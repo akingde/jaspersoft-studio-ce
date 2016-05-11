@@ -27,13 +27,8 @@ import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
  */
 public class DeleteChartAxesCommand extends Command {
 
-	/** The jr group. */
-	private JRDesignMultiAxisPlot jrGroup;
-
-	/** The jr element. */
-	private JRDesignChartAxis jrElement;
-
-	/** The element position. */
+	private JRDesignMultiAxisPlot chartPlot;
+	private JRDesignChartAxis jrChart;
 	private int oldIndex = 0;
 
 	/**
@@ -46,8 +41,8 @@ public class DeleteChartAxesCommand extends Command {
 	 */
 	public DeleteChartAxesCommand(MChart destNode, MChartAxes srcNode) {
 		super();
-		this.jrElement = (JRDesignChartAxis) srcNode.getValue();
-		this.jrGroup = (JRDesignMultiAxisPlot) ((JRDesignChart) destNode.getValue()).getPlot();
+		this.jrChart = (JRDesignChartAxis) srcNode.getValue();
+		this.chartPlot = (JRDesignMultiAxisPlot) ((JRDesignChart) destNode.getValue()).getPlot();
 	}
 
 	/*
@@ -57,9 +52,8 @@ public class DeleteChartAxesCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldIndex = jrGroup.getAxes().indexOf(jrElement);
-
-		jrGroup.removeAxis(jrElement);
+		oldIndex = chartPlot.getAxes().indexOf(jrChart);
+		chartPlot.removeAxis(jrChart);
 	}
 
 	/*
@@ -69,7 +63,7 @@ public class DeleteChartAxesCommand extends Command {
 	 */
 	@Override
 	public boolean canUndo() {
-		if (jrGroup == null || jrElement == null)
+		if (chartPlot == null || jrChart == null)
 			return false;
 		return true;
 	}
@@ -81,9 +75,20 @@ public class DeleteChartAxesCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		if (oldIndex >= 0 && oldIndex < jrGroup.getAxes().size())
-			jrGroup.addAxis(oldIndex, jrElement);
+		if (oldIndex >= 0 && oldIndex < chartPlot.getAxes().size())
+			chartPlot.addAxis(oldIndex, jrChart);
 		else
-			jrGroup.addAxis(jrElement);
+			chartPlot.addAxis(jrChart);
+	}
+	
+	@Override
+	public boolean canExecute() {
+		if(chartPlot==null) {
+			return false;
+		}
+		else {
+			// cannot have a multi-axes chart with zero children
+			return chartPlot.getAxes().size()>1;
+		}
 	}
 }

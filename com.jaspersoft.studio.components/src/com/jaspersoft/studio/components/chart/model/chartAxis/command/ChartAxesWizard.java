@@ -45,5 +45,14 @@ public class ChartAxesWizard extends Wizard {
 	public boolean performFinish() {
 		return true;
 	}
+	
+	@Override
+	public boolean canFinish() {
+		byte chartAxis = getChartAxis();
+		if(chartAxis<=0){
+			return false;
+		}
+		return super.canFinish();
+	}
 
 }

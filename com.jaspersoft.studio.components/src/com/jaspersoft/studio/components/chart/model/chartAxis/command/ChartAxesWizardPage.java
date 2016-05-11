@@ -15,23 +15,11 @@ package com.jaspersoft.studio.components.chart.model.chartAxis.command;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.jasperreports.charts.JRAreaPlot;
-import net.sf.jasperreports.charts.JRBar3DPlot;
-import net.sf.jasperreports.charts.JRBarPlot;
-import net.sf.jasperreports.charts.JRBubblePlot;
-import net.sf.jasperreports.charts.JRCandlestickPlot;
-import net.sf.jasperreports.charts.JRHighLowPlot;
-import net.sf.jasperreports.charts.JRLinePlot;
-import net.sf.jasperreports.charts.JRScatterPlot;
-import net.sf.jasperreports.charts.JRTimeSeriesPlot;
-import net.sf.jasperreports.engine.JRChartPlot;
-import net.sf.jasperreports.engine.design.JRDesignChart;
-
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.nebula.widgets.gallery.DefaultGalleryItemRenderer;
 import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.nebula.widgets.gallery.NoGroupRenderer;
+import org.eclipse.nebula.widgets.gallery.RoundedGalleryItemRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -43,6 +31,18 @@ import org.eclipse.swt.widgets.Scale;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.wizard.ChartTypeWizardPage;
+
+import net.sf.jasperreports.charts.JRAreaPlot;
+import net.sf.jasperreports.charts.JRBar3DPlot;
+import net.sf.jasperreports.charts.JRBarPlot;
+import net.sf.jasperreports.charts.JRBubblePlot;
+import net.sf.jasperreports.charts.JRCandlestickPlot;
+import net.sf.jasperreports.charts.JRHighLowPlot;
+import net.sf.jasperreports.charts.JRLinePlot;
+import net.sf.jasperreports.charts.JRScatterPlot;
+import net.sf.jasperreports.charts.JRTimeSeriesPlot;
+import net.sf.jasperreports.engine.JRChartPlot;
+import net.sf.jasperreports.engine.design.JRDesignChart;
 
 public class ChartAxesWizardPage extends WizardPage {
 	private static final int GALLERY_HEIGHT = 100;
@@ -97,7 +97,7 @@ public class ChartAxesWizardPage extends WizardPage {
 		gd.widthHint = 500;
 		chartsGallery.setLayoutData(gd);
 		chartsGallery.setGroupRenderer(gr);
-		DefaultGalleryItemRenderer ir = new DefaultGalleryItemRenderer();
+		RoundedGalleryItemRenderer ir = new RoundedGalleryItemRenderer();
 		ir.setShowLabels(true);
 		ir.setShowRoundedSelectionCorners(false);
 		ir.setSelectionForegroundColor(getShell().getDisplay().getSystemColor(SWT.COLOR_BLUE));
@@ -110,8 +110,13 @@ public class ChartAxesWizardPage extends WizardPage {
 		chartsGallery.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				if (e.item instanceof GalleryItem)
+				if (e.item instanceof GalleryItem) {
 					chartAxes = (Byte) ((GalleryItem) e.item).getData();
+					setPageComplete(true);
+				}
+				else {
+					setPageComplete(false);
+				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -130,15 +135,20 @@ public class ChartAxesWizardPage extends WizardPage {
 
 	private void fillTableb4j(Gallery table, GalleryItem rootItem) {
 		table.setRedraw(false);
-
+		boolean defaultSelected=false;
 		for (byte ctype : plotmap.keySet()) {
 			// if (chartPlot != null
 			// && !plotmap.get(ctype).isAssignableFrom(chartPlot))
 			// continue;
 			// hmm here we should use the same from jfreechart
-			ChartTypeWizardPage.getTableItem(ctype, rootItem);
+			GalleryItem item = ChartTypeWizardPage.getTableItem(ctype, rootItem);
+			if(!defaultSelected){
+				table.setSelection(new GalleryItem[]{item});
+				chartAxes = (Byte) item.getData();
+				setPageComplete(true);
+				defaultSelected=true;
+			}
 		}
-
 		table.setRedraw(true);
 	}
 
