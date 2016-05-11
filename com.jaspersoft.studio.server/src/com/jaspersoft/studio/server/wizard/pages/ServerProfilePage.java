@@ -172,7 +172,8 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		new Label(urlCmp, SWT.NONE).setText(Messages.ServerProfilePage_4);
 
-		ssLabel = new Label(urlCmp, SWT.BORDER);
+		ssLabel = new Label(urlCmp, SWT.NONE);
+		ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png"));
 
 		Text turl = new Text(composite, SWT.BORDER);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -736,15 +737,30 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		};
 
 		public String getUrl() throws MalformedURLException, URISyntaxException {
-			if (sp.getUrl().trim().startsWith("https://")) {
-				ssLabel.addMouseListener(mlistener);
-				ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png"));
-				ssLabel.setCursor(new Cursor(ssLabel.getDisplay(), SWT.CURSOR_HAND));
-			} else {
-				ssLabel.removeMouseListener(mlistener);
-				ssLabel.setImage(null);
-				ssLabel.setCursor(null);
-			}
+			UIUtils.getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						if (sp.getUrl().trim().startsWith("https://")) {
+							ssLabel.addMouseListener(mlistener);
+							ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png"));
+							ssLabel.setCursor(new Cursor(ssLabel.getDisplay(), SWT.CURSOR_HAND));
+							ssLabel.getParent().layout(true);
+							return;
+						}
+					} catch (MalformedURLException e) {
+					} catch (URISyntaxException e) {
+					}
+
+					ssLabel.removeMouseListener(mlistener);
+					ssLabel.setImage(null);
+					ssLabel.setCursor(null);
+
+					ssLabel.getParent().layout(true);
+				}
+			});
+
 			return sp.getUrl();
 		}
 
