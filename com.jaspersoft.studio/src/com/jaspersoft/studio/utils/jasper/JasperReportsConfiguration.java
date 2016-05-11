@@ -115,26 +115,26 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD"; //$NON-NLS-1$
 
 	private final class PreferenceListener implements IPropertyChangeListener {
-
+		
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			String property = event.getProperty();
-			if (property.equals(FontsPreferencePage.FPP_FONT_LIST)
-					|| property.equals(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES)) {
-				refreshFonts = true;
-				fontList = null;
-				getFontList();
+				String property = event.getProperty();
+				if (property.equals(FontsPreferencePage.FPP_FONT_LIST)){
+					refreshFonts = true;
+					fontList = null;
+					getFontList();
+					refreshBundles = true;
 
-				refreshBundles = true;
-				isPropsCached = false;
-				getProperties();
-				qExecutors = null;
-			} else if (prmProvider != null && property.startsWith(ParameterSet.PARAMETER_SET)) {
-				prmProvider.reset();
-			} else if (property.startsWith("com.jaspersoft.studio.")) {
-				isPropsCached = false;
-				getProperties();
-			}
-			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "preferences", null, event));
+				} else if (property.equals(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES)) {	
+					isPropsCached = false;
+					getProperties();
+					qExecutors = null;
+				} else if (prmProvider != null && property.startsWith(ParameterSet.PARAMETER_SET)) {
+					prmProvider.reset();
+				} else if (property.startsWith("com.jaspersoft.studio.")) {
+					isPropsCached = false;
+					getProperties();
+				}
+				propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "preferences", null, event));
 		}
 	}
 
