@@ -155,8 +155,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			@Override
 			protected void prepareSocket(SSLSocket socket) throws IOException {
 				super.prepareSocket(socket);
-				socket.setEnabledProtocols(
-						new String[] { "SSLv2Hello", "SSL", "SSLv2", "SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2" });
+				socket.setEnabledProtocols(new String[] { "SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2" });
 			}
 		};
 
