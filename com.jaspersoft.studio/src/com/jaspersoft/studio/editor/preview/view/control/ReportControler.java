@@ -146,6 +146,13 @@ public class ReportControler {
 
 	public void resetParametersToDefault() {
 		ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
+		Set<String> toDel = new HashSet<String>();
+		for (String key : jasperParameters.keySet())
+			if (jasperParameters.get(key) == null)
+				toDel.add(key);
+		for (String key : toDel)
+			jasperParameters.remove(key);
+
 		prmInput.update();
 		prmRepInput.update();
 		//
