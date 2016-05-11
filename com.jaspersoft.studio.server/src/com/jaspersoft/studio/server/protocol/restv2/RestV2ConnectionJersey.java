@@ -28,9 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLSocket;
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
@@ -186,7 +184,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		clientConfig.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
 		clientConfig.register(JacksonFeature.class).register(ClientQueryMapperProvider.class);
 
-		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
+		client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
 		client.register(MultiPartFeature.class);
 
 		if (sp.isLogging()) {

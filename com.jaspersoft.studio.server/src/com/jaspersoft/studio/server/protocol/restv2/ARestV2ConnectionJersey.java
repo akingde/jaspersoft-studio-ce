@@ -21,13 +21,17 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -39,6 +43,13 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 
 	public JSSApacheConnectorFactory getConnector() {
 		return connector;
+	}
+
+	protected Client client;
+
+	public <T> T toObj(String str, Class<T> clazz, MediaType mediaType)
+			throws JAXBException, JsonProcessingException, IOException {
+		return new ClientQueryMapperProvider().getContext(clazz).readValue(str.getBytes(), clazz);
 	}
 
 	public <T> T toObj(Response res, Class<T> clazz, IProgressMonitor monitor) throws IOException {

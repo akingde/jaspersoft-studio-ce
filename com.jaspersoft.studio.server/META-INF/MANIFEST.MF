@@ -140,4 +140,5 @@ Export-Package: com.fasterxml.jackson.module.jaxb,
  org.apache.axis.handlers,
  org.apache.axis.soap,
  org.apache.axis.transport.http,
- org.apache.axis.utils
+ org.apache.axis.utils,
+ org.glassfish.jersey.client
