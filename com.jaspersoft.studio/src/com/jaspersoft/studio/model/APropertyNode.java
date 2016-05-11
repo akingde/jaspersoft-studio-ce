@@ -52,53 +52,45 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		
 	}
 
-	public boolean isPropertyResettable(Object id) {
-		return true;
-	}
-
-	/**
-	 * Return the default map of this node. First is chekced if it is already available
-	 * in the cache map, in that case is returned otherwise it is created, stored and returned
-	 * 
-	 * @return a map of the default value, could be null
-	 */
-	public Map<String, DefaultValue> getDefaultsMap(){
-		Map<String, DefaultValue> result = defaultsMap.get(this.getClass());
-		if (result == null){
-			result = createDefaultsMap();
-			defaultsMap.put(this.getClass(), result);
-		}
-		return result;
-	}
-	
-	protected Map<String, DefaultValue> createDefaultsMap(){
-		return new HashMap<String, DefaultValue>();
-	}
-
 	public abstract void setDescriptors(IPropertyDescriptor[] descriptors1);
-
+	
 	public abstract IPropertyDescriptor[] getDescriptors();
-
-	/**
-	 * Return the actual value of an attribute, so the value that the system is using, not considering if it's inherited
-	 * or of the element
-	 * 
-	 * @param id
-	 *          of the attribute
-	 * @return the attribute value.
-	 */
-	public Object getPropertyActualValue(Object id) {
-		return getPropertyValue(id);
-	}
-
-	/**
-	 * Creates the property descriptors.
-	 * 
-	 * @param desc
-	 *          the desc
-	 */
+	
 	public abstract void createPropertyDescriptors(List<IPropertyDescriptor> desc);
 
+	@Deprecated
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap){
+		createPropertyDescriptors(desc);
+	}
+	
+	@Deprecated
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1){
+		setDescriptors(descriptors1);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyDescriptors()
+	 */
+	public IPropertyDescriptor[] getPropertyDescriptors() {
+		// if we cache sections ... we have to return descriptors always
+		// if (getValue() == null)
+		// return new IPropertyDescriptor[0];
+		IPropertyDescriptor[] descriptors = getDescriptors();
+		if (descriptors == null) {
+			Map<String, Object> defaultsMap = new HashMap<String, Object>();
+			List<IPropertyDescriptor> desc = new ArrayList<IPropertyDescriptor>();
+
+			createPropertyDescriptors(desc, defaultsMap);
+
+			descriptors = desc.toArray(new IPropertyDescriptor[desc.size()]);
+			setDescriptors(descriptors, defaultsMap);
+		}
+		postDescriptors(descriptors);
+		return descriptors;
+	}
+	
 	/**
 	 * @param descriptors
 	 */
@@ -155,28 +147,6 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyDescriptors()
-	 */
-	public IPropertyDescriptor[] getPropertyDescriptors() {
-		// if we cache sections ... we have to return descriptors always
-		// if (getValue() == null)
-		// return new IPropertyDescriptor[0];
-		IPropertyDescriptor[] descriptors = getDescriptors();
-		if (descriptors == null) {
-			List<IPropertyDescriptor> desc = new ArrayList<IPropertyDescriptor>();
-
-			createPropertyDescriptors(desc);
-
-			descriptors = desc.toArray(new IPropertyDescriptor[desc.size()]);
-			setDescriptors(descriptors);
-		}
-		postDescriptors(descriptors);
-		return descriptors;
-	}
-
 	protected void setHelpPrefix(List<IPropertyDescriptor> desc, String prefix) {
 		for (IPropertyDescriptor pd : desc)
 			if (pd instanceof IHelp && ((IHelp) pd).getHelpReference() == null)
@@ -208,17 +178,6 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		return false;
 	}
 
-	/**
-	 * @param id
-	 * @return default value
-	 */
-	public Object getPropertyDefaultValue(String id) throws Exception {
-		Map<String, DefaultValue> defaultsMap = getDefaultsMap();
-		if (defaultsMap != null && defaultsMap.containsKey(id))
-			return defaultsMap.get(id).getValue();
-		throw new Exception("Key not found"); //$NON-NLS-1$
-	}
-
 	public void initProperties() {
 		IPropertyDescriptor[] pd = getPropertyDescriptors();
 		for (int i = 0; i < pd.length; i++) {
@@ -228,7 +187,6 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 			} catch (Exception e) {
 			}
 		}
-
 	}
 
 	/*
@@ -268,4 +226,50 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	public String getCustomPropertyTitle() {
 		return null;
 	}
+	
+	/**
+	 * Return the default map of this node. First is chekced if it is already available
+	 * in the cache map, in that case is returned otherwise it is created, stored and returned
+	 * 
+	 * @return a map of the default value, could be null
+	 */
+	public Map<String, DefaultValue> getDefaultsMap(){
+		Map<String, DefaultValue> result = defaultsMap.get(this.getClass());
+		if (result == null){
+			result = createDefaultsMap();
+			defaultsMap.put(this.getClass(), result);
+		}
+		return result;
+	}
+	
+	protected Map<String, DefaultValue> createDefaultsMap(){
+		return new HashMap<String, DefaultValue>();
+	}
+
+	/**
+	 * Return the actual value of an attribute, so the value that the system is using, not considering if it's inherited
+	 * or of the element
+	 * 
+	 * @param id
+	 *          of the attribute
+	 * @return the attribute value.
+	 */
+	public Object getPropertyActualValue(Object id) {
+		return getPropertyValue(id);
+	}
+	
+	/**
+	 * @param id
+	 * @return default value
+	 */
+	public Object getPropertyDefaultValue(String id) throws Exception {
+		Map<String, DefaultValue> defaultsMap = getDefaultsMap();
+		if (defaultsMap != null && defaultsMap.containsKey(id)) return defaultsMap.get(id).getValue();
+		throw new Exception("Key not found"); //$NON-NLS-1$
+	}
+	
+	public boolean isPropertyResettable(Object id) {
+		return true;
+	}
 }
+
