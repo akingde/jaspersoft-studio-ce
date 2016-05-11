@@ -173,7 +173,8 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		new Label(urlCmp, SWT.NONE).setText(Messages.ServerProfilePage_4);
 
 		ssLabel = new Label(urlCmp, SWT.NONE);
-		ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png"));
+		ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png")); //$NON-NLS-1$
+		ssLabel.setToolTipText(Messages.ServerProfilePage_48);
 
 		Text turl = new Text(composite, SWT.BORDER);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -710,7 +711,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					builder.loadTrustMaterial(trustStore, new JSSTrustStrategy(trustStore) {
 						@Override
 						public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-							new CertificatesDialog(UIUtils.getShell(), "", chain[0], chain, trustStore).open();
+							new CertificatesDialog(UIUtils.getShell(), "", chain[0], chain, trustStore).open(); //$NON-NLS-1$
 							return true;
 						}
 					});
@@ -742,9 +743,9 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				@Override
 				public void run() {
 					try {
-						if (sp.getUrl().trim().startsWith("https://")) {
+						if (sp.getUrl().trim().startsWith("https://")) { //$NON-NLS-1$
 							ssLabel.addMouseListener(mlistener);
-							ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png"));
+							ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png")); //$NON-NLS-1$
 							ssLabel.setCursor(new Cursor(ssLabel.getDisplay(), SWT.CURSOR_HAND));
 							ssLabel.getParent().layout(true);
 							return;

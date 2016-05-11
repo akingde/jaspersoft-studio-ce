@@ -385,6 +385,7 @@ public class Messages extends NLS {
 	public static String ServerProfilePage_44;
 	public static String ServerProfilePage_45;
 	public static String ServerProfilePage_46;
+	public static String ServerProfilePage_48;
 	public static String ServerProfilePage_5;
 	public static String ServerProfilePage_6;
 	public static String ServerProfilePage_7;
