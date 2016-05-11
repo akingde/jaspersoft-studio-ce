@@ -393,7 +393,7 @@ public class MChart extends MGraphicElementLineBox
 		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_POSITION, new DefaultValue(null, true));
 		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, true));
 		
-		defaultsMap.putAll(new MHyperLink(null).getDefaultsMap());
+		defaultsMap.putAll(new MHyperLink(null).getDefaultsPropertiesMap());
 		
 		return defaultsMap;
 	}

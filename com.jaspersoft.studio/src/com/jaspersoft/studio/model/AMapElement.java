@@ -57,7 +57,7 @@ public abstract class AMapElement extends APropertyNode {
 
 	@Override
 	public Object getPropertyValue(Object id) {
-		return Misc.nvl(props.get(id), getDefaultsMap().get(id));
+		return Misc.nvl(props.get(id), getDefaultsPropertiesMap().get(id));
 	}
 
 	@Override

@@ -137,7 +137,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, new DefaultValue(null, true));
 		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, new DefaultValue(null, true));
 		
-		defaultsMap.putAll(getMFont().getDefaultsMap());
+		defaultsMap.putAll(getMFont().getDefaultsPropertiesMap());
 		
 		return defaultsMap;
 	}

@@ -284,7 +284,7 @@ public class MImage extends MGraphicElementLineBox {
 		int onErrorValue = NamedEnumPropertyDescriptor.getIntValue(OnErrorTypeEnum.ERROR, NullEnum.NULL, OnErrorTypeEnum.ERROR);
 		defaultsMap.put(JRBaseImage.PROPERTY_ON_ERROR_TYPE, new DefaultValue(onErrorValue, true));
 
-		defaultsMap.putAll(new MHyperLink(null).getDefaultsMap());	
+		defaultsMap.putAll(new MHyperLink(null).getDefaultsPropertiesMap());	
 		
 		return defaultsMap;
 	}

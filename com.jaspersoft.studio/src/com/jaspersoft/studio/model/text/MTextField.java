@@ -248,7 +248,7 @@ public class MTextField extends MTextElement {
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JRDesignStyle.PROPERTY_PATTERN, new DefaultValue(null, true));
 		
-		defaultsMap.putAll(new MHyperLink(null).getDefaultsMap());
+		defaultsMap.putAll(new MHyperLink(null).getDefaultsPropertiesMap());
 		
 		return defaultsMap;
 	}

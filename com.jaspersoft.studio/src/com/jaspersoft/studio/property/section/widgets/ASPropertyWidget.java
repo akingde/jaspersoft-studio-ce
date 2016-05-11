@@ -145,7 +145,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 			}
 			
 			boolean entryCreated = false;
-			Map<String, DefaultValue> defaultMap = node.getDefaultsMap();
+			Map<String, DefaultValue> defaultMap = node.getDefaultsPropertiesMap();
 			if (defaultMap != null){
 				DefaultValue defaultEntry = defaultMap.get(pDescriptor.getId().toString());
 				if (defaultEntry != null && (defaultEntry.isNullable() || defaultEntry.hasDefault())){

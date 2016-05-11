@@ -395,7 +395,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, new DefaultValue(null, false));
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, new DefaultValue(null, false));
 		
-		defaultsMap.putAll(new MHyperLink(null).getDefaultsMap());
+		defaultsMap.putAll(new MHyperLink(null).getDefaultsPropertiesMap());
 		
 		return defaultsMap;
 	}

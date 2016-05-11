@@ -59,6 +59,11 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	public abstract void createPropertyDescriptors(List<IPropertyDescriptor> desc);
 
 	@Deprecated
+	public Map<String, Object> getDefaultsMap(){
+		return null;
+	}
+	
+	@Deprecated
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap){
 		createPropertyDescriptors(desc);
 	}
@@ -233,7 +238,7 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	 * 
 	 * @return a map of the default value, could be null
 	 */
-	public Map<String, DefaultValue> getDefaultsMap(){
+	public Map<String, DefaultValue> getDefaultsPropertiesMap(){
 		Map<String, DefaultValue> result = defaultsMap.get(this.getClass());
 		if (result == null){
 			result = createDefaultsMap();
@@ -263,7 +268,7 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	 * @return default value
 	 */
 	public Object getPropertyDefaultValue(String id) throws Exception {
-		Map<String, DefaultValue> defaultsMap = getDefaultsMap();
+		Map<String, DefaultValue> defaultsMap = getDefaultsPropertiesMap();
 		if (defaultsMap != null && defaultsMap.containsKey(id)) return defaultsMap.get(id).getValue();
 		throw new Exception("Key not found"); //$NON-NLS-1$
 	}
