@@ -18,6 +18,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.components.chart.model.MChart;
+import com.jaspersoft.studio.components.chart.model.chartAxis.command.CreateChartAxesCommand;
 import com.jaspersoft.studio.components.chart.wizard.ChartWizard;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -39,6 +40,7 @@ public class EditChartCommand extends Command {
 	private JRDesignChart newChart;
 	protected JasperReportsConfiguration jConfig;
 	private MChart originalNode;
+	private Byte chosenAxis;
 
 	public EditChartCommand(MFrame parent, MChart mchart) {
 		this(parent, mchart, -1);
@@ -75,16 +77,27 @@ public class EditChartCommand extends Command {
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				this.newChart = (JRDesignChart) wizard.getChart().getValue();
-			} else
+				if(newChart.getChartType()==JRDesignChart.CHART_TYPE_MULTI_AXIS) {
+					// Additional details for Multi-Axis chart
+					this.chosenAxis = wizard.getChoseAxis();
+					if(this.chosenAxis!=null) {
+						CreateChartAxesCommand cmd = new CreateChartAxesCommand((JRDesignChart) newChart, null, -1, jConfig.getJasperDesign());
+						cmd.setSelectedAxes(this.chosenAxis);	
+						cmd.execute();
+					}
+				}
+			} else {
 				return;
+			}
 		}
 		switchCharts(oldChart, newChart);
 	}
 
 	@Override
 	public void undo() {
-		if (newChart != null)
+		if (newChart != null) {
 			switchCharts(newChart, oldChart);
+		}
 	}
 
 	private void switchCharts(JRDesignChart chart1, JRDesignChart chart2) {

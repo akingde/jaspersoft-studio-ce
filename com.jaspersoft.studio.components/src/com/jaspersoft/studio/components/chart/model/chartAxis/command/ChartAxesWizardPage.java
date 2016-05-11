@@ -56,18 +56,21 @@ public class ChartAxesWizardPage extends WizardPage {
 		return chartAxes;
 	}
 
-	protected ChartAxesWizardPage(Class<? extends JRChartPlot> chartPlot) {
+	public ChartAxesWizardPage() {
 		super("chartaxiswizard"); //$NON-NLS-1$
 		setTitle(Messages.common_chartaxis_wizard);
 		setDescription(Messages.ChartAxesWizardPage_chartaxis_wizard_description);
+		setPageComplete(false);
 	}
 
 	@Override
 	public void dispose() {
-		GalleryItem[] tis = chartsGallery.getSelection();
-		if (tis.length > 0) {
-			GalleryItem ti = tis[0];
-			chartAxes = (Byte) ti.getData();
+		if(chartsGallery!=null) {
+			GalleryItem[] tis = chartsGallery.getSelection();
+			if (tis.length > 0) {
+				GalleryItem ti = tis[0];
+				chartAxes = (Byte) ti.getData();
+			}
 		}
 		super.dispose();
 	}

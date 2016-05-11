@@ -92,9 +92,6 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 		chartsGallery.setGroupRenderer(gr);
 		RoundedGalleryItemRenderer ir = new RoundedGalleryItemRenderer();
 		ir.setShowLabels(true);
-//		ir.setShowRoundedSelectionCorners(false);
-//		ir.setSelectionForegroundColor(getShell().getDisplay().getSystemColor(
-//				SWT.COLOR_BLUE));
 		chartsGallery.setItemRenderer(ir);
 
 		itemGroup = new GalleryItem(chartsGallery, SWT.NONE);
@@ -106,8 +103,20 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				if (e.item instanceof GalleryItem) {
 					chartType = (Byte) ((GalleryItem) e.item).getData();
-
-					getContainer().updateButtons();
+					if (chartType == JRDesignChart.CHART_TYPE_MULTI_AXIS) {
+						if(getWizard() instanceof ChartWizard) {
+							((ChartWizard)getWizard()).fixLastPage(true);
+						}
+					}
+					else {
+						if(getWizard() instanceof ChartWizard) {
+							((ChartWizard)getWizard()).fixLastPage(false);
+						}
+					}
+					setPageComplete(true);
+				}
+				else {
+					setPageComplete(false);
 				}
 			}
 
@@ -157,7 +166,6 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 			if (chartType != old.getChartType()) {
 				old.setChartType(chartType);
 			}
-			return false;
 		}
 		return super.canFlipToNextPage();
 	}

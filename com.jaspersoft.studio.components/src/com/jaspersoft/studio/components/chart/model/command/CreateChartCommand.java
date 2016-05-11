@@ -12,10 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.command;
 
-import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -31,6 +27,10 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 
 /*
  * link nodes & together.
@@ -107,11 +107,8 @@ public class CreateChartCommand extends CreateElementCommand {
 
 			ChartWizard wizard = new ChartWizard(new MChart(null, newchart, -1), (JRDesignElementDataset) newchart.getDataset());
 			wizard.setConfig(jConfig);
-			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(null, destNode)); // Use
-																																														// the
-																																														// "future"
-																																														// parent
-																																														// inherited
+			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(null, destNode)); // Use the "future" parent inherited
+			
 			// information
 			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 			dialog.create();
@@ -127,6 +124,7 @@ public class CreateChartCommand extends CreateElementCommand {
 
 				if (((JRDesignChart) jrElement).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS) {
 					CreateChartAxesCommand cmd = new CreateChartAxesCommand((JRDesignChart) jrElement, null, -1, jasperDesign);
+					cmd.setSelectedAxes(wizard.getChoseAxis());
 					addCommand(cmd);
 				}
 			}

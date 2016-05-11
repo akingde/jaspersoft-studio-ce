@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.chartAxis.command;
 
-import net.sf.jasperreports.engine.JRChartPlot;
-
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
@@ -21,17 +19,15 @@ import com.jaspersoft.studio.components.chart.messages.Messages;
 public class ChartAxesWizard extends Wizard {
 	private ChartAxesWizardPage page0;
 	private byte chart;
-	private Class<? extends JRChartPlot> chartPlot;
 
-	public ChartAxesWizard(Class<? extends JRChartPlot> chartPlot) {
+	public ChartAxesWizard() {
 		super();
-		this.chartPlot = chartPlot;
 		setWindowTitle(Messages.common_chartaxis_wizard);
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new ChartAxesWizardPage(chartPlot);
+		page0 = new ChartAxesWizardPage();
 		addPage(page0);
 	}
 
