@@ -36,7 +36,7 @@ public class FontImporter {
 		for (FontFamily ff : fontFamilies)
 			fams.put(ff.getName(), ff);
 		for (File f : org.apache.commons.io.FileUtils.listFiles(destDir,
-				new String[] { "ttf", "otf", "svg", "eot", "woff" }, true)) {
+				new String[] { "ttf", "TTF", "OTF", "otf", "SVG", "svg", "eot", "EOT", "WOFF", "woff" }, true)) {
 			monitor.setTaskName("Analyzing font: " + f.getName());
 			String fname = f.getName().trim().toLowerCase();
 			if (fname.endsWith(".ttf") || fname.endsWith(".otf")) {
