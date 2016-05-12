@@ -113,6 +113,7 @@ public class CertificatesDialog extends CertificateDialog {
 				getShell().setText(Messages.CertificatesDialog_4);
 				getButton(IDialogConstants.OK_ID).setText(Messages.CertificatesDialog_3);
 				getButton(IDialogConstants.CANCEL_ID).setText(Messages.CertificatesDialog_2);
+
 				show = false;
 			} catch (KeyStoreException e1) {
 				UIUtils.showError(e1);
