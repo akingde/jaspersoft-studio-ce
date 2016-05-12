@@ -118,7 +118,7 @@ public class CertificatesDialog extends CertificateDialog {
 			} catch (KeyStoreException e1) {
 				UIUtils.showError(e1);
 			}
-		} else {
+		} else if (UIUtils.showDeleteConfirmation()) {
 			StructuredSelection sel = (StructuredSelection) viewer.getSelection();
 			if (!sel.isEmpty()) {
 				X509Certificate cert = (X509Certificate) sel.getFirstElement();
