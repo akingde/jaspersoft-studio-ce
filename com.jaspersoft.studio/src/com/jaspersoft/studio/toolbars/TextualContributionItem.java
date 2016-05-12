@@ -233,7 +233,6 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			System.out.println("modify event");
 			if (!refreshing){
 				List<Object> selection = getSelectionForType(MTextElement.class);
 				if (selection.isEmpty())
@@ -331,7 +330,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontSize.addSelectionListener(fontSizeComboModify);
 
 		RowData data = new RowData();
-		data.width = 100;
+		data.width = 80;
 		fontSize.setLayoutData(data);
 		
 		ToolBar sizeButtons = new ToolBar(controlsArea, SWT.FLAT | SWT.WRAP);

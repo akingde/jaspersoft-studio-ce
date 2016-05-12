@@ -15,8 +15,6 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
@@ -247,10 +245,11 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 		fontSize = new NumericCombo(fontSizeLayout, SWT.FLAT, 0, 6);
 		fontSize.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		fontSize.setItems(pd1.getItems());
-		fontSize.addModifyListener(new ModifyListener() {
+		fontSize.addSelectionListener(new SelectionAdapter() {
+			
 			private int time = 0;
 
-			public void modifyText(ModifyEvent e) {
+			public void widgetSelected(SelectionEvent e) {
 				if (e.time - time > 100) {
 					String value = fontSize.getText();
 					if (IntegerCellEditorValidator.instance().isValid(value) == null)

@@ -19,10 +19,12 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,8 +34,13 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Menu;
 import org.mihalis.opal.utils.StringUtil;
 
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -45,7 +52,12 @@ import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
  * @author Orlandin Marco
  *
  */
-public class NumericCombo extends CCombo {
+public class NumericCombo extends Composite {
+	
+	
+	private Combo controlCombo = null;
+	
+	private CCombo controlCCombo = null;
 	
 	/**
 	 * The listeners on this widget
@@ -103,13 +115,47 @@ public class NumericCombo extends CCombo {
 	 */
 	private Number defaultValue = null;
 	
+	private static Point defaultSize = null;
+	
+	/**
+	 * Custom layout used to place the elements inside the composite. This will remove 
+	 * every unnecessary space to have the elements completely fit the container area
+	 */
+	private Layout mainLayout = new Layout() {
+		
+		@Override
+		protected void layout(Composite parent, boolean flushCache) {
+			Control[] children = parent.getChildren();
+			Rectangle carea = parent.getClientArea();
+			children[0].setBounds(0, 0, carea.width, carea.height);
+		}
+		
+		@Override
+		protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
+			int width = wHint;
+			int height = hHint;
+			if (wHint == SWT.DEFAULT){
+				width = defaultSize != null ? defaultSize.x : 50;
+			}
+			if (hHint == SWT.DEFAULT){
+				height = defaultSize != null ? defaultSize.y : 23;
+			}
+			return new Point(width, height);
+		}
+	};
+
+	
 	/**
 	 * Verify listener used to check if the typed value is valid or not
 	 */
 	private VerifyListener inputVerifier = new VerifyListener() {
 		@Override
 		public void verifyText(final VerifyEvent e) {
-			e.doit = verifyEntryAndStoreValue(e.text, e.keyCode);
+			if (controlCCombo != null) {
+				e.doit = verifyEntryAndStoreValueCCombo(e.text, e.keyCode);
+			} else if (controlCombo != null) {
+				e.doit = verifyEntryAndStoreValueCombo(e.text, e.keyCode);
+			}
 		}
 	};
 	
@@ -151,7 +197,8 @@ public class NumericCombo extends CCombo {
 	 * decimalDigitsShown	 
 	 */
 	public NumericCombo(Composite parent, int style, int decimalDigitsShown, int decimalDigitsAccepted){
-		super(parent, style | SWT.BORDER);
+		super(parent, SWT.NONE);
+		createControls();
 		currentColor = getForeground();
 		this.formatter = new ValidatedDecimalFormat(decimalDigitsShown, decimalDigitsAccepted);
 		addListeners();
@@ -165,11 +212,84 @@ public class NumericCombo extends CCombo {
 	 * @param style the style bits, the supported ones are the same of a standard SWT text widget
 	 */
 	public NumericCombo(Composite parent, NumberFormat formatter, int style) {
-		super(parent, style | SWT.BORDER);
+		super(parent, SWT.NONE);
+		createControls();
 		currentColor = getForeground();
 		addListeners();
 		this.formatter = formatter;
 		Assert.isTrue(formatter != null, "The formatter can't be null");
+	}
+	
+	protected void createControls(){
+		setLayout(mainLayout);
+		if (defaultSize == null){
+			Combo tempCombo = new Combo(this, SWT.DROP_DOWN);
+			defaultSize = tempCombo.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+			tempCombo.dispose();
+		}
+		if (Util.isWindows()){
+			controlCCombo = new CCombo(this, SWT.BORDER);
+		} else {
+			controlCombo = new Combo(this, SWT.DROP_DOWN);
+		}
+		layout();
+	}
+	
+	protected void addVerifyListener(VerifyListener listener){
+		if (controlCombo != null){
+			controlCombo.addVerifyListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.addVerifyListener(listener);
+		}
+	}
+	
+	protected void addModifyListener(ModifyListener listener){
+		if (controlCombo != null){
+			controlCombo.addModifyListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.addModifyListener(listener);
+		}
+	}
+	
+	protected void removeVerifyListener(VerifyListener listener){
+		if (controlCombo != null){
+			controlCombo.removeVerifyListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.removeVerifyListener(listener);
+		}
+	}
+	
+	protected void removeModifyListener(ModifyListener listener){
+		if (controlCombo != null){
+			controlCombo.removeModifyListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.removeModifyListener(listener);
+		}
+	}
+	
+	protected void addComboSelectionListener(SelectionListener listener){
+		if (controlCombo != null){
+			controlCombo.addSelectionListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.addSelectionListener(listener);
+		}
+	}
+	
+	protected void removeComboSelectionListener(SelectionListener listener){
+		if (controlCombo != null){
+			controlCombo.removeSelectionListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.removeSelectionListener(listener);
+		}
+	}
+	
+	@Override
+	public void addFocusListener(FocusListener listener){
+		if (controlCombo != null){
+			controlCombo.addFocusListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.addFocusListener(listener);
+		}
 	}
 	
 	/**
@@ -178,7 +298,7 @@ public class NumericCombo extends CCombo {
 	protected void addListeners(){
 		addVerifyListener(inputVerifier);
 		addModifyListener(inputNotifier);
-		super.addSelectionListener(selectionNotifier);
+		addComboSelectionListener(selectionNotifier);
 		addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(final FocusEvent e) {
@@ -242,11 +362,19 @@ public class NumericCombo extends CCombo {
 		if (isInherited != value){
 			if (value){
 				currentColor = getForeground();
-				super.setForeground(ColorConstants.gray);
+				setComboForeground(ColorConstants.gray);
 			} else {
-				super.setForeground(currentColor);
+				setComboForeground(currentColor);
 			}
 			this.isInherited = value;
+		}
+	}
+	
+	protected void setComboForeground(Color color){
+		if (controlCombo != null){
+			controlCombo.setForeground(color);
+		} else if (controlCCombo != null){
+			controlCCombo.setForeground(color);
 		}
 	}
 	
@@ -257,7 +385,17 @@ public class NumericCombo extends CCombo {
 	@Override
 	public void setForeground(Color color) {
 		currentColor = getForeground();
-		if (!isInherited) super.setForeground(color);
+		if (!isInherited) setComboForeground(color);
+	}
+	
+	@Override
+	public Color getForeground() {
+		if (controlCombo != null){
+			return controlCombo.getForeground();
+		} else if (controlCCombo != null){
+			controlCCombo.getForeground();
+		}
+		return null;
 	}
 	
 	/**
@@ -369,6 +507,22 @@ public class NumericCombo extends CCombo {
 		}
 	}
 	
+	public void setSelection(Point selection){
+		if (controlCombo != null){
+			controlCombo.setSelection(selection);
+		} else if (controlCCombo != null){
+			controlCCombo.setSelection(selection);
+		}
+	}
+	
+	@Override
+	public void setBackground(Color color) {
+		if (controlCombo != null){
+			controlCombo.setBackground(color);
+		} else if (controlCCombo != null){
+			controlCCombo.setBackground(color);
+		}
+	}
 	
 	/**
 	 * Verify the entry and store the value in the field storedValue
@@ -378,10 +532,10 @@ public class NumericCombo extends CCombo {
 	 * @return <code>true</code> if the entry if correct, <code>false</code>
 	 *         otherwise
 	 */
-	private boolean verifyEntryAndStoreValue(final String entry, final int keyCode) {
+	private boolean verifyEntryAndStoreValueCCombo(final String entry, final int keyCode) {
 		String work = "";
 		if (keyCode == SWT.DEL) {
-			Point cursorSelection = getSelection();
+			Point cursorSelection = controlCCombo.getSelection();
 			String text = getText();
 			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != text.length()){
 				work = StringUtil.removeCharAt(getText(), cursorSelection.x);
@@ -389,7 +543,7 @@ public class NumericCombo extends CCombo {
 				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
 			}
 		} else if (keyCode == SWT.BS) {
-			Point cursorSelection = getSelection();
+			Point cursorSelection = controlCCombo.getSelection();
 			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != 0){
 				work = StringUtil.removeCharAt(getText(), cursorSelection.x - 1);
 			} else if (cursorSelection.x != cursorSelection.y) {
@@ -399,7 +553,58 @@ public class NumericCombo extends CCombo {
 		} else if (keyCode == 0) {
 			work = entry;
 		} else {
-			Point cursorSelection = getSelection();
+			Point cursorSelection = controlCCombo.getSelection();
+			if (cursorSelection.x == cursorSelection.y){
+				work = StringUtil.insertString(getText(), entry, cursorSelection.x);
+			} else if (cursorSelection.x != cursorSelection.y) {
+				String text = getText();
+				work = text.substring(0, cursorSelection.x) + entry + text.substring(cursorSelection.y, text.length());
+			}
+		}
+		work = work.trim();
+		
+		if (work.isEmpty()){
+			if (isNullable){
+				storedValue = null;
+			} else {
+				return false;
+			}
+		} else {
+			try {			
+				Number newValue = formatter.parse(work);
+				if (newValue.doubleValue() < minimum || newValue.doubleValue() > maximum) return false;
+				storedValue = newValue;
+			} catch (ParseException nfe) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Verify the entry and store the value in the field storedValue
+	 * 
+	 * @param entry entry to check
+	 * @param keyCode code of the typed key
+	 * @return <code>true</code> if the entry if correct, <code>false</code>
+	 *         otherwise
+	 */
+	private boolean verifyEntryAndStoreValueCombo(final String entry, final int keyCode) {
+		String work = "";
+		if (keyCode == SWT.DEL) {
+			work = StringUtil.removeCharAt(getText(), getCaretPosition());
+		} else if (keyCode == SWT.BS) {
+			Point cursorSelection = controlCombo.getSelection();
+			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != 0){
+				work = StringUtil.removeCharAt(getText(), getCaretPosition() - 1);
+			} else if (cursorSelection.x != cursorSelection.y) {
+				String text = getText();
+				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
+			}
+		} else if (keyCode == 0) {
+			work = entry;
+		} else {
+			Point cursorSelection = controlCombo.getSelection();
 			if (cursorSelection.x == cursorSelection.y){
 				work = StringUtil.insertString(getText(), entry, cursorSelection.x);
 			} else if (cursorSelection.x != cursorSelection.y) {
@@ -482,7 +687,6 @@ public class NumericCombo extends CCombo {
 	 * 
 	 * @param listener the listener, must be not null
 	 */
-	@Override
 	public void addSelectionListener(SelectionListener listener) {
 		checkWidget();
 		selectionListeners.add(listener);
@@ -554,16 +758,22 @@ public class NumericCombo extends CCombo {
 	protected void checkSubclass() {
 	}
 	
-	@Override
 	public void cut() {
-		super.cut();
+		comboCut();
 		setValue(null);
 		fireListeners();
 	}
 	
-	@Override
+	protected void comboCut(){
+		if (controlCombo != null){
+			controlCombo.cut();
+		} else if (controlCCombo != null){
+			controlCCombo.cut();
+		}
+	}
+	
 	public void paste() {
-		super.paste();
+		comboPaste();
 		String work = getText().trim();
 		if (work.isEmpty()){
 			setValue(null);
@@ -576,6 +786,14 @@ public class NumericCombo extends CCombo {
 			}
 		}
 		fireListeners();
+	}
+	
+	protected void comboPaste(){
+		if (controlCombo != null){
+			controlCombo.paste();
+		} else if (controlCCombo != null){
+			controlCCombo.paste();
+		}
 	}
 	
 	/**
@@ -607,13 +825,20 @@ public class NumericCombo extends CCombo {
 	 * 
 	 * @param the string to set, must be not null
 	 */
-	@Override
 	public void setText(String string) {
 		removeVerifyListener(inputVerifier);
 		removeModifyListener(inputNotifier);
-		super.setText(string);
+		setComboText(string);
 		addVerifyListener(inputVerifier);
 		addModifyListener(inputNotifier);
+	}
+	
+	protected void setComboText(String text){
+		if (controlCombo != null){
+			controlCombo.setText(text);
+		} else if (controlCCombo != null){
+			controlCCombo.setText(text);
+		}
 	}
 
 	/**
@@ -640,28 +865,103 @@ public class NumericCombo extends CCombo {
 		this.defaultValue = value;
 	}
 	
-	@Override
+
 	public void select(int index) {
-		removeSelectionListener(selectionNotifier);
-		super.select(index);
+		removeComboSelectionListener(selectionNotifier);
+		comboSelect(index);
 		int count = getItemCount ();
 		if (0 <= index && index < count) {
 			if (index == getSelectionIndex()) return;
 			setValue(Double.parseDouble(getItem(index)));
 		}
-		addSelectionListener(selectionNotifier);
+		addComboSelectionListener(selectionNotifier);
 	}
 	
-	@Override
+	protected void comboSelect(int index){
+		if (controlCombo != null){
+			controlCombo.select(index);
+		} else if (controlCCombo != null){
+			controlCCombo.select(index);
+		}
+	}
+	
+	public int getItemCount(){
+		if (controlCombo != null){
+			return controlCombo.getItemCount();
+		} else if (controlCCombo != null){
+			return controlCCombo.getItemCount();
+		}
+		return 0;
+	}
+	
+	public int getSelectionIndex(){
+		if (controlCombo != null){
+			return controlCombo.getSelectionIndex();
+		} else if (controlCCombo != null){
+			return controlCCombo.getSelectionIndex();
+		}
+		return 0;
+	}
+	
+	public String getItem(int index){
+		if (controlCombo != null){
+			return controlCombo.getItem(index);
+		} else if (controlCCombo != null){
+			return controlCCombo.getItem(index);
+		}
+		return null;
+	}
+	
 	public void setItems(String[] items) {
 		removeVerifyListener(inputVerifier);
 		removeModifyListener(inputNotifier);
-		super.setItems(items);
+		setComboItems(items);
 		addVerifyListener(inputVerifier);
 		addModifyListener(inputNotifier);
 	}
 	
+	protected void setComboItems(String[] items){
+		if (controlCombo != null){
+			controlCombo.setItems(items);
+		} else if (controlCCombo != null){
+			controlCCombo.setItems(items);
+		}
+	}
+	
 	public int getCaretPosition(){
-		return getSelection().y;
+		if (controlCombo != null){
+			return controlCombo.getCaretPosition();
+		} else if (controlCCombo != null){
+			return controlCCombo.getSelection().y;
+		}
+		return 0;
+	}
+	
+	public String getText(){
+		if (controlCombo != null){
+			return controlCombo.getText();
+		} else if (controlCCombo != null){
+			return controlCCombo.getText();
+		}
+		return null;
+	}
+	
+	@Override
+	public void setMenu(Menu menu) {
+		if (controlCombo != null){
+			controlCombo.setMenu(menu);
+		} else if (controlCCombo != null){
+			controlCCombo.setMenu(menu);
+		}
+	}
+	
+	@Override
+	public Menu getMenu() {
+		if (controlCombo != null){
+			controlCombo.getMenu();
+		} else if (controlCCombo != null){
+			controlCCombo.getMenu();
+		}
+		return null;
 	}
 }
