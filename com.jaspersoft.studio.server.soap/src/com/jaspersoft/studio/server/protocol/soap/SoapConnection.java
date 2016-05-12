@@ -134,11 +134,11 @@ public class SoapConnection implements IConnection {
 			if (sp.isLogging()) {
 				System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog"); //$NON-NLS-1$ //$NON-NLS-2$
 				System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true"); //$NON-NLS-1$ //$NON-NLS-2$
-				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
-				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
-				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
-				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
-				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "debug"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "debug"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "debug"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "debug"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "debug"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog"); //$NON-NLS-1$ //$NON-NLS-2$
 				System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true"); //$NON-NLS-1$ //$NON-NLS-2$

@@ -234,6 +234,12 @@
            id="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
            name="%jrssettings">
      </page>
+     <page
+           category="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
+           class="com.jaspersoft.studio.server.preferences.TrustStorePreferencePage"
+           id="com.jaspersoft.studio.server.preferences.TrustStorePreferencePage"
+           name="Trust Store">
+     </page>
   </extension>
   <extension
         point="org.eclipse.ui.propertyPages">

@@ -124,7 +124,11 @@ public class CertificateDialog extends ATitledDialog {
 		lbl1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
-	class CertificateLabelProvider extends ColumnLabelProvider {
+	public static CertificateLabelProvider getLabelProvider() {
+		return new CertificateLabelProvider();
+	}
+
+	public static class CertificateLabelProvider extends ColumnLabelProvider {
 
 		@Override
 		public String getText(Object element) {
@@ -133,7 +137,7 @@ public class CertificateDialog extends ATitledDialog {
 
 	}
 
-	static StyledString getStyledToolTip(X509Certificate cert) {
+	public static StyledString getStyledToolTip(X509Certificate cert) {
 		StyledString ss = new StyledString();
 		if (cert == null)
 			return ss;

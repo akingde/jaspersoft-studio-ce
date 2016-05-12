@@ -722,7 +722,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 							getContainer().getShell().getDisplay().syncExec(new Runnable() {
 								public void run() {
 									if (!shown) {
-										new CertificatesDialog(UIUtils.getShell(), "", chain[0], chain, trustStore) //$NON-NLS-1$
+										new CertificatesDialog(UIUtils.getShell(), "", chain[0], chain) //$NON-NLS-1$
 												.open();
 										shown = true;
 									}
