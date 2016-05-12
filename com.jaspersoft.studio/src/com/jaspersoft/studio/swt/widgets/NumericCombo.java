@@ -20,6 +20,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -31,7 +32,6 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.mihalis.opal.utils.StringUtil;
@@ -45,7 +45,7 @@ import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
  * @author Orlandin Marco
  *
  */
-public class NumericCombo extends Combo {
+public class NumericCombo extends CCombo {
 	
 	/**
 	 * The listeners on this widget
@@ -151,7 +151,7 @@ public class NumericCombo extends Combo {
 	 * decimalDigitsShown	 
 	 */
 	public NumericCombo(Composite parent, int style, int decimalDigitsShown, int decimalDigitsAccepted){
-		super(parent, style);
+		super(parent, style | SWT.BORDER);
 		currentColor = getForeground();
 		this.formatter = new ValidatedDecimalFormat(decimalDigitsShown, decimalDigitsAccepted);
 		addListeners();
@@ -165,7 +165,7 @@ public class NumericCombo extends Combo {
 	 * @param style the style bits, the supported ones are the same of a standard SWT text widget
 	 */
 	public NumericCombo(Composite parent, NumberFormat formatter, int style) {
-		super(parent, style);
+		super(parent, style | SWT.BORDER);
 		currentColor = getForeground();
 		addListeners();
 		this.formatter = formatter;
@@ -381,11 +381,17 @@ public class NumericCombo extends Combo {
 	private boolean verifyEntryAndStoreValue(final String entry, final int keyCode) {
 		String work = "";
 		if (keyCode == SWT.DEL) {
-			work = StringUtil.removeCharAt(getText(), getCaretPosition());
+			Point cursorSelection = getSelection();
+			String text = getText();
+			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != text.length()){
+				work = StringUtil.removeCharAt(getText(), cursorSelection.x);
+			} else {
+				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
+			}
 		} else if (keyCode == SWT.BS) {
 			Point cursorSelection = getSelection();
 			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != 0){
-				work = StringUtil.removeCharAt(getText(), getCaretPosition() - 1);
+				work = StringUtil.removeCharAt(getText(), cursorSelection.x - 1);
 			} else if (cursorSelection.x != cursorSelection.y) {
 				String text = getText();
 				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
@@ -653,5 +659,9 @@ public class NumericCombo extends Combo {
 		super.setItems(items);
 		addVerifyListener(inputVerifier);
 		addModifyListener(inputNotifier);
+	}
+	
+	public int getCaretPosition(){
+		return getSelection().y;
 	}
 }

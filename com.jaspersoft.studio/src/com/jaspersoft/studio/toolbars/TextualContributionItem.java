@@ -21,8 +21,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -231,10 +229,11 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	/**
 	 * Change the font size of one or more elements
 	 */
-	private ModifyListener fontSizeComboModify = new ModifyListener() {
+	private SelectionAdapter fontSizeComboModify = new SelectionAdapter() {
 		
 		@Override
-		public void modifyText(ModifyEvent e) {
+		public void widgetSelected(SelectionEvent e) {
+			System.out.println("modify event");
 			if (!refreshing){
 				List<Object> selection = getSelectionForType(MTextElement.class);
 				if (selection.isEmpty())
@@ -326,13 +325,13 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontName.addSelectionListener(fontNameComboSelect);
 		setAvailableFonts();
 		
-		fontSize = new NumericCombo(controlsArea, SWT.DROP_DOWN, 0, 6);
+		fontSize = new NumericCombo(controlsArea, SWT.NONE, 0, 6);
 		fontSize.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
 		fontSize.setItems(ModelUtils.FONT_SIZES);
-		fontSize.addModifyListener(fontSizeComboModify);
+		fontSize.addSelectionListener(fontSizeComboModify);
 
 		RowData data = new RowData();
-		data.width = 80;
+		data.width = 100;
 		fontSize.setLayoutData(data);
 		
 		ToolBar sizeButtons = new ToolBar(controlsArea, SWT.FLAT | SWT.WRAP);
@@ -418,10 +417,10 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		getToolItems().add(tiFontName);
 		
 		ToolItem tiFontSizeCombo = new ToolItem(parent,SWT.SEPARATOR);
-		fontSize = new NumericCombo(parent, SWT.DROP_DOWN, 0, 6);
+		fontSize = new NumericCombo(parent, SWT.NONE, 0, 6);
 		fontSize.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
 		fontSize.setItems(ModelUtils.FONT_SIZES);
-		fontSize.addModifyListener(fontSizeComboModify);
+		fontSize.addSelectionListener(fontSizeComboModify);
 		fontSize.pack();
 		tiFontSizeCombo.setWidth(fontSize.getSize().x);
 		tiFontSizeCombo.setControl(fontSize);
