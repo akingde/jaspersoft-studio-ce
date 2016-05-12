@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
@@ -47,6 +45,8 @@ import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class ImportDialog extends Dialog {
 	private String value;
@@ -131,7 +131,7 @@ public class ImportDialog extends Dialog {
 							for (int i = 0; i < objects.length; i++) {
 								if (objects[i] instanceof IType) {
 									IType bt = (IType) objects[i];
-									results[i] = bt.getFullyQualifiedName();
+									results[i] = bt.getFullyQualifiedName('.');
 								}
 							}
 						}
