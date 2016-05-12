@@ -421,7 +421,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontSize.setItems(ModelUtils.FONT_SIZES);
 		fontSize.addSelectionListener(fontSizeComboModify);
 		fontSize.pack();
-		tiFontSizeCombo.setWidth(fontSize.getSize().x);
+		tiFontSizeCombo.setWidth(50);
 		tiFontSizeCombo.setControl(fontSize);
 		getToolItems().add(tiFontSizeCombo);
 		

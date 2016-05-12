@@ -47,16 +47,25 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
 
 /**
- * Extension of an swt widget to handle only numeric values
+ * Extension of an swt widget to handle only numeric values. It uses different widgets in 
+ * windows and other OS. In windows it is used internally a CCombo, this because there is an 
+ * abnormal behavior in windows: when the combo is opened a modify listener is triggered. This
+ * happen only on windows, the CCcombo is not affected by this. In the other OS this bug is not
+ * present on both Combo and CCombo, so a base combo is used since it has a better look & feel.
  * 
  * @author Orlandin Marco
  *
  */
 public class NumericCombo extends Composite {
 	
-	
+	/**
+	 * The combo control used in MacOS/Linux
+	 */
 	private Combo controlCombo = null;
 	
+	/**
+	 * The combo control used on windows
+	 */
 	private CCombo controlCCombo = null;
 	
 	/**
@@ -115,11 +124,15 @@ public class NumericCombo extends Composite {
 	 */
 	private Number defaultValue = null;
 	
+	/**
+	 * The default size of a native combo on the current OS. It will be initialized
+	 * the first time this class is used
+	 */
 	private static Point defaultSize = null;
 	
 	/**
 	 * Custom layout used to place the elements inside the composite. This will remove 
-	 * every unnecessary space to have the elements completely fit the container area
+	 * every unnecessary space to have the combo completely fit the container area
 	 */
 	private Layout mainLayout = new Layout() {
 		
@@ -220,6 +233,10 @@ public class NumericCombo extends Composite {
 		Assert.isTrue(formatter != null, "The formatter can't be null");
 	}
 	
+	/**
+	 * Initialize the default size if necessary then build the appropriated
+	 * combo for the current OS, CCombo for windows, Combo for every others
+	 */
 	protected void createControls(){
 		setLayout(mainLayout);
 		if (defaultSize == null){
@@ -233,63 +250,6 @@ public class NumericCombo extends Composite {
 			controlCombo = new Combo(this, SWT.DROP_DOWN);
 		}
 		layout();
-	}
-	
-	protected void addVerifyListener(VerifyListener listener){
-		if (controlCombo != null){
-			controlCombo.addVerifyListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.addVerifyListener(listener);
-		}
-	}
-	
-	protected void addModifyListener(ModifyListener listener){
-		if (controlCombo != null){
-			controlCombo.addModifyListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.addModifyListener(listener);
-		}
-	}
-	
-	protected void removeVerifyListener(VerifyListener listener){
-		if (controlCombo != null){
-			controlCombo.removeVerifyListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.removeVerifyListener(listener);
-		}
-	}
-	
-	protected void removeModifyListener(ModifyListener listener){
-		if (controlCombo != null){
-			controlCombo.removeModifyListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.removeModifyListener(listener);
-		}
-	}
-	
-	protected void addComboSelectionListener(SelectionListener listener){
-		if (controlCombo != null){
-			controlCombo.addSelectionListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.addSelectionListener(listener);
-		}
-	}
-	
-	protected void removeComboSelectionListener(SelectionListener listener){
-		if (controlCombo != null){
-			controlCombo.removeSelectionListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.removeSelectionListener(listener);
-		}
-	}
-	
-	@Override
-	public void addFocusListener(FocusListener listener){
-		if (controlCombo != null){
-			controlCombo.addFocusListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.addFocusListener(listener);
-		}
 	}
 	
 	/**
@@ -367,14 +327,6 @@ public class NumericCombo extends Composite {
 				setComboForeground(currentColor);
 			}
 			this.isInherited = value;
-		}
-	}
-	
-	protected void setComboForeground(Color color){
-		if (controlCombo != null){
-			controlCombo.setForeground(color);
-		} else if (controlCCombo != null){
-			controlCCombo.setForeground(color);
 		}
 	}
 	
@@ -507,25 +459,8 @@ public class NumericCombo extends Composite {
 		}
 	}
 	
-	public void setSelection(Point selection){
-		if (controlCombo != null){
-			controlCombo.setSelection(selection);
-		} else if (controlCCombo != null){
-			controlCCombo.setSelection(selection);
-		}
-	}
-	
-	@Override
-	public void setBackground(Color color) {
-		if (controlCombo != null){
-			controlCombo.setBackground(color);
-		} else if (controlCCombo != null){
-			controlCCombo.setBackground(color);
-		}
-	}
-	
 	/**
-	 * Verify the entry and store the value in the field storedValue
+	 * Verify the entry and store the value in the field storedValue, this is used for the ccombo
 	 * 
 	 * @param entry entry to check
 	 * @param keyCode code of the typed key
@@ -582,7 +517,7 @@ public class NumericCombo extends Composite {
 	}
 	
 	/**
-	 * Verify the entry and store the value in the field storedValue
+	 * Verify the entry and store the value in the field storedValue, this is used for the standard combo
 	 * 
 	 * @param entry entry to check
 	 * @param keyCode code of the typed key
@@ -764,14 +699,6 @@ public class NumericCombo extends Composite {
 		fireListeners();
 	}
 	
-	protected void comboCut(){
-		if (controlCombo != null){
-			controlCombo.cut();
-		} else if (controlCCombo != null){
-			controlCCombo.cut();
-		}
-	}
-	
 	public void paste() {
 		comboPaste();
 		String work = getText().trim();
@@ -786,14 +713,6 @@ public class NumericCombo extends Composite {
 			}
 		}
 		fireListeners();
-	}
-	
-	protected void comboPaste(){
-		if (controlCombo != null){
-			controlCombo.paste();
-		} else if (controlCCombo != null){
-			controlCCombo.paste();
-		}
 	}
 	
 	/**
@@ -832,14 +751,6 @@ public class NumericCombo extends Composite {
 		addVerifyListener(inputVerifier);
 		addModifyListener(inputNotifier);
 	}
-	
-	protected void setComboText(String text){
-		if (controlCombo != null){
-			controlCombo.setText(text);
-		} else if (controlCCombo != null){
-			controlCCombo.setText(text);
-		}
-	}
 
 	/**
 	 * Fire the selection listener added to this widget
@@ -865,7 +776,6 @@ public class NumericCombo extends Composite {
 		this.defaultValue = value;
 	}
 	
-
 	public void select(int index) {
 		removeComboSelectionListener(selectionNotifier);
 		comboSelect(index);
@@ -877,6 +787,9 @@ public class NumericCombo extends Composite {
 		addComboSelectionListener(selectionNotifier);
 	}
 	
+	//THE FOLLOWING METHODS RECRATE SOME API OF THE COMBO AND CALL THEM ON
+	//THE APPROPRIATE COMBO, DEPENDING ON WHICH WAS INITIALIZED
+
 	protected void comboSelect(int index){
 		if (controlCombo != null){
 			controlCombo.select(index);
@@ -963,5 +876,111 @@ public class NumericCombo extends Composite {
 			controlCCombo.getMenu();
 		}
 		return null;
+	}
+	
+	protected void addVerifyListener(VerifyListener listener){
+		if (controlCombo != null){
+			controlCombo.addVerifyListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.addVerifyListener(listener);
+		}
+	}
+	
+	protected void addModifyListener(ModifyListener listener){
+		if (controlCombo != null){
+			controlCombo.addModifyListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.addModifyListener(listener);
+		}
+	}
+	
+	protected void removeVerifyListener(VerifyListener listener){
+		if (controlCombo != null){
+			controlCombo.removeVerifyListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.removeVerifyListener(listener);
+		}
+	}
+	
+	protected void removeModifyListener(ModifyListener listener){
+		if (controlCombo != null){
+			controlCombo.removeModifyListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.removeModifyListener(listener);
+		}
+	}
+	
+	protected void addComboSelectionListener(SelectionListener listener){
+		if (controlCombo != null){
+			controlCombo.addSelectionListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.addSelectionListener(listener);
+		}
+	}
+	
+	protected void removeComboSelectionListener(SelectionListener listener){
+		if (controlCombo != null){
+			controlCombo.removeSelectionListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.removeSelectionListener(listener);
+		}
+	}
+	
+	@Override
+	public void addFocusListener(FocusListener listener){
+		if (controlCombo != null){
+			controlCombo.addFocusListener(listener);
+		} else if (controlCCombo != null){
+			controlCCombo.addFocusListener(listener);
+		}
+	}
+	
+	protected void setComboText(String text){
+		if (controlCombo != null){
+			controlCombo.setText(text);
+		} else if (controlCCombo != null){
+			controlCCombo.setText(text);
+		}
+	}
+	
+	protected void comboCut(){
+		if (controlCombo != null){
+			controlCombo.cut();
+		} else if (controlCCombo != null){
+			controlCCombo.cut();
+		}
+	}
+	
+	protected void comboPaste(){
+		if (controlCombo != null){
+			controlCombo.paste();
+		} else if (controlCCombo != null){
+			controlCCombo.paste();
+		}
+	}
+	
+	public void setSelection(Point selection){
+		if (controlCombo != null){
+			controlCombo.setSelection(selection);
+		} else if (controlCCombo != null){
+			controlCCombo.setSelection(selection);
+		}
+	}
+	
+	@Override
+	public void setBackground(Color color) {
+		if (controlCombo != null){
+			controlCombo.setBackground(color);
+		} else if (controlCCombo != null){
+			controlCCombo.setBackground(color);
+		}
+	}
+	
+	protected void setComboForeground(Color color){
+		if (controlCombo != null){
+			controlCombo.setForeground(color);
+		} else if (controlCCombo != null){
+			controlCCombo.setForeground(color);
+		}
 	}
 }
