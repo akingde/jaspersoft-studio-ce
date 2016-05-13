@@ -545,7 +545,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 			@Override
 			public void focusLost(FocusEvent e) {
 				IContextService service = (IContextService) PlatformUI.getWorkbench().getService(IContextService.class);
-				if (context != null) {
+				if (context != null && service != null) {
 					// it could be activated somewhere else, we don't know, so I add this dirty :(
 					for (int i = 0; i < 10; i++)
 						service.deactivateContext(context);
@@ -555,8 +555,8 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 			@Override
 			public void focusGained(FocusEvent e) {
 				IContextService service = (IContextService) PlatformUI.getWorkbench().getService(IContextService.class);
-				System.out.println("contex added");
-				context = service.activateContext("com.jaspersoft.studio.context"); //$NON-NLS-1$
+				if (service != null)
+					context = service.activateContext("com.jaspersoft.studio.context"); //$NON-NLS-1$
 			}
 		});
 
