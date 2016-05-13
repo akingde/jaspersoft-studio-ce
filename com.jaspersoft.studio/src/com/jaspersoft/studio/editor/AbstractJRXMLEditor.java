@@ -818,8 +818,6 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 					service.deactivateContext(context);
 				break;
 			case PAGE_PREVIEW:
-				if (context == null)
-					context = service.activateContext("com.jaspersoft.studio.context"); //$NON-NLS-1$
 				if (activePage == PAGE_SOURCEEDITOR && !xmlFresh)
 					try {
 						xml2model();
