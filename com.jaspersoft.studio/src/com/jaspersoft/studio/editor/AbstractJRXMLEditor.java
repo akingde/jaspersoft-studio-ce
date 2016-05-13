@@ -771,7 +771,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 				}
 			}
 			String ver = JRXmlWriterHelper.getVersion(getCurrentFile(), jrContext, false);
-			IContextService service = getSite().getService(IContextService.class);
+			IContextService service = (IContextService) PlatformUI.getWorkbench().getService(IContextService.class);
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
 				if (activePage == PAGE_SOURCEEDITOR && !xmlFresh) {
@@ -813,6 +813,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 					isRefreshing = false;
 				}
 				if (context != null)
+					// it could be activated somewhere else, we don't know, so I add this dirty :(
+					for (int i = 0; i < 10; i++)
 					service.deactivateContext(context);
 				break;
 			case PAGE_PREVIEW:

@@ -50,11 +50,16 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.contexts.IContextActivation;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.ResourceTransfer;
@@ -533,6 +538,28 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		}
 
 		getEditorSite().getActionBarContributor();
+
+		graphicalViewer.getControl().addFocusListener(new FocusListener() {
+			protected IContextActivation context;
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				IContextService service = (IContextService) PlatformUI.getWorkbench().getService(IContextService.class);
+				if (context != null) {
+					// it could be activated somewhere else, we don't know, so I add this dirty :(
+					for (int i = 0; i < 10; i++)
+						service.deactivateContext(context);
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				IContextService service = (IContextService) PlatformUI.getWorkbench().getService(IContextService.class);
+				System.out.println("contex added");
+				context = service.activateContext("com.jaspersoft.studio.context"); //$NON-NLS-1$
+			}
+		});
+
 	}
 
 	/*
@@ -575,7 +602,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 			protected void configurePaletteViewer(PaletteViewer viewer) {
 				viewer.setContextMenu(new JSSPaletteContextMenuProvider(viewer));
 				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
-				//set the selection tool into the palette
+				// set the selection tool into the palette
 				viewer.getEditDomain().setDefaultTool(new JSSPaletteSelectionTool(getEditDomain()));
 				viewer.getEditDomain().loadDefaultTool();
 				// Uncomment these lines if you want to set as default a palette
@@ -671,7 +698,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new RefreshTemplateStyleExpression(this);
 		registry.registerAction(action);
 		selectionActions.add(RefreshTemplateStyleExpression.ID);
-		
+
 		action = new RefreshTemplateStyleReference(this);
 		registry.registerAction(action);
 		selectionActions.add(RefreshTemplateStyleReference.ID);
