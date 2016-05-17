@@ -129,7 +129,7 @@ public class CreateListCommand extends CreateElementCommand {
 			int suggestedWidth = location != null ? location.width : -1;
 			int suggestedHeight = location != null ? location.height : -1;
 			ListWizard wizard = new ListWizard(suggestedWidth, suggestedHeight);
-			wizard.setConfig(jConfig);
+			wizard.setConfig(jConfig, false);
 			
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);

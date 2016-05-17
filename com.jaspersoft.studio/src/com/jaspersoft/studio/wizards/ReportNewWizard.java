@@ -124,7 +124,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		JasperDesign jd = new JasperDesign();
 		jd.setJasperReportsContext(jrConfig);
 		jrConfig.setJasperDesign(jd);
-		setConfig(jrConfig);
+		setConfig(jrConfig, true);
 		JDTUtils.deactivateLinkedResourcesSupport();
 	}
 

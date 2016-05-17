@@ -10,9 +10,6 @@ package com.jaspersoft.studio.data.wizard.pages;
 
 import java.text.MessageFormat;
 
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.JasperReportsContext;
-
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -37,6 +34,8 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.WizardEndingStateListener;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 public class DataAdapterEditorPage extends WizardPage implements WizardEndingStateListener {
 
 	private DataAdapterEditor dataAdapterEditor = null;
@@ -48,13 +47,13 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 	private Text textName;
 	private boolean editMode = false;
 	private ADataAdapterStorage storage;
+	private JasperReportsContext jrContext;
+	private WizardPageSupport wizardPageSupport;
+
 
 	public void setStorage(ADataAdapterStorage storage) {
 		this.storage = storage;
 	}
-
-	private JasperReportsContext jrContext;
-	private WizardPageSupport wizardPageSupport;
 
 	public void setJrContext(JasperReportsContext jrContext) {
 		this.jrContext = jrContext;
@@ -172,7 +171,7 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 			editorComposite.dispose();
 		}
 		if (jrContext == null)
-			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
+			jrContext = JasperReportsConfiguration.getDefaultJRConfig();
 		editorComposite = dataAdapterEditor.getComposite(customContainer, SWT.NULL, this, jrContext);
 		editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		wizardPageSupport = WizardPageSupport.create(this, editorComposite.getBindingContext());

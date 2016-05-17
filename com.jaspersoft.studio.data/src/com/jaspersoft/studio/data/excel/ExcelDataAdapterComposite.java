@@ -16,20 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jasperreports.data.AbstractDataAdapterService;
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.data.excel.ExcelDataAdapter;
-import net.sf.jasperreports.data.excel.ExcelDataAdapterImpl;
-import net.sf.jasperreports.data.excel.ExcelFormatEnum;
-import net.sf.jasperreports.data.xls.XlsDataAdapter;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.viewers.CellEditor;
@@ -67,6 +53,20 @@ import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.data.AbstractDataAdapterService;
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.data.excel.ExcelDataAdapter;
+import net.sf.jasperreports.data.excel.ExcelDataAdapterImpl;
+import net.sf.jasperreports.data.excel.ExcelFormatEnum;
+import net.sf.jasperreports.data.xls.XlsDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 	private Text textSheetSelection;
@@ -83,7 +83,13 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 	// The data model
 	private java.util.List<String[]> rows;
+	
+	/**
+	 * Temp. JR configuration used only to get the fields from
+	 * a fake design. It is disposed at the end
+	 */
 	private JasperReportsConfiguration jConfig;
+	
 	private Combo format;
 
 	/**
@@ -582,8 +588,9 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 		if (textFileName.getText().length() > 0) {
 			DataAdapterDescriptor da = getDataAdapter();
-			if (jConfig == null)
-				jConfig = JasperReportsConfiguration.getDefaultInstance();
+			if (jConfig == null){
+				jConfig = JasperReportsConfiguration.getDefaultJRConfig();
+			}
 			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
 			((AbstractDataAdapterService) das).getDataAdapter();
 			JasperDesign jd = new JasperDesign();
@@ -605,8 +612,7 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 			XlsDataAdapter xlsAdapter = (XlsDataAdapter) da.getDataAdapter();
 			boolean useRowHeader = xlsAdapter.isUseFirstRowAsHeader();
 			xlsAdapter.setUseFirstRowAsHeader(true);
-			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig,
-					new JRDesignDataset(jConfig, false));
+			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, new JRDesignDataset(jConfig, false));
 			xlsAdapter.setUseFirstRowAsHeader(useRowHeader);
 
 			rows.clear();
@@ -624,8 +630,11 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 	@Override
 	public void dispose() {
-		if (jConfig != null)
+		if (jConfig != null){
+			//it is safe to dispose this jConfig since it was for sure created internally
 			jConfig.dispose();
+			jConfig = null;
+		}
 		super.dispose();
 	}
 

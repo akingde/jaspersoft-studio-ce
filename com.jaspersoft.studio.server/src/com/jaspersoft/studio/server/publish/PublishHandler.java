@@ -49,6 +49,7 @@ public class PublishHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IFile file = null;
 		JasperReportsConfiguration jContext = null;
+		boolean disposeJrContext = false;
 		ISelection sel = HandlerUtil.getCurrentSelection(event);
 		if (sel instanceof StructuredSelection) {
 			Object obj = ((StructuredSelection) sel).getFirstElement();
@@ -87,6 +88,7 @@ public class PublishHandler extends AbstractHandler {
 		if (ext.equals(FileExtension.JRXML) || ext.equals(FileExtension.JASPER)) {
 			if (jContext == null) {
 				jContext = JasperReportsConfiguration.getDefaultJRConfig(file);
+				disposeJrContext = true;
 				try {
 					jContext.setJasperDesign(JRXMLUtils.getJasperDesign(jContext, file.getContents(), ext));
 				} catch (Exception e) {
@@ -99,6 +101,10 @@ public class PublishHandler extends AbstractHandler {
 				JrxmlPublishAction publishAction = new JrxmlPublishAction(1, null);
 				publishAction.setJrConfig(jContext);
 				publishAction.run();
+				//Check if the context was created internally and must be disposed
+				if (disposeJrContext){
+					jContext.dispose();
+				}
 				return null;
 			}
 		}

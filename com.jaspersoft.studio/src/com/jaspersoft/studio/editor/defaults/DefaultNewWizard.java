@@ -87,7 +87,7 @@ public class DefaultNewWizard extends JSSWizard implements INewWizard {
 		jd.setJasperReportsContext(jrConfig);
 		jrConfig.setJasperDesign(jd);
 
-		setConfig(jrConfig);
+		setConfig(jrConfig, true);
 	}
 
 	/**

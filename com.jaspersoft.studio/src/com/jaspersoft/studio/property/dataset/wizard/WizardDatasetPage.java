@@ -279,10 +279,6 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		handleOptionSelected();
 		
 	}
-
-	
-	
-	
 	
 	protected void handleOptionSelected() {
 		
@@ -294,7 +290,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 					IWizard pwizard = WizardDatasetPage.this.getWizard();
 					DatasetWizard w = new DatasetWizard(pwizard, pwizard.getNextPage(WizardDatasetPage.this));
 					if (pwizard instanceof JSSWizard)
-						w.setConfig( ((JSSWizard) pwizard).getConfig() );
+						w.setConfig( ((JSSWizard) pwizard).getConfig(), false);
 					return w;
 				}
 			});

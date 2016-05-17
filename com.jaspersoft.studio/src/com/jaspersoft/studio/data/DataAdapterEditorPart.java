@@ -13,12 +13,6 @@ import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.eclipse.builder.Markers;
-import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -27,7 +21,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,14 +39,34 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.editor.preview.ABasicEditor;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.builder.Markers;
+import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class DataAdapterEditorPart extends ABasicEditor {
+	
+	private final class ModelPropertyChangeListener implements PropertyChangeListener {
+
+		public void propertyChange(PropertyChangeEvent evt) {
+			getSite().getWorkbenchWindow().getShell().getDisplay().asyncExec(new Runnable() {
+				public void run() {
+					isDirty = true;
+					firePropertyChange(ISaveablePart.PROP_DIRTY);
+				}
+			});
+
+		}
+	}
+	
 	public static final String ID = "com.jaspersoft.studio.data.DataAdapterEditorPart"; //$NON-NLS-1$
 	private DataAdapterDescriptor descriptor;
 	private ModelPropertyChangeListener modelListener = new ModelPropertyChangeListener();
 	private NameComposite nameComposite;
 	private DataAdapterEditor editor;
+	private ADataAdapterComposite dacomposite;
 
 	public DataAdapterEditorPart() {
 		super(true);
@@ -120,24 +133,6 @@ public class DataAdapterEditorPart extends ABasicEditor {
 		return true;
 	}
 
-	private final class ModelPropertyChangeListener implements PropertyChangeListener {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-		 */
-		public void propertyChange(PropertyChangeEvent evt) {
-			getSite().getWorkbenchWindow().getShell().getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					isDirty = true;
-					firePropertyChange(ISaveablePart.PROP_DIRTY);
-				}
-			});
-
-		}
-	}
-
 	@Override
 	public void createPartControl(Composite parent) {
 		Composite c = new Composite(parent, SWT.NONE);
@@ -186,21 +181,6 @@ public class DataAdapterEditorPart extends ABasicEditor {
 				}
 			});
 		}
-	}
-
-	private JasperReportsConfiguration jrContext;
-	private ADataAdapterComposite dacomposite;
-
-	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
-		if (jrContext == null)
-			jrContext = JasperReportsConfiguration.getDefaultJRConfig(file);
-	}
-
-	@Override
-	public void dispose() {
-		if (jrContext != null)
-			jrContext.dispose();
-		super.dispose();
 	}
 
 	@Override

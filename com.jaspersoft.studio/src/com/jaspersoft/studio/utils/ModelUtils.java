@@ -54,6 +54,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.components.items.StandardItemData;
+import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.components.table.BaseColumn;
@@ -767,21 +768,35 @@ public class ModelUtils {
 
 	public static List<JRDesignElement> getAllElements(JasperDesign jd) {
 		List<JRDesignElement> list = getAllGElements(jd);
-
+		return list;
+	}
+	
+	public static List<JRDesignElement> getAllElements(List<JRChild> childElements) {
 		List<JRDesignElement> list2 = new ArrayList<JRDesignElement>();
-		for (int i = 0; i < list.size(); ++i) {
-			JRDesignElement ele = list.get(i);
-			if (ele instanceof JRDesignCrosstab) {
+		for(JRChild ele : childElements){
+			if (ele instanceof JRDesignElement){
+				list2.add((JRDesignElement)ele);
+			}
+			if (ele instanceof JRElementGroup) {
+				list2.addAll(getGElements((JRElementGroup) ele));
+			} else if (ele instanceof JRDesignCrosstab) {
 				list2.addAll(getCrosstabElements((JRDesignCrosstab) ele));
 			} else if (ele instanceof JRDesignComponentElement) {
 				Component cmp = ((JRDesignComponentElement) ele).getComponent();
 				if (cmp instanceof StandardTable) {
 					list2.addAll(getTableElements((StandardTable) cmp));
+				} else if (cmp instanceof StandardListComponent){
+					list2.addAll(getListElements((StandardListComponent) cmp));
 				}
 			}
 		}
-		list.addAll(list2);
-		return list;
+		return list2;
+	}
+	
+	public static List<JRDesignElement> getListElements(StandardListComponent list) {
+		List<JRDesignElement> list2 = new ArrayList<JRDesignElement>();
+		list2.addAll(getAllElements(list.getContents().getChildren()));
+		return list2;
 	}
 
 	public static List<JRDesignElement> getTableElements(StandardTable table) {
@@ -812,23 +827,12 @@ public class ModelUtils {
 	public static void getTableCellElements(Cell cell, List<JRDesignElement> list2) {
 		if (cell == null)
 			return;
-		for (JRChild child : cell.getChildren()) {
-			if (child instanceof JRDesignElement)
-				list2.add((JRDesignElement) child);
-		}
+		list2.addAll(getAllElements(cell.getChildren()));
 	}
 
 	public static List<JRDesignElement> getGElements(JRElementGroup gr) {
 		List<JRDesignElement> res = new ArrayList<JRDesignElement>();
-		for (Object el : gr.getChildren()) {
-			if (el instanceof JRElementGroup) {
-				res.addAll(getGElements((JRElementGroup) el));
-			} else if (el instanceof JRDesignElement) {
-				res.add((JRDesignElement) el);
-				if (el instanceof JRDesignCrosstab)
-					res.addAll(getCrosstabElements((JRDesignCrosstab) el));
-			}
-		}
+		res.addAll(getAllElements(gr.getChildren()));
 		return res;
 	}
 
@@ -847,9 +851,11 @@ public class ModelUtils {
 	public static List<JRDesignElement> getCrosstabElements(JRDesignCrosstab crosstab) {
 		List<JRDesignElement> list = new ArrayList<JRDesignElement>();
 		List<JRDesignCellContents> cells = getAllCells(crosstab);
-		for (JRDesignCellContents content : cells)
-			if (content != null)
+		for (JRDesignCellContents content : cells){
+			if (content != null){
 				list.addAll(getGElements(content));
+			}
+		}
 		return list;
 	}
 

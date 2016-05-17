@@ -121,7 +121,7 @@ public class CreateCustomVisualizationCommand extends CreateElementCommand {
 			List<ComponentDescriptor> modules = UIManager.getModules(jConfig);
 			if (!Misc.isNullOrEmpty(modules)) {
 				CVCWizard wizard = new CVCWizard(modules);
-				wizard.setConfig(jConfig);
+				wizard.setConfig(jConfig, false);
 				WizardDialog d = new WizardDialog(UIUtils.getShell(), wizard);
 				if (d.open() == Dialog.OK) {
 					CVDesignComponent cvComp = (CVDesignComponent) ((JRDesignComponentElement) jrElement)

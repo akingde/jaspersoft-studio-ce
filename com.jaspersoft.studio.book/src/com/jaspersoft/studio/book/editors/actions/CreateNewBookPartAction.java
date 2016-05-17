@@ -92,7 +92,7 @@ public class CreateNewBookPartAction extends ACreateAndSelectAction {
 						};
 					};
 					WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
-					wizard.setConfig(partContainer.getJasperConfiguration());
+					wizard.setConfig(partContainer.getJasperConfiguration(), false);
 					dialog.create();
 					if (dialog.open() == Dialog.OK) {
 						MSubreport srcNode = wizard.getSubreport();

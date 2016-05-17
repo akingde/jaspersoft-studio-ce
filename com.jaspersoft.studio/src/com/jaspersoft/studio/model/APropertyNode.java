@@ -36,8 +36,8 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	/**
 	 * Static default map used to keep the defaults value of every implementation of a property node.
 	 */
-	private static HashMap<Class<? extends APropertyNode>, Map<String, DefaultValue>> defaultsMap = 
-														new HashMap<Class<? extends APropertyNode>, Map<String,DefaultValue>>();
+	public HashMap<Class<? extends APropertyNode>, Map<String, DefaultValue>> defaultsMap = 
+			new HashMap<Class<? extends APropertyNode>, Map<String,DefaultValue>>();
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 

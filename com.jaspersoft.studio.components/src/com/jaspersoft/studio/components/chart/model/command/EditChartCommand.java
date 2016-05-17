@@ -71,7 +71,7 @@ public class EditChartCommand extends Command {
 
 			ChartWizard wizard = new ChartWizard(new MChart(null, clone, -1),
 					(JRDesignElementDataset) clone.getDataset(), true);
-			wizard.setConfig(jConfig);
+			wizard.setConfig(jConfig, false);
 			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(oldChart, originalNode));
 			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 			dialog.create();

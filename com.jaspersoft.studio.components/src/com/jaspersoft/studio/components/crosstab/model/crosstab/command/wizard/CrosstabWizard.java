@@ -424,8 +424,8 @@ public class CrosstabWizard extends JSSWizard {
 	}
 
 	@Override
-	public void setConfig(JasperReportsConfiguration jConfig) {
-		super.setConfig(jConfig);
+	public void setConfig(JasperReportsConfiguration jConfig, boolean disposeConfig) {
+		super.setConfig(jConfig, disposeConfig);
 		if (crosstab != null)
 			crosstab.setJasperConfiguration(jConfig);
 	}

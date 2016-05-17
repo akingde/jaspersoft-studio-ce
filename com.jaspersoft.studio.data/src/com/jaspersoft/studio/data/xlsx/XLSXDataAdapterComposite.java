@@ -16,16 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.data.xlsx.XlsxDataAdapter;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.viewers.CellEditor;
@@ -59,6 +49,16 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.data.xlsx.XlsxDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 
 	private TableViewer tableViewer;
@@ -74,6 +74,11 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 
 	// The data model
 	private java.util.List<String[]> rows;
+	
+	/**
+	 * Temp. JR configuration used only to get the fields from
+	 * a fake design. It is disposed at the end
+	 */
 	private JasperReportsConfiguration jConfig;
 
 	/**
@@ -501,7 +506,7 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 		if (textFileName.getText().length() > 0) {
 			DataAdapterDescriptor da = getDataAdapter();
 			if (jConfig == null)
-				jConfig = JasperReportsConfiguration.getDefaultInstance();
+				jConfig = JasperReportsConfiguration.getDefaultJRConfig();
 			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
 			JasperDesign jd = new JasperDesign();
 			jd.setJasperReportsContext(jConfig);
@@ -536,8 +541,11 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 
 	@Override
 	public void dispose() {
-		if (jConfig != null)
+		if (jConfig != null){
+			//it is safe to dispose this jConfig since it was for sure created internally
 			jConfig.dispose();
+			jConfig = null;
+		}
 		super.dispose();
 	}
 

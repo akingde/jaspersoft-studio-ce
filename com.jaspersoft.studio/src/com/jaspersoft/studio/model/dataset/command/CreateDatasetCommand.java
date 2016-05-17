@@ -97,7 +97,7 @@ public class CreateDatasetCommand extends Command {
 		if (jrDataset == null) {
 			DatasetWizard wizard = new DatasetWizard();
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-			wizard.setConfig(jConfig);
+			wizard.setConfig(jConfig, false);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				jrDataset = wizard.getDataset();

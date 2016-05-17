@@ -74,7 +74,15 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	private int startPage;
 	private AMJrxmlContainer node;
 	private JasperReportsConfiguration jrConfig;
+	
+	/**
+	 * Flag to keep track if the context was created internally to this wizard
+	 * or passed from outside. If it was created internally then it is disposed
+	 * at the end, otherwise not.
+	 */
+	private boolean disposeContext = true;
 
+	
 	public Publish2ServerWizard() {
 		super();
 		setWindowTitle(Messages.Publish2ServerWizard_Title);
@@ -82,12 +90,20 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 		JDTUtils.activateLinkedResourcesSupport();
 	}
 
-	public Publish2ServerWizard(JasperDesign jDesign,
-			JasperReportsConfiguration jrConfig, int page) {
+	/**
+	 * Create the wizard
+	 * 
+	 * @param jDesign
+	 * @param jrConfig a JasperReportsConfiguration, when passed in this way this jrConfig is not disposed
+	 * at the end of the wizard
+	 * @param page
+	 */
+	public Publish2ServerWizard(JasperDesign jDesign, JasperReportsConfiguration jrConfig, int page) {
 		this();
 		this.jDesign = jDesign;
 		this.startPage = page;
 		this.jrConfig = jrConfig;
+		disposeContext = false;
 	}
 
 	private void init() {
@@ -95,18 +111,22 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 			Object obj = ((IStructuredSelection) selection).getFirstElement();
 			if (obj instanceof IFile) {
 				IFile file = (IFile) obj;
-				jrConfig = new JasperReportsConfiguration(
-						DefaultJasperReportsContext.getInstance(), file);
+				jrConfig = JasperReportsConfiguration.getDefaultJRConfig(file); 
+				disposeContext = true;
 				initJDesign(file);
 			}
 		}
-		if (jrConfig == null)
+		if (jrConfig == null){
 			jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
+			disposeContext = true;
+		}
 	}
 
 	@Override
 	public void dispose() {
-		jrConfig.dispose();
+		if (disposeContext){
+			jrConfig.dispose();
+		}
 		super.dispose();
 	}
 
@@ -369,8 +389,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	private void doFinish() {
 		try {
-			Method m = getContainer().getClass().getDeclaredMethod(
-					"finishPressed", null); //$NON-NLS-1$
+			Method m = getContainer().getClass().getDeclaredMethod("finishPressed", null); //$NON-NLS-1$
 			if (m != null) {
 				m.setAccessible(true);
 				m.invoke(getContainer());

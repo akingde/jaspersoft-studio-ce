@@ -54,11 +54,33 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	public static final String FILE_NAME = "file_name";
 
 	private IWizard parentWizard;
+	
 	protected IWizardPage fallbackPage;
+	
 	private List<IWizard> childWizards = new ArrayList<IWizard>();
 
 	private Map<String, Object> settings = new HashMap<String, Object>();
+	
+	private List<Command> commands;
+	
+	/**
+	 * Flag to keep track if the context was created internally to this wizard
+	 * or passed from outside. If it was created internally then it is disposed
+	 * at the end, otherwise not.
+	 */
+	private boolean disposeConfig = true;
 
+	public JSSWizard() {
+		super();
+		setForcePreviousAndNextButtons(true);
+	}
+	
+	public JSSWizard(IWizard parentWizard, IWizardPage fallbackPage) {
+		this();
+		this.parentWizard = parentWizard;
+		this.fallbackPage = fallbackPage;
+	}
+	
 	/**
 	 * Allows pages to share keyed objects for general porpuses.
 	 * 
@@ -80,17 +102,6 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	 */
 	public void setSettings(Map<String, Object> map) {
 		this.settings = map;
-	}
-
-	public JSSWizard() {
-		super();
-		setForcePreviousAndNextButtons(true);
-	}
-
-	public JSSWizard(IWizard parentWizard, IWizardPage fallbackPage) {
-		this();
-		this.parentWizard = parentWizard;
-		this.fallbackPage = fallbackPage;
 	}
 
 	public IWizardPage hasNextPage(IWizardPage page) {
@@ -148,8 +159,17 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 		return true;
 	}
 
-	public void setConfig(JasperReportsConfiguration config) {
-
+	/**
+	 * Set the {@link JasperReportsConfiguration} of the wizard. The wizard
+	 * can also dispose it at the end according to the value of the passed
+	 * flag
+	 * 
+	 * @param config the config, if null it is removed
+	 * @param disposeConfig true if the JR Configuration should be disposed at the end
+	 * of the wizard, false otherwise
+	 */
+	public void setConfig(JasperReportsConfiguration config, boolean disposeConfig) {
+		this.disposeConfig = disposeConfig;
 		if (config == null) {
 			getSettings().remove(JASPERREPORTS_CONFIGURATION);
 		} else {
@@ -170,17 +190,6 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 			UIUtils.showError(e.getCause());
 		}
 	}
-
-	/**
-	 * 
-	 * @deprecated Use setConfig() instead
-	 * @param jConfig
-	 */
-	public void init(JasperReportsConfiguration jConfig) {
-		setConfig(jConfig);
-	}
-
-	private List<Command> commands;
 
 	public void removeCommand(Command command) {
 		if (parentWizard != null && parentWizard instanceof JSSWizard)
@@ -321,7 +330,7 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 		}
 		super.dispose();
 		JasperReportsConfiguration jrConfig = getConfig();
-		if (jrConfig != null && jrConfig != JasperReportsConfiguration.getDefaultInstance())
+		if (jrConfig != null && jrConfig != JasperReportsConfiguration.getDefaultInstance() && disposeConfig)
 			jrConfig.dispose();
 	}
 

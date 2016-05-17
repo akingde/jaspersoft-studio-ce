@@ -14,16 +14,6 @@ package com.jaspersoft.studio.data;
 
 import java.io.File;
 
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataFile;
-import net.sf.jasperreports.data.FileDataAdapter;
-import net.sf.jasperreports.data.StandardRepositoryDataLocation;
-import net.sf.jasperreports.data.http.StandardHttpDataLocation;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.ui.validator.NotEmptyFileValidator;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JasperReportsContext;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -46,8 +36,20 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.messages.Messages;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataFile;
+import net.sf.jasperreports.data.FileDataAdapter;
+import net.sf.jasperreports.data.StandardRepositoryDataLocation;
+import net.sf.jasperreports.data.http.StandardHttpDataLocation;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.ui.validator.NotEmptyFileValidator;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
+	
 	protected Text textFileName;
+	
 	private Button btnBrowse;
 
 	public AFileDataAdapterComposite(Composite parent, int style,

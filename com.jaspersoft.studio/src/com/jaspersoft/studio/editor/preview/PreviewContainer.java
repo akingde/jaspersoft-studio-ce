@@ -166,7 +166,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 				}
 				in = JRXMLUtils.getXML(jrContext, input, file.getCharset(true), in, null);
-				getJrContext(file);
+				initJRContext(file);
 				jrContext.setJasperDesign(JRXmlLoader.load(jrContext, in));
 				setJasperDesign(jrContext);
 			} catch (Exception e) {

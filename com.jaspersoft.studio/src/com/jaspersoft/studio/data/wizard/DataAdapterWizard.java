@@ -29,7 +29,7 @@ public class DataAdapterWizard extends AbstractDataAdapterWizard implements Sele
 	public DataAdapterWizard(ADataAdapterStorage storage) {
 		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
 		this.storage = storage;
-		setConfig(JasperReportsConfiguration.getDefaultInstance());
+		setConfig(JasperReportsConfiguration.getDefaultInstance(), false);
 	}
 
 	/**

@@ -74,7 +74,7 @@ public class EditSpiderChartCommand extends Command {
 
 			ChartWizard wizard = new ChartWizard(new MSpiderChart(null, clone,
 					-1), (JRDesignElementDataset) scc.getDataset());
-			wizard.setConfig(jConfig);
+			wizard.setConfig(jConfig, false);
 			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(oldChart,originalNode));
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);

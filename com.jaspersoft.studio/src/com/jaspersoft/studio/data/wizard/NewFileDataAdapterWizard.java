@@ -84,7 +84,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 	public NewFileDataAdapterWizard() {
 		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
 		this.storage = DataAdapterManager.getPreferencesStorage();
-		setConfig(JasperReportsConfiguration.getDefaultJRConfig());
+		setConfig(JasperReportsConfiguration.getDefaultJRConfig(), true);
 		JDTUtils.deactivateLinkedResourcesSupport();
 	}
 

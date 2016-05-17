@@ -15,9 +15,6 @@ package com.jaspersoft.studio.server.publish.wizard;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -49,12 +46,15 @@ import com.jaspersoft.studio.server.publish.wizard.page.RFileLocationPage;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 	private JasperReportsConfiguration jrConfig;
 	private int startPage = 0;
 	private IFile file;
 	private FileSelectionPage page0;
 	private RFileLocationPage page1;
+	private ISelection selection;
 
 	public PublishFile2ServerWizard() {
 		super();
@@ -75,14 +75,17 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 				file = (IFile) obj;
 		}
 		if (jrConfig == null)
-			if (file != null)
-				jrConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
-			else
+			if (file != null){
+				jrConfig = JasperReportsConfiguration.getDefaultJRConfig(file);
+			} else {
 				jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
+			}
 	}
 
 	@Override
 	public void dispose() {
+		//it is safe to dispose this context since it can only be created inside this
+		//class in the init() method
 		jrConfig.dispose();
 		super.dispose();
 	}
@@ -168,8 +171,6 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 	public IWizardPage getStartingPage() {
 		return getPages()[Math.min(startPage, getPageCount() - 1)];
 	}
-
-	private ISelection selection;
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {

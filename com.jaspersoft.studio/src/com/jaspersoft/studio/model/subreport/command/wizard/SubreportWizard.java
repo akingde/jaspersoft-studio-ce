@@ -182,8 +182,8 @@ public class SubreportWizard extends JSSWizard {
 	}
 
 	@Override
-	public void setConfig(JasperReportsConfiguration config) {
-		super.setConfig(config);
+	public void setConfig(JasperReportsConfiguration config, boolean disposeConfig) {
+		super.setConfig(config, disposeConfig);
 		if (subreport != null)
 			subreport.setJasperConfiguration(config);
 	}

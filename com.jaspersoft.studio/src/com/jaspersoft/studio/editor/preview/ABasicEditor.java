@@ -8,10 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JasperReportsContext;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -32,8 +28,19 @@ import org.eclipse.ui.part.EditorPart;
 import com.jaspersoft.studio.editor.DeltaVisitor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 public abstract class ABasicEditor extends EditorPart {
+	
 	protected boolean listenResource;
+	
+	protected JasperReportsConfiguration jrContext;
+	
+	private IPartListener partListener;
+	
+	private ResourceTracker resourceListener;
 
 	public ABasicEditor(boolean listenResource) {
 		this.listenResource = listenResource;
@@ -94,9 +101,6 @@ public abstract class ABasicEditor extends EditorPart {
 		}
 	};
 
-	private IPartListener partListener;
-	private ResourceTracker resourceListener;
-
 	@Override
 	public void dispose() {
 		if (partListener != null)
@@ -104,8 +108,7 @@ public abstract class ABasicEditor extends EditorPart {
 		partListener = null;
 		if (resourceListener != null)
 			((IFileEditorInput) getEditorInput()).getFile().getWorkspace().removeResourceChangeListener(resourceListener);
-		if (jrContext != null)
-			jrContext.dispose();
+		disposeContext();
 		super.dispose();
 	}
 
@@ -152,7 +155,7 @@ public abstract class ABasicEditor extends EditorPart {
 		}
 
 		try {
-			getJrContext(file);
+			initJRContext(file);
 			setSite(site);
 			setPartName(input.getName());
 			setInput(input);
@@ -161,15 +164,24 @@ public abstract class ABasicEditor extends EditorPart {
 		}
 	}
 
-	protected JasperReportsConfiguration jrContext;
-
-	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
+	/**
+	 * If the jrContext was not set yet it create a new one basing on the 
+	 * passed file. The jrContext created this way will be disposed at the end.
+	 * It it safe to dispose a JRConfig created this way, since it is a not shared
+	 * instance
+	 */
+	protected void initJRContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null)
 			jrContext = JasperReportsConfiguration.getDefaultJRConfig(file);
 	}
-
-	public void setJrContext(JasperReportsConfiguration jrContext) {
-		this.jrContext = jrContext;
+	
+	/**
+	 * Method called to dispose the current context, can be overridden to provide
+	 * a different behavior
+	 */
+	protected void disposeContext(){
+		if (jrContext != null)
+			jrContext.dispose();
 	}
 
 	@Override

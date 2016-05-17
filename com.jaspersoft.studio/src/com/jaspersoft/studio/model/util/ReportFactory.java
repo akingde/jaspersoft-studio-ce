@@ -16,6 +16,55 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.eclipse.core.resources.IFile;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.background.MBackgrounImage;
+import com.jaspersoft.studio.callout.MCallout;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MBreak;
+import com.jaspersoft.studio.model.MCompositeElementReport;
+import com.jaspersoft.studio.model.MElementGroup;
+import com.jaspersoft.studio.model.MEllipse;
+import com.jaspersoft.studio.model.MLine;
+import com.jaspersoft.studio.model.MRectangle;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.MReportRoot;
+import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.band.MBandGroupFooter;
+import com.jaspersoft.studio.model.band.MBandGroupHeader;
+import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.field.MFields;
+import com.jaspersoft.studio.model.frame.MFrame;
+import com.jaspersoft.studio.model.genericElement.MComponentElement;
+import com.jaspersoft.studio.model.genericElement.MGenericElement;
+import com.jaspersoft.studio.model.group.MGroup;
+import com.jaspersoft.studio.model.group.MGroups;
+import com.jaspersoft.studio.model.image.MImage;
+import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.parameter.MParameterSystem;
+import com.jaspersoft.studio.model.parameter.MParameters;
+import com.jaspersoft.studio.model.scriptlet.MScriptlet;
+import com.jaspersoft.studio.model.scriptlet.MScriptlets;
+import com.jaspersoft.studio.model.scriptlet.MSystemScriptlet;
+import com.jaspersoft.studio.model.sortfield.MSortField;
+import com.jaspersoft.studio.model.sortfield.MSortFields;
+import com.jaspersoft.studio.model.style.MConditionalStyle;
+import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.model.style.StyleTemplateFactory;
+import com.jaspersoft.studio.model.subreport.MSubreport;
+import com.jaspersoft.studio.model.text.MStaticText;
+import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.model.variable.MVariable;
+import com.jaspersoft.studio.model.variable.MVariableSystem;
+import com.jaspersoft.studio.model.variable.MVariables;
+import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
@@ -57,55 +106,6 @@ import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
-import org.eclipse.core.resources.IFile;
-
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.background.MBackgrounImage;
-import com.jaspersoft.studio.callout.MCallout;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MBreak;
-import com.jaspersoft.studio.model.MCompositeElementReport;
-import com.jaspersoft.studio.model.MElementGroup;
-import com.jaspersoft.studio.model.MEllipse;
-import com.jaspersoft.studio.model.MLine;
-import com.jaspersoft.studio.model.MRectangle;
-import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.band.MBandGroupFooter;
-import com.jaspersoft.studio.model.band.MBandGroupHeader;
-import com.jaspersoft.studio.model.dataset.MDataset;
-import com.jaspersoft.studio.model.field.MField;
-import com.jaspersoft.studio.model.field.MFields;
-import com.jaspersoft.studio.model.frame.MFrame;
-import com.jaspersoft.studio.model.genericElement.MComponentElement;
-import com.jaspersoft.studio.model.genericElement.MGenericElement;
-import com.jaspersoft.studio.model.group.MGroup;
-import com.jaspersoft.studio.model.group.MGroups;
-import com.jaspersoft.studio.model.image.MImage;
-import com.jaspersoft.studio.model.parameter.MParameter;
-import com.jaspersoft.studio.model.parameter.MParameterSystem;
-import com.jaspersoft.studio.model.parameter.MParameters;
-import com.jaspersoft.studio.model.scriptlet.MScriptlet;
-import com.jaspersoft.studio.model.scriptlet.MScriptlets;
-import com.jaspersoft.studio.model.scriptlet.MSystemScriptlet;
-import com.jaspersoft.studio.model.sortfield.MSortField;
-import com.jaspersoft.studio.model.sortfield.MSortFields;
-import com.jaspersoft.studio.model.style.MConditionalStyle;
-import com.jaspersoft.studio.model.style.MStyle;
-import com.jaspersoft.studio.model.style.MStyles;
-import com.jaspersoft.studio.model.style.StyleTemplateFactory;
-import com.jaspersoft.studio.model.subreport.MSubreport;
-import com.jaspersoft.studio.model.text.MStaticText;
-import com.jaspersoft.studio.model.text.MTextField;
-import com.jaspersoft.studio.model.variable.MVariable;
-import com.jaspersoft.studio.model.variable.MVariableSystem;
-import com.jaspersoft.studio.model.variable.MVariables;
-import com.jaspersoft.studio.plugin.ExtensionManager;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-
 /*
  * A factory for creating Report objects.
  * 
@@ -122,7 +122,7 @@ public class ReportFactory {
 	 */
 	public static INode createReport(JasperReportsConfiguration jConfig) {
 		JasperDesign jd = jConfig.getJasperDesign();
-		ANode node = new MRoot(null, jd);
+		ANode node = new MReportRoot(jConfig, jd);
 		ANode report = new MReport(node, jConfig);
 		// create first level
 		// create Styles
@@ -150,7 +150,7 @@ public class ReportFactory {
 	 */
 	public static INode createToolReport(JasperReportsConfiguration jConfig) {
 		JasperDesign jd = jConfig.getJasperDesign();
-		ANode node = new MRoot(null, jd);
+		ANode node = new MReportRoot(jConfig, jd);
 		ANode report = new MCompositeElementReport(node, jConfig);
 		//Create the background element
 		new MBackgrounImage(report);
