@@ -24,6 +24,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 public class RunWithProgressBar implements IRunnableContext {
 
 	private ProgressBar pb;
@@ -45,7 +47,7 @@ public class RunWithProgressBar implements IRunnableContext {
 			InterruptedException {
 		IProgressMonitor monitor = getProgressMonitor();
 
-		ModalContext.run(runnable, true, monitor, Display.getDefault());
+		ModalContext.run(runnable, true, monitor, UIUtils.getDisplay());
 	}
 
 	public IProgressMonitor getProgressMonitor() {

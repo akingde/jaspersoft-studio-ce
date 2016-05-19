@@ -333,41 +333,45 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 	public void resourceChanged(final IResourceChangeEvent event) {
 		if (isRefreshing)
 			return;
-		switch (event.getType()) {
-		case IResourceChangeEvent.PRE_CLOSE:
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					IWorkbenchPage[] pages = getSite().getWorkbenchWindow().getPages();
-					for (int i = 0; i < pages.length; i++) {
-						if (((FileEditorInput) xmlEditor.getEditorInput()).getFile().getProject().equals(event.getResource())) {
-							IEditorPart editorPart = pages[i].findEditor(xmlEditor.getEditorInput());
-							pages[i].closeEditor(editorPart, true);
+		UIUtils.getDisplay().syncExec(new Runnable() {
+			public void run() {
+				switch (event.getType()) {
+				case IResourceChangeEvent.PRE_CLOSE:
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							IWorkbenchPage[] pages = getSite().getWorkbenchWindow().getPages();
+							for (int i = 0; i < pages.length; i++) {
+								if (((FileEditorInput) xmlEditor.getEditorInput()).getFile().getProject().equals(event.getResource())) {
+									IEditorPart editorPart = pages[i].findEditor(xmlEditor.getEditorInput());
+									pages[i].closeEditor(editorPart, true);
+								}
+							}
 						}
+					});
+					break;
+				case IResourceChangeEvent.PRE_DELETE:
+					break;
+				case IResourceChangeEvent.POST_CHANGE:
+					try {
+						DeltaVisitor visitor = new DeltaVisitor(AbstractJRXMLEditor.this);
+						event.getDelta().accept(visitor);
+						if (jrContext != null && getEditorInput() != null) {
+							IFile old = jrContext.getAssociatedReportFile();
+							IFile newf = ((IFileEditorInput) getEditorInput()).getFile();
+							jrContext.init(newf);
+							JaspersoftStudioPlugin.getExtensionManager().onRename(old, newf, jrContext,
+									getActiveEditor().getEditorSite().getActionBars().getStatusLineManager().getProgressMonitor());
+						}
+					} catch (CoreException e) {
+						UIUtils.showError(e);
 					}
+					break;
+				case IResourceChangeEvent.PRE_BUILD:
+				case IResourceChangeEvent.POST_BUILD:
+					break;
 				}
-			});
-			break;
-		case IResourceChangeEvent.PRE_DELETE:
-			break;
-		case IResourceChangeEvent.POST_CHANGE:
-			try {
-				DeltaVisitor visitor = new DeltaVisitor(this);
-				event.getDelta().accept(visitor);
-				if (jrContext != null && getEditorInput() != null) {
-					IFile old = jrContext.getAssociatedReportFile();
-					IFile newf = ((IFileEditorInput) getEditorInput()).getFile();
-					jrContext.init(newf);
-					JaspersoftStudioPlugin.getExtensionManager().onRename(old, newf, jrContext,
-							getActiveEditor().getEditorSite().getActionBars().getStatusLineManager().getProgressMonitor());
-				}
-			} catch (CoreException e) {
-				UIUtils.showError(e);
 			}
-			break;
-		case IResourceChangeEvent.PRE_BUILD:
-		case IResourceChangeEvent.POST_BUILD:
-			break;
-		}
+		});
 	}
 
 	/*
