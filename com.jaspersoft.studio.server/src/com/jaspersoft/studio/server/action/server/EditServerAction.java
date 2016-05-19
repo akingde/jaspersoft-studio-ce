@@ -14,8 +14,6 @@ package com.jaspersoft.studio.server.action.server;
 
 import java.lang.reflect.InvocationTargetException;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -25,7 +23,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.server.Activator;
@@ -35,6 +32,8 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.ServerProfileWizard;
 import com.jaspersoft.studio.server.wizard.ServerProfileWizardDialog;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class EditServerAction extends Action {
 	public static final String ID = "editServerAction"; //$NON-NLS-1$
@@ -79,6 +78,7 @@ public class EditServerAction extends Action {
 				mspold.setWsClient(null);
 
 				ServerManager.saveServerProfile(mspold);
+				mspold.setWsClient(msprof.getWsClient());
 				fillServerProfile(mspold, treeViewer);
 			}
 
@@ -95,7 +95,7 @@ public class EditServerAction extends Action {
 					mspold.removeChildren();
 					new MDummy(mspold);
 					showSelection();
-					WSClientHelper.connectGetData(mspold, monitor);
+					WSClientHelper.connectGetData(mspold, monitor, false);
 					showSelection();
 				} catch (InvocationTargetException e) {
 					UIUtils.showError(e);
@@ -110,7 +110,7 @@ public class EditServerAction extends Action {
 			}
 
 			private void showSelection() {
-				Display.getDefault().syncExec(new Runnable() {
+				UIUtils.getDisplay().syncExec(new Runnable() {
 
 					@Override
 					public void run() {

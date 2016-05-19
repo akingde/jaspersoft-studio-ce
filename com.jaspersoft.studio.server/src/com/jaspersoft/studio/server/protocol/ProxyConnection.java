@@ -473,7 +473,6 @@ public class ProxyConnection implements IConnection {
 							pass = pd.getValue(); // $NON-NLS-1$
 						else
 							monitor.setCanceled(true);
-						;
 					}
 				});
 

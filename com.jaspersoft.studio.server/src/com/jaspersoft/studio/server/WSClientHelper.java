@@ -112,10 +112,18 @@ public class WSClientHelper {
 	}
 
 	public static void connectGetData(MServerProfile msp, IProgressMonitor monitor) throws Exception {
+		connectGetData(msp, monitor, true);
+	}
+
+	public static void connectGetData(MServerProfile msp, IProgressMonitor monitor, boolean reconnect)
+			throws Exception {
 		msp.removeChildren();
-		IConnection c = connect(msp, monitor);
-		if (monitor.isCanceled())
-			return;
+		IConnection c = msp.getWsClient();
+		if (reconnect && c != null) {
+			c = connect(msp, monitor);
+			if (monitor.isCanceled())
+				return;
+		}
 		WSClientHelper.listFolder(msp, c, "/", monitor, 0);
 	}
 

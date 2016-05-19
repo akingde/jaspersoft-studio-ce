@@ -412,7 +412,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 		final TreeViewer tv = (TreeViewer) event.getTreeViewer();
 		final MServerProfile r = (MServerProfile) event.getElement();
 		try {
-			WSClientHelper.connectGetData(r, monitor);
+			WSClientHelper.connectGetData(r, monitor, false);
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 
 				public void run() {
