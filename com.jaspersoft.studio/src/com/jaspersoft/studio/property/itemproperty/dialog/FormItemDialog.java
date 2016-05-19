@@ -54,6 +54,15 @@ public abstract class FormItemDialog extends AItemDialog {
 	}
 
 	@Override
+	public boolean close() {
+		for (String key : map.keySet()) {
+			item.getProperties().clear();
+			item.addItemProperty(map.get(key).getValue());
+		}
+		return super.close();
+	}
+
+	@Override
 	protected void createAddItemDataButton(Composite cmp) {
 		if (showAddDatasetButton)
 			super.createAddItemDataButton(cmp);
