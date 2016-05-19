@@ -119,7 +119,7 @@ public class WSClientHelper {
 			throws Exception {
 		msp.removeChildren();
 		IConnection c = msp.getWsClient();
-		if (reconnect && c != null) {
+		if (reconnect || c == null) {
 			c = connect(msp, monitor);
 			if (monitor.isCanceled())
 				return;
