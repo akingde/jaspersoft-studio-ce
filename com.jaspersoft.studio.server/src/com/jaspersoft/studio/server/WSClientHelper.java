@@ -113,7 +113,10 @@ public class WSClientHelper {
 
 	public static void connectGetData(MServerProfile msp, IProgressMonitor monitor) throws Exception {
 		msp.removeChildren();
-		WSClientHelper.listFolder(msp, connect(msp, monitor), "/", monitor, 0);
+		IConnection c = connect(msp, monitor);
+		if (monitor.isCanceled())
+			return;
+		WSClientHelper.listFolder(msp, c, "/", monitor, 0);
 	}
 
 	/**
