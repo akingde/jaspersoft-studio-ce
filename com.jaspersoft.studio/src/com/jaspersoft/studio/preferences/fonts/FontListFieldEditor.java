@@ -607,6 +607,10 @@ public class FontListFieldEditor extends TreeFieldEditor {
 		WizardDialog d = new WizardDialog(UIUtils.getShell(), wiz);
 		d.setPageSize(800, 50);
 		if (d.open() == Dialog.OK) {
+			if (fontFamilies == null) {
+				fontFamilies = new FontExtensionsCollector();
+				tree.setInput(fontFamilies);
+			}
 			fontFamilies.getFontFamilies().clear();
 			fontFamilies.getFontFamilies().addAll(wiz.getFonts());
 			tree.refresh(true);
@@ -619,6 +623,10 @@ public class FontListFieldEditor extends TreeFieldEditor {
 		WizardDialog d = new WizardDialog(UIUtils.getShell(), wiz);
 		d.setPageSize(800, 50);
 		if (d.open() == Dialog.OK) {
+			if (fontFamilies == null) {
+				fontFamilies = new FontExtensionsCollector();
+				tree.setInput(fontFamilies);
+			}
 			fontFamilies.getFontFamilies().clear();
 			fontFamilies.getFontFamilies().addAll(wiz.getFonts());
 			tree.refresh(true);
@@ -771,7 +779,7 @@ public class FontListFieldEditor extends TreeFieldEditor {
 		tree.setSelection(new StructuredSelection(obj), true);
 		selectionChanged();
 	}
-	
+
 	@Override
 	public TreeViewer getTreeControl(Composite parent) {
 		return getTreeControl(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
