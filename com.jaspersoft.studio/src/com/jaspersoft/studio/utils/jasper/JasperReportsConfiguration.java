@@ -86,28 +86,12 @@ import net.sf.jasperreports.repo.RepositoryService;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext implements JasperReportsContext {
 
-	// public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
 	public static final String KEY_JASPERDESIGN = "JasperDesign";
+	
+	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
+	
 	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
-
-	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);;
-	private ClasspathListener classpathlistener;
-	private PreferenceListener preferenceListener;
-	// private IPreferencesService service;
-	private String qualifier;
-	// private String[] lookupOrders;
-	// private IScopeContext[] contexts;
-	private String[] fontList;
-	private boolean refreshFonts = true;
-	private boolean refreshBundles = true;
-	private boolean refreshMessageProviderFactory = true;
-	private boolean refreshFunctionsBundles = true;
-	private FontExtensionsCollector lst;
-	private JavaProjectClassLoader javaclassloader;
-	private List<ComponentsBundle> bundles;
-	private List<FunctionsBundle> functionsBundles;
-	private MessageProviderFactory messageProviderFactory;
-
+	
 	/**
 	 * The key which identified the file being edited
 	 */
@@ -120,12 +104,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 				String property = event.getProperty();
 				if (property.equals(FontsPreferencePage.FPP_FONT_LIST)){
-					refreshFonts = true;
-					fontList = null;
-					getFontList();
+					refreshFonts();
 					refreshBundles = true;
-
 				} else if (property.equals(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES)) {	
+					refreshBundles = true;
 					isPropsCached = false;
 					getProperties();
 					qExecutors = null;
@@ -169,14 +151,33 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 					element.getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, true, false);
 				}
 			}
-
 		}
 	}
 
-	public PropertyChangeSupport getPropertyChangeSupport() {
-		return propertyChangeSupport;
-	}
-
+	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);;
+	private ClasspathListener classpathlistener;
+	private PreferenceListener preferenceListener;
+	private String qualifier;
+	private String[] fontList;
+	private boolean refreshFonts = true;
+	private boolean refreshBundles = true;
+	private boolean refreshMessageProviderFactory = true;
+	private boolean refreshFunctionsBundles = true;
+	private FontExtensionsCollector lst;
+	private JavaProjectClassLoader javaclassloader;
+	private List<ComponentsBundle> bundles;
+	private List<FunctionsBundle> functionsBundles;
+	private MessageProviderFactory messageProviderFactory;
+	private static JasperReportsConfiguration instance;
+	private List<RepositoryService> repositoryServices;
+	private List<JRQueryExecuterFactoryBundle> qExecutors;
+	private Map<Object, Object> map;
+	private MScopedPreferenceStore pstore;
+	private List<IDisposeListener> toDispose;
+	private ClassLoader classLoader;
+	private boolean isPropsCached = false;
+	private ParameterSetProvider prmProvider;
+	
 	/**
 	 * @param parent
 	 * @param file
@@ -186,12 +187,14 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		init(file);
 	}
 
-	private MScopedPreferenceStore pstore;
-
 	public ScopedPreferenceStore getPrefStore() {
 		return pstore;
 	}
-
+	
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
+	}
+	
 	public void init(IFile file) {
 		IFile oldFile = (IFile) get(FileUtils.KEY_FILE);
 		if (oldFile != null && oldFile == file)
@@ -324,8 +327,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				d.dispose();
 	}
 
-	private List<IDisposeListener> toDispose;
-
 	public void addDisposeListener(IDisposeListener listener) {
 		if (toDispose == null)
 			toDispose = new ArrayList<IDisposeListener>();
@@ -350,8 +351,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		removeValue(key);
 	}
 
-	private ClassLoader classLoader;
-
 	public ClassLoader getClassLoader() {
 		return classLoader;
 	}
@@ -366,8 +365,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		else
 			put(KEY_JASPERDESIGN, jd);
 	}
-
-	private ParameterSetProvider prmProvider;
 
 	public void setJRParameters(Map<String, Object> value) {
 		put(KEY_JRPARAMETERS, value);
@@ -422,8 +419,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		return propmap;
 	}
 
-	private boolean isPropsCached = false;
-	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
 
 	private Properties getJRProperties() {
 		Properties props = null;
@@ -648,6 +643,26 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			refreshFonts = false;
 		}
 	}
+	
+	/**
+	 * Refresh the list of fonts loaded
+	 */
+	public void refreshFonts(){
+		refreshFonts = true;
+		fontList = null;
+		getFontList();
+		//it is not necessary to call the read fonts since the getFontList will indirectly call it
+		//readFonts();
+	}
+
+	public synchronized String[] getFontList() {
+		if (refreshFonts || fontList == null) {
+			refreshFonts = true;
+			fontList = FontUtils.stringToItems(ModelUtils.getFontNames(this));
+		}
+		return fontList;
+	}
+
 
 	/**
 	 * Return the components extension both by resolving the property of the current project and from the commons
@@ -736,28 +751,17 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		return result;
 	}
-
+	
 	/*
 	 * private <T> List<T> getCachedExtension(Class<T> extensionType){ if (parent ==
 	 * DefaultJasperReportsContext.getInstance()){ Object cache = extensionCache.get(extensionType); if (cache != null )
 	 * return (List<T>)parent; }
 	 */
 
-	private List<JRQueryExecuterFactoryBundle> qExecutors;
-	private Map<Object, Object> map;
-
 	public Map<Object, Object> getMap() {
 		if (map == null)
 			map = new HashMap<Object, Object>();
 		return map;
-	}
-
-	public synchronized String[] getFontList() {
-		if (refreshFonts || fontList == null) {
-			refreshFonts = true;
-			fontList = FontUtils.stringToItems(ModelUtils.getFontNames(this));
-		}
-		return fontList;
 	}
 
 	/**
@@ -770,9 +774,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public static JasperReportsConfiguration getDefaultJRConfig(IFile f) {
 		return new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), f);
 	}
-
-	private static JasperReportsConfiguration instance;
-	private List<RepositoryService> repositoryServices;
 
 	/**
 	 * @return a default {@link JasperReportsConfiguration} instance, based on the {@link DefaultJasperReportsContext}.
