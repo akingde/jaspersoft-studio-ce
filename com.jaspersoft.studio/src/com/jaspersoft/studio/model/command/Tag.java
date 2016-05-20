@@ -28,6 +28,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
@@ -37,6 +38,7 @@ import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.obj2text.Obj2TextWizard;
 
 public class Tag {
@@ -57,17 +59,39 @@ public class Tag {
 		if (n.getValue() != null)
 			if (n instanceof MField) {
 				JRField f = (JRField) n.getValue();
-				Tag tag = new Tag("$F{%}", f.getValueClassName(), f.getName(), f.getValueClass());//$NON-NLS-1$ //$NON-NLS-2$
+				Tag tag = new Tag("$F{%}", f.getValueClassName(), f.getName(), resolveClass(n, f.getValueClassName()));//$NON-NLS-1$
 				tag.isField = true;
 				return tag;
 			} else if (n instanceof MParameterSystem) {
 				JRParameter f = (JRParameter) n.getValue();
-				return new Tag("$P{%}", f.getValueClassName(), f.getName(), f.getValueClass());//$NON-NLS-1$ //$NON-NLS-2$
+				Tag result = new Tag("$P{%}", f.getValueClassName(), f.getName(), resolveClass(n, f.getValueClassName()));//$NON-NLS-1$;
+				return result;
 			} else if (n instanceof MVariableSystem) {
 				JRVariable f = (JRVariable) n.getValue();
-				return new Tag("$V{%}", f.getValueClassName(), f.getName(), f.getValueClass());//$NON-NLS-1$ //$NON-NLS-2$
+				return new Tag("$V{%}", f.getValueClassName(), f.getName(), resolveClass(n, f.getValueClassName()));//$NON-NLS-1$ 
 			}
 		return new Tag("", "", "", null);
+	}
+	
+	/**
+	 * Resolve the class fullname of a class using the Studio classloader
+	 * 
+	 * @param node the node from where the classloader is retrive  
+	 * @param classFullName the fullname of the class to resolve
+	 * @return the class, or null if it can't be resolved
+	 */
+	protected static Class<?> resolveClass(ANode node, String classFullName){
+		JasperReportsConfiguration jConfig = node.getJasperConfiguration();
+		if (jConfig != null){
+			try {
+				Class<?> clazz = jConfig.getClassLoader().loadClass(classFullName);
+				return clazz;
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+				JaspersoftStudioPlugin.getInstance().logError(e);
+			}
+		}
+		return null;
 	}
 
 	public static MStaticText createStaticText(String txtExp) {
