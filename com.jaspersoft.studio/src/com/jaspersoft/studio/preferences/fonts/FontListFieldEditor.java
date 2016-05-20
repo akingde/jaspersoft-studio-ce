@@ -771,4 +771,9 @@ public class FontListFieldEditor extends TreeFieldEditor {
 		tree.setSelection(new StructuredSelection(obj), true);
 		selectionChanged();
 	}
+	
+	@Override
+	public TreeViewer getTreeControl(Composite parent) {
+		return getTreeControl(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+	}
 }

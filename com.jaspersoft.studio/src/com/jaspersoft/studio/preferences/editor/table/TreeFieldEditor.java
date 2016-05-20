@@ -280,6 +280,10 @@ public abstract class TreeFieldEditor extends FieldEditor {
 		selectionChanged();
 		return buttonBox;
 	}
+	
+	public TreeViewer getTreeControl(Composite parent) {
+		return getTreeControl(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+	}
 
 	/**
 	 * Returns this field editor's table control.
@@ -288,9 +292,9 @@ public abstract class TreeFieldEditor extends FieldEditor {
 	 *          the parent control
 	 * @return the table control
 	 */
-	public TreeViewer getTreeControl(Composite parent) {
+	public TreeViewer getTreeControl(Composite parent, int style) {
 		if (tree == null) {
-			tree = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+			tree = new TreeViewer(parent, style);
 			setupTree(tree);
 			ColumnViewerToolTipSupport.enableFor(tree, ToolTip.NO_RECREATE);
 			tree.getTree().addSelectionListener(getSelectionListener());
