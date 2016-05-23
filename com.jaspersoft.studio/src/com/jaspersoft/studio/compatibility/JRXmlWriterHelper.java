@@ -160,17 +160,16 @@ public class JRXmlWriterHelper {
 			if (dialog.open() == Dialog.OK) {
 				version = dialog.getVersion();
 				try {
-					ScopedPreferenceStore pstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore(resource,
-							JaspersoftStudioPlugin.getUniqueIdentifier());
+					ScopedPreferenceStore pstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore(resource,JaspersoftStudioPlugin.getUniqueIdentifier());
 					pstore.setValue(JRVersionPreferencesPages.JSS_COMPATIBILITY_VERSION, version);
-
-					// resource.setPersistentProperty(new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(),
-					// StudioPreferencePage.JSS_COMPATIBILITY_VERSION), version);
-					if (dialog.isHideNext())
-						pstore.setValue(JRVersionPreferencesPages.JSS_COMPATIBILITY_SHOW_DIALOG, false);
+					
+					if (dialog.isHideNext()){
+						//need to use put value, with setValue since false it is the default will remove the value from
+						//the project store and this will cause the get to look on upper level. Instead the put aways set
+						//the value inside the store
+						pstore.putValue(JRVersionPreferencesPages.JSS_COMPATIBILITY_SHOW_DIALOG, Boolean.FALSE.toString());
+					}
 					pstore.save();
-					// resource.setPersistentProperty(new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(),
-					// StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG), "false");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
