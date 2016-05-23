@@ -70,6 +70,11 @@ public class BuiltInCategories {
 	public static final String TABULAR_KEY = "tabular";
 	
 	/**
+	 * Prefix for the built in category for the localisation
+	 */
+	public static final String CATEGORY_PREFIX = "template.category.";
+	
+	/**
 	 * Return a list of all the embedded categories key
 	 * Note that the first position must be the all template 
 	 * category

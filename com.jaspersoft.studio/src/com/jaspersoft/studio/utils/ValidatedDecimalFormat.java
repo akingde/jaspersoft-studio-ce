@@ -81,13 +81,20 @@ public class ValidatedDecimalFormat extends DecimalFormat{
     //char groupSeparator = getDecimalFormatSymbols().getGroupingSeparator();
     //remove the grouping separator
     String valueToParse = source;//source.replace(String.valueOf(groupSeparator), "");
+    //When the value start with a minus handle it like a positive changing the minus with 0 
+    //and changing sign at the end
+    boolean isNegative = false;
+    if (valueToParse.startsWith("-")){
+    	isNegative = true;
+    	valueToParse = "0" + valueToParse.substring(1);
+    }
     Matcher matcher = patternToMatch.matcher(valueToParse);
 		if (!matcher.matches()) {
 			throw new ParseException(valueToParse, pp.getIndex());
 		}
     Number result = super.parse(valueToParse, pp);
     if (pp.getIndex() == valueToParse.length())  {
-    	 return result;
+    	 return isNegative ? result.doubleValue() * -1 : result;
      } else {
     	 throw new ParseException(valueToParse, pp.getIndex());
      }

@@ -56,6 +56,7 @@ public class MReportRoot extends MRoot {
 						
 						@Override
 						public void run() {
+							//getJasperConfiguration().refreshFonts();
 							for(JRDesignElement element : ModelUtils.getAllElements(getJasperDesign())){
 								element.getEventSupport().firePropertyChange(changeEvent);
 							}

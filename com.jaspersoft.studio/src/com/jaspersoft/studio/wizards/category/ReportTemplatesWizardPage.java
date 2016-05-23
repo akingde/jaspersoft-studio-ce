@@ -419,7 +419,13 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 
 		categoryList = new ArrayList<TemplateCategory>();
 		for(String builtInCategory : BuiltInCategories.getCategoriesList()){
-			String localizedName = MessagesByKeys.getString(builtInCategory);
+			//Use a prefix since some category can have a really common name that overlap with 
+			//other localization keys
+			String key = BuiltInCategories.CATEGORY_PREFIX + builtInCategory;
+			String localizedName = builtInCategory;
+			if (MessagesByKeys.hasTranslation(key)){
+				localizedName = MessagesByKeys.getString(key);
+			}
 			categoryList.add(new TemplateCategory(builtInCategory, localizedName));
 		}
 		for (TemplateCategory cat : categoryList) {
