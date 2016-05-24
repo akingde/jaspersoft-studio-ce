@@ -46,12 +46,12 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Chicu Veaceslav
  */
 public class MVariable extends MVariableSystem implements ICopyable {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
+
 	private IPropertyDescriptor[] descriptors;
 
 	/**
@@ -125,6 +125,8 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
+
 		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP, Messages.common_reset_group,
 				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		resetGroupD.setDescription(Messages.MVariable_reset_group_description);
@@ -154,15 +156,15 @@ public class MVariable extends MVariableSystem implements ICopyable {
 				JRDesignVariable.PROPERTY_EXPRESSION, Messages.common_expression);
 		expressionD.setDescription(Messages.MVariable_expression_description);
 		desc.add(expressionD);
-		expressionD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#variableExpression"));
+		expressionD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#variableExpression"));
 
 		JRExpressionPropertyDescriptor iniValExprD = new JRExpressionPropertyDescriptor(
 				JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION, Messages.MVariable_initial_value_expression);
 		iniValExprD.setDescription(Messages.MVariable_initial_value_expression_description);
 		desc.add(iniValExprD);
-		iniValExprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#initialValueExpression"));
+		iniValExprD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#initialValueExpression"));
 
 		NClassTypePropertyDescriptor factoryClassName = new NClassTypePropertyDescriptor(
 				JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, Messages.MVariable_incrementer_factory_class_name);
@@ -171,17 +173,18 @@ public class MVariable extends MVariableSystem implements ICopyable {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#variable");
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
-		
+
 		defaultsMap.put(JRDesignVariable.PROPERTY_RESET_TYPE, new DefaultValue(ResetTypeEnum.REPORT, false));
 		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, new DefaultValue(IncrementTypeEnum.NONE, false));
-		
-		int calculationValue = NamedEnumPropertyDescriptor.getIntValue(CalculationEnum.NOTHING, NullEnum.NOTNULL, CalculationEnum.NOTHING);
+
+		int calculationValue = NamedEnumPropertyDescriptor.getIntValue(CalculationEnum.NOTHING, NullEnum.NOTNULL,
+				CalculationEnum.NOTHING);
 		defaultsMap.put(JRDesignVariable.PROPERTY_CALCULATION, new DefaultValue(calculationValue, false));
-		
+
 		return defaultsMap;
 	}
 
@@ -289,13 +292,11 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		} else if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
 			jrVariable.setCalculation(calculationD.getEnumValue(value));
 		else if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE)) {
-			jrVariable.setResetType(
-					EnumHelper.getEnumByObjectValue(ResetTypeEnum.values(), value));
+			jrVariable.setResetType(EnumHelper.getEnumByObjectValue(ResetTypeEnum.values(), value));
 			if (!jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP))
 				jrVariable.setResetGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE)) {
-			jrVariable.setIncrementType(
-					EnumHelper.getEnumByObjectValue(incrementTypeD.getEnumElements(),value));
+			jrVariable.setIncrementType(EnumHelper.getEnumByObjectValue(incrementTypeD.getEnumElements(), value));
 			if (!jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP))
 				jrVariable.setIncrementGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME)) {
