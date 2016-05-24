@@ -42,13 +42,13 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav
  */
 public class MVariableSystem extends APropertyNode implements IDragable {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
+
 	private static IPropertyDescriptor[] descriptors;
-	
+
 	private static VariableNameValidator validator;
 
 	/**
@@ -136,7 +136,8 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
 		// Set into the validator the actual reference
-		validator.setTargetNode(this);
+		if (validator != null)
+			validator.setTargetNode(this);
 	}
 
 	/**
@@ -158,10 +159,10 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 				Messages.common_value_class_name);
 		classD.setDescription(Messages.MVariableSystem_value_class_name_description);
 		desc.add(classD);
-		classD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#variable_class"));
+		classD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#variable_class"));
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
