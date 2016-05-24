@@ -223,7 +223,7 @@ public class VParameters extends AVParameters {
 
 	protected boolean createInput(Composite sectionClient, JRDesignParameter p, Map<String, Object> params, boolean first)
 			throws ClassNotFoundException {
-		ParameterJasper pres = new ParameterJasper(p);
+		ParameterJasper pres = new ParameterJasper(p, jContext);
 		// Use a custom control for the report maxcount instead of the integer standard one
 		if (p.getName().equals(JRParameter.REPORT_MAX_COUNT)) {
 			createControl(sectionClient, pres, new BooleanNumericInput(), p, first);
