@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.style.wizard;
 
@@ -51,8 +47,10 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.jaspersoft.studio.backward.JRVersionPreferencesPages;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -61,6 +59,7 @@ import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.xml.JRXmlBaseWriter;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 
 /*
@@ -77,10 +76,10 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	protected static final String NEW_STYLE_JRTX = NEW_STYLE_NAME + NEW_STYLE_EXT;
 	protected WizardNewFileCreationPage step1;
 	protected ISelection selection;
-	
-	private IFile file = null;
-	
-	private IFile reportFile = null;
+
+	protected IFile file = null;
+
+	protected IFile reportFile = null;
 
 	/**
 	 * Constructor for ReportNewWizard.
@@ -122,14 +121,15 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 			step1.setFileName(filename);
 		}
 	}
-	
+
 	/**
 	 * Return the WizardPage used to select the destination resource for the template reference
 	 * 
 	 * @return a not null {@link WizardNewFileCreationPage}
 	 */
-	protected WizardNewFileCreationPage getDestinationPage(){
-		WizardHelpNewFileCreationPage page = new WizardHelpNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
+	protected WizardNewFileCreationPage getDestinationPage() {
+		WizardHelpNewFileCreationPage page = new WizardHelpNewFileCreationPage("newFilePage1", //$NON-NLS-1$
+				(IStructuredSelection) selection);
 		page.setTitle(Messages.StyleTemplateNewWizard_title);
 		page.setDescription(Messages.StyleTemplateNewWizard_description);
 		page.setFileExtension("jrtx");//$NON-NLS-1$
@@ -167,7 +167,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public boolean performCancel() {
 		JDTUtils.restoreLinkedResourcesSupport();
@@ -176,7 +176,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean canFinish() {
-		if(JDTUtils.isVirtualResource(step1.getContainerFullPath())) {
+		if (JDTUtils.isVirtualResource(step1.getContainerFullPath())) {
 			step1.setMessage(Messages.StyleTemplateNewWizard_VirtualFolderErr, IStatus.ERROR);
 			return false;
 		}
@@ -252,7 +252,17 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 			JRDesignStyle jrDesignStyle = new JRDesignStyle();
 			jrDesignStyle.setName("SimpleStyle"); //$NON-NLS-1$
 			tmp.addStyle(jrDesignStyle);
-			String contents = JRXmlTemplateWriter.writeTemplate(tmp);
+			JasperReportsConfiguration jConf = null;
+			if (file != null)
+				jConf = JasperReportsConfiguration.getDefaultJRConfig(file);
+			else if (reportFile != null)
+				jConf = JasperReportsConfiguration.getDefaultJRConfig(reportFile);
+			else
+				jConf = JasperReportsConfiguration.getDefaultJRConfig();
+
+			jConf.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION,
+					jConf.getProperty(JRVersionPreferencesPages.JSS_COMPATIBILITY_VERSION));
+			String contents = JRXmlTemplateWriter.writeTemplate(jConf, tmp);
 			return new ByteArrayInputStream(contents.getBytes());
 		} catch (JRException e) {
 			e.printStackTrace();
@@ -268,7 +278,8 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
 			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile
-					|| selection.getFirstElement() instanceof IFolder || selection.getFirstElement() instanceof IPackageFragment) {
+					|| selection.getFirstElement() instanceof IFolder
+					|| selection.getFirstElement() instanceof IPackageFragment) {
 				this.selection = selection;
 				return;
 			}

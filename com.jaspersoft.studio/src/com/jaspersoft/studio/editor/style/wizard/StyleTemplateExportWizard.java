@@ -21,12 +21,15 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
+import com.jaspersoft.studio.backward.JRVersionPreferencesPages;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.xml.JRXmlBaseWriter;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 
 /**
@@ -67,7 +70,17 @@ public class StyleTemplateExportWizard extends StyleTemplateNewWizard {
 					tmp.addStyle(style);
 				}
 			}
-			String contents = JRXmlTemplateWriter.writeTemplate(tmp);
+			JasperReportsConfiguration jConf = null;
+			if (file != null)
+				jConf = JasperReportsConfiguration.getDefaultJRConfig(file);
+			else if (reportFile != null)
+				jConf = JasperReportsConfiguration.getDefaultJRConfig(reportFile);
+			else
+				jConf = JasperReportsConfiguration.getDefaultJRConfig();
+
+			jConf.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION,
+					jConf.getProperty(JRVersionPreferencesPages.JSS_COMPATIBILITY_VERSION));
+			String contents = JRXmlTemplateWriter.writeTemplate(jConf, tmp);
 			return new ByteArrayInputStream(contents.getBytes());
 		} catch (JRException e) {
 			e.printStackTrace();
