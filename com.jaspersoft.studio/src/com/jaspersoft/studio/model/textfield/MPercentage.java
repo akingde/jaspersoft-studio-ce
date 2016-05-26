@@ -73,7 +73,7 @@ public class MPercentage extends MTextField {
 	 */
 	@Override
 	public JRDesignTextField createJRElement(JasperDesign jasperDesign) {
-		JRDesignTextField jrDesignTextField = new JRDesignTextField();
+		JRDesignTextField jrDesignTextField = new JRDesignTextField(jasperDesign);
 		jrDesignTextField.setPattern("#,##0.00%");
 		return jrDesignTextField;
 	}

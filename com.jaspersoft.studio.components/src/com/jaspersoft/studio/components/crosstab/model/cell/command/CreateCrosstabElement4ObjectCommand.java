@@ -30,18 +30,21 @@ public class CreateCrosstabElement4ObjectCommand extends CreateElementCommand {
 	protected ANode child;
 	protected ANode parent;
 	protected JRDesignDataset jDataset;
+	private JRDesignVariable var;
+	private JasperDesign jd;
 
 	public CreateCrosstabElement4ObjectCommand(ANode child, MCell parent,
 			Rectangle location, int index) {
 		super(parent, null, location, index);
-		JasperDesign jd = parent.getJasperDesign();
+		jd = parent.getJasperDesign();
 		jDataset = jd.getMainDesignDataset();
 		JRCrosstabDataset d = parent.getMCrosstab().getValue().getDataset();
 		JRDesignDatasetRun dr = (JRDesignDatasetRun) d.getDatasetRun();
 		if (dr != null) {
 			String dbname = dr.getDatasetName();
-			if (dbname != null)
+			if (dbname != null){
 				jDataset = (JRDesignDataset) jd.getDatasetMap().get(dbname);
+			}
 		}
 		this.child = child;
 		this.parent = parent;
@@ -53,8 +56,7 @@ public class CreateCrosstabElement4ObjectCommand extends CreateElementCommand {
 			Tag tag = Tag.getExpression(child);
 
 			var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null, jDataset);
-			srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name),
-					tag.classname);
+			srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jd);
 
 			jrElement = srcNode.getValue();
 			super.createObject();
@@ -62,8 +64,6 @@ public class CreateCrosstabElement4ObjectCommand extends CreateElementCommand {
 			e.printStackTrace();
 		}
 	}
-
-	private JRDesignVariable var;
 
 	@Override
 	public void execute() {

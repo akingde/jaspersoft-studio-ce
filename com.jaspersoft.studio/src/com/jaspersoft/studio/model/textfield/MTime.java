@@ -73,7 +73,7 @@ public class MTime extends MTextField {
 	 */
 	@Override
 	public JRDesignTextField createJRElement(JasperDesign jasperDesign) {
-		JRDesignTextField jrDesignTextField = new JRDesignTextField();
+		JRDesignTextField jrDesignTextField = new JRDesignTextField(jasperDesign);
 		JRDesignExpression expression = new JRDesignExpression();
 		expression.setText("new java.util.Date()"); //$NON-NLS-1$
 		jrDesignTextField.setExpression(expression);

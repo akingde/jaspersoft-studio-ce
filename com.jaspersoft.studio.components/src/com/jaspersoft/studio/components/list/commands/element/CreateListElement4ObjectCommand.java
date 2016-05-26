@@ -29,11 +29,12 @@ public class CreateListElement4ObjectCommand extends CreateElementCommand {
 	protected ANode child;
 	protected ANode parent;
 	protected JRDesignDataset jDataset;
+	protected JasperDesign jd;
 
 	public CreateListElement4ObjectCommand(ANode child, MList parent,
 			Rectangle location, int index) {
 		super(parent, null, location, index);
-		JasperDesign jd = parent.getJasperDesign();
+		jd = parent.getJasperDesign();
 		JRDatasetRun dr = parent.getList().getDatasetRun();
 		if (dr != null) {
 			String dbname = dr.getDatasetName();
@@ -50,8 +51,7 @@ public class CreateListElement4ObjectCommand extends CreateElementCommand {
 			Tag tag = Tag.getExpression(child);
 
 			var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null, jDataset);
-			srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name),
-					tag.classname);
+			srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jd);
 
 			jrElement = srcNode.getValue();
 			super.createObject();

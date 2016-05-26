@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
@@ -93,18 +94,33 @@ public class Tag {
 		}
 		return null;
 	}
-
-	public static MStaticText createStaticText(String txtExp) {
+	
+	/**
+	 * Create a static text with a specific content 
+	 * 
+	 * @param text the content of the text
+	 * @param the context of the static text
+	 * @return a not null MStaticText with a new {@link JRDesignStaticText} inside
+	 */
+	public static MStaticText createStaticText(String text, JasperDesign jd) {
 		MStaticText src = new MStaticText();
-		JRDesignStaticText tf = new JRDesignStaticText();
-		tf.setText(txtExp);
+		JRDesignStaticText tf = new JRDesignStaticText(jd);
+		tf.setText(text);
 		src.setValue(tf);
 		return src;
 	}
-
-	public static MTextField createTextField(String txtExp, String classExp) {
+	
+	/**
+	 * Create a static textfield with a specific content 
+	 * 
+	 * @param txtExp the textual expression
+	 * @param classExp FIXME not used now, maybe to be removed
+	 * @param the context of the static text
+	 * @return a not null MTextField with a new {@link JRDesignTextField} inside
+	 */
+	public static MTextField createTextField(String txtExp, String classExp, JasperDesign jd) {
 		MTextField src = new MTextField();
-		JRDesignTextField tf = new JRDesignTextField();
+		JRDesignTextField tf = new JRDesignTextField(jd);
 		src.setValue(tf);
 
 		JRDesignExpression jre = new JRDesignExpression();

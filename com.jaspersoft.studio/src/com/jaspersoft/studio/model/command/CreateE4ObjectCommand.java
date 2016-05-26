@@ -97,30 +97,30 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 				JRDesignBand b = (JRDesignBand) n.getValue();
 				BandTypeEnum btype = b.getOrigin().getBandTypeValue();
 				if (btype.equals(BandTypeEnum.DETAIL)) {
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.COLUMN_FOOTER) || btype.equals(BandTypeEnum.COLUMN_HEADER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.COLUMN, null, jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.GROUP_FOOTER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupFooter) n).getJrGroup(),
 							jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.GROUP_HEADER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupHeader) n).getJrGroup(),
 							jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.SUMMARY) || btype.equals(BandTypeEnum.TITLE)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null, jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.PAGE_FOOTER) || btype.equals(BandTypeEnum.PAGE_HEADER)
 						|| btype.equals(BandTypeEnum.LAST_PAGE_FOOTER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.PAGE, null, jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
 				} else {
-					srcNode = Tag.createStaticText(tag.name);
+					srcNode = Tag.createStaticText(tag.name, jasperDesign);
 				}
 			} else {
-				srcNode = Tag.createStaticText(tag.name);
+				srcNode = Tag.createStaticText(tag.name, jasperDesign);
 			}
 			if (parent instanceof MFrame)
 				setContext(parent, srcNode, index);

@@ -75,7 +75,7 @@ public class MPageNumber extends MTextField {
 	 */
 	@Override
 	public JRDesignTextField createJRElement(JasperDesign jasperDesign) {
-		JRDesignTextField jrDesignTextField = new JRDesignTextField();
+		JRDesignTextField jrDesignTextField = new JRDesignTextField(jasperDesign);
 		JRDesignExpression expression = new JRDesignExpression();
 		expression.setText("$V{PAGE_NUMBER}"); //$NON-NLS-1$
 		jrDesignTextField.setExpression(expression);
