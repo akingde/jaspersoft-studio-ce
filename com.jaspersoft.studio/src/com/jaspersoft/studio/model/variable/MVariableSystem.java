@@ -136,10 +136,16 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
 		// Set into the validator the actual reference
-		if (validator != null)
-			validator.setTargetNode(this);
+		updateNameValidator();
 	}
 
+	protected void updateNameValidator(){
+		if (validator == null){
+			validator = new VariableNameValidator();
+		}
+		validator.setTargetNode(this);
+	}
+	
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -148,8 +154,7 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
-		validator = new VariableNameValidator();
-		validator.setTargetNode(this);
+		updateNameValidator();
 		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME,
 				Messages.common_name, validator);
 		nameD.setDescription(Messages.MVariableSystem_name_description);
