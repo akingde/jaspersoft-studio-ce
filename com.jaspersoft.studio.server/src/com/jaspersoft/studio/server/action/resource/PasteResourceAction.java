@@ -119,7 +119,8 @@ public class PasteResourceAction extends Action {
 					if (c.isCopyable2(parent) == ICopyable.RESULT.COPYABLE) {
 						res = true;
 						break;
-					}
+					} else
+						return false;
 				}
 			}
 			return true;

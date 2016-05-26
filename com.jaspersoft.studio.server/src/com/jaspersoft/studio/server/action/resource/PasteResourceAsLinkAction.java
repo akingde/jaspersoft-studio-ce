@@ -54,7 +54,8 @@ public class PasteResourceAsLinkAction extends PasteResourceAction {
 							else
 								res = true;
 							break;
-						}
+						} else
+							return false;
 					}
 			}
 		}
@@ -62,7 +63,8 @@ public class PasteResourceAsLinkAction extends PasteResourceAction {
 	}
 
 	@Override
-	protected void saveToReportUnit(IProgressMonitor monitor, ANode parent, IConnection ws, ResourceDescriptor origin) throws IOException, Exception {
+	protected void saveToReportUnit(IProgressMonitor monitor, ANode parent, IConnection ws, ResourceDescriptor origin)
+			throws IOException, Exception {
 		ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
 		ResourceDescriptor rd = null;
 		rd = new ResourceDescriptor();

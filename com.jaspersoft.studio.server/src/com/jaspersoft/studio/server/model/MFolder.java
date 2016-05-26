@@ -48,7 +48,7 @@ public class MFolder extends AMResource {
 	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MFolder || parent instanceof MServerProfile)
 			return ICopyable.RESULT.COPYABLE;
-		return ICopyable.RESULT.CHECK_PARENT;
+		return ICopyable.RESULT.NOT_COPYABLE;
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
