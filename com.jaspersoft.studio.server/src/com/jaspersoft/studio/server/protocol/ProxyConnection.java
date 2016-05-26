@@ -131,10 +131,10 @@ public class ProxyConnection implements IConnection {
 						return connect(monitor, sp);
 					cause = cause.getCause();
 				}
-				Activator.getDefault().logError(e);
-				if (e.getMessage() != null && e.getMessage().contains("connect timed out"))
-					throw e;
-				e.printStackTrace();
+				Activator.getDefault().logError(e); 
+				if (e.getMessage() != null
+						&& (e.getMessage().contains("connect timed out") || e.getMessage().contains("authentication")))
+					throw e; 
 				exc = e;
 			}
 			if (monitor.isCanceled())

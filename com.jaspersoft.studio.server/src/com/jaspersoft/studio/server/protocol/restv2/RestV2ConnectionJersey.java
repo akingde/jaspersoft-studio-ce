@@ -240,6 +240,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		try {
 			getServerProfile().setClientUser(null);
 			getServerProfile().setClientUser(getUser(monitor));
+		} catch (HttpResponseException e) {
+			throw e;
 		} catch (Exception e) {
 			Activator.getDefault().logError(e);
 		}
