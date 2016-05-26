@@ -35,6 +35,8 @@ public class FontPathPage extends WizardPage {
 		return value;
 	}
 
+	private static String path;
+
 	@Override
 	public void createControl(Composite parent) {
 		Composite cmp = new Composite(parent, SWT.NONE);
@@ -52,10 +54,14 @@ public class FontPathPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DirectoryDialog dialog = new DirectoryDialog(getShell(), SWT.OPEN);
+				dialog.setText("Fonts Path");
+				dialog.setMessage("A directory with TTF fonts.");
+				dialog.setFilterPath(path);
 				String result = dialog.open();
 				if (result != null) {
 					value = result;
 					txt.setText(result);
+					path = result;
 					setPageComplete(true);
 				}
 			}
