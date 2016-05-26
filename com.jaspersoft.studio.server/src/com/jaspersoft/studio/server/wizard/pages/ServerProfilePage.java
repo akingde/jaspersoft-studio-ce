@@ -180,6 +180,9 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		ssLabel = new Label(urlCmp, SWT.NONE);
 		ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png")); //$NON-NLS-1$
 		ssLabel.setToolTipText(Messages.ServerProfilePage_48);
+		gd = new GridData();
+		gd.widthHint = 24;
+		ssLabel.setLayoutData(gd);
 
 		Text turl = new Text(composite, SWT.BORDER);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -802,7 +805,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 							ssLabel.addMouseListener(mlistener);
 							ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png")); //$NON-NLS-1$
 							ssLabel.setCursor(new Cursor(ssLabel.getDisplay(), SWT.CURSOR_HAND));
-							ssLabel.getParent().layout(true);
+							ssLabel.getParent().getParent().layout(true);
 							return;
 						}
 					} catch (MalformedURLException e) {
@@ -813,7 +816,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					ssLabel.setImage(null);
 					ssLabel.setCursor(null);
 
-					ssLabel.getParent().layout(true);
+					ssLabel.getParent().getParent().layout(true);
 				}
 			});
 
