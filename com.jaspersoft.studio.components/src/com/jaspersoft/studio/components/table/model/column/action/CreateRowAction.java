@@ -15,7 +15,9 @@ package com.jaspersoft.studio.components.table.model.column.action;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMFooterHeaderCollection;
@@ -48,6 +50,9 @@ public class CreateRowAction extends ACachedSelectionAction {
 		setText(Messages.CreateRowAction_createRowName);
 		setToolTipText(Messages.CreateRowAction_createRowTooltip);
 		setId(CreateRowAction.ID);
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
+		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED));
 	}
 	
 	@Override
