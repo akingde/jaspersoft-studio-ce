@@ -318,6 +318,7 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 						da.setFormat(ExcelFormatEnum.XLSX);
 						break;
 					}
+					pchangesuport.firePropertyChange("dirty", false, true);
 				}
 			}
 		});
