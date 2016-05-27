@@ -16,12 +16,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.ui.validator.NotEmptyFileValidator;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.type.ImageTypeEnum;
-import net.sf.jasperreports.engine.util.JRTypeSniffer;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -65,16 +59,19 @@ import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.ui.validator.NotEmptyFileValidator;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.type.ImageTypeEnum;
+import net.sf.jasperreports.engine.util.JRTypeSniffer;
+
 public abstract class AFileResourcePageContent extends APageContent {
 	protected Text trefuri;
 
-	protected static ComboItem defaultComboItem = new ComboItem(
-			Messages.AFileResourcePageContent_upDownButtonTitle,
-			true,
-			Activator.getDefault().getImage("icons/up-down-arrows.png"), 0, 0, 0); //$NON-NLS-2$
+	protected static ComboItem defaultComboItem = new ComboItem(Messages.AFileResourcePageContent_upDownButtonTitle,
+			true, Activator.getDefault().getImage("icons/up-down-arrows.png"), 0, 0, 0); // $NON-NLS-2$
 
-	public AFileResourcePageContent(ANode parent, AMResource resource,
-			DataBindingContext bindingContext) {
+	public AFileResourcePageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -92,13 +89,11 @@ public abstract class AFileResourcePageContent extends APageContent {
 		if (!res.getValue().getIsNew()) {
 			Button bexport = new Button(parent, SWT.PUSH | SWT.LEFT);
 			bexport.setText(Messages.AFileResourcePage_downloadfilebutton);
-			bexport.setImage(Activator.getDefault().getImage(
-					"icons/drive-download.png")); //$NON-NLS-1$
+			bexport.setImage(Activator.getDefault().getImage("icons/drive-download.png")); //$NON-NLS-1$
 			bexport.addSelectionListener(new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent e) {
-					SaveAsDialog saveAsDialog = new SaveAsDialog(UIUtils
-							.getShell());
+					SaveAsDialog saveAsDialog = new SaveAsDialog(UIUtils.getShell());
 					String fname = res.getValue().getName();
 					if (!fname.contains(".")) //$NON-NLS-1$
 						fname += "." + ((AFileResource) res).getDefaultFileExtension(); //$NON-NLS-1$
@@ -106,11 +101,9 @@ public abstract class AFileResourcePageContent extends APageContent {
 					if (saveAsDialog.open() == Dialog.OK) {
 						IPath path = saveAsDialog.getResult();
 						if (path != null) {
-							IFile file = ResourcesPlugin.getWorkspace()
-									.getRoot().getFile(path);
+							IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 							if (file != null)
-								doSaveFile(file.getLocation()
-										.toPortableString());
+								doSaveFile(file.getLocation().toPortableString());
 							try {
 								file.getParent().refreshLocal(2, null);
 							} catch (CoreException e1) {
@@ -133,8 +126,7 @@ public abstract class AFileResourcePageContent extends APageContent {
 	protected void createImportButton(Composite parent) {
 		Button bimport = new Button(parent, SWT.PUSH | SWT.LEFT);
 		bimport.setText(Messages.AFileResourcePage_uploadfile);
-		bimport.setImage(Activator.getDefault().getImage(
-				"icons/drive-upload.png")); //$NON-NLS-1$
+		bimport.setImage(Activator.getDefault().getImage("icons/drive-upload.png")); //$NON-NLS-1$
 		bimport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -164,15 +156,19 @@ public abstract class AFileResourcePageContent extends APageContent {
 		JasperReportsConfiguration jrConfig = res.getJasperConfiguration();
 		if (jrConfig == null)
 			jrConfig = JasperReportsConfiguration.getDefaultInstance();
-		NotEmptyFileValidator nefValidator = new NotEmptyFileValidator(jrConfig);
-		Binding binding = bindingContext.bindValue(SWTObservables.observeText(
-				trefuri, SWT.Modify), PojoObservables.observeValue(
-				new FileProxy((AFileResource) res), "fileName"), //$NON-NLS-1$
-				new UpdateValueStrategy()
-						.setAfterConvertValidator(nefValidator), null);
-		nefValidator.setBinding(binding);
-		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null,
-				new ControlDecorationUpdater());
+		Binding binding = null;
+		if (res.getValue().getIsNew()) {
+			NotEmptyFileValidator nefValidator = new NotEmptyFileValidator(jrConfig);
+			binding = bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.Modify),
+					PojoObservables.observeValue(new FileProxy((AFileResource) res), "fileName"), //$NON-NLS-1$
+					new UpdateValueStrategy().setAfterConvertValidator(nefValidator), null);
+			nefValidator.setBinding(binding);
+		} else {
+			binding = bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.Modify),
+					PojoObservables.observeValue(new FileProxy((AFileResource) res), "fileName"));
+		}
+		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null, new ControlDecorationUpdater());
+
 	}
 
 	/**
@@ -189,8 +185,8 @@ public abstract class AFileResourcePageContent extends APageContent {
 	 */
 	protected void createComboMenuButton(Composite parent) {
 		List<ComboItem> itemsList = getItemsList();
-		final ComboMenuViewer multipleButton = new ComboMenuViewer(parent,
-				SWT.NORMAL, SPRWPopUpCombo.getLongest(itemsList));
+		final ComboMenuViewer multipleButton = new ComboMenuViewer(parent, SWT.NORMAL,
+				SPRWPopUpCombo.getLongest(itemsList));
 		multipleButton.setItems(itemsList);
 		multipleButton.addSelectionListener(new ComboItemAction() {
 			/**
@@ -222,20 +218,12 @@ public abstract class AFileResourcePageContent extends APageContent {
 		// so we hide the download option is hidden when we are creating an
 		// elemen
 		if (res.getRoot() instanceof MServerProfile)
-			itemsList
-					.add(new ComboItem(
-							Messages.AFileResourcePage_downloadfilebutton,
-							true, Activator.getDefault().getImage(
-									"icons/drive-download.png"), 0, 0, 0)); //$NON-NLS-2$
-		itemsList
-				.add(new ComboItem(
-						Messages.AFileResourcePageContent_uploadFromFS, true,
-						Activator.getDefault().getImage(
-								"icons/drive-upload.png"), 1, 1, 1)); //$NON-NLS-2$
-		itemsList
-				.add(new ComboItem(Messages.JrxmlPageContent_uploadFromRepo,
-						true, Activator.getDefault().getImage(
-								"icons/drive-upload.png"), 2, 2, 2)); //$NON-NLS-2$
+			itemsList.add(new ComboItem(Messages.AFileResourcePage_downloadfilebutton, true,
+					Activator.getDefault().getImage("icons/drive-download.png"), 0, 0, 0)); // $NON-NLS-2$
+		itemsList.add(new ComboItem(Messages.AFileResourcePageContent_uploadFromFS, true,
+				Activator.getDefault().getImage("icons/drive-upload.png"), 1, 1, 1)); // $NON-NLS-2$
+		itemsList.add(new ComboItem(Messages.JrxmlPageContent_uploadFromRepo, true,
+				Activator.getDefault().getImage("icons/drive-upload.png"), 2, 2, 2)); // $NON-NLS-2$
 		return itemsList;
 	}
 
@@ -256,8 +244,7 @@ public abstract class AFileResourcePageContent extends APageContent {
 			if (saveAsDialog.open() == Dialog.OK) {
 				IPath path = saveAsDialog.getResult();
 				if (path != null) {
-					IFile file = ResourcesPlugin.getWorkspace().getRoot()
-							.getFile(path);
+					IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 					if (file != null)
 						doSaveFile(file.getLocation().toPortableString());
 					try {
@@ -293,11 +280,10 @@ public abstract class AFileResourcePageContent extends APageContent {
 	 * @return the path of the resource
 	 */
 	protected String getResourceDialog() {
-		FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(
-				trefuri.getShell(), false, ResourcesPlugin.getWorkspace()
-						.getRoot(), IResource.FILE);
+		FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(trefuri.getShell(), false,
+				ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
 		dialog.setTitle("");
-		dialog.setInitialPattern(getIntialPattern()); //$NON-NLS-1$
+		dialog.setInitialPattern(getIntialPattern()); // $NON-NLS-1$
 		if (dialog.open() == Window.OK) {
 			IFile file = (IFile) dialog.getFirstResult();
 			return file.getLocation().toPortableString();
@@ -361,14 +347,12 @@ public abstract class AFileResourcePageContent extends APageContent {
 	protected void doSaveFile(String filename) {
 		if (filename != null) {
 			try {
-				WSClientHelper.getResource(new NullProgressMonitor(),
-						AFileResourcePageContent.this.res, res.getValue(),
+				WSClientHelper.getResource(new NullProgressMonitor(), AFileResourcePageContent.this.res, res.getValue(),
 						filename);
 				File file = new File(filename);
 				int dotPos = filename.lastIndexOf("."); //$NON-NLS-1$
 				String strFilename = filename.substring(0, dotPos);
-				ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils
-						.getBytes(file));
+				ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils.getBytes(file));
 				if (itype == ImageTypeEnum.GIF) {
 					file = FileUtils.fileRenamed(file, strFilename, ".gif"); //$NON-NLS-1$
 				} else if (itype == ImageTypeEnum.JPEG) {
