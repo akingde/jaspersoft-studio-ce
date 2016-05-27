@@ -38,6 +38,8 @@ import com.jaspersoft.studio.utils.Misc;
 public class FontFaceFragment {
 
 	private SimpleFontFace fontFace;
+	
+	private static String lastLocation;
 
 	protected FontFaceFragment(SimpleFontFace fontFace) {
 		this.fontFace = fontFace;
@@ -96,7 +98,7 @@ public class FontFaceFragment {
 				if (selected.trim().isEmpty())
 					selected = null;
 				if (type.equals("ttf")) //$NON-NLS-1$
-					fontFace.setTtf(selected);
+					fontFace.setTtf(selected, false);
 				else if (type.equals("eot")) //$NON-NLS-1$
 					fontFace.setEot(selected);
 				else if (type.equals("svg")) //$NON-NLS-1$
@@ -131,7 +133,7 @@ public class FontFaceFragment {
 				if (selected != null) {
 					selected = selected.trim();
 					if (type.equals("ttf")) //$NON-NLS-1$
-						fontFace.setTtf(selected);
+						fontFace.setTtf(selected, false);
 					else if (type.equals("eot")) //$NON-NLS-1$
 						fontFace.setEot(selected);
 					else if (type.equals("svg")) //$NON-NLS-1$
@@ -145,8 +147,6 @@ public class FontFaceFragment {
 		});
 		return txt;
 	}
-
-	private static String lastLocation;
 
 	public static String setupLastLocation(FileDialog dialog) {
 		if (lastLocation == null)

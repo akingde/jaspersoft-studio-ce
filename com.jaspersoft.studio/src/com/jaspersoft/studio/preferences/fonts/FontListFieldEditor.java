@@ -185,8 +185,9 @@ public class FontListFieldEditor extends TreeFieldEditor {
 			String s = getPreferenceStore().getDefaultString(getPreferenceName());
 			if (Misc.isNullOrEmpty(s))
 				return;
+			//Load the list of the extension parsing the xml but without loading actually the fonts
 			SimpleFontExtensionHelper.getInstance().loadFontExtensions(JasperReportsConfiguration.getDefaultInstance(),
-					new ByteArrayInputStream(s.getBytes()), fontFamilies);
+					new ByteArrayInputStream(s.getBytes()), fontFamilies, false);
 			tree.refresh(true);
 		}
 	}
@@ -199,8 +200,9 @@ public class FontListFieldEditor extends TreeFieldEditor {
 			String s = getPreferenceStore().getString(getPreferenceName());
 			if (Misc.isNullOrEmpty(s))
 				return;
+			//Load the list of the extension parsing the xml but without loading actually the fonts
 			SimpleFontExtensionHelper.getInstance().loadFontExtensions(JasperReportsConfiguration.getDefaultInstance(),
-					new ByteArrayInputStream(s.getBytes()), fontFamilies);
+					new ByteArrayInputStream(s.getBytes()), fontFamilies, false);
 			tree.refresh(true);
 		}
 	}

@@ -54,7 +54,6 @@ import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.IDisposeListener;
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FilePrefUtil;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.HttpUtils;
@@ -629,16 +628,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 						lst.getFontSets().add(f);
 			}
 			
-			//FIXME: load the custom font as last fonts, and catch the exception to prevent a missing font to 
-			//broke them all http://jira.jaspersoft.com/browse/JSS-118
-			try{
-				String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
-				if (strprop != null)
-					SimpleFontExtensionHelper.getInstance().loadFontExtensions(this, new ByteArrayInputStream(strprop.getBytes()), lst);
-			} catch (JRRuntimeException ex){
-				ex.printStackTrace();
-				UIUtils.showError(ex);
-			}
+			String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
+			if (strprop != null)
+				SimpleFontExtensionHelper.getInstance().loadFontExtensions(this, new ByteArrayInputStream(strprop.getBytes()), lst, true);
 			
 			refreshFonts = false;
 		}
