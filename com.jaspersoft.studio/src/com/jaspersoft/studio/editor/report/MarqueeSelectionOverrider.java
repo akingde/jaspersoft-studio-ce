@@ -26,6 +26,7 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.util.EditPartUtilities;
 import org.eclipse.jface.viewers.StructuredSelection;
 
+import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.java2d.ISelectionOverrider;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.preferences.bindings.BindingsPreferencePersistence;
@@ -117,11 +118,11 @@ public class MarqueeSelectionOverrider implements ISelectionOverrider {
 		if (selectedPart != null && BindingsPreferencePersistence.isPressed(BINDING_KEY_ID)){
 				List<GraphicalEditPart> graphicalParts = new ArrayList<GraphicalEditPart>();
 				for(Object currentPart : previousSelection){
-					if (currentPart instanceof GraphicalEditPart){
+					if (currentPart instanceof GraphicalEditPart && !(currentPart instanceof BandEditPart)){
 						graphicalParts.add((GraphicalEditPart)currentPart);
 					}
 				}
-				if (selectedPart instanceof GraphicalEditPart){
+				if (selectedPart instanceof GraphicalEditPart && !(selectedPart instanceof BandEditPart)){
 					graphicalParts.add((GraphicalEditPart)selectedPart);
 				}
 				//Compute the rectangle that contains all the parts
