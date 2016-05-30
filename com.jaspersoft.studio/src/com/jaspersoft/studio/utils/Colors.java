@@ -308,4 +308,29 @@ public class Colors {
 		}
 		return listMatches.toArray(new String[listMatches.size()]);
 	}
+	
+	/**
+	 * Given a bunch of colors it produces an encoded string that 
+	 * can be used in different places as compact value representation.
+	 * <p>
+	 * <em>Sample return value</em>: 
+	 * <code>['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9']</code>
+	 * 
+	 * @param colors the array of colors
+	 * @return the encoded string representing the array of colors
+	 */
+	public static String encodeHexColorsAsArray(String[] colors) {
+		StringBuffer sb = new StringBuffer();
+		if(colors!=null && colors.length>0){
+			String separator = "";
+			sb.append("[");
+			for(String col : colors){
+				sb.append(separator);
+				separator=",";
+				sb.append( "'").append(col).append("'");
+			}
+			sb.append("]");
+		}
+		return sb.toString();
+	}
 }

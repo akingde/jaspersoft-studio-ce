@@ -2298,6 +2298,14 @@ public class Messages extends NLS {
 	public static String VInputControls_0;
 	public static String VParameters_calculate_default_values;
 	public static String VParameters_resetparameters;
+	public static String WColorsPalette_Add;
+	public static String WColorsPalette_CopyColors;
+	public static String WColorsPalette_Down;
+	public static String WColorsPalette_Modify;
+	public static String WColorsPalette_PasteColors;
+	public static String WColorsPalette_PickNewColor;
+	public static String WColorsPalette_Remove;
+	public static String WColorsPalette_Up;
 	public static String WizardDataSourcePage_lblNewLabel_text;
 	public static String WizardDataSourcePage_btnNew_text;
 	public static String WizardDataSourcePage_lblThisDataAdapter_text;

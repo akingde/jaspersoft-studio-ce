@@ -57,23 +57,23 @@ public class FileSelectionDialog extends Dialog {
 	// Expression that will be associated to the image element
 	protected String fileExpressionText;
 	// All widgets stuff
-	private Text txtResourcePath;
+	protected Text txtResourcePath;
 	protected Text txtFilesystemPath;
 	protected Text txtURL;
-	private Button btnWorkspaceResource;
+	protected Button btnWorkspaceResource;
 	protected Button btnAbsolutePath;
-	private Button btnNoFile;
+	protected Button btnNoFile;
 	protected Button btnUrlRemote;
-	private Button btnCustomExpression;
-	private StackLayout grpOptionsLayout;
-	private Composite cmpWorkspaceResourceSelection;
-	private Composite cmpFilesystemResourceSelection;
-	private Composite cmpNoFile;
-	private Composite cmpCustomExpression;
-	private Composite cmpURL;
-	private Group grpOptions;
-	private WTextExpression customExpression;
-	private JRDesignExpression jrFileExpression;
+	protected Button btnCustomExpression;
+	protected StackLayout grpOptionsLayout;
+	protected Composite cmpWorkspaceResourceSelection;
+	protected Composite cmpFilesystemResourceSelection;
+	protected Composite cmpNoFile;
+	protected Composite cmpCustomExpression;
+	protected Composite cmpURL;
+	protected Group grpOptions;
+	protected WTextExpression customExpression;
+	protected JRDesignExpression jrFileExpression;
 
 	protected JasperReportsConfiguration jConfig;
 
