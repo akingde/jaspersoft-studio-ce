@@ -9,7 +9,6 @@
 package com.jaspersoft.studio.editor;
 
 import java.io.InputStream;
-import java.net.URI;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -51,7 +50,7 @@ public class JasperFileEditorLauncher implements IEditorLauncher {
 		IFile jasperFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(file);
 		if(jasperFile==null){
 			try {
-				jasperFile = FileUtils.getInProjectFile(new URI(file.toOSString()), new NullProgressMonitor());
+				jasperFile = FileUtils.getInProjectFile(file.toFile().toURI(), new NullProgressMonitor());
 			} catch (Exception e) {
 				UIUtils.showError(Messages.JasperFileEditorLauncher_ErrorExternalJasperFile,e);
 			}
