@@ -9,7 +9,7 @@
 package com.jaspersoft.studio.data.reader;
 
 import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -42,6 +43,7 @@ import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
@@ -50,7 +52,6 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 /**
  * Reader class for generic dataset.
@@ -81,6 +82,170 @@ public class DatasetReader {
 		listeners = new ArrayList<DatasetReaderListener>();
 	}
 
+	public static JasperDesign getJasperDesign(JasperReportsConfiguration jConfig) throws IOException, JRException {
+		FileInputStream is = null;
+		try {
+			String reportLocation = JaspersoftStudioPlugin.getInstance()
+					.getFileLocation(DataPreviewScriptlet.PREVIEW_REPORT_PATH);
+			is = new FileInputStream(reportLocation);
+			return JRXmlLoader.load(jConfig, is);
+		} finally {
+			FileUtils.closeStream(is);
+		}
+	}
+
+	public static void setupDataset(JasperDesign dataJD, JRDesignDataset designDataset,
+			JasperReportsConfiguration jConfig, List<String> columns) throws JRException {
+		// 2. Set query information
+		JRDesignQuery query = new JRDesignQuery();
+		query.setLanguage(designDataset.getQuery().getLanguage());
+		query.setText(designDataset.getQuery().getText());
+		dataJD.setQuery(query);
+		// and the report language to the actual report one
+		dataJD.setLanguage(jConfig.getJasperDesign().getLanguage());
+		dataJD.setFilterExpression(designDataset.getFilterExpression());
+		// 3. Replace properties map
+		ModelUtils.replacePropertiesMap(jConfig.getJasperDesign().getPropertiesMap(), dataJD.getPropertiesMap());
+
+		// 4. Set "standard" parameters
+		List<JRParameter> parametersList = designDataset.getParametersList();
+		for (JRParameter param : parametersList) {
+			if (param.isSystemDefined())
+				continue;
+			if (dataJD.getParametersMap().containsKey(param.getName())) {
+				dataJD.removeParameter(param.getName());
+			}
+			dataJD.addParameter(param);
+		}
+
+		// 5. Add the fields
+		if (columns.size() > 0) {
+			// Clear "dirty" fields
+			dataJD.getFieldsList().clear();
+			dataJD.getFieldsMap().clear();
+			//
+			JRField[] fields = designDataset.getFields();
+			for (JRField f : fields) {
+				dataJD.addField(f);
+			}
+		}
+		// 5.a Add the variables
+		// Clear "dirty" variables
+		dataJD.getVariablesList().clear();
+		dataJD.getVariablesMap().clear();
+
+		// 5.b add groups
+		dataJD.getGroupsList().clear();
+		dataJD.getMainDesignDataset().getGroupsMap().clear();
+		for (JRGroup sf : designDataset.getGroupsList()) {
+			JRDesignGroup gr = new JRDesignGroup();
+			gr.setName(sf.getName());
+			// gr.setExpression(sf.getExpression());
+			dataJD.addGroup(gr);
+		}
+
+		// 5.c add the variables, ignore duplicates
+		JRVariable[] variables = designDataset.getVariables();
+		for (JRVariable f : variables)
+			try {
+				JRDesignVariable v = new JRDesignVariable();
+				v.setName(f.getName());
+				v.setSystemDefined(f.isSystemDefined());
+				v.setValueClassName(f.getValueClassName());
+				v.setCalculation(f.getCalculationValue());
+				v.setExpression(f.getExpression());
+				v.setInitialValueExpression(f.getInitialValueExpression());
+
+				v.setIncrementerFactoryClassName(f.getIncrementerFactoryClassName());
+				v.setIncrementType(f.getIncrementTypeValue());
+				if (f.getIncrementGroup() != null)
+					v.setIncrementGroup(dataJD.getGroupsMap().get(f.getIncrementGroup().getName()));
+
+				v.setResetType(f.getResetTypeValue());
+				if (f.getResetGroup() != null)
+					v.setResetGroup(dataJD.getGroupsMap().get(f.getResetGroup().getName()));
+
+				dataJD.addVariable(v);
+			} catch (JRException e) {
+				// it's possible we'll have some duplicates from groups
+				if (!e.getMessageKey().equals(JRDesignDataset.EXCEPTION_MESSAGE_KEY_DUPLICATE_VARIABLE))
+					e.printStackTrace();
+			}
+
+		// 6. add sort fields
+		dataJD.getSortFieldsList().clear();
+		dataJD.getMainDesignDataset().getSortFieldsMap().clear();
+		for (JRSortField sf : designDataset.getSortFieldsList())
+			dataJD.addSortField(sf);
+
+		// 6.b add scriptlets
+		dataJD.getScriptletsList().clear();
+		dataJD.getMainDesignDataset().getScriptletsMap().clear();
+		for (JRScriptlet sf : designDataset.getScriptletsList())
+			dataJD.addScriptlet(sf);
+	}
+
+	public static JasperReport compile(JasperReportsConfiguration jConfig, JasperDesign dataJD)
+			throws CoreException, JRException {
+		JasperReport jrobj = null;
+		IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		if (f != null) {
+			// System.out.println(JRXmlWriter.writeReport(dataJD, "UTF-8"));
+			Markers.deleteMarkers(f);
+			JasperReportCompiler compiler = new JasperReportCompiler();
+			compiler.setErrorHandler(new JRErrorHandler(f));
+			compiler.setProject(f.getProject());
+			jrobj = compiler.compileReport(jConfig, dataJD);
+			if (jrobj == null) {
+				IMarker[] markers = f.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+				for (IMarker m : markers)
+					UIUtils.showError(new Exception(m.getAttribute(IMarker.MESSAGE).toString()));
+				return null;
+			}
+		} else
+			jrobj = JasperCompileManager.getInstance(jConfig).compile(dataJD);
+		return jrobj;
+	}
+
+	public static Map<String, Object> prepareParameters(JasperReportsConfiguration jConfig, int maxRecords) {
+		Map<String, Object> hm = new HashMap<String, Object>();
+		if (jConfig.getJRParameters() != null) {
+			// add also prompting parameters that may have previously
+			// set during a preview phase. This way we can get a more
+			// likely "default" value.
+			hm.putAll(jConfig.getJRParameters());
+		}
+		hm = ReportControler.resetParameters(hm, jConfig);
+		if (maxRecords > 0) {
+			hm.put(JRDesignParameter.REPORT_MAX_COUNT, maxRecords);
+		} else {
+			hm.remove(JRDesignParameter.REPORT_MAX_COUNT);
+		}
+		return hm;
+	}
+
+	public static JasperPrint fillReport(JasperReportsConfiguration jConfig, JRDesignDataset designDataset,
+			DataAdapterDescriptor dataAdapterDesc, JasperReport jrobj, Map<String, Object> hm) throws JRException {
+		if (dataAdapterDesc != null)
+			jConfig.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
+		DataAdapterService das = null;
+		try {
+			das = DataAdapterServiceUtil.getInstance(jConfig).getService(dataAdapterDesc.getDataAdapter());
+
+			das.contributeParameters(hm);
+
+			ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(), jrobj.getMainDataset().getPropertiesMap());
+
+			JaspersoftStudioPlugin.getExtensionManager().onRun(jConfig, jrobj, hm);
+
+			// 9. Fill the report
+			return JasperFillManager.getInstance(jConfig).fill(jrobj, hm);
+		} finally {
+			if (das != null)
+				das.dispose();
+		}
+	}
+
 	/**
 	 * Executes the task for the dataset reading task.
 	 * <p>
@@ -100,7 +265,6 @@ public class DatasetReader {
 	 *          the configuration instance
 	 */
 	public void start(JasperReportsConfiguration jConfig) {
-		InputStream is = null;
 		// Temporary replace the class loader to get the "report" one.
 		// This is necessary for example to load JDBC drivers or additional
 		// classes that are in the classpath of the JasperReports project
@@ -110,32 +274,9 @@ public class DatasetReader {
 		try {
 			running = true;
 			// 1. Load JD from custom data preview report
-			String reportLocation = JaspersoftStudioPlugin.getInstance()
-					.getFileLocation(DataPreviewScriptlet.PREVIEW_REPORT_PATH);
-			is = new FileInputStream(reportLocation);
-			JasperDesign dataJD = JRXmlLoader.load(jConfig, is);
+			JasperDesign dataJD = getJasperDesign(jConfig);
 
-			// 2. Set query information
-			JRDesignQuery query = new JRDesignQuery();
-			query.setLanguage(designDataset.getQuery().getLanguage());
-			query.setText(designDataset.getQuery().getText());
-			dataJD.setQuery(query);
-			// and the report language to the actual report one
-			dataJD.setLanguage(jConfig.getJasperDesign().getLanguage());
-			dataJD.setFilterExpression(designDataset.getFilterExpression());
-			// 3. Replace properties map
-			ModelUtils.replacePropertiesMap(jConfig.getJasperDesign().getPropertiesMap(), dataJD.getPropertiesMap());
-
-			// 4. Set "standard" parameters
-			List<JRParameter> parametersList = designDataset.getParametersList();
-			for (JRParameter param : parametersList) {
-				if (param.isSystemDefined())
-					continue;
-				if (dataJD.getParametersMap().containsKey(param.getName())) {
-					dataJD.removeParameter(param.getName());
-				}
-				dataJD.addParameter(param);
-			}
+			setupDataset(dataJD, designDataset, jConfig, columns);
 			// and add the custom ones
 			JRDesignParameter pColumns = new JRDesignParameter();
 			pColumns.setName(DataPreviewScriptlet.PARAM_COLUMNS);
@@ -146,126 +287,18 @@ public class DatasetReader {
 			pListeners.setValueClass(List.class);
 			dataJD.addParameter(pListeners);
 
-			// 5. Add the fields
-			if (columns.size() > 0) {
-				// Clear "dirty" fields
-				dataJD.getFieldsList().clear();
-				dataJD.getFieldsMap().clear();
-				//
-				JRField[] fields = designDataset.getFields();
-				for (JRField f : fields) {
-					dataJD.addField(f);
-				}
-			}
-			// 5.a Add the variables
-			// Clear "dirty" variables
-			dataJD.getVariablesList().clear();
-			dataJD.getVariablesMap().clear();
-
-			// 5.b add groups
-			dataJD.getGroupsList().clear();
-			dataJD.getMainDesignDataset().getGroupsMap().clear();
-			for (JRGroup sf : designDataset.getGroupsList()) {
-				JRDesignGroup gr = new JRDesignGroup();
-				gr.setName(sf.getName());
-				// gr.setExpression(sf.getExpression());
-				dataJD.addGroup(gr);
-			}
-
-			// 5.c add the variables, ignore duplicates
-			JRVariable[] variables = designDataset.getVariables();
-			for (JRVariable f : variables)
-				try {
-					JRDesignVariable v = new JRDesignVariable();
-					v.setName(f.getName());
-					v.setSystemDefined(f.isSystemDefined());
-					v.setValueClassName(f.getValueClassName());
-					v.setCalculation(f.getCalculationValue());
-					v.setExpression(f.getExpression());
-					v.setInitialValueExpression(f.getInitialValueExpression());
-
-					v.setIncrementerFactoryClassName(f.getIncrementerFactoryClassName());
-					v.setIncrementType(f.getIncrementTypeValue());
-					if (f.getIncrementGroup() != null)
-						v.setIncrementGroup(dataJD.getGroupsMap().get(f.getIncrementGroup().getName()));
-
-					v.setResetType(f.getResetTypeValue());
-					if (f.getResetGroup() != null)
-						v.setResetGroup(dataJD.getGroupsMap().get(f.getResetGroup().getName()));
-
-					dataJD.addVariable(v);
-				} catch (JRException e) {
-					// it's possible we'll have some duplicates from groups
-					if (!e.getMessageKey().equals(JRDesignDataset.EXCEPTION_MESSAGE_KEY_DUPLICATE_VARIABLE))
-						e.printStackTrace();
-				}
-
-			// 6. add sort fields
-			dataJD.getSortFieldsList().clear();
-			dataJD.getMainDesignDataset().getSortFieldsMap().clear();
-			for (JRSortField sf : designDataset.getSortFieldsList())
-				dataJD.addSortField(sf);
-
-			// 6.b add scriptlets
-			dataJD.getScriptletsList().clear();
-			dataJD.getMainDesignDataset().getScriptletsMap().clear();
-			for (JRScriptlet sf : designDataset.getScriptletsList())
-				dataJD.addScriptlet(sf);
-
 			// 6. Compile report
-			JasperReport jrobj = null;
-			IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
-			if (f != null) {
-//				System.out.println(JRXmlWriter.writeReport(dataJD, "UTF-8"));
-				Markers.deleteMarkers(f);
-				JasperReportCompiler compiler = new JasperReportCompiler();
-				compiler.setErrorHandler(new JRErrorHandler(f));
-				compiler.setProject(f.getProject());
-				jrobj = compiler.compileReport(jConfig, dataJD);
-				if (jrobj == null) {
-					IMarker[] markers = f.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-					for (IMarker m : markers)
-						UIUtils.showError(new Exception(m.getAttribute(IMarker.MESSAGE).toString()));
-					return;
-				}
-			} else
-				jrobj = JasperCompileManager.getInstance(jConfig).compile(dataJD);
+			JasperReport jrobj = compile(jConfig, dataJD);
+			if (jrobj == null)
+				return;
 
 			// 7. Prepare parameters
-			Map<String, Object> hm = new HashMap<String, Object>();
-			if (jConfig.getJRParameters() != null) {
-				// add also prompting parameters that may have previously
-				// set during a preview phase. This way we can get a more
-				// likely "default" value.
-				hm.putAll(jConfig.getJRParameters());
-			}
-			hm = ReportControler.resetParameters(hm, jConfig);
+			Map<String, Object> hm = prepareParameters(jConfig, maxRecords);
 			hm.put(DataPreviewScriptlet.PARAM_COLUMNS, columns);
 			hm.put(DataPreviewScriptlet.PARAM_LISTENERS, listeners);
-			if (maxRecords > 0) {
-				hm.put(JRDesignParameter.REPORT_MAX_COUNT, maxRecords);
-			} else {
-				hm.remove(JRDesignParameter.REPORT_MAX_COUNT);
-			}
+
 			// 8. Contribute parameters from the data adapter
-			if (dataAdapterDesc != null)
-				jConfig.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
-			DataAdapterService das = null;
-			try {
-				das = DataAdapterServiceUtil.getInstance(jConfig).getService(dataAdapterDesc.getDataAdapter());
-
-				das.contributeParameters(hm);
-
-				ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(), jrobj.getMainDataset().getPropertiesMap());
-
-				JaspersoftStudioPlugin.getExtensionManager().onRun(jConfig, jrobj, hm);
-
-				// 9. Fill the report
-				JasperFillManager.getInstance(jConfig).fill(jrobj, hm);
-			} finally {
-				if (das != null)
-					das.dispose();
-			}
+			fillReport(jConfig, designDataset, dataAdapterDesc, jrobj, hm);
 		} catch (DataPreviewInterruptedException e) {
 			e.printStackTrace();
 			// DO NOTHING
@@ -275,7 +308,6 @@ public class DatasetReader {
 			UIUtils.showError(e);
 			// UIUtils.showError(Messages.DatasetReader_GenericErrorMsg, e);
 		} finally {
-			FileUtils.closeStream(is);
 			running = false;
 			for (DatasetReaderListener l : listeners) {
 				l.finished();

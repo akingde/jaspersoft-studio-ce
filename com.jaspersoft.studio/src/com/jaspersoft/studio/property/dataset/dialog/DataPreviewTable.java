@@ -13,11 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignField;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -43,14 +38,22 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.data.IDataPreviewInfoProvider;
 import com.jaspersoft.studio.data.reader.DatasetReader;
 import com.jaspersoft.studio.data.reader.DatasetReaderListener;
 import com.jaspersoft.studio.messages.Messages;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 /**
  * Data preview table widget.
@@ -66,6 +69,7 @@ public class DataPreviewTable implements DatasetReaderListener {
 	private static final int RECORDS_NUM_1000 = 1000;
 	private static final int RECORDS_NUM_500 = 500;
 	private static final int RECORDS_NUM_100 = 100;
+	private static final int RECORDS_NUM_10 = 10;
 
 	// Widget stuff
 	private TableViewer tviewer;
@@ -156,9 +160,9 @@ public class DataPreviewTable implements DatasetReaderListener {
 		cancelPreviewBtn.setEnabled(false);
 
 		recordsNumCombo = new Combo(composite, SWT.READ_ONLY);
-		recordsNumCombo.setItems(new String[] { Messages.DataPreviewTable_RecordsNum100,
-				Messages.DataPreviewTable_RecordsNum500, Messages.DataPreviewTable_RecordsNum1000,
-				Messages.DataPreviewTable_RecordsNumAll });
+		recordsNumCombo
+				.setItems(new String[] { Messages.DataPreviewTable_0, Messages.DataPreviewTable_RecordsNum100, Messages.DataPreviewTable_RecordsNum500,
+						Messages.DataPreviewTable_RecordsNum1000, Messages.DataPreviewTable_RecordsNumAll });
 		recordsNumCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 		recordsNumCombo.select(0);
 
@@ -193,6 +197,17 @@ public class DataPreviewTable implements DatasetReaderListener {
 		wtable.setLinesVisible(true);
 
 		tviewer.setContentProvider(ArrayContentProvider.getInstance());
+
+		Menu menu = new Menu(tviewer.getTable());
+		MenuItem mitem = new MenuItem(menu, SWT.NONE);
+		mitem.setText(Messages.DataPreviewTable_1);
+		mitem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new CopyDataDialog(tableContainer.getShell(), DataPreviewTable.this).open();
+			}
+		});
+		tviewer.getTable().setMenu(menu);
 	}
 
 	/**
@@ -281,22 +296,24 @@ public class DataPreviewTable implements DatasetReaderListener {
 	private int getRecordsCountSelected() {
 		switch (recordsNumCombo.getSelectionIndex()) {
 		case 0:
-			return RECORDS_NUM_100;
+			return RECORDS_NUM_10;
 		case 1:
-			return RECORDS_NUM_500;
+			return RECORDS_NUM_100;
 		case 2:
-			return RECORDS_NUM_1000;
+			return RECORDS_NUM_500;
 		case 3:
+			return RECORDS_NUM_1000;
+		case 4:
 			return RECORDS_NUM_ALL;
 		default:
-			return RECORDS_NUM_100;
+			return RECORDS_NUM_10;
 		}
 	}
 
 	/*
 	 * Gets the column names.
 	 */
-	private List<String> getColumns() {
+	public List<String> getColumns() {
 		List<String> columns = new ArrayList<String>();
 		for (JRDesignField f : previewInfoProvider.getFieldsForPreview()) {
 			columns.add(f.getName());
@@ -304,8 +321,8 @@ public class DataPreviewTable implements DatasetReaderListener {
 		return columns;
 	}
 
-	private static SimpleDateFormat TIMESTAMP = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss.SSSS");
-	private static SimpleDateFormat TIME = new SimpleDateFormat("hh:mm:ss.SSSS");
+	private static SimpleDateFormat TIMESTAMP = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss.SSSS"); //$NON-NLS-1$
+	private static SimpleDateFormat TIME = new SimpleDateFormat("hh:mm:ss.SSSS"); //$NON-NLS-1$
 
 	/*
 	 * Update the table layout.
@@ -413,7 +430,7 @@ public class DataPreviewTable implements DatasetReaderListener {
 	/*
 	 * Bean to represent the read record for previewing.
 	 */
-	private class DataPreviewBean {
+	public class DataPreviewBean {
 		private Object[] values;
 
 		public DataPreviewBean(Object[] values) {
@@ -468,4 +485,10 @@ public class DataPreviewTable implements DatasetReaderListener {
 
 	}
 
+	public List<DataPreviewBean> getPreviewItems() {
+		List<DataPreviewBean> res = new ArrayList<DataPreviewTable.DataPreviewBean>();
+		for (TableItem ti : tviewer.getTable().getItems())
+			res.add((DataPreviewBean) ti.getData());
+		return res;
+	}
 }

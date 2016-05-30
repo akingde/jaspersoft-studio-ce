@@ -470,6 +470,8 @@ public class Messages extends NLS {
 	public static String DataAdapterWizard_windowtitle;
 	public static String DataAdapterWizardDialog_0;
 	public static String DataPreviewScriptlet_InterruptErrorMsg;
+	public static String DataPreviewTable_0;
+	public static String DataPreviewTable_1;
 	public static String DataPreviewTable_CancelButton;
 	public static String DataPreviewTable_ErrorMsgNoDataAdapter;
 	public static String DataPreviewTable_ErrorMsgNoFields;

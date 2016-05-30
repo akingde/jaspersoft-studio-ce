@@ -320,6 +320,7 @@ Export-Package: com.jaspersoft.studio;
    com.jaspersoft.studio.utils,
    org.eclipse.swt.widgets",
  com.jaspersoft.studio.editor.preview.actions;uses:="org.eclipse.jface.action,org.eclipse.swt.widgets,com.jaspersoft.studio.editor.preview",
+ com.jaspersoft.studio.editor.preview.element,
  com.jaspersoft.studio.editor.preview.input;uses:="net.sf.jasperreports.engine.design,org.eclipse.swt.graphics,org.eclipse.swt.widgets",
  com.jaspersoft.studio.editor.preview.input.ext,
  com.jaspersoft.studio.editor.preview.jive,
