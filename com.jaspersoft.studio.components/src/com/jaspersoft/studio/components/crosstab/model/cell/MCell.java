@@ -119,6 +119,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		super(parent, -1);
 		setValue(jfRield);
 		setName(name);
+		setJasperConfiguration(parent.getJasperConfiguration());
 	}
 
 	/**

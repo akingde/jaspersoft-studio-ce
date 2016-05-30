@@ -328,4 +328,12 @@ public class StaticWizardFieldsPage extends JSSWizardPage {
 	public List<Object> getSelectedFields() {
 		return new ArrayList<Object>( outFields );
 	}
+	
+	/**
+	 * Clear the current selected fields in the page
+	 */
+	public void clearSelection(){
+		outFields.clear();
+		storeSettings();
+	}
 }

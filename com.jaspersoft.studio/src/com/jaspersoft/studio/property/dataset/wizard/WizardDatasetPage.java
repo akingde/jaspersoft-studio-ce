@@ -298,22 +298,13 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		}
 	}
 	
-	
-	
-	private void handleComboBoxDatasetSelected(Event event) {
-		
-//		if (comboBoxDatasets.getSelectionIndex() == 0 && acceptMainDataset)
-//		{
-//			datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME, null);
-//		}
-//		else if (comboBoxDatasets.getSelectionIndex() >= 0 && comboBoxDatasets.getSelectionIndex() < comboBoxDatasets.getItemCount())
-//		{
-//			datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME,comboBoxDatasets.getItem(comboBoxDatasets.getSelectionIndex()));
-//		}
-
+	/**
+	 * When the combo dataset is changed the settings are stored,
+	 * this can be overridden to provide additional behavior
+	 */
+	protected void handleComboBoxDatasetSelected(Event event) {
 		storeSettings();
 	}
-
 	
 	/**
 	 * Saves the local variables which hold the information provided by the user.

@@ -225,9 +225,21 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 				return;
 
 			settings.put(CrosstabWizard.CROSSTAB_ROWS, getSelectedFields());
-			setPageComplete(!(getSelectedFields()==null || getSelectedFields().isEmpty()));
+			getContainer().updateButtons();
 		}
-
+	}
+	
+	@Override
+	public boolean isPageComplete() {
+		if (getWizard() instanceof JSSWizard && getWizard() != null) {
+			Map<String, Object> settings = ((JSSWizard) getWizard()).getSettings();
+			if (settings != null && settings.get(CrosstabWizard.CROSSTAB_ROWS) != null){
+				List<?> fields = (List<?>)settings.get(CrosstabWizard.CROSSTAB_ROWS);
+				return !fields.isEmpty();
+			}
+			return false;
+		}
+		return super.isPageComplete();
 	}
 
 	/**

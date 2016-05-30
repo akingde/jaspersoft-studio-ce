@@ -224,10 +224,22 @@ public class CrosstabWizardMeasurePage extends StaticWizardFieldsPage {
 				return;
 
 			settings.put(CrosstabWizard.CROSSTAB_MEASURES, getSelectedFields());
-			setPageComplete(!(getSelectedFields() == null || getSelectedFields()
-					.isEmpty()));
+			getContainer().updateButtons();
 		}
 
+	}
+	
+	@Override
+	public boolean isPageComplete() {
+		if (getWizard() instanceof JSSWizard && getWizard() != null) {
+			Map<String, Object> settings = ((JSSWizard) getWizard()).getSettings();
+			if (settings != null && settings.get(CrosstabWizard.CROSSTAB_MEASURES) != null){
+				List<?> fields = (List<?>)settings.get(CrosstabWizard.CROSSTAB_MEASURES);
+				return !fields.isEmpty();
+			}
+			return false;
+		}
+		return super.isPageComplete();
 	}
 
 	/**

@@ -271,11 +271,24 @@ public class CrosstabWizardColumnPage extends StaticWizardFieldsPage {
 				return;
 
 			settings.put(CrosstabWizard.CROSSTAB_COLUMNS, getSelectedFields());
-			setPageComplete(!(getSelectedFields() == null || getSelectedFields().isEmpty()));
+			getContainer().updateButtons();
 		}
 
 	}
 
+	@Override
+	public boolean isPageComplete() {
+		if (getWizard() instanceof JSSWizard && getWizard() != null) {
+			Map<String, Object> settings = ((JSSWizard) getWizard()).getSettings();
+			if (settings != null && settings.get(CrosstabWizard.CROSSTAB_COLUMNS) != null){
+				List<?> fields = (List<?>)settings.get(CrosstabWizard.CROSSTAB_COLUMNS);
+				return !fields.isEmpty();
+			}
+			return false;
+		}
+		return super.isPageComplete();
+	}
+	
 	/**
 	 * This function checks if a particular right element is in the provided
 	 * list, and which is the matching element in that list.

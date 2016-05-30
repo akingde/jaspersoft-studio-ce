@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.wizard.IWizardPage;
 
@@ -69,6 +70,10 @@ public class CrosstabWizard extends JSSWizard {
 	private CrosstabWizardMeasurePage step4;
 	private CrosstabWizardLayoutPage step5;
 
+	private ReportObjects colGroups;
+	private ReportObjects rowGroups;
+	private ReportObjects measures;
+	
 	// private CrosstabWizardLayoutPage step6;
 	// private WizardConnectionPage step2;
 
@@ -87,7 +92,30 @@ public class CrosstabWizard extends JSSWizard {
 				jrCrosstab));
 		crosstab.setJasperConfiguration(getConfig());
 
-		step1 = new WizardDatasetPage("Crosstab");
+		step1 = new WizardDatasetPage("Crosstab"){
+			
+			protected void clearSettings(){
+				Map<String, Object> settings = ((JSSWizard) getWizard()).getSettings();
+				if (settings != null){
+					step2.clearSelection();
+					step3.clearSelection();
+					step4.clearSelection();
+					getContainer().updateButtons();
+				}
+			}
+			
+			protected void handleComboBoxDatasetSelected(org.eclipse.swt.widgets.Event event) {
+				super.handleComboBoxDatasetSelected(event);
+				clearSettings();
+			};
+			
+			@Override
+			protected void handleOptionSelected() {
+				super.handleOptionSelected();
+				clearSettings();
+			}
+			
+		};
 		addPage(step1);
 
 		step2 = new CrosstabWizardColumnPage();
@@ -161,8 +189,7 @@ public class CrosstabWizard extends JSSWizard {
 		}
 
 		// Add measures...
-		List<Object> measures = (List<Object>) getSettings().get(
-				CROSSTAB_MEASURES);
+		List<Object> measures = (List<Object>) getSettings().get(CROSSTAB_MEASURES);
 		if (measures != null) {
 			for (Object obj : measures) {
 				try {
@@ -175,7 +202,7 @@ public class CrosstabWizard extends JSSWizard {
 			}
 		}
 
-		// Add measures...
+		// Add column groups...
 		List<Object> columnGroups = (List<Object>) getSettings().get(
 				CROSSTAB_COLUMNS);
 		if (columnGroups != null) {
@@ -190,9 +217,8 @@ public class CrosstabWizard extends JSSWizard {
 			}
 		}
 
-		// Add measures...
-		List<Object> rowGroups = (List<Object>) getSettings()
-				.get(CROSSTAB_ROWS);
+		// Add row groups...
+		List<Object> rowGroups = (List<Object>) getSettings().get(CROSSTAB_ROWS);
 		if (rowGroups != null) {
 			for (Object obj : rowGroups) {
 				try {
@@ -391,10 +417,6 @@ public class CrosstabWizard extends JSSWizard {
 		}
 
 	}
-
-	private ReportObjects colGroups;
-	private ReportObjects rowGroups;
-	private ReportObjects measures;
 
 	/**
 	 * This inner class is used to cache set of objects based in the selected
