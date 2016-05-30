@@ -880,8 +880,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 					// instead will end to propagate the update to every model binded to the jr object
 					JRChangeEventsSupport parentEvents = (JRChangeEventsSupport) parent.getValue();
 					parentEvents.getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
-					// IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler) parent;
-					// handler.setChangedProperty(true);
 					// We can exit the cycle since the setChangedProperty on the parent will propagate the
 					// refresh on the upper levels
 					break;

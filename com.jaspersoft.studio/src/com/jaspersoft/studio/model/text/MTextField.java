@@ -16,23 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRHyperlinkParameter;
-import net.sf.jasperreports.engine.JRTextField;
-import net.sf.jasperreports.engine.base.JRBaseTextField;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignHyperlink;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.design.JRDesignTextField;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
-import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -42,7 +25,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.DefaultValue;
-import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -58,6 +40,22 @@ import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRHyperlinkParameter;
+import net.sf.jasperreports.engine.JRTextField;
+import net.sf.jasperreports.engine.base.JRBaseTextField;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignHyperlink;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JRDesignTextField;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 /*
  * The Class MTextField.
@@ -403,23 +401,10 @@ public class MTextField extends MTextElement {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (JRDesignExpression.PROPERTY_TEXT.equals(evt.getPropertyName()) && element != null) {
-				ANode parent = element.getParent();
-				// Refresh also the container if it is a table or something like that
-				while (parent != null) {
-					if (parent instanceof IGraphicalPropertiesHandler) {
-						((IGraphicalPropertiesHandler) parent).setChangedProperty(true);
-						if (parent.getValue() instanceof JRChangeEventsSupport) {
-							((JRChangeEventsSupport) parent.getValue()).getEventSupport().firePropertyChange(FORCE_GRAPHICAL_REFRESH,
-									null, null);
-						}
-
-					}
-					parent = parent.getParent();
-				}
 				// Notify the change to the element, no need to set the the refresh to true, it will be done by
-				// the property change since the PROPERTY_EXPRESSION is a graphical property
-				element.getValue().getEventSupport().firePropertyChange(JRDesignTextField.PROPERTY_EXPRESSION,
-						evt.getOldValue(), evt.getNewValue());
+				// the property change since the PROPERTY_EXPRESSION is a graphical property, the refresh will so be propagated 
+				// to the upper levels
+				element.getValue().getEventSupport().firePropertyChange(JRDesignTextField.PROPERTY_EXPRESSION, evt.getOldValue(), evt.getNewValue());
 			}
 		}
 	};
@@ -445,16 +430,29 @@ public class MTextField extends MTextElement {
 	/**
 	 * When the value of the element is set, it will be removed also all the ExpressionNameChange from the expression of
 	 * its value and will be set a new ExpressionNameChange on the expression for the actual model. This is done to avoid
-	 * duplicate of the listener if for expample the JRElement is moved from a model to another
+	 * duplicate of the listener if for example the JRElement is moved from a model to another.
+	 * The listener is used to update the graphical appearance after a refactor of something used in the expression
 	 */
 	@Override
 	public void setValue(Object value) {
-		super.setValue(value);
+		//Remove the expression change from the expression of the old value, if any 
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
-		JRDesignExpression expression = (JRDesignExpression) jrElement.getExpression();
-		if (expression != null) {
-			removeListeners(expression);
-			expression.getEventSupport().addPropertyChangeListener(new ExpressionNameChanged(this));
+		if (jrElement != null){
+			JRDesignExpression expression = (JRDesignExpression) jrElement.getExpression();
+			if (expression != null) {
+				removeListeners(expression);
+			}
+		}
+		super.setValue(value);
+		jrElement = (JRDesignTextField) getValue();
+		//if the the new value is not null add an expression change listener to it
+		if (jrElement != null){
+			JRDesignExpression expression = (JRDesignExpression) jrElement.getExpression();
+			if (expression != null) {
+				//Since expression and element should have a 1-1 relation, remove any other listener
+				removeListeners(expression);
+				expression.getEventSupport().addPropertyChangeListener(new ExpressionNameChanged(this));
+			}
 		}
 	}
 

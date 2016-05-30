@@ -373,7 +373,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		for(INode node : new ArrayList<INode>(currentNode.getChildren())){
 			deleteChildren(node);
 		}
-		((ANode)currentNode).setParent(null, -1);
+		ANode aNode = (ANode) currentNode;
+		aNode.setParent(null, -1);
+		//It is important to set the value to null to remove any old property change listener
+		//set by this node
+		aNode.setValue(null);
 	}
 
 	public List<?> getChildren4Element(Object jrObject) {
