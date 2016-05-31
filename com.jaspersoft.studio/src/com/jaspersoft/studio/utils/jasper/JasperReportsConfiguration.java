@@ -86,11 +86,11 @@ import net.sf.jasperreports.repo.RepositoryService;
 public class JasperReportsConfiguration extends LocalJasperReportsContext implements JasperReportsContext {
 
 	public static final String KEY_JASPERDESIGN = "JasperDesign";
-	
+
 	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
-	
+
 	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
-	
+
 	/**
 	 * The key which identified the file being edited
 	 */
@@ -99,24 +99,24 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD"; //$NON-NLS-1$
 
 	private final class PreferenceListener implements IPropertyChangeListener {
-		
+
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-				String property = event.getProperty();
-				if (property.equals(FontsPreferencePage.FPP_FONT_LIST)){
-					refreshFonts();
-					refreshBundles = true;
-				} else if (property.equals(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES)) {	
-					refreshBundles = true;
-					isPropsCached = false;
-					getProperties();
-					qExecutors = null;
-				} else if (prmProvider != null && property.startsWith(ParameterSet.PARAMETER_SET)) {
-					prmProvider.reset();
-				} else if (property.startsWith("com.jaspersoft.studio.")) {
-					isPropsCached = false;
-					getProperties();
-				}
-				propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "preferences", null, event));
+			String property = event.getProperty();
+			if (property.equals(FontsPreferencePage.FPP_FONT_LIST)) {
+				refreshFonts();
+				refreshBundles = true;
+			} else if (property.equals(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES)) {
+				refreshBundles = true;
+				isPropsCached = false;
+				getProperties();
+				qExecutors = null;
+			} else if (prmProvider != null && property.startsWith(ParameterSet.PARAMETER_SET)) {
+				prmProvider.reset();
+			} else if (property.startsWith("com.jaspersoft.studio.")) {
+				isPropsCached = false;
+				getProperties();
+			}
+			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "preferences", null, event));
 		}
 	}
 
@@ -176,7 +176,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	private ClassLoader classLoader;
 	private boolean isPropsCached = false;
 	private ParameterSetProvider prmProvider;
-	
+
 	/**
 	 * @param parent
 	 * @param file
@@ -189,11 +189,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public ScopedPreferenceStore getPrefStore() {
 		return pstore;
 	}
-	
+
 	public PropertyChangeSupport getPropertyChangeSupport() {
 		return propertyChangeSupport;
 	}
-	
+
 	public void init(IFile file) {
 		IFile oldFile = (IFile) get(FileUtils.KEY_FILE);
 		if (oldFile != null && oldFile == file)
@@ -418,7 +418,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		return propmap;
 	}
 
-
 	private Properties getJRProperties() {
 		Properties props = null;
 		try {
@@ -627,24 +626,25 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 					if (f != null)
 						lst.getFontSets().add(f);
 			}
-			
+
 			String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
 			if (strprop != null)
-				SimpleFontExtensionHelper.getInstance().loadFontExtensions(this, new ByteArrayInputStream(strprop.getBytes()), lst, true);
-			
+				SimpleFontExtensionHelper.getInstance().loadFontExtensions(this, new ByteArrayInputStream(strprop.getBytes()),
+						lst, true);
+
 			refreshFonts = false;
 		}
 	}
-	
+
 	/**
 	 * Refresh the list of fonts loaded
 	 */
-	public void refreshFonts(){
+	public void refreshFonts() {
 		refreshFonts = true;
 		fontList = null;
 		getFontList();
-		//it is not necessary to call the read fonts since the getFontList will indirectly call it
-		//readFonts();
+		// it is not necessary to call the read fonts since the getFontList will indirectly call it
+		// readFonts();
 	}
 
 	public synchronized String[] getFontList() {
@@ -654,7 +654,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		return fontList;
 	}
-
 
 	/**
 	 * Return the components extension both by resolving the property of the current project and from the commons
@@ -734,6 +733,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			} else {
 				try {
 					result = super.getExtensions(extensionType);
+					if (result != null)
+						result = new ArrayList<T>(new LinkedHashSet<T>(result));
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
@@ -743,7 +744,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		return result;
 	}
-	
+
 	/*
 	 * private <T> List<T> getCachedExtension(Class<T> extensionType){ if (parent ==
 	 * DefaultJasperReportsContext.getInstance()){ Object cache = extensionCache.get(extensionType); if (cache != null )

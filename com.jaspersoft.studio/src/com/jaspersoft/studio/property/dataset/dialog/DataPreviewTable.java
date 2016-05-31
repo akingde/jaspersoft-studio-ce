@@ -160,9 +160,9 @@ public class DataPreviewTable implements DatasetReaderListener {
 		cancelPreviewBtn.setEnabled(false);
 
 		recordsNumCombo = new Combo(composite, SWT.READ_ONLY);
-		recordsNumCombo
-				.setItems(new String[] { Messages.DataPreviewTable_0, Messages.DataPreviewTable_RecordsNum100, Messages.DataPreviewTable_RecordsNum500,
-						Messages.DataPreviewTable_RecordsNum1000, Messages.DataPreviewTable_RecordsNumAll });
+		recordsNumCombo.setItems(new String[] { Messages.DataPreviewTable_0, Messages.DataPreviewTable_RecordsNum100,
+				Messages.DataPreviewTable_RecordsNum500, Messages.DataPreviewTable_RecordsNum1000,
+				Messages.DataPreviewTable_RecordsNumAll });
 		recordsNumCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 		recordsNumCombo.select(0);
 
@@ -319,6 +319,10 @@ public class DataPreviewTable implements DatasetReaderListener {
 			columns.add(f.getName());
 		}
 		return columns;
+	}
+
+	public List<JRDesignField> getFields() {
+		return previewInfoProvider.getFieldsForPreview();
 	}
 
 	private static SimpleDateFormat TIMESTAMP = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss.SSSS"); //$NON-NLS-1$

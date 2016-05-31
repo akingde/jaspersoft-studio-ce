@@ -8,6 +8,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -19,6 +22,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.property.dataset.dialog.DataPreviewTable.DataPreviewBean;
 
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 public class CopyDataDialog extends ATitledDialog {
 	private DataPreviewTable dpt;
@@ -47,14 +51,15 @@ public class CopyDataDialog extends ATitledDialog {
 	}
 
 	private String getSQL() {
-		if (dpt.getColumns().isEmpty())
+		List<JRDesignField> fields = dpt.getFields();
+		if (fields.isEmpty())
 			return "";
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT ");
 		StringBuffer tcol = new StringBuffer();
 		String del = "";
-		for (String f : dpt.getColumns()) {
-			tcol.append(del).append(f);
+		for (JRDesignField f : fields) {
+			tcol.append(del).append("\"" + f.getName().replaceAll("\"", "\"\"") + "\"");
 			del = " , ";
 		}
 		sb.append(tcol).append("\nFROM \n(VALUES \n");
@@ -62,9 +67,20 @@ public class CopyDataDialog extends ATitledDialog {
 		for (DataPreviewBean it : dpt.getPreviewItems()) {
 			sb.append(del).append("(");
 			String rdel = "";
-			for (int i = 0; i < dpt.getColumns().size(); i++) {
-				sb.append(rdel).append("'" + it.getValue(i) + "'");
-				rdel = ",";
+			for (int i = 0; i < fields.size(); i++) {
+				sb.append(rdel);
+				Class<?> vc = fields.get(i).getValueClass();
+				String q = vc.isAssignableFrom(Integer.class) || vc.isAssignableFrom(Byte.class)
+						|| vc.isAssignableFrom(Short.class) || vc.isAssignableFrom(Long.class) || vc.isAssignableFrom(Boolean.class)
+								? "" : "'";
+				Object v = it.getValue(i);
+				if (v == null)
+					sb.append("NULL");
+				else if (v instanceof Number && q.equals("'"))
+					sb.append(q).append(new BigDecimal(v.toString()).stripTrailingZeros().toPlainString()).append(q);
+				else
+					sb.append(q).append(v.toString().replaceAll("'", "''")).append(q);
+				rdel = ", ";
 			}
 			sb.append(")");
 			del = ",\n";
