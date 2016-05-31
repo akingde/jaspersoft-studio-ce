@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -98,11 +99,15 @@ public class CutAction extends ACachedSelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> copiableObjects = editor.getSelectionCache().getSelectionModelForType(ICopyable.class);
+		ISelection currentSelection = editor.getSelectionCache().getLastRawSelection();
 		for(Object obj : copiableObjects){
-			if (obj instanceof ANode){
-				ANode node = (ANode)obj;
-				ANode parent = node.getParent();
-				if (parent instanceof MStyleTemplate) return false;
+			ICopyable copyable = (ICopyable)obj;
+			if (copyable.isCuttable(currentSelection)){
+				if (obj instanceof ANode){
+					ANode node = (ANode)obj;
+					ANode parent = node.getParent();
+					if (parent instanceof MStyleTemplate) return false;
+				}
 			}
 		}
 		return !copiableObjects.isEmpty();
@@ -118,15 +123,19 @@ public class CutAction extends ACachedSelectionAction {
 		CutCommand cmd = new CutCommand();
 		command.add(cmd);
 		HashSet<INode> nestedNodes = getNotNestedNodes(copiableObjects);
+		ISelection currentSelection = editor.getSelectionCache().getLastRawSelection();
 		for (Object it : copiableObjects) {
-			cmd.addElement((ICopyable) it);
-			if (it instanceof MGraphicElement){
-				MGraphicElement node = (MGraphicElement)it;
-				command.setReferenceNodeIfNull(node.getRoot());
-				//Avoid to delete the nested nodes
-				if (!nestedNodes.contains(node)){
-					DeleteElementCommand deleteCommand = new DeleteElementCommand(node);
-					command.add(deleteCommand);
+			ICopyable copyable = (ICopyable)it;
+			if  (copyable.isCuttable(currentSelection)){
+				cmd.addElement((ICopyable) it);
+				if (it instanceof MGraphicElement){
+					MGraphicElement node = (MGraphicElement)it;
+					command.setReferenceNodeIfNull(node.getRoot());
+					//Avoid to delete the nested nodes
+					if (!nestedNodes.contains(node)){
+						DeleteElementCommand deleteCommand = new DeleteElementCommand(node);
+						command.add(deleteCommand);
+					}
 				}
 			}
 		}

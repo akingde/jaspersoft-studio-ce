@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
@@ -298,4 +299,8 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		return ICopyable.RESULT.CHECK_PARENT;
 	}
 
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
+	}
 }

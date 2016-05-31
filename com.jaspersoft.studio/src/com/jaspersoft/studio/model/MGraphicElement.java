@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
@@ -1099,5 +1100,10 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	@Override
 	public boolean isVisible() {
 		return super.isVisible() && checkVisibleFrame();
+	}
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
 	}
 }

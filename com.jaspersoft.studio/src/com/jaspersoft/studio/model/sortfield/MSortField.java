@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -381,5 +382,10 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 		if (parent instanceof MSortFields)
 			return ICopyable.RESULT.COPYABLE;
 		return ICopyable.RESULT.CHECK_PARENT;
+	}
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
 	}
 }

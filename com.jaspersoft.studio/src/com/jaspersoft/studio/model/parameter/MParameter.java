@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -287,5 +288,10 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	@Override
 	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
+	}
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
 	}
 }

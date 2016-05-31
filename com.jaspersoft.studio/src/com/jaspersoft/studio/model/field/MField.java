@@ -16,6 +16,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -296,5 +297,10 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 			return getExpressionContext();
 		}
 		return super.getAdapter(adapter);
+	}
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
 	}
 }

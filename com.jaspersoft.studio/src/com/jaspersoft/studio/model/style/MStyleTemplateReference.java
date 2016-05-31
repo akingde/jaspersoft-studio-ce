@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
@@ -211,5 +212,8 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 		fireChildrenChangeEvent();
 	}
 	
-	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
+	}
 }

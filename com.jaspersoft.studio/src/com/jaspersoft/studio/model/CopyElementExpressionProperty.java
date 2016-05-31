@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.viewers.ISelection;
 
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 
@@ -193,5 +194,10 @@ public class CopyElementExpressionProperty implements ICopyable {
 	 */
 	public String getValue() {
 		return value;
+	}
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
 	}
 }

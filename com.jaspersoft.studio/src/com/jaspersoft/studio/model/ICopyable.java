@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
+import org.eclipse.jface.viewers.ISelection;
+
 /**
  * Interface to implement to define that an element is 
  * compatible with the copy and paste
@@ -38,4 +40,12 @@ public interface ICopyable {
 	 * the target
 	 */
 	public RESULT isCopyable2(Object target);
+	
+	/**
+	 * Check if the current element is cuttable
+	 * 
+	 * @param currentSelection the current editor selection
+	 * @return true if the element can be cut, false otherwise
+	 */
+	public boolean isCuttable(ISelection currentSelection);
 }

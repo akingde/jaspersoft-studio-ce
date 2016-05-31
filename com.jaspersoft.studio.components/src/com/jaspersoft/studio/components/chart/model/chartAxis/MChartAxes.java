@@ -12,9 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.chartAxis;
 
+import java.util.HashSet;
 import java.util.List;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
@@ -25,6 +29,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -204,6 +209,33 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 				|| parent instanceof IPastableGraphic)
 			return ICopyable.RESULT.COPYABLE;
 		return ICopyable.RESULT.CHECK_PARENT;
+	}
+	
+	/**
+	 * An axis can be cut when there are more than one axis and when 
+	 * not every axis of the chart are selected
+	 */
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		if (getChildren().size() > 1) return false;
+		//Use the selection to understand if all the subcharts are in the 
+		//current selection
+		StructuredSelection sSel = (StructuredSelection)currentSelection;
+		HashSet<Object> selectedModels = new HashSet<Object>();
+		for(Object obj : sSel.toArray()){
+			if (obj instanceof EditPart){
+				EditPart part = (EditPart)obj;
+				selectedModels.add(part.getModel());
+			}
+		}
+		boolean allIncluded = true;
+		for(INode child : getChildren()){
+			if (!selectedModels.contains(child)){
+				allIncluded = false;
+				break;
+			}
+		}
+		return !allIncluded;
 	}
 
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
@@ -262,5 +263,9 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable, IDragable {
 			return ICopyable.RESULT.COPYABLE;
 		return ICopyable.RESULT.CHECK_PARENT;
 	}
-
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
+	}
 }

@@ -15,6 +15,7 @@ package com.jaspersoft.studio.components.crosstab.model.measure;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
@@ -236,5 +237,10 @@ public class MMeasure extends MDatasetGroupNode implements ICopyable, IDragable 
 		if (parent instanceof MMeasures)
 			return ICopyable.RESULT.COPYABLE;
 		return ICopyable.RESULT.CHECK_PARENT;
+	}
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
 	}
 }

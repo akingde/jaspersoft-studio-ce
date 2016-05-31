@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
@@ -230,5 +231,10 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 		if (parent instanceof MScriptlets)
 			return ICopyable.RESULT.COPYABLE;
 		return ICopyable.RESULT.CHECK_PARENT;
+	}
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
 	}
 }

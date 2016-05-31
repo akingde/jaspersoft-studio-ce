@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.WhenResourceMissingTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
@@ -486,5 +487,10 @@ public class MDataset extends APropertyNode implements ICopyable {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
 	}
 }

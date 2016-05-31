@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.wb.swt.ResourceManager;
 
@@ -244,4 +245,9 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 	}
 
 	public abstract String getJRSUrl() throws UnsupportedEncodingException;
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
+	}
 }

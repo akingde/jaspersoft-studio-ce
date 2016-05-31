@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.type.CalculationEnum;
 import net.sf.jasperreports.engine.type.IncrementTypeEnum;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -348,5 +349,10 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	public void setValue(Object value) {
 		super.setValue(value);
 		setEditable(true);
+	}
+	
+	@Override
+	public boolean isCuttable(ISelection currentSelection) {
+		return true;
 	}
 }
