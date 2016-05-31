@@ -151,6 +151,7 @@ public class ImpDataAdapter extends AImpObject {
 
 								rd.setParentFolder(runit.getParentFolder());
 								rd.setUriString(runit.getParentFolder() + "/" + rd.getName());
+
 								AFileResource mdaf = null;
 								if (da instanceof XmlDataAdapter)
 									mdaf = new MXmlFile(mrunit, rd, -1);
@@ -158,28 +159,29 @@ public class ImpDataAdapter extends AImpObject {
 									mdaf = new MRJson(mrunit, rd, -1);
 								else
 									mdaf = new MContentResource(mrunit, rd, -1);
+								if (mdaf != null) {
+									mdaf.setFile(file);
+									PublishOptions fpopt = createOptions(jrConfig, fname);
+									mdaf.setPublishOptions(fpopt);
+									fpopt.setValueSetter(popt.new ValueSetter<DataAdapter>(da) {
 
-								mdaf.setFile(file);
-								PublishOptions fpopt = createOptions(jrConfig, fname);
-								mdaf.setPublishOptions(fpopt);
-								fpopt.setValueSetter(popt.new ValueSetter<DataAdapter>(da) {
-
-									@Override
-									public void setup() {
-										setFileName(da, value);
-										try {
-											File f = FileUtils.createTempFile("tmp", "");
-											org.apache.commons.io.FileUtils.writeStringToFile(f,
-													DataAdapterManager.toDataAdapterFile(dad, jrConfig));
-											mres.setFile(f);
-										} catch (IOException e) {
-											UIUtils.showError(e);
+										@Override
+										public void setup() {
+											setFileName(da, value);
+											try {
+												File f = FileUtils.createTempFile("tmp", "");
+												org.apache.commons.io.FileUtils.writeStringToFile(f,
+														DataAdapterManager.toDataAdapterFile(dad, jrConfig));
+												mres.setFile(f);
+											} catch (IOException e) {
+												UIUtils.showError(e);
+											}
 										}
-									}
-								});
-								fpopt.getValueSetter().setValue("repo:" + rd.getUriString());
+									});
+									fpopt.getValueSetter().setValue("repo:" + rd.getUriString());
 
-								PublishUtil.getResources(mrunit, monitor, jrConfig).add(mdaf);
+									PublishUtil.getResources(mrunit, monitor, jrConfig).add(mdaf);
+								}
 
 								// setFileName(da, "repo:" + rd.getUriString());
 								f = FileUtils.createTempFile("tmp", "");

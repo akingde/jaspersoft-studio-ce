@@ -241,7 +241,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			getServerProfile().setClientUser(null);
 			getServerProfile().setClientUser(getUser(monitor));
 		} catch (HttpResponseException e) {
-			throw e;
+			if (!(e.getMessage().contains("Access") || e.getMessage().contains("Forbidden")))
+				throw e;
 		} catch (Exception e) {
 			Activator.getDefault().logError(e);
 		}
