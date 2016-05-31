@@ -97,10 +97,22 @@ public class PublishUtil {
 		return mainr;
 	}
 
-	public static void initRUnitName(AMJrxmlContainer runit, JasperDesign jd) {
+	public static void initRUnitName(AMJrxmlContainer runit, JasperDesign jd, JasperReportsConfiguration jConf) {
 		if (runit == null || jd == null)
 			return;
-		initResourceName(jd.getName(), runit.getValue());
+		String name = getRUnitNAme(jd, jConf);
+		initResourceName(name, runit.getValue());
+	}
+
+	public static String getRUnitNAme(JasperDesign jd, JasperReportsConfiguration jConf) {
+		String name = jd.getName();
+		IFile f = (IFile) jConf.get(FileUtils.KEY_FILE);
+		if (f != null) {
+			name = f.getName();
+			if (!Misc.isNullOrEmpty(f.getFileExtension()))
+				name = name.substring(0, name.length() - f.getFileExtension().length() - 1);
+		}
+		return name;
 	}
 
 	public static void setChild(ResourceDescriptor rd, ResourceDescriptor child) {

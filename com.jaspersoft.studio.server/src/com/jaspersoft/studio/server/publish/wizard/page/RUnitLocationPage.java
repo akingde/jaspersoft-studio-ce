@@ -187,18 +187,21 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			public Object[] getChildren(Object parentElement) {
 				if (parentElement instanceof AMResource) {
 					AMResource mres = (AMResource) parentElement;
-					if (mres instanceof MReportUnit || (mres.isSupported(Feature.INPUTCONTROLS_ORDERING) && (mres instanceof IInputControlsContainer))) {
+					if (mres instanceof MReportUnit || (mres.isSupported(Feature.INPUTCONTROLS_ORDERING)
+							&& (mres instanceof IInputControlsContainer))) {
 						if (mres.getChildren() != null && mres.getChildren().size() > 0) {
 							List<INode> children = new ArrayList<INode>();
 							if (mres.getChildren().get(0) instanceof MDummy)
 								try {
-									//WSClientHelper.refreshContainer(mres, new NullProgressMonitor());
+									// WSClientHelper.refreshContainer(mres, new
+									// NullProgressMonitor());
 									return mres.getChildren().toArray();
 								} catch (Exception e) {
 									UIUtils.showError(e);
 								}
 							for (INode n : mres.getChildren())
-								if (n instanceof AMResource && !SelectorDatasource.isDatasource(((AMResource) n).getValue()))
+								if (n instanceof AMResource
+										&& !SelectorDatasource.isDatasource(((AMResource) n).getValue()))
 									children.add(n);
 							return children.toArray();
 						}
@@ -373,8 +376,10 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 							try {
 								getContainer().run(true, true, new IRunnableWithProgress() {
 
-									public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-										monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
+									public void run(IProgressMonitor monitor)
+											throws InvocationTargetException, InterruptedException {
+										monitor.beginTask(Messages.Publish2ServerWizard_MonitorName,
+												IProgressMonitor.UNKNOWN);
 										try {
 											if (serverProvider == null)
 												serverProvider = new ServerProvider();
@@ -442,7 +447,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			rd.setResourceProperty(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS, true);
 			newrunit = new MReportUnit(null, rd, -1);
 		}
-		PublishUtil.initRUnitName(newrunit, jDesign);
+		PublishUtil.initRUnitName(newrunit, jDesign, jConfig);
 		return newrunit;
 	}
 
@@ -452,12 +457,12 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			rd.setName(null);
 			newjrxml = new MJrxml(null, rd, -1);
 		}
-		PublishUtil.initRUnitName(newjrxml, jDesign);
+		PublishUtil.initRUnitName(newjrxml, jDesign, jConfig);
 		return newjrxml;
 	}
 
 	private AMJrxmlContainer getReportUnit() {
-		PublishUtil.initRUnitName(reportUnit, jDesign);
+		PublishUtil.initRUnitName(reportUnit, jDesign, jConfig);
 		return reportUnit;
 	}
 
@@ -535,8 +540,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 	private void initIDLabel() {
 		if (jDesign != null) {
-			ruID.setText(jDesign.getName().replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
-			ruLabel.setText(jDesign.getName());
+			String rUnitNAme = PublishUtil.getRUnitNAme(jDesign, jConfig);
+			ruID.setText(rUnitNAme.replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
+			ruLabel.setText(rUnitNAme);
 		}
 	}
 
@@ -583,7 +589,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 								List<ResourceDescriptor> children = mReportUnit.getValue().getChildren();
 								ResourceDescriptor rd = null;
 								for (ResourceDescriptor c : children) {
-									if (c.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && c.getUriString().equals(res)) {
+									if (c.getWsType().equals(ResourceDescriptor.TYPE_JRXML)
+											&& c.getUriString().equals(res)) {
 										rd = c;
 										break;
 									}
