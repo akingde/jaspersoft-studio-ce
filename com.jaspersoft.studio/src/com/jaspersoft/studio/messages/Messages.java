@@ -836,6 +836,9 @@ public class Messages extends NLS {
 	public static String FontPathPage_0;
 	public static String FontPathPage_1;
 	public static String FontPathPage_2;
+	public static String FontPathWizard_0;
+	public static String FontPathWizard_2;
+	public static String FontPathWizard_3;
 	public static String FontSetFamilyDialog_0;
 	public static String FontSetFamilyDialog_1;
 	public static String FontSetFamilyDialog_2;
