@@ -21,6 +21,8 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -202,31 +204,6 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	};
 	
 	/**
-	 * Listener called when the element selected in the font name combo changes
-	 */
-	private SelectionAdapter fontNameComboSelect = new SelectionAdapter() {
-		
-		public void widgetSelected(SelectionEvent e) {
-			if (!refreshing){
-				List<Object> selection = getSelectionForType(MTextElement.class);
-				if (selection.isEmpty())
-					return;
-				String value = fontName.getText();
-				JSSCompoundCommand cc = new JSSCompoundCommand(null);
-				for(Object textElement : selection){
-					Command changeValueCmd = createCommand(textElement, value, JRDesignStyle.PROPERTY_FONT_NAME);
-					if (changeValueCmd != null) {
-						cc.add(changeValueCmd);
-						cc.setReferenceNodeIfNull(textElement);
-					}
-				}
-				getCommandStack().execute(cc);
-			}
-		} 
-	};
-	
-	
-	/**
 	 * Change the font size of one or more elements
 	 */
 	private SelectionAdapter fontSizeComboModify = new SelectionAdapter() {
@@ -251,6 +228,32 @@ public class TextualContributionItem extends CommonToolbarHandler {
 			}
 		}
 	};
+	
+	/**
+	 * Listener called when the element selected in the font name combo changes
+	 */
+	private ModifyListener fontNameComboModify = new ModifyListener() {
+		
+		@Override
+		public void modifyText(ModifyEvent e) {
+			if (!refreshing){
+				List<Object> selection = getSelectionForType(MTextElement.class);
+				if (selection.isEmpty())
+					return;
+				String value = fontName.getText();
+				JSSCompoundCommand cc = new JSSCompoundCommand(null);
+				for(Object textElement : selection){
+					Command changeValueCmd = createCommand(textElement, value, JRDesignStyle.PROPERTY_FONT_NAME);
+					if (changeValueCmd != null) {
+						cc.add(changeValueCmd);
+						cc.setReferenceNodeIfNull(textElement);
+					}
+				}
+				getCommandStack().execute(cc);
+			}
+		}
+	};
+	
 	
 	/**
 	 * Listener called when the bold or italic button is pressed
@@ -321,7 +324,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontList = null;
 		fontName = new Combo(controlsArea, SWT.DROP_DOWN);
 		fontName.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_NAME);
-		fontName.addSelectionListener(fontNameComboSelect);
+		fontName.addModifyListener(fontNameComboModify);
 		setAvailableFonts();
 		
 		fontSize = new NumericCombo(controlsArea, SWT.NONE, 0, 6);
@@ -408,7 +411,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		ToolItem tiFontName = new ToolItem(parent,SWT.SEPARATOR);
 		fontName = new Combo(parent, SWT.DROP_DOWN);
 		fontName.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_NAME);
-		fontName.addSelectionListener(fontNameComboSelect);
+		fontName.addModifyListener(fontNameComboModify);
 		setAvailableFonts();
 		fontName.pack();
 		tiFontName.setWidth(fontName.getSize().x);
@@ -557,6 +560,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	 * Set the available fonts inside the combo for the current report
 	 */
 	private void setAvailableFonts(){
+		refreshing = true;
 		List<Object> selection = getSelectionForType(MTextElement.class);
 		if (selection.size() > 0){
 			APropertyNode node = (APropertyNode)selection.get(0);
@@ -567,6 +571,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 				fontList = fonts;
 			}
 		}
+		refreshing = false;
 	}
 
 	@Override
