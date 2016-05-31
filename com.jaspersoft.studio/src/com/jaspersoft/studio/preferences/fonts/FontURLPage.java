@@ -63,7 +63,6 @@ public class FontURLPage extends WizardPage {
 						return;
 					}
 				} catch (MalformedURLException e1) {
-					e1.printStackTrace();
 				}
 				setPageComplete(false);
 				setErrorMessage(Messages.JRRuntimeURLPage_4);
