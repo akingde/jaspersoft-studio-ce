@@ -217,25 +217,29 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 	 */
 	@Override
 	public boolean isCuttable(ISelection currentSelection) {
-		if (getChildren().size() > 1) return false;
-		//Use the selection to understand if all the subcharts are in the 
-		//current selection
-		StructuredSelection sSel = (StructuredSelection)currentSelection;
-		HashSet<Object> selectedModels = new HashSet<Object>();
-		for(Object obj : sSel.toArray()){
-			if (obj instanceof EditPart){
-				EditPart part = (EditPart)obj;
-				selectedModels.add(part.getModel());
+		ANode parent = getParent();
+		if (parent != null){
+			if (parent.getChildren().size() <= 1) return false;
+			//Use the selection to understand if all the subcharts are in the 
+			//current selection
+			StructuredSelection sSel = (StructuredSelection)currentSelection;
+			HashSet<Object> selectedModels = new HashSet<Object>();
+			for(Object obj : sSel.toArray()){
+				if (obj instanceof EditPart){
+					EditPart part = (EditPart)obj;
+					selectedModels.add(part.getModel());
+				}
 			}
-		}
-		boolean allIncluded = true;
-		for(INode child : getChildren()){
-			if (!selectedModels.contains(child)){
-				allIncluded = false;
-				break;
+			boolean allIncluded = true;
+			for(INode child : parent.getChildren()){
+				if (!selectedModels.contains(child)){
+					allIncluded = false;
+					break;
+				}
 			}
+			return !allIncluded;			
 		}
-		return !allIncluded;
+		return false;
 	}
 
 }

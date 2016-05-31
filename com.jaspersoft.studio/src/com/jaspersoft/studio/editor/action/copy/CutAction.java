@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.copy;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -100,9 +101,12 @@ public class CutAction extends ACachedSelectionAction {
 	protected boolean calculateEnabled() {
 		List<Object> copiableObjects = editor.getSelectionCache().getSelectionModelForType(ICopyable.class);
 		ISelection currentSelection = editor.getSelectionCache().getLastRawSelection();
+		List<Object> cuttableObjects = new ArrayList<Object>();
+		//Search among the copyable objects the ones that can be cut
 		for(Object obj : copiableObjects){
-			ICopyable copyable = (ICopyable)obj;
-			if (copyable.isCuttable(currentSelection)){
+			ICopyable copyableObject = (ICopyable)obj;
+			if (copyableObject.isCuttable(currentSelection)){
+				cuttableObjects.add(copyableObject);
 				if (obj instanceof ANode){
 					ANode node = (ANode)obj;
 					ANode parent = node.getParent();
@@ -110,7 +114,7 @@ public class CutAction extends ACachedSelectionAction {
 				}
 			}
 		}
-		return !copiableObjects.isEmpty();
+		return !cuttableObjects.isEmpty();
 	}
 	
 	
