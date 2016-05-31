@@ -181,6 +181,9 @@ public class ServerProfile implements Resource, Cloneable, Serializable, JRChang
 		url = HttpUtils.toSafeUri(new URL(url)).toASCIIString();
 		return url;
 	}
+	public String getUrlString() {
+		return url;
+	}
 
 	private URL url_;
 

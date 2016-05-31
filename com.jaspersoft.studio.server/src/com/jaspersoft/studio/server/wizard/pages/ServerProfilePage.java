@@ -762,7 +762,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 									new FutureCallback<Content>() {
 
 										public void failed(final Exception ex) {
-											ex.printStackTrace();
+											UIUtils.showError(ex);
 										}
 
 										public void completed(final Content content) {
@@ -820,7 +820,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				}
 			});
 
-			return sp.getUrl();
+			return sp.getUrlString();
 		}
 
 		public void setJrVersion(String v) {
