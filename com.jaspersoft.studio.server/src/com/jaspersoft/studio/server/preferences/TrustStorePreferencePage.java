@@ -108,7 +108,7 @@ public class TrustStorePreferencePage extends PreferencePage implements IWorkben
 		});
 
 		final StyledText cTxt = new StyledText(cmp,
-				SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.READ_ONLY | SWT.BORDER);
+				SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY | SWT.BORDER);
 
 		cTxt.setLeftMargin(3);
 		cTxt.setTopMargin(3);
