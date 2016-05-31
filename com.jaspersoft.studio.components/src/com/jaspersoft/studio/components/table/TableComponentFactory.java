@@ -87,6 +87,7 @@ import com.jaspersoft.studio.components.table.model.columngroup.action.UnGroupCo
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupFromGroupCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.command.MoveColumnIntoGroupCommand;
+import com.jaspersoft.studio.components.table.model.columngroup.command.MoveColumnOutsideGroupCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.command.ReorderColumnGroupCommand;
 import com.jaspersoft.studio.components.table.model.table.command.CreateTableCommand;
 import com.jaspersoft.studio.components.table.model.table.command.DeleteTableCommand;
@@ -507,7 +508,21 @@ public class TableComponentFactory implements IComponentFactory {
 				tableCommand.add(new MoveColumnIntoGroupCommand((StandardColumnGroup)parent.getValue(), (MCell)child));
 				return tableCommand;
 			}
-
+			MCell cell = (MCell)child;		
+			if (parent instanceof AMCollection && cell.getSection() == parent){
+				ANode currentParent = cell.getParent();
+				if (currentParent instanceof MColumnGroupCell){
+					MColumnGroupCell cellParent = (MColumnGroupCell)currentParent;
+					JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(cell.getTable());
+					tableCommand.add(new MoveColumnOutsideGroupCommand((StandardColumnGroup)cellParent.getValue(), cell, newIndex));
+					return tableCommand;
+				} else if (currentParent instanceof MColumnGroup){
+					MColumnGroup cellParent = (MColumnGroup)currentParent;
+					JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(cell.getTable());
+					tableCommand.add(new MoveColumnOutsideGroupCommand(cellParent.getValue(), cell, newIndex));
+					return tableCommand;
+				}
+			}
 
 		}  else if (child instanceof MColumnGroup) {
 			if (parent instanceof AMCollection){
