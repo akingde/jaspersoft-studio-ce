@@ -75,17 +75,14 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 				file = (IFile) obj;
 		}
 		if (jrConfig == null)
-			if (file != null){
-				jrConfig = JasperReportsConfiguration.getDefaultJRConfig(file);
-			} else {
-				jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
-			}
+			JasperReportsConfiguration.getDefaultJRConfig(file);
 	}
 
 	@Override
 	public void dispose() {
-		//it is safe to dispose this context since it can only be created inside this
-		//class in the init() method
+		// it is safe to dispose this context since it can only be created
+		// inside this
+		// class in the init() method
 		jrConfig.dispose();
 		super.dispose();
 	}
@@ -132,10 +129,12 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 								rd.setWsType(ResourceDescriptor.TYPE_JSON_FILE);
 							else if (ext.equalsIgnoreCase("properties"))
 								rd.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
-							else if (ext.equalsIgnoreCase("ttf") || ext.equalsIgnoreCase("eot") || ext.equalsIgnoreCase("woff"))
+							else if (ext.equalsIgnoreCase("ttf") || ext.equalsIgnoreCase("eot")
+									|| ext.equalsIgnoreCase("woff"))
 								rd.setWsType(ResourceDescriptor.TYPE_FONT);
-							else if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("bmp")
-									|| ext.equalsIgnoreCase("tiff"))
+							else if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("gif")
+									|| ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg")
+									|| ext.equalsIgnoreCase("bmp") || ext.equalsIgnoreCase("tiff"))
 								rd.setWsType(ResourceDescriptor.TYPE_IMAGE);
 							else if (fres.getParent() instanceof MReportUnit)
 								rd.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
@@ -146,7 +145,8 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 							PublishUtil.savePath(file, fres);
 							INode n = fres.getRoot();
 							if (n != null && n instanceof MServerProfile) {
-								MServerProfile msp = ServerManager.getServerByUrl(((MServerProfile) n).getValue().getUrl());
+								MServerProfile msp = ServerManager
+										.getServerByUrl(((MServerProfile) n).getValue().getUrl());
 								ServerManager.selectIfExists(monitor, msp, fres);
 							}
 						}
@@ -175,7 +175,8 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
-			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile || selection.getFirstElement() instanceof IFolder) {
+			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile
+					|| selection.getFirstElement() instanceof IFolder) {
 				this.selection = selection;
 				return;
 			}
@@ -183,7 +184,8 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 				if (obj instanceof EditPart) {
 					IEditorInput ein = SelectionHelper.getActiveJRXMLEditor().getEditorInput();
 					if (ein instanceof FileEditorInput) {
-						this.selection = new TreeSelection(new TreePath(new Object[] { ((FileEditorInput) ein).getFile() }));
+						this.selection = new TreeSelection(
+								new TreePath(new Object[] { ((FileEditorInput) ein).getFile() }));
 						return;
 					}
 				}

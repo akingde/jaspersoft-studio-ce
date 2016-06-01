@@ -74,7 +74,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	private int startPage;
 	private AMJrxmlContainer node;
 	private JasperReportsConfiguration jrConfig;
-	
+
 	/**
 	 * Flag to keep track if the context was created internally to this wizard
 	 * or passed from outside. If it was created internally then it is disposed
@@ -82,7 +82,6 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	 */
 	private boolean disposeContext = true;
 
-	
 	public Publish2ServerWizard() {
 		super();
 		setWindowTitle(Messages.Publish2ServerWizard_Title);
@@ -94,8 +93,9 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	 * Create the wizard
 	 * 
 	 * @param jDesign
-	 * @param jrConfig a JasperReportsConfiguration, when passed in this way this jrConfig is not disposed
-	 * at the end of the wizard
+	 * @param jrConfig
+	 *            a JasperReportsConfiguration, when passed in this way this
+	 *            jrConfig is not disposed at the end of the wizard
 	 * @param page
 	 */
 	public Publish2ServerWizard(JasperDesign jDesign, JasperReportsConfiguration jrConfig, int page) {
@@ -111,12 +111,12 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 			Object obj = ((IStructuredSelection) selection).getFirstElement();
 			if (obj instanceof IFile) {
 				IFile file = (IFile) obj;
-				jrConfig = JasperReportsConfiguration.getDefaultJRConfig(file); 
+				jrConfig = JasperReportsConfiguration.getDefaultJRConfig(file);
 				disposeContext = true;
 				initJDesign(file);
 			}
 		}
-		if (jrConfig == null){
+		if (jrConfig == null) {
 			jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
 			disposeContext = true;
 		}
@@ -124,7 +124,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public void dispose() {
-		if (disposeContext){
+		if (disposeContext) {
 			jrConfig.dispose();
 		}
 		super.dispose();
@@ -134,15 +134,13 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 		try {
 			if (file != null && file.exists()) {
 				if (jrConfig == null)
-					jrConfig = new JasperReportsConfiguration(
-							DefaultJasperReportsContext.getInstance(), file);
+					jrConfig = JasperReportsConfiguration.getDefaultJRConfig(file);
 				else
 					jrConfig.init(file);
 				String fext = file.getFileExtension();
-				if (jDesign == null
-						&& fext.equalsIgnoreCase(FileExtension.JRXML)
+				if (jDesign == null && fext.equalsIgnoreCase(FileExtension.JRXML)
 						|| fext.equalsIgnoreCase(FileExtension.JASPER)) {
-					jDesign = new JRXmlLoader(jrConfig,JRXmlDigesterFactory.createDigester(jrConfig))
+					jDesign = new JRXmlLoader(jrConfig, JRXmlDigesterFactory.createDigester(jrConfig))
 							.loadXML(file.getContents());
 					jrConfig.setJasperDesign(jDesign);
 				}
@@ -158,8 +156,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	public ANode getNode(IProgressMonitor monitor) {
 		if (node == null) {
-			ANode mserv = ServerManager.getServerProfile(jDesign, jrConfig,
-					monitor);
+			ANode mserv = ServerManager.getServerProfile(jDesign, jrConfig, monitor);
 			if (mserv == null)
 				mserv = new MRoot(null, jDesign);
 			mserv.setJasperConfiguration(jrConfig);
@@ -205,8 +202,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 							@Override
 							public void run() {
-								AMJrxmlContainer snode = page0
-										.getSelectedNode();
+								AMJrxmlContainer snode = page0.getSelectedNode();
 								page1.setParentResource(snode);
 								if (snode == null) {
 									page0.setValue(jDesign, getNode());
@@ -218,10 +214,8 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 								}
 							}
 						});
-					} else if (event.getSelectedPage() == page2
-							&& getStartingPage() == page1) {
-						if (jrConfig.get(JRSEditorContributor.KEY_PUBLISH2JSS,
-								false))
+					} else if (event.getSelectedPage() == page2 && getStartingPage() == page1) {
+						if (jrConfig.get(JRSEditorContributor.KEY_PUBLISH2JSS, false))
 							doFinish();
 					}
 				}
@@ -245,10 +239,8 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 		}
 		if (page == page2) {
 			if (node instanceof MJrxml) {
-				if (node.getParent() instanceof MReportUnit
-						&& node.getValue().isMainReport()) {
-					page2.configurePage(node.getParent().getParent(),
-							(MReportUnit) node.getParent());
+				if (node.getParent() instanceof MReportUnit && node.getValue().isMainReport()) {
+					page2.configurePage(node.getParent().getParent(), (MReportUnit) node.getParent());
 					return super.getNextPage(page);
 				}
 				return null;
@@ -265,14 +257,10 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 		canFinish = true;
 		try {
 			getContainer().run(false, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(
-							Messages.Publish2ServerWizard_MonitorName,
-							IProgressMonitor.UNKNOWN);
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
 					try {
-						hasDepResources = FindResources.find(monitor, node,
-								jDesign);
+						hasDepResources = FindResources.find(monitor, node, jDesign);
 						UIUtils.getDisplay().asyncExec(new Runnable() {
 							public void run() {
 								if (hasDepResources)
@@ -315,15 +303,12 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 			getContainer().run(true, true, new IRunnableWithProgress() {
 
 				@Override
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(Messages.Publish2ServerWizard_0,
-							IProgressMonitor.UNKNOWN);
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(Messages.Publish2ServerWizard_0, IProgressMonitor.UNKNOWN);
 					try {
 						ANode node = getNode(monitor);
 						if (node instanceof AMJrxmlContainer)
-							new Publish(jrConfig).publish(
-									(AMJrxmlContainer) node, jDesign, monitor);
+							new Publish(jrConfig).publish((AMJrxmlContainer) node, jDesign, monitor);
 					} finally {
 						monitor.done();
 					}
@@ -337,7 +322,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 		return true;
 	}
-	
+
 	@Override
 	public boolean performCancel() {
 		JDTUtils.restoreLinkedResourcesSupport();
@@ -365,20 +350,17 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
-			if (selection.getFirstElement() instanceof IProject
-					|| selection.getFirstElement() instanceof IFile
+			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile
 					|| selection.getFirstElement() instanceof IFolder) {
 				this.selection = selection;
 				return;
 			}
 			for (Object obj : selection.toList()) {
 				if (obj instanceof EditPart) {
-					IEditorInput ein = SelectionHelper.getActiveJRXMLEditor()
-							.getEditorInput();
+					IEditorInput ein = SelectionHelper.getActiveJRXMLEditor().getEditorInput();
 					if (ein instanceof FileEditorInput) {
-						this.selection = new TreeSelection(new TreePath(
-								new Object[] { ((FileEditorInput) ein)
-										.getFile() }));
+						this.selection = new TreeSelection(
+								new TreePath(new Object[] { ((FileEditorInput) ein).getFile() }));
 						return;
 					}
 				}

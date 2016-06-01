@@ -51,6 +51,12 @@
 		<field name="mime" type="boolean">
 			<bind-xml name="mime" node="element" />
 		</field>
+		<field name="logging" type="boolean">
+			<bind-xml name="logging" node="element" />
+		</field>
+		<field name="askPass" type="boolean">
+			<bind-xml name="askPass" node="element" />
+		</field>
 		<field name="timeout" type="int">
 			<bind-xml name="timeout" node="element" />
 		</field>
