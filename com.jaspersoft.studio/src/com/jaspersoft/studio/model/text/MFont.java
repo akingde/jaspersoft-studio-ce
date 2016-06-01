@@ -171,8 +171,8 @@ public class MFont extends APropertyNode {
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
 		
-		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, new DefaultValue("SansSerif", false)); //$NON-NLS-1$
-		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, new DefaultValue(10f, true)); //$NON-NLS-1$
+		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, new DefaultValue("SansSerif", true)); //$NON-NLS-1$
+		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, new DefaultValue(10f, true)); 
 		defaultsMap.put(JRBaseFont.PROPERTY_STRIKE_THROUGH, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JRBaseFont.PROPERTY_UNDERLINE, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JRBaseFont.PROPERTY_ITALIC, new DefaultValue(Boolean.FALSE, false));

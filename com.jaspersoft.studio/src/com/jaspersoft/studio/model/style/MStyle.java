@@ -487,8 +487,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap.put(JRBaseStyle.PROPERTY_UNDERLINE, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JRBaseStyle.PROPERTY_ITALIC, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JRBaseStyle.PROPERTY_BOLD, new DefaultValue(Boolean.FALSE, false));
-		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_NAME, new DefaultValue("SansSerif", false)); //$NON-NLS-1$
-		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, new DefaultValue(10f, false)); //$NON-NLS-1$
+		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_NAME, new DefaultValue("SansSerif", true)); //$NON-NLS-1$
+		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, new DefaultValue(10f, true)); //$NON-NLS-1$
 		
 		int modeValue = NamedEnumPropertyDescriptor.getIntValue(ModeEnum.OPAQUE, NullEnum.NOTNULL, ModeEnum.OPAQUE);
 		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, new DefaultValue(modeValue, true));
@@ -820,7 +820,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 * @return the jR design style
 	 */
 	public static JRDesignStyle createJRStyle(JasperDesign jrDesign) {
-		JRDesignStyle jrDesignStyle = new JRDesignStyle();
+		JRDesignStyle jrDesignStyle = new JRDesignStyle(jrDesign);
 		jrDesignStyle.setName(ModelUtils.getDefaultName(jrDesign.getStylesMap(), "Style")); //$NON-NLS-1$
 		return jrDesignStyle;
 	}
