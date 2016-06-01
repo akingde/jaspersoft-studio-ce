@@ -793,6 +793,13 @@ public class Messages extends NLS {
 	public static String FileDataAdapterStorage_1;
 	public static String FileDataAdapterStorage_2;
 	public static String FileInput_selectfile;
+	public static String FileSelectionDialog_0;
+	public static String FileSelectionDialog_1;
+	public static String FileSelectionDialog_2;
+	public static String FileSelectionDialog_3;
+	public static String FileSelectionDialog_4;
+	public static String FileSelectionDialog_5;
+	public static String FileSelectionDialog_6;
 	public static String FinalPage_errorConclusiveMessage;
 	public static String FinalPage_errorTitle;
 	public static String FirstPageAction_actionName;

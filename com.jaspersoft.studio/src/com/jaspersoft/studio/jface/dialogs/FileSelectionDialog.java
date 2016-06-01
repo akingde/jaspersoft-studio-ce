@@ -96,7 +96,7 @@ public class FileSelectionDialog extends Dialog {
 	 * @return the title for the dialog
 	 */
 	protected String getDialogTitle() {
-		return "Select a file";
+		return Messages.FileSelectionDialog_0;
 	}
 
 	/**
@@ -115,11 +115,9 @@ public class FileSelectionDialog extends Dialog {
 	 * @return the title and labels for the group of modes
 	 */
 	protected String[] getImageModesAndHeaderTitles() {
-		return new String[] { "File selection mode", "Workspace resource (an element inside the workspace)",
-				"Absolute Path in the filesystem (use only for quick testing, never use in real reports)",
-				"URL (a remote URL referring to a file, will be the expression value)",
-				"No file (no file reference will be set)",
-				"Custom expression (enter an expression for the file using the expression editor)" };
+		return new String[] { Messages.FileSelectionDialog_1, Messages.FileSelectionDialog_2,
+				Messages.FileSelectionDialog_3, Messages.FileSelectionDialog_4, Messages.FileSelectionDialog_5,
+				Messages.FileSelectionDialog_6 };
 	}
 
 	private List<IFileSelection> fselectors;
@@ -171,14 +169,9 @@ public class FileSelectionDialog extends Dialog {
 		});
 		btnUrlRemote.setText(fileModesAndHeaderTitles[3]);
 
-		btnNoFile = new Button(grpFileSelectionMode, SWT.RADIO);
-		btnNoFile.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				changeFileSelectionMode(cmpNoFile);
-			}
-		});
-		btnNoFile.setText(fileModesAndHeaderTitles[4]);
+		fselectors = JaspersoftStudioPlugin.getExtensionManager().getFileSelectors();
+		for (IFileSelection fs : fselectors)
+			fs.createRadioButton(grpFileSelectionMode, this, jConfig.getJasperDesign());
 
 		btnCustomExpression = new Button(grpFileSelectionMode, SWT.RADIO);
 		btnCustomExpression.addSelectionListener(new SelectionAdapter() {
@@ -189,9 +182,14 @@ public class FileSelectionDialog extends Dialog {
 		});
 		btnCustomExpression.setText(fileModesAndHeaderTitles[5]);
 
-		fselectors = JaspersoftStudioPlugin.getExtensionManager().getFileSelectors();
-		for (IFileSelection fs : fselectors)
-			fs.createRadioButton(grpFileSelectionMode, this, jConfig.getJasperDesign());
+		btnNoFile = new Button(grpFileSelectionMode, SWT.RADIO);
+		btnNoFile.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				changeFileSelectionMode(cmpNoFile);
+			}
+		});
+		btnNoFile.setText(fileModesAndHeaderTitles[4]);
 
 		createOptionsPanel(container);
 
@@ -378,7 +376,7 @@ public class FileSelectionDialog extends Dialog {
 
 			// Change the standard separator with an universal one
 			fileExpressionText = StringUtils
-					.replaceBackslashWithDoubleBackslash(filepath.replace(System.getProperty("file.separator").charAt(0), '/'));
+					.replaceBackslashWithDoubleBackslash(filepath.replace(System.getProperty("file.separator").charAt(0), '/')); //$NON-NLS-1$
 		} else {
 			// no image selected
 			txtResourcePath.setText(""); //$NON-NLS-1$
@@ -387,11 +385,11 @@ public class FileSelectionDialog extends Dialog {
 	}
 
 	protected String getFileExtension() {
-		return "*.*";
+		return "*.*"; //$NON-NLS-1$
 	}
 
 	protected String[] getFileExtensions() {
-		return new String[] { "*.*" };
+		return new String[] { "*.*" }; //$NON-NLS-1$
 	}
 
 	/*
