@@ -925,6 +925,13 @@ public class Messages extends NLS {
 	public static String HTMLExporterPreferencePage_32;
 	public static String HyperlinkSection_hyperlinkSectionTitle;
 	public static String ImageAlignSection_imageAlignLabel;
+	public static String ImageSelectionDialog_0;
+	public static String ImageSelectionDialog_1;
+	public static String ImageSelectionDialog_2;
+	public static String ImageSelectionDialog_3;
+	public static String ImageSelectionDialog_4;
+	public static String ImageSelectionDialog_5;
+	public static String ImageSelectionDialog_6;
 	public static String ImageSelectionDialog_Browse;
 	public static String ImageSelectionDialog_bytes;
 	public static String ImageContributionItem_actionName;

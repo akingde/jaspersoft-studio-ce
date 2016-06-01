@@ -10,6 +10,8 @@ package com.jaspersoft.studio.jface.dialogs;
 
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.messages.Messages;
+
 /**
  * Dialog proposed when an image needs to be selected.
  * 
@@ -31,7 +33,7 @@ public class ImageSelectionDialog extends FilePreviewSelectionDialog {
 	 * @return the title for the dialog
 	 */
 	protected String getDialogTitle() {
-		return "Select an image";
+		return Messages.ImageSelectionDialog_0;
 	}
 
 	/**
@@ -50,20 +52,20 @@ public class ImageSelectionDialog extends FilePreviewSelectionDialog {
 	 * @return the title and labels for the group of modes
 	 */
 	protected String[] getImageModesAndHeaderTitles() {
-		return new String[] { "Image selection mode", "Workspace resource (an element inside the workspace)",
-				"Absolute Path in the filesystem (use only for quick testing, never use in real reports)",
-				"URL (a remote URL referring to an image, will be the expression value)",
-				"No image (no image reference will be set)",
-				"Custom expression (enter an expression for the image using the expression editor)" };
+		return new String[] { Messages.ImageSelectionDialog_1, Messages.ImageSelectionDialog_2,
+				Messages.ImageSelectionDialog_3,
+				Messages.ImageSelectionDialog_4,
+				Messages.ImageSelectionDialog_5,
+				Messages.ImageSelectionDialog_6 };
 	}
 
 	@Override
 	protected String getFileExtension() {
-		return "*.png";
+		return "*.png"; //$NON-NLS-1$
 	}
 
 	@Override
 	protected String[] getFileExtensions() {
-		return new String[] { "*.png", "*.jpeg; *.jpg", "*.gif", "*.*" };
+		return new String[] { "*.png", "*.jpeg; *.jpg", "*.gif", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 }
