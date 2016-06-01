@@ -12,15 +12,21 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.java2d.ISelectionOverrider;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.bindings.BindingsPreferencePersistence;
+import com.jaspersoft.studio.preferences.bindings.JSSKeySequence;
+import com.jaspersoft.studio.preferences.bindings.JSSKeyStroke;
+
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 
 /**
  * This selection overrider allow to override the current selection and instead
@@ -81,6 +87,18 @@ public class ParentSelectionOverrider implements ISelectionOverrider {
 					currentNode = currentNode.getParent();
 				}
 			}
+		} else if (JaspersoftStudioPlugin.getInstance().isTraceEnabled()) {
+			StringBuilder message = new StringBuilder("ParentSelectOverrider-");
+			message.append("Sequence Expected: ");
+			message.append(BindingsPreferencePersistence.getBinding(BINDING_KEY_ID));
+			List<JSSKeyStroke> pressedKeys = new ArrayList<JSSKeyStroke>();
+			for(int pressedKey : JasperReportsPlugin.getPressedKeys()){
+				pressedKeys.add(JSSKeyStroke.getInstance(pressedKey));
+			}
+			JSSKeySequence keysSequence = JSSKeySequence.getInstance(pressedKeys);
+			message.append("\r\n Currently Pressed: ");
+			message.append(keysSequence);
+			JaspersoftStudioPlugin.getInstance().logTrage(message.toString());
 		}
 		return false;
 	}

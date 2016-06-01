@@ -79,10 +79,6 @@ public class JSSScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	
 	@Override
 	public void select(EditPart editpart) {
-		// If selection isn't changing, do nothing.
-		if ((getSelectedEditParts().size() == 1)	&& (getSelectedEditParts().get(0) == editpart)){
-			return;
-		}
 		//Store the selection for the overridder
 		List<?> previousSelection= primDeselectAll();
 		
@@ -93,7 +89,15 @@ public class JSSScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 				break;
 			}
 		}
-		if (!wasOverride) super.select(editpart);
+		if (!wasOverride) {
+			//this code is the same of the super.select, the difference this call the super.appendSelection
+			//calling directly super.select will called this appendSelection causing the overrider to be evaluated
+			//twice
+			if ((getSelectedEditParts().size() == 1) && (getSelectedEditParts().get(0) == editpart))
+				return;
+			primDeselectAll();
+			super.appendSelection(editpart); 
+		}
 	}
 	
 	/**
