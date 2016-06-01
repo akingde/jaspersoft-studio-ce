@@ -26,6 +26,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
+import com.jaspersoft.studio.editor.action.exporter.IPropertyCustomExporter;
+import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
@@ -53,22 +55,42 @@ public class ExportedStudioPropertiesHandler implements IExportedResourceHandler
 	/**
 	 * The list of JSS properties that should not be exported. 
 	 */
-	private static final HashSet<String> propertiesBlackList = getPropertiesBlacklist();
+	private static HashSet<String> propertiesBlackList = null;
 	
 	/**
 	 * Return the list of properties that should not be exported. Among this there is 
 	 * the logger properties since their change can regard the application ini file
-	 * and the JasperReport properties since they are already handled by another exporter
 	 * 
 	 * @return a not null set of properties id that should not be exported/imported
 	 */
 	private static HashSet<String> getPropertiesBlacklist(){
 		HashSet<String> result = new HashSet<String>();
-		result.add(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES);
 		result.add(GlobalPreferencePage.LOG_ENABLE);
 		result.add(GlobalPreferencePage.LOG4j_FILE);
 		result.add(GlobalPreferencePage.LOG_FILE);
 		return result;
+	}
+	
+	/**
+	 * Used to get the properties that should not be exported, first of all look if the 
+	 * information is already available in the static field, if it is so then it is immediately
+	 * returned. Otherwise it is created and stored.
+	 * It is created from a set of embedded properties plus the properties already handled by
+	 * other exporters
+	 * 
+	 * @return a not null set of properties names that should not be exported
+	 */
+	protected HashSet<String> getExcludedProeprties(){
+		if (propertiesBlackList == null) {
+			 propertiesBlackList = getPropertiesBlacklist();
+			 for(IExportedResourceHandler definition : ExtensionManager.getContributedExporters()){
+				 if (definition instanceof IPropertyCustomExporter){
+					 IPropertyCustomExporter customExporter = (IPropertyCustomExporter)definition;
+					 propertiesBlackList.addAll(customExporter.getHandledProperties());
+				 }
+			 }
+		}
+		return propertiesBlackList;
 	}
 	
 	@Override
@@ -79,7 +101,7 @@ public class ExportedStudioPropertiesHandler implements IExportedResourceHandler
 			IEclipsePreferences pref = store.getQualifierStore();
 			resources.addAll(Arrays.asList(pref.keys()));
 			int size = resources.size();
-			for(String blacklistedProperty : propertiesBlackList){
+			for(String blacklistedProperty : getExcludedProeprties()){
 				if (resources.contains(blacklistedProperty)){
 					size --;
 				}
@@ -121,7 +143,7 @@ public class ExportedStudioPropertiesHandler implements IExportedResourceHandler
 			resources.addAll(Arrays.asList(pref.keys()));
 			Properties props = new Properties();
 			for(String resource : resources){
-				if (!propertiesBlackList.contains(resource)){
+				if (!getExcludedProeprties().contains(resource)){
 					props.put(resource, store.getString(resource));
 				}
 			}
@@ -163,7 +185,7 @@ public class ExportedStudioPropertiesHandler implements IExportedResourceHandler
       MScopedPreferenceStore store = (MScopedPreferenceStore)JaspersoftStudioPlugin.getInstance().getPreferenceStore();
 			IEclipsePreferences pref = store.getQualifierStore();
 			for(String key : pref.keys()){
-				if (!propertiesBlackList.contains(key)){
+				if (!getExcludedProeprties().contains(key)){
 					Object loadedValue = loadedProperties.get(key);
 					if (loadedValue != null){
 						pref.put(key, loadedValue.toString());

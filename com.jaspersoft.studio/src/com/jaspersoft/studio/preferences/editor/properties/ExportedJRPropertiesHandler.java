@@ -17,6 +17,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -24,7 +26,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
+import com.jaspersoft.studio.editor.action.exporter.IPropertyCustomExporter;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FilePrefUtil;
@@ -36,7 +40,7 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
  * @author Orlandin Marco
  *
  */
-public class ExportedJRPropertiesHandler implements IExportedResourceHandler {
+public class ExportedJRPropertiesHandler implements IExportedResourceHandler, IPropertyCustomExporter {
 
 	/**
 	 * Folder name for the exported properties
@@ -168,4 +172,10 @@ public class ExportedJRPropertiesHandler implements IExportedResourceHandler {
 		return false;
 	}
 
+	@Override
+	public List<String> getHandledProperties() {
+		List<String> result = new ArrayList<String>();
+		result.add(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES);
+		return result;
+	}
 }

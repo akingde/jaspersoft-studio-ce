@@ -47,6 +47,7 @@ public class Messages extends NLS {
 	public static String common_bold;
 	public static String common_background;
 	public static String common_browse;
+	public static String common_path;
 	public static String common_class;
 	public static String common_classTypeLabel;
 	public static String common_column_names;
@@ -764,6 +765,8 @@ public class Messages extends NLS {
 	public static String ExportedResourcesWizardPage_pluginProducer;
 	public static String ExportedResourcesWizardPage_pluginVersion;
 	public static String ExportedResourcesWizardPage_selectedGroupTitle;
+	public static String ExportedStudioTemplatesHandler_dialogDescription;
+	public static String ExportedStudioTemplatesHandler_dialogTitle;
 	public static String ExportImageAction_actionName;
 	public static String ExportImageAction_actionTooltip;
 	public static String ExportImageAction_saveDialogTitle;
