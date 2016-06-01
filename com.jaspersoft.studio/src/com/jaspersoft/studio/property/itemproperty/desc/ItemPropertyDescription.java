@@ -9,6 +9,8 @@
 package com.jaspersoft.studio.property.itemproperty.desc;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -168,10 +170,13 @@ public class ItemPropertyDescription<T> {
 			});
 		}
 		textExpression.addFocusListener(new FocusAdapter() {
+
 			@Override
 			public void focusGained(FocusEvent e) {
 				if (UIUtil.isMacAndEclipse4() && editHappened) {
-					setValue(textExpression, wiProp);
+					if (((Text) e.getSource()).isDisposed())
+						return;
+					setValue(((Text) e.getSource()), wiProp);
 					editHappened = false;
 				}
 			}
@@ -183,15 +188,15 @@ public class ItemPropertyDescription<T> {
 			public void modifyText(ModifyEvent e) {
 				if (wiProp.isRefresh())
 					return;
-				Point p = textExpression.getSelection();
+				Point p = ((Text) e.getSource()).getSelection();
 
 				StandardItemProperty v = wiProp.getValue();
 				if (v == null)
 					v = new StandardItemProperty(getName(), null, null);
-				handleEdit(textExpression, v);
+				handleEdit(((Text) e.getSource()), v);
 				wiProp.setValue(v);
 				// if (!textExpression.isDisposed())
-				textExpression.setSelection(p);
+				((Text) e.getSource()).setSelection(p);
 			}
 		});
 		setupContextMenu(textExpression, wiProp);
