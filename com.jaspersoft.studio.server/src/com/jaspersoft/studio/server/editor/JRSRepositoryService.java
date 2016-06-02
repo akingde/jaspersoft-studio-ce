@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.server.editor;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import net.sf.jasperreports.repo.Resource;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -110,13 +112,8 @@ public class JRSRepositoryService implements RepositoryService {
 	private void setupConnection(IConnection conn) {
 		c = conn;
 		try {
-
-			IFolder tmpDir = msp.getTmpDir(new NullProgressMonitor());
-			if (tmpDir.getRawLocation() != null)
-				rpath = tmpDir.getRawLocation().toOSString();
-			else if (tmpDir.getFullPath() != null)
-				rpath = tmpDir.getFullPath().toOSString();
-			else
+			initRPath();
+			if (rpath == null)
 				return;
 			List<RepositoryService> servs = parent.getRepositoryServices();
 			if (repService != null)
@@ -128,6 +125,19 @@ public class JRSRepositoryService implements RepositoryService {
 			e.printStackTrace();
 		} finally {
 			isConnecting = false;
+		}
+	}
+
+	private void initRPath() throws IOException, CoreException {
+		IFolder tmpDir = msp.getTmpDir(new NullProgressMonitor());
+		if (tmpDir.getRawLocation() != null)
+			rpath = tmpDir.getRawLocation().toOSString();
+		else if (tmpDir.getFullPath() != null)
+			rpath = tmpDir.getFullPath().toOSString();
+		else {
+			IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
+			if (file != null)
+				rpath = file.getProject().getRawLocation().toOSString();
 		}
 	}
 
@@ -181,7 +191,9 @@ public class JRSRepositoryService implements RepositoryService {
 				r = c.get(monitor, r, null);
 				if (r.getIsReference())
 					r = ReferenceResolver.resolveReference(c, r, null);
-				String fpath = rpath;
+				if (rpath == null)
+					initRPath();
+				String fpath = Misc.nvl(rpath);
 				if (!objectUri.startsWith("/")) //$NON-NLS-1$
 					fpath += "/"; //$NON-NLS-1$
 				fpath += objectUri;
@@ -231,7 +243,10 @@ public class JRSRepositoryService implements RepositoryService {
 				}
 			}
 			refresh();
-			return getFromParent(uri, resourceType);
+			String u = uri;
+			if (u.startsWith("repo:"))
+				u = u.substring(5);
+			return getFromParent(u, resourceType);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

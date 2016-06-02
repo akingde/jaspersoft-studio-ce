@@ -276,9 +276,10 @@ public class MServerProfile extends ANode {
 
 				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
 				if (prj != null) {
-					if (fpath.isEmpty())
-						tmpDir = ResourcesPlugin.getWorkspace().getRoot().getFolder(prj.getLocation());
-					else
+					if (fpath.isEmpty()) {
+						if (prj.getLocation() != null)
+							tmpDir = ResourcesPlugin.getWorkspace().getRoot().getFolder(prj.getLocation());
+					} else
 						tmpDir = prj.getFolder(fpath);
 				}
 			}
