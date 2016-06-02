@@ -37,17 +37,6 @@ public abstract class RepositoryDialog extends ATitledDialog {
 		setTitle(Messages.RepositoryDialog_0);
 	}
 
-	// @Override
-	// protected void setShellStyle(int newShellStyle) {
-	// super.setShellStyle(newShellStyle | SWT.SHELL_TRIM);
-	// }
-	//
-	// @Override
-	// protected void configureShell(Shell newShell) {
-	// super.configureShell(newShell);
-	// newShell.setText("JasperServer Repository Browser");
-	// }
-
 	private AMResource resource;
 	private Text tname;
 	private Text ttype;
@@ -62,14 +51,12 @@ public abstract class RepositoryDialog extends ATitledDialog {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		composite.setLayout(new GridLayout(2, false));
 
-		RepositoryComposite rcom = new RepositoryComposite(composite, SWT.NONE,
-				root) {
+		RepositoryComposite rcom = new RepositoryComposite(composite, SWT.NONE, root) {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see
-			 * com.jaspersoft.studio.server.properties.dialog.RepositoryComposite
-			 * #okPressed()
+			 * @see com.jaspersoft.studio.server.properties.dialog.
+			 * RepositoryComposite #okPressed()
 			 */
 			@Override
 			protected void okPressed() {
@@ -79,9 +66,8 @@ public abstract class RepositoryDialog extends ATitledDialog {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see
-			 * com.jaspersoft.studio.server.properties.dialog.RepositoryComposite
-			 * #setOkButtonEnabled(boolean)
+			 * @see com.jaspersoft.studio.server.properties.dialog.
+			 * RepositoryComposite #setOkButtonEnabled(boolean)
 			 */
 			@Override
 			protected void setOkButtonEnabled(boolean resCompatible) {
@@ -91,8 +77,8 @@ public abstract class RepositoryDialog extends ATitledDialog {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see
-			 * com.jaspersoft.studio.server.properties.dialog.RepositoryComposite
+			 * @see com.jaspersoft.studio.server.properties.dialog.
+			 * RepositoryComposite
 			 * #setResource(com.jaspersoft.studio.server.model.MResource)
 			 */
 			@Override
@@ -107,9 +93,8 @@ public abstract class RepositoryDialog extends ATitledDialog {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see
-			 * com.jaspersoft.studio.server.properties.dialog.RepositoryComposite
-			 * #
+			 * @see com.jaspersoft.studio.server.properties.dialog.
+			 * RepositoryComposite #
 			 * isResourceCompatible(com.jaspersoft.studio.server.model.MResource
 			 * )
 			 */
@@ -141,9 +126,7 @@ public abstract class RepositoryDialog extends ATitledDialog {
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 	}
 }

@@ -35,6 +35,7 @@ import com.jaspersoft.studio.jface.dialogs.StyleTemplateSelectionDialog;
 import com.jaspersoft.studio.jface.dialogs.SubreportSelectionDialog;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.export.AExporter;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
@@ -61,12 +62,12 @@ public class FileSelector implements IFileSelection {
 				dialog.changeFileSelectionMode(cmpExpr);
 			}
 		});
-		btnExpression.setText("Select a resource from JasperReports Server");
+		btnExpression.setText(Messages.FileSelector_0);
 	}
 
 	@Override
 	public void changeSelectionMode(Control newTopControl) {
-		txtURL.setText("");
+		txtURL.setText(""); //$NON-NLS-1$
 	}
 
 	@Override
@@ -75,7 +76,7 @@ public class FileSelector implements IFileSelection {
 		cmpExpr.setLayout(new GridLayout(2, false));
 
 		Label lbl = new Label(cmpExpr, SWT.NONE);
-		lbl.setText("Select a resource from JasperReports Server");
+		lbl.setText(Messages.FileSelector_0);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
@@ -91,7 +92,7 @@ public class FileSelector implements IFileSelection {
 		});
 
 		Button btn = new Button(cmpExpr, SWT.PUSH);
-		btn.setText("...");
+		btn.setText("..."); //$NON-NLS-1$
 		btn.addSelectionListener(new SelectionAdapter() {
 			private MServerProfile msp;
 
@@ -110,7 +111,7 @@ public class FileSelector implements IFileSelection {
 							jd.setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
 							jd.setProperty(AExporter.PROP_USER,
 									msp.getValue().getUser() + (msp.getValue().getOrganisation() != null
-											? "|" + msp.getValue().getOrganisation() : ""));
+											? "|" + msp.getValue().getOrganisation() : "")); //$NON-NLS-1$ //$NON-NLS-2$
 						} catch (MalformedURLException e1) {
 							e1.printStackTrace();
 						} catch (URISyntaxException e1) {
@@ -131,9 +132,9 @@ public class FileSelector implements IFileSelection {
 						incl = new String[] { ResourceMediaType.FILE_CLIENT_TYPE };
 					else if (dialog instanceof StyleTemplateSelectionDialog)
 						incl = new String[] { ResourceMediaType.FILE_CLIENT_TYPE };
-					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, incl, null);
+					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, incl, null, true);
 					if (rd != null) {
-						dialog.setFileExpressionText("repo:" + rd.getUriString());
+						dialog.setFileExpressionText("repo:" + rd.getUriString()); //$NON-NLS-1$
 						txtURL.setText(rd.getUriString());
 					}
 				} else {
@@ -153,7 +154,7 @@ public class FileSelector implements IFileSelection {
 					if (rd.open() == Dialog.OK) {
 						AMResource rs = rd.getResource();
 						if (rs != null) {
-							dialog.setFileExpressionText("repo:" + rs.getValue().getUriString());
+							dialog.setFileExpressionText("repo:" + rs.getValue().getUriString()); //$NON-NLS-1$
 							txtURL.setText(rs.getValue().getUriString());
 						}
 					}

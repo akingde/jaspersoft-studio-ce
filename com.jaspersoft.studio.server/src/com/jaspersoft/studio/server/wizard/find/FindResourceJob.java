@@ -34,7 +34,12 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class FindResourceJob {
 	public static ResourceDescriptor doFindResource(MServerProfile msp, String[] in, String[] excl) {
-		FindResourceWizard wizard = new FindResourceWizard(msp);
+		return doFindResource(msp, in, excl, false);
+	}
+
+	public static ResourceDescriptor doFindResource(MServerProfile msp, String[] in, String[] excl,
+			boolean containedResource) {
+		FindResourceWizard wizard = new FindResourceWizard(msp, containedResource);
 		wizard.setFilterTypes(in, excl);
 		WizardDialog dialog = new FindWizardDialog(UIUtils.getShell(), wizard);
 		dialog.setHelpAvailable(false);
@@ -45,6 +50,10 @@ public class FindResourceJob {
 	}
 
 	public static void doFindResource(ServerProvider sp, TreeViewer treeViewer) {
+		doFindResource(sp, treeViewer, false);
+	}
+
+	public static void doFindResource(ServerProvider sp, TreeViewer treeViewer, boolean containedResource) {
 		TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 		Object el = ts.getFirstElement();
 		MServerProfile msp = null;
@@ -56,7 +65,7 @@ public class FindResourceJob {
 				msp = (MServerProfile) n;
 		}
 		if (msp != null) {
-			FindResourceWizard wizard = new FindResourceWizard(msp);
+			FindResourceWizard wizard = new FindResourceWizard(msp, containedResource);
 			WizardDialog dialog = new FindWizardDialog(UIUtils.getShell(), wizard);
 			dialog.setHelpAvailable(false);
 			dialog.create();
@@ -68,7 +77,8 @@ public class FindResourceJob {
 		}
 	}
 
-	public static void selectResource(final ServerProvider sp, final MServerProfile msp, final ResourceDescriptor rd, final TreeViewer treeViewer) {
+	public static void selectResource(final ServerProvider sp, final MServerProfile msp, final ResourceDescriptor rd,
+			final TreeViewer treeViewer) {
 		Job job = new Job(Messages.FindResourceJob_0) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {

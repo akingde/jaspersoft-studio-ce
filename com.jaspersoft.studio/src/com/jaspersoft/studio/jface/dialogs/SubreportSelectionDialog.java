@@ -10,6 +10,8 @@ package com.jaspersoft.studio.jface.dialogs;
 
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.messages.Messages;
+
 /**
  * Dialog proposed when an image needs to be selected.
  * 
@@ -31,7 +33,7 @@ public class SubreportSelectionDialog extends FileSelectionDialog {
 	 * @return the title for the dialog
 	 */
 	protected String getDialogTitle() {
-		return "Select a subreport";
+		return Messages.SubreportSelectionDialog_0;
 	}
 
 	/**
@@ -50,20 +52,20 @@ public class SubreportSelectionDialog extends FileSelectionDialog {
 	 * @return the title and labels for the group of modes
 	 */
 	protected String[] getImageModesAndHeaderTitles() {
-		return new String[] { "Subreport selection mode", "Workspace resource (an element inside the workspace)",
-				"Absolute Path in the filesystem (use only for quick testing, never use in real reports)",
-				"URL (a remote URL referring to a subreport, will be the expression value)",
-				"No subreport (no subreport reference will be set)",
-				"Custom expression (enter an expression for the subreport using the expression editor)" };
+		return new String[] { Messages.SubreportSelectionDialog_1, Messages.SubreportSelectionDialog_2,
+				Messages.SubreportSelectionDialog_3,
+				Messages.SubreportSelectionDialog_4,
+				Messages.SubreportSelectionDialog_5,
+				Messages.SubreportSelectionDialog_6 };
 	}
 
 	@Override
 	protected String getFileExtension() {
-		return "*.jrxml";
+		return Messages.SubreportSelectionDialog_7;
 	}
 
 	@Override
 	protected String[] getFileExtensions() {
-		return new String[] { "*.jrxml", "*.*" };
+		return new String[] { "*.jrxml", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

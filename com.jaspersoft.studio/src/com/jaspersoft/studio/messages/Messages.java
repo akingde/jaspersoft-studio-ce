@@ -2084,6 +2084,14 @@ public class Messages extends NLS {
 	public static String SubreportParameterPage_copyFromMaster;
 	public static String SubreportPropertiesLabelProvider_numbers_of_parameters;
 	public static String SubreportPropertyPage_description;
+	public static String SubreportSelectionDialog_0;
+	public static String SubreportSelectionDialog_1;
+	public static String SubreportSelectionDialog_2;
+	public static String SubreportSelectionDialog_3;
+	public static String SubreportSelectionDialog_4;
+	public static String SubreportSelectionDialog_5;
+	public static String SubreportSelectionDialog_6;
+	public static String SubreportSelectionDialog_7;
 	public static String SubTitleSection_Color_Label;
 	public static String SubTitleSection_Expression_Label;
 	public static String SubTitleSection_Subtitle_Label;

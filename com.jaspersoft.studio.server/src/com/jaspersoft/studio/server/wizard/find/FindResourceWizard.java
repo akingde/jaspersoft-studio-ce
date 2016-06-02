@@ -21,9 +21,15 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 public class FindResourceWizard extends Wizard {
 	private MServerProfile sp;
 	private FindResourcePage page0;
+	private boolean containedResource = false;
 
 	public FindResourceWizard(MServerProfile sp) {
+		this(sp, false);
+	}
+
+	public FindResourceWizard(MServerProfile sp, boolean containedResource) {
 		super();
+		this.containedResource = containedResource;
 		setWindowTitle(Messages.FindResourceWizard_0 + sp.getDisplayText());
 		setNeedsProgressMonitor(true);
 		this.sp = sp;
@@ -53,7 +59,7 @@ public class FindResourceWizard extends Wizard {
 
 	@Override
 	public void addPages() {
-		page0 = new FindResourcePage(sp);
+		page0 = new FindResourcePage(sp, containedResource);
 		setFilters();
 		addPage(page0);
 	}

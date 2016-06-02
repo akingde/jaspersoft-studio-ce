@@ -133,6 +133,7 @@ public class Messages extends NLS {
 	public static String ExportMetadataWizard_0;
 	public static String FileSelectionPage_0;
 	public static String FileSelectionPage_1;
+	public static String FileSelector_0;
 	public static String FindReportUnit_jobname;
 	public static String FindResourceAction_0;
 	public static String FindResourceAction_1;

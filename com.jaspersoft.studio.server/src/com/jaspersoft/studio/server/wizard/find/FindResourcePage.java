@@ -18,10 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import jersey.repackaged.com.google.common.collect.BiMap;
-import jersey.repackaged.com.google.common.collect.HashBiMap;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.apache.commons.lang.SystemUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -73,11 +69,16 @@ import com.jaspersoft.studio.server.properties.dialog.RepositoryComposite;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.utils.Misc;
 
+import jersey.repackaged.com.google.common.collect.BiMap;
+import jersey.repackaged.com.google.common.collect.HashBiMap;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 public class FindResourcePage extends WizardPage {
 	private FinderUI finderUI;
 	private String[] itypes;
 	private String[] etypes;
 	private String name;
+	private boolean containedResource = false;
 
 	public void setDefaultName(String name) {
 		this.name = name;
@@ -98,8 +99,9 @@ public class FindResourcePage extends WizardPage {
 					tps.remove(t);
 	}
 
-	protected FindResourcePage(MServerProfile sp) {
+	protected FindResourcePage(MServerProfile sp, boolean containedResource) {
 		super("findresource"); //$NON-NLS-1$
+		this.containedResource = containedResource;
 		setTitle(Messages.FindResourcePage_1);
 		setDescription(Messages.FindResourcePage_2);
 		finderUI = new FinderUI(ServerManager.getMServerProfileCopy(sp));
@@ -289,7 +291,7 @@ public class FindResourcePage extends WizardPage {
 			public boolean isResourceCompatible(AMResource r) {
 				if (Misc.isNullOrEmpty(finderUI.getTypes()))
 					return true;
-				if (!finderUI.isShowHidden() && r.getValue().getParentFolder().endsWith("_files"))
+				if (!finderUI.isShowHidden() && !containedResource && r.getValue().getParentFolder().endsWith("_files"))
 					return false;
 				String type = WsTypes.INST().toRestType(r.getValue().getWsType());
 				for (String t : finderUI.getTypes()) {
