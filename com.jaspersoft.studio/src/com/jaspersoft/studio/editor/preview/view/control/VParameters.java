@@ -201,7 +201,7 @@ public class VParameters extends AVParameters {
 					if (p.getDefaultValueExpression() != null)
 						defaultExists = true;
 					count++;
-					if (params.containsKey(pname) && incontrols.get(pname).isDirty())
+					if ((params.containsKey(pname) || incontrols.get(pname).isRemoved()) && incontrols.get(pname).isDirty())
 						return true;
 				}
 			}
