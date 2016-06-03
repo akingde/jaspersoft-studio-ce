@@ -602,7 +602,9 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	 * @param value the string
 	 */
 	protected void setFontNameText(Object value) {
+		Point selection = fontName.getSelection();
 		fontName.setText(Misc.nvl(value, "").toString());
+		fontName.setSelection(selection);
 	}
 
 	/**
