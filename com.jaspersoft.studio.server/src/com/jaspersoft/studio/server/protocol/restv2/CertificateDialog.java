@@ -56,9 +56,8 @@ public class CertificateDialog extends ATitledDialog {
 	protected TableViewer viewer;
 
 	public CertificateDialog(Shell parentShell, String message, X509Certificate client, X509Certificate[] chain) {
-		super(parentShell);
+		super(parentShell, SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.OK | SWT.APPLICATION_MODAL, false);
 		setTitle(Messages.CertificateDialog_0);
-		setDefaultSize(550, 500);
 		this.client = client;
 		this.message = message;
 		this.chain = chain;
@@ -89,6 +88,7 @@ public class CertificateDialog extends ATitledDialog {
 		Table table = viewer.getTable();
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = 70;
+		gd.widthHint = 500;
 		table.setLayoutData(gd);
 
 		final StyledText cTxt = new StyledText(cmp, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.READ_ONLY);
@@ -96,7 +96,10 @@ public class CertificateDialog extends ATitledDialog {
 		cTxt.setLeftMargin(3);
 		cTxt.setTopMargin(3);
 		cTxt.setLineSpacing(1);
-		cTxt.setLayoutData(new GridData(GridData.FILL_BOTH));
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.widthHint = 500;
+		gd.heightHint = 400;
+		cTxt.setLayoutData(gd);
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
