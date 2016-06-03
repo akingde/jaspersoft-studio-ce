@@ -47,11 +47,12 @@ import net.sf.jasperreports.engine.JRConstants;
  *
  */
 public abstract class AMResource extends APropertyNode implements ICopyable {
-	
-	public static final ImageDescriptor LINK_DECORATOR = Activator.getDefault().getImageDescriptor("/icons/link_decorator.png");
-	
+
+	public static final ImageDescriptor LINK_DECORATOR = Activator.getDefault()
+			.getImageDescriptor("/icons/link_decorator.png");
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private static IPropertyDescriptor[] descriptors;
 
 	public AMResource(ANode parent, ResourceDescriptor rd, int index) {
@@ -229,7 +230,7 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MFolder || parent instanceof MReportUnit || parent instanceof MServerProfile)
 			return ICopyable.RESULT.COPYABLE;
-		return ICopyable.RESULT.CHECK_PARENT;
+		return ICopyable.RESULT.NOT_COPYABLE;
 	}
 
 	private PublishOptions publishOptions;
@@ -245,7 +246,7 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 	}
 
 	public abstract String getJRSUrl() throws UnsupportedEncodingException;
-	
+
 	@Override
 	public boolean isCuttable(ISelection currentSelection) {
 		return true;

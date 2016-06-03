@@ -25,6 +25,7 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class PasteResourceAsLinkAction extends PasteResourceAction {
@@ -63,8 +64,8 @@ public class PasteResourceAsLinkAction extends PasteResourceAction {
 	}
 
 	@Override
-	protected void saveToReportUnit(IProgressMonitor monitor, ANode parent, IConnection ws, ResourceDescriptor origin)
-			throws IOException, Exception {
+	protected void saveToReportUnit(IProgressMonitor monitor, AMResource parent, IConnection ws,
+			ResourceDescriptor origin) throws IOException, Exception {
 		ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
 		ResourceDescriptor rd = null;
 		rd = new ResourceDescriptor();
@@ -73,15 +74,21 @@ public class PasteResourceAsLinkAction extends PasteResourceAction {
 		rd.setDescription(origin.getDescription());
 		rd.setIsNew(true);
 		rd.setIsReference(true);
-		rd.setReferenceUri(origin.getUriString());
-		rd.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
-		if (ResourceFactory.isFileResourceType(origin))
-			rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
-		else
+		if (parent.getWsClient().isSupported(Feature.SEARCHREPOSITORY)) {
+			rd.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");
+			rd.setUriString(origin.getUriString());
 			rd.setWsType(origin.getWsType());
-		rd.setUriString(prd.getParentFolder() + "/" + prd.getName() + "_files/" + prd.getName()); //$NON-NLS-1$ //$NON-NLS-2$
-
+		} else {
+			rd.setReferenceUri(origin.getUriString());
+			rd.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+			if (ResourceFactory.isFileResourceType(origin))
+				rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
+			else
+				rd.setWsType(origin.getWsType());
+			rd.setUriString(prd.getParentFolder() + "/" + prd.getName() + "_files/" + prd.getName()); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 		prd.getChildren().add(rd);
+
 		ws.addOrModifyResource(monitor, prd, null);
 	}
 

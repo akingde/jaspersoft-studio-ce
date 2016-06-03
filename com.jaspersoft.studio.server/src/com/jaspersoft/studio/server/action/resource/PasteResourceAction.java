@@ -306,7 +306,7 @@ public class PasteResourceAction extends Action {
 							fixUris(rd, monitor, mc);
 							ws.addOrModifyResource(monitor, rd, file);
 						} else if (parent instanceof MReportUnit)
-							saveToReportUnit(monitor, parent, ws, origin);
+							saveToReportUnit(monitor, (AMResource) parent, ws, origin);
 					} else if (parent instanceof MFolder) {
 						if (copy) {
 							IConnection mc = m.getWsClient();
@@ -368,7 +368,7 @@ public class PasteResourceAction extends Action {
 							if (origin.getParentFolder() != null && !origin.getParentFolder().endsWith("_files")) //$NON-NLS-1$
 								origin.setIsReference(true);
 						}
-						saveToReportUnit(monitor, parent, ws, origin);
+						saveToReportUnit(monitor, (AMResource) parent, ws, origin);
 					}
 				}
 				deleteIfCut(monitor, m);
@@ -506,9 +506,9 @@ public class PasteResourceAction extends Action {
 		}
 	}
 
-	protected void saveToReportUnit(IProgressMonitor monitor, ANode parent, IConnection ws, ResourceDescriptor origin)
-			throws IOException, Exception {
-		ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
+	protected void saveToReportUnit(IProgressMonitor monitor, AMResource parent, IConnection ws,
+			ResourceDescriptor origin) throws IOException, Exception {
+		ResourceDescriptor prd = parent.getValue();
 		ResourceDescriptor rd = null;
 		File file = null;
 		if (origin.getIsReference()) {
