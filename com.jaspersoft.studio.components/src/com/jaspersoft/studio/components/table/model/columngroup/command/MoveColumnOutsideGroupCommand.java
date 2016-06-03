@@ -21,6 +21,8 @@ import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.command.RefreshColumnNamesCommand;
+import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
+import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
@@ -66,11 +68,6 @@ public class MoveColumnOutsideGroupCommand extends Command {
 	private RefreshColumnNamesCommand refreshNameCommand;
 	
 	/**
-	 * The previous parent of the column
-	 */
-	private StandardColumnGroup oldParent;
-	
-	/**
 	 * The index where the column should be inserted
 	 */
 	private int newIndex;
@@ -82,15 +79,39 @@ public class MoveColumnOutsideGroupCommand extends Command {
 	 * @param movedElement the model of the moved column
 	 * @param newIndex index where the column should be moved
 	 */
-	public MoveColumnOutsideGroupCommand(StandardColumnGroup oldParent, MCell movedElement, int newIndex) {
+	public MoveColumnOutsideGroupCommand(MColumnGroupCell parent, MCell movedElement, int newIndex) {
+		this((StandardColumnGroup)parent.getValue(), movedElement, newIndex);
+	}
+	
+	/**
+	 * Instantiate the command to move a column outside a group
+	 * 
+	 * @param oldPafrent the group where the column was
+	 * @param movedElement the model of the moved column
+	 * @param newIndex index where the column should be moved
+	 */
+	public MoveColumnOutsideGroupCommand(MColumnGroup parent, MCell movedElement, int newIndex) {
+		this(parent.getValue(), movedElement, newIndex);
+	}
+	
+	/**
+	 * Instantiate the command to move a column outside a group
+	 * 
+	 * @param oldPafrent the group where the column was
+	 * @param movedElement the model of the moved column
+	 * @param newIndex index where the column should be moved
+	 */
+	public MoveColumnOutsideGroupCommand(StandardColumnGroup parent, MCell movedElement, int newIndex) {
 		super(Messages.ReorderColumnGroupCommand_reorder_column_group);
 		this.movedColumn = movedElement.getValue();
 		this.tableNode = movedElement.getMTable();
 		this.table = tableNode.getStandardTable();
-		this.oldParent = oldParent;
+		if (newIndex < 0) newIndex = 0;
+		else if (newIndex >= table.getColumns().size()) newIndex = table.getColumns().size() - 1;
 		this.newIndex = newIndex;
 		refreshNameCommand = new RefreshColumnNamesCommand(tableNode, true, true);
 	}
+	
 	
 	/**
 	 * Calculate the height for a cell into a specific column, basing the calculation
@@ -183,7 +204,7 @@ public class MoveColumnOutsideGroupCommand extends Command {
 	 */
 	@Override
 	public boolean canExecute() {
-		return table != null && tableNode != null && oldParent.getColumns().size() > 1;
+		return table != null && tableNode != null;
 	}
 
 	/**

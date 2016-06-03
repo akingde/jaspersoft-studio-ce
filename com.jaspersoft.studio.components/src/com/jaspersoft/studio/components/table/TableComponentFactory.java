@@ -512,14 +512,12 @@ public class TableComponentFactory implements IComponentFactory {
 			if (parent instanceof AMCollection && cell.getSection() == parent){
 				ANode currentParent = cell.getParent();
 				if (currentParent instanceof MColumnGroupCell){
-					MColumnGroupCell cellParent = (MColumnGroupCell)currentParent;
 					JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(cell.getTable());
-					tableCommand.add(new MoveColumnOutsideGroupCommand((StandardColumnGroup)cellParent.getValue(), cell, newIndex));
+					tableCommand.add(new MoveColumnOutsideGroupCommand((MColumnGroupCell)currentParent, cell, newIndex));
 					return tableCommand;
 				} else if (currentParent instanceof MColumnGroup){
-					MColumnGroup cellParent = (MColumnGroup)currentParent;
 					JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(cell.getTable());
-					tableCommand.add(new MoveColumnOutsideGroupCommand(cellParent.getValue(), cell, newIndex));
+					tableCommand.add(new MoveColumnOutsideGroupCommand((MColumnGroup)currentParent, cell, newIndex));
 					return tableCommand;
 				}
 			}
