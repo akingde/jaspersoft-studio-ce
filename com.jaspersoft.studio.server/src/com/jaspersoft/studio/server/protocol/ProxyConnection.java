@@ -131,10 +131,10 @@ public class ProxyConnection implements IConnection {
 						return connect(monitor, sp);
 					cause = cause.getCause();
 				}
-				Activator.getDefault().logError(e); 
+				Activator.getDefault().logError(e);
 				if (e.getMessage() != null
 						&& (e.getMessage().contains("connect timed out") || e.getMessage().contains("authentication")))
-					throw e; 
+					throw e;
 				exc = e;
 			}
 			if (monitor.isCanceled())
@@ -468,7 +468,7 @@ public class ProxyConnection implements IConnection {
 			if (pass == null) {
 				UIUtils.getDisplay().syncExec(new Runnable() {
 					public void run() {
-						PasswordDialog pd = new PasswordDialog(UIUtils.getShell(), sp);
+						PasswordDialog pd = new PasswordDialog(UIUtils.getDisplay().getActiveShell(), sp);
 						if (pd.open() == Dialog.OK)
 							pass = pd.getValue(); // $NON-NLS-1$
 						else

@@ -37,10 +37,10 @@ public class PasswordDialog extends ATitledDialog {
 	private String value;
 
 	public PasswordDialog(Shell parentShell, ServerProfile sp) {
-		super(parentShell);
+		super(parentShell, SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.OK | SWT.APPLICATION_MODAL | SWT.SHEET, false);
 		setTitle(Messages.PasswordDialog_0);
 		setDescription(Messages.PasswordDialog_1);
-		setDefaultSize(600, 250);
+		// setDefaultSize(600, 250);
 		this.sp = sp;
 	}
 
