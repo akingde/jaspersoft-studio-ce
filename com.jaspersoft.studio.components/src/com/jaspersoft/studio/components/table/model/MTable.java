@@ -587,19 +587,21 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	 * remove the old one if present
 	 */
 	private void addDatasetGroupListener() {
+		//First remove the old listeners
 		if (datasetWithListener != null) {
-			datasetWithListener.getEventSupport().removePropertyChangeListener(
-					datasetGroupListener);
+			datasetWithListener.getEventSupport().removePropertyChangeListener(datasetGroupListener);
+			datasetWithListener = null;
 		}
-		JRDatasetRun datasetRun = getStandardTable().getDatasetRun();
-		JasperDesign design = getJasperDesign();
-		if (design != null) {
-			JRDesignDataset dataset = (JRDesignDataset) design.getDatasetMap()
-					.get(datasetRun.getDatasetName());
-			datasetWithListener = dataset;
-			if (dataset != null) {
-				dataset.getEventSupport().addPropertyChangeListener(
-						datasetGroupListener);
+		//If there is a value into the table lets add the new one
+		if (getValue() != null){
+			JRDatasetRun datasetRun = getStandardTable().getDatasetRun();
+			JasperDesign design = getJasperDesign();
+			if (design != null) {
+				JRDesignDataset dataset = (JRDesignDataset) design.getDatasetMap().get(datasetRun.getDatasetName());
+				datasetWithListener = dataset;
+				if (dataset != null) {
+					dataset.getEventSupport().addPropertyChangeListener(datasetGroupListener);
+				}
 			}
 		}
 	}
