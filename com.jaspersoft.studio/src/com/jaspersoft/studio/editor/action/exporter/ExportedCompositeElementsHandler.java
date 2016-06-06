@@ -51,7 +51,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 public class ExportedCompositeElementsHandler implements IExportedResourceHandler {
 
 	/**
-	 * Name of the folder where the definition of the composite elments will be stored 
+	 * Name of the folder where the definition of the composite elements will be stored 
 	 * in the exported container
 	 */
 	private static final String EXPORTED_FOLDER_NAME = "compositeElements"; //$NON-NLS-1$
@@ -117,7 +117,7 @@ public class ExportedCompositeElementsHandler implements IExportedResourceHandle
 	@Override
 	public String getResourceNameExport() {
 		int elementsNumber = CompositeElementManager.INSTANCE.getAvailableElements().size();
-		return "Composite Elements ( " + elementsNumber + ")"; //$NON-NLS-1$
+		return "Composite Elements (" + elementsNumber + ")"; //$NON-NLS-1$
 	}
 
 	@Override
