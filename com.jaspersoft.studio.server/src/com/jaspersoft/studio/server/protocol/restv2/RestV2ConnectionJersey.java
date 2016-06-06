@@ -484,7 +484,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			try {
 				Builder req = tgt.request(cf.getType().getMimeType()).header("Accept", //$NON-NLS-1$
 						cf.getType().getMimeType());
-				cf.setContent(new String(Base64.encodeBase64(readFile(connector.get(req, monitor), monitor))));
+				byte[] bytes = readFile(connector.get(req, monitor), monitor);
+				if (bytes != null)
+					cf.setContent(new String(Base64.encodeBase64(bytes)));
 			} catch (HttpResponseException e) {
 				if (e.getStatusCode() == 500)
 					;// jrs 5.5 returns 500 if file is not existing, a
