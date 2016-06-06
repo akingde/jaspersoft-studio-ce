@@ -17,6 +17,7 @@ import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -156,7 +157,9 @@ public class TextualContributionItem extends CommonToolbarHandler {
 			if (selection.size() == 1) {
 				APropertyNode node = (APropertyNode) selection.get(0);
 				if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_FONT_NAME)) {
-					setFontNameText(node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_NAME));
+					Object actaulNameValue = node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_NAME);
+					Object ownNameValue = node.getPropertyValue(JRDesignStyle.PROPERTY_FONT_NAME);
+					setFontNameText(actaulNameValue, ownNameValue);
 				} else if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_FONT_SIZE)) {
 					Object actaulValue = node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_SIZE);
 					Object ownValue = node.getPropertyValue(JRDesignStyle.PROPERTY_FONT_SIZE);
@@ -168,7 +171,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 				}
 			} else {
 				setFontSizeComboText(null, null);
-				setFontNameText(null);
+				setFontNameText(null, null);
 				italic.setSelection(false);
 				bold.setSelection(false);
 				if (showedNode != null) {
@@ -601,9 +604,14 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	 * 
 	 * @param value the string
 	 */
-	protected void setFontNameText(Object value) {
+	protected void setFontNameText(Object resolvedValue, Object elementValue) {
 		Point selection = fontName.getSelection();
-		fontName.setText(Misc.nvl(value, "").toString());
+		fontName.setText(Misc.nvl(resolvedValue, "").toString());
+		if (elementValue == null){
+			fontName.setForeground(ColorConstants.gray);
+		} else {
+			fontName.setForeground(ColorConstants.black);
+		}
 		fontName.setSelection(selection);
 	}
 
@@ -675,10 +683,15 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		List<Object> selection = getSelectionForType(MTextElement.class);
 		if (selection.size() == 1){
 			APropertyNode node = (APropertyNode)selection.get(0);
-			Object actaulValue = node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_SIZE);
-			Object ownValue = node.getPropertyValue(JRDesignStyle.PROPERTY_FONT_SIZE);
-			setFontSizeComboText(actaulValue, ownValue);
-			setFontNameText(node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_NAME));
+			
+			Object actaulSizeValue = node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_SIZE);
+			Object ownSizeValue = node.getPropertyValue(JRDesignStyle.PROPERTY_FONT_SIZE);
+			setFontSizeComboText(actaulSizeValue, ownSizeValue);
+			
+			Object actaulNameValue = node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_NAME);
+			Object ownNameValue = node.getPropertyValue(JRDesignStyle.PROPERTY_FONT_NAME);
+			setFontNameText(actaulNameValue, ownNameValue);
+			
 			italic.setSelection((Boolean) node.getPropertyActualValue(JRDesignStyle.PROPERTY_ITALIC));
 			bold.setSelection((Boolean) node.getPropertyActualValue(JRDesignStyle.PROPERTY_BOLD));
 			
@@ -688,7 +701,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 			
 		} else {
 			setFontSizeComboText(null, null);
-			setFontNameText(null);
+			setFontNameText(null, null);
 			italic.setSelection(false);
 			bold.setSelection(false);
 			if (showedNode != null) {

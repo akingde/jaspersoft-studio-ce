@@ -12,6 +12,7 @@ import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -120,6 +121,18 @@ public class SPFontNameCombo<T extends IPropertyDescriptor> extends ASPropertyWi
 			if (b != null)
 				combo.setText(b.toString());
 			isRefreshing = false;
+		}
+	}
+	
+	@Override
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		setData(pnode, resolvedValue);
+		if (combo != null && !combo.isDisposed()){
+			if (elementValue != null){
+				combo.setForeground(ColorConstants.black);
+			} else {
+				combo.setForeground(ColorConstants.gray);
+			}
 		}
 	}
 
