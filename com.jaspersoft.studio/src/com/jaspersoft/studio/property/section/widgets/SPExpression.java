@@ -77,6 +77,10 @@ public class SPExpression extends AHistorySPropertyWidget<IPropertyDescriptor> i
 	public void setData(APropertyNode pnode, Object b) {
 		createContextualMenu(pnode);
 		expr.setExpression((JRDesignExpression) b);
+		if (b != null && expr.getTextControl() != null){
+			expr.getTextControl().setToolTipText(((JRDesignExpression)b).getText());
+		}
+		
 		JRDesignElement designEl = null;
 		if (pnode.getValue() instanceof JRDesignElement) {
 			designEl = (JRDesignElement) pnode.getValue();
