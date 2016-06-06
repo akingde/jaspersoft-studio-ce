@@ -602,7 +602,8 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	/**
 	 * Set a string inside the font name combo
 	 * 
-	 * @param value the string
+	 * @param resolvedValue the font name resolved trough the JR hierarchy
+	 * @param elementValue the value of the element itself
 	 */
 	protected void setFontNameText(Object resolvedValue, Object elementValue) {
 		Point selection = fontName.getSelection();
