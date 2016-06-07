@@ -145,7 +145,7 @@ public class MoveColumnOutsideGroupCommand extends Command {
 	 */
 	private void moveColumn(){
 		
-		BaseColumn sibling = table.getColumns().get(0);
+		BaseColumn sibling = table.getColumns().size() > 0 ? table.getColumns().get(0) : null;
 		
 		//Move the column
 		table.addColumn(newIndex, movedColumn);
@@ -154,26 +154,34 @@ public class MoveColumnOutsideGroupCommand extends Command {
 		if (movedColumn.getTableHeader() != null){
 			DesignCell movedCell = (DesignCell)movedColumn.getTableHeader();
 			oldCellSizes.put(movedCell, movedCell.getHeight());
-			movedCell.setHeight(getHeight(sibling, TableUtil.TABLE_HEADER));	
+			if (sibling != null) {
+				movedCell.setHeight(getHeight(sibling, TableUtil.TABLE_HEADER));	
+			}
 		}
 		
 
 		if (movedColumn.getTableFooter() != null){
 			DesignCell movedCell = (DesignCell)movedColumn.getTableFooter();
 			oldCellSizes.put(movedCell, movedCell.getHeight());
-			movedCell.setHeight(getHeight(sibling, TableUtil.TABLE_FOOTER));	
+			if (sibling != null) {
+				movedCell.setHeight(getHeight(sibling, TableUtil.TABLE_FOOTER));	
+			}
 		}
 		
 		if (movedColumn.getColumnHeader() != null){
 			DesignCell movedCell = (DesignCell)movedColumn.getColumnHeader();
 			oldCellSizes.put(movedCell, movedCell.getHeight());
-			movedCell.setHeight(getHeight(sibling, TableUtil.COLUMN_HEADER));	
+			if (sibling != null) {
+				movedCell.setHeight(getHeight(sibling, TableUtil.COLUMN_HEADER));	
+			}
 		}
 		
 		if (movedColumn.getColumnFooter() != null){
 			DesignCell movedCell = (DesignCell)movedColumn.getColumnFooter();
 			oldCellSizes.put(movedCell, movedCell.getHeight());
-			movedCell.setHeight(getHeight(sibling, TableUtil.COLUMN_FOOTER));	
+			if (sibling != null) {
+				movedCell.setHeight(getHeight(sibling, TableUtil.COLUMN_FOOTER));	
+			}
 		}
 		
 		tableNode.getTableManager().updateTableSpans();
