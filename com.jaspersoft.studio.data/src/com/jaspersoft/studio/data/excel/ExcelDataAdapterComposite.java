@@ -50,6 +50,8 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DateNumberFormatWidget;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.swt.events.ChangeEvent;
+import com.jaspersoft.studio.swt.events.ChangeListener;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -205,7 +207,14 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		btnDelete.setText(Messages.XLSDataAdapterComposite_8);
 		btnDelete.setEnabled(false);
 
-		new ListOrderButtons().createOrderButtons(composite_4, tableViewer);
+		ListOrderButtons listOrderButtons = new ListOrderButtons();
+		listOrderButtons.createOrderButtons(composite_4, tableViewer);
+		listOrderButtons.addChangeListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event) {
+				pchangesuport.firePropertyChange("dirty", false, true);
+			}
+		});
 
 		Composite composite_2 = new Composite(this, SWT.NONE);
 		composite_2.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -237,6 +246,7 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 			public void widgetSelected(SelectionEvent e) {
 				try {
 					getExcelColumns();
+					pchangesuport.firePropertyChange("dirty", false, true);
 				} catch (Exception e1) {
 					UIUtils.showError(e1);
 				}
@@ -259,16 +269,16 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 				tableViewer.refresh();
 				setTableSelection(-1);
+				pchangesuport.firePropertyChange("dirty", false, true);
 			}
 		});
 
 		// delete selected entries and set selection on last table item
 		btnDelete.addSelectionListener(new SelectionAdapter() {
-
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
 				removeEntries();
+				pchangesuport.firePropertyChange("dirty", false, true);
 			}
 		});
 
@@ -283,6 +293,7 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 				if (e.character == SWT.DEL) {
 					removeEntries();
+					pchangesuport.firePropertyChange("dirty", false, true);
 				}
 			}
 		});
