@@ -92,7 +92,7 @@ public class OrphanColumn4GroupCommand extends Command {
 			deleteGroupCommand = TableComponentFactory.getDeleteColumnCommand(groupNode.getParent(), groupNode);
 			if (deleteGroupCommand != null && deleteGroupCommand.canExecute()){
 				//Set the width to 0 since it is not necessary to compute a new width
-				//because we alredy know it is empty
+				//because we already know it is empty
 				jrGroup.setWidth(0);
 				deleteGroupCommand.execute();
 			}
