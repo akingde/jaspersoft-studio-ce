@@ -271,7 +271,7 @@ public class SyncDatasetRunParameters {
 					if (dsRunList != null)
 						for (MDatasetRun mdsrun : dsRunList) {
 							JRDesignDatasetRun dsrun = mdsrun.getValue();
-							if (dsrun.getDataSourceExpression() != null)
+							if (dsrun == null || dsrun.getDataSourceExpression() != null)
 								continue;
 							if (dsrun.getDatasetName() != null && dsrun.getDatasetName().equals(dsName))
 								dsRuns.add(dsrun);
