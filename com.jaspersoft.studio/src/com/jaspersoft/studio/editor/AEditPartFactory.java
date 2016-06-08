@@ -22,6 +22,7 @@ import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.jasper.JSSReportConverter;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -38,9 +39,12 @@ public abstract class AEditPartFactory implements EditPartFactory {
 		if (tjd != jDesign) {
 			jDesign = tjd;
 			drawVisitor = new JSSDrawVisitor(new JSSReportConverter(jrContext, jDesign, true), null);
+			jrContext.setValue(JasperReportsConfiguration.KEY_DRAWER, drawVisitor);
 		}
-		if (drawVisitor == null)
+		if (drawVisitor == null){
 			drawVisitor = new JSSDrawVisitor(new JSSReportConverter(jrContext, jDesign, true), null);
+			jrContext.setValue(JasperReportsConfiguration.KEY_DRAWER, drawVisitor);
+		}
 		drawVisitor.setClip(false);
 		return drawVisitor;
 	}

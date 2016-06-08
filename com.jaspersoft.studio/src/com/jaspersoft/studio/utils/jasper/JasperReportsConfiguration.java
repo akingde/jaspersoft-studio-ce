@@ -90,6 +90,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
 
 	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
+	
+	/**
+	 * Key used to store the drawer used to paint the JRElements, it is stored in 
+	 * the configuration to be easily accessible
+	 */
+	public static final String KEY_DRAWER = "REPORT_DRAWER";
 
 	/**
 	 * The key which identified the file being edited
@@ -509,8 +515,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 
 	public Boolean getPropertyBooleanDef(String key, boolean def) {
 		Boolean p = getPropertyBoolean(key);
-		if (p == null)
+		if (p == null){
 			p = pstore.getDefaultBoolean(key);
+		}
 		if (p == null)
 			return def;
 		return p;

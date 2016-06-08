@@ -17,6 +17,7 @@ import java.beans.PropertyChangeEvent;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -56,7 +57,11 @@ public class MReportRoot extends MRoot {
 						
 						@Override
 						public void run() {
-							//getJasperConfiguration().refreshFonts();
+							//If available force the refresh of the drawer cache
+							JSSDrawVisitor visitor = (JSSDrawVisitor)getJasperConfiguration().getValue(JasperReportsConfiguration.KEY_DRAWER);
+							if (visitor != null){
+								visitor.refreshFontsCache();
+							}
 							for(JRDesignElement element : ModelUtils.getAllElements(getJasperDesign())){
 								element.getEventSupport().firePropertyChange(changeEvent);
 							}
