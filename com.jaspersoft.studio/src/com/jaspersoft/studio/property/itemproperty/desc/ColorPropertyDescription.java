@@ -36,6 +36,12 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 		super(name, label, description, mandatory);
 	}
 
+	private boolean transparent = false;
+
+	public void setTransparent(boolean transparent) {
+		this.transparent = transparent;
+	}
+
 	public void handleEdit(Control txt, StandardItemProperty value) {
 		super.handleEdit(txt, value);
 		if (txt instanceof WColorPicker) {
@@ -59,6 +65,7 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 		super.createControl(wiProp, cmp);
 
 		final WColorPicker cp = new WColorPicker(new AlfaRGB(new RGB(0, 0, 0), 0), cmp);
+		cp.setHaveTransparency(transparent);
 		cp.addColorSelectionListener(new ColorSelectionListener() {
 
 			@Override

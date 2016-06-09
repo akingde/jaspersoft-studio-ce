@@ -414,11 +414,11 @@ public class UIManager {
 			} else
 				desc = new ComboItemPropertyDescription<String>(cpd.getName(), cd.i18n(cpd.getLabel()),
 						cd.i18n(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), cpd.getOptions());
-		} else if (cpd.getType().equalsIgnoreCase("color"))
+		} else if (cpd.getType().equalsIgnoreCase("color")) {
 			desc = new ColorPropertyDescription<String>(cpd.getName(), cd.i18n(cpd.getLabel()),
 					cd.i18n(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
-
-		else if (cpd.getType().equalsIgnoreCase("float")) {
+			((ColorPropertyDescription) desc).setTransparent(cpd.isTransparent());
+		} else if (cpd.getType().equalsIgnoreCase("float")) {
 			if (cpd.getMin() != null)
 				min = new Float(cpd.getMin());
 			if (cpd.getMax() != null)

@@ -21,6 +21,7 @@ public class ComponentPropertyDescriptor {
 	private String min;
 	private String max;
 	private String type;
+	private boolean transparent;
 	private String[] options;
 	private String[][] options2;
 
@@ -111,4 +112,13 @@ public class ComponentPropertyDescriptor {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public boolean isTransparent() {
+		return transparent;
+	}
+
+	public void setTransparent(boolean transparent) {
+		this.transparent = transparent;
+	}
+
 }

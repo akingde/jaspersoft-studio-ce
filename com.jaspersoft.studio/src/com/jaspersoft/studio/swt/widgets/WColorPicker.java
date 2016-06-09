@@ -73,6 +73,12 @@ public class WColorPicker extends Composite {
 		createControl(parent);
 	}
 
+	private boolean haveTransparency;
+
+	public void setHaveTransparency(boolean haveTransparency) {
+		this.haveTransparency = haveTransparency;
+	}
+
 	@Override
 	public void setToolTipText(String string) {
 		super.setToolTipText(string);
@@ -118,10 +124,16 @@ public class WColorPicker extends Composite {
 				ColorDialog cd = new ColorDialog(getShell());
 				cd.setText(Messages.ColorsSection_element_forecolor);
 				cd.setRGB(selectedRGB);
-				AlfaRGB newColor = cd.openAlfaRGB();
-				if (newColor != null) {
-					setColor(newColor);
+				AlfaRGB newColor = null;
+				if (haveTransparency) {
+					newColor = cd.openAlfaRGB();
+				} else {
+					RGB rgb = cd.openRGB();
+					if (rgb != null)
+						newColor = AlfaRGB.getFullyOpaque(rgb);
 				}
+				if (newColor != null)
+					setColor(newColor);
 			}
 
 		});
