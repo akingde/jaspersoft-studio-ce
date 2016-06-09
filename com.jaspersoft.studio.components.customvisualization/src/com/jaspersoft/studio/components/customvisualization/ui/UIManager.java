@@ -64,6 +64,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.IDisposeListener;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.util.ResourceBundleMessageProvider;
 
@@ -158,8 +159,12 @@ public class UIManager {
 			// } else {
 			getDescriptor(jConf, cd.getModule());
 			String uri = parentsPath.get(cd);
-			if (uri != null)
-				is = new URL(uri + path).openStream();
+			if (uri != null) {
+				URL url = new URL(uri + path);
+				if (url.sameFile(dest.toURI().toURL()))
+					return;
+				is = url.openStream();
+			}
 			// }
 			if (is != null) {
 				org.apache.commons.io.FileUtils.copyInputStreamToFile(is, dest);
@@ -380,13 +385,17 @@ public class UIManager {
 			mapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
 			return mapper.readValue(in, ComponentDescriptor.class);
 		} catch (JsonParseException e) {
-			CustomVisualizationActivator.getDefault().logError(e);
+			// CustomVisualizationActivator.getDefault().logError(e);
+			UIUtils.showError(e);
 		} catch (JsonMappingException e) {
-			CustomVisualizationActivator.getDefault().logError(e);
+			// CustomVisualizationActivator.getDefault().logError(e);
+			UIUtils.showError(e);
 		} catch (IOException e) {
-			CustomVisualizationActivator.getDefault().logError(e);
+			// CustomVisualizationActivator.getDefault().logError(e);
+			UIUtils.showError(e);
 		} catch (Throwable e) {
-			CustomVisualizationActivator.getDefault().logError(e);
+			// CustomVisualizationActivator.getDefault().logError(e);
+			UIUtils.showError(e);
 		}
 		return null;
 	}
