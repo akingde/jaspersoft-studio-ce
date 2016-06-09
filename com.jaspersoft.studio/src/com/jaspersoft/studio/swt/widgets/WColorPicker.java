@@ -73,7 +73,7 @@ public class WColorPicker extends Composite {
 		createControl(parent);
 	}
 
-	private boolean haveTransparency;
+	private boolean haveTransparency = false;
 
 	public void setHaveTransparency(boolean haveTransparency) {
 		this.haveTransparency = haveTransparency;
