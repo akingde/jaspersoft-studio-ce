@@ -539,6 +539,10 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	protected boolean handleButtonDown(int button) {
 		if (!isViewerImportant(null))
 			return true;
+		
+		if ((button == 3 || button == 1) && isInState(STATE_INITIAL))
+			performConditionalSelection();
+		
 		if (button != 1) {
 			setState(STATE_INVALID);
 			handleInvalidInput();
