@@ -18,15 +18,6 @@
                     "type": "text"
                 },
                 {
-                    "name": "css",
-                    "label": "CSS Path",
-                    "description": "CSS Path",
-                    "mandatory": true,
-                    "defaultValue": "sparkline.css",
-                    "readOnly": false,
-                    "type": "path"
-                },
-                {
                     "name": "script",
                     "label": "Script Path",
                     "description": "Script path",
@@ -90,7 +81,7 @@
                     "description": "The opacity of the line area",
                     "mandatory": "false",
                     "type": "float",
-                    "defaultValue": "0.5",
+                    "defaultValue": "0.1",
                     "min": "0",
                     "max": "1"
                 },
