@@ -36,7 +36,7 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 		super(name, label, description, mandatory);
 	}
 
-	private boolean transparent = false;
+	private boolean transparent = true;
 
 	public void setTransparent(boolean transparent) {
 		this.transparent = transparent;
@@ -46,6 +46,8 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 		super.handleEdit(txt, value);
 		if (txt instanceof WColorPicker) {
 			String tvalue = Colors.getHexEncodedRGBColor(((WColorPicker) txt).getSelectedColorAsRGB());
+			if (transparent)
+				tvalue = Colors.getRGBAEncodedRGBColor(((WColorPicker) txt).getSelectedColorAsRGB());
 			if (tvalue != null && tvalue.isEmpty())
 				tvalue = null;
 

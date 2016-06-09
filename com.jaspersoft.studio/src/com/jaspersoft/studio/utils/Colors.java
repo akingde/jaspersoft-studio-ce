@@ -165,6 +165,14 @@ public class Colors {
 		return getHexEncodedAWTColor(getAWT4SWTRGBColor(alfaRgbColor));
 	}
 
+	public static String getRGBAEncodedRGBColor(AlfaRGB alfaRgbColor) {
+		if (alfaRgbColor == null) {
+			return ""; //$NON-NLS-1$
+		}
+		RGB rgb = alfaRgbColor.getRgb();
+		return "rgba(" + rgb.red + "," + rgb.green + "," + rgb.blue + "," + alfaRgbColor.getAlfa() + ")";
+	}
+
 	/**
 	 * Gets an SWT image representing a preview of the specified AWT color. The output image has size according to the
 	 * specified width and height in pixels.
@@ -308,26 +316,26 @@ public class Colors {
 		}
 		return listMatches.toArray(new String[listMatches.size()]);
 	}
-	
+
 	/**
-	 * Given a bunch of colors it produces an encoded string that 
-	 * can be used in different places as compact value representation.
+	 * Given a bunch of colors it produces an encoded string that can be used in different places as compact value
+	 * representation.
 	 * <p>
-	 * <em>Sample return value</em>: 
-	 * <code>['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9']</code>
+	 * <em>Sample return value</em>: <code>['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9']</code>
 	 * 
-	 * @param colors the array of colors
+	 * @param colors
+	 *          the array of colors
 	 * @return the encoded string representing the array of colors
 	 */
 	public static String encodeHexColorsAsArray(String[] colors) {
 		StringBuffer sb = new StringBuffer();
-		if(colors!=null && colors.length>0){
+		if (colors != null && colors.length > 0) {
 			String separator = "";
 			sb.append("[");
-			for(String col : colors){
+			for (String col : colors) {
 				sb.append(separator);
-				separator=",";
-				sb.append( "'").append(col).append("'");
+				separator = ",";
+				sb.append("'").append(col).append("'");
 			}
 			sb.append("]");
 		}

@@ -21,7 +21,7 @@ public class ComponentPropertyDescriptor {
 	private String min;
 	private String max;
 	private String type;
-	private boolean transparent;
+	private boolean transparent = true;
 	private String[] options;
 	private String[][] options2;
 
