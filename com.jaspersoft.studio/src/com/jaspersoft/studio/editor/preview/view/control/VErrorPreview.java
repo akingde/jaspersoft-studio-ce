@@ -320,7 +320,7 @@ public class VErrorPreview extends APreview {
 		JRExpressionCollector datasetCollector = reportCollector.getCollector(dataset);
 		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
 		for (JRExpression expr : datasetExpressions) {
-			if (datasetCollector.getExpressionId(expr) == exp.getId()) {
+			if (/*datasetCollector.getExpressionId(expr)*/ expr.getId() == exp.getId()) {
 				if (!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
 					JRExpressionEditor wizard = new JRExpressionEditor();
 					wizard.setExpressionContext(new ExpressionContext(dataset, jContext));
