@@ -309,6 +309,10 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 			 this.alpha = oldColor.getAlfa();
 		 }
 		 hideSliderBar = !showAlpha;
+		 //when the slider is hidden (base RGB color), the alpha is forced to opaque
+		 if (hideSliderBar){
+			 this.alpha = 255;
+		 }
 		 
 		 setLayout(new GridLayout(2,false));
 		 colorsSelector = new ColorsSelectorWidget(this, SWT.NONE, new HueBasedSelector());
