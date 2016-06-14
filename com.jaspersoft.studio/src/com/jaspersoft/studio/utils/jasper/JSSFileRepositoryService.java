@@ -105,6 +105,25 @@ public class JSSFileRepositoryService implements RepositoryService {
 				}
 				refreshFile(rs, uri);
 				return rs.getResource(uri, resourceType);
+			} else if (ReportResource.class.equals(resourceType)) {
+				InputStreamResource inr = rs.getResource(uri, InputStreamResource.class);
+				if (inr == null)
+					return null;
+				String jruri = uri +FileExtension.PointJASPER;
+				if (rs instanceof DefaultRepositoryService) {
+					URI dUri = new URI(jruri);
+					JasperCompileManager.getInstance(jConfig).compileToFile(new URI(uri).getRawPath(), dUri.getRawPath());
+				} else {
+					OutputStreamResource or = new OutputStreamResource();
+					if (rs instanceof FileRepositoryService)
+						or.setOutputStream(((FileRepositoryService) rs).getOutputStream(jruri));
+					else
+						or.setOutputStream(new ByteArrayOutputStream());
+					JasperCompileManager.getInstance(jConfig).compileToStream(inr.getInputStream(), or.getOutputStream());
+					rs.saveResource(jruri, or);
+				}
+				refreshFile(rs, jruri);
+				return rs.getResource(jruri, resourceType);
 			}
 		} catch (Throwable e1) {
 			e1.printStackTrace();
@@ -122,8 +141,8 @@ public class JSSFileRepositoryService implements RepositoryService {
 						if (fs != null && fs.length > 0)
 							fs[0].refreshLocal(1, monitor);
 					} else if (rs instanceof FileRepositoryService) {
-						IFile[] fs = SubreportsUtil.root.findFilesForLocationURI(new File(((FileRepositoryService) rs).getRoot(),
-								uri).toURI());
+						IFile[] fs = SubreportsUtil.root
+								.findFilesForLocationURI(new File(((FileRepositoryService) rs).getRoot(), uri).toURI());
 						if (fs != null && fs.length > 0)
 							fs[0].refreshLocal(1, monitor);
 					}
