@@ -382,10 +382,11 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 		JRExpressionCellEditor expEditor = new JRExpressionCellEditor(parent, new ExpressionContext(jConfig));
 		cOverwrite = new ComboBoxCellEditor(parent,
-				new String[] { Messages.ResourcesPage_3, Messages.ResourcesPage_5, Messages.ResourcesPage_6 });
+				new String[] { Messages.ResourcesPage_3, Messages.ResourcesPage_5, Messages.ResourcesPage_6 },
+				SWT.READ_ONLY);
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), cOverwrite, expEditor,
 				new TextCellEditor(parent, SWT.RIGHT), new ComboBoxCellEditor(parent,
-						new String[] { sres.getText(), sresource.getText(), slocal.getText() }) });
+						new String[] { sres.getText(), sresource.getText(), slocal.getText() }, SWT.READ_ONLY) });
 		viewer.setColumnProperties(new String[] { "NAME", "VALUE", "EXPRESSION", "FILESIZE", "TYPE" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 
