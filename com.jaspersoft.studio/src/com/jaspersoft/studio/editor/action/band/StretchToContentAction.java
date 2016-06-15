@@ -88,60 +88,63 @@ public class StretchToContentAction extends SelectionAction {
 			return null;
 		Object obj = objects.get(0);
 		if (obj instanceof EditPart) {
-			ANode n = (ANode) ((EditPart) obj).getModel();
-			if (n instanceof MPage) {
-				for (INode c : n.getChildren()) {
-					if (c instanceof MGraphicElement) {
-						n = (ANode) c;
-						break;
+			Object model = ((EditPart) obj).getModel();
+			if (model instanceof ANode){
+				ANode n = (ANode) model;
+				if (n instanceof MPage) {
+					for (INode c : n.getChildren()) {
+						if (c instanceof MGraphicElement) {
+							n = (ANode) c;
+							break;
+						}
 					}
 				}
-			}
-			if (!(n instanceof IGraphicElement))
-				return null;
+				if (!(n instanceof IGraphicElement))
+					return null;
 
-			JRElementGroup container = getContainer(n);
-			if (container == null)
-				return null;
+				JRElementGroup container = getContainer(n);
+				if (container == null)
+					return null;
 
-			APropertyNode mcontainer = getContainerNode(n);
-			JSSCompoundCommand cc = new JSSCompoundCommand(getText(), mcontainer);
-			Dimension size = new Dimension(0, 0);
-			if (container instanceof JRDesignFrame) {
-				size = ModelUtils.getContainerSize(container.getChildren(), size);
-				if (size.height > 0 && size.width > 0) {
-					SetValueCommand cmd = new SetValueCommand();
-					cmd.setTarget(mcontainer);
-					cmd.setPropertyId(JRDesignFrame.PROPERTY_WIDTH);
-					cmd.setPropertyValue(size.width);
-					cc.add(cmd);
+				APropertyNode mcontainer = getContainerNode(n);
+				JSSCompoundCommand cc = new JSSCompoundCommand(getText(), mcontainer);
+				Dimension size = new Dimension(0, 0);
+				if (container instanceof JRDesignFrame) {
+					size = ModelUtils.getContainerSize(container.getChildren(), size);
+					if (size.height > 0 && size.width > 0) {
+						SetValueCommand cmd = new SetValueCommand();
+						cmd.setTarget(mcontainer);
+						cmd.setPropertyId(JRDesignFrame.PROPERTY_WIDTH);
+						cmd.setPropertyValue(size.width);
+						cc.add(cmd);
 
-					cmd = new SetValueCommand();
-					cmd.setTarget(mcontainer);
-					cmd.setPropertyId(JRDesignFrame.PROPERTY_HEIGHT);
-					cmd.setPropertyValue(size.height);
-					cc.add(cmd);
+						cmd = new SetValueCommand();
+						cmd.setTarget(mcontainer);
+						cmd.setPropertyId(JRDesignFrame.PROPERTY_HEIGHT);
+						cmd.setPropertyValue(size.height);
+						cc.add(cmd);
+					}
+				} else if (container instanceof JRDesignBand) {
+					int bandHeight = ModelUtils.getBandHeight((JRBand) container);
+					if (bandHeight > 0) {
+						SetValueCommand cmd = new SetValueCommand();
+						cmd.setTarget(mcontainer);
+						cmd.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
+						cmd.setPropertyValue(bandHeight);
+						cc.add(cmd);
+					}
+				} else if (n instanceof IGraphicElementContainer) {
+					Command c = JaspersoftStudioPlugin.getExtensionManager().getStretchToContent(n);
+					if (c != null)
+						cc.add(c);
+				} else if (n.getParent() instanceof IGraphicElementContainer) {
+					Command c = JaspersoftStudioPlugin.getExtensionManager().getStretchToContent(n.getParent());
+					if (c != null)
+						cc.add(c);
 				}
-			} else if (container instanceof JRDesignBand) {
-				int bandHeight = ModelUtils.getBandHeight((JRBand) container);
-				if (bandHeight > 0) {
-					SetValueCommand cmd = new SetValueCommand();
-					cmd.setTarget(mcontainer);
-					cmd.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
-					cmd.setPropertyValue(bandHeight);
-					cc.add(cmd);
-				}
-			} else if (n instanceof IGraphicElementContainer) {
-				Command c = JaspersoftStudioPlugin.getExtensionManager().getStretchToContent(n);
-				if (c != null)
-					cc.add(c);
-			} else if (n.getParent() instanceof IGraphicElementContainer) {
-				Command c = JaspersoftStudioPlugin.getExtensionManager().getStretchToContent(n.getParent());
-				if (c != null)
-					cc.add(c);
+				return cc;
 			}
-			return cc;
-		}
+			}
 		return null;
 	}
 

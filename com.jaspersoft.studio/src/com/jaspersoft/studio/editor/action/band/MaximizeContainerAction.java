@@ -83,36 +83,39 @@ public class MaximizeContainerAction extends SelectionAction {
 			return null;
 		Object obj = objects.get(0);
 		if (obj instanceof EditPart) {
-			ANode n = (ANode) ((EditPart) obj).getModel();
-			if (n instanceof MPage) {
-				for (INode c : n.getChildren()) {
-					if (c instanceof MGraphicElement) {
-						n = (ANode) c;
-						break;
+			Object model = ((EditPart) obj).getModel();
+			if (model instanceof ANode){
+				ANode n = (ANode) model;
+				if (n instanceof MPage) {
+					for (INode c : n.getChildren()) {
+						if (c instanceof MGraphicElement) {
+							n = (ANode) c;
+							break;
+						}
 					}
 				}
-			}
-			if (!(n instanceof IGraphicElement))
-				return null;
+				if (!(n instanceof IGraphicElement))
+					return null;
 
-			JRElementGroup container = getContainer(n);
-			if (container == null)
-				return null;
+				JRElementGroup container = getContainer(n);
+				if (container == null)
+					return null;
 
-			APropertyNode mcontainer = getContainerNode(n);
-			JSSCompoundCommand cc = new JSSCompoundCommand(getText(), mcontainer);
-			if (container instanceof JRDesignBand) {
-				int bandHeight = ModelUtils.getMaxBandHeight((JRDesignBand) container, mcontainer.getJasperDesign());
-				if (bandHeight > 0) {
-					SetValueCommand cmd = new SetValueCommand();
-					cmd.setTarget(mcontainer);
-					cmd.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
-					cmd.setPropertyValue(bandHeight);
-					cc.add(cmd);
+				APropertyNode mcontainer = getContainerNode(n);
+				JSSCompoundCommand cc = new JSSCompoundCommand(getText(), mcontainer);
+				if (container instanceof JRDesignBand) {
+					int bandHeight = ModelUtils.getMaxBandHeight((JRDesignBand) container, mcontainer.getJasperDesign());
+					if (bandHeight > 0) {
+						SetValueCommand cmd = new SetValueCommand();
+						cmd.setTarget(mcontainer);
+						cmd.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
+						cmd.setPropertyValue(bandHeight);
+						cc.add(cmd);
+					}
 				}
+				return cc.isEmpty() ? null : cc;
 			}
-			return cc.isEmpty() ? null : cc;
-		}
+			}
 		return null;
 	}
 
