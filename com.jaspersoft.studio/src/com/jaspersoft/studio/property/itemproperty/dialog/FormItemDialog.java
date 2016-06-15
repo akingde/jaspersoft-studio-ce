@@ -135,6 +135,9 @@ public abstract class FormItemDialog extends AItemDialog {
 
 			@Override
 			public void itemModified(ItemPropertyModifiedEvent event) {
+				item.getProperties().clear();
+				for (String key : map.keySet())
+					item.addItemProperty(map.get(key).getValue());
 				validateForm();
 			}
 		});
