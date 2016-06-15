@@ -117,6 +117,7 @@ public class ColumnsEqualWidthAction extends ACachedSelectionAction {
 		int selectedColumnsNewWidth = selectedColumnsWidth / columns.size();
 		int remains = selectedColumnsWidth % columns.size();
 		JSSCompoundTableCommand cmd = new JSSCompoundTableCommand(table);
+		cmd.setLayoutTableContent(true);
 		HashSet<BaseColumn> fixedColumns = new HashSet<BaseColumn>();
 		for(MColumn column : columns){
 			int newWidth = selectedColumnsNewWidth;

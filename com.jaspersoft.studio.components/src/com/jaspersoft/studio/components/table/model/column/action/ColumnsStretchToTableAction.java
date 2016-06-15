@@ -21,18 +21,17 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.command.SetColumnWidthCommand;
+import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
-import com.jaspersoft.studio.property.SetValueCommand;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
  * Make the selected columns to fill a table. The action is visible only if there is space to
@@ -186,13 +185,11 @@ public class ColumnsStretchToTableAction extends ACachedSelectionAction {
 				}
 			}
 			if (newWidths != null){
-				JSSCompoundCommand cmd = new JSSCompoundCommand(table);
+				JSSCompoundTableCommand cmd = new JSSCompoundTableCommand(table);
+				cmd.setLayoutTableContent(true);
 				int index = 0;
 				for(MColumn col : selectedCols){
-					SetValueCommand setCommand = new SetValueCommand();
-					setCommand.setPropertyId(JRDesignElement.PROPERTY_WIDTH);
-					setCommand.setTarget(col);
-					setCommand.setPropertyValue(newWidths[index]);
+					SetColumnWidthCommand setCommand = new SetColumnWidthCommand(col, newWidths[index]);
 					index ++;
 					cmd.add(setCommand);
 				}
