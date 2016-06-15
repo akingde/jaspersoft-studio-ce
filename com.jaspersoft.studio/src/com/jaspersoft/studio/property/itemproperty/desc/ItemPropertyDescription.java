@@ -32,6 +32,7 @@ import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 public class ItemPropertyDescription<T> {
@@ -192,7 +193,7 @@ public class ItemPropertyDescription<T> {
 
 				StandardItemProperty v = wiProp.getValue();
 				if (v == null)
-					v = new StandardItemProperty(getName(), null, null);
+					v = getNewProperty(getName(), null, null);
 				handleEdit(((Text) e.getSource()), v);
 				wiProp.setValue(v);
 				// if (!textExpression.isDisposed())
@@ -202,6 +203,10 @@ public class ItemPropertyDescription<T> {
 		setupContextMenu(textExpression, wiProp);
 
 		return textExpression;
+	}
+
+	public StandardItemProperty getNewProperty(String name, String value, JRExpression valueExpression) {
+		return new StandardItemProperty(name, null, null);
 	}
 
 	protected void setupContextMenu(final Control c, final IWItemProperty wiProp) {
@@ -219,7 +224,7 @@ public class ItemPropertyDescription<T> {
 			refreshItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					StandardItemProperty v = new StandardItemProperty(getName(), getDefaultValueString(), null);
+					StandardItemProperty v = getNewProperty(getName(), getDefaultValueString(), null);
 					wiProp.setValue(v);
 				}
 			});
@@ -232,7 +237,7 @@ public class ItemPropertyDescription<T> {
 		if (c instanceof Text) {
 			Text txtExpr = (Text) c;
 			if (wip.getValue() == null)
-				wip.setValue(new StandardItemProperty(getName(), null, null));
+				wip.setValue(getNewProperty(getName(), null, null));
 			String txt = wip.getLabelProvider().getText(wip.getValue());
 			txt = toSimpleString(txt);
 			Point oldSelection = txtExpr.getSelection();

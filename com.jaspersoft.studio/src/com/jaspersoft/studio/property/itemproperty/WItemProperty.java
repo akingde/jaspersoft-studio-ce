@@ -319,7 +319,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		try {
 			if (this.value != exp) {
 				if (exp == null)
-					exp = new StandardItemProperty(ipDesc.getName(), null, null);
+					exp = ipDesc.getNewProperty(ipDesc.getName(), null, null);
 				if (this.value == null)
 					this.value = exp;
 				else {

@@ -55,8 +55,8 @@ public abstract class FormItemDialog extends AItemDialog {
 
 	@Override
 	public boolean close() {
+		item.getProperties().clear();
 		for (String key : map.keySet()) {
-			item.getProperties().clear();
 			item.addItemProperty(map.get(key).getValue());
 		}
 		return super.close();
