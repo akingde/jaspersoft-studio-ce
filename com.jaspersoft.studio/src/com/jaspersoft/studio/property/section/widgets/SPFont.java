@@ -252,7 +252,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 
 			public void widgetSelected(SelectionEvent e) {
 				if (e.time - time > 100) {
-					String value = fontSize.getValueAsFloat().toString();
+					Float value = fontSize.getValueAsFloat();
 					changeProperty(section, pDescriptor.getId(), pd1.getId(), value);
 					int stringLength = fontSize.getText().length();
 					fontSize.setSelection(new Point(stringLength, stringLength));
