@@ -123,7 +123,7 @@ public class LovPageContent extends APageContent {
 					ListItem li = new ListItem();
 					li.setLabel(d.getKey());
 					li.setValue(d.getValue());
-					return d.getValue();
+					return li;
 				}
 				return null;
 			}
