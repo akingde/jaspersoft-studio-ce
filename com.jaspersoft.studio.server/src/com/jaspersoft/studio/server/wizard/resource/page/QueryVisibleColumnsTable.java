@@ -16,18 +16,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
@@ -37,18 +41,23 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorQuery;
 import com.jaspersoft.studio.swt.events.ChangeEvent;
 import com.jaspersoft.studio.swt.events.ChangeListener;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
+import com.jaspersoft.studio.swt.widgets.table.EditButton;
+import com.jaspersoft.studio.swt.widgets.table.IEditElement;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.Misc;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 public class QueryVisibleColumnsTable {
 	private ResourceDescriptor rd;
 	private APageContent page;
 	private SelectorQuery sQuery;
 
-	public QueryVisibleColumnsTable(Composite composite, ResourceDescriptor rd, APageContent page, SelectorQuery sQuery) {
+	public QueryVisibleColumnsTable(Composite composite, ResourceDescriptor rd, APageContent page,
+			SelectorQuery sQuery) {
 		this.rd = rd;
 		this.page = page;
 		this.sQuery = sQuery;
@@ -84,11 +93,24 @@ public class QueryVisibleColumnsTable {
 		bnew.createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				return Messages.QueryVisibleColumnsTable_0;
+				StringValueDialog d = new StringValueDialog(UIUtils.getShell(), Messages.QueryVisibleColumnsTable_0);
+				if (d.open() == Dialog.OK)
+					return d.getValue();
+				return null;
 			}
 
 		});
+		EditButton<String> bedit = new EditButton<String>();
+		bedit.createEditButtons(bGroup, tableViewer, new IEditElement<String>() {
 
+			@Override
+			public void editElement(List<String> input, int pos) {
+				StringValueDialog d = new StringValueDialog(UIUtils.getShell(), input.get(pos));
+				if (d.open() == Dialog.OK)
+					input.set(pos, d.getValue());
+			}
+		});
+		bedit.editOnDoubleClick();
 		bdel = new DeleteButton() {
 			@Override
 			protected void afterElementDeleted(Object selement) {
@@ -111,6 +133,43 @@ public class QueryVisibleColumnsTable {
 
 	}
 
+	class StringValueDialog extends Dialog {
+		private String value;
+
+		protected StringValueDialog(Shell parentShell, String value) {
+			super(parentShell);
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		@Override
+		protected Control createDialogArea(Composite parent) {
+			Composite cmp = (Composite) super.createDialogArea(parent);
+			cmp.setLayout(new GridLayout(2, false));
+
+			new Label(cmp, SWT.NONE).setText("Column");
+
+			final Text txt = new Text(cmp, SWT.BORDER);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.widthHint = 150;
+			txt.setLayoutData(gd);
+			txt.setText(Misc.nvl(value));
+			txt.addModifyListener(new ModifyListener() {
+
+				@Override
+				public void modifyText(ModifyEvent e) {
+					value = txt.getText();
+					getButton(OK).setEnabled(!Misc.isNullOrEmpty(value));
+				}
+			});
+
+			return cmp;
+		}
+	}
+
 	private void buildTable(Composite composite) {
 		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -122,7 +181,6 @@ public class QueryVisibleColumnsTable {
 		tableViewer = new TableViewer(table);
 		attachContentProvider(tableViewer);
 		attachLabelProvider(tableViewer);
-		attachCellEditors(tableViewer, table);
 
 		TableLayout tlayout = new TableLayout();
 		tlayout.addColumnData(new ColumnWeightData(50));
@@ -134,7 +192,6 @@ public class QueryVisibleColumnsTable {
 
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
-
 	}
 
 	private void attachLabelProvider(TableViewer viewer) {
@@ -145,33 +202,4 @@ public class QueryVisibleColumnsTable {
 		viewer.setContentProvider(new ListContentProvider());
 	}
 
-	private void attachCellEditors(final TableViewer viewer, Composite parent) {
-		viewer.setCellModifier(new ICellModifier() {
-			public boolean canModify(Object element, String property) {
-				if (property.equals("KEY")) //$NON-NLS-1$
-					return true;
-				return false;
-			}
-
-			public Object getValue(Object element, String property) {
-				if (property.equals("KEY"))//$NON-NLS-1$
-					return Misc.nvl((String) element);
-				return null;
-			}
-
-			public void modify(Object element, String property, Object value) {
-				int index = table.getSelectionIndex();
-				List<String> lst = (List<String>) tableViewer.getInput();
-				lst.set(index, (String) value);
-				//				if (property.equals("KEY")) //$NON-NLS-1$
-				// mi.setLabel((String) value);
-				setValues();
-				tableViewer.update(element, new String[] { property });
-				tableViewer.refresh();
-			}
-		});
-
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "KEY" }); //$NON-NLS-1$  
-	}
 }
