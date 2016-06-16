@@ -74,7 +74,7 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 
 			@Override
 			public void verifyText(VerifyEvent e) {
-				if (wiProp.getValue().getValueExpression() != null)
+				if (wiProp.getValue() == null || wiProp.getValue().getValueExpression() != null)
 					return;
 				super.verifyText(e);
 			}

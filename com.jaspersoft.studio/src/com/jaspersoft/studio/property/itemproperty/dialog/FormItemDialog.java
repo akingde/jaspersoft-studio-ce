@@ -97,7 +97,7 @@ public abstract class FormItemDialog extends AItemDialog {
 				expr.setExpressionContext(currentExpContext);
 				boolean createNew = true;
 				for (ItemProperty ip : item.getProperties()) {
-					if (ip.getName().equals(key)) {
+					if (ip != null && ip.getName().equals(key)) {
 						expr.setValue((StandardItemProperty) ip);
 						createNew = false;
 						break;
