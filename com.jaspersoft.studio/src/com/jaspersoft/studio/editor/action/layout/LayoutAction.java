@@ -96,69 +96,72 @@ public class LayoutAction extends SelectionAction {
 			return null;
 		Object obj = objects.get(0);
 		if (obj instanceof EditPart) {
-			ANode n = (ANode) ((EditPart) obj).getModel();
-			if (n instanceof MPage) {
-				for (INode c : n.getChildren()) {
-					if (c instanceof MGraphicElement) {
-						n = (ANode) c;
-						break;
+			Object model = ((EditPart) obj).getModel();
+			if (model instanceof ANode){
+				ANode n = (ANode) model;
+				if (n instanceof MPage) {
+					for (INode c : n.getChildren()) {
+						if (c instanceof MGraphicElement) {
+							n = (ANode) c;
+							break;
+						}
 					}
 				}
-			}
-			if (!(n instanceof IGraphicElement))
-				return null;
+				if (!(n instanceof IGraphicElement))
+					return null;
 
-			JRElementGroup container = getContainer(n);
-			if (container == null)
-				return null;
+				JRElementGroup container = getContainer(n);
+				if (container == null)
+					return null;
 
-			Dimension size = null;
-			if (container instanceof JRDesignElement) {
-				//JRDesignElement c = (JRDesignElement) container;
-				//size = new Dimension(c.getWidth(), c.getHeight());
-				size = LayoutManager.getPaddedSize((JRDesignElement) container);
-			} else if (container instanceof JRDesignBand) {
-				int h = ((JRDesignBand) container).getHeight();
-				JasperDesign jDesign = n.getJasperDesign();
-				int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
-				size = new Dimension(w, h);
-			} else if (n instanceof IGraphicElementContainer) {
-				size = LayoutManager.getPaddedSize((IGraphicElementContainer) n);
-				//size.expand(((IGraphicElementContainer) n).getLeftPadding(), ((IGraphicElementContainer) n).getTopPadding());
-			} else if (n.getParent() instanceof IGraphicElementContainer) {
-				IGraphicElementContainer prnt = (IGraphicElementContainer) n.getParent();
-				size = LayoutManager.getPaddedSize(prnt);
-				//size = prnt.getSize();
-				//size.expand(prnt.getLeftPadding(), prnt.getTopPadding());
-			}
-			APropertyNode mcontainer = getContainerNode(n);
-			JSSCompoundCommand cc = new JSSCompoundCommand(getText(), mcontainer);
-			if (mcontainer.getValue() instanceof JRPropertiesHolder) {
-				JRPropertiesMap pmap = (JRPropertiesMap) mcontainer.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-				pmap = (JRPropertiesMap) pmap.clone();
-				pmap.setProperty(ILayout.KEY, layout.getClass().getName());
-				SetValueCommand c = new SetValueCommand();
-				c.setTarget((IPropertySource) mcontainer);
-				c.setPropertyId(MGraphicElement.PROPERTY_MAP);
-				c.setPropertyValue(pmap);
-				cc.add(c);
-			} else if (mcontainer.getValue() instanceof JRBaseElement) {
-				String uuid = ((JRBaseElement) mcontainer.getValue()).getUUID().toString();
-				INode root = mcontainer.getRoot();
-				if (root != null && n instanceof MReport) {
-					MReport mrep = (MReport) n;
-					JRPropertiesMap pmap = (JRPropertiesMap) mrep.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+				Dimension size = null;
+				if (container instanceof JRDesignElement) {
+					//JRDesignElement c = (JRDesignElement) container;
+					//size = new Dimension(c.getWidth(), c.getHeight());
+					size = LayoutManager.getPaddedSize((JRDesignElement) container);
+				} else if (container instanceof JRDesignBand) {
+					int h = ((JRDesignBand) container).getHeight();
+					JasperDesign jDesign = n.getJasperDesign();
+					int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
+					size = new Dimension(w, h);
+				} else if (n instanceof IGraphicElementContainer) {
+					size = LayoutManager.getPaddedSize((IGraphicElementContainer) n);
+					//size.expand(((IGraphicElementContainer) n).getLeftPadding(), ((IGraphicElementContainer) n).getTopPadding());
+				} else if (n.getParent() instanceof IGraphicElementContainer) {
+					IGraphicElementContainer prnt = (IGraphicElementContainer) n.getParent();
+					size = LayoutManager.getPaddedSize(prnt);
+					//size = prnt.getSize();
+					//size.expand(prnt.getLeftPadding(), prnt.getTopPadding());
+				}
+				APropertyNode mcontainer = getContainerNode(n);
+				JSSCompoundCommand cc = new JSSCompoundCommand(getText(), mcontainer);
+				if (mcontainer.getValue() instanceof JRPropertiesHolder) {
+					JRPropertiesMap pmap = (JRPropertiesMap) mcontainer.getPropertyValue(MGraphicElement.PROPERTY_MAP);
 					pmap = (JRPropertiesMap) pmap.clone();
-					pmap.setProperty(ILayout.KEY + "." + uuid, layout.getClass().getName()); //$NON-NLS-1$
+					pmap.setProperty(ILayout.KEY, layout.getClass().getName());
 					SetValueCommand c = new SetValueCommand();
-					c.setTarget((MReport) root);
+					c.setTarget((IPropertySource) mcontainer);
 					c.setPropertyId(MGraphicElement.PROPERTY_MAP);
 					c.setPropertyValue(pmap);
 					cc.add(c);
+				} else if (mcontainer.getValue() instanceof JRBaseElement) {
+					String uuid = ((JRBaseElement) mcontainer.getValue()).getUUID().toString();
+					INode root = mcontainer.getRoot();
+					if (root != null && n instanceof MReport) {
+						MReport mrep = (MReport) n;
+						JRPropertiesMap pmap = (JRPropertiesMap) mrep.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+						pmap = (JRPropertiesMap) pmap.clone();
+						pmap.setProperty(ILayout.KEY + "." + uuid, layout.getClass().getName()); //$NON-NLS-1$
+						SetValueCommand c = new SetValueCommand();
+						c.setTarget((MReport) root);
+						c.setPropertyId(MGraphicElement.PROPERTY_MAP);
+						c.setPropertyValue(pmap);
+						cc.add(c);
+					}
 				}
+				cc.add(new LayoutCommand(container, layout, size));
+				return cc;
 			}
-			cc.add(new LayoutCommand(container, layout, size));
-			return cc;
 		}
 		return null;
 	}
