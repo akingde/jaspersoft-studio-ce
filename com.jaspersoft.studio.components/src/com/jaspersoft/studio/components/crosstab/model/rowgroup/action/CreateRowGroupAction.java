@@ -84,7 +84,9 @@ public class CreateRowGroupAction extends ACachedSelectionAction {
 				JRDesignCrosstabRowGroup jrGroup = CrosstabUtil.createRowGroup(crosstab.getJasperDesign(), crosstab.getValue(),
 																				crosstabGroupWizard.getGroupName(),
 																				CrosstabTotalPositionEnum.END);
-				((JRDesignCrosstabBucket)jrGroup.getBucket()).setExpression(new JRDesignExpression(crosstabGroupWizard.getGroupExpression()));
+				JRDesignCrosstabBucket bucket = (JRDesignCrosstabBucket)jrGroup.getBucket();
+				bucket.setExpression(new JRDesignExpression(crosstabGroupWizard.getGroupExpression()));
+				bucket.setValueClassName(crosstabGroupWizard.getGroupValueClass());
 				cmd.add(new CreateRowCommand(crosstab, jrGroup, -1));
 				cmd.setReferenceNodeIfNull(crosstab);
 				cmd.add(new LazyCrosstabLayoutCommand(crosstab));

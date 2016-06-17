@@ -114,6 +114,11 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 	private String groupExpression = "";
 	
 	/**
+	 * Type of the value
+	 */
+	private String valueClass = Object.class.getName();
+	
+	/**
 	 * Class that define which label is shown when the field are listed, to show
 	 * the correct icon if it is a variable, parameter or field
 	 */
@@ -293,6 +298,7 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 						mexp = wizard.getValue();
 						if (mexp != null) {
 							groupExpression = mexp.getText();
+							valueClass = Object.class.getName();
 							dsExpr.setText(mexp.getText());
 						}
 					}
@@ -306,6 +312,7 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 
 			public void modifyText(ModifyEvent e) {
 				groupExpression = dsExpr.getText();
+				valueClass = Object.class.getName();
 			}
 		});
 
@@ -345,11 +352,17 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 				if (!sel.isEmpty()) {
 					Object obj = sel.getFirstElement();
 					if (obj instanceof JRDesignField) {
-						groupExpression = "$F{" + ((JRDesignField) obj).getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
+						JRDesignField field = (JRDesignField) obj;
+						groupExpression = "$F{" + field.getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
+						valueClass = field.getValueClassName();
 					} else if (obj instanceof JRDesignVariable) {
-						groupExpression = "$V{" + ((JRDesignVariable) obj).getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
+						JRDesignVariable variable = (JRDesignVariable) obj;
+						groupExpression = "$V{" + variable.getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
+						valueClass = variable.getValueClassName();
 					} else if (obj instanceof JRDesignParameter){
-						groupExpression = "$P{" + ((JRDesignParameter) obj).getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
+						JRDesignParameter parameter = (JRDesignParameter) obj;
+						groupExpression = "$P{" + parameter.getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
+						valueClass = parameter.getValueClassName();
 					}
 					
 				}
@@ -389,5 +402,15 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 	 */
 	public String getGroupExpression(){
 		return groupExpression;
+	}
+	
+	/**
+	 * Return the type of the selected element
+	 * 
+	 * @return a string defining the qualified type of the selected element, if
+	 * if used an expression the type returned will be java.lang.Object
+	 */
+	public String getGroupValueClass(){
+		return valueClass;
 	}
 }

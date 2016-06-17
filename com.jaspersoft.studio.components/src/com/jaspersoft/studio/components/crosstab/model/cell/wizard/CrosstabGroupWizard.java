@@ -120,4 +120,14 @@ public class CrosstabGroupWizard extends Wizard implements IExpressionContextSet
 	public String getGroupExpression(){
 		return step1.getGroupExpression();
 	}
+	
+	/**
+	 * Return the type of the selected element
+	 * 
+	 * @return a string defining the qualified type of the selected element, if
+	 * if used an expression the type returned will be java.lang.Object
+	 */
+	public String getGroupValueClass(){
+		return step1.getGroupValueClass();
+	}
 }
