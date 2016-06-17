@@ -106,8 +106,10 @@ public class QueryVisibleColumnsTable {
 			@Override
 			public void editElement(List<String> input, int pos) {
 				StringValueDialog d = new StringValueDialog(UIUtils.getShell(), input.get(pos));
-				if (d.open() == Dialog.OK)
+				if (d.open() == Dialog.OK) {
 					input.set(pos, d.getValue());
+					setValues();
+				}
 			}
 		});
 		bedit.editOnDoubleClick();
