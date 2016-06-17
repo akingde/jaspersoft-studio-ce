@@ -9,8 +9,6 @@
 package com.jaspersoft.studio.property.itemproperty.desc;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -166,6 +164,8 @@ public class ItemPropertyDescription<T> {
 		if (UIUtil.isMacAndEclipse4()) {
 			textExpression.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent e) {
+					if (wiProp.isRefresh())
+						return;
 					editHappened = true;
 				}
 			});
@@ -242,7 +242,10 @@ public class ItemPropertyDescription<T> {
 			txt = toSimpleString(txt);
 			Point oldSelection = txtExpr.getSelection();
 
+			boolean r = wip.isRefresh();
+			wip.setRefresh(true);
 			txtExpr.setText(txt);
+			wip.setRefresh(r);
 
 			oldSelection.x = Math.min(txt.length(), oldSelection.x);
 			oldSelection.y = Math.min(txt.length(), oldSelection.y);

@@ -127,8 +127,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
 
-		itemsViewer = new TableViewer(cmp,
-				SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		itemsViewer = new TableViewer(cmp, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		itemsViewer.setContentProvider(ArrayContentProvider.getInstance());
 		itemsViewer.setLabelProvider(new ItemLabelProvider(descriptor) {
 			@Override
