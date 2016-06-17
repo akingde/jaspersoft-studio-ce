@@ -144,7 +144,7 @@ public class StretchToContentAction extends SelectionAction {
 				}
 				return cc;
 			}
-			}
+		}
 		return null;
 	}
 
