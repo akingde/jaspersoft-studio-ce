@@ -37,5 +37,13 @@ public class JSSReportConverter extends ReportConverter {
 	public Map<String, JRStyle> getStylesMap(){
 		return stylesMap;
 	}
+	
+	/**
+	 * Force the recreation of the JasperPrint and the reload of the styles, in this way
+	 * all the external styles will updated
+	 */
+	public void refreshCachedStyles(){
+		convert(false);
+	}
 
 }

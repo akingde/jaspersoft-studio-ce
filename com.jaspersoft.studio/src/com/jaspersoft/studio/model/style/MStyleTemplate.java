@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRTempalteStyleExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -92,7 +92,7 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
-		JRExpressionPropertyDescriptor sourceExpression = new JRExpressionPropertyDescriptor(
+		JRTempalteStyleExpressionPropertyDescriptor sourceExpression = new JRTempalteStyleExpressionPropertyDescriptor(
 				JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION, Messages.MStyleTemplate_source_expression);
 		sourceExpression.setDescription(Messages.MStyleTemplate_source_expression_description);
 		desc.add(sourceExpression);
@@ -255,9 +255,15 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		}
 		
 		@Override
-		public IStatus run(IProgressMonitor monitor) {	
-			refreshChildren();
-			monitor.done();
+		public IStatus run(final IProgressMonitor monitor) {	
+			UIUtils.getDisplay().syncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					refreshChildren();
+					monitor.done();
+				}
+			});
 			return Status.OK_STATUS;
 		}
 	}

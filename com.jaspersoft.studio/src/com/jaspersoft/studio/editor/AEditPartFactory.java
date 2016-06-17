@@ -38,12 +38,16 @@ public abstract class AEditPartFactory implements EditPartFactory {
 		JasperDesign tjd = model.getJasperDesign();
 		if (tjd != jDesign) {
 			jDesign = tjd;
-			drawVisitor = new JSSDrawVisitor(new JSSReportConverter(jrContext, jDesign, true), null);
+			JSSReportConverter converter = new JSSReportConverter(jrContext, jDesign, true);
+			drawVisitor = new JSSDrawVisitor(converter, null);
 			jrContext.setValue(JasperReportsConfiguration.KEY_DRAWER, drawVisitor);
+			jrContext.setValue(JasperReportsConfiguration.KEY_CONVERTER, converter);
 		}
 		if (drawVisitor == null){
-			drawVisitor = new JSSDrawVisitor(new JSSReportConverter(jrContext, jDesign, true), null);
+			JSSReportConverter converter = new JSSReportConverter(jrContext, jDesign, true);
+			drawVisitor = new JSSDrawVisitor(converter, null);
 			jrContext.setValue(JasperReportsConfiguration.KEY_DRAWER, drawVisitor);
+			jrContext.setValue(JasperReportsConfiguration.KEY_CONVERTER, converter);
 		}
 		drawVisitor.setClip(false);
 		return drawVisitor;

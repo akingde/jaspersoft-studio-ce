@@ -98,6 +98,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public static final String KEY_DRAWER = "REPORT_DRAWER";
 
 	/**
+	 * Key used to store the report converter used to paint the JRElements, it is stored in 
+	 * the configuration to be easily accessible
+	 */
+	public static final String KEY_CONVERTER = "REPORT_CONVERTER";
+	
+	/**
 	 * The key which identified the file being edited
 	 */
 	public static final String REPORT_FILE = "REPORTFILEWIZARD"; //$NON-NLS-1$
@@ -846,6 +852,25 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 */
 	public IFile getAssociatedReportFile() {
 		return (IFile) get(FileUtils.KEY_FILE);
+	}
+	
+	/**
+	 * Force the reload of the styles for jasperreports, should be called when an 
+	 * used external style change, this will discard all the loaded styles and reload
+	 * them another time. Then it trigger the repaint of every element in the report
+	 */
+	public void refreshCachedStyles(){
+		//FIXME: experimental, need more test
+		/*Object converter = get(JasperReportsConfiguration.KEY_CONVERTER);
+		if (converter instanceof JSSReportConverter){
+			JSSReportConverter reportConverter = (JSSReportConverter)converter;
+			reportConverter.refreshCachedStyles();
+			JasperDesign design = getJasperDesign();
+			PropertyChangeEvent changeEvent = new PropertyChangeEvent(design, MGraphicElement.FORCE_GRAPHICAL_REFRESH, false, true);
+			for(JRDesignElement element : ModelUtils.getAllElements(design)){
+				element.getEventSupport().firePropertyChange(changeEvent);
+			}
+		}*/
 	}
 
 }

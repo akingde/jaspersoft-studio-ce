@@ -60,31 +60,29 @@ public class SPColor extends ASPropertyWidget<ColorPropertyDescriptor> {
 			}
 		});
 		foreButton = new ToolItem(toolBar, SWT.PUSH);
-		if (section.getElement().isEditable()) {
-			foreButton.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					if (isEnabled){
-						ColorDialog cd = new ColorDialog(toolBar.getShell());
-						cd.setText(pDescriptor.getDisplayName());
-						AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyActualValue(pDescriptor.getId());
-						cd.setRGB(rgb == null ? null : rgb);
-						boolean useTransparency = true;
-						useTransparency = pDescriptor.supportsTransparency();
-						if (useTransparency) {
-							AlfaRGB newColor = cd.openAlfaRGB();
-							if (newColor != null) {
-								changeProperty(section, pDescriptor.getId(), newColor);
-							}
-						} else {
-							RGB newColor = cd.openRGB();
-							if (newColor != null) {
-								changeProperty(section, pDescriptor.getId(), AlfaRGB.getFullyOpaque(newColor));
-							}
+		foreButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				if (isEnabled){
+					ColorDialog cd = new ColorDialog(toolBar.getShell());
+					cd.setText(pDescriptor.getDisplayName());
+					AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyActualValue(pDescriptor.getId());
+					cd.setRGB(rgb == null ? null : rgb);
+					boolean useTransparency = true;
+					useTransparency = pDescriptor.supportsTransparency();
+					if (useTransparency) {
+						AlfaRGB newColor = cd.openAlfaRGB();
+						if (newColor != null) {
+							changeProperty(section, pDescriptor.getId(), newColor);
+						}
+					} else {
+						RGB newColor = cd.openRGB();
+						if (newColor != null) {
+							changeProperty(section, pDescriptor.getId(), AlfaRGB.getFullyOpaque(newColor));
 						}
 					}
 				}
-			});
-		}
+			}
+		});
 		foreButton.setToolTipText(pDescriptor.getDescription());
 		toolBar.pack();
 	}

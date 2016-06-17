@@ -22,9 +22,10 @@ import com.jaspersoft.studio.property.section.widgets.SPExpression;
 
 public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor implements IPropertyDescriptorWidget,
 		IExpressionContextSetter {
-	private ExpressionContext expContext;
 
-	private SPExpression expEditor;
+	protected ExpressionContext expContext;
+
+	protected SPExpression expEditor;
 
 	public JRExpressionPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);

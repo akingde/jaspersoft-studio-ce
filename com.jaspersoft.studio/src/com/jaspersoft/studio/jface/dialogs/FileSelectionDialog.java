@@ -41,7 +41,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -197,11 +196,7 @@ public class FileSelectionDialog extends Dialog {
 		btnNoFile.setSelection(true);
 		btnNoFile.setFocus();
 
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				changeFileSelectionMode(cmpNoFile);
-			}
-		});
+		changeFileSelectionMode(cmpNoFile);
 
 		return area;
 	}
@@ -333,6 +328,21 @@ public class FileSelectionDialog extends Dialog {
 
 	public void handleTxtUrlChange() {
 
+	}
+	
+	/**
+	 * Show the custom expression area with an expression preinitialized inside it 
+	 * 
+	 * @param expression the expression to show, must be not null
+	 */
+	protected void showCustomExpression(String expression){
+		changeFileSelectionMode(cmpCustomExpression);
+		btnWorkspaceResource.setSelection(false);
+		btnAbsolutePath.setSelection(false);
+		btnNoFile.setSelection(false);
+		btnUrlRemote.setSelection(false);
+		btnCustomExpression.setSelection(true);
+		customExpression.setExpression(new JRDesignExpression(expression));
 	}
 
 	/*

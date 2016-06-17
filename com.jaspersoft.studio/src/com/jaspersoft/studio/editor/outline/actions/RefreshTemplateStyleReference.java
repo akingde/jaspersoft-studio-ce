@@ -26,6 +26,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyleTemplateReference;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Action to reload an external template reference file, the difference between an
@@ -75,6 +76,7 @@ public class RefreshTemplateStyleReference extends ACachedSelectionAction {
 	public void run() {
 		List<MStyleTemplateReference> references = getSelectedStyles();
 		HashSet<MStyleTemplate> refreshedTemplate = new HashSet<MStyleTemplate>();
+		JasperReportsConfiguration jconfig = null;
 		for(MStyleTemplateReference template : references){
 			MStyleTemplate parentTemplate = getParentTemplate(template);
 			//if the style is under a template force the update of the cache of that template
@@ -84,8 +86,14 @@ public class RefreshTemplateStyleReference extends ACachedSelectionAction {
 			} else {
 				ExternalStylesManager.refreshStyleReference(template, null);
 			}
+			if (jconfig == null){
+				jconfig = template.getJasperConfiguration();
+			}
 			//Need to manually refresh the child nodes
 			template.refreshChildren();
+		}
+		if (jconfig != null){
+			jconfig.refreshCachedStyles();
 		}
 	}
 	
