@@ -143,6 +143,12 @@ public class QueryVisibleColumnsTable {
 			this.value = value;
 		}
 
+		@Override
+		protected void configureShell(Shell newShell) {
+			super.configureShell(newShell);
+			newShell.setText(Messages.QueryVisibleColumnsTable_2);
+		}
+
 		public String getValue() {
 			return value;
 		}
@@ -152,7 +158,7 @@ public class QueryVisibleColumnsTable {
 			Composite cmp = (Composite) super.createDialogArea(parent);
 			cmp.setLayout(new GridLayout(2, false));
 
-			new Label(cmp, SWT.NONE).setText("Column");
+			new Label(cmp, SWT.NONE).setText(Messages.QueryVisibleColumnsTable_2);
 
 			final Text txt = new Text(cmp, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);

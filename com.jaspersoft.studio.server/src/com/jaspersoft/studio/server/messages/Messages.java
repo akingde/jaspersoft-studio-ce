@@ -245,6 +245,7 @@ public class Messages extends NLS {
 	public static String PublishHandler_0;
 	public static String QueryVisibleColumnsTable_0;
 	public static String QueryVisibleColumnsTable_1;
+	public static String QueryVisibleColumnsTable_2;
 	public static String RDDataAdapterPage_Title;
 	public static String RDDatasourceBeanPage_BeanMethod;
 	public static String RDDatasourceBeanPage_BeanName;
