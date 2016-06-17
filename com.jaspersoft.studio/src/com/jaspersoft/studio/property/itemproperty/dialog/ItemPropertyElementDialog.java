@@ -59,7 +59,7 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 		ipDesc = descriptor.getDescription(pname.getName());
 		setTitle(NLS.bind(Messages.ItemPropertyElementDialog_0, pname != null ? pname.getName() : "")); // $NON-NLS-2$
 		setDescription(ipDesc.getDescription());
-		setDefaultSize(400, 200);
+		setDefaultSize(500, -1);
 	}
 
 	@Override
