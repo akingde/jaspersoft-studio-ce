@@ -112,14 +112,14 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 			fcol = getColumnFigure(getTarget(), ops);
 			if (fcol != null)
 				f.setTargetAnchor(new LateralAnchor(fcol));
-		}else{
-			
+		} else {
+
 		}
 	}
 
 	private void setupToolTip(MFromTableJoin tJoin, PolylineConnection f) {
 		final StringBuffer tt = new StringBuffer();
-		if (tJoin.getValue() instanceof MQueryTable)
+		if (tJoin != null && tJoin.getValue() instanceof MQueryTable)
 			tt.append(tJoin.toSQLString() + QueryWriter.writeQuery(tJoin));
 		else {
 			tt.append(tJoin.getToolTip());

@@ -65,4 +65,10 @@ public class TableJoinDetail {
 			return (MFromTableJoin) srcTbl;
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return srcTbl.toSQLString() + " , " + destTbl.toSQLString();
+	}
 }
