@@ -85,7 +85,9 @@ public class FilePreviewSelectionDialog extends FileSelectionDialog {
 		Control area = super.createDialogArea(parent);
 
 		createFilePreviewPanel(container);
-
+		
+		//This will allow to show the preview now that the preview area is created
+		changeFileSelectionMode(cmpNoFile);
 		return area;
 	}
 
@@ -157,12 +159,16 @@ public class FilePreviewSelectionDialog extends FileSelectionDialog {
 	 */
 	public void changeFileSelectionMode(Control newTopControl) {
 		super.changeFileSelectionMode(newTopControl);
-		// Shows no preview panel and hide the image preview one
-		Image currImgPreview = filePreview.getImage();
-		if (currImgPreview != null)
-			currImgPreview.dispose();
-		grpFilePreviewLayout.topControl = cmpNoFilePreview;
-		grpFilePreview.layout();
+		//Check if the preview area was already created, since this method
+		//can be called by the superclass during the controls creation
+		if (filePreview != null){
+			// Shows no preview panel and hide the image preview one
+			Image currImgPreview = filePreview.getImage();
+			if (currImgPreview != null)
+				currImgPreview.dispose();
+			grpFilePreviewLayout.topControl = cmpNoFilePreview;
+			grpFilePreview.layout();
+		}
 	}
 
 	/*
