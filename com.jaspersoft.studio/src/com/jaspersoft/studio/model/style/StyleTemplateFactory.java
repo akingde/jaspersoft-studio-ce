@@ -15,22 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRConditionalStyle;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.JRSimpleTemplate;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.JRTemplateReference;
-import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.FileResolver;
-import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -40,6 +24,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.ExternalStylesManager;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
@@ -48,6 +33,23 @@ import com.jaspersoft.studio.utils.CacheMap;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRConditionalStyle;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.JRSimpleTemplate;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.JRTemplate;
+import net.sf.jasperreports.engine.JRTemplateReference;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.FileResolver;
+import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 
 public class StyleTemplateFactory {
 
@@ -94,10 +96,18 @@ public class StyleTemplateFactory {
 		if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
 			JRSimpleTemplate jrst = (JRSimpleTemplate) JRXmlTemplateLoader.load(fileToBeOpened);
 			createTemplate(parent, set, editable, file, fileToBeOpened, jrst);
+		} else {
+			try {
+				JasperReportsConfiguration jConfig = parent.getJasperConfiguration();
+				JRTemplate jrst = JRXmlTemplateLoader.getInstance(jConfig).loadTemplate(location);
+				createTemplate(parent, set, editable, file, fileToBeOpened, jrst);
+			} catch (JRException e) {
+				JaspersoftStudioPlugin.getInstance().logError(e);
+			}
 		}
 	}
 
-	public static void createTemplate(ANode parent, Set<String> set, boolean editable, IFile file, File fileToBeOpened,JRSimpleTemplate jrst) {
+	public static void createTemplate(ANode parent, Set<String> set, boolean editable, IFile file, File fileToBeOpened, JRTemplate jrst) {
 		for (JRTemplateReference s : jrst.getIncludedTemplates()) {
 			MStyleTemplateReference p = new MStyleTemplateReference(parent, s, -1);
 			p.setEditable(editable);

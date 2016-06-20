@@ -359,8 +359,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 							IFile old = jrContext.getAssociatedReportFile();
 							IFile newf = ((IFileEditorInput) getEditorInput()).getFile();
 							jrContext.init(newf);
-							JaspersoftStudioPlugin.getExtensionManager().onRename(old, newf, jrContext,
-									getActiveEditor().getEditorSite().getActionBars().getStatusLineManager().getProgressMonitor());
+							JaspersoftStudioPlugin.getExtensionManager().onRename(old, newf, jrContext, new NullProgressMonitor());
 						}
 					} catch (CoreException e) {
 						UIUtils.showError(e);

@@ -14,6 +14,7 @@ package com.jaspersoft.studio;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,13 +38,16 @@ import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.JRTemplate;
 import net.sf.jasperreports.engine.JRTemplateReference;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
+import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 
 /**
  * Class that caches the external styles to improve the performance when resolving their names
@@ -275,10 +279,20 @@ public class ExternalStylesManager {
 					externalStylesCache.put(key, cachedStyles);
 					if (fireEvents) fireEvent(STYLE_FOUND_EVENT, jrTemplate);
 				} else {
-					JRExpression styleExpression = jrTemplate.getSourceExpression();
-					String expString = styleExpression != null ? styleExpression.getText() : "";
-					addNotValuableExpression(projectPath, expString);
-					fireEvent(STYLE_NOT_FOUND_EVENT, jrTemplate);
+					//It is not a local file, try to resolve it with the repository serivce
+					String key = projectPath + evaluatedExpression;
+					try {
+						JasperReportsConfiguration jConfig = template.getJasperConfiguration();
+						JRTemplate resolvedTemplate = JRXmlTemplateLoader.getInstance(jConfig).loadTemplate(evaluatedExpression);
+						externalStylesCache.put(key, Arrays.asList(resolvedTemplate.getStyles()));
+						if (fireEvents) fireEvent(STYLE_FOUND_EVENT, jrTemplate);
+					} catch (JRException e) {
+						JaspersoftStudioPlugin.getInstance().logError(e);
+						JRExpression styleExpression = jrTemplate.getSourceExpression();
+						String expString = styleExpression != null ? styleExpression.getText() : "";
+						addNotValuableExpression(projectPath, expString);
+						fireEvent(STYLE_NOT_FOUND_EVENT, jrTemplate);
+					}
 				}
 			}
 		}
@@ -366,9 +380,12 @@ public class ExternalStylesManager {
 	 */
 	public static List<JRStyle> getStyles(JRReportTemplate style, IFile project, JasperReportsConfiguration jConfig) {
 		String evaluatedExpression = evaluateStyleExpression(style, project, jConfig);
+		String projectPath = project.getLocation().toPortableString();
 		if (evaluatedExpression != null) {
+			//Try to resolve it as local file
 			File styleFile = StyleTemplateFactory.getFile(evaluatedExpression, project);
 			if (styleFile != null) {
+				//It is a local file
 				String key = styleFile.getAbsolutePath();
 				List<JRStyle> cachedStyles = externalStylesCache.get(key);
 				if (cachedStyles == null) {
@@ -379,15 +396,32 @@ public class ExternalStylesManager {
 				fireEvent(STYLE_FOUND_EVENT, style);
 				return cachedStyles;
 			} else {
-				String projectPath = project.getLocation().toPortableString();
-				JRExpression styleExpression = style.getSourceExpression();
-				String expString = styleExpression != null ? styleExpression.getText() : "";
-				addNotValuableExpression(projectPath, expString);
-				fireEvent(STYLE_NOT_FOUND_EVENT, style);
+				//It is not a local file, try to resolve it with the repository serivce
+				String key = projectPath + evaluatedExpression;
+				List<JRStyle> cachedStyles = externalStylesCache.get(key);
+				if (cachedStyles == null) {
+					try {
+						JRTemplate template = JRXmlTemplateLoader.getInstance(jConfig).loadTemplate(evaluatedExpression);
+						cachedStyles = Arrays.asList(template.getStyles());
+						externalStylesCache.put(key, cachedStyles);
+						fireEvent(STYLE_FOUND_EVENT, style);
+						return cachedStyles;
+					} catch (JRException e) {
+						JaspersoftStudioPlugin.getInstance().logError(e);
+					}
+				}
 			}
+		} else {
+			//Unable to resolve it in anyway, add to the blacklisted expressions
+			JRExpression styleExpression = style.getSourceExpression();
+			String expString = styleExpression != null ? styleExpression.getText() : "";
+			addNotValuableExpression(projectPath, expString);
 		}
+		fireEvent(STYLE_NOT_FOUND_EVENT, style);
 		return new ArrayList<JRStyle>();
 	}
+	
+
 	
 	/**
 	 * Given a list of JRStyles and a styles name search inside the list a JRStyle
