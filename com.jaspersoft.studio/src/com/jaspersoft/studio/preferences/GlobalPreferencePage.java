@@ -15,8 +15,6 @@ import java.util.Properties;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -43,6 +41,8 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class GlobalPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	public static final String LOG_FILE = "com.jaspersoft.studio.log.file"; //$NON-NLS-1$
@@ -270,8 +270,23 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (!refresh)
-					showLogFile();
+				if (!refresh) {
+					try {
+						String lfile = logFile.getTextControl(cmpJavaLog).getText();
+						File file = new File(lfile);
+						if (file.exists())
+							tLogPreview.setText(FileUtils.readFileToString(file));
+						else if (lfile.equals(getDefaultLogProperties().toString())) {
+							File tmp = getTemplate();
+							if (tmp != null)
+								tLogPreview.setText(FileUtils.readFileToString(tmp));
+						} else
+							tLogPreview.setText(Messages.GlobalPreferencePage_20);
+					} catch (IOException ex) {
+						tLogPreview.setText(ex.getLocalizedMessage() + "\n" + ex.toString()); //$NON-NLS-1$
+						ex.printStackTrace();
+					}
+				}
 			}
 		});
 
@@ -308,8 +323,23 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (!refresh)
-					showLog4jFile();
+				if (!refresh) {
+					try {
+						String lfile = log4jFile.getTextControl(cmpLog4j).getText();
+						File file = new File(lfile);
+						if (file.exists())
+							tLog4jPreview.setText(FileUtils.readFileToString(file));
+						else if (lfile.equals(getDefaultLog4jProperties().toString())) {
+							File tmp = getTemplate();
+							if (tmp != null)
+								tLog4jPreview.setText(FileUtils.readFileToString(tmp));
+						} else
+							tLog4jPreview.setText(Messages.GlobalPreferencePage_20);
+					} catch (IOException ex) {
+						tLog4jPreview.setText(ex.getLocalizedMessage() + "\n" + ex.toString()); //$NON-NLS-1$
+						ex.printStackTrace();
+					}
+				}
 			}
 		});
 
@@ -495,9 +525,9 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 				showLogFile();
 				showLog4jFile();
 			} else if (event.getSource() == logFile)
-				showLogFile();
+				;// showLogFile();
 			else if (event.getSource() == log4jFile)
-				showLog4jFile();
+				;// showLog4jFile();
 		}
 	}
 
