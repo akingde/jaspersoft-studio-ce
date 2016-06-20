@@ -36,8 +36,8 @@ public class JoinCommand extends ACommand {
 	private MSQLColumn src, dest;
 	private MFromTable srcTbl, destTbl;
 
-	public JoinCommand(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest,
-			MFromTable destTbl, SQLQueryDesigner designer) {
+	public JoinCommand(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl,
+			SQLQueryDesigner designer) {
 		this.designer = designer;
 		this.src = src;
 		this.srcTbl = srcTbl;
@@ -45,8 +45,7 @@ public class JoinCommand extends ACommand {
 		this.destTbl = destTbl;
 	}
 
-	public JoinCommand(MFromTable srcTbl, MFromTable destTbl,
-			SQLQueryDesigner designer) {
+	public JoinCommand(MFromTable srcTbl, MFromTable destTbl, SQLQueryDesigner designer) {
 		this.designer = designer;
 		this.srcTbl = srcTbl;
 		this.destTbl = destTbl;
@@ -57,15 +56,13 @@ public class JoinCommand extends ACommand {
 		super.execute();
 		ActionFactory afactory = designer.getOutline().getAfactory();
 		MFromTable mfSrcTbl = srcTbl;
-		if (srcTbl.getParent() instanceof MFrom
-				&& srcTbl.getParent() != null
+		if (srcTbl.getParent() instanceof MFrom && srcTbl.getParent() != null
 				&& srcTbl.getParent().getParent() instanceof MFromTable
 				&& srcTbl.getParent().getParent().getValue() != null
 				&& srcTbl.getParent().getParent().getValue() instanceof MQueryTable)
 			mfSrcTbl = (MFromTable) srcTbl.getParent().getParent();
 		MFromTable mfDesttbl = destTbl;
-		if (destTbl.getParent() instanceof MFrom
-				&& destTbl.getParent() != null
+		if (destTbl.getParent() instanceof MFrom && destTbl.getParent() != null
 				&& destTbl.getParent().getParent() instanceof MFromTable
 				&& destTbl.getParent().getParent().getValue() != null
 				&& destTbl.getParent().getParent().getValue() instanceof MQueryTable)
@@ -74,8 +71,7 @@ public class JoinCommand extends ACommand {
 			srcTbl = mfSrcTbl;
 			destTbl = mfDesttbl;
 		}
-		if (srcTbl instanceof MFromTableJoin
-				&& !(destTbl instanceof MFromTableJoin)) {
+		if (srcTbl instanceof MFromTableJoin && !(destTbl instanceof MFromTableJoin)) {
 			MFromTable tmp = srcTbl;
 			MSQLColumn tmpColumn = src;
 			srcTbl = destTbl;
@@ -84,8 +80,7 @@ public class JoinCommand extends ACommand {
 			dest = tmpColumn;
 		}
 		if (srcTbl instanceof MFromTableJoin) {
-			DeleteTableJoinCommand cmd = new DeleteTableJoinCommand(
-					new Object[] { srcTbl });
+			DeleteTableJoinCommand cmd = new DeleteTableJoinCommand(new Object[] { srcTbl });
 			undoCmd.add(cmd);
 			cmd.execute();
 			srcTbl = cmd.getResultFromTable();
@@ -102,12 +97,13 @@ public class JoinCommand extends ACommand {
 				undoRemove.add(mexpr);
 				mexpr.getOperands().add(new FieldOperand(src, srcTbl, mexpr));
 				mexpr.getOperands().add(new FieldOperand(dest, destTbl, mexpr));
+
+				refresh();
 				return;
 			}
 		}
 
-		JoinTableCommand c = new JoinTableCommand(src, srcTbl, dest, destTbl,
-				fromTbl);
+		JoinTableCommand c = new JoinTableCommand(src, srcTbl, dest, destTbl, fromTbl);
 		undoCmd.add(c);
 		c.execute();
 
@@ -122,10 +118,13 @@ public class JoinCommand extends ACommand {
 			for (MFromTable mft : lst)
 				reparent(mft, destTbl);
 		}
+		refresh();
+	}
+
+	private void refresh() {
 		TreeViewer tv = designer.getOutline().getTreeViewer();
 		tv.refresh(true);
-		tv.setSelection(new TreeSelection(
-				new TreePath(new Object[] { destTbl })));
+		tv.setSelection(new TreeSelection(new TreePath(new Object[] { destTbl })));
 		tv.reveal(destTbl);
 	}
 
