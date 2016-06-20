@@ -36,7 +36,7 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 		super(name, label, description, mandatory);
 	}
 
-	private boolean transparent = true;
+	private boolean transparent = false;
 
 	public void setTransparent(boolean transparent) {
 		this.transparent = transparent;
