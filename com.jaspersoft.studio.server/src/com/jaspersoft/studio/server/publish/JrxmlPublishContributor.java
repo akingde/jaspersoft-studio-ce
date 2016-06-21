@@ -76,6 +76,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		init(mrunit.getJasperConfiguration(), version);
 		publishJrxml(mrunit, monitor, jasper, fileset, file);
 		if (ResourceDescriptorUtil.isReportMain(file)) {
+			jasper.removeProperty("com.jaspersoft.jrs.data.source");
 			if (mrunit instanceof MJrxml && mrunit.getValue().isMainReport())
 				mrunit = (AMJrxmlContainer) mrunit.getParent();
 			if (mrunit instanceof MReportUnit)
