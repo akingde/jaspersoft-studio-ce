@@ -12,17 +12,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish.imp;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
-import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.types.date.DateRange;
-import net.sf.jasperreports.types.date.TimestampRange;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -36,6 +31,12 @@ import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.types.date.DateRange;
+import net.sf.jasperreports.types.date.TimestampRange;
+
 public class ImpInputControls {
 	protected JasperReportsConfiguration jrConfig;
 
@@ -43,9 +44,8 @@ public class ImpInputControls {
 		this.jrConfig = jrConfig;
 	}
 
-	public void publish(MReportUnit mrunit, IProgressMonitor monitor,
-			JasperDesign jasper, JasperReportsConfiguration jrConfig)
-			throws Exception {
+	public void publish(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper,
+			JasperReportsConfiguration jrConfig) throws Exception {
 		ResourceDescriptor runit = mrunit.getValue();
 		for (JRParameter p : jasper.getParametersList()) {
 			if (p.isSystemDefined() || !p.isForPrompting())
@@ -58,18 +58,18 @@ public class ImpInputControls {
 			rd.setVisible(true);
 			rd.setReadOnly(false);
 			rd.setMandatory(false);
-			rd.setResourceProperty(ResourceDescriptor.PROP_INPUTCONTROL_TYPE,
-					ResourceDescriptor.IC_TYPE_SINGLE_VALUE);
+			rd.setResourceProperty(ResourceDescriptor.PROP_INPUTCONTROL_TYPE, ResourceDescriptor.IC_TYPE_SINGLE_VALUE);
 			rd.setParentFolder(runit.getUriString() + "_files");
 			rd.setUriString(runit.getUriString() + "_files/" + rd.getName());
 
-			MInputControl mres = (MInputControl) ResourceFactory.getResource(
-					mrunit, rd, -1);
+			MInputControl mres = (MInputControl) ResourceFactory.getResource(mrunit, rd, -1);
 
 			if (Boolean.class.isAssignableFrom(p.getValueClass())) {
 				rd.setControlType(ResourceDescriptor.IC_TYPE_BOOLEAN);
 			} else if (String.class.isAssignableFrom(p.getValueClass())) {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_TEXT);
+			} else if (Time.class.isAssignableFrom(p.getValueClass())) {
+				addType(rd, mres, (byte) 5);
 			} else if (Timestamp.class.isAssignableFrom(p.getValueClass())) {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE_TIME);
 			} else if (Date.class.isAssignableFrom(p.getValueClass())) {
@@ -105,8 +105,7 @@ public class ImpInputControls {
 		}
 	}
 
-	public static ResourceDescriptor addType(ResourceDescriptor rd,
-			MInputControl mres, byte type) {
+	public static ResourceDescriptor addType(ResourceDescriptor rd, MInputControl mres, byte type) {
 		ResourceDescriptor rdtype = MDataType.createDescriptor(mres);
 		String name = "myDatatype";
 		rdtype.setName(name);
