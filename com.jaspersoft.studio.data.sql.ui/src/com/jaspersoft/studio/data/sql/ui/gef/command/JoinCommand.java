@@ -54,6 +54,7 @@ public class JoinCommand extends ACommand {
 	@Override
 	public void execute() {
 		super.execute();
+		ActionFactory afactory = designer.getOutline().getAfactory();
 		MFromTable mfSrcTbl = srcTbl;
 		if (srcTbl.getParent() instanceof MFrom && srcTbl.getParent() != null
 				&& srcTbl.getParent().getParent() instanceof MFromTable
@@ -90,8 +91,6 @@ public class JoinCommand extends ACommand {
 			fromTbl = getParentFromTable((MFromTableJoin) destTbl);
 		if (srcTbl == destTbl)
 			return;
-		if (srcTbl instanceof MFromTable)
-			srcTbl = convertToSubTable(srcTbl, fromTbl);
 		for (INode n : fromTbl.getChildren()) {
 			if (n == destTbl) {
 				MExpression mexpr = new MExpression(srcTbl, src, -1);
@@ -120,17 +119,6 @@ public class JoinCommand extends ACommand {
 				reparent(mft, destTbl);
 		}
 		refresh();
-	}
-
-	private MFromTableJoin convertToSubTable(MFromTable nsrc, MFromTable parent) {
-		reparent(nsrc, null);
-		MFromTableJoin join = new MFromTableJoin(parent, nsrc.getValue());
-		undoRemove.add(join);
-		undoProperties.put(nsrc, nsrc.copyPropertiesUndo(join));
-		if (!Misc.isNullOrEmpty(nsrc.getChildren()))
-			for (INode n : new ArrayList<INode>(nsrc.getChildren()))
-				reparent((ANode) n, parent);
-		return join;
 	}
 
 	private void refresh() {
