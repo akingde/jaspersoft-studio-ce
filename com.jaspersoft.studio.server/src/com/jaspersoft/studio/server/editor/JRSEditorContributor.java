@@ -76,7 +76,7 @@ public class JRSEditorContributor implements IEditorContributor {
 
 	public void onSave(JasperReportsContext jrConfig, IProgressMonitor monitor) {
 		String isSaveAs = jrConfig.getProperty(IS_FROM_SAVE_AS);
-		if (isSaveAs != null) {
+		if (isSaveAs == null) {
 			jrConfig.removeProperty(IS_FROM_SAVE_AS);
 			return;
 		}
