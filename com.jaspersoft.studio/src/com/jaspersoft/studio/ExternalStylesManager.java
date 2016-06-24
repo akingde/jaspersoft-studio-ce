@@ -12,29 +12,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
 
-import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
-import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -60,124 +49,14 @@ public class ExternalStylesManager {
 	/**
 	 * Map of the cached styles, the key is the absolute path to the template file
 	 */
-	private static HashMap<String, List<JRStyle>> externalStylesCache = new HashMap<String, List<JRStyle>>();
-	
-
-	/**
-	 * Listener called when a file is saved
-	 */
-	private static IResourceChangeListener resourceChangeListenr = new IResourceChangeListener(){
-		@Override
-		public void resourceChanged(IResourceChangeEvent event) {
-			HashSet<String> removedStyles = new HashSet<String>();
-			if (event.getDelta() != null){
-				removeStyle(event.getDelta().getAffectedChildren(), removedStyles);
-				//if (event.getType() == IResourceChangeEvent.PRE_CLOSE) removeReport(event.getDelta().getAffectedChildren());
-				refreshStyles(removedStyles);
-			}
-		}	
-	};
-	
-	/**
-	 * Listener used to know when an editor is closed and if it has an interpreter saved than it can be removed
-	 * 
-	 */
-	/*private static IPartListener documentClosedListener = new IPartListener() {
-		
-		@Override
-		public void partClosed(IWorkbenchPart part) {
-			if (part instanceof JrxmlEditor){
-				JrxmlEditor editor = (JrxmlEditor)part;
-				ExpressionUtil.removeCachedInterpreter(editor.getModel().getJasperDesign().getMainDesignDataset());
-			}	
-		}
-		
-		@Override
-		public void partOpened(IWorkbenchPart part) {}
-		
-		@Override
-		public void partDeactivated(IWorkbenchPart part) {}
-		
-		@Override
-		public void partBroughtToTop(IWorkbenchPart part) {}
-		
-		@Override
-		public void partActivated(IWorkbenchPart part) {}
-	};*/
+	private static HashMap<String, Pair<JRTemplate, List<JRStyle>>> externalStylesCache = new HashMap<String, Pair<JRTemplate, List<JRStyle>>>();
 	
 	/**
 	 * Initialize the appropriate listener
 	 */
 	public static void initListeners(){
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListenr,
-				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
-		
-		//PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService().addPartListener(documentClosedListener);
+		//FOR FUTURE USE, IS CALLED AT START AND CAN INITIALIZE LISTENERS FOR THE TEMPLATE FILES
 	}
-	
-	/**
-	 * Notify to the opened jrxml editors to refresh the styles
-	 * 
-	 * @param removedStyles name of the Styles that were updated in the cache
-	 */
-	private static void refreshStyles(HashSet<String> changedStyles){
-		IWorkbenchWindow activeWorkbenchWindow = JaspersoftStudioPlugin.getInstance().getWorkbench().getActiveWorkbenchWindow();
-		if (activeWorkbenchWindow == null || activeWorkbenchWindow.getPages() == null) return;
-		for(IWorkbenchPage page : activeWorkbenchWindow.getPages()){
-			IEditorReference[] openEditors = page.getEditorReferences();
-			for(IEditorReference editor : openEditors){
-				IWorkbenchPart part = editor.getPart(false);
-				if (part instanceof JrxmlEditor){
-					JrxmlEditor jrxmlEditor = (JrxmlEditor)part;
-					jrxmlEditor.refreshExternalStyles(changedStyles);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * When a jrtx file is saved search if it is in the cache and in case it is update
-	 * 
-	 * @param editedResources resources saved
-	 * @param removedStylesName Map where the name of the update jrstyle are stored
-	 */
-	private static void removeStyle(IResourceDelta[] editedResources, HashSet<String> removedStylesName){
-		for(IResourceDelta resource : editedResources){
-			if (resource.getAffectedChildren().length>0) {
-				removeStyle(resource.getAffectedChildren(), removedStylesName);
-			}
-			IPath rawLocation = resource.getResource().getRawLocation();
-			if (rawLocation != null){
-				String key = rawLocation.toOSString();
-				List<JRStyle> removedElement = externalStylesCache.remove(key);
-				if (removedElement != null){
-					ArrayList<JRStyle> cachedStyles = new ArrayList<JRStyle>();
-					StyleTemplateFactory.getStylesReference(key, cachedStyles, new HashSet<File>());
-					externalStylesCache.put(key, cachedStyles);
-					for(JRStyle style : removedElement)
-						removedStylesName.add(style.getName());
-				}
-			}
-		}
-	}
-	
-	/**
-	 * When a close action  is done, if it was of a report remove eventually its interpreter 
-	 * from the cache
-	 * 
-	 */
-	/*private static void removeReport(IResourceDelta[] editedResources){
-		for(IResourceDelta resource : editedResources){
-			if (resource.getAffectedChildren().length>0) {
-				removeReport(resource.getAffectedChildren());
-			}
-			IPath rawLocation = resource.getResource().getRawLocation();
-			if (rawLocation != null){
-				String key = rawLocation.toOSString();
-				ExpressionUtil.removeCachedInterpreter(key);
-			}
-		}
-	}*/
 	
 	/**
 	 * Map of the expression that was already attempt to evaluate, but since their evaluation
@@ -257,7 +136,7 @@ public class ExternalStylesManager {
 	 * @param fireEvents true if the reloaded styles should be notified with an event when the load
 	 * operation ends, false otherwise
 	 */
-	protected static void refreshStyle(ANode template, boolean fireEvents){
+	protected static void refreshTemplte(ANode template, boolean fireEvents){
 		JasperReportsConfiguration jConf = template.getJasperConfiguration();
 		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
 		String projectPath = project.getLocation().toPortableString();
@@ -271,27 +150,122 @@ public class ExternalStylesManager {
 			//Recalculate the style overwriting the cache
 			String evaluatedExpression = evaluateStyleExpression(jrTemplate, project, jConf);
 			if (evaluatedExpression != null) {
-				File styleFile = StyleTemplateFactory.getFile(evaluatedExpression, project);
-				if (styleFile != null) {
-					String key = styleFile.getAbsolutePath();
-					List<JRStyle> cachedStyles = new ArrayList<JRStyle>();
-					StyleTemplateFactory.getStylesReference(project, evaluatedExpression, cachedStyles, new HashSet<File>());
-					externalStylesCache.put(key, cachedStyles);
-					if (fireEvents) fireEvent(STYLE_FOUND_EVENT, jrTemplate);
-				} else {
-					//It is not a local file, try to resolve it with the repository serivce
-					String key = projectPath + evaluatedExpression;
-					try {
-						JasperReportsConfiguration jConfig = template.getJasperConfiguration();
-						JRTemplate resolvedTemplate = JRXmlTemplateLoader.getInstance(jConfig).loadTemplate(evaluatedExpression);
-						externalStylesCache.put(key, Arrays.asList(resolvedTemplate.getStyles()));
-						if (fireEvents) fireEvent(STYLE_FOUND_EVENT, jrTemplate);
-					} catch (JRException e) {
-						JaspersoftStudioPlugin.getInstance().logError(e);
-						JRExpression styleExpression = jrTemplate.getSourceExpression();
-						String expString = styleExpression != null ? styleExpression.getText() : "";
-						addNotValuableExpression(projectPath, expString);
-						fireEvent(STYLE_NOT_FOUND_EVENT, jrTemplate);
+				//It is not a local file, try to resolve it with the repository serivce
+				String key = projectPath + evaluatedExpression;
+				externalStylesCache.remove(key);
+				JRTemplate loadedTemplate = getTemplate(jConf, evaluatedExpression);
+				if (loadedTemplate != null){
+					 if (fireEvents){
+						 fireEvent(STYLE_FOUND_EVENT, jrTemplate);
+					 }
+					 return;
+				}			
+			}
+		}
+		fireEvent(STYLE_NOT_FOUND_EVENT, jrTemplate);
+	}
+	
+	/**
+	 * Load a template style from its location. It handle a cache to store
+	 * the templates loaded
+	 * 
+	 * @param jConf the configuration of the current opened file
+	 * @param location a not null location for the template
+	 * @return reference to the loaded template or null if it can't be found 
+	 */
+	public static JRTemplate getTemplate(JasperReportsConfiguration jConf, String location){
+		return getTemplate(jConf, location, false);
+	}
+	
+	/**
+	 * Load a template style from its location. It handle a cache to store
+	 * the templates loaded. It trigger also the refresh of the report drawer if the
+	 * call is not a nested one. A nested call could occur if the loaded template as 
+	 * other templates inside
+	 * 
+	 * @param jConf the configuration of the current opened file
+	 * @param location a not null location for the template
+	 * @param isNestedCall flag used to know if it is a nested call. If it is not a nested
+	 * call once the template is loaded trigger a refresh of the drawer 
+	 * @return reference to the loaded template or null if it can't be found 
+	 */
+	protected static JRTemplate getTemplate(JasperReportsConfiguration jConf, String location, boolean isNestedCall){
+		if (jConf != null && location != null){
+			IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
+			String projectPath = project.getLocation().toPortableString();
+			String key = projectPath + location;
+			if (externalStylesCache.containsKey(key)){
+				return externalStylesCache.get(key).getKey();
+			} else {
+				try {
+					JRTemplate resolvedTemplate = JRXmlTemplateLoader.getInstance(jConf).loadTemplate(location);
+					List<JRStyle> templateStyles = new ArrayList<JRStyle>();
+					loadTemplateStyle(resolvedTemplate, location, jConf, templateStyles);
+					Pair<JRTemplate, List<JRStyle>> cacheEntry = new Pair<JRTemplate, List<JRStyle>>(resolvedTemplate, templateStyles);
+					externalStylesCache.put(key, cacheEntry);
+					if (!isNestedCall) jConf.refreshCachedStyles();
+					return resolvedTemplate;
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Find all the styles inside a template, and also in the other templates nested in it. If a template is referenced
+	 * more times in the hierarchy then it is skipped
+	 * 
+	 * @param template the template, must be not null
+	 * @param location the location of the template
+	 * @param jConfig the {@link JasperReportsConfiguration} of the current file
+	 * @param result list where the found styles are stored, must be not null
+	 */
+	protected static void loadTemplateStyle(JRTemplate template, String location, JasperReportsConfiguration jConfig, List<JRStyle> result){
+		Set<String> loadedLocations = new HashSet<String>();
+		loadedLocations.add(location);
+		JRTemplateReference[] includedTemplates = template.getIncludedTemplates();
+		
+		for(JRStyle style : template.getStyles()){
+			result.add(style);
+		}
+		
+		if (includedTemplates != null)
+		{
+			for (int i = 0; i < includedTemplates.length; i++)
+			{
+				JRTemplateReference reference = includedTemplates[i];
+				loadTemplateStyles(jConfig, reference.getLocation(), loadedLocations, result);
+			}
+		}
+		
+	}
+	
+	/**
+	 * Recursive method to load a template defined inside another template
+	 * 
+	 * @param jConfig the {@link JasperReportsConfiguration} of the current file
+	 * @param location the location of the template to load
+	 * @param loadedLocations the set of already loaded locations, to avoid to load more time the same resource
+	 * @param result list where the found styles are placed 
+	 */
+	protected static void loadTemplateStyles(JasperReportsConfiguration jConfig, String location, Set<String> loadedLocations, List<JRStyle> result)
+	{
+		if (!loadedLocations.contains(location)){
+			loadedLocations.add(location);
+			JRTemplate template = getTemplate(jConfig, location, true);
+			if (template != null){
+				for(JRStyle style : template.getStyles()){
+					result.add(style);
+				}
+				JRTemplateReference[] includedTemplates = template.getIncludedTemplates();
+				if (includedTemplates != null)
+				{
+					for (int i = 0; i < includedTemplates.length; i++)
+					{
+						JRTemplateReference reference = includedTemplates[i];
+						loadTemplateStyles(jConfig, reference.getLocation(), loadedLocations, result);
 					}
 				}
 			}
@@ -305,7 +279,7 @@ public class ExternalStylesManager {
 	 * instance of JRDesignReportTemplate
 	 */
 	public static void refreshStyle(ANode template){
-		refreshStyle(template, true);
+		refreshTemplte(template, true);
 	}
 	
 	/**
@@ -319,20 +293,18 @@ public class ExternalStylesManager {
 	public static void refreshStyleReference(ANode template, MStyleTemplate parent){
 		JasperReportsConfiguration jConf = template.getJasperConfiguration();
 		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
-		
+		String projectPath = project.getLocation().toPortableString();
 		JRTemplateReference jrTemplate = (JRTemplateReference) template.getValue();
 		String location = jrTemplate.getLocation();
 		if (location != null) {
-			File styleFile = StyleTemplateFactory.getFile(location, project);
-			if (styleFile != null) {
-				List<JRStyle> cachedStyles = new ArrayList<JRStyle>();
-				StyleTemplateFactory.getStylesReference(project, location, cachedStyles, new HashSet<File>());
-				if (parent != null){
-					//if the reference is contained into a template force the reload of the cache
-					refreshStyle(parent, false);
-				}
+			String key = projectPath + location;
+			externalStylesCache.remove(key);
+			JRTemplate loadedTemplate = getTemplate(jConf, location);
+			if (loadedTemplate != null){
 				fireEvent(STYLE_FOUND_EVENT, jrTemplate);
-			} 
+			} else {
+				fireEvent(STYLE_NOT_FOUND_EVENT, jrTemplate);
+			}
 		}
 	}
 	
@@ -342,7 +314,7 @@ public class ExternalStylesManager {
 	 * @param styleExpression expression of the external style
 	 * @param project project of the report
 	 * @param jConfig Configuration of the report to evaluate the expression
-	 * @return path of the style of null if the expression can't be resolved
+	 * @return path of the style or null if the expression can't be resolved
 	 */
 	public static String evaluateStyleExpression(JRReportTemplate style, IFile project, JasperReportsConfiguration jConfig){	
 		String evaluatedExpression = null;
@@ -380,48 +352,23 @@ public class ExternalStylesManager {
 	 */
 	public static List<JRStyle> getStyles(JRReportTemplate style, IFile project, JasperReportsConfiguration jConfig) {
 		String evaluatedExpression = evaluateStyleExpression(style, project, jConfig);
-		String projectPath = project.getLocation().toPortableString();
 		if (evaluatedExpression != null) {
-			//Try to resolve it as local file
-			File styleFile = StyleTemplateFactory.getFile(evaluatedExpression, project);
-			if (styleFile != null) {
-				//It is a local file
-				String key = styleFile.getAbsolutePath();
-				List<JRStyle> cachedStyles = externalStylesCache.get(key);
-				if (cachedStyles == null) {
-					cachedStyles = new ArrayList<JRStyle>();
-					StyleTemplateFactory.getStylesReference(project, evaluatedExpression, cachedStyles, new HashSet<File>());
-					externalStylesCache.put(key, cachedStyles);
-				}
-				fireEvent(STYLE_FOUND_EVENT, style);
-				return cachedStyles;
+			String projectPath = project.getLocation().toPortableString();
+			String key = projectPath + evaluatedExpression;
+			if (externalStylesCache.containsKey(key)){
+				return externalStylesCache.get(key).getValue();
 			} else {
-				//It is not a local file, try to resolve it with the repository serivce
-				String key = projectPath + evaluatedExpression;
-				List<JRStyle> cachedStyles = externalStylesCache.get(key);
-				if (cachedStyles == null) {
-					try {
-						JRTemplate template = JRXmlTemplateLoader.getInstance(jConfig).loadTemplate(evaluatedExpression);
-						cachedStyles = Arrays.asList(template.getStyles());
-						externalStylesCache.put(key, cachedStyles);
-						fireEvent(STYLE_FOUND_EVENT, style);
-						return cachedStyles;
-					} catch (JRException e) {
-						JaspersoftStudioPlugin.getInstance().logError(e);
-					}
+				JRTemplate loadedTemplate = getTemplate(jConfig, evaluatedExpression);
+				if (loadedTemplate != null){
+					fireEvent(STYLE_FOUND_EVENT, style);
+					return externalStylesCache.get(key).getValue();
+				} else {
+					fireEvent(STYLE_NOT_FOUND_EVENT, style);
 				}
 			}
-		} else {
-			//Unable to resolve it in anyway, add to the blacklisted expressions
-			JRExpression styleExpression = style.getSourceExpression();
-			String expString = styleExpression != null ? styleExpression.getText() : "";
-			addNotValuableExpression(projectPath, expString);
 		}
-		fireEvent(STYLE_NOT_FOUND_EVENT, style);
 		return new ArrayList<JRStyle>();
 	}
-	
-
 	
 	/**
 	 * Given a list of JRStyles and a styles name search inside the list a JRStyle
@@ -462,5 +409,4 @@ public class ExternalStylesManager {
 		}
 		return null;
 	}
-
 }

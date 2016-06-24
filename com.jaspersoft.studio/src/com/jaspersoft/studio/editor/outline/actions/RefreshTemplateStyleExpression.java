@@ -22,7 +22,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Action to reload an external template style, this will also re-evaluate its expression
@@ -69,19 +68,11 @@ public class RefreshTemplateStyleExpression extends ACachedSelectionAction {
 	@Override
 	public void run() {
 		List<MStyleTemplate> templates = getSelectedStyles();
-		JasperReportsConfiguration jconfig = null;
 		for(MStyleTemplate template : templates){
 			ExternalStylesManager.refreshStyle(template);
 			//Need to manually refresh the child nodes
 			template.refreshChildren();
-			if (jconfig == null){
-				jconfig = template.getJasperConfiguration();
-			}
 		}
-		if (jconfig != null){
-			jconfig.refreshCachedStyles();
-		}
-
 	}
 	
 	/**

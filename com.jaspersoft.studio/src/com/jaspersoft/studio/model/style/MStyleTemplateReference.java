@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -31,10 +30,8 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRTemplateReference;
 
@@ -198,8 +195,6 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 	 * Refresh the children of a template style by reloading them
 	 */
 	public void refreshChildren(){
-		JasperReportsConfiguration jConf = getJasperConfiguration();
-		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
 		JRTemplateReference jrTemplate = (JRTemplateReference) getValue();
 		
 		//Clear the old children
@@ -208,7 +203,7 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 		}
 		getChildren().clear();
 		
-		StyleTemplateFactory.createTemplateReference(this, jrTemplate.getLocation(), -1, new HashSet<String>(), false, project);
+		StyleTemplateFactory.createTemplateReference(this, jrTemplate.getLocation(), -1, new HashSet<String>(), false);
 		fireChildrenChangeEvent();
 	}
 	

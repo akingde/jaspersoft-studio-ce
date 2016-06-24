@@ -41,6 +41,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.jasper.JSSReportConverter;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
@@ -860,8 +861,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * them another time. Then it trigger the repaint of every element in the report
 	 */
 	public void refreshCachedStyles(){
-		//FIXME: experimental, need more test
-		/*Object converter = get(JasperReportsConfiguration.KEY_CONVERTER);
+		Object converter = get(JasperReportsConfiguration.KEY_CONVERTER);
 		if (converter instanceof JSSReportConverter){
 			JSSReportConverter reportConverter = (JSSReportConverter)converter;
 			reportConverter.refreshCachedStyles();
@@ -870,7 +870,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			for(JRDesignElement element : ModelUtils.getAllElements(design)){
 				element.getEventSupport().firePropertyChange(changeEvent);
 			}
-		}*/
+		}
 	}
 
 }
