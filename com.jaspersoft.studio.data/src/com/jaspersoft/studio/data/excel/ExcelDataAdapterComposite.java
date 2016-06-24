@@ -157,15 +157,27 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		gdComposite3.heightHint = 150;
 		composite_3.setLayoutData(gdComposite3);
 
-		tableViewer = new TableViewer(composite_3,
-				SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		table = new Table(composite_3, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.widthHint = 100;
+		table.setLayoutData(gd);
+		table.setHeaderVisible(true);
+		
+//		TableLayout tlayout = new TableLayout();
+//		tlayout.addColumnData(new ColumnWeightData(100, false));
+//		table.setLayout(tlayout);
+
+		tableViewer = new TableViewer(table);
+		
+//		tableViewer = new TableViewer(composite_3,
+//				SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		tableViewer.setContentProvider(new XLSContentProvider());
 		tableViewer.setInput(rows);
 
-		table = tableViewer.getTable();
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
+//		table = tableViewer.getTable();
+//		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+//		table.setLinesVisible(true);
+//		table.setHeaderVisible(true);
 
 		tableViewerColumnName = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnColumnName = tableViewerColumnName.getColumn();
@@ -183,9 +195,9 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		tableViewerColumnIndex.setLabelProvider(new ColumnNameIndexLabelProvider(1));
 		tableViewerColumnIndex.setEditingSupport(new NameIndexEditingSupport(tableViewer, 1));
 
-		for (int i = 0, n = table.getColumnCount(); i < n; i++) {
-			table.getColumn(i).pack();
-		}
+//		for (int i = 0, n = table.getColumnCount(); i < n; i++) {
+//			table.getColumn(i).pack();
+//		}
 
 		Composite composite_4 = new Composite(composite_3, SWT.NONE);
 		composite_4.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
@@ -226,7 +238,7 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		grpOther.setLayout(gl_grpOther);
 
 		dnf = new DateNumberFormatWidget(grpOther);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		  gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		dnf.setLayoutData(gd);
 
