@@ -20,7 +20,6 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
-import com.jaspersoft.studio.data.sql.action.ActionFactory;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -30,6 +29,7 @@ import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.utils.Misc;
 
 public class JoinCommand extends ACommand {
 	private SQLQueryDesigner designer;
@@ -54,7 +54,6 @@ public class JoinCommand extends ACommand {
 	@Override
 	public void execute() {
 		super.execute();
-		ActionFactory afactory = designer.getOutline().getAfactory();
 		MFromTable mfSrcTbl = srcTbl;
 		if (srcTbl.getParent() instanceof MFrom && srcTbl.getParent() != null
 				&& srcTbl.getParent().getParent() instanceof MFromTable
@@ -91,6 +90,8 @@ public class JoinCommand extends ACommand {
 			fromTbl = getParentFromTable((MFromTableJoin) destTbl);
 		if (srcTbl == destTbl)
 			return;
+		if (srcTbl instanceof MFromTable)
+			convertToSubTable(srcTbl, fromTbl);
 		for (INode n : fromTbl.getChildren()) {
 			if (n == destTbl) {
 				MExpression mexpr = new MExpression(srcTbl, src, -1);
@@ -119,6 +120,25 @@ public class JoinCommand extends ACommand {
 				reparent(mft, destTbl);
 		}
 		refresh();
+	}
+
+	private MFromTableJoin convertToSubTable(MFromTable nsrc, MFromTable parent) {
+		reparent(nsrc, null);
+
+		fromTable.remove(nsrc);
+
+		if (parent instanceof MFromTableJoin)
+			parent = (MFromTable) parent.getParent();
+
+		MFromTableJoin join = new MFromTableJoin(parent, nsrc.getValue());
+		undoRemove.add(join);
+
+		undoProperties.put(nsrc, nsrc.copyPropertiesUndo(join));
+		if (!Misc.isNullOrEmpty(nsrc.getChildren()))
+			for (INode n : new ArrayList<INode>(nsrc.getChildren()))
+				reparent((ANode) n, parent);
+		fromTable.add(join);
+		return join;
 	}
 
 	private void refresh() {
