@@ -68,6 +68,8 @@ public class ImpInputControls {
 				rd.setControlType(ResourceDescriptor.IC_TYPE_BOOLEAN);
 			} else if (String.class.isAssignableFrom(p.getValueClass())) {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_TEXT);
+			} else if (Time.class.isAssignableFrom(p.getValueClass())) {
+				addType(rd, mres, (byte) 5);
 			} else if (Timestamp.class.isAssignableFrom(p.getValueClass())) {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE_TIME);
 			} else if (Date.class.isAssignableFrom(p.getValueClass())) {
