@@ -93,6 +93,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sq" eType="#//SubQueryOperand"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" eType="#//FromValues"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="pivot" eType="#//PivotTable"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="unpivot" eType="#//UnpivotTable"
@@ -100,6 +102,38 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tblAlias" eType="#//DbObjectName"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FromValues">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" eType="#//Values"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="c" eType="#//FromValuesColumns"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FromValuesColumns">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fvCols" eType="#//FromValuesColumnNames"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FromValuesColumnNames"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ColumnNames" eSuperTypes="#//FromValuesColumnNames">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Values">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" eType="#//Rows" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rows">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//Row" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Row" eSuperTypes="#//Rows">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rowValues" eType="#//RowValues"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RowValues">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//RowValue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RowValue" eSuperTypes="#//RowValues">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="null" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PivotTable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pfun" eType="#//PivotFunctions"
@@ -377,7 +411,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="sel" eType="#//SelectQuery"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ScalarOperand" eSuperTypes="#//OperandList">
+  <eClassifiers xsi:type="ecore:EClass" name="ScalarOperand" eSuperTypes="#//RowValue #//OperandList">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sostr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodbl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -446,6 +480,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="Col" eSuperTypes="#//ColumnFull">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//DbObjectName" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="abc" eSuperTypes="#//FromValuesColumnNames">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//ColumnNames" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UnipivotInClause" eSuperTypes="#//UnpivotInClause">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

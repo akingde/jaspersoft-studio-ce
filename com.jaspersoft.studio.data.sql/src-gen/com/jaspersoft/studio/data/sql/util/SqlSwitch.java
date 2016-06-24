@@ -190,6 +190,72 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.FROM_VALUES:
+      {
+        FromValues fromValues = (FromValues)theEObject;
+        T result = caseFromValues(fromValues);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.FROM_VALUES_COLUMNS:
+      {
+        FromValuesColumns fromValuesColumns = (FromValuesColumns)theEObject;
+        T result = caseFromValuesColumns(fromValuesColumns);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.FROM_VALUES_COLUMN_NAMES:
+      {
+        FromValuesColumnNames fromValuesColumnNames = (FromValuesColumnNames)theEObject;
+        T result = caseFromValuesColumnNames(fromValuesColumnNames);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.COLUMN_NAMES:
+      {
+        ColumnNames columnNames = (ColumnNames)theEObject;
+        T result = caseColumnNames(columnNames);
+        if (result == null) result = caseFromValuesColumnNames(columnNames);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.VALUES:
+      {
+        Values values = (Values)theEObject;
+        T result = caseValues(values);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ROWS:
+      {
+        Rows rows = (Rows)theEObject;
+        T result = caseRows(rows);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ROW:
+      {
+        Row row = (Row)theEObject;
+        T result = caseRow(row);
+        if (result == null) result = caseRows(row);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ROW_VALUES:
+      {
+        RowValues rowValues = (RowValues)theEObject;
+        T result = caseRowValues(rowValues);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ROW_VALUE:
+      {
+        RowValue rowValue = (RowValue)theEObject;
+        T result = caseRowValue(rowValue);
+        if (result == null) result = caseRowValues(rowValue);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.PIVOT_TABLE:
       {
         PivotTable pivotTable = (PivotTable)theEObject;
@@ -618,7 +684,9 @@ public class SqlSwitch<T> extends Switch<T>
       {
         ScalarOperand scalarOperand = (ScalarOperand)theEObject;
         T result = caseScalarOperand(scalarOperand);
+        if (result == null) result = caseRowValue(scalarOperand);
         if (result == null) result = caseOperandList(scalarOperand);
+        if (result == null) result = caseRowValues(scalarOperand);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -664,6 +732,14 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseCol(col);
         if (result == null) result = caseColumnFull(col);
         if (result == null) result = casePivotForClause(col);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ABC:
+      {
+        abc abc = (abc)theEObject;
+        T result = caseabc(abc);
+        if (result == null) result = caseFromValuesColumnNames(abc);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -1053,6 +1129,150 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTableOrAlias(TableOrAlias object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>From Values</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>From Values</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFromValues(FromValues object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>From Values Columns</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>From Values Columns</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFromValuesColumns(FromValuesColumns object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>From Values Column Names</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>From Values Column Names</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFromValuesColumnNames(FromValuesColumnNames object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Column Names</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Column Names</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseColumnNames(ColumnNames object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Values</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Values</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseValues(Values object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Rows</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Rows</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseRows(Rows object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Row</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Row</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseRow(Row object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Row Values</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Row Values</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseRowValues(RowValues object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Row Value</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Row Value</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseRowValue(RowValue object)
   {
     return null;
   }
@@ -2077,6 +2297,22 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseCol(Col object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>abc</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>abc</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseabc(abc object)
   {
     return null;
   }

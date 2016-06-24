@@ -56,8 +56,35 @@ UsingCols returns UsingCols:
 	DbObjectName ({UsingCols.entries+=current} ("," entries+=DbObjectName)+)?;
 
 TableOrAlias:
-	(tfull=TableFull | sq=SubQueryOperand) (pivot=PivotTable | unpivot=UnpivotTable)? alias=('AS')?
+	(tfull=TableFull | sq=SubQueryOperand | values=FromValues) (pivot=PivotTable | unpivot=UnpivotTable)? alias=('AS')?
 	(tblAlias=DbObjectName)?;
+
+FromValues:
+	values=Values (c=FromValuesColumns)?;
+
+FromValuesColumns:
+	ID '(' fvCols=FromValuesColumnNames ')';
+
+FromValuesColumnNames:
+	ColumnName ({abc.entries+=current} ("," entries+=ColumnName)+)?;
+
+ColumnName returns ColumnNames:
+	colName=STRING;
+
+Values:
+	'(' 'VALUES' rows=Rows ')';
+
+Rows returns Rows:
+	Row ({Rows.entries+=current} ("," entries+=Row)+)?;
+
+Row:
+	'(' rowValues=RowValues ')';
+
+RowValues returns RowValues:
+	RowValue ({RowValues.entries+=current} ("," entries+=RowValue)+)?;
+
+RowValue:
+	ScalarNumberOperand | null='NULL';
 
 PivotTable:
 	'PIVOT' 'XML'? '(' pfun=PivotFunctions pfor=PivotForClause pin=PivotInClause ')';
@@ -328,7 +355,7 @@ terminal TIME:
 	"'" '0'..'9' '0'..'9' ':' '0'..'9' '0'..'9' ':' '0'..'9' '0'..'9' '.' '0'..'9' '0'..'9' '0'..'9' "'";
 
 terminal STRING_:
-	"'" ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";
+	"'" ("''" | '\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";
 
 terminal STRING:
 	'"' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | '"'))* '"';

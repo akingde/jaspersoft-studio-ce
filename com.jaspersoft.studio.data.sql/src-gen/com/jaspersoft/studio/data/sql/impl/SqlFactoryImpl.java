@@ -81,6 +81,15 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.JOIN_CONDITION: return createJoinCondition();
       case SqlPackage.USING_COLS: return createUsingCols();
       case SqlPackage.TABLE_OR_ALIAS: return createTableOrAlias();
+      case SqlPackage.FROM_VALUES: return createFromValues();
+      case SqlPackage.FROM_VALUES_COLUMNS: return createFromValuesColumns();
+      case SqlPackage.FROM_VALUES_COLUMN_NAMES: return createFromValuesColumnNames();
+      case SqlPackage.COLUMN_NAMES: return createColumnNames();
+      case SqlPackage.VALUES: return createValues();
+      case SqlPackage.ROWS: return createRows();
+      case SqlPackage.ROW: return createRow();
+      case SqlPackage.ROW_VALUES: return createRowValues();
+      case SqlPackage.ROW_VALUE: return createRowValue();
       case SqlPackage.PIVOT_TABLE: return createPivotTable();
       case SqlPackage.PIVOT_FUNCTIONS: return createPivotFunctions();
       case SqlPackage.PIVOT_FUNCTION: return createPivotFunction();
@@ -145,6 +154,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.INTEGER_VALUE: return createIntegerValue();
       case SqlPackage.UNSIGNED_VALUE: return createUnsignedValue();
       case SqlPackage.COL: return createCol();
+      case SqlPackage.ABC: return createabc();
       case SqlPackage.UNIPIVOT_IN_CLAUSE: return createUnipivotInClause();
       case SqlPackage.UICARGS: return createuicargs();
       case SqlPackage.PVCS: return createpvcs();
@@ -377,6 +387,105 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     TableOrAliasImpl tableOrAlias = new TableOrAliasImpl();
     return tableOrAlias;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FromValues createFromValues()
+  {
+    FromValuesImpl fromValues = new FromValuesImpl();
+    return fromValues;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FromValuesColumns createFromValuesColumns()
+  {
+    FromValuesColumnsImpl fromValuesColumns = new FromValuesColumnsImpl();
+    return fromValuesColumns;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FromValuesColumnNames createFromValuesColumnNames()
+  {
+    FromValuesColumnNamesImpl fromValuesColumnNames = new FromValuesColumnNamesImpl();
+    return fromValuesColumnNames;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ColumnNames createColumnNames()
+  {
+    ColumnNamesImpl columnNames = new ColumnNamesImpl();
+    return columnNames;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Values createValues()
+  {
+    ValuesImpl values = new ValuesImpl();
+    return values;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Rows createRows()
+  {
+    RowsImpl rows = new RowsImpl();
+    return rows;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Row createRow()
+  {
+    RowImpl row = new RowImpl();
+    return row;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public RowValues createRowValues()
+  {
+    RowValuesImpl rowValues = new RowValuesImpl();
+    return rowValues;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public RowValue createRowValue()
+  {
+    RowValueImpl rowValue = new RowValueImpl();
+    return rowValue;
   }
 
   /**
@@ -1081,6 +1190,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     ColImpl col = new ColImpl();
     return col;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public abc createabc()
+  {
+    abcImpl abc = new abcImpl();
+    return abc;
   }
 
   /**

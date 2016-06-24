@@ -167,6 +167,87 @@ public interface SqlFactory extends EFactory
   TableOrAlias createTableOrAlias();
 
   /**
+   * Returns a new object of class '<em>From Values</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>From Values</em>'.
+   * @generated
+   */
+  FromValues createFromValues();
+
+  /**
+   * Returns a new object of class '<em>From Values Columns</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>From Values Columns</em>'.
+   * @generated
+   */
+  FromValuesColumns createFromValuesColumns();
+
+  /**
+   * Returns a new object of class '<em>From Values Column Names</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>From Values Column Names</em>'.
+   * @generated
+   */
+  FromValuesColumnNames createFromValuesColumnNames();
+
+  /**
+   * Returns a new object of class '<em>Column Names</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Column Names</em>'.
+   * @generated
+   */
+  ColumnNames createColumnNames();
+
+  /**
+   * Returns a new object of class '<em>Values</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Values</em>'.
+   * @generated
+   */
+  Values createValues();
+
+  /**
+   * Returns a new object of class '<em>Rows</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Rows</em>'.
+   * @generated
+   */
+  Rows createRows();
+
+  /**
+   * Returns a new object of class '<em>Row</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Row</em>'.
+   * @generated
+   */
+  Row createRow();
+
+  /**
+   * Returns a new object of class '<em>Row Values</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Row Values</em>'.
+   * @generated
+   */
+  RowValues createRowValues();
+
+  /**
+   * Returns a new object of class '<em>Row Value</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Row Value</em>'.
+   * @generated
+   */
+  RowValue createRowValue();
+
+  /**
    * Returns a new object of class '<em>Pivot Table</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -741,6 +822,15 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   Col createCol();
+
+  /**
+   * Returns a new object of class '<em>abc</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>abc</em>'.
+   * @generated
+   */
+  abc createabc();
 
   /**
    * Returns a new object of class '<em>Unipivot In Clause</em>'.

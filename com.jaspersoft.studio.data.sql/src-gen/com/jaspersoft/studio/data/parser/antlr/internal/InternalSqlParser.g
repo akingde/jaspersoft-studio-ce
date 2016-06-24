@@ -1327,19 +1327,38 @@ ruleTableOrAlias returns [EObject current=null]
 	    }
 
 )
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getValuesFromValuesParserRuleCall_0_2_0()); 
+	    }
+		lv_values_2_0=ruleFromValues		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getTableOrAliasRule());
+	        }
+       		set(
+       			$current, 
+       			"values",
+        		lv_values_2_0, 
+        		"com.jaspersoft.studio.data.Sql.FromValues");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
 ))((
 (
 		{ 
 	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getPivotPivotTableParserRuleCall_1_0_0()); 
 	    }
-		lv_pivot_2_0=rulePivotTable		{
+		lv_pivot_3_0=rulePivotTable		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTableOrAliasRule());
 	        }
        		set(
        			$current, 
        			"pivot",
-        		lv_pivot_2_0, 
+        		lv_pivot_3_0, 
         		"com.jaspersoft.studio.data.Sql.PivotTable");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -1351,14 +1370,14 @@ ruleTableOrAlias returns [EObject current=null]
 		{ 
 	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getUnpivotUnpivotTableParserRuleCall_1_1_0()); 
 	    }
-		lv_unpivot_3_0=ruleUnpivotTable		{
+		lv_unpivot_4_0=ruleUnpivotTable		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTableOrAliasRule());
 	        }
        		set(
        			$current, 
        			"unpivot",
-        		lv_unpivot_3_0, 
+        		lv_unpivot_4_0, 
         		"com.jaspersoft.studio.data.Sql.UnpivotTable");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -1366,17 +1385,17 @@ ruleTableOrAlias returns [EObject current=null]
 )
 ))?(
 (
-		lv_alias_4_0=
+		lv_alias_5_0=
 	AS
     {
-        newLeafNode(lv_alias_4_0, grammarAccess.getTableOrAliasAccess().getAliasASKeyword_2_0());
+        newLeafNode(lv_alias_5_0, grammarAccess.getTableOrAliasAccess().getAliasASKeyword_2_0());
     }
 
 	    {
 	        if ($current==null) {
 	            $current = createModelElement(grammarAccess.getTableOrAliasRule());
 	        }
-       		setWithLastConsumed($current, "alias", lv_alias_4_0, "AS");
+       		setWithLastConsumed($current, "alias", lv_alias_5_0, "AS");
 	    }
 
 )
@@ -1385,20 +1404,496 @@ ruleTableOrAlias returns [EObject current=null]
 		{ 
 	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getTblAliasDbObjectNameParserRuleCall_3_0()); 
 	    }
-		lv_tblAlias_5_0=ruleDbObjectName		{
+		lv_tblAlias_6_0=ruleDbObjectName		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTableOrAliasRule());
 	        }
        		set(
        			$current, 
        			"tblAlias",
-        		lv_tblAlias_5_0, 
+        		lv_tblAlias_6_0, 
         		"com.jaspersoft.studio.data.Sql.DbObjectName");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 )?)
+;
+
+
+
+
+
+// Entry rule entryRuleFromValues
+entryRuleFromValues returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getFromValuesRule()); }
+	 iv_ruleFromValues=ruleFromValues 
+	 { $current=$iv_ruleFromValues.current; } 
+	 EOF 
+;
+
+// Rule FromValues
+ruleFromValues returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFromValuesAccess().getValuesValuesParserRuleCall_0_0()); 
+	    }
+		lv_values_0_0=ruleValues		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFromValuesRule());
+	        }
+       		set(
+       			$current, 
+       			"values",
+        		lv_values_0_0, 
+        		"com.jaspersoft.studio.data.Sql.Values");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFromValuesAccess().getCFromValuesColumnsParserRuleCall_1_0()); 
+	    }
+		lv_c_1_0=ruleFromValuesColumns		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFromValuesRule());
+	        }
+       		set(
+       			$current, 
+       			"c",
+        		lv_c_1_0, 
+        		"com.jaspersoft.studio.data.Sql.FromValuesColumns");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)?)
+;
+
+
+
+
+
+// Entry rule entryRuleFromValuesColumns
+entryRuleFromValuesColumns returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getFromValuesColumnsRule()); }
+	 iv_ruleFromValuesColumns=ruleFromValuesColumns 
+	 { $current=$iv_ruleFromValuesColumns.current; } 
+	 EOF 
+;
+
+// Rule FromValuesColumns
+ruleFromValuesColumns returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(this_ID_0=RULE_ID
+    { 
+    newLeafNode(this_ID_0, grammarAccess.getFromValuesColumnsAccess().getIDTerminalRuleCall_0()); 
+    }
+
+	otherlv_1=LeftParenthesis
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getFromValuesColumnsAccess().getLeftParenthesisKeyword_1());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFromValuesColumnsAccess().getFvColsFromValuesColumnNamesParserRuleCall_2_0()); 
+	    }
+		lv_fvCols_2_0=ruleFromValuesColumnNames		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFromValuesColumnsRule());
+	        }
+       		set(
+       			$current, 
+       			"fvCols",
+        		lv_fvCols_2_0, 
+        		"com.jaspersoft.studio.data.Sql.FromValuesColumnNames");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_3=RightParenthesis
+    {
+    	newLeafNode(otherlv_3, grammarAccess.getFromValuesColumnsAccess().getRightParenthesisKeyword_3());
+    }
+)
+;
+
+
+
+
+
+// Entry rule entryRuleFromValuesColumnNames
+entryRuleFromValuesColumnNames returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getFromValuesColumnNamesRule()); }
+	 iv_ruleFromValuesColumnNames=ruleFromValuesColumnNames 
+	 { $current=$iv_ruleFromValuesColumnNames.current; } 
+	 EOF 
+;
+
+// Rule FromValuesColumnNames
+ruleFromValuesColumnNames returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+    { 
+        newCompositeNode(grammarAccess.getFromValuesColumnNamesAccess().getColumnNameParserRuleCall_0()); 
+    }
+    this_ColumnName_0=ruleColumnName
+    {
+        $current = $this_ColumnName_0.current;
+        afterParserOrEnumRuleCall();
+    }
+((
+    {
+        $current = forceCreateModelElementAndAdd(
+            grammarAccess.getFromValuesColumnNamesAccess().getAbcEntriesAction_1_0(),
+            $current);
+    }
+)(
+	otherlv_2=Comma
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getFromValuesColumnNamesAccess().getCommaKeyword_1_1_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFromValuesColumnNamesAccess().getEntriesColumnNameParserRuleCall_1_1_1_0()); 
+	    }
+		lv_entries_3_0=ruleColumnName		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFromValuesColumnNamesRule());
+	        }
+       		add(
+       			$current, 
+       			"entries",
+        		lv_entries_3_0, 
+        		"com.jaspersoft.studio.data.Sql.ColumnName");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))+)?)
+;
+
+
+
+
+
+// Entry rule entryRuleColumnName
+entryRuleColumnName returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getColumnNameRule()); }
+	 iv_ruleColumnName=ruleColumnName 
+	 { $current=$iv_ruleColumnName.current; } 
+	 EOF 
+;
+
+// Rule ColumnName
+ruleColumnName returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+(
+		lv_colName_0_0=RULE_STRING
+		{
+			newLeafNode(lv_colName_0_0, grammarAccess.getColumnNameAccess().getColNameSTRINGTerminalRuleCall_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getColumnNameRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"colName",
+        		lv_colName_0_0, 
+        		"com.jaspersoft.studio.data.Sql.STRING");
+	    }
+
+)
+)
+;
+
+
+
+
+
+// Entry rule entryRuleValues
+entryRuleValues returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getValuesRule()); }
+	 iv_ruleValues=ruleValues 
+	 { $current=$iv_ruleValues.current; } 
+	 EOF 
+;
+
+// Rule Values
+ruleValues returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+	otherlv_0=LeftParenthesis
+    {
+    	newLeafNode(otherlv_0, grammarAccess.getValuesAccess().getLeftParenthesisKeyword_0());
+    }
+
+	otherlv_1=VALUES
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getValuesAccess().getVALUESKeyword_1());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getValuesAccess().getRowsRowsParserRuleCall_2_0()); 
+	    }
+		lv_rows_2_0=ruleRows		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getValuesRule());
+	        }
+       		set(
+       			$current, 
+       			"rows",
+        		lv_rows_2_0, 
+        		"com.jaspersoft.studio.data.Sql.Rows");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_3=RightParenthesis
+    {
+    	newLeafNode(otherlv_3, grammarAccess.getValuesAccess().getRightParenthesisKeyword_3());
+    }
+)
+;
+
+
+
+
+
+// Entry rule entryRuleRows
+entryRuleRows returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getRowsRule()); }
+	 iv_ruleRows=ruleRows 
+	 { $current=$iv_ruleRows.current; } 
+	 EOF 
+;
+
+// Rule Rows
+ruleRows returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+    { 
+        newCompositeNode(grammarAccess.getRowsAccess().getRowParserRuleCall_0()); 
+    }
+    this_Row_0=ruleRow
+    {
+        $current = $this_Row_0.current;
+        afterParserOrEnumRuleCall();
+    }
+((
+    {
+        $current = forceCreateModelElementAndAdd(
+            grammarAccess.getRowsAccess().getRowsEntriesAction_1_0(),
+            $current);
+    }
+)(
+	otherlv_2=Comma
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getRowsAccess().getCommaKeyword_1_1_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getRowsAccess().getEntriesRowParserRuleCall_1_1_1_0()); 
+	    }
+		lv_entries_3_0=ruleRow		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getRowsRule());
+	        }
+       		add(
+       			$current, 
+       			"entries",
+        		lv_entries_3_0, 
+        		"com.jaspersoft.studio.data.Sql.Row");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))+)?)
+;
+
+
+
+
+
+// Entry rule entryRuleRow
+entryRuleRow returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getRowRule()); }
+	 iv_ruleRow=ruleRow 
+	 { $current=$iv_ruleRow.current; } 
+	 EOF 
+;
+
+// Rule Row
+ruleRow returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+	otherlv_0=LeftParenthesis
+    {
+    	newLeafNode(otherlv_0, grammarAccess.getRowAccess().getLeftParenthesisKeyword_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getRowAccess().getRowValuesRowValuesParserRuleCall_1_0()); 
+	    }
+		lv_rowValues_1_0=ruleRowValues		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getRowRule());
+	        }
+       		set(
+       			$current, 
+       			"rowValues",
+        		lv_rowValues_1_0, 
+        		"com.jaspersoft.studio.data.Sql.RowValues");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_2=RightParenthesis
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getRowAccess().getRightParenthesisKeyword_2());
+    }
+)
+;
+
+
+
+
+
+// Entry rule entryRuleRowValues
+entryRuleRowValues returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getRowValuesRule()); }
+	 iv_ruleRowValues=ruleRowValues 
+	 { $current=$iv_ruleRowValues.current; } 
+	 EOF 
+;
+
+// Rule RowValues
+ruleRowValues returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+    { 
+        newCompositeNode(grammarAccess.getRowValuesAccess().getRowValueParserRuleCall_0()); 
+    }
+    this_RowValue_0=ruleRowValue
+    {
+        $current = $this_RowValue_0.current;
+        afterParserOrEnumRuleCall();
+    }
+((
+    {
+        $current = forceCreateModelElementAndAdd(
+            grammarAccess.getRowValuesAccess().getRowValuesEntriesAction_1_0(),
+            $current);
+    }
+)(
+	otherlv_2=Comma
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getRowValuesAccess().getCommaKeyword_1_1_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getRowValuesAccess().getEntriesRowValueParserRuleCall_1_1_1_0()); 
+	    }
+		lv_entries_3_0=ruleRowValue		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getRowValuesRule());
+	        }
+       		add(
+       			$current, 
+       			"entries",
+        		lv_entries_3_0, 
+        		"com.jaspersoft.studio.data.Sql.RowValue");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))+)?)
+;
+
+
+
+
+
+// Entry rule entryRuleRowValue
+entryRuleRowValue returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getRowValueRule()); }
+	 iv_ruleRowValue=ruleRowValue 
+	 { $current=$iv_ruleRowValue.current; } 
+	 EOF 
+;
+
+// Rule RowValue
+ruleRowValue returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+    { 
+        newCompositeNode(grammarAccess.getRowValueAccess().getScalarNumberOperandParserRuleCall_0()); 
+    }
+    this_ScalarNumberOperand_0=ruleScalarNumberOperand
+    {
+        $current = $this_ScalarNumberOperand_0.current;
+        afterParserOrEnumRuleCall();
+    }
+
+    |(
+(
+		lv_null_1_0=
+	NULL
+    {
+        newLeafNode(lv_null_1_0, grammarAccess.getRowValueAccess().getNullNULLKeyword_1_0());
+    }
+
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getRowValueRule());
+	        }
+       		setWithLastConsumed($current, "null", lv_null_1_0, "NULL");
+	    }
+
+)
+))
 ;
 
 

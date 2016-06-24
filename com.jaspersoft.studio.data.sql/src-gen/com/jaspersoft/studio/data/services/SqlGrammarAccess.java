@@ -755,6 +755,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cTfullTableFullParserRuleCall_0_0_0 = (RuleCall)cTfullAssignment_0_0.eContents().get(0);
 		private final Assignment cSqAssignment_0_1 = (Assignment)cAlternatives_0.eContents().get(1);
 		private final RuleCall cSqSubQueryOperandParserRuleCall_0_1_0 = (RuleCall)cSqAssignment_0_1.eContents().get(0);
+		private final Assignment cValuesAssignment_0_2 = (Assignment)cAlternatives_0.eContents().get(2);
+		private final RuleCall cValuesFromValuesParserRuleCall_0_2_0 = (RuleCall)cValuesAssignment_0_2.eContents().get(0);
 		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
 		private final Assignment cPivotAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
 		private final RuleCall cPivotPivotTableParserRuleCall_1_0_0 = (RuleCall)cPivotAssignment_1_0.eContents().get(0);
@@ -766,14 +768,15 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cTblAliasDbObjectNameParserRuleCall_3_0 = (RuleCall)cTblAliasAssignment_3.eContents().get(0);
 		
 		//TableOrAlias:
-		//	(tfull=TableFull | sq=SubQueryOperand) (pivot=PivotTable | unpivot=UnpivotTable)? alias='AS'?
+		//	(tfull=TableFull | sq=SubQueryOperand | values=FromValues) (pivot=PivotTable | unpivot=UnpivotTable)? alias='AS'?
 		//	tblAlias=DbObjectName?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//(tfull=TableFull | sq=SubQueryOperand) (pivot=PivotTable | unpivot=UnpivotTable)? alias='AS'? tblAlias=DbObjectName?
+		//(tfull=TableFull | sq=SubQueryOperand | values=FromValues) (pivot=PivotTable | unpivot=UnpivotTable)? alias='AS'?
+		//tblAlias=DbObjectName?
 		public Group getGroup() { return cGroup; }
 
-		//tfull=TableFull | sq=SubQueryOperand
+		//tfull=TableFull | sq=SubQueryOperand | values=FromValues
 		public Alternatives getAlternatives_0() { return cAlternatives_0; }
 
 		//tfull=TableFull
@@ -787,6 +790,12 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//SubQueryOperand
 		public RuleCall getSqSubQueryOperandParserRuleCall_0_1_0() { return cSqSubQueryOperandParserRuleCall_0_1_0; }
+
+		//values=FromValues
+		public Assignment getValuesAssignment_0_2() { return cValuesAssignment_0_2; }
+
+		//FromValues
+		public RuleCall getValuesFromValuesParserRuleCall_0_2_0() { return cValuesFromValuesParserRuleCall_0_2_0; }
 
 		//(pivot=PivotTable | unpivot=UnpivotTable)?
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
@@ -814,6 +823,286 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//DbObjectName
 		public RuleCall getTblAliasDbObjectNameParserRuleCall_3_0() { return cTblAliasDbObjectNameParserRuleCall_3_0; }
+	}
+
+	public class FromValuesElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.FromValues");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cValuesAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cValuesValuesParserRuleCall_0_0 = (RuleCall)cValuesAssignment_0.eContents().get(0);
+		private final Assignment cCAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cCFromValuesColumnsParserRuleCall_1_0 = (RuleCall)cCAssignment_1.eContents().get(0);
+		
+		//FromValues:
+		//	values=Values c=FromValuesColumns?;
+		@Override public ParserRule getRule() { return rule; }
+
+		//values=Values c=FromValuesColumns?
+		public Group getGroup() { return cGroup; }
+
+		//values=Values
+		public Assignment getValuesAssignment_0() { return cValuesAssignment_0; }
+
+		//Values
+		public RuleCall getValuesValuesParserRuleCall_0_0() { return cValuesValuesParserRuleCall_0_0; }
+
+		//c=FromValuesColumns?
+		public Assignment getCAssignment_1() { return cCAssignment_1; }
+
+		//FromValuesColumns
+		public RuleCall getCFromValuesColumnsParserRuleCall_1_0() { return cCFromValuesColumnsParserRuleCall_1_0; }
+	}
+
+	public class FromValuesColumnsElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.FromValuesColumns");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cFvColsAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cFvColsFromValuesColumnNamesParserRuleCall_2_0 = (RuleCall)cFvColsAssignment_2.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		
+		//FromValuesColumns:
+		//	ID '(' fvCols=FromValuesColumnNames ')';
+		@Override public ParserRule getRule() { return rule; }
+
+		//ID '(' fvCols=FromValuesColumnNames ')'
+		public Group getGroup() { return cGroup; }
+
+		//ID
+		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
+
+		//'('
+		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
+
+		//fvCols=FromValuesColumnNames
+		public Assignment getFvColsAssignment_2() { return cFvColsAssignment_2; }
+
+		//FromValuesColumnNames
+		public RuleCall getFvColsFromValuesColumnNamesParserRuleCall_2_0() { return cFvColsFromValuesColumnNamesParserRuleCall_2_0; }
+
+		//')'
+		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
+	}
+
+	public class FromValuesColumnNamesElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.FromValuesColumnNames");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cColumnNameParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cAbcEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cEntriesColumnNameParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		
+		//FromValuesColumnNames:
+		//	ColumnName ({abc.entries+=current} ("," entries+=ColumnName)+)?;
+		@Override public ParserRule getRule() { return rule; }
+
+		//ColumnName ({abc.entries+=current} ("," entries+=ColumnName)+)?
+		public Group getGroup() { return cGroup; }
+
+		//ColumnName
+		public RuleCall getColumnNameParserRuleCall_0() { return cColumnNameParserRuleCall_0; }
+
+		//({abc.entries+=current} ("," entries+=ColumnName)+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{abc.entries+=current}
+		public Action getAbcEntriesAction_1_0() { return cAbcEntriesAction_1_0; }
+
+		//("," entries+=ColumnName)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//","
+		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
+
+		//entries+=ColumnName
+		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+
+		//ColumnName
+		public RuleCall getEntriesColumnNameParserRuleCall_1_1_1_0() { return cEntriesColumnNameParserRuleCall_1_1_1_0; }
+	}
+
+	public class ColumnNameElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.ColumnName");
+		private final Assignment cColNameAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cColNameSTRINGTerminalRuleCall_0 = (RuleCall)cColNameAssignment.eContents().get(0);
+		
+		//ColumnName ColumnNames:
+		//	colName=STRING
+		@Override public ParserRule getRule() { return rule; }
+
+		//colName=STRING
+		public Assignment getColNameAssignment() { return cColNameAssignment; }
+
+		//STRING
+		public RuleCall getColNameSTRINGTerminalRuleCall_0() { return cColNameSTRINGTerminalRuleCall_0; }
+	}
+
+	public class ValuesElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.Values");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cLeftParenthesisKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Keyword cVALUESKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cRowsAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cRowsRowsParserRuleCall_2_0 = (RuleCall)cRowsAssignment_2.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		
+		//Values:
+		//	'(' 'VALUES' rows=Rows ')';
+		@Override public ParserRule getRule() { return rule; }
+
+		//'(' 'VALUES' rows=Rows ')'
+		public Group getGroup() { return cGroup; }
+
+		//'('
+		public Keyword getLeftParenthesisKeyword_0() { return cLeftParenthesisKeyword_0; }
+
+		//'VALUES'
+		public Keyword getVALUESKeyword_1() { return cVALUESKeyword_1; }
+
+		//rows=Rows
+		public Assignment getRowsAssignment_2() { return cRowsAssignment_2; }
+
+		//Rows
+		public RuleCall getRowsRowsParserRuleCall_2_0() { return cRowsRowsParserRuleCall_2_0; }
+
+		//')'
+		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
+	}
+
+	public class RowsElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.Rows");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cRowParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cRowsEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cEntriesRowParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		
+		//Rows:
+		//	Row ({Rows.entries+=current} ("," entries+=Row)+)?;
+		@Override public ParserRule getRule() { return rule; }
+
+		//Row ({Rows.entries+=current} ("," entries+=Row)+)?
+		public Group getGroup() { return cGroup; }
+
+		//Row
+		public RuleCall getRowParserRuleCall_0() { return cRowParserRuleCall_0; }
+
+		//({Rows.entries+=current} ("," entries+=Row)+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{Rows.entries+=current}
+		public Action getRowsEntriesAction_1_0() { return cRowsEntriesAction_1_0; }
+
+		//("," entries+=Row)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//","
+		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
+
+		//entries+=Row
+		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+
+		//Row
+		public RuleCall getEntriesRowParserRuleCall_1_1_1_0() { return cEntriesRowParserRuleCall_1_1_1_0; }
+	}
+
+	public class RowElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.Row");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cLeftParenthesisKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cRowValuesAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cRowValuesRowValuesParserRuleCall_1_0 = (RuleCall)cRowValuesAssignment_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		
+		//Row:
+		//	'(' rowValues=RowValues ')';
+		@Override public ParserRule getRule() { return rule; }
+
+		//'(' rowValues=RowValues ')'
+		public Group getGroup() { return cGroup; }
+
+		//'('
+		public Keyword getLeftParenthesisKeyword_0() { return cLeftParenthesisKeyword_0; }
+
+		//rowValues=RowValues
+		public Assignment getRowValuesAssignment_1() { return cRowValuesAssignment_1; }
+
+		//RowValues
+		public RuleCall getRowValuesRowValuesParserRuleCall_1_0() { return cRowValuesRowValuesParserRuleCall_1_0; }
+
+		//')'
+		public Keyword getRightParenthesisKeyword_2() { return cRightParenthesisKeyword_2; }
+	}
+
+	public class RowValuesElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.RowValues");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cRowValueParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cRowValuesEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cEntriesRowValueParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		
+		//RowValues:
+		//	RowValue ({RowValues.entries+=current} ("," entries+=RowValue)+)?;
+		@Override public ParserRule getRule() { return rule; }
+
+		//RowValue ({RowValues.entries+=current} ("," entries+=RowValue)+)?
+		public Group getGroup() { return cGroup; }
+
+		//RowValue
+		public RuleCall getRowValueParserRuleCall_0() { return cRowValueParserRuleCall_0; }
+
+		//({RowValues.entries+=current} ("," entries+=RowValue)+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{RowValues.entries+=current}
+		public Action getRowValuesEntriesAction_1_0() { return cRowValuesEntriesAction_1_0; }
+
+		//("," entries+=RowValue)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//","
+		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
+
+		//entries+=RowValue
+		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+
+		//RowValue
+		public RuleCall getEntriesRowValueParserRuleCall_1_1_1_0() { return cEntriesRowValueParserRuleCall_1_1_1_0; }
+	}
+
+	public class RowValueElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.RowValue");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final RuleCall cScalarNumberOperandParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final Assignment cNullAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final Keyword cNullNULLKeyword_1_0 = (Keyword)cNullAssignment_1.eContents().get(0);
+		
+		//RowValue:
+		//	ScalarNumberOperand | null='NULL';
+		@Override public ParserRule getRule() { return rule; }
+
+		//ScalarNumberOperand | null='NULL'
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//ScalarNumberOperand
+		public RuleCall getScalarNumberOperandParserRuleCall_0() { return cScalarNumberOperandParserRuleCall_0; }
+
+		//null='NULL'
+		public Assignment getNullAssignment_1() { return cNullAssignment_1; }
+
+		//'NULL'
+		public Keyword getNullNULLKeyword_1_0() { return cNullNULLKeyword_1_0; }
 	}
 
 	public class PivotTableElements extends AbstractParserRuleElementFinder {
@@ -4191,6 +4480,15 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private final JoinConditionElements pJoinCondition;
 	private final UsingColsElements pUsingCols;
 	private final TableOrAliasElements pTableOrAlias;
+	private final FromValuesElements pFromValues;
+	private final FromValuesColumnsElements pFromValuesColumns;
+	private final FromValuesColumnNamesElements pFromValuesColumnNames;
+	private final ColumnNameElements pColumnName;
+	private final ValuesElements pValues;
+	private final RowsElements pRows;
+	private final RowElements pRow;
+	private final RowValuesElements pRowValues;
+	private final RowValueElements pRowValue;
 	private final PivotTableElements pPivotTable;
 	private final PivotFunctionsElements pPivotFunctions;
 	private final PivotFunctionElements pPivotFunction;
@@ -4306,6 +4604,15 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		this.pJoinCondition = new JoinConditionElements();
 		this.pUsingCols = new UsingColsElements();
 		this.pTableOrAlias = new TableOrAliasElements();
+		this.pFromValues = new FromValuesElements();
+		this.pFromValuesColumns = new FromValuesColumnsElements();
+		this.pFromValuesColumnNames = new FromValuesColumnNamesElements();
+		this.pColumnName = new ColumnNameElements();
+		this.pValues = new ValuesElements();
+		this.pRows = new RowsElements();
+		this.pRow = new RowElements();
+		this.pRowValues = new RowValuesElements();
+		this.pRowValue = new RowValueElements();
 		this.pPivotTable = new PivotTableElements();
 		this.pPivotFunctions = new PivotFunctionsElements();
 		this.pPivotFunction = new PivotFunctionElements();
@@ -4578,7 +4885,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TableOrAlias:
-	//	(tfull=TableFull | sq=SubQueryOperand) (pivot=PivotTable | unpivot=UnpivotTable)? alias='AS'?
+	//	(tfull=TableFull | sq=SubQueryOperand | values=FromValues) (pivot=PivotTable | unpivot=UnpivotTable)? alias='AS'?
 	//	tblAlias=DbObjectName?;
 	public TableOrAliasElements getTableOrAliasAccess() {
 		return pTableOrAlias;
@@ -4586,6 +4893,96 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getTableOrAliasRule() {
 		return getTableOrAliasAccess().getRule();
+	}
+
+	//FromValues:
+	//	values=Values c=FromValuesColumns?;
+	public FromValuesElements getFromValuesAccess() {
+		return pFromValues;
+	}
+	
+	public ParserRule getFromValuesRule() {
+		return getFromValuesAccess().getRule();
+	}
+
+	//FromValuesColumns:
+	//	ID '(' fvCols=FromValuesColumnNames ')';
+	public FromValuesColumnsElements getFromValuesColumnsAccess() {
+		return pFromValuesColumns;
+	}
+	
+	public ParserRule getFromValuesColumnsRule() {
+		return getFromValuesColumnsAccess().getRule();
+	}
+
+	//FromValuesColumnNames:
+	//	ColumnName ({abc.entries+=current} ("," entries+=ColumnName)+)?;
+	public FromValuesColumnNamesElements getFromValuesColumnNamesAccess() {
+		return pFromValuesColumnNames;
+	}
+	
+	public ParserRule getFromValuesColumnNamesRule() {
+		return getFromValuesColumnNamesAccess().getRule();
+	}
+
+	//ColumnName ColumnNames:
+	//	colName=STRING
+	public ColumnNameElements getColumnNameAccess() {
+		return pColumnName;
+	}
+	
+	public ParserRule getColumnNameRule() {
+		return getColumnNameAccess().getRule();
+	}
+
+	//Values:
+	//	'(' 'VALUES' rows=Rows ')';
+	public ValuesElements getValuesAccess() {
+		return pValues;
+	}
+	
+	public ParserRule getValuesRule() {
+		return getValuesAccess().getRule();
+	}
+
+	//Rows:
+	//	Row ({Rows.entries+=current} ("," entries+=Row)+)?;
+	public RowsElements getRowsAccess() {
+		return pRows;
+	}
+	
+	public ParserRule getRowsRule() {
+		return getRowsAccess().getRule();
+	}
+
+	//Row:
+	//	'(' rowValues=RowValues ')';
+	public RowElements getRowAccess() {
+		return pRow;
+	}
+	
+	public ParserRule getRowRule() {
+		return getRowAccess().getRule();
+	}
+
+	//RowValues:
+	//	RowValue ({RowValues.entries+=current} ("," entries+=RowValue)+)?;
+	public RowValuesElements getRowValuesAccess() {
+		return pRowValues;
+	}
+	
+	public ParserRule getRowValuesRule() {
+		return getRowValuesAccess().getRule();
+	}
+
+	//RowValue:
+	//	ScalarNumberOperand | null='NULL';
+	public RowValueElements getRowValueAccess() {
+		return pRowValue;
+	}
+	
+	public ParserRule getRowValueRule() {
+		return getRowValueAccess().getRule();
 	}
 
 	//PivotTable:
@@ -5416,7 +5813,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	} 
 
 	//terminal STRING_:
-	//	"'" ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";
+	//	"'" ("''" | '\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";
 	public TerminalRule getSTRING_Rule() {
 		return tSTRING_;
 	} 

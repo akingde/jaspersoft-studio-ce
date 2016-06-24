@@ -155,6 +155,51 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createTableOrAliasAdapter();
       }
       @Override
+      public Adapter caseFromValues(FromValues object)
+      {
+        return createFromValuesAdapter();
+      }
+      @Override
+      public Adapter caseFromValuesColumns(FromValuesColumns object)
+      {
+        return createFromValuesColumnsAdapter();
+      }
+      @Override
+      public Adapter caseFromValuesColumnNames(FromValuesColumnNames object)
+      {
+        return createFromValuesColumnNamesAdapter();
+      }
+      @Override
+      public Adapter caseColumnNames(ColumnNames object)
+      {
+        return createColumnNamesAdapter();
+      }
+      @Override
+      public Adapter caseValues(Values object)
+      {
+        return createValuesAdapter();
+      }
+      @Override
+      public Adapter caseRows(Rows object)
+      {
+        return createRowsAdapter();
+      }
+      @Override
+      public Adapter caseRow(Row object)
+      {
+        return createRowAdapter();
+      }
+      @Override
+      public Adapter caseRowValues(RowValues object)
+      {
+        return createRowValuesAdapter();
+      }
+      @Override
+      public Adapter caseRowValue(RowValue object)
+      {
+        return createRowValueAdapter();
+      }
+      @Override
       public Adapter casePivotTable(PivotTable object)
       {
         return createPivotTableAdapter();
@@ -473,6 +518,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseCol(Col object)
       {
         return createColAdapter();
+      }
+      @Override
+      public Adapter caseabc(abc object)
+      {
+        return createabcAdapter();
       }
       @Override
       public Adapter caseUnipivotInClause(UnipivotInClause object)
@@ -807,6 +857,141 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTableOrAliasAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.FromValues <em>From Values</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.FromValues
+   * @generated
+   */
+  public Adapter createFromValuesAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.FromValuesColumns <em>From Values Columns</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.FromValuesColumns
+   * @generated
+   */
+  public Adapter createFromValuesColumnsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.FromValuesColumnNames <em>From Values Column Names</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.FromValuesColumnNames
+   * @generated
+   */
+  public Adapter createFromValuesColumnNamesAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.ColumnNames <em>Column Names</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.ColumnNames
+   * @generated
+   */
+  public Adapter createColumnNamesAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Values <em>Values</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.Values
+   * @generated
+   */
+  public Adapter createValuesAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Rows <em>Rows</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.Rows
+   * @generated
+   */
+  public Adapter createRowsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Row <em>Row</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.Row
+   * @generated
+   */
+  public Adapter createRowAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.RowValues <em>Row Values</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.RowValues
+   * @generated
+   */
+  public Adapter createRowValuesAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.RowValue <em>Row Value</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.RowValue
+   * @generated
+   */
+  public Adapter createRowValueAdapter()
   {
     return null;
   }
@@ -1767,6 +1952,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createColAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.abc <em>abc</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.abc
+   * @generated
+   */
+  public Adapter createabcAdapter()
   {
     return null;
   }

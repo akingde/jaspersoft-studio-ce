@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
+public class ScalarOperandImpl extends RowValueImpl implements ScalarOperand
 {
   /**
    * The default value of the '{@link #getSostr() <em>Sostr</em>}' attribute.

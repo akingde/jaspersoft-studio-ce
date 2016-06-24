@@ -26,7 +26,7 @@ import java.math.BigDecimal;
  * @model
  * @generated
  */
-public interface ScalarOperand extends OperandList
+public interface ScalarOperand extends RowValue, OperandList
 {
   /**
    * Returns the value of the '<em><b>Sostr</b></em>' attribute.
