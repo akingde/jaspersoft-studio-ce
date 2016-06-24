@@ -210,19 +210,23 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 				fsd.configureDialog(jConf);
 				if (fsd.open() == Dialog.OK) {
 					selectedSubreportExpression = fsd.getFileExpression();
-					String t = selectedSubreportExpression.getText();
+					String t = null;
+					if (selectedSubreportExpression != null)
+						t = selectedSubreportExpression.getText();
 					if (!Misc.isNullOrEmpty(t)) {
 						Boolean isJRXML = null;
-						if (t.toLowerCase().endsWith(FileExtension.PointJRXML)) {
-							selectedSubreportExpression.setText(t.substring(0, t.lastIndexOf(".")) + FileExtension.PointJASPER); //$NON-NLS-1$ //$NON-NLS-2$
-							isJRXML = Boolean.TRUE;
-						} else if (t.toLowerCase().endsWith(FileExtension.PointJRXML + "\"")) {
-							selectedSubreportExpression
-									.setText(t.substring(0, t.lastIndexOf(".")) + FileExtension.PointJASPER + "\""); //$NON-NLS-1$ //$NON-NLS-2$
-							isJRXML = Boolean.TRUE;
-						} else if (t.toLowerCase().endsWith(FileExtension.PointJASPER + "\"")
-								|| t.toLowerCase().endsWith(FileExtension.PointJASPER)) {
-							isJRXML = Boolean.FALSE;
+						if (selectedSubreportExpression != null) {
+							if (t.toLowerCase().endsWith(FileExtension.PointJRXML)) {
+								selectedSubreportExpression.setText(t.substring(0, t.lastIndexOf(".")) + FileExtension.PointJASPER); //$NON-NLS-1$ //$NON-NLS-2$
+								isJRXML = Boolean.TRUE;
+							} else if (t.toLowerCase().endsWith(FileExtension.PointJRXML + "\"")) {
+								selectedSubreportExpression
+										.setText(t.substring(0, t.lastIndexOf(".")) + FileExtension.PointJASPER + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+								isJRXML = Boolean.TRUE;
+							} else if (t.toLowerCase().endsWith(FileExtension.PointJASPER + "\"")
+									|| t.toLowerCase().endsWith(FileExtension.PointJASPER)) {
+								isJRXML = Boolean.FALSE;
+							}
 						}
 
 						try {
@@ -251,7 +255,8 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 						}
 					} else
 						setSelectedFile(null);
-					subreportExpressionEditor.setExpression(selectedSubreportExpression);
+					if (subreportExpressionEditor != null)
+						subreportExpressionEditor.setExpression(selectedSubreportExpression);
 					storeSettings();
 				}
 			}
