@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.0.qualifier using JasperReports Library version 5.6.2  -->
+<!-- 2014-11-02T12:12:30 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Wave Book" pageWidth="595" pageHeight="842" sectionType="Part" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="30" uuid="d2716064-8ae4-40cf-a575-33afba400e3a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="true"/>
+	<property name="com.jaspersoft.studio.book.group.cover.header" value="Cover and Table of Contents"/>
+	<property name="com.jaspersoft.studio.book.group.cover.footer" value="Backcover"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<group name="cover">
+		<groupHeader>
+			<part uuid="7aed05b9-1301-4a53-b47e-34289560bc0c">
+				<p:subreportPart xmlns:p="http://jasperreports.sourceforge.net/jasperreports/parts" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/parts http://jasperreports.sourceforge.net/xsd/parts.xsd">
+					<subreportExpression><![CDATA["cover"]]></subreportExpression>
+				</p:subreportPart>
+			</part>
+			<part evaluationTime="Report" uuid="56ab525c-754f-4f48-a52c-7cc23934be3d">
+				<property name="net.sf.jasperreports.bookmarks.data.source.parameter" value="REPORT_DATA_SOURCE"/>
+				<p:subreportPart xmlns:p="http://jasperreports.sourceforge.net/jasperreports/parts" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/parts http://jasperreports.sourceforge.net/xsd/parts.xsd">
+					<subreportExpression><![CDATA["toc"]]></subreportExpression>
+				</p:subreportPart>
+			</part>
+		</groupHeader>
+		<groupFooter>
+			<part uuid="88decbbe-63ad-45cc-9e03-5dadc50004d5">
+				<p:subreportPart xmlns:p="http://jasperreports.sourceforge.net/jasperreports/parts" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/parts http://jasperreports.sourceforge.net/xsd/parts.xsd">
+					<subreportExpression><![CDATA["backcover"]]></subreportExpression>
+				</p:subreportPart>
+			</part>
+		</groupFooter>
+	</group>
+</jasperReport>
