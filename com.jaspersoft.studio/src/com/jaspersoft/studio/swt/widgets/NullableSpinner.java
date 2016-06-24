@@ -109,7 +109,7 @@ public class NullableSpinner extends Composite {
 			
 			@Override
 			public void paintControl(PaintEvent e) {
-				if (!Util.isWindows()){
+				if (!Util.isWindows() && !Util.isLinux()){
 					e.gc.setForeground(ColorConstants.lightGray);
 					Rectangle rect = text.getBounds();
 	        e.gc.setLineStyle(SWT.LINE_SOLID);
