@@ -58,7 +58,7 @@ public class ClassTypeComboCellEditor extends CellEditor {
 		DEFAULT_ITEMS = new String[] {
 			"java.lang.Integer", "java.lang.Long", "java.lang.Double", "java.lang.String",
 			"java.lang.Short", "java.lang.Boolean", "java.lang.Float", "java.math.BigDecimal",
-			"java.sql.Time", "java.sql.Timestamp", "java.sql.Date"
+			"java.sql.Time", "java.sql.Timestamp", "java.sql.Date", "java.util.Date"
 		};
 		Arrays.sort(DEFAULT_ITEMS);
 	}
