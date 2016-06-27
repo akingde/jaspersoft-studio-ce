@@ -107,6 +107,11 @@ public class DSXy extends ADSComponent {
 		yvalueWidget.bindObject(serie, "YValueExpression"); //$NON-NLS-1$
 		labelWidget.bindObject(serie, "LabelExpression"); //$NON-NLS-1$
 		hyperlinkBtn.setText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton,seriesCombo.getText()));
+		
+		xvalueWidget.setEnabled(serie != null);
+		yvalueWidget.setEnabled(serie != null); 
+		labelWidget.setEnabled(serie != null);
+		hyperlinkBtn.setEnabled(serie != null);
 	}
 
 	protected Control createChartTop(Composite composite) {

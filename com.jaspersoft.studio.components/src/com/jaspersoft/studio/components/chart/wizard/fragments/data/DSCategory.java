@@ -63,12 +63,11 @@ public class DSCategory extends ADSComponent {
 
 	@Override
 	public String getName() {
-		return Messages.DSCategory_datasetName; 
+		return Messages.DSCategory_datasetName;
 	}
 
 	@Override
-	public void setData(JSSDrawVisitor drawVisitor, JRDesignElement jrChart,
-			JRDesignElementDataset eDataset,
+	public void setData(JSSDrawVisitor drawVisitor, JRDesignElement jrChart, JRDesignElementDataset eDataset,
 			JasperReportsConfiguration jrContext) {
 		Assert.isTrue(eDataset instanceof JRDesignCategoryDataset);
 		super.setData(drawVisitor, jrChart, eDataset, jrContext);
@@ -83,8 +82,7 @@ public class DSCategory extends ADSComponent {
 			for (int i = 0; i < seriesList.size(); i++) {
 				JRCategorySeries cs = seriesList.get(i);
 				JRExpression se = cs.getSeriesExpression();
-				srnames[i] = se != null && se.getText() != null ? se.getText()
-						: ""; //$NON-NLS-1$
+				srnames[i] = se != null && se.getText() != null ? se.getText() : ""; //$NON-NLS-1$
 			}
 			seriesCombo.setItems(srnames);
 			seriesCombo.select(selection);
@@ -107,14 +105,19 @@ public class DSCategory extends ADSComponent {
 		categWidget.bindObject(serie, "CategoryExpression"); //$NON-NLS-1$
 		labelWidget.bindObject(serie, "LabelExpression"); //$NON-NLS-1$
 		String seriesText = seriesCombo.getText();
-		if (seriesText.length() > 30){
-			hyperlinkBtn.setToolTipText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton,seriesText));
+		if (seriesText.length() > 30) {
+			hyperlinkBtn.setToolTipText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton, seriesText));
 			seriesText = seriesText.substring(0, 27) + "..."; //$NON-NLS-1$
-	
+
 		} else {
 			hyperlinkBtn.setToolTipText(null);
 		}
-		hyperlinkBtn.setText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton,seriesText));
+		hyperlinkBtn.setText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton, seriesText));
+
+		valueWidget.setEnabled(serie != null);
+		categWidget.setEnabled(serie != null);
+		labelWidget.setEnabled(serie != null);
+		hyperlinkBtn.setEnabled(serie != null);
 	}
 
 	protected Control createChartTop(Composite composite) {
@@ -149,8 +152,7 @@ public class DSCategory extends ADSComponent {
 
 			public void widgetSelected(SelectionEvent e) {
 				CategorySerie serie = new CategorySerie();
-				SeriesDialog<JRCategorySeries> dlg = new SeriesDialog<JRCategorySeries>(
-						btn.getShell(), serie);
+				SeriesDialog<JRCategorySeries> dlg = new SeriesDialog<JRCategorySeries>(btn.getShell(), serie);
 				dlg.setExpressionContext(expContext);
 				List<JRCategorySeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();
@@ -165,9 +167,7 @@ public class DSCategory extends ADSComponent {
 					for (JRCategorySeries item : newlist)
 						dataset.addCategorySeries(item);
 
-					int sel = selected != null
-							&& newlist.indexOf(selected) >= 0 ? newlist
-							.indexOf(selected) : 0;
+					int sel = selected != null && newlist.indexOf(selected) >= 0 ? newlist.indexOf(selected) : 0;
 					setSeries(sel);
 				}
 			}
@@ -176,7 +176,7 @@ public class DSCategory extends ADSComponent {
 				widgetSelected(e);
 			}
 		});
-		
+
 		hyperlinkBtn = new Button(yCompo, SWT.PUSH | SWT.FLAT);
 		hyperlinkBtn.setSelection(false);
 		hyperlinkBtn.addSelectionListener(new SelectionListener() {
@@ -186,19 +186,20 @@ public class DSCategory extends ADSComponent {
 				JRDesignCategorySeries serie = null;
 				if (selection >= 0 && selection < dataset.getSeriesList().size())
 					serie = (JRDesignCategorySeries) dataset.getSeriesList().get(selection);
-				if (serie != null){
+				if (serie != null) {
 					MHyperLink hyperLinkElement = null;
 					JRHyperlink hyperlink = serie.getItemHyperlink();
-					if (hyperlink != null){
-						hyperLinkElement = new MHyperLink((JRHyperlink)hyperlink.clone());
+					if (hyperlink != null) {
+						hyperLinkElement = new MHyperLink((JRHyperlink) hyperlink.clone());
 					} else {
 						hyperLinkElement = new MHyperLink(new JRDesignHyperlink());
 					}
-					HyperlinkPage dlg = new HyperlinkPage(hyperlinkBtn.getShell(), hyperLinkElement, seriesCombo.getText(), serie.getItemHyperlink() != null);
+					HyperlinkPage dlg = new HyperlinkPage(hyperlinkBtn.getShell(), hyperLinkElement,
+							seriesCombo.getText(), serie.getItemHyperlink() != null);
 					int operationResult = dlg.open();
 					if (operationResult == Window.OK) {
-						serie.setItemHyperlink((JRHyperlink)dlg.getElement().getValue());
-					} else if (operationResult == IDialogConstants.ABORT_ID){
+						serie.setItemHyperlink((JRHyperlink) dlg.getElement().getValue());
+					} else if (operationResult == IDialogConstants.ABORT_ID) {
 						serie.setItemHyperlink(null);
 					}
 				}
@@ -208,7 +209,7 @@ public class DSCategory extends ADSComponent {
 				widgetSelected(e);
 			}
 		});
-		
+
 		return yCompo;
 	}
 

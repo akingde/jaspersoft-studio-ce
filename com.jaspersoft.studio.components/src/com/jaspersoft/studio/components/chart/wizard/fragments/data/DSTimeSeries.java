@@ -125,6 +125,11 @@ public class DSTimeSeries extends ADSComponent {
 		timePeriod.bindObject(serie, "TimePeriodExpression"); //$NON-NLS-1$
 		labelWidget.bindObject(serie, "LabelExpression"); //$NON-NLS-1$
 		hyperlinkBtn.setText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton,seriesCombo.getText()));
+		
+		valueWidget.setEnabled(serie != null);
+		timePeriod.setEnabled(serie != null);
+		labelWidget.setEnabled(serie != null);
+		hyperlinkBtn.setEnabled(serie != null);
 	}
 
 	protected Control createChartTop(Composite composite) {

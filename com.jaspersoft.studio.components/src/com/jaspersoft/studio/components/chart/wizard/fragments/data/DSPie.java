@@ -125,6 +125,11 @@ public class DSPie extends ADSComponent {
 		key.bindObject(serie, "KeyExpression"); //$NON-NLS-1$
 		labelWidget.bindObject(serie, "LabelExpression"); //$NON-NLS-1$
 		hyperlinkBtn.setText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton,seriesCombo.getText()));
+		
+		valueWidget.setEnabled(serie != null);
+		key.setEnabled(serie != null);
+		labelWidget.setEnabled(serie != null);
+		hyperlinkBtn.setEnabled(serie != null);
 	}
 
 	protected Control createChartTop(Composite composite) {

@@ -100,6 +100,15 @@ public class DSGantt extends ADSComponent {
 		endDate.bindObject(serie, "EndDateExpression");
 		percent.bindObject(serie, "PercentExpression");
 		labelWidget.bindObject(serie, "LabelExpression");
+		
+		
+		task.setEnabled(serie != null);
+		subtask.setEnabled(serie != null);
+		starDate.setEnabled(serie != null);
+		endDate.setEnabled(serie != null);
+		
+		percent.setEnabled(serie != null);
+		labelWidget.setEnabled(serie != null); 
 	}
 
 	protected Control createChartTop(Composite composite) {

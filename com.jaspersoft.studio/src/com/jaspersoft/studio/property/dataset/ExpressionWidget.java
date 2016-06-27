@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset;
 
@@ -49,6 +45,10 @@ public class ExpressionWidget {
 	public void setEnabled(boolean enabled) {
 		expButton.setEnabled(enabled);
 		expText.setEnabled(enabled);
+		if (enabled)
+			expLabel.setForeground(expLabel.getDisplay().getSystemColor(SWT.COLOR_TITLE_FOREGROUND));
+		else
+			expLabel.setForeground(expLabel.getDisplay().getSystemColor(SWT.COLOR_TITLE_INACTIVE_FOREGROUND));
 	}
 
 	private void createControl(Composite parent) {
@@ -71,17 +71,17 @@ public class ExpressionWidget {
 		expButton.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+				if (!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
 					JRExpressionEditor wizard = new JRExpressionEditor();
 					wizard.setValue(expression);
 					wizard.setExpressionContext(exprContext);
-					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(Display.getDefault().getActiveShell(), wizard);
+					WizardDialog dialog = ExpressionEditorSupportUtil
+							.getExpressionEditorWizardDialog(Display.getDefault().getActiveShell(), wizard);
 					if (dialog.open() == Dialog.OK) {
 						JRDesignExpression exprTmp = wizard.getValue();
-						if(exprTmp!=null){
+						if (exprTmp != null) {
 							setExpressionText(exprTmp.getText(), exprTmp.getValueClassName());
-						}
-						else{
+						} else {
 							setExpression(exprTmp);
 						}
 					}
@@ -101,16 +101,14 @@ public class ExpressionWidget {
 	public void setExpression(JRDesignExpression exp) {
 		this.expression = exp;
 		setOnParent(exp);
-		
+
 		if (exp != null && exp.getText() != null) {
-			
-			if (!exp.getText().equals(expText.getText()))
-			{
+
+			if (!exp.getText().equals(expText.getText())) {
 				expText.setText(exp.getText());
 				expText.setToolTipText(expText.getText());
 			}
-		}
-		else{
+		} else {
 			expText.setText("");
 			expText.setToolTipText("");
 		}
@@ -119,8 +117,8 @@ public class ExpressionWidget {
 	protected void setOnParent(JRDesignExpression exp) {
 		try {
 			if (obj != null)
-				obj.getClass().getMethod("set" + property, new Class[] { JRExpression.class })
-						.invoke(obj, new Object[] { exp });
+				obj.getClass().getMethod("set" + property, new Class[] { JRExpression.class }).invoke(obj,
+						new Object[] { exp });
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -182,19 +180,20 @@ public class ExpressionWidget {
 	}
 
 	public void setExpressionContext(ExpressionContext exprContext) {
-		this.exprContext=exprContext;
+		this.exprContext = exprContext;
 	}
 
 	public boolean isEnabled() {
 		return expButton.isEnabled() && expText.isEnabled();
 	}
-	
+
 	/**
 	 * Set the tooltip of the label and of the text area
 	 * 
-	 * @param text the tooltip text
+	 * @param text
+	 *          the tooltip text
 	 */
-	public void setToolTipText(String text){
+	public void setToolTipText(String text) {
 		expText.setToolTipText(text);
 		expLabel.setToolTipText(text);
 	}
