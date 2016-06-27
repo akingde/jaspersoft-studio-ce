@@ -23,7 +23,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPClassType<T extends IPropertyDescriptor> extends SPText<T> {
+public class SPClassType<T extends IPropertyDescriptor> extends SPRWCombo<T> {
 
 	private Button btn;
 
@@ -44,7 +44,7 @@ public class SPClassType<T extends IPropertyDescriptor> extends SPText<T> {
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String classname = ClassTypeCellEditor.getJavaClassDialog(ftext.getShell(), null);
+				String classname = ClassTypeCellEditor.getJavaClassDialog(btn.getShell(), null);
 				if (classname != null)
 					handleTextChanged(section, pDescriptor.getId(), classname);
 			}
