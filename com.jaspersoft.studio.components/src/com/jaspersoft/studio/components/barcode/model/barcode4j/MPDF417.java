@@ -32,17 +32,16 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class MPDF417 extends MBarcode4j {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private static IPropertyDescriptor[] descriptors;
 
 	public MPDF417() {
 		super();
 	}
 
-	public MPDF417(ANode parent, JRDesignComponentElement jrBarcode,
-			int newIndex) {
+	public MPDF417(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
 		super(parent, jrBarcode, newIndex);
 	}
 
@@ -54,10 +53,11 @@ public class MPDF417 extends MBarcode4j {
 		exp.setText("\"123456789\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "PDF417")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		
+		el.setComponentKey(
+				new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "PDF417")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
-		
+
 		return el;
 	}
 
@@ -81,41 +81,36 @@ public class MPDF417 extends MBarcode4j {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		super.createPropertyDescriptors(desc);
 
-		IntegerPropertyDescriptor minColumnsD = new IntegerPropertyDescriptor(
-				PDF417Component.PROPERTY_MIN_COLUMNS,
+		IntegerPropertyDescriptor minColumnsD = new IntegerPropertyDescriptor(PDF417Component.PROPERTY_MIN_COLUMNS,
 				Messages.MPDF417_min_columns);
 		minColumnsD.setDescription(Messages.MPDF417_min_columns_description);
 		desc.add(minColumnsD);
 
-		IntegerPropertyDescriptor maxColumnsD = new IntegerPropertyDescriptor(
-				PDF417Component.PROPERTY_MAX_COLUMNS,
+		IntegerPropertyDescriptor maxColumnsD = new IntegerPropertyDescriptor(PDF417Component.PROPERTY_MAX_COLUMNS,
 				Messages.MPDF417_max_columns);
 		maxColumnsD.setDescription(Messages.MPDF417_max_columns_description);
 		desc.add(maxColumnsD);
 
-		IntegerPropertyDescriptor minRowsD = new IntegerPropertyDescriptor(
-				PDF417Component.PROPERTY_MIN_ROWS, Messages.MPDF417_min_rows);
+		IntegerPropertyDescriptor minRowsD = new IntegerPropertyDescriptor(PDF417Component.PROPERTY_MIN_ROWS,
+				Messages.MPDF417_min_rows);
 		minRowsD.setDescription(Messages.MPDF417_min_rows_description);
 		desc.add(minRowsD);
 
-		IntegerPropertyDescriptor maxRowsD = new IntegerPropertyDescriptor(
-				PDF417Component.PROPERTY_MAX_ROWS, Messages.MPDF417_max_rows);
+		IntegerPropertyDescriptor maxRowsD = new IntegerPropertyDescriptor(PDF417Component.PROPERTY_MAX_ROWS,
+				Messages.MPDF417_max_rows);
 		maxRowsD.setDescription(Messages.MPDF417_max_rows_description);
 		desc.add(maxRowsD);
 
 		DoublePropertyDescriptor width2HeightRatioD = new DoublePropertyDescriptor(
-				PDF417Component.PROPERTY_WIDTH_TO_HEIGHT_RATIO,
-				Messages.MPDF417_width_to_height_ratio);
-		width2HeightRatioD
-				.setDescription(Messages.MPDF417_width_to_height_ratio_description);
+				PDF417Component.PROPERTY_WIDTH_TO_HEIGHT_RATIO, Messages.MPDF417_width_to_height_ratio);
+		width2HeightRatioD.setDescription(Messages.MPDF417_width_to_height_ratio_description);
 		desc.add(width2HeightRatioD);
 
 		IntegerPropertyDescriptor errorCorrectionLevelD = new IntegerPropertyDescriptor(
-				PDF417Component.PROPERTY_ERROR_CORRECTION_LEVEL,
-				Messages.MPDF417_error_correction_level);
-		errorCorrectionLevelD
-				.setDescription(Messages.MPDF417_error_correction_level_description);
+				PDF417Component.PROPERTY_ERROR_CORRECTION_LEVEL, Messages.MPDF417_error_correction_level);
+		errorCorrectionLevelD.setDescription(Messages.MPDF417_error_correction_level_description);
 		desc.add(errorCorrectionLevelD);
+		errorCorrectionLevelD.setBounds(0, 8);
 
 		minColumnsD.setCategory(Messages.MPDF417_properties_category);
 		maxColumnsD.setCategory(Messages.MPDF417_properties_category);
@@ -166,7 +161,7 @@ public class MPDF417 extends MBarcode4j {
 
 		super.setPropertyValue(id, value);
 	}
-	
+
 	@Override
 	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> properties = super.generateGraphicalProperties();
@@ -178,17 +173,17 @@ public class MPDF417 extends MBarcode4j {
 		properties.add(PDF417Component.PROPERTY_ERROR_CORRECTION_LEVEL);
 		return properties;
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
 		PDF417Component jrSourceBarcode = (PDF417Component) jrSourceElement.getComponent();
-		
+
 		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
 		PDF417Component jrTargetBarcode = (PDF417Component) jrTargetElement.getComponent();
-		
+
 		jrTargetBarcode.setMinColumns(jrSourceBarcode.getMinColumns());
 		jrTargetBarcode.setMaxColumns(jrSourceBarcode.getMaxColumns());
 		jrTargetBarcode.setMinRows(jrSourceBarcode.getMinRows());
