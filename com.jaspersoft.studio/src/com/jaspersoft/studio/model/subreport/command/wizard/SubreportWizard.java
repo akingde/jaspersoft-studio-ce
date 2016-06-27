@@ -1,23 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.subreport.command.wizard;
-
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRSubreportParameter;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignSubreport;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -41,12 +30,19 @@ import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
 import com.jaspersoft.studio.wizards.datasource.StaticWizardDataSourcePage;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRSubreportParameter;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
+
 public class SubreportWizard extends JSSWizard {
 	private NewSubreportPage step0;
 	private WizardConnectionPage step2;
-	private ParameterPage step3;
+	private SubreportParameterPage step3;
 	private MSubreport subreport;
-	
+
 	public SubreportWizard() {
 		super();
 		setWindowTitle(Messages.common_subreport);
@@ -63,59 +59,55 @@ public class SubreportWizard extends JSSWizard {
 		addPage(step0);
 
 		subreport.setJasperConfiguration(getConfig());
-		
+
 		step2 = new WizardConnectionPage();
 		addPage(step2);
-		
-		step3 = new ParameterPage();
+
+		step3 = new SubreportParameterPage();
 		addPage(step3);
 
 		// Setting up the expressions context. This is not really useful, since
 		// the subreport has not been added to the report yet and it will be fallback to the default dataset.
 		// FIXME: pass a proper ANode to the wizard to let the code to lookup for a more appropriate dataset.
-		ExpressionContext ec = ModelUtils.getElementExpressionContext((JRDesignElement)subreport.getValue(), subreport);
+		ExpressionContext ec = ModelUtils.getElementExpressionContext((JRDesignElement) subreport.getValue(), subreport);
 		step0.setExpressionContext(ec);
 		step2.setExpressionContext(ec);
-		step3.setExpressionContext(ec);		
+		step3.setExpressionContext(ec);
 	}
-	
+
 	/**
-	 * Return the first page of the wizard, where an existing report can
-	 * be selected or create a new one
+	 * Return the first page of the wizard, where an existing report can be selected or create a new one
 	 * 
 	 * @return a not null NewSubreportPage
 	 */
-	protected NewSubreportPage getSubreportPage(){
+	protected NewSubreportPage getSubreportPage() {
 		return new NewSubreportPage();
 	}
 
 	/**
-	 * The getNextPage implementations does nothing, since all the logic has
-	 * been moved inside each page, specifically extended for
-	 * this wizard
+	 * The getNextPage implementations does nothing, since all the logic has been moved inside each page, specifically
+	 * extended for this wizard
 	 * 
 	 * @see com.jaspersoft.studio.wizards.JSSWizard#getNextPage(org.eclipse.jface.wizard.IWizardPage)
 	 *
-	 * @param the current page.
+	 * @param the
+	 *          current page.
 	 *
 	 * @return the next page
 	 */
 	@Override
-	public IWizardPage getNextPage(IWizardPage page) {
-		
-		// Nothing to do. If you change this method, please update the
-		// comment.
-		
+	public IWizardPage getNextPage(IWizardPage page) { 
+		if (page == step3)
+			step3.setJasperDesign(getSubreport().getJasperDesign());
 		return super.getNextPage(page);
 	}
 
 	@Override
 	public boolean performFinish() {
-		for (IWizard w : getChildWizards())
-		{
-			if (w instanceof ReportNewWizard){
+		for (IWizard w : getChildWizards()) {
+			if (w instanceof ReportNewWizard) {
 				JRSubreportParameter[] parameters = GenericJSSParameter.convertToSubreport(step3.getValue());
- 				((ReportNewWizard) w).getSettings().put(StaticWizardDataSourcePage.EXTRA_PARAMETERS, parameters);
+				((ReportNewWizard) w).getSettings().put(StaticWizardDataSourcePage.EXTRA_PARAMETERS, parameters);
 			}
 			w.performFinish();
 		}
@@ -128,9 +120,9 @@ public class SubreportWizard extends JSSWizard {
 	 * @return
 	 */
 	public MSubreport getSubreport() {
-		
+
 		JRSubreportParameter[] map = GenericJSSParameter.convertToSubreport(step3.getValue());
-		
+
 		if (map != null)
 			subreport.setPropertyValue(JRDesignSubreport.PROPERTY_PARAMETERS, map);
 
@@ -139,44 +131,38 @@ public class SubreportWizard extends JSSWizard {
 
 		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION,
 				datasetRun.getParametersMapExpression());
-		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION,
-				datasetRun.getConnectionExpression());
-		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION,
-				datasetRun.getDataSourceExpression());
-		
+		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, datasetRun.getConnectionExpression());
+		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION, datasetRun.getDataSourceExpression());
+
 		// Create the subreport expression....
-		if (step0.getSelectedOption() == NewSubreportPage.EXISTING_REPORT)
-		{
-			subreport.setPropertyValue( JRDesignSubreport.PROPERTY_EXPRESSION ,  step0.getSelectedSubreportExpression() );
-		}
-		else if (step0.getSelectedOption() == NewSubreportPage.NEW_REPORT)
-		{
+		if (step0.getSelectedOption() == NewSubreportPage.EXISTING_REPORT) {
+			subreport.setPropertyValue(JRDesignSubreport.PROPERTY_EXPRESSION, step0.getSelectedSubreportExpression());
+		} else if (step0.getSelectedOption() == NewSubreportPage.NEW_REPORT) {
 			// In this case the new report has been created by using a report wizard
 			// which stores the location of a file in the
 			// wizard settings...
 			IPath path = (IPath) getSettings().get(JSSWizard.FILE_PATH);
 			String fname = (String) getSettings().get(JSSWizard.FILE_NAME);
-			
+
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 			IResource resource = root.findMember(path);
-			IFile file = ((IContainer)resource).getFile(new Path(fname));
-			
+			IFile file = ((IContainer) resource).getFile(new Path(fname));
+
 			IFile contextfile = (IFile) getConfig().get(FileUtils.KEY_FILE);
-			
+
 			String filepath = "";
 			if (contextfile != null && file.getProject().equals(contextfile.getProject())) {
 				filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", "");
 			} else {
 				filepath = file.getRawLocationURI().toASCIIString();
 			}
-			if (filepath.toLowerCase().endsWith(".jrxml"))
-			{
-				filepath = filepath.substring(0,filepath.lastIndexOf(".")) + ".jasper";
+			if (filepath.toLowerCase().endsWith(".jrxml")) {
+				filepath = filepath.substring(0, filepath.lastIndexOf(".")) + ".jasper";
 			}
 			JRDesignExpression exp = new JRDesignExpression();
 			exp.setText("\"" + filepath + "\""); //$NON-NLS-1$ $NON-NLS-1$
-			
-			subreport.setPropertyValue( JRDesignSubreport.PROPERTY_EXPRESSION , exp ); 
+
+			subreport.setPropertyValue(JRDesignSubreport.PROPERTY_EXPRESSION, exp);
 		}
 		return subreport;
 	}
@@ -190,13 +176,11 @@ public class SubreportWizard extends JSSWizard {
 
 	@Override
 	public boolean canFinish() {
-		
-		if (step0.getSelectedOption() == NewSubreportPage.NEW_REPORT)
-		{
+
+		if (step0.getSelectedOption() == NewSubreportPage.NEW_REPORT) {
 			return getContainer().getCurrentPage() == step3;
 		}
 		return super.canFinish();
 	}
-	
-	
+
 }
