@@ -70,7 +70,8 @@ public abstract class ADSComponent implements IExpressionContextSetter {
 
 	public abstract String getName();
 
-	public void setData(JSSDrawVisitor drawVisitor, JRDesignElement jrChart, JRDesignElementDataset eDataset, JasperReportsConfiguration jrContext) {
+	public void setData(JSSDrawVisitor drawVisitor, JRDesignElement jrChart, JRDesignElementDataset eDataset,
+			JasperReportsConfiguration jrContext) {
 		this.jrElement = jrChart;
 		this.eDataset = eDataset;
 		jrElement.setWidth(canvasChart.getSize().x);
@@ -78,12 +79,18 @@ public abstract class ADSComponent implements IExpressionContextSetter {
 		setChartFigure();
 		chartFigure.setJRElement(jrElement, drawVisitor);
 		canvasChart.redraw();
+
+		btDatasetType.setVisible(false);
 		btDatasetType.setEnabled(false);
 		if (jrElement instanceof JRDesignChart) {
 			JRDesignChart jrDChart = (JRDesignChart) jrElement;
-			if (jrDChart.getChartType() == JRChart.CHART_TYPE_XYBAR)
+			if (jrDChart.getChartType() == JRChart.CHART_TYPE_XYBAR) {
 				btDatasetType.setEnabled(true);
+				btDatasetType.setVisible(true);
+			}
 		}
+		btDatasetType.getParent().update();
+		btDatasetType.getParent().layout(true);
 	}
 
 	public Control getControl() {
@@ -109,13 +116,15 @@ public abstract class ADSComponent implements IExpressionContextSetter {
 
 					}
 					if (!map.isEmpty()) {
-						Class<? extends JRDesignElementDataset> selclass = (Class<? extends JRDesignElementDataset>) jrDChart.getDataset().getClass();
+						Class<? extends JRDesignElementDataset> selclass = (Class<? extends JRDesignElementDataset>) jrDChart
+								.getDataset().getClass();
 						ChartDatasetDialog dialog = new ChartDatasetDialog(btDatasetType.getShell(), map, selclass);
 						if (dialog.open() == Window.OK) {
 							Class<? extends JRDesignElementDataset> newselclass = dialog.getSelection();
 							if (!selclass.equals(newselclass))
 								try {
-									JRChartDataset jrded = (JRChartDataset) newselclass.getConstructor(JRChartDataset.class).newInstance(jrDChart.getDataset());
+									JRChartDataset jrded = (JRChartDataset) newselclass
+											.getConstructor(JRChartDataset.class).newInstance(jrDChart.getDataset());
 									jrDChart.setDataset(jrded);
 									dsWidget.setDataset(null, jrElement, eDataset);
 								} catch (Exception e1) {
