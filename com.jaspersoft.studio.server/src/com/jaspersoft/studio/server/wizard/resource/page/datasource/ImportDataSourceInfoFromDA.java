@@ -16,9 +16,6 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.jasperreports.data.DataAdapter;
-
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,6 +32,9 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.server.messages.Messages;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
 /**
  * Popup dialog that allows to select an existing JSS data adapter to retrieve
  * the information that can be used to create a data source resource on
@@ -43,7 +43,7 @@ import com.jaspersoft.studio.server.messages.Messages;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class ImportDataSourceInfoFromDA<T extends DataAdapter> extends Dialog {
+public class ImportDataSourceInfoFromDA<T extends DataAdapter> extends PersistentLocationDialog {
 	private static final String _DA = "_DA";
 	/* selected data adapter */
 	private T selectedDA;

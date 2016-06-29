@@ -48,7 +48,9 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
-public class MapDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class MapDialog extends PersistentLocationDialog {
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 

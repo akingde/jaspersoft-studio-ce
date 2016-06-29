@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.xmla;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -27,6 +26,8 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.messages.Messages;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
 /**
  * Dialog used to authenticate the user when he try to connect
  * to a Xmla endpoint
@@ -34,7 +35,7 @@ import com.jaspersoft.studio.data.messages.Messages;
  * @author Orlandin Marco
  *
  */
-public class AuthenticationDialog extends Dialog{
+public class AuthenticationDialog extends PersistentLocationDialog {
 
 	/**
 	 *  key of the username in the url

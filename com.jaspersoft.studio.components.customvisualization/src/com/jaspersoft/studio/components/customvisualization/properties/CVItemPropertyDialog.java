@@ -10,6 +10,7 @@ import java.util.List;
 
 import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -46,8 +47,7 @@ import com.jaspersoft.studio.utils.Misc;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class CVItemPropertyDialog extends Dialog implements
-		IExpressionContextSetter {
+public class CVItemPropertyDialog extends PersistentLocationDialog implements IExpressionContextSetter {
 
 	private Composite dialogArea;
 	private Text propertyName;

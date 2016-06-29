@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.map.ui;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
@@ -41,6 +40,8 @@ import com.jaspersoft.studio.widgets.map.support.BaseJavaMapSupport;
 import com.jaspersoft.studio.widgets.map.support.GMapUtils;
 import com.jaspersoft.studio.widgets.map.support.JavaMapSupport;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
 /**
  * This dialog allows to configure the basic details of a map: its center, the
  * zoom level and the type.
@@ -48,7 +49,7 @@ import com.jaspersoft.studio.widgets.map.support.JavaMapSupport;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class BasicInfoMapDialog extends Dialog {
+public class BasicInfoMapDialog extends PersistentLocationDialog {
 
 	// basic map details
 	protected LatLng mapCenter;

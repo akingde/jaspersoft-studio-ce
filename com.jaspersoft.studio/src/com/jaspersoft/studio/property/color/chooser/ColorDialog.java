@@ -30,6 +30,8 @@ import org.eclipse.swt.widgets.TabItem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.AlfaRGB;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
 /**
  * An advanced color dialog that offers more functionalities towards the default one,
  * like the transparency and many other. It also provide a system independent way to choose the color. 
@@ -38,7 +40,7 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  * @author Orlandin Marco
  *
  */
-public class ColorDialog extends Dialog{
+public class ColorDialog extends PersistentLocationDialog{
 
 	// STYLEBITS
 	

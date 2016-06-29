@@ -16,7 +16,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -49,7 +48,9 @@ import com.jaspersoft.studio.editor.preview.input.array.number.IntegerElement;
 import com.jaspersoft.studio.editor.preview.input.array.number.LongElement;
 import com.jaspersoft.studio.editor.preview.input.array.number.ShortElement;
 
-public class MapElementDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class MapElementDialog extends PersistentLocationDialog {
 	private IParameter prm;
 	private ValueComposite kval;
 	private ValueComposite vval;

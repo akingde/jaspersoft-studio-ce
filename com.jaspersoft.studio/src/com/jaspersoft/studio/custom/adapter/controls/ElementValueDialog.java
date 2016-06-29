@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.custom.adapter.controls;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
@@ -27,13 +26,15 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.messages.Messages;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
 /**
  * Dialog used to edit or add a value to a list of value
  * 
  * @author Orlandin Marco
  *
  */
-public class ElementValueDialog extends Dialog {
+public class ElementValueDialog extends PersistentLocationDialog {
 
 	/**
 	 * Type of the value, the controls created inside the dialog depends on the type.

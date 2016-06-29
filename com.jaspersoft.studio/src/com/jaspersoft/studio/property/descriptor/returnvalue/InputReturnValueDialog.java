@@ -12,9 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.returnvalue;
 
-import net.sf.jasperreports.engine.fill.JRIncrementerFactory;
-import net.sf.jasperreports.engine.type.CalculationEnum;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Assert;
@@ -27,7 +24,6 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.internal.core.search.BasicSearchEngine;
 import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.window.Window;
@@ -53,6 +49,10 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+import net.sf.jasperreports.engine.fill.JRIncrementerFactory;
+import net.sf.jasperreports.engine.type.CalculationEnum;
+
 /**
  * Dialog to provide the configuration of a dataset run return value
  * 
@@ -60,7 +60,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  *
  */
 @SuppressWarnings("restriction")
-public class InputReturnValueDialog extends Dialog {
+public class InputReturnValueDialog extends PersistentLocationDialog {
 
 	/**
 	 * The textual list of the possible Calculation value

@@ -49,7 +49,9 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
-public class TableDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class TableDialog extends PersistentLocationDialog {
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 

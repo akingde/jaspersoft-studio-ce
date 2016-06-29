@@ -16,11 +16,6 @@ import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import net.sf.jasperreports.chartthemes.simple.ColorProvider;
-import net.sf.jasperreports.chartthemes.simple.GradientPaintProvider;
-import net.sf.jasperreports.chartthemes.simple.PaintProvider;
-
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,7 +30,12 @@ import org.eclipse.swt.widgets.Shell;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
-public class PaintProviderDialog extends Dialog {
+import net.sf.jasperreports.chartthemes.simple.ColorProvider;
+import net.sf.jasperreports.chartthemes.simple.GradientPaintProvider;
+import net.sf.jasperreports.chartthemes.simple.PaintProvider;
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class PaintProviderDialog extends PersistentLocationDialog {
 	private PaintProvider value;
 	private Button bgrad;
 

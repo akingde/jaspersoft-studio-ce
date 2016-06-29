@@ -40,7 +40,9 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
-public class StrokesDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class StrokesDialog extends PersistentLocationDialog {
 	private Table table;
 	private TableViewer tableViewer;
 	private List<Stroke> value;

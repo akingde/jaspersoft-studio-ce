@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.jface.dialogs;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -28,7 +27,9 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.messages.Messages;
 
-public class PropertyDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class PropertyDialog extends PersistentLocationDialog {
 	
 	private String[] propertyAndValue = null;
 	private Text textProperty;

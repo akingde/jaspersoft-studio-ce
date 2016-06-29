@@ -102,9 +102,6 @@ public class JRExpressionPage extends JSSHelpWizardPage {
 			});
 			contributedComposite.setExpression(this.value);
 			setControl(contributedComposite);
-			// Resize and position the shell
-			getShell().setSize(ExpressionEditorSupportUtil.getExpEditorDialogSize(getShell()));
-			getShell().setLocation(ExpressionEditorSupportUtil.getExpEditorDialogLocation(getShell()));
 		}
 		// Otherwise fallback to a generic composite
 		else{

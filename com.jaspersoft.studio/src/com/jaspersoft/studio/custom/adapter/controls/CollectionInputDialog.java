@@ -36,13 +36,15 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
 /**
  * Dialog to edit, add or remove values from a list control
  * 
  * @author Orlandin Marco
  *
  */
-public class CollectionInputDialog extends Dialog{
+public class CollectionInputDialog extends PersistentLocationDialog{
 	
 	/**
 	 * The viewer of a table with one column where the content of the list

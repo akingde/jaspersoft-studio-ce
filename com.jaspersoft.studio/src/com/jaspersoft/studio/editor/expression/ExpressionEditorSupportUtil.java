@@ -22,7 +22,6 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.graphics.Point;
@@ -42,6 +41,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRExpression;
@@ -357,7 +357,27 @@ public class ExpressionEditorSupportUtil {
 			}
 			else {
 				isExpressionEditorDialogOpen=Boolean.TRUE;
-				return new WizardDialog(parentShell, newWizard) {
+				return new PersistentLocationWizardDialog(parentShell, newWizard) {
+					
+					
+					@Override
+					protected Point getInitialLocation(Point initialSize) {
+						if (ExpressionEditorSupportUtil.shouldRememberExpEditorDialogLocation()){
+							return super.getInitialLocation(initialSize);
+						} else {
+							return getCenteredMonitorLocation(initialSize);
+						}
+					}
+					
+					@Override
+					protected Point getInitialSize() {
+						if (ExpressionEditorSupportUtil.shouldRememberExpEditorDialogSize()){
+							return super.getInitialSize();
+						} else {
+							return new Point(EXPEDITOR_INITIAL_WIDTH, EXPEDITOR_INITIAL_HEIGHT);
+						}
+					}
+					
 					/*
 					 * Possibly ask if the wizard dialog should be closed.
 					 */
@@ -539,63 +559,4 @@ public class ExpressionEditorSupportUtil {
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_X, x);
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_Y, y);
 	}
-	
-	/**
-	 * Calculates the initial size for the expression editor dialog being created.
-	 * A default size is returned if no previous information is stored.
-	 * 
-	 * @param shell the shell holding the expression editor
-	 * 
-	 * @return the initial size for the expression editor being created
-	 * @see #EXPEDITOR_INITIAL_WIDTH
-	 * @see #EXPEDITOR_INITIAL_HEIGHT 
-	 */
-	public static Point getExpEditorDialogSize(Shell shell) {
-		int width = -1;
-		int height = -1;
-		if(shouldRememberExpEditorDialogSize()) {
-			IPreferenceStore prefstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-			if(prefstore.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_WIDTH)) {
-				width = prefstore.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_WIDTH);
-			}
-			if(prefstore.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_HEIGHT)) {
-				height = prefstore.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_HEIGHT);				
-			}
-		}
-		if(width==-1 || height == -1){
-			return new Point(EXPEDITOR_INITIAL_WIDTH,EXPEDITOR_INITIAL_HEIGHT); 
-		}
-		else {
-			return new Point(width, height);
-		}
-	}
-	
-	/**
-	 * Calculates the initial location for the expression editor dialog being created.
-	 * A default centered location is returned if no previous information is stored.
-	 *
-	 * @param shell the shell holding the expression editor
-	 * 
-	 * @return the initial location for the expression editor being created
-	 */
-	public static Point getExpEditorDialogLocation(Shell shell) {
-		int x = -1;
-		int y = -1;
-		if(shouldRememberExpEditorDialogLocation()) {
-			IPreferenceStore prefstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-			if(prefstore.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_X)) {
-				x = prefstore.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_X);
-			}
-			if(prefstore.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_Y)){
-				y = prefstore.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_Y);
-			}
-		}
-		if(x==-1 || y==-1){
-			return UIUtils.getShellCenterLocation(shell);
-		}
-		else {
-			return new Point(x, y);
-		}
-	}
-
 }

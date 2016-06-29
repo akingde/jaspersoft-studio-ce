@@ -5,12 +5,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.properties;
  
-import net.sf.jasperreports.components.items.Item;
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItem;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -35,13 +29,19 @@ import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 /**
  * Edit dialog for a {@link CVItem} element.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class CVItemDialog extends Dialog implements IExpressionContextSetter {
+public class CVItemDialog extends PersistentLocationDialog implements IExpressionContextSetter {
 
 	private StandardItem item;
 	private ExpressionContext expContext;

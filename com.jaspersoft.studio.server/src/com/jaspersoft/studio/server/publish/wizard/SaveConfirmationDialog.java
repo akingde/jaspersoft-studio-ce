@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish.wizard;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,7 +25,9 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.messages.Messages;
 
-public class SaveConfirmationDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class SaveConfirmationDialog extends PersistentLocationDialog {
 
 	public SaveConfirmationDialog(Shell parent) {
 		super(parent);

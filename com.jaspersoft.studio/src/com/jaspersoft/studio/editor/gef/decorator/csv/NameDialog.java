@@ -1,6 +1,5 @@
 package com.jaspersoft.studio.editor.gef.decorator.csv;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -9,13 +8,15 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
 /**
  * A simple dialog to ask a string value to the user
  * 
  * @author Orlandin Marco
  * 
  */
-public class NameDialog extends Dialog {
+public class NameDialog extends PersistentLocationDialog {
 
 	/**
 	 * The textfield where the string is typed

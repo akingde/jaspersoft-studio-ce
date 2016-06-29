@@ -14,7 +14,6 @@ package com.jaspersoft.studio.jface.dialogs;
 
 import java.util.TimeZone;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -30,7 +29,9 @@ import org.eclipse.swt.widgets.Shell;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTimeZoneList;
 
-public class TimeZoneDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class TimeZoneDialog extends PersistentLocationDialog {
 	
 	private TimeZone timeZone = null;
 	private WTimeZoneList wTimeZoneList;

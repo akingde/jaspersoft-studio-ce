@@ -41,6 +41,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -51,7 +52,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class FileSelectionDialog extends Dialog {
+public class FileSelectionDialog extends PersistentLocationDialog {
 
 	// Expression that will be associated to the image element
 	protected String fileExpressionText;

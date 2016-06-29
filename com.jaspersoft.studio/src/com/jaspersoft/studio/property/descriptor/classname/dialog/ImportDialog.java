@@ -46,9 +46,10 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
-public class ImportDialog extends Dialog {
+public class ImportDialog extends PersistentLocationDialog {
 	private String value;
 	private TableViewer tableViewer;
 	private List<String> imports;

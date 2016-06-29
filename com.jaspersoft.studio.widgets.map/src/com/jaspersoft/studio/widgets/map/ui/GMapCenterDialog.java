@@ -1,6 +1,5 @@
 package com.jaspersoft.studio.widgets.map.ui;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -10,7 +9,9 @@ import org.eclipse.swt.widgets.Shell;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
 
-public class GMapCenterDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class GMapCenterDialog extends PersistentLocationDialog {
 
 	private GMapsCenterPanel mapPanel;
 

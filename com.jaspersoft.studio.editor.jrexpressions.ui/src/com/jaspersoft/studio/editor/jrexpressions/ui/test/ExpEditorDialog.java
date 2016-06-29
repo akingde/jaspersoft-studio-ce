@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -51,8 +50,9 @@ import com.google.inject.Injector;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
 
 import de.itemis.xtext.utils.jface.viewers.StyledTextXtextAdapter;
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
 
-public class ExpEditorDialog extends Dialog {
+public class ExpEditorDialog extends PersistentLocationDialog {
 
 	private StyledTextXtextAdapter xtextAdapter;
 	private TreeViewer debugtree;

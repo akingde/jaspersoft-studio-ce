@@ -15,7 +15,6 @@ package com.jaspersoft.studio.components.chart.model.theme.stroke;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -29,7 +28,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class StrokeDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class StrokeDialog extends PersistentLocationDialog {
 	private BasicStroke value;
 	private Text twidth;
 	private Text tdash;

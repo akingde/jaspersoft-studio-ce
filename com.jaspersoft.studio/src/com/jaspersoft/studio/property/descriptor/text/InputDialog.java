@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.text;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.swt.SWT;
@@ -26,7 +25,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-class InputDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+class InputDialog extends PersistentLocationDialog {
 	/**
 	 * The title of the dialog.
 	 */

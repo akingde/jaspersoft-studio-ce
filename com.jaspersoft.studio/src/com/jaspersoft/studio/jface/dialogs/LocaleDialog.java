@@ -14,7 +14,6 @@ package com.jaspersoft.studio.jface.dialogs;
 
 import java.util.Locale;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -38,7 +37,9 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WLocaleList;
 
-public class LocaleDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class LocaleDialog extends PersistentLocationDialog {
 	
 	private CTabFolder tabFolder;
 	private CTabItem tbtmPredefinedLocales;

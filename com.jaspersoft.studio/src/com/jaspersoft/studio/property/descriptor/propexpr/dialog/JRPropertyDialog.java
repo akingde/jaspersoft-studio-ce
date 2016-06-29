@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JasperDesign;
-
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
@@ -45,13 +42,16 @@ import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.infoList.SelectableComposite;
 import com.jaspersoft.studio.utils.Misc;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 /**
  * 
  * This dialog offer the methods to define a property in 
  * the form key and value
  *
  */
-public class JRPropertyDialog extends Dialog {
+public class JRPropertyDialog extends PersistentLocationDialog {
 	
 	/**
 	 * Object that represent the properties

@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.compatibility.dialog;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -27,7 +26,9 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.messages.Messages;
 
-public class VersionDialog extends Dialog {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class VersionDialog extends PersistentLocationDialog {
 
 	private boolean hideNext = false;
 

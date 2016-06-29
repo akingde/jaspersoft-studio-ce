@@ -16,7 +16,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 import org.eclipse.gef.rulers.RulerProvider;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -40,13 +39,15 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
 /**
  * Dialog to define or edit the position of ruler guide
  * 
  * @author Orlandin Marco
  *
  */
-public final class PositionDialog extends Dialog {
+public final class PositionDialog extends PersistentLocationDialog {
 
 		/**
 		 * The start position

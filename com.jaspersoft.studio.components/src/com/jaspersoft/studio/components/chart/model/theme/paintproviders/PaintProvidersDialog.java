@@ -14,8 +14,6 @@ package com.jaspersoft.studio.components.chart.model.theme.paintproviders;
 
 import java.util.List;
 
-import net.sf.jasperreports.chartthemes.simple.PaintProvider;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -40,7 +38,10 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
-public class PaintProvidersDialog extends Dialog {
+import net.sf.jasperreports.chartthemes.simple.PaintProvider;
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+
+public class PaintProvidersDialog extends PersistentLocationDialog {
 	private Table table;
 	private TableViewer tableViewer;
 	private List<PaintProvider> value;

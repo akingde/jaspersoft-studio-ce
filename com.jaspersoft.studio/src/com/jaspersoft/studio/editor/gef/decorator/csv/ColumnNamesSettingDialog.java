@@ -12,14 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRTextElement;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.JRCsvMetadataExporter;
-import net.sf.jasperreports.export.CsvMetadataReportConfiguration;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -41,6 +33,15 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRTextElement;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRCsvMetadataExporter;
+import net.sf.jasperreports.export.CsvMetadataReportConfiguration;
+
 /**
  * A dialog that allows to specify the column names that should be
  * used for CSV metadata exporting.
@@ -50,7 +51,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Orlandin Marco
  * 
  */
-public class ColumnNamesSettingDialog extends Dialog {
+public class ColumnNamesSettingDialog extends PersistentLocationDialog {
 
 	/**
 	 * A textual representation of the column names
