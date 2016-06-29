@@ -66,6 +66,6 @@ public class ImageSelectionDialog extends FilePreviewSelectionDialog {
 
 	@Override
 	protected String[] getFileExtensions() {
-		return new String[] { "*.png", "*.jpeg; *.jpg", "*.gif", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		return new String[] { "*.png", "*.jpeg; *.jpg", "*.gif", ".svg", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 }
