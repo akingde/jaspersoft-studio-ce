@@ -104,6 +104,8 @@ public class Messages extends NLS {
 	public static String ChartThemeNewWizard_PageTitle;
 	public static String ChartThemeNewWizard_VirtualFolderError;
 	public static String ChartThemeNewWizard_WindowTitle;
+	public static String ChartTypeWizardPage_0;
+	public static String ChartTypeWizardPage_1;
 	public static String ChartWizardPage_chart_wizard_description;
 	public static String CreateCategorySeriesAction_create_category_series;
 	public static String CreateCategorySeriesAction_create_category_series_tool_tip;
@@ -151,6 +153,7 @@ public class Messages extends NLS {
 	public static String DSPie_valueTooltip;
 	public static String DSTimePeriod_endDateLabel;
 	public static String DSTimePeriod_startDateLabel;
+	public static String DSTimeSeries_0;
 	public static String DSTimeSeries_labelExpression;
 	public static String DSTimeSeries_timePeriodExpression;
 	public static String DSTimeSeries_timePeriodLabel;

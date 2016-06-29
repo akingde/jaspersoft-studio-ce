@@ -68,7 +68,7 @@ public class DSTimeSeries extends ADSComponent {
 
 	@Override
 	public String getName() {
-		return "Time Series Dataset"; //$NON-NLS-1$
+		return Messages.DSTimeSeries_0; 
 	}
 
 	@Override
