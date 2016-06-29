@@ -12,7 +12,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chartspider.figure;
 
+import java.awt.Graphics2D;
+
+import com.jaspersoft.studio.editor.gef.figures.ACachedGraphics;
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
+import com.jaspersoft.studio.editor.java2d.ImageGraphics2D;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
@@ -29,4 +33,8 @@ public class SpiderChartFigure extends JRComponentFigure {
 		super(node);
 	}
 
+	@Override
+	protected ACachedGraphics getCachedGraphics(Graphics2D originalGraphics) {
+		return new ImageGraphics2D(originalGraphics);
+	}
 }
