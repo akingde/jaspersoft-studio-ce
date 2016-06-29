@@ -8,52 +8,52 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.fonts;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.messages.Messages;
 
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
-import net.sf.jasperreports.eclipse.util.Misc;
-import net.sf.jasperreports.engine.fonts.SimpleFontSet;
+import net.sf.jasperreports.engine.fonts.FontSet;
 
-public class FontSetDialog extends ATitledDialog {
-	private SimpleFontSet fs;
+public class SelectFontSetSetDialog extends ATitledDialog {
+	private List<FontSet> sets;
+	private FontSet value;
 
-	protected FontSetDialog(Shell parentShell, SimpleFontSet fs) {
+	protected SelectFontSetSetDialog(Shell parentShell, List<FontSet> sets) {
 		super(parentShell);
-		setTitle(Messages.FontSetDialog_0);
-		setDefaultSize(400, 140);
-		this.fs = fs;
+		setTitle(Messages.SelectFontSetSetDialog_0);
+		setDefaultSize(300, 400);
+		this.sets = sets;
 	}
 
-	public SimpleFontSet getValue() {
-		return fs;
+	public FontSet getValue() {
+		return value;
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite cmp = (Composite) super.createDialogArea(parent);
-		cmp.setLayout(new GridLayout(2, false));
+		cmp.setLayout(new GridLayout());
 
-		new Label(cmp, SWT.NONE).setText(Messages.FontSetDialog_1);
-
-		final Text txt = new Text(cmp, SWT.BORDER);
-		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		txt.setText(Misc.nvl(fs.getName()));
-		txt.addModifyListener(new ModifyListener() {
-
+		final org.eclipse.swt.widgets.List lst = new org.eclipse.swt.widgets.List(cmp, SWT.SINGLE | SWT.BORDER);
+		lst.setLayoutData(new GridData(GridData.FILL_BOTH));
+		String[] items = new String[sets.size()];
+		for (int i = 0; i < sets.size(); i++)
+			items[i] = sets.get(i).getName();
+		lst.setItems(items);
+		lst.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void modifyText(ModifyEvent e) {
-				fs.setName(txt.getText());
+			public void widgetSelected(SelectionEvent e) {
+				value = sets.get(lst.getSelectionIndex());
 			}
 		});
 

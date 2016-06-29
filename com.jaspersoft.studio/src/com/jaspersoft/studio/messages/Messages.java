@@ -849,6 +849,8 @@ public class Messages extends NLS {
 	public static String FontPathWizard_0;
 	public static String FontPathWizard_2;
 	public static String FontPathWizard_3;
+	public static String FontSetDialog_0;
+	public static String FontSetDialog_1;
 	public static String FontSetFamilyDialog_0;
 	public static String FontSetFamilyDialog_1;
 	public static String FontSetFamilyDialog_2;
@@ -1965,6 +1967,7 @@ public class Messages extends NLS {
 	public static String SelectDefaultDatasetPage_customDAAction;
 	public static String SelectDefaultDatasetPage_customDADescription;
 	public static String SelectDefaultDatasetPage_pathLabel;
+	public static String SelectFontSetSetDialog_0;
 	public static String SelectWorkspacePage_description;
 	public static String SelectWorkspacePage_openTitle;
 	public static String SelectWorkspacePage_title;

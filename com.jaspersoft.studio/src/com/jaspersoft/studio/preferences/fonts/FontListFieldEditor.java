@@ -46,6 +46,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -87,6 +88,7 @@ public class FontListFieldEditor extends TreeFieldEditor {
 	private Button addURLButton;
 	private Button addPathButton;
 	private Button addSetButton;
+	private Button addToSetButton;
 
 	public FontListFieldEditor() {
 		super();
@@ -185,7 +187,7 @@ public class FontListFieldEditor extends TreeFieldEditor {
 			String s = getPreferenceStore().getDefaultString(getPreferenceName());
 			if (Misc.isNullOrEmpty(s))
 				return;
-			//Load the list of the extension parsing the xml but without loading actually the fonts
+			// Load the list of the extension parsing the xml but without loading actually the fonts
 			SimpleFontExtensionHelper.getInstance().loadFontExtensions(JasperReportsConfiguration.getDefaultInstance(),
 					new ByteArrayInputStream(s.getBytes()), fontFamilies, false);
 			tree.refresh(true);
@@ -200,7 +202,7 @@ public class FontListFieldEditor extends TreeFieldEditor {
 			String s = getPreferenceStore().getString(getPreferenceName());
 			if (Misc.isNullOrEmpty(s))
 				return;
-			//Load the list of the extension parsing the xml but without loading actually the fonts
+			// Load the list of the extension parsing the xml but without loading actually the fonts
 			SimpleFontExtensionHelper.getInstance().loadFontExtensions(JasperReportsConfiguration.getDefaultInstance(),
 					new ByteArrayInputStream(s.getBytes()), fontFamilies, false);
 			tree.refresh(true);
@@ -368,6 +370,27 @@ public class FontListFieldEditor extends TreeFieldEditor {
 				}
 			}
 			fontFamilies.getFontSets().add(fs);
+			tree.refresh(true);
+			tree.setSelection(new StructuredSelection(fs), true);
+			selectionChanged();
+		}
+	}
+
+	protected void add2SetPressed() {
+		setPresentsDefaultValue(false);
+		StructuredSelection sel = (StructuredSelection) tree.getSelection();
+		SelectFontSetSetDialog d = new SelectFontSetSetDialog(UIUtils.getShell(), fontFamilies.getFontSets());
+		if (d.open() == Dialog.OK) {
+			FontSet fs = ((SimpleFontSet) d.getValue());
+			if (fs == null)
+				return;
+			for (Object obj : sel.toList()) {
+				if (obj instanceof FontFamily) {
+					SimpleFontSetFamily fsf = new SimpleFontSetFamily();
+					fsf.setFamilyName(((FontFamily) obj).getName());
+					((SimpleFontSet) d.getValue()).addFamily(fsf);
+				}
+			}
 			tree.refresh(true);
 			tree.setSelection(new StructuredSelection(fs), true);
 			selectionChanged();
@@ -565,13 +588,24 @@ public class FontListFieldEditor extends TreeFieldEditor {
 
 		addPathButton = createPushButton(box, Messages.JRVersionPage_4);
 
-		super.createButtons(box);
+		addButton = createPushButton(box, Messages.common_add);
+		((GridData) addButton.getLayoutData()).verticalIndent = 20;
 
-		addSetButton = createPushButton(box, Messages.FontListFieldEditor_6);
+		duplicateButton = createPushButton(box, Messages.common_duplicate);
 
 		editButton = createPushButton(box, Messages.FontListFieldEditor_editButton);
 
+		removeButton = createPushButton(box, Messages.common_delete);
+		upButton = createPushButton(box, Messages.common_up);
+		downButton = createPushButton(box, Messages.common_down);
+
+		addSetButton = createPushButton(box, Messages.FontListFieldEditor_6);
+		((GridData) addSetButton.getLayoutData()).verticalIndent = 20;
+
+		addToSetButton = createPushButton(box, "Add To Set");
+
 		exportButton = createPushButton(box, Messages.FontListFieldEditor_exportButton);
+		((GridData) exportButton.getLayoutData()).verticalIndent = 20;
 	}
 
 	public void createSelectionListener() {
@@ -582,6 +616,8 @@ public class FontListFieldEditor extends TreeFieldEditor {
 					addPressed();
 				else if (widget == addSetButton)
 					addSetPressed();
+				else if (widget == addToSetButton)
+					add2SetPressed();
 				else if (widget == duplicateButton)
 					duplicatePressed();
 				else if (widget == removeButton)
@@ -667,6 +703,16 @@ public class FontListFieldEditor extends TreeFieldEditor {
 					}
 			addSetButton.setEnabled(en);
 		}
+		if (addToSetButton != null) {
+			boolean en = !sel.isEmpty();
+			if (en)
+				for (Object obj : sel.toList())
+					if (!(obj instanceof FontFamily)) {
+						en = false;
+						break;
+					}
+			addToSetButton.setEnabled(en);
+		}
 	}
 
 	public void setEnabled(boolean enabled, Composite parent) {
@@ -676,6 +722,7 @@ public class FontListFieldEditor extends TreeFieldEditor {
 		addPathButton.setEnabled(enabled);
 		addURLButton.setEnabled(enabled);
 		addSetButton.setEnabled(enabled);
+		addToSetButton.setEnabled(enabled);
 	}
 
 	@Override
