@@ -71,8 +71,8 @@ public class TableViewerSorter extends ViewerSorter {
 				value2 = "";
 			}
 
-			return (this.isAscending() ? this.getComparator().compare(value1, value2) : (-this.getComparator().compare(
-					value1, value2)));
+			return (this.isAscending() ? this.getComparator().compare((String)value1, (String)value2) : (-this.getComparator().compare(
+					(String)value1, (String)value2)));
 		} else {
 			if (value1 == null && value2 == null) {
 
@@ -87,8 +87,8 @@ public class TableViewerSorter extends ViewerSorter {
 				return (this.isAscending() ? ((Comparable) value1).compareTo(value2) : -((Comparable) value1).compareTo(value2));
 			} else {
 
-				return (this.isAscending() ? this.getComparator().compare(value1, value2) : (-this.getComparator().compare(
-						value1, value2)));
+				return (this.isAscending() ? this.getComparator().compare((String)value1, (String)value2) : (-this.getComparator().compare(
+						(String)value1, (String)value2)));
 			}
 		}
 	}
