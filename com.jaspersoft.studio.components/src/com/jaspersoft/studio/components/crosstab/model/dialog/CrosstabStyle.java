@@ -14,25 +14,33 @@ package com.jaspersoft.studio.components.crosstab.model.dialog;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.graphics.RGB;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.editor.action.exporter.BaseResource;
 import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
+import com.jaspersoft.studio.editor.action.exporter.IResourceDefinition;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator.SCHEMAS;
 import com.jaspersoft.studio.style.view.TemplateStyleView;
 import com.jaspersoft.studio.utils.AlfaRGB;
+import com.jaspersoft.studio.utils.Pair;
 
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion;
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion.RESPONSE_TYPE;
@@ -86,6 +94,26 @@ public class CrosstabStyle extends TemplateStyle implements IExportedResourceHan
 	 * Key for the color of the measure cells
 	 */
 	public final static String COLOR_MEASURES = "color_measures";
+	
+	/**
+	 * Filename used to store metadata of the exported resources
+	 */
+	private static final String INDEX_FILE_NAME = "index.properties";
+	
+	/**
+	 * The name of the file where the styles will be written
+	 */
+	private static final String STYLE_FILE_NAME= "exportedStyles.xml";
+	
+	/**
+	 * Cache when the list of exportable resource definition is requested, used to avoid multiple calculation
+	 */
+	private List<IResourceDefinition> cachedExportableResources = null;
+
+	/**
+	 * Cache when the list of importable resource definition is requested, used to avoid multiple calculation of the same container
+	 */
+	private Pair<String, List<IResourceDefinition>> cachedImportableResources = null;
 	
 	public CrosstabStyle(AlfaRGB baseColor, SCHEMAS variation, boolean whiteGrid) {
 		super(baseColor, variation);
@@ -288,7 +316,7 @@ public class CrosstabStyle extends TemplateStyle implements IExportedResourceHan
 	 * @return a not null folder containing the backup of the styles
 	 */
 	@Override
-	public File exportContentFolder() {
+	public File exportContentFolder(List<IResourceDefinition> resourcesToExport) {
 		//Create the temp folder
 		File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 		tempDir.deleteOnExit();
@@ -296,24 +324,47 @@ public class CrosstabStyle extends TemplateStyle implements IExportedResourceHan
 		if (destDir.exists()) FileUtils.recursiveDelete(destDir);
 		destDir.mkdirs();
 
+		//Create the set of the resources that should be exported
+		HashSet<TemplateStyle> resourcesToExportSet = new HashSet<TemplateStyle>();
+		for(IResourceDefinition definition : resourcesToExport){
+			resourcesToExportSet.add((TemplateStyle)definition.getData());
+		}
+		
 		//Convert the styles handled by this class into a single xml
+		Properties props = new Properties();
 		Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(CrosstabStyle.TEMPLATE_TYPE);
 		StringBuffer xmlBuffer = new StringBuffer();
 		xmlBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n<templateStyles>");  //$NON-NLS-1$
+		int index = 0;
 		for(TemplateStyle style : styles){
-			xmlBuffer.append(style.getXMLData());
+			if (resourcesToExportSet.contains(style)) {
+				xmlBuffer.append(style.getXMLData());
+				props.put(index, style.getDescription());
+				index++;
+			}
 		}
 		xmlBuffer.append("</templateStyles>"); //$NON-NLS-1$
 		
 		//Write the xml on the exportedfolder
 		try {
-			OutputStream file = new FileOutputStream(new File(destDir, "exportedStyles.xml"));  //$NON-NLS-1$
+			OutputStream file = new FileOutputStream(new File(destDir, STYLE_FILE_NAME));  //$NON-NLS-1$
 			String xml = xmlBuffer.toString();
 			file.write(xml.getBytes("UTF-8")); //$NON-NLS-1$
 			file.flush();
 			file.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		//Write the index file
+		FileOutputStream out = null;
+		try{
+			out = new FileOutputStream(new File(destDir, INDEX_FILE_NAME));
+			props.store(out, "Exported Crosstab Styles Index");
+		} catch (Exception ex){
+			JaspersoftStudioPlugin.getInstance().logError(ex);
+		} finally {
+			FileUtils.closeStream(out);
 		}
 		return destDir;
 	}
@@ -325,19 +376,30 @@ public class CrosstabStyle extends TemplateStyle implements IExportedResourceHan
 	 * by the export procedure
 	 */
 	@Override
-	public void restoreContentFolder(File exportedContainer) {
-	
+	public void restoreContentFolder(File exportedContainer, List<IResourceDefinition> resourcesToImport) {
+		
+		//Create the set of the files to import
+		HashSet<Integer> stylesToImport = new HashSet<Integer>();
+		for(IResourceDefinition resourceToImport : resourcesToImport){
+			stylesToImport.add((Integer)resourceToImport.getData());
+		}
+		
 		//Load the styles from the exported folder
 		List<TemplateStyle> loadedStyles = new ArrayList<TemplateStyle>();
 		File exportedFolder = new File(exportedContainer, CrosstabStyle.TEMPLATE_TYPE);
-		for(File styleDefinition : exportedFolder.listFiles()){
-			try{
-				String xml = FileUtils.readFileAsAString(styleDefinition);
-				List<TemplateStyle> fileStyles = TemplateStyleView.getTemplateStylesStorage().readTemplateFromFile(xml);
-				loadedStyles.addAll(fileStyles);
-			} catch (Exception ex){
-				ex.printStackTrace();
+		File exportedFile = new File(exportedFolder, STYLE_FILE_NAME);
+		try{
+			String xml = FileUtils.readFileAsAString(exportedFile);
+			List<TemplateStyle> fileStyles = TemplateStyleView.getTemplateStylesStorage().readTemplateFromFile(xml);
+			int index = 0;
+			for(TemplateStyle style : fileStyles){
+				if (stylesToImport.contains(index)){
+					loadedStyles.add(style);
+				}
+				index++;
 			}
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 		
 		//Search the duplicated styles name
@@ -378,9 +440,37 @@ public class CrosstabStyle extends TemplateStyle implements IExportedResourceHan
 	 * @return true if there is something to import, false otherwise
 	 */
 	@Override
-	public boolean hasRestorableResources(File exportedContainer) {
-		File exportedFolder = new File(exportedContainer, CrosstabStyle.TEMPLATE_TYPE);
-		return (exportedFolder.exists() && exportedFolder.listFiles().length > 0);
+	public List<IResourceDefinition> getRestorableResources(File exportedContainer) {
+		String containerPath = exportedContainer.getAbsolutePath();
+		if (cachedImportableResources == null || 
+				!cachedImportableResources.getKey().equals(containerPath)){
+	
+			File exportedFolder = new File(exportedContainer, CrosstabStyle.TEMPLATE_TYPE);
+			File indexFile = new File(exportedFolder, INDEX_FILE_NAME);
+			if (indexFile.exists()){
+				FileInputStream is = null;
+				try{
+					List<IResourceDefinition> result = new ArrayList<IResourceDefinition>();
+					is = new FileInputStream(indexFile);
+					Properties loadedProperties = new Properties();
+					loadedProperties.load(is);
+					for(Entry<Object, Object> entry : loadedProperties.entrySet()){
+						BaseResource resource = new BaseResource(entry.getValue().toString());
+						resource.setData(entry.getKey());
+						result.add(resource);
+					}
+					cachedImportableResources = new Pair<String, List<IResourceDefinition>>(containerPath, result);
+				} catch (Exception ex){ 
+					JaspersoftStudioPlugin.getInstance().logError(ex);
+					cachedImportableResources = new Pair<String, List<IResourceDefinition>>(containerPath, new ArrayList<IResourceDefinition>());
+				} finally {
+					FileUtils.closeStream(is);
+				}
+			} else {
+				cachedImportableResources = new Pair<String, List<IResourceDefinition>>(containerPath, new ArrayList<IResourceDefinition>());
+			}
+		}
+		return cachedImportableResources.getValue();
 	}
 
 	/**
@@ -389,9 +479,17 @@ public class CrosstabStyle extends TemplateStyle implements IExportedResourceHan
 	 * @return true if there are at least one crosstab template style, false otherwise
 	 */
 	@Override
-	public boolean hasExportableResources() {
-		Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(CrosstabStyle.TEMPLATE_TYPE);
-		return styles.size() > 0;
+	public List<IResourceDefinition> getExportableResources() {
+		if (cachedExportableResources == null) {
+			Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(CrosstabStyle.TEMPLATE_TYPE);
+			cachedExportableResources = new ArrayList<IResourceDefinition>();
+			for(TemplateStyle style : styles){
+				BaseResource resource = new BaseResource(style.getDescription());
+				resource.setData(style);
+				cachedExportableResources.add(resource);
+			}
+		}
+		return cachedExportableResources;
 	}
 	
 	/**

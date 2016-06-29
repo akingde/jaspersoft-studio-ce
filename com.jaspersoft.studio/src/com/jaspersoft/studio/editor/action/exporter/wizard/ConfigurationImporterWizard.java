@@ -15,6 +15,9 @@ package com.jaspersoft.studio.editor.action.exporter.wizard;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -24,6 +27,7 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
+import com.jaspersoft.studio.editor.action.exporter.IResourceDefinition;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -87,14 +91,16 @@ public class ConfigurationImporterWizard extends Wizard implements IImportWizard
 				
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						monitor.beginTask("Restoring Resources", page1.getSelection().size());
+						Map<IExportedResourceHandler, List<IResourceDefinition>> selectedResources = page1.getSelectedResources();
+						monitor.beginTask("Restoring Resources", selectedResources.keySet().size());
 						final File importContainerLocation = new File(getSelectedFile());
-						for(IExportedResourceHandler exporter: page1.getSelection()){
-							final IExportedResourceHandler currentExporter = exporter;
+						for(Entry<IExportedResourceHandler, List<IResourceDefinition>> selectedEntry : selectedResources.entrySet()){
+							final IExportedResourceHandler currentExporter = selectedEntry.getKey();
+							final List<IResourceDefinition> exporterSelection = selectedEntry.getValue();
 							UIUtils.getDisplay().syncExec(new Runnable() {				
 								@Override
 								public void run() {
-									currentExporter.restoreContentFolder(importContainerLocation);
+									currentExporter.restoreContentFolder(importContainerLocation, exporterSelection);
 								}
 							});
 							monitor.worked(1);

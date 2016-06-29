@@ -150,7 +150,7 @@ public class SourcePage extends JSSHelpWizardPage {
 	protected boolean hasImportableContent(String path){
 		File contentFolder = new File(path);
 		for(IExportedResourceHandler importer : ExtensionManager.getContributedExporters()){
-			if (importer.hasRestorableResources(contentFolder)){
+			if (importer.getRestorableResources(contentFolder).size() > 0){
 				return true;
 			}
 		}

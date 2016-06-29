@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -25,10 +26,13 @@ import java.util.Properties;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.exporter.BaseResource;
 import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
 import com.jaspersoft.studio.editor.action.exporter.IPropertyCustomExporter;
+import com.jaspersoft.studio.editor.action.exporter.IResourceDefinition;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.Pair;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FilePrefUtil;
@@ -51,6 +55,16 @@ public class ExportedJRPropertiesHandler implements IExportedResourceHandler, IP
 	 * File name for the exported properties
 	 */
 	private static final String FILE_NAME = "backup.properties"; //$NON-NLS-1$
+	
+	/**
+	 * Cache when the list of exportable resource definition is requested, used to avoid multiple calculation
+	 */
+	private List<IResourceDefinition> cachedExportableResources = null;
+
+	/**
+	 * Cache when the list of importable resource definition is requested, used to avoid multiple calculation of the same container
+	 */
+	private Pair<String, List<IResourceDefinition>> cachedImportableResources = null;
 	
 	@Override
 	public String getResourceNameExport() {
@@ -84,12 +98,81 @@ public class ExportedJRPropertiesHandler implements IExportedResourceHandler, IP
 	}
 
 	@Override
-	public File exportContentFolder() {
+	public List<IResourceDefinition> getExportableResources() {
+		if (cachedExportableResources == null) {
+			cachedExportableResources = new ArrayList<IResourceDefinition>();
+			try{
+				IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+				Properties props = FileUtils.load(store.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
+				for(Object key : props.keySet()){
+					Object value = props.get(key);
+					BaseResource resource = new BaseResource(key.toString() + "=" + Misc.nvl(value.toString()));
+					resource.setData(key);
+					cachedExportableResources.add(resource);
+				}
+			} catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}
+		return cachedExportableResources;
+	}
+
+	
+	@Override
+	public List<IResourceDefinition> getRestorableResources(File exportedContainer) {
+		String containerPath = exportedContainer.getAbsolutePath();
+		if (cachedImportableResources == null || 
+				!cachedImportableResources.getKey().equals(containerPath)){
+			
+			File destDir = new File (exportedContainer, CONTAINER_NAME);
+			File indexFile = new File(destDir, FILE_NAME);
+			InputStream is = null;
+			if (indexFile.exists()){
+				try{
+					List<IResourceDefinition> result = new ArrayList<IResourceDefinition>();
+		      is = new FileInputStream(indexFile);
+		      Properties props = new Properties();
+		      props.load(is);	
+		    	for(Object key : props.keySet()){
+						Object value = props.get(key);
+						BaseResource resource = new BaseResource(key.toString() + "=" + Misc.nvl(value.toString()));
+						resource.setData(key);
+						result.add(resource);
+					}
+					cachedImportableResources = new Pair<String, List<IResourceDefinition>>(containerPath, result);
+				} catch (Exception ex){
+					JaspersoftStudioPlugin.getInstance().logError(ex); 
+					cachedImportableResources = new Pair<String, List<IResourceDefinition>>(containerPath, new ArrayList<IResourceDefinition>());
+				} finally {
+					FileUtils.closeStream(is);
+				}
+			} else {
+				cachedImportableResources = new Pair<String, List<IResourceDefinition>>(containerPath, new ArrayList<IResourceDefinition>());
+			}
+		}
+		return cachedImportableResources.getValue();
+	}
+	
+	@Override
+	public File exportContentFolder(List<IResourceDefinition> resourcesToExport) {
 		OutputStream out = null;
 		File destDir = null;
 		try{
 			IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
 			Properties props = FileUtils.load(store.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
+			
+			//Create the set of the resources that should be exported
+			HashSet<String> resourcesToExportSet = new HashSet<String>();
+			for(IResourceDefinition definition : resourcesToExport){
+				resourcesToExportSet.add((String)definition.getData());
+			}
+			
+			//Remove from the properties the unexported keys
+			for(Object key : new ArrayList<Object>(props.keySet())){
+				if (!resourcesToExportSet.contains(key.toString())){
+					props.remove(key);
+				}
+			}
 			
 			//Create the temp folder
 			File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
@@ -110,15 +193,28 @@ public class ExportedJRPropertiesHandler implements IExportedResourceHandler, IP
 	}
 
 	@Override
-	public void restoreContentFolder(File exportedContainer) {
+	public void restoreContentFolder(File exportedContainer, List<IResourceDefinition> resourcesToImport) {
     InputStream is = null;
     try {
+			//Create the set of the files to import
+			HashSet<String> propertiesToImport = new HashSet<String>();
+			for(IResourceDefinition resourceToImport : resourcesToImport){
+				propertiesToImport.add(resourceToImport.getData().toString());
+			}
+    	
     	//Load the stored resources
     	File destDir = new File (exportedContainer, CONTAINER_NAME);
     	File f = new File(destDir, FILE_NAME);
       is = new FileInputStream(f);
       Properties loadedProperties = new Properties();
       loadedProperties.load(is);
+      
+			//Remove from the properties the unimported keys
+			for(Object key : new ArrayList<Object>(loadedProperties.keySet())){
+				if (!propertiesToImport.contains(key.toString())){
+					loadedProperties.remove(key);
+				}
+			}
       
       //Check if there are duplicates
       boolean hasDuplicatedProperties = false;
@@ -152,24 +248,6 @@ public class ExportedJRPropertiesHandler implements IExportedResourceHandler, IP
     	FileUtils.closeStream(is);
     }
 
-	}
-
-	@Override
-	public boolean hasRestorableResources(File exportedContainer) {
-		File destDir = new File (exportedContainer, CONTAINER_NAME);
-		return destDir.exists() && destDir.list().length > 0;
-	}
-
-	@Override
-	public boolean hasExportableResources() {
-		try{
-			IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-			Properties props = FileUtils.load(store.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
-			return props.size() > 0;
-		} catch(Exception ex){
-			ex.printStackTrace();
-		}
-		return false;
 	}
 
 	@Override

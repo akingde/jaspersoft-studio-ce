@@ -251,18 +251,25 @@ public class CompositeElementManager {
 			document = builder.newDocument();
 			root = document.createElement("elements"); //$NON-NLS-1$
 			document.appendChild(root);
-
+			String baseFolderName = "CompositeElement";
+			int index = 1;
 			for (MCompositeElement elementToExport : elementsToExport) {
+				
+				//Create the folder for this composite element
+				File destinationFolder = new File(targetFolder, baseFolderName + index);
+				destinationFolder.mkdirs();
+				index++;
+				
 				File elementDefinition = new File(elementToExport.getPath());
 				if (elementDefinition.exists()) {
-					FileUtils.copyFile(elementDefinition, new File(targetFolder, elementDefinition.getName()));
+					FileUtils.copyFile(elementDefinition, new File(destinationFolder, elementDefinition.getName()));
 
 					boolean hasSmallIcon = false;
 					String iconSmallPath = elementToExport.getIconPathSmall();
 					if (iconSmallPath != null) {
 						File iconSmallFile = new File(iconSmallPath);
 						if (iconSmallFile.exists()) {
-							FileUtils.copyFile(iconSmallFile, new File(targetFolder, iconSmallFile.getName()));
+							FileUtils.copyFile(iconSmallFile, new File(destinationFolder, iconSmallFile.getName()));
 							hasSmallIcon = true;
 						}
 					}
@@ -272,7 +279,7 @@ public class CompositeElementManager {
 					if (iconBigPath != null) {
 						File iconBigFile = new File(iconBigPath);
 						if (iconBigFile.exists()) {
-							FileUtils.copyFile(iconBigFile, new File(targetFolder, iconBigFile.getName()));
+							FileUtils.copyFile(iconBigFile, new File(destinationFolder, iconBigFile.getName()));
 							hasBigIcon = true;
 						}
 					}
@@ -281,7 +288,7 @@ public class CompositeElementManager {
 					File elementResourceDir = new File(elementDefinition.getParentFile(), elementToExport.getName());
 					if (elementResourceDir.exists()) {
 						try {
-							FileUtils.copyDirectory(elementResourceDir, new File(targetFolder, elementResourceDir.getName()));
+							FileUtils.copyDirectory(elementResourceDir, new File(destinationFolder, elementResourceDir.getName()));
 						} catch (IOException e) {
 							e.printStackTrace();
 							JaspersoftStudioPlugin.getInstance().logError(e);
@@ -291,14 +298,14 @@ public class CompositeElementManager {
 					try {
 						Element newNode = document.createElement(XML_TAG_NAME);
 						newNode.setAttribute(PROPERTY_NAME, elementToExport.getName());
-						newNode.setAttribute(PROPERTY_PATH, elementDefinition.getName());
+						newNode.setAttribute(PROPERTY_PATH, destinationFolder.getName() + "/" + elementDefinition.getName());
 						newNode.setAttribute(PROPERTY_DESCRIPTION, elementToExport.getDescription());
 						newNode.setAttribute(PROPERTY_GROUP, elementToExport.getGroupId());
 						if (hasSmallIcon) {
-							newNode.setAttribute(PROPERTY_ICON_SMALL, new File(iconSmallPath).getName());
+							newNode.setAttribute(PROPERTY_ICON_SMALL, destinationFolder.getName() + "/" + new File(iconSmallPath).getName());
 						}
 						if (hasBigIcon) {
-							newNode.setAttribute(PROPERTY_ICON_BIG, new File(iconBigPath).getName());
+							newNode.setAttribute(PROPERTY_ICON_BIG, destinationFolder.getName() + "/" + new File(iconBigPath).getName());
 						}
 						root.appendChild(newNode);
 					} catch (Exception ex) {

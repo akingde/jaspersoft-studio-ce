@@ -20,8 +20,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -37,7 +41,10 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 import com.ibm.icu.text.MessageFormat;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.exporter.BaseResource;
 import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
+import com.jaspersoft.studio.editor.action.exporter.IResourceDefinition;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.repository.RepositoryView;
@@ -46,6 +53,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.utils.Pair;
 
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion;
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion.RESPONSE_TYPE;
@@ -66,9 +74,81 @@ public class ExportedServersHandler implements IExportedResourceHandler {
 	 * Folder name for the exported connections
 	 */
 	private static final String EXPORTED_FOLDER_NAME = "jrsConnections"; //$NON-NLS-1$
+	
+	/**
+	 * Filename used to store metadata of the exported resources
+	 */
+	private static final String INDEX_FILE_NAME = "index.properties";
+	
+	/**
+	 * Cache when the list of exportable resource definition is requested, used to avoid multiple calculation
+	 */
+	private List<IResourceDefinition> cachedExportableResources = null;
+
+	/**
+	 * Cache when the list of importable resource definition is requested, used to avoid multiple calculation of the same container
+	 */
+	private Pair<String, List<IResourceDefinition>> cachedImportableResources = null;
+	
+	@Override
+	public List<IResourceDefinition> getRestorableResources(File exportedContainer) {
+		String containerPath = exportedContainer.getAbsolutePath();
+		if (cachedImportableResources == null || 
+				!cachedImportableResources.getKey().equals(containerPath)){
+			
+	
+			File exportedFolder = new File(exportedContainer, EXPORTED_FOLDER_NAME);
+			File indexFile = new File(exportedFolder, INDEX_FILE_NAME);
+			if (indexFile.exists()){
+				FileInputStream is = null;
+				try{
+					List<IResourceDefinition> result = new ArrayList<IResourceDefinition>();
+					is = new FileInputStream(indexFile);
+					Properties loadedProperties = new Properties();
+					loadedProperties.load(is);
+					for(Entry<Object, Object> entry : loadedProperties.entrySet()){
+						BaseResource resource = new BaseResource(entry.getValue().toString());
+						resource.setData(entry.getKey());
+						result.add(resource);
+					}
+					cachedImportableResources = new Pair<String, List<IResourceDefinition>>(containerPath, result);
+				} catch (Exception ex){ 
+					JaspersoftStudioPlugin.getInstance().logError(ex);
+					cachedImportableResources = new Pair<String, List<IResourceDefinition>>(containerPath, new ArrayList<IResourceDefinition>());
+				} finally {
+					FileUtils.closeStream(is);
+				}
+			} else {
+				cachedImportableResources = new Pair<String, List<IResourceDefinition>>(containerPath, new ArrayList<IResourceDefinition>());
+			}
+		}
+		return cachedImportableResources.getValue();
+	}
+	
+	@Override
+	public List<IResourceDefinition> getExportableResources() {
+		if (cachedExportableResources == null) {
+			Collection<MServerProfile> profiles = ServerManager.getServerProfiles();
+			cachedExportableResources = new ArrayList<IResourceDefinition>();
+			for(MServerProfile profile : profiles){
+				BaseResource resource = new BaseResource(profile.getDisplayText());
+				resource.setData(profile);
+				cachedExportableResources.add(resource);
+			}
+		}
+		return cachedExportableResources;
+	}
 
 	@Override
-	public File exportContentFolder() {
+	public File exportContentFolder(List<IResourceDefinition> resourcesToExport) {
+		
+		//Create the set of the resources that should be exported
+		HashSet<MServerProfile> resourcesToExportSet = new HashSet<MServerProfile>();
+		for(IResourceDefinition definition : resourcesToExport){
+			resourcesToExportSet.add((MServerProfile)definition.getData());
+		}
+		
+		Properties props = new Properties();		
 		File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 		tempDir.deleteOnExit();
 		File destDir = new File (tempDir, EXPORTED_FOLDER_NAME);
@@ -76,18 +156,33 @@ public class ExportedServersHandler implements IExportedResourceHandler {
 		destDir.mkdirs();
 		int index = 0;
 		for(MServerProfile serverConnection : ServerManager.getServerProfiles()){
-			save(serverConnection, new File(destDir, "jrsConnection"+index)); //$NON-NLS-1$
-			index++;
+			if (resourcesToExportSet.contains(serverConnection)){
+				String fileName = "jrsConnection"+index;
+				save(serverConnection, new File(destDir, fileName)); //$NON-NLS-1$
+				props.put(fileName, serverConnection.getDisplayText());
+				index++;
+			}
+		}
+		
+		//Write the index file
+		FileOutputStream out = null;
+		try{
+			out = new FileOutputStream(new File(destDir, INDEX_FILE_NAME));
+			props.store(out, "Exported Server Index");
+		} catch (Exception ex){
+			JaspersoftStudioPlugin.getInstance().logError(ex);
+		} finally {
+			FileUtils.closeStream(out);
 		}
 		return destDir;
 	}
 
 	@Override
-	public void restoreContentFolder(File exportedContainer) {
+	public void restoreContentFolder(File exportedContainer, List<IResourceDefinition> resourcesToImport) {
 		File elementsFolder = new File(exportedContainer, EXPORTED_FOLDER_NAME);
 		if (elementsFolder.exists()){
 			//Load the exported server
-			List<MServerProfile> loadedProfiles = load(elementsFolder);
+			List<MServerProfile> loadedProfiles = load(elementsFolder, resourcesToImport);
 			HashMap<String, MServerProfile> existingProfiles = getExistingProfiles();
 			List<String> duplicatedConnection = new ArrayList<String>();
 			for(MServerProfile profile : loadedProfiles){
@@ -167,39 +262,41 @@ public class ExportedServersHandler implements IExportedResourceHandler {
 	 * @param serversFolder folder containing the xml definition of the servers
 	 * @return a not null list of the servers created from XMLs
 	 */
-	private List<MServerProfile> load(File serversFolder) {
+	private List<MServerProfile> load(File serversFolder, List<IResourceDefinition> resourcesToImport) {
 		List<MServerProfile> result = new ArrayList<MServerProfile>();
+		
+		//Create the set of the files to import
+		HashSet<String> filesToImport = new HashSet<String>();
+		for(IResourceDefinition resourceToImport : resourcesToImport){
+			filesToImport.add(resourceToImport.getData().toString());
+		}
 		
 		// Read the configuration from the file storage
 		File[] storageContent = serversFolder.listFiles();
 		for (File storageElement : storageContent) {
-			try {
-				InputStream inputStream = new FileInputStream(storageElement);
-				Reader reader = new InputStreamReader(inputStream, "UTF-8"); //$NON-NLS-1$
-				InputSource is = new InputSource(reader);
-				is.setEncoding("UTF-8"); //$NON-NLS-1$
-				Document document = JRXmlUtils.parse(is);
-				Node serverNode = document.getDocumentElement();
-				if (serverNode.getNodeType() == Node.ELEMENT_NODE) {
-					try {
-						ServerProfile sprof = (ServerProfile) CastorHelper.read(serverNode, MServerProfile.MAPPINGFILE);
-						MServerProfile sp = new MServerProfile(null, sprof);
-						result.add(sp);
-					} catch (Exception ex) {
-						ex.printStackTrace();
+			if (!storageElement.isHidden() && filesToImport.contains(storageElement.getName())) {
+				try {
+					InputStream inputStream = new FileInputStream(storageElement);
+					Reader reader = new InputStreamReader(inputStream, "UTF-8"); //$NON-NLS-1$
+					InputSource is = new InputSource(reader);
+					is.setEncoding("UTF-8"); //$NON-NLS-1$
+					Document document = JRXmlUtils.parse(is);
+					Node serverNode = document.getDocumentElement();
+					if (serverNode.getNodeType() == Node.ELEMENT_NODE) {
+						try {
+							ServerProfile sprof = (ServerProfile) CastorHelper.read(serverNode, MServerProfile.MAPPINGFILE);
+							MServerProfile sp = new MServerProfile(null, sprof);
+							result.add(sp);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
 					}
+				} catch (Exception e) {
+					UIUtils.showError(e);
 				}
-			} catch (Exception e) {
-				UIUtils.showError(e);
 			}
 		}
 		return result;
-	}
-	
-	@Override
-	public boolean hasRestorableResources(File exportedContainer) {
-		File exportedFolder = new File(exportedContainer, EXPORTED_FOLDER_NAME);
-		return (exportedFolder.exists() && exportedFolder.list().length > 0);
 	}
 
 	@Override
@@ -210,14 +307,7 @@ public class ExportedServersHandler implements IExportedResourceHandler {
 
 	@Override
 	public String getResourceNameImport(File exportedContainer) {
-		File elementsFolder = new File(exportedContainer, EXPORTED_FOLDER_NAME);
-		int serverNumbers = elementsFolder.list().length;
-		return "JasperReports Server Connections (" + serverNumbers + ")"; //$NON-NLS-1$
-	}
-	
-	@Override
-	public boolean hasExportableResources() {
-		return (ServerManager.getServerProfiles().size() > 0);
+		return "JasperReports Server Connections (" + getRestorableResources(exportedContainer).size() + ")"; //$NON-NLS-1$
 	}
 	
 	/**

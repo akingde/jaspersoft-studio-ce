@@ -185,5 +185,11 @@
          </run>
       </builder>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.resourceExporter">
+      <resourceExporter
+            exporterClass="com.jaspersoft.studio.components.customvisualization.ui.preferences.ExportedCVCHandler">
+      </resourceExporter>
+   </extension>
     
 </plugin>

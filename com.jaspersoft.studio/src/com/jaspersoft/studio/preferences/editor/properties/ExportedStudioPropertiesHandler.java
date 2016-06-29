@@ -17,16 +17,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.exporter.BaseResource;
 import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
 import com.jaspersoft.studio.editor.action.exporter.IPropertyCustomExporter;
+import com.jaspersoft.studio.editor.action.exporter.IResourceDefinition;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 
@@ -131,99 +135,109 @@ public class ExportedStudioPropertiesHandler implements IExportedResourceHandler
   	}
 		return result;
 	}
-
+	
 	@Override
-	public File exportContentFolder() {
-		OutputStream out = null;
-		File destDir = null;
-		try{
-			MScopedPreferenceStore store = (MScopedPreferenceStore)JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-			HashSet<String> resources = new HashSet<String>();
-			IEclipsePreferences pref = store.getQualifierStore();
-			resources.addAll(Arrays.asList(pref.keys()));
-			Properties props = new Properties();
-			for(String resource : resources){
-				if (!getExcludedProeprties().contains(resource)){
-					props.put(resource, store.getString(resource));
-				}
-			}
-			
-			//Create the temp folder
-			File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
-			tempDir.deleteOnExit();
-			destDir = new File (tempDir, CONTAINER_NAME);
-			if (destDir.exists()) FileUtils.recursiveDelete(destDir);
-			destDir.mkdirs();
-		
-	    out = new FileOutputStream(new File(destDir, FILE_NAME));
-	    props.store(out, "Jaspersoft Studio Properties Backup"); //$NON-NLS-1$
-		} catch (Exception ex){
-			ex.printStackTrace();
-			destDir = null;
-		} finally {
-			FileUtils.closeStream(out);
-		}
-		return destDir;
-	}
-
-	@Override
-	public void restoreContentFolder(File exportedContainer) {
-    InputStream is = null;
-    try {
-    	//Load the stored resources
-    	File destDir = new File (exportedContainer, CONTAINER_NAME);
-    	File f = new File(destDir, FILE_NAME);
-      is = new FileInputStream(f);
-      Properties loadedProperties = new Properties();
-      loadedProperties.load(is);
-      
-      HashSet<String> missingProperties = new HashSet<String>();
-      for(Object key : loadedProperties.keySet()){
-      	missingProperties.add(key.toString());
-      }
-      
-      MScopedPreferenceStore store = (MScopedPreferenceStore)JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-			IEclipsePreferences pref = store.getQualifierStore();
-			for(String key : pref.keys()){
-				if (!getExcludedProeprties().contains(key)){
-					Object loadedValue = loadedProperties.get(key);
-					if (loadedValue != null){
-						pref.put(key, loadedValue.toString());
-						missingProperties.remove(key);
-					} else {
-						pref.remove(key);
-					}
-				}
-			}
-			for(String missingProperty : missingProperties){
-				Object loadedValue = loadedProperties.get(missingProperty);
-				pref.put(missingProperty, loadedValue != null ? loadedValue.toString() : null);
-			}
-			store.save();
-    }
-    catch (Exception e) { 
-    	e.printStackTrace();
-    } finally {
-    	FileUtils.closeStream(is);
-    }
-	}
-
-	@Override
-	public boolean hasRestorableResources(File exportedContainer) {
+	public List<IResourceDefinition> getRestorableResources(File exportedContainer) {
+		List<IResourceDefinition> result = new ArrayList<IResourceDefinition>();
 		File destDir = new File (exportedContainer, CONTAINER_NAME);
-		return destDir.exists() && destDir.list().length > 0;
+		if (destDir.exists() && destDir.list().length > 0){
+			result.add(new BaseResource("All Jaspersoft Studio Preferences"));
+		}
+		return result;
 	}
 
 	@Override
-	public boolean hasExportableResources() {
+	public List<IResourceDefinition> getExportableResources() {
+		List<IResourceDefinition> result = new ArrayList<IResourceDefinition>();
 		try{
 			IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
 			Properties props = FileUtils.load(store.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
-			return props.size() > 0;
+			if ( props.size() > 0) result.add(new BaseResource("All Jaspersoft Studio Preferences"));
 		} catch(Exception ex){
 			ex.printStackTrace();
 		}
-		return false;
+		return result;
 	}
 
+	@Override
+	public File exportContentFolder(List<IResourceDefinition> resourcesToExport) {
+		OutputStream out = null;
+		File destDir = null;
+		if (!resourcesToExport.isEmpty()){
+			try{
+				MScopedPreferenceStore store = (MScopedPreferenceStore)JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+				HashSet<String> resources = new HashSet<String>();
+				IEclipsePreferences pref = store.getQualifierStore();
+				resources.addAll(Arrays.asList(pref.keys()));
+				Properties props = new Properties();
+				for(String resource : resources){
+					if (!getExcludedProeprties().contains(resource)){
+						props.put(resource, store.getString(resource));
+					}
+				}
+				
+				//Create the temp folder
+				File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
+				tempDir.deleteOnExit();
+				destDir = new File (tempDir, CONTAINER_NAME);
+				if (destDir.exists()) FileUtils.recursiveDelete(destDir);
+				destDir.mkdirs();
+			
+		    out = new FileOutputStream(new File(destDir, FILE_NAME));
+		    props.store(out, "Jaspersoft Studio Properties Backup"); //$NON-NLS-1$
+			} catch (Exception ex){
+				ex.printStackTrace();
+				destDir = null;
+			} finally {
+				FileUtils.closeStream(out);
+			}
+			return destDir;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public void restoreContentFolder(File exportedContainer, List<IResourceDefinition> resourcesToImport) {
+    InputStream is = null;
+    if (!resourcesToImport.isEmpty()){
+	    try {
+	    	//Load the stored resources
+	    	File destDir = new File (exportedContainer, CONTAINER_NAME);
+	    	File f = new File(destDir, FILE_NAME);
+	      is = new FileInputStream(f);
+	      Properties loadedProperties = new Properties();
+	      loadedProperties.load(is);
+	      
+	      HashSet<String> missingProperties = new HashSet<String>();
+	      for(Object key : loadedProperties.keySet()){
+	      	missingProperties.add(key.toString());
+	      }
+	      
+	      MScopedPreferenceStore store = (MScopedPreferenceStore)JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+				IEclipsePreferences pref = store.getQualifierStore();
+				for(String key : pref.keys()){
+					if (!getExcludedProeprties().contains(key)){
+						Object loadedValue = loadedProperties.get(key);
+						if (loadedValue != null){
+							pref.put(key, loadedValue.toString());
+							missingProperties.remove(key);
+						} else {
+							pref.remove(key);
+						}
+					}
+				}
+				for(String missingProperty : missingProperties){
+					Object loadedValue = loadedProperties.get(missingProperty);
+					pref.put(missingProperty, loadedValue != null ? loadedValue.toString() : null);
+				}
+				store.save();
+	    }
+	    catch (Exception e) { 
+	    	e.printStackTrace();
+	    } finally {
+	    	FileUtils.closeStream(is);
+	    }
+    }
+	}
 }

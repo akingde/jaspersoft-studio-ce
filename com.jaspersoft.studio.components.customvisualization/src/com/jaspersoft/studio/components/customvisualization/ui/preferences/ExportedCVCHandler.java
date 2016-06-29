@@ -10,32 +10,35 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.preferences.editor.properties;
+package com.jaspersoft.studio.components.customvisualization.ui.preferences;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.preference.IPreferenceStore;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
 import com.jaspersoft.studio.editor.action.exporter.BaseResource;
 import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
 import com.jaspersoft.studio.editor.action.exporter.IPropertyCustomExporter;
 import com.jaspersoft.studio.editor.action.exporter.IResourceDefinition;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
 import com.jaspersoft.studio.utils.Pair;
-import com.jaspersoft.studio.wizards.BuiltInCategories;
 
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.ui.FolderDestinationDialog;
@@ -43,18 +46,17 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 /**
- * Exporter used to import/export the Jaspersoft Studio templates, it will export and import
- * also the folder containing the custom templates
+ * Exporter used to import/export the Custom Visualization components
  * 
  * @author Orlandin Marco
  *
  */
-public class ExportedStudioTemplatesHandler implements IExportedResourceHandler, IPropertyCustomExporter {
+public class ExportedCVCHandler implements IExportedResourceHandler, IPropertyCustomExporter {
 
 	/**
 	 * Folder name for the exported properties
 	 */
-	private static final String CONTAINER_NAME = "jssReportTemplates"; //$NON-NLS-1$
+	private static final String CONTAINER_NAME = "cvComponents"; //$NON-NLS-1$
 	
 	/**
 	 * Cache when the list of exportable resource definition is requested, used to avoid multiple calculation
@@ -68,12 +70,12 @@ public class ExportedStudioTemplatesHandler implements IExportedResourceHandler,
 	
 	@Override
 	public String getResourceNameExport() {
-		return "Jaspersoft Studio Templates (" + getExportableResources().size() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+		return "Custom Vistualization Components (" + getExportableResources().size() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	@Override
 	public String getResourceNameImport(File exportedContainer) {
-		return "Jaspersoft Studio Templates (" + getRestorableResources(exportedContainer).size() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+		return "Custom Vistualization Components (" + getRestorableResources(exportedContainer).size() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -85,83 +87,77 @@ public class ExportedStudioTemplatesHandler implements IExportedResourceHandler,
 			List<IResourceDefinition> result = new ArrayList<IResourceDefinition>();
 			File importedDir = new File (exportedContainer, CONTAINER_NAME);
 			if (importedDir.exists()){
-	  		for(File templateFolder : importedDir.listFiles()){
+				for(File templateFolder : importedDir.listFiles()){
 					File[] propertiesFiles = templateFolder.listFiles(new FilenameFilter() {
 						
 						@Override
 						public boolean accept(File dir, String name) {
-							return name.endsWith(".properties");
+							return name.endsWith(".json");
 						}
 					});
 					for(File properitesFile : propertiesFiles){
-						FileInputStream is = null;
-						try{
-							is = new FileInputStream(properitesFile);
-					    Properties props = new Properties();
-					    props.load(is);		
-					    String templtateName = props.getProperty(BuiltInCategories.NAME_KEY);
-					    if (templtateName != null) {
-					    	BaseResource templateResource = new BaseResource(templtateName);
-					    	templateResource.setData(properitesFile.getAbsolutePath());
-					    	result.add(templateResource);
-					    }
-						} catch(Exception ex){
-							
-						} finally {
-							FileUtils.closeStream(is);
+						ComponentDescriptor cd = readComponentDescriptor(properitesFile);
+						if (cd != null){
+							String componentName = cd.getLabel();
+							BaseResource templateResource = new BaseResource(componentName);
+						    templateResource.setData(properitesFile.getAbsolutePath());
+						    result.add(templateResource);
 						}
 					}
-	  		}
+				}
 			}
 			cachedImportableResources = new Pair<String, List<IResourceDefinition>>(containerPath, result);
 		}
 		return cachedImportableResources.getValue();
 	}
-
+	
 	@Override
 	public List<IResourceDefinition> getExportableResources() {
 		if (cachedExportableResources == null) {
 			cachedExportableResources = new ArrayList<IResourceDefinition>();
-
-			try{
-				IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-				String s = store.getString(TemplateLocationsPreferencePage.TPP_TEMPLATES_LOCATIONS_LIST);
-				List<String> paths = parseString(s);
-				for(String path : paths){
-					File templateLocation = new File(path);
-					File[] propertiesFiles = templateLocation.listFiles(new FilenameFilter() {
-						
-						@Override
-						public boolean accept(File dir, String name) {
-							return name.endsWith(".properties");
-						}
-					});
-					for(File properitesFile : propertiesFiles){
-						FileInputStream is = null;
-						try{
-							is = new FileInputStream(properitesFile);
-					    Properties props = new Properties();
-					    props.load(is);		
-					    String templtateName = props.getProperty(BuiltInCategories.NAME_KEY);
-					    if (templtateName != null) {
-					    	BaseResource templateResource = new BaseResource(templtateName);
-					    	templateResource.setData(properitesFile.getAbsolutePath());
-					    	cachedExportableResources.add(templateResource);
-					    }
-						} catch(Exception ex){
-							
-						} finally {
-							FileUtils.closeStream(is);
-						}
+	
+			IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+			String paths = store.getString(CVCDescriptorsPreferencePage.RESOURCE_PATHS);
+			List<String> pathsList = parseString(paths);
+			for (String dir : pathsList) {
+				File componentsLocation = new File(dir);
+				File[] definitionFiles = componentsLocation.listFiles(new FilenameFilter() {
+					
+					@Override
+					public boolean accept(File dir, String name) {
+						return name.endsWith(".json");
+					}
+				});
+				for (File f : definitionFiles) {
+					ComponentDescriptor cd = readComponentDescriptor(f);
+					if (cd != null){
+				    	BaseResource templateResource = new BaseResource(cd.getLabel());
+				    	templateResource.setData(f.getAbsolutePath());
+				    	cachedExportableResources.add(templateResource);
 					}
 				}
-			} catch(Exception ex){
-				ex.printStackTrace();
-			}
-			
+			} 
 		}
 		return cachedExportableResources;
 	}
+	
+	private ComponentDescriptor readComponentDescriptor(File resource) {
+		ObjectMapper mapper = new ObjectMapper();
+		InputStream is = null;
+		ComponentDescriptor result = null;
+		try {
+			is = new FileInputStream(resource);
+			BufferedReader in = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+			mapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
+			result = mapper.readValue(in, ComponentDescriptor.class);
+		} catch (Exception ex){
+			JaspersoftStudioPlugin.getInstance().logError(ex);
+		} finally {
+			FileUtils.closeStream(is);
+		}
+		return result;
+	} 
+
 	
 	/**
 	 * Convert the string in the preferences containing the all the path to a list where every
@@ -214,23 +210,31 @@ public class ExportedStudioTemplatesHandler implements IExportedResourceHandler,
 		return newName;
 	}
 	
-	protected void removeUnwantedTemplates(File destinationFolder, HashSet<String> allowedTemplates){
-		File[] propertiesFiles = destinationFolder.listFiles(new FilenameFilter() {
+	protected void removeUnwantedComponents(File destinationFolder, HashSet<String> allowedTemplates){
+		File[] definitionFiles = destinationFolder.listFiles(new FilenameFilter() {
 			
 			@Override
 			public boolean accept(File dir, String name) {
-				return name.endsWith(".properties");
+				return name.endsWith(".json");
 			}
 		});
-		for(File templateFile : propertiesFiles){
-			if (!allowedTemplates.contains(templateFile.getName())){
-				final String templateToDelete = FilenameUtils.removeExtension(templateFile.getName());
+		for(File definitionFile : definitionFiles){
+			if (!allowedTemplates.contains(definitionFile.getName())){
+				ComponentDescriptor componentToRemove = readComponentDescriptor(definitionFile);
+				
+				//delete the thumbnail
+				File thumbnail = new File(definitionFile.getParent(), componentToRemove.getThumbnail());
+				thumbnail.delete();
+				
+				//Delete the other files with the same name of the definition but with different extension
+				final String definitionFileName = FilenameUtils.removeExtension(definitionFile.getName());
 				File[] filesToDelete = destinationFolder.listFiles(new FilenameFilter() {
 					
 					@Override
 					public boolean accept(File dir, String name) {
 						String fileNameWithOutExt = FilenameUtils.removeExtension(name);
-						return fileNameWithOutExt.equals(templateToDelete);
+						return fileNameWithOutExt.equals(definitionFileName) || 
+								fileNameWithOutExt.equals(definitionFileName + ".min");
 					}
 				});
 				for(File fileToDelete : filesToDelete){
@@ -243,9 +247,9 @@ public class ExportedStudioTemplatesHandler implements IExportedResourceHandler,
 	@Override
 	public File exportContentFolder(List<IResourceDefinition> resourcesToExport) {
 		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-		String s = store.getString(TemplateLocationsPreferencePage.TPP_TEMPLATES_LOCATIONS_LIST);
-		List<String> paths = parseString(s);
-		if (paths.isEmpty()) return null;
+		String paths = store.getString(CVCDescriptorsPreferencePage.RESOURCE_PATHS);
+		List<String> pathsList = parseString(paths);
+		if (pathsList.isEmpty()) return null;
 		
 		File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 		tempDir.deleteOnExit();
@@ -254,26 +258,26 @@ public class ExportedStudioTemplatesHandler implements IExportedResourceHandler,
 		destDir.mkdirs();
 		
 		//Create the set of the resources that should be exported
-		HashMap<String, HashSet<String>> templatesToExportMap = new HashMap<String, HashSet<String>>();
+		HashMap<String, HashSet<String>> componentsToExportMap = new HashMap<String, HashSet<String>>();
 		for(IResourceDefinition definition : resourcesToExport){
 			File templateDefinition = new File(definition.getData().toString());
 			File contentFolder = templateDefinition.getParentFile();
 			String templateDefinitionName = templateDefinition.getName();
-			HashSet<String> templateNames = templatesToExportMap.get(contentFolder.getAbsolutePath());
+			HashSet<String> templateNames = componentsToExportMap.get(contentFolder.getAbsolutePath());
 			if (templateNames == null){
 				templateNames = new HashSet<String>();
-				templatesToExportMap.put(contentFolder.getAbsolutePath(), templateNames);
+				componentsToExportMap.put(contentFolder.getAbsolutePath(), templateNames);
 			}
 			templateNames.add(templateDefinitionName);
 		}
 		
 		//Start the export operation
 		HashSet<String> usedNames = new HashSet<String>();
-		for(String path : paths){
+		for(String path : pathsList){
 			File filePath = new File(path);
-			HashSet<String> templatesToExportSet = templatesToExportMap.get(path);
+			HashSet<String> componentsToExportSet = componentsToExportMap.get(path);
 			if (filePath.exists() && filePath.isDirectory() && filePath.list().length > 0 && 
-													templatesToExportSet != null && templatesToExportSet.size() > 0){
+					componentsToExportSet != null && componentsToExportSet.size() > 0){
 				String folderName = getFolderName(usedNames, filePath.getName());
 				usedNames.add(folderName);
 				File containerfolder = new File(destDir, folderName);
@@ -281,7 +285,7 @@ public class ExportedStudioTemplatesHandler implements IExportedResourceHandler,
 					org.apache.commons.io.FileUtils.copyDirectory(filePath, containerfolder);
 					
 					//REMOVE UNWANTED TEMPLATES
-					removeUnwantedTemplates(containerfolder, templatesToExportSet);
+					removeUnwantedComponents(containerfolder, componentsToExportSet);
 					
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -295,63 +299,63 @@ public class ExportedStudioTemplatesHandler implements IExportedResourceHandler,
 	@Override
 	public void restoreContentFolder(File exportedContainer, List<IResourceDefinition> resourcesToImport) {
 		FolderDestinationDialog destDialog = new FolderDestinationDialog(UIUtils.getShell(), Messages.ExportedStudioTemplatesHandler_dialogTitle, 
-																																													Messages.ExportedStudioTemplatesHandler_dialogDescription );
-  	destDialog.open();
-  	if (destDialog.getDirectory() != null){
-      MScopedPreferenceStore store = (MScopedPreferenceStore)JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+																			Messages.ExportedStudioTemplatesHandler_dialogDescription );
+		destDialog.open();
+		if (destDialog.getDirectory() != null){
+			MScopedPreferenceStore store = (MScopedPreferenceStore)JaspersoftStudioPlugin.getInstance().getPreferenceStore();
 			IEclipsePreferences pref = store.getQualifierStore();
-  		String s = store.getString(TemplateLocationsPreferencePage.TPP_TEMPLATES_LOCATIONS_LIST);
-  		List<String> paths = parseString(s);
+			String s = store.getString(CVCDescriptorsPreferencePage.RESOURCE_PATHS);
+			List<String> paths = parseString(s);
   		
-  		File importedDir = new File (exportedContainer, CONTAINER_NAME);
-  		File targetDir = new File(destDialog.getDirectory());
+			File importedDir = new File (exportedContainer, CONTAINER_NAME);
+			File targetDir = new File(destDialog.getDirectory());
   		
-  		//Create the set of the resources that should be exported
-  		HashMap<String, HashSet<String>> templatesToImportMap = new HashMap<String, HashSet<String>>();
-  		for(IResourceDefinition definition : resourcesToImport){
-  			File templateDefinition = new File(definition.getData().toString());
-  			File contentFolder = templateDefinition.getParentFile();
-  			String templateDefinitionName = templateDefinition.getName();
-  			HashSet<String> templateNames = templatesToImportMap.get(contentFolder.getAbsolutePath());
-  			if (templateNames == null){
-  				templateNames = new HashSet<String>();
-  				templatesToImportMap.put(contentFolder.getAbsolutePath(), templateNames);
-  			}
-  			templateNames.add(templateDefinitionName);
-  		}
+			//Create the set of the resources that should be imported
+			HashMap<String, HashSet<String>> componentsToImportMap = new HashMap<String, HashSet<String>>();
+			for(IResourceDefinition definition : resourcesToImport){
+				File componentDefinition = new File(definition.getData().toString());
+				File contentFolder = componentDefinition.getParentFile();
+				String templateDefinitionName = componentDefinition.getName();
+				HashSet<String> templateNames = componentsToImportMap.get(contentFolder.getAbsolutePath());
+				if (templateNames == null){
+					templateNames = new HashSet<String>();
+					componentsToImportMap.put(contentFolder.getAbsolutePath(), templateNames);
+				}
+				templateNames.add(templateDefinitionName);
+			}
   		
-  		for(File templateFolder : importedDir.listFiles()){
-  			HashSet<String> templatesToImportSet = templatesToImportMap.get(templateFolder.getAbsolutePath());
-  			if (templatesToImportSet != null && !templatesToImportSet.isEmpty()){
-  				try {
-    				File targetFile = new File(targetDir, templateFolder.getName());
-  					org.apache.commons.io.FileUtils.copyDirectory(templateFolder, targetFile);
-  	  			paths.add(targetFile.getAbsolutePath());
-  	  			removeUnwantedTemplates(templateFolder, templatesToImportSet);
-  				} catch (IOException e) {
-  					e.printStackTrace();
-  					JaspersoftStudioPlugin.getInstance().logError(e);
-  				}
-  			}
-  		}
-  		
-  		String newPaths = createList(paths);
-  		pref.put(TemplateLocationsPreferencePage.TPP_TEMPLATES_LOCATIONS_LIST, newPaths);
-  		try {
+	  		for(File templateFolder : importedDir.listFiles()){
+	  			HashSet<String> componentsToImportSet = componentsToImportMap.get(templateFolder.getAbsolutePath());
+	  			if (componentsToImportSet != null && !componentsToImportSet.isEmpty()){
+	  				try {
+	  					File targetFile = new File(targetDir, templateFolder.getName());
+	  					org.apache.commons.io.FileUtils.copyDirectory(templateFolder, targetFile);
+	  					paths.add(targetFile.getAbsolutePath());
+	  					removeUnwantedComponents(templateFolder, componentsToImportSet);
+	  				} catch (IOException e) {
+	  					e.printStackTrace();
+	  					JaspersoftStudioPlugin.getInstance().logError(e);
+	  				}
+	  			}
+	  		}
+	  		
+	  		String newPaths = createList(paths);
+	  		pref.put(CVCDescriptorsPreferencePage.RESOURCE_PATHS, newPaths);
+	  		try {
 				store.save();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-  	}
+		}
 	}
 
 	/**
-	 * This class handle the template location property, so it return the property handled
+	 * This class handle the custom visualization components location property, so it return the property handled
 	 */
 	@Override
 	public List<String> getHandledProperties() {
 		List<String> result = new ArrayList<String>();
-		result.add(TemplateLocationsPreferencePage.TPP_TEMPLATES_LOCATIONS_LIST);
+		result.add(CVCDescriptorsPreferencePage.RESOURCE_PATHS);
 		return result;
 	}
 }
