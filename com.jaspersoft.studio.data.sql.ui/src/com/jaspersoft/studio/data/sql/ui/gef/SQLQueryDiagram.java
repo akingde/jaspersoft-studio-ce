@@ -206,7 +206,7 @@ public class SQLQueryDiagram {
 				}
 				menu.add(new org.eclipse.jface.action.Separator());
 
-				TableSelectAllAction sa = new TableSelectAllAction(designer, "Select All Columns"); //$NON-NLS-1$
+				TableSelectAllAction sa = new TableSelectAllAction(designer, Messages.SQLQueryDiagram_0);  
 				if (sa.calculateEnabled(selection))
 					menu.add(sa);
 

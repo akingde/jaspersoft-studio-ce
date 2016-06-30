@@ -123,6 +123,7 @@ public class Messages extends NLS {
 	public static String SQLQueryDesigner_outline;
 	public static String SQLQueryDesigner_readmetadata;
 	public static String SQLQueryDesigner_text;
+	public static String SQLQueryDiagram_0;
 	public static String SQLQueryDiagram_1;
 	public static String SQLQueryDiagram_2;
 	public static String SQLQueryDiagram_3;
