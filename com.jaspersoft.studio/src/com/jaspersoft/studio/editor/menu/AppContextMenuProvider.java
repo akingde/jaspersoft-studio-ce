@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.menu;
 
@@ -48,6 +44,7 @@ import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
 import com.jaspersoft.studio.editor.action.band.StretchToContentAction;
 import com.jaspersoft.studio.editor.action.copy.CopyFormatAction;
 import com.jaspersoft.studio.editor.action.copy.PasteFormatAction;
+import com.jaspersoft.studio.editor.action.image.ChangeImageExpression;
 import com.jaspersoft.studio.editor.action.layout.LayoutAction;
 import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.order.BringForwardAction;
@@ -77,10 +74,10 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
-import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
+import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.tools.CreateCompositeElementAction;
 import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
@@ -131,76 +128,76 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 	 */
 	@Override
 	public void buildContextMenu(IMenuManager menu) {
-	
+
 		IAction action = null;
-		
-		//Create the background actions
-		
-		if (isBackgroundEditable()){
-			
+
+		// Create the background actions
+
+		if (isBackgroundEditable()) {
+
 			action = getActionRegistry().getAction(BackgroundFitAction.ID);
 			if (action != null && action.isEnabled())
 				menu.add(action);
-			
+
 			MenuManager submenu = new MenuManager(Messages.MBackgrounImage_labelTransparency, null, "BackgroundTransparency");//$NON-NLS-1$
-			
+
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_5);
 			if (action != null && action.isEnabled())
 				submenu.add(action);
-			
+
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_10);
 			if (action != null && action.isEnabled())
 				submenu.add(action);
-			
+
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_15);
 			if (action != null && action.isEnabled())
 				submenu.add(action);
-			
+
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_20);
 			if (action != null && action.isEnabled())
 				submenu.add(action);
-			
+
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_25);
 			if (action != null && action.isEnabled())
 				submenu.add(action);
-			
+
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_30);
 			if (action != null && action.isEnabled())
 				submenu.add(action);
-			
+
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_40);
 			if (action != null && action.isEnabled())
 				submenu.add(action);
-			
+
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_50);
 			if (action != null && action.isEnabled())
 				submenu.add(action);
-			
+
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_75);
 			if (action != null && action.isEnabled())
 				submenu.add(action);
-			
+
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_100);
 			if (action != null && action.isEnabled())
 				submenu.add(action);
-			
+
 			menu.add(submenu);
-			
+
 			action = getActionRegistry().getAction(BackgroundKeepRatioAction.ID);
 			if (action != null && action.isEnabled())
 				menu.add(action);
-			
+
 			menu.add(new Separator());
-			
-			//The return on this action  avoid to add any unnecessary other action to 
-			//the background operations
+
+			// The return on this action avoid to add any unnecessary other action to
+			// the background operations
 			action = getActionRegistry().getAction(BackgroundEndTransformationAction.ID);
-			if (action != null && action.isEnabled()){
+			if (action != null && action.isEnabled()) {
 				menu.add(action);
 				return;
 			}
 		}
-		
+
 		// Add component actions group
 		menu.add(new Separator(IComponentFactory.GROUP_COMPONENT));
 
@@ -211,7 +208,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 
 		action = getActionRegistry().getAction(ActionFactory.REDO.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
-		
+
 		action = getActionRegistry().getAction(ConnectToDatasetAction.ID);
 		if (action != null && action.isEnabled())
 			menu.add(action);
@@ -229,23 +226,31 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(ActionFactory.PASTE.getId());
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-		
+
 		action = getActionRegistry().getAction(CopyFormatAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-		
-		action = getActionRegistry().getAction(EncloseIntoFrameAction.ID);
-		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-		
-		action = getActionRegistry().getAction(CreateCompositeElementAction.ID);
-		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-		
+
 		action = getActionRegistry().getAction(PasteFormatAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-		
+
+		menu.appendToGroup(GEFActionConstants.GROUP_COPY, new Separator());
+
+		action = getActionRegistry().getAction(ChangeImageExpression.ID);
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+
+		action = getActionRegistry().getAction(EncloseIntoFrameAction.ID);
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+
+		menu.appendToGroup(GEFActionConstants.GROUP_COPY, new Separator());
+
+		action = getActionRegistry().getAction(CreateCompositeElementAction.ID);
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+
 		action = getActionRegistry().getAction(SetDefaultsAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
@@ -271,7 +276,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(CreateParameterAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
-		
+
 		action = getActionRegistry().getAction(CreateParameterSetAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
@@ -291,11 +296,11 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(CreateConditionalStyleAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
-		
+
 		action = getActionRegistry().getAction(SaveStyleAsTemplateAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
-		
+
 		action = getActionRegistry().getAction(RefreshTemplateStyleExpression.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
@@ -303,7 +308,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(RefreshTemplateStyleReference.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
-		
+
 		action = getActionRegistry().getAction(ResetStyleAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
@@ -352,11 +357,11 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action != null && action.isEnabled())
 			menu.add(action);
 
-		//HIDE and SHOW BAND ACTIONS
+		// HIDE and SHOW BAND ACTIONS
 		action = getActionRegistry().getAction(HideElementsAction.ID_VISIBLE);
 		if (action != null && action.isEnabled())
 			menu.add(action);
-		
+
 		action = getActionRegistry().getAction(HideElementsAction.ID_NOT_VISIBLE);
 		if (action != null && action.isEnabled())
 			menu.add(action);
@@ -364,22 +369,23 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(CreateDetailBandActionOnDetail.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-		
+
 		action = getActionRegistry().getAction(CreateGroupHeaderAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-		
+
 		action = getActionRegistry().getAction(CreateGroupFooterAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-		
+
 		action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 		// position actions
-		MenuManager submenu = new MenuManager(Messages.AppContextMenuProvider_order, JaspersoftStudioPlugin.getInstance()
-				.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), BringToFrontAction.ID); //$NON-NLS-1$
+		MenuManager submenu = new MenuManager(Messages.AppContextMenuProvider_order,
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), //$NON-NLS-1$
+				BringToFrontAction.ID);
 
 		action = getActionRegistry().getAction(BringToFrontAction.ID);
 		if (action.isEnabled())
@@ -442,8 +448,8 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		menu.add(submenu);
 
 		// Alignment Actions
-		submenu = new MenuManager(Messages.AppContextMenuProvider_align_to_container, JaspersoftStudioPlugin.getInstance()
-				.getImageDescriptor("icons/resources/eclipse/align-band-left.gif"), //$NON-NLS-1$
+		submenu = new MenuManager(Messages.AppContextMenuProvider_align_to_container,
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/align-band-left.gif"), //$NON-NLS-1$
 				Align2BorderAction.ID_ALIGN_LEFT);
 
 		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_CENTER);
@@ -520,7 +526,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		menu.add(new Separator());
 
 		// horizontal spacing Actions
-		submenu = new MenuManager(Messages.AppContextMenuProvider_horizontalSpacingSubmenu, "horizontalspacingmenu"); //$NON-NLS-2$
+		submenu = new MenuManager(Messages.AppContextMenuProvider_horizontalSpacingSubmenu, "horizontalspacingmenu"); // $NON-NLS-2$
 
 		action = getActionRegistry().getAction(DecreaseHSpaceAction.ID);
 		if (action.isEnabled())
@@ -543,7 +549,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		menu.add(submenu);
 
 		// vertical spacing Actions
-		submenu = new MenuManager(Messages.AppContextMenuProvider_verticalSpacingSubMenu, "verticalspacingmenu"); //$NON-NLS-2$
+		submenu = new MenuManager(Messages.AppContextMenuProvider_verticalSpacingSubMenu, "verticalspacingmenu"); // $NON-NLS-2$
 
 		action = getActionRegistry().getAction(DecreaseVSpaceAction.ID);
 		if (action.isEnabled())
@@ -568,8 +574,8 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 
 		// ------------------------------
 
-		submenu = new MenuManager(Messages.AppContextMenuProvider_size_to_container, JaspersoftStudioPlugin.getInstance()
-				.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"), //$NON-NLS-1$
+		submenu = new MenuManager(Messages.AppContextMenuProvider_size_to_container,
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"), //$NON-NLS-1$
 				Size2BorderAction.ID_SIZE_WIDTH);
 
 		action = getActionRegistry().getAction(Size2BorderAction.ID_SIZE_WIDTH);
@@ -586,8 +592,8 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 
 		menu.add(submenu);
 
-		submenu = new MenuManager(Messages.AppContextMenuProvider_arrangeInContainerMenu, JaspersoftStudioPlugin
-				.getInstance().getImageDescriptor("icons/layout-6.png"), //$NON-NLS-1$
+		submenu = new MenuManager(Messages.AppContextMenuProvider_arrangeInContainerMenu,
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/layout-6.png"), //$NON-NLS-1$
 				LayoutAction.ID);
 
 		LayoutManager.addMenu(submenu, getActionRegistry());
@@ -604,7 +610,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(MaximizeContainerAction.ID);
 		if (action.isEnabled())
 			menu.add(action);
-		
+
 		action = getActionRegistry().getAction(CreateDetailBandAction.ID);
 		if (action != null && action.isEnabled())
 			menu.add(action);
@@ -625,8 +631,8 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			menu.add(action);
 
 		// End of the convert actions
-		
-		//Action to open a subreport into the editor
+
+		// Action to open a subreport into the editor
 		action = getActionRegistry().getAction(OpenEditorAction.ID);
 		if (action.isEnabled())
 			menu.add(action);
@@ -651,15 +657,15 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 	}
-	
-	private boolean isBackgroundEditable(){
+
+	private boolean isBackgroundEditable() {
 		IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();
-		if (currentEditor instanceof JrxmlEditor){
-			ReportContainer container = ((JrxmlEditor)currentEditor).getReportContainer();
-			if (container.isBackgroundImageEditable()){
+		if (currentEditor instanceof JrxmlEditor) {
+			ReportContainer container = ((JrxmlEditor) currentEditor).getReportContainer();
+			if (container.isBackgroundImageEditable()) {
 				EditPart backgroundPart = SelectionHelper.getBackgroundEditPart();
-				if (backgroundPart != null){
-					return ((AbstractGraphicalEditPart)backgroundPart).getFigure().isVisible();
+				if (backgroundPart != null) {
+					return ((AbstractGraphicalEditPart) backgroundPart).getFigure().isVisible();
 				}
 			}
 		}
