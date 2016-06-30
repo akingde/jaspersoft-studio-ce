@@ -21,9 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
@@ -65,6 +62,7 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.LayoutAction;
 import com.jaspersoft.studio.data.sql.action.TableModeShowAction;
+import com.jaspersoft.studio.data.sql.action.TableSelectAllAction;
 import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.action.table.DeleteTable;
@@ -90,6 +88,9 @@ import com.jaspersoft.studio.model.DialogEnabledCommand;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 public class SQLQueryDiagram {
 	private SQLQueryDesigner designer;
@@ -204,6 +205,10 @@ public class SQLQueryDiagram {
 					menu.add(zoomOut);
 				}
 				menu.add(new org.eclipse.jface.action.Separator());
+
+				TableSelectAllAction sa = new TableSelectAllAction(designer, "Select All Columns"); //$NON-NLS-1$
+				if (sa.calculateEnabled(selection))
+					menu.add(sa);
 
 				TableModeShowAction ms = new TableModeShowAction(designer, "keys", Messages.SQLQueryDiagram_2); //$NON-NLS-1$
 				if (ms.calculateEnabled(selection))
