@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
@@ -364,7 +365,7 @@ public class TextStyleView implements TemplateViewProvider {
 	 * @return a dialog that can be opened
 	 */
 	protected WizardDialog getEditorDialog(JSSWizard wizardPage){
-			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizardPage){
+			WizardDialog dialog = new PersistentLocationWizardDialog(Display.getDefault().getActiveShell(), wizardPage){
 			//Ovverride this method to change the default text of the finish button with another text
 			@Override
 			protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
