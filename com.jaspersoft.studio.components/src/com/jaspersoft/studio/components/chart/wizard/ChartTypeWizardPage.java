@@ -181,10 +181,9 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 	public boolean finishPage() {
 		JRDesignChart oldChart = (JRDesignChart) chart.getValue();
 		if (chartType != oldChart.getChartType()) {
-			if (UIUtils.showConfirmation(Messages.ChartTypeWizardPage_0,
-					Messages.ChartTypeWizardPage_1)) {
+			if (UIUtils.showConfirmation(Messages.ChartTypeWizardPage_0, Messages.ChartTypeWizardPage_1)) {
 				setChartType(oldChart, chartType);
-				MChart.setupChart(oldChart);
+				// MChart.setupChart(oldChart);
 			} else
 				return false;
 		}
