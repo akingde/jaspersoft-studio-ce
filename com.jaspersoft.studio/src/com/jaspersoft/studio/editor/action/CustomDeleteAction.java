@@ -83,7 +83,7 @@ public class CustomDeleteAction extends DeleteAction{
 	 * @return true if a part was moved by this method, doesn't assure there aren't other part to move.
 	 * False if now parts were moved so it is already in the correct order
 	 */
-	private boolean reorderPart(ArrayList<EditPart> selectedParts){
+	protected boolean reorderPart(ArrayList<EditPart> selectedParts){
 		if (selectedParts.size() <= 1) return false;
 		for(int i = 0; i< selectedParts.size(); i++){
 			for(int j = i+ 1; j<selectedParts.size(); j++){

@@ -71,6 +71,13 @@ public class DeleteRowGroupCommand extends Command {
 		this.crosstabNode = destNode;
 		this.jrRowGroup = (JRDesignCrosstabRowGroup) srcNode.getValue();
 	}
+	
+	public DeleteRowGroupCommand(MCrosstab crosstab, JRDesignCrosstabRowGroup group){
+		super();
+		this.jrCrosstab = crosstab.getValue();
+		this.crosstabNode = crosstab;
+		this.jrRowGroup = group;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -132,5 +139,9 @@ public class DeleteRowGroupCommand extends Command {
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Map<String, JRCrosstabCell> getRemovedCells(){
+		return removedCells;
 	}
 }

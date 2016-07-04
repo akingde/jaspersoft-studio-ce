@@ -93,11 +93,66 @@ public class CrosstabUtil {
 		jrGroup.setTotalHeader(totalCell);
 		return jrGroup;
 	}
+	
+	/**
+	 * Add a column groups to a crosstab in a specific index. Also support as parameter an hash map with the cell needed for the group.
+	 * If the cell that should be created are found inside this map then it get them from it, otherwise they will be created.
+	 * This is useful for undo of a cancel operation, to restore all the old cells instead to create new ones.
+	 */
+	public static void addColumnGroup(JRDesignCrosstab jrCross, JRDesignCrosstabColumnGroup jrColGr, int index, Map<String, JRCrosstabCell> cellsToRestore) throws JRException {
+		if (index >= 0 && index <= jrCross.getColumnGroupsList().size())
+			jrCross.addColumnGroup(index, jrColGr);
+		else
+			jrCross.addColumnGroup(jrColGr);
+
+		// I need to add the extra cells...
+
+		if (!jrCross.getCellsMap().containsKey(new Pair<String, String>(null, null))) {
+			JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
+			dT.setColumnTotalGroup(null);
+			dT.setRowTotalGroup(null);
+			jrCross.addCell(dT);
+			dT.setHeight(jrColGr.getHeight());
+			dT.setWidth(60);
+		}
+
+		if (cellsToRestore.containsKey(null)){
+			JRCrosstabCell dT = cellsToRestore.get(null);
+			jrCross.addCell((JRDesignCrosstabCell)dT);
+		}  else {
+			JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
+			dT.setColumnTotalGroup(jrColGr.getName());
+			jrCross.addCell(dT);
+			dT.setHeight(jrColGr.getHeight());
+			dT.setWidth(60);
+		}
+		
+		// for each column, we need to add the total...
+		List<JRCrosstabRowGroup> rows = jrCross.getRowGroupsList();
+		if (rows != null){
+			for (JRCrosstabRowGroup r : rows) {
+				if (cellsToRestore.containsKey(r.getName())){
+					JRDesignCrosstabCell cell = (JRDesignCrosstabCell)cellsToRestore.get(r.getName());
+					jrCross.addCell(cell);
+				} else {
+					JRDesignCrosstabCell cell = new JRDesignCrosstabCell();
+					cell.setColumnTotalGroup(jrColGr.getName());
+					cell.setRowTotalGroup(r.getName());
+					jrCross.addCell(cell);
+					cell.setHeight(jrColGr.getHeight());
+					cell.setWidth(60);
+					// Add some cells...
+				}
+
+			}
+		}
+		jrCross.preprocess();
+	}
 
 	/**
 	 * Add a row groups to a crosstab in a specific index. Also support as parameter an hash map with the cell needed for the group.
 	 * If the cell that should be created are found inside this map then it get them from it, otherwise they will be created.
-	 * This is useful for undo of a cancel operation, to restore all the old cells insted to create new ones.
+	 * This is useful for undo of a cancel operation, to restore all the old cells instead to create new ones.
 	 */
 	public static void addRowGroup(JRDesignCrosstab jrCross, JRDesignCrosstabRowGroup jrRowGr, int index, Map<String, JRCrosstabCell> cellsToRestore) throws JRException {
 		JRCrosstabRowGroup lastGroup = null; 
@@ -137,7 +192,7 @@ public class CrosstabUtil {
 		}
 		
 		List<JRCrosstabColumnGroup> columns = jrCross.getColumnGroupsList();
-		if (columns != null)
+		if (columns != null){
 			for (JRCrosstabColumnGroup c : columns) {
 				if (cellsToRestore.containsKey(c.getName())){
 					JRDesignCrosstabCell cell = (JRDesignCrosstabCell)cellsToRestore.get(c.getName());
@@ -158,7 +213,47 @@ public class CrosstabUtil {
 					}
 				}
 			}
+		}
+		jrCross.preprocess();
+	}
+	
+	public static void addColumnGroup(JRDesignCrosstab jrCross,
+			JRDesignCrosstabColumnGroup jrRowGr, int index) throws JRException {
+		if (index >= 0 && index <= jrCross.getColumnGroupsList().size())
+			jrCross.addColumnGroup(index, jrRowGr);
+		else
+			jrCross.addColumnGroup(jrRowGr);
 
+		// I need to add the extra cells...
+
+		if (!jrCross.getCellsMap().containsKey(
+				new Pair<String, String>(null, null))) {
+			JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
+			dT.setColumnTotalGroup(null);
+			dT.setRowTotalGroup(null);
+			jrCross.addCell(dT);
+			dT.setHeight(jrRowGr.getHeight());
+			dT.setWidth(60);
+		}
+
+		JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
+		dT.setColumnTotalGroup(jrRowGr.getName());
+		jrCross.addCell(dT);
+		dT.setHeight(jrRowGr.getHeight());
+		dT.setWidth(60);
+		// for each column, we need to add the total...
+		List<JRCrosstabRowGroup> rows = jrCross.getRowGroupsList();
+		if (rows != null)
+			for (JRCrosstabRowGroup r : rows) {
+				JRDesignCrosstabCell cell = new JRDesignCrosstabCell();
+				cell.setColumnTotalGroup(jrRowGr.getName());
+				cell.setRowTotalGroup(r.getName());
+				jrCross.addCell(cell);
+				cell.setHeight(jrRowGr.getHeight());
+				cell.setWidth(60);
+				// Add some cells...
+
+			}
 		jrCross.preprocess();
 	}
 	
@@ -215,9 +310,7 @@ public class CrosstabUtil {
 		jrCross.preprocess();
 	}
 	
-	public static JRDesignCrosstabColumnGroup createColumnGroup(
-			JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab,
-			String name, CrosstabTotalPositionEnum total) {
+	public static JRDesignCrosstabColumnGroup createColumnGroup(JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab,String name, CrosstabTotalPositionEnum total) {
 		JRDesignCrosstabColumnGroup jrGroup = new JRDesignCrosstabColumnGroup();
 		jrGroup.setTotalPosition(total);
 		jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab, name));
@@ -262,45 +355,4 @@ public class CrosstabUtil {
 		jrGroup.setTotalHeader(totalCell);
 		return jrGroup;
 	}
-
-	public static void addColumnGroup(JRDesignCrosstab jrCross,
-			JRDesignCrosstabColumnGroup jrRowGr, int index) throws JRException {
-		if (index >= 0 && index <= jrCross.getColumnGroupsList().size())
-			jrCross.addColumnGroup(index, jrRowGr);
-		else
-			jrCross.addColumnGroup(jrRowGr);
-
-		// I need to add the extra cells...
-
-		if (!jrCross.getCellsMap().containsKey(
-				new Pair<String, String>(null, null))) {
-			JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
-			dT.setColumnTotalGroup(null);
-			dT.setRowTotalGroup(null);
-			jrCross.addCell(dT);
-			dT.setHeight(jrRowGr.getHeight());
-			dT.setWidth(60);
-		}
-
-		JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
-		dT.setColumnTotalGroup(jrRowGr.getName());
-		jrCross.addCell(dT);
-		dT.setHeight(jrRowGr.getHeight());
-		dT.setWidth(60);
-		// for each column, we need to add the total...
-		List<JRCrosstabRowGroup> rows = jrCross.getRowGroupsList();
-		if (rows != null)
-			for (JRCrosstabRowGroup r : rows) {
-				JRDesignCrosstabCell cell = new JRDesignCrosstabCell();
-				cell.setColumnTotalGroup(jrRowGr.getName());
-				cell.setRowTotalGroup(r.getName());
-				jrCross.addCell(cell);
-				cell.setHeight(jrRowGr.getHeight());
-				cell.setWidth(60);
-				// Add some cells...
-
-			}
-		jrCross.preprocess();
-	}
-
 }

@@ -703,7 +703,35 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(RefreshTemplateStyleReference.ID);
 	}
+	
+	protected void createDeleteAction(ActionRegistry registry){
+		List<String> selectionActions = getSelectionActions();
+		CustomDeleteAction deleteAction = new CustomDeleteAction(this);
+		registry.registerAction(deleteAction);
+		selectionActions.add(deleteAction.getId());
+	}
+	
+	protected void createCopyAction(ActionRegistry registry){
+		List<String> selectionActions = getSelectionActions();
+		IAction action = new CopyAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+	}
 
+	protected void createPasteAction(ActionRegistry registry){
+		List<String> selectionActions = getSelectionActions();
+		IAction action = new PasteAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+	}
+	
+	protected void createCutAction(ActionRegistry registry){
+		List<String> selectionActions = getSelectionActions();
+		IAction action = new CutAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -714,16 +742,20 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		super.createActions();
 
 		ActionRegistry registry = getActionRegistry();
-		IAction action = new CutAction(this);
-		registry.registerAction(action);
+		
+		IAction action = null;
+		
 		List<String> selectionActions = getSelectionActions();
-		selectionActions.add(action.getId());
 
 		// Create the custom delete action that aggregate all the messages when more elements are deleted
 		// the old default action is replaced
-		CustomDeleteAction deleteAction = new CustomDeleteAction(this);
-		registry.registerAction(deleteAction);
-
+		createDeleteAction(registry);
+		
+		//Create the copy, paste and cut actions
+		createCutAction(registry);
+		createPasteAction(registry);
+		createCopyAction(registry);
+		
 		action = new HideElementsAction(this, true);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -731,15 +763,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new HideElementsAction(this, false);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-
-		action = new CopyAction(this);
-		registry.registerAction(action);
-		selectionActions.add(action.getId());
-
-		action = new PasteAction(this);
-		registry.registerAction(action);
-		selectionActions.add(action.getId());
-
+		
 		action = new CopyFormatAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());

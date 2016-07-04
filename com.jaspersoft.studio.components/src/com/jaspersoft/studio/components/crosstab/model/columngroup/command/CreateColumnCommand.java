@@ -40,10 +40,13 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 public class CreateColumnCommand extends Command {
 
 	private JRDesignCrosstabColumnGroup jrGroup;
+	
+	private MCrosstab crosstabNode;
 
 	private JRDesignCrosstab jrCrosstab;
 
 	private int index;
+	
 	private JasperDesign jasperDesign;
 
 	/**
@@ -58,13 +61,11 @@ public class CreateColumnCommand extends Command {
 	 * @param index
 	 *            the index
 	 */
-	public CreateColumnCommand(MColumnGroups destNode, MColumnGroup srcNode,
-			int index) {
+	public CreateColumnCommand(MColumnGroups destNode, MColumnGroup srcNode, int index) {
 		this((ANode) destNode, srcNode, index);
 	}
 
-	public CreateColumnCommand(MColumnGroup destNode, MColumnGroup srcNode,
-			int index) {
+	public CreateColumnCommand(MColumnGroup destNode, MColumnGroup srcNode, int index) {
 		this(destNode.getMCrosstab(), srcNode, index);
 	}
 
@@ -72,13 +73,13 @@ public class CreateColumnCommand extends Command {
 		this(destNode.getMCrosstab(), srcNode, index);
 	}
 
-	public CreateColumnCommand(MCrosstab destNode, MColumnGroup srcNode,
-			int index) {
+	public CreateColumnCommand(MCrosstab destNode, MColumnGroup srcNode, int index) {
 		this((ANode) destNode, srcNode, index);
 	}
 	
-	public CreateColumnCommand(ANode destNode, JRDesignCrosstabColumnGroup jrGroup, int index) {
+	public CreateColumnCommand(MCrosstab destNode, JRDesignCrosstabColumnGroup jrGroup, int index) {
 		super();
+		this.crosstabNode = destNode;
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
 		this.index = index;
 		this.jrGroup = jrGroup;
@@ -87,10 +88,12 @@ public class CreateColumnCommand extends Command {
 
 	private CreateColumnCommand(ANode destNode, MColumnGroup srcNode, int index) {
 		super();
+		this.crosstabNode = srcNode.getMCrosstab();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
 		this.index = index;
-		if (srcNode != null && srcNode.getValue() != null)
+		if (srcNode != null && srcNode.getValue() != null){
 			this.jrGroup = (JRDesignCrosstabColumnGroup) srcNode.getValue();
+		}
 		jasperDesign = destNode.getJasperDesign();
 	}
 
@@ -151,7 +154,8 @@ public class CreateColumnCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		DeleteColumnGroupCommand.removeColumnGroup(jrCrosstab, jrGroup);
+		DeleteColumnGroupCommand deleteCommand = new DeleteColumnGroupCommand(crosstabNode, jrGroup);
+		deleteCommand.execute();
 		jrCrosstab.getEventSupport().firePropertyChange(MCrosstab.UPDATE_CROSSTAB_MODEL, null, jrGroup);
 		//Fire the event to eventually update the crosstab columns size
 		jrCrosstab.getEventSupport().firePropertyChange(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, jrGroup, null);

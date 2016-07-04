@@ -24,6 +24,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.components.crosstab.action.CrosstabCutAction;
+import com.jaspersoft.studio.components.crosstab.action.CustomCrosstabDeleteAction;
 import com.jaspersoft.studio.components.crosstab.action.EditCrosstabStyleAction;
 import com.jaspersoft.studio.components.crosstab.action.RemoveCrosstabStylesAction;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
@@ -114,6 +116,24 @@ public class CrosstabEditor extends NamedSubeditor {
 		return lst;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void createDeleteAction(ActionRegistry registry){
+		List<String> selectionActions = getSelectionActions();
+		CustomCrosstabDeleteAction deleteAction = new CustomCrosstabDeleteAction(this);
+		registry.registerAction(deleteAction);
+		selectionActions.add(deleteAction.getId());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void createCutAction(ActionRegistry registry){
+		List<String> selectionActions = getSelectionActions();
+		IAction action = new CrosstabCutAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+	}
+	
 	@Override
 	protected void createEditorActions(ActionRegistry registry) {
 		createDatasetAndStyleActions(registry);
