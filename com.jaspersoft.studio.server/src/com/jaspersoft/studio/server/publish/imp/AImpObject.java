@@ -44,8 +44,7 @@ public abstract class AImpObject {
 		this.jrConfig = jrConfig;
 	}
 
-	protected AFileResource findFile(MReportUnit mrunit,
-			IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
+	protected AFileResource findFile(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
 			JRDesignExpression exp, IFile file) {
 		String str = getPath(fileset, exp);
 		if (fileset.contains(str))
@@ -57,8 +56,7 @@ public abstract class AImpObject {
 			PublishOptions popt = createOptions(jrConfig, str);
 			popt.setjExpression(exp);
 			if (!f.getName().contains(":"))
-				popt.setExpression("\"repo:"
-						+ IDStringValidator.safeChar(f.getName()) + "\"");
+				popt.setExpression("\"repo:" + IDStringValidator.safeChar(f.getName()) + "\"");
 
 			fileset.add(str);
 
@@ -67,12 +65,12 @@ public abstract class AImpObject {
 		return null;
 	}
 
-	public static PublishOptions createOptions(
-			JasperReportsConfiguration jrConfig, String path) {
+	public static PublishOptions createOptions(JasperReportsConfiguration jrConfig, String path) {
 		PublishOptions popt = new PublishOptions();
-		Boolean b = jrConfig.getPropertyBoolean(
-				JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, true);
-		if (!b || (path != null && isRemoteResource(path)))
+		String b = jrConfig.getProperty(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, "true");
+		if (b.equals("ignore"))
+			popt.setOverwrite(OverwriteEnum.IGNORE);
+		else if (!b.equals("true") || (path != null && isRemoteResource(path)))
 			popt.setOverwrite(OverwriteEnum.IGNORE);
 		else
 			popt.setOverwrite(OverwriteEnum.OVERWRITE);
@@ -88,8 +86,7 @@ public abstract class AImpObject {
 	}
 
 	protected String getPath(Set<String> fileset, JRDesignExpression exp) {
-		String str = ExpressionUtil.cachedExpressionEvaluationString(exp,
-				jrConfig);
+		String str = ExpressionUtil.cachedExpressionEvaluationString(exp, jrConfig);
 		return preparePath(fileset, str);
 	}
 
@@ -101,8 +98,8 @@ public abstract class AImpObject {
 		return str;
 	}
 
-	protected AFileResource addResource(IProgressMonitor monitor,
-			MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
+	protected AFileResource addResource(IProgressMonitor monitor, MReportUnit mrunit, Set<String> fileset, File f,
+			PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
 		if (rname.startsWith("repo:"))
@@ -141,9 +138,8 @@ public abstract class AImpObject {
 		return FileUtils.findFile(file, str, jrConfig);
 	}
 
-	public AFileResource publish(JasperDesign jd, JRDesignElement img,
-			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
-			IFile file) throws Exception {
+	public AFileResource publish(JasperDesign jd, JRDesignElement img, MReportUnit mrunit, IProgressMonitor monitor,
+			Set<String> fileset, IFile file) throws Exception {
 		return findFile(mrunit, monitor, jd, fileset, getExpression(img), file);
 	}
 

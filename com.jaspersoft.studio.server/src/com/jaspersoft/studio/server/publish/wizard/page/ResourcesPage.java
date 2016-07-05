@@ -396,11 +396,11 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			for (AMResource r : res) {
 				if (r instanceof AFileResource)
 					continue;
-				Boolean b = jConfig.getPropertyBoolean(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, true);
-				if (!b)
-					r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
-				else
+				String b = jConfig.getProperty(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, "true");
+				if (b.equals("overwrite"))
 					r.getPublishOptions().setOverwrite(OverwriteEnum.OVERWRITE);
+				else
+					r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
 			}
 		else {
 			if (pres instanceof MReportUnit && !pres.getValue().getIsNew()) {
