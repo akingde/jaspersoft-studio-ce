@@ -16,6 +16,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -31,11 +32,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.IWItemProperty;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
@@ -204,7 +208,22 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 
 			@Override
 			public void mouseDown(MouseEvent e) {
-				handleEditButton();
+				if (!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					wizard.setValue((JRDesignExpression) getValue().getValueExpression().clone());
+					wizard.setExpressionContext(expContext);
+					WizardDialog dialog = ExpressionEditorSupportUtil
+							.getExpressionEditorWizardDialog(Display.getDefault().getActiveShell(), wizard);
+					if (dialog.open() == Dialog.OK) {
+						JRDesignExpression exprTmp = wizard.getValue();
+						if (exprTmp != null) {
+							getValue().setValueExpression(new JRDesignExpression(getText()));
+							((JRDesignExpression) getValue().getValueExpression()).setValueClassName(exprTmp.getValueClassName());
+						} else {
+							getValue().setValueExpression(exprTmp);
+						}
+					}
+				}
 			}
 
 		});
