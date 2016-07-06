@@ -252,7 +252,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		ServerProfile value = sprofile.getValue();
 		try {
 			refreshing = true;
-			Proxy proxy = new Proxy(value);
+			proxy = new Proxy(value);
 			dbc.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(value, "name"), //$NON-NLS-1$
 					new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator() {
 						@Override
@@ -803,7 +803,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					try {
 						if (sp.getUrl().trim().startsWith("https://")) { //$NON-NLS-1$
 							ssLabel.addMouseListener(mlistener);
-							ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png")); //$NON-NLS-1$
+							setSslIcon();
 							ssLabel.setCursor(new Cursor(ssLabel.getDisplay(), SWT.CURSOR_HAND));
 							ssLabel.getParent().getParent().layout(true);
 							return;
@@ -821,6 +821,13 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			});
 
 			return sp.getUrlString();
+		}
+
+		private void setSslIcon() {
+			if (sprofile.getWsClient() == null)
+				ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png")); //$NON-NLS-1$
+			else
+				ssLabel.setImage(Activator.getDefault().getImage("icons/lock-green.png")); //$NON-NLS-1$
 		}
 
 		public void setJrVersion(String v) {
@@ -915,6 +922,13 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				if (drvtab != null)
 					drvtab.dispose();
 				createJdbcDrivers(tabFolder);
+				try {
+					proxy.getUrl();
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -924,6 +938,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	private Composite cmpAsk;
 	private Text tuserA;
 	private Label ssLabel;
+	private Proxy proxy;
 
 	private void createJdbcDrivers(CTabFolder tabFolder) {
 		if (sprofile.getWsClient() == null || !sprofile.getWsClient().isSupported(Feature.EXPORTMETADATA)
@@ -1024,5 +1039,12 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		if (drvtab != null)
 			drvtab.dispose();
 		showServerInfo();
+		try {
+			proxy.getUrl();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 	}
 }
