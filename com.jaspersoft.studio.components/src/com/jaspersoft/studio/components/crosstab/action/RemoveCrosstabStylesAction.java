@@ -23,12 +23,14 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.command.ForceRefreshCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
+import com.jaspersoft.studio.property.SetPropertyValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.crosstabs.JRCellContents;
@@ -39,6 +41,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
@@ -166,6 +169,14 @@ public class RemoveCrosstabStylesAction extends ACachedSelectionAction {
 			for(JRCrosstabCell dataCell : crosstab.getCellsList()){
 				createCommand(dataCell.getContents(), command, report);
 			}
+			
+			//Remove the styles property if any
+			JRPropertiesMap crosstabMap = crosstab.getPropertiesMap();
+			command.add(new SetPropertyValueCommand(crosstabMap, ApplyCrosstabStyleAction.CROSSTAB_DETAIL_PROPERTY, null));
+			command.add(new SetPropertyValueCommand(crosstabMap, ApplyCrosstabStyleAction.CROSSTAB_GROUP_PROPERTY, null));
+			command.add(new SetPropertyValueCommand(crosstabMap, ApplyCrosstabStyleAction.CROSSTAB_HEADER_PROPERTY, null));
+			command.add(new SetPropertyValueCommand(crosstabMap, ApplyCrosstabStyleAction.CROSSTAB_TOTAL_PROPERTY, null));
+			
 			command.add(new ForceRefreshCommand(crosstabModel));
 		}
 		return command;

@@ -14,13 +14,14 @@ package com.jaspersoft.studio.components.crosstab.model.crosstab.command;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
 import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle;
+
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * The command to update the CrosstabStyle of a Crosstab, support the undo
@@ -69,9 +70,10 @@ public class UpdateCrosstabStyleCommand extends Command{
 
 	@Override
 	public void execute() {
-		ApplyCrosstabStyleAction applyAction = new ApplyCrosstabStyleAction(newStyleTemplate, crosstab.getValue()); 
+		ApplyCrosstabStyleAction applyAction = new ApplyCrosstabStyleAction(newStyleTemplate, crosstab.getValue());
+		JasperDesign jd = crosstab.getJasperDesign();
 		//Save the old styles for the undo
-		JRDesignStyle[] tableStyles  = applyAction.getStylesFromCrosstab();
+		JRDesignStyle[] tableStyles  = applyAction.getStylesFromCrosstab(crosstab.getValue().getPropertiesMap(), jd);
 		oldStyles = new JRDesignStyle[tableStyles.length];
 		for(int i = 0; i < tableStyles.length; i++){
 			JRDesignStyle currentStyle = tableStyles[i];
@@ -80,7 +82,7 @@ public class UpdateCrosstabStyleCommand extends Command{
 			}
 		}
 		//Apply the new style, the old one if not overwritten are not removed
-		applyAction.updateStyle(crosstab.getJasperDesign(), newStyleTemplate, updateOldStyles, false);
+		applyAction.updateStyle(jd, newStyleTemplate, updateOldStyles, false);
 		crosstab.setChangedProperty(true);
 	}
 	

@@ -12,6 +12,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.cell.command;
 
+import org.eclipse.draw2d.geometry.Rectangle;
+
+import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.command.Tag;
+
 import net.sf.jasperreports.crosstabs.JRCrosstabDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -19,12 +25,6 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
-
-import org.eclipse.draw2d.geometry.Rectangle;
-
-import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.command.Tag;
 
 public class CreateCrosstabElement4ObjectCommand extends CreateElementCommand {
 	protected ANode child;

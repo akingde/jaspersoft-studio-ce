@@ -45,7 +45,7 @@ public class CrosstabGroupWizard extends Wizard implements IExpressionContextSet
 	/**
 	 * Step where the user define the group name and its expression
 	 */
-	private WizardCrosstabGroupPage step1;
+	protected WizardCrosstabGroupPage step1;
 	
 	/**
 	 * Crosstab where the group is added
@@ -84,11 +84,15 @@ public class CrosstabGroupWizard extends Wizard implements IExpressionContextSet
 		for(JRCrosstabMeasure measure : crosstab.getValue().getMeasures()){
 			namesInUse.add(measure.getName());
 		}
-		step1 = new WizardCrosstabGroupPage(crosstab, namesInUse);
+		step1 = createPage(crosstab, namesInUse);
 		addPage(step1);
 		if (expContext != null) {
 			step1.setExpressionContext(expContext);
 		}
+	}
+	
+	protected WizardCrosstabGroupPage createPage(MCrosstab crosstab, List<String> namesInUse){
+		return new WizardCrosstabGroupPage(crosstab, namesInUse);
 	}
 
 	@Override

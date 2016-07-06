@@ -119,9 +119,9 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 		
 		//Bind the styles to the table properties
 		JRPropertiesMap tableMap = getElement().getPropertiesMap();
-		tableMap.setProperty(TABLE_HEADER_PROPERTY, styleList.get(1).getName());
-		tableMap.setProperty(COLUMN_HEADER_PROPERTY, styleList.get(2).getName());
-		tableMap.setProperty(DETAIL_PROPERTY, styleList.get(3).getName());
+		if (styleList.get(1) != null) tableMap.setProperty(TABLE_HEADER_PROPERTY, styleList.get(1).getName());
+		if (styleList.get(2) != null) tableMap.setProperty(COLUMN_HEADER_PROPERTY, styleList.get(2).getName());
+		if (styleList.get(3) != null) tableMap.setProperty(DETAIL_PROPERTY, styleList.get(3).getName());
 		
 		List<BaseColumn> columns = TableUtil.getAllColumns(table);
 		for(BaseColumn col : columns){
@@ -308,6 +308,8 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 					stylesToApply.set(i, styleToUpdate);
 					if (styleToUpdate != null){
 						commands.add(new UpdateStyleCommand(updatedStyle, styleToUpdate));
+					} else {
+						stylesToApply.set(i, null);
 					}
 				} else {
 					stylesToApply.set(i, null);

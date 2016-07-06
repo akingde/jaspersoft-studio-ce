@@ -15,6 +15,7 @@ package com.jaspersoft.studio.components.table.model.table.command;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -22,6 +23,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
+import com.jaspersoft.studio.components.table.model.dialog.ApplyTableStyleAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
@@ -31,8 +33,10 @@ import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.eclipse.ui.util.RunnableCancelQuestion.RESPONSE_TYPE;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Delete the element and also the styles that where used inside and 
@@ -88,6 +92,35 @@ public class DeleteTableCommand extends DeleteElementCommand {
 		return true;
 	}
 	
+	/**
+	 * Check if the passed map has one of the properties that bind the table to
+	 * its default styles
+	 * 
+	 * @param tableMap
+	 *            the properties map of the table
+	 * @return true if the table map has one of the properties that reference
+	 *         the default style, false otherwise
+	 */
+	protected static boolean hasStyleProperties(JRPropertiesMap tableMap) {
+		return (tableMap.containsProperty(ApplyTableStyleAction.COLUMN_HEADER_PROPERTY)
+				|| tableMap.containsProperty(ApplyTableStyleAction.TABLE_HEADER_PROPERTY)
+				|| tableMap.containsProperty(ApplyTableStyleAction.DETAIL_PROPERTY));
+	}
+	
+	/**
+	 * Check if a style name exist and it is internal
+	 * 
+	 * @param styleName the name of the style
+	 * @param jd the jasperdesign, must be not null
+	 * @return true if the style name is not null and referencing an internal style, false otherwise
+	 */
+	protected boolean isExistingInternalStyle(String styleName, JasperDesign jd){
+		if (styleName != null){
+			return jd.getStylesMap().containsKey(styleName);
+		}
+		return false;
+	}
+	
 	@Override
 	public void execute() {
 		delteStylesCommand.clear();
@@ -97,7 +130,7 @@ public class DeleteTableCommand extends DeleteElementCommand {
 		HashMap<String, List<ANode>> tableStyles = table.getUsedStyles();
 		
 		//check which styles were used in the element but not in the rest of the report
-		List<String> unusedStyles = new ArrayList<String>();
+		HashSet<String> unusedStyles = new HashSet<String>();
 		
 		for(Entry<String, List<ANode>> entry : tableStyles.entrySet()){
 			List<ANode> nodesUsingOutsideTable = reportStyles.get(entry.getKey());
@@ -106,16 +139,33 @@ public class DeleteTableCommand extends DeleteElementCommand {
 				unusedStyles.add(entry.getKey());
 			}
 		}
+		
+		//Add the styles of the table
+		JRPropertiesMap tableMap = table.getPropertiesMap();
+		if (hasStyleProperties(tableMap)){
+			String styleName = tableMap.getProperty(ApplyTableStyleAction.TABLE_HEADER_PROPERTY);
+			if (isExistingInternalStyle(styleName, jDesign)) unusedStyles.add(styleName);
+			
+			styleName = tableMap.getProperty(ApplyTableStyleAction.COLUMN_HEADER_PROPERTY);
+			if (isExistingInternalStyle(styleName, jDesign)) unusedStyles.add(styleName);
+			
+			styleName = tableMap.getProperty(ApplyTableStyleAction.DETAIL_PROPERTY);
+			if (isExistingInternalStyle(styleName, jDesign)) unusedStyles.add(styleName);
+		}
+		
 		if (!unusedStyles.isEmpty()){
 			//If there are style that can be removed ask the user what to do and in case
 			//generate the commands to remove them
 			String unusedStylesName = ""; //$NON-NLS-1$
-			for(int i = 0; i<unusedStyles.size(); i++){
-				unusedStylesName += unusedStyles.get(i);
-				if (i != unusedStyles.size()-1 ){
+			int count = 0;
+			for(String styleName : unusedStyles){
+				unusedStylesName += styleName;
+				if (count != unusedStyles.size()-1 ){
 					unusedStylesName += ", "; //$NON-NLS-1$
 				}
+				count++;
 			}
+
 			RESPONSE_TYPE response = UIUtils.showCancellableConfirmation(Messages.DeleteTableCommand_unusedTitle, MessageFormat.format(Messages.DeleteTableCommand_unusedMessage, new Object[]{unusedStylesName}));
 			if (response == RESPONSE_TYPE.YES){
 				for(String style : unusedStyles){

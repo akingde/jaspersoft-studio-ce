@@ -67,6 +67,13 @@ public class CreateMeasureCommand extends Command {
 	public CreateMeasureCommand(MCell destNode, MMeasure srcNode, int index) {
 		this(destNode.getMCrosstab(), srcNode, index);
 	}
+	
+	public CreateMeasureCommand(MCrosstab crosstab, JRDesignCrosstabMeasure measure, int index){
+		super();
+		this.jrCrosstab = crosstab.getValue();
+		this.index = index;
+		this.jrMeasure = measure;
+	}
 
 	private CreateMeasureCommand(ANode destNode, MMeasure srcNode, int index) {
 		super();
@@ -116,8 +123,7 @@ public class CreateMeasureCommand extends Command {
 		}
 	}
 
-	public static JRDesignCrosstabMeasure createMesure(
-			JRDesignCrosstab jrCrosstab, String name) {
+	public static JRDesignCrosstabMeasure createMesure(JRDesignCrosstab jrCrosstab, String name) {
 		JRDesignCrosstabMeasure jrMeasure = new JRDesignCrosstabMeasure();
 		jrMeasure.setName(ModelUtils.getDefaultName(jrCrosstab, name));
 		return jrMeasure;

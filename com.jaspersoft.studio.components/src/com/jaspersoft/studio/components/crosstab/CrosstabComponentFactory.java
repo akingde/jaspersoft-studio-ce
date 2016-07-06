@@ -21,6 +21,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
@@ -71,7 +72,6 @@ import com.jaspersoft.studio.components.crosstab.model.measure.MMeasure;
 import com.jaspersoft.studio.components.crosstab.model.measure.MMeasures;
 import com.jaspersoft.studio.components.crosstab.model.measure.action.CreateMeasureAction;
 import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMeasureCommand;
-import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMeasureFieldCommand;
 import com.jaspersoft.studio.components.crosstab.model.measure.command.DeleteMeasureCommand;
 import com.jaspersoft.studio.components.crosstab.model.measure.command.ReorderMeasureCommand;
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoData;
@@ -405,6 +405,18 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
+		
+		//Check to avoid that dataset objects are dragged inside the crosstab
+		boolean isDatasetType = (child instanceof MVariableSystem) || (child instanceof MField) || (child instanceof MParameterSystem);
+		if (isDatasetType){
+			//It is a dataset object, check if the target is the crosstab
+			ANode currentParent = parent;
+			while(currentParent != null){
+				if (currentParent instanceof MCrosstab) return UnexecutableCommand.INSTANCE;
+				else currentParent = currentParent.getParent();
+			}
+		}
+		
 		if (parent instanceof MPage) {
 			for (INode c : parent.getChildren()) {
 				if (c instanceof MCrosstab) {
@@ -441,30 +453,24 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				return new CreateParameterCommand((MCrosstabParameters) parent, (MParameter) child, newIndex);
 		}
 		if (child instanceof MMeasure) {
-			if (parent instanceof MCell && ((MCell) parent).getMCrosstab() != null)
-				return new CreateMeasureFieldCommand((MMeasure) child, (MCell) parent, location);
-			// return new CreateMeasureCommand((MCell) parent, (MMeasure) child,
-			// newIndex);
+			if (parent instanceof MCell || parent instanceof MMeasures)
+				return UnexecutableCommand.INSTANCE;
 			if (parent instanceof MCrosstab)
 				return new CreateMeasureCommand((MCrosstab) parent, (MMeasure) child, newIndex);
 			if (parent instanceof MMeasures)
 				return new CreateMeasureCommand((MMeasures) parent, (MMeasure) child, newIndex);
 		}
 		if (child instanceof MColumnGroup) {
-			if (parent instanceof MCell && ((MCell) parent).getMCrosstab() != null)
-				return new CreateColumnCommand((MCell) parent, (MColumnGroup) child, newIndex);
-			if (parent instanceof MColumnGroup)
-				return new CreateColumnCommand((MColumnGroup) parent, (MColumnGroup) child, newIndex);
+			if (parent instanceof MCell || parent instanceof MColumnGroup)
+				return UnexecutableCommand.INSTANCE;
 			if (parent instanceof MCrosstab)
 				return new CreateColumnCommand((MCrosstab) parent, (MColumnGroup) child, newIndex);
 			if (parent instanceof MColumnGroups)
 				return new CreateColumnCommand((MColumnGroups) parent, (MColumnGroup) child, newIndex);
 		}
 		if (child instanceof MRowGroup) {
-			if (parent instanceof MCell && ((MCell) parent).getMCrosstab() != null)
-				return new CreateRowCommand((MCell) parent, (MRowGroup) child, newIndex);
-			if (parent instanceof MRowGroup)
-				return new CreateRowCommand((MRowGroup) parent, (MRowGroup) child, newIndex);
+			if (parent instanceof MCell || parent instanceof MRowGroup)
+				return UnexecutableCommand.INSTANCE;
 			if (parent instanceof MCrosstab)
 				return new CreateRowCommand((MCrosstab) parent, (MRowGroup) child, newIndex);
 			if (parent instanceof MRowGroups)

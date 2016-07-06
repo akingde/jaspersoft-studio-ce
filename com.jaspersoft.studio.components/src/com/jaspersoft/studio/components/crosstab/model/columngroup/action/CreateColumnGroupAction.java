@@ -40,6 +40,7 @@ import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Class to create a new column group. It open a wizard to define the group name and
@@ -92,8 +93,9 @@ public class CreateColumnGroupAction extends ACachedSelectionAction {
 				cmd.add(new LazyCrosstabLayoutCommand(crosstab));
 				execute(cmd);
 				
+				JasperDesign jd = crosstab.getJasperDesign();
 				ApplyCrosstabStyleAction applyStyle = new ApplyCrosstabStyleAction(new ArrayList<JRDesignStyle>(), crosstab.getValue());
-				applyStyle.rebuildStylesFromCrosstab();
+				applyStyle.rebuildStylesFromCrosstab(jd);
 				applyStyle.applayStyle(crosstab.getJasperDesign());
 			}
 		}

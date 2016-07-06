@@ -104,7 +104,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 					targetFeedback = null;
 				}
 			}
-
+			
 			protected IFigure getLayoutTargetFeedback(Request request) {
 				if (request instanceof ChangeBoundsRequest) {
 					ChangeBoundsRequest cbr = (ChangeBoundsRequest) request;
@@ -115,8 +115,9 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 						if (ep instanceof CrosstabCellEditPart)
 							return null;
 					}
-				} else if (request instanceof CreateRequest && !(getModel() instanceof MCell))
+				} else if ((request instanceof CreateRequest) && !(getModel() instanceof MCell)){
 					return null;
+				}
 				if (targetFeedback == null) {
 					targetFeedback = new RectangleFigure();
 					targetFeedback.setFill(false);

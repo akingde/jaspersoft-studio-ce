@@ -27,6 +27,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -176,13 +178,19 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(1, false));
 		setControl(composite);
 
-		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.common_group_name);
+		Composite nameArea = new Composite(composite, SWT.NONE);
+		nameArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridLayout nameAreaLayout = new GridLayout(2, false);
+		nameAreaLayout.marginWidth = 0;
+		nameArea.setLayout(nameAreaLayout);
+		
+		Label lbl = new Label(nameArea, SWT.NONE);
+		lbl.setText(getGroupNameLabel());
 
-		grName = new Text(composite, SWT.BORDER);
+		grName = new Text(nameArea, SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		grName.setLayoutData(gd);
 		grName.addModifyListener(new ModifyListener() {
@@ -190,10 +198,10 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 			public void modifyText(ModifyEvent e) {
 				String currentText = grName.getText().trim();
 				if (currentText.isEmpty()) {//$NON-NLS-1$
-					setErrorMessage(Messages.WizardBandGroupPage_error_message_group_name_not_empty);
+					setErrorMessage(getEmptyNameError());
 					setPageComplete(false);
 				} else if (alreadyUsedNames.contains(currentText)) {
-					setErrorMessage(Messages.WizardBandGroupPage_error_message_unique_name);
+					setErrorMessage(getDuplicatedNameError());
 					setPageComplete(false);
 				} else {
 					setPageComplete(true);
@@ -205,24 +213,24 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 		});
 		grName.setText("");
 
+		//Subclass can here create additional controls
+		createAdditionalControls(composite);
+		
 		bfield = new Button(composite, SWT.RADIO);
-		bfield.setText(Messages.WizardBandGroupPage_1);
+		bfield.setText(getReportObjectLabel());
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
 		bfield.setLayoutData(gd);
 		bfield.setSelection(true);
 
 		Button bexpr = new Button(composite, SWT.RADIO);
-		bexpr.setText(Messages.WizardBandGroupPage_2);
+		bexpr.setText(getExpressionLabel());
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
 		bexpr.setLayoutData(gd);
 
 		final Composite cmp = new Composite(composite, SWT.NONE);
 		final StackLayout stackLayout = new StackLayout();
 		cmp.setLayout(stackLayout);
 		gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
 		cmp.setLayoutData(gd);
 
 		final Composite objCmp = createObjectFields(cmp);
@@ -259,6 +267,10 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 		});
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
+	}
+	
+	protected void createAdditionalControls(Composite parent){
+		
 	}
 
 	private Composite createExpression(Composite cmp) {
@@ -364,7 +376,6 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 						groupExpression = "$P{" + parameter.getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
 						valueClass = parameter.getValueClassName();
 					}
-					
 				}
 			}
 
@@ -373,8 +384,32 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 
 			}
 		});
+		
+		leftTable.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				StructuredSelection sel = (StructuredSelection) leftTView.getSelection();
+				if (!sel.isEmpty()) {
+					Object obj = sel.getFirstElement();
+					if (obj instanceof JRDesignField) {
+						JRDesignField field = (JRDesignField) obj;
+						grName.setText(field.getName());
+					} else if (obj instanceof JRDesignVariable) {
+						JRDesignVariable variable = (JRDesignVariable) obj;
+						grName.setText(variable.getName());
+					} else if (obj instanceof JRDesignParameter){
+						JRDesignParameter parameter = (JRDesignParameter) obj;
+						grName.setText(parameter.getName());
+					}
+				}
+			}
+			
+		});
 		return composite;
 	}
+	
+
 
 	/**
 	 * Set the expression context for the expression editor.
@@ -412,5 +447,27 @@ public class WizardCrosstabGroupPage extends WizardPage implements IExpressionCo
 	 */
 	public String getGroupValueClass(){
 		return valueClass;
+	}
+	
+	//Return the strings used in the dialog, to allow it to use in more context
+	
+	protected String getGroupNameLabel(){
+		return Messages.common_group_name;
+	}
+	
+	protected String getReportObjectLabel(){
+		return Messages.WizardBandGroupPage_1;
+	}
+	
+	protected String getExpressionLabel(){
+		return Messages.WizardBandGroupPage_2;
+	}
+	
+	protected String getDuplicatedNameError(){
+		return Messages.WizardBandGroupPage_error_message_unique_name;
+	}
+	
+	protected String getEmptyNameError(){
+		return Messages.WizardBandGroupPage_error_message_group_name_not_empty;
 	}
 }

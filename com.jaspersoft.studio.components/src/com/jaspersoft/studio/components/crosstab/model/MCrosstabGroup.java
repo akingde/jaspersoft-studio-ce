@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.components.crosstab.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -20,6 +21,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -176,5 +178,16 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 			}
 		} else if (id.equals(JRDesignCrosstabGroup.PROPERTY_MERGE_HEADER_CELLS))
 			jrField.setMergeHeaderCells(((Boolean) value).booleanValue());
+	}
+	
+	@Override
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		HashMap<String, List<ANode>> result = super.getUsedStyles();
+		for (INode node : getChildren()) {
+			if (node instanceof ANode) {
+				mergeElementStyle(result, ((ANode) node).getUsedStyles());
+			}
+		}
+		return result;
 	}
 }

@@ -21,6 +21,7 @@ public class Messages extends NLS {
 	public static String common_crosstab_wizard;
 	public static String common_fields;
 	public static String common_height;
+	public static String common_measure;
 	public static String common_name;
 	public static String common_order;
 	public static String common_orphan_child;
@@ -155,6 +156,10 @@ public class Messages extends NLS {
 	public static String MTitle_title;
 	public static String MTitleCell_contentPosition;
 	public static String MTitleCell_titlecell;
+	public static String WizardCrosstabMeasurePage_dialogDescription;
+	public static String WizardCrosstabMeasurePage_errorEmptyName;
+	public static String WizardCrosstabMeasurePage_optionExpressionText;
+	public static String WizardCrosstabMeasurePage_optionReportObjectText;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
