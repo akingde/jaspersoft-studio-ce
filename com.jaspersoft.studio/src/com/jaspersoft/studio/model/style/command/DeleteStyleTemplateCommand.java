@@ -19,6 +19,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 /*
  * link nodes & together.
  * 
@@ -34,6 +35,8 @@ public class DeleteStyleTemplateCommand extends Command {
 
 	/** The element position. */
 	private int elementPosition = 0;
+	
+	private JasperReportsConfiguration jConfig;
 
 	/**
 	 * Instantiates a new delete style template command.
@@ -42,6 +45,7 @@ public class DeleteStyleTemplateCommand extends Command {
 		super();
 		this.jrDesign = srcNode.getJasperDesign();
 		this.jrTemplate = (JRDesignReportTemplate) srcNode.getValue();
+		this.jConfig = destNode.getJasperConfiguration();
 	}
 
 	/*
@@ -53,6 +57,7 @@ public class DeleteStyleTemplateCommand extends Command {
 	public void execute() {
 		elementPosition = jrDesign.getTemplatesList().indexOf(jrTemplate);
 		jrDesign.removeTemplate(jrTemplate);
+		jConfig.refreshCachedStyles();
 	}
 
 	/*
@@ -78,5 +83,6 @@ public class DeleteStyleTemplateCommand extends Command {
 			jrDesign.addTemplate(jrTemplate);
 		else
 			jrDesign.addTemplate(elementPosition, jrTemplate);
+		jConfig.refreshCachedStyles();
 	}
 }
