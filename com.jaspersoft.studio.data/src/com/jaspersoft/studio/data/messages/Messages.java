@@ -35,6 +35,8 @@ public class Messages extends NLS {
 	public static String BeanMappingTool_labeltitle;
 	public static String BeanMappingTool_selectfieldstitle;
 	public static String BeanMappingTool_toolname;
+	public static String CSVDataAdapterComposite_0;
+	public static String CSVDataAdapterComposite_1;
 	public static String CSVDataAdapterComposite_10;
 	public static String CSVDataAdapterComposite_11;
 	public static String CSVDataAdapterComposite_12;

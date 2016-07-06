@@ -927,6 +927,21 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 	}
 
+	@Override
+	protected void fireFileChanged(boolean showWarning) {
+		try {
+			if (showWarning) {
+				if (UIUtils.showConfirmation(Messages.CSVDataAdapterComposite_0, Messages.CSVDataAdapterComposite_1))
+					getCSVColumns();
+			} else
+				getCSVColumns();
+		} catch (IOException e) {
+			UIUtils.showError(e);
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		}
+	}
+
 	/**
 	 * This method will populate the data model with the CSV columns This also
 	 * checks the button "Skip the first line " and enables the delete button

@@ -44,16 +44,16 @@ import net.sf.jasperreports.data.http.StandardHttpDataLocation;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.NotEmptyFileValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
-	
+
 	protected Text textFileName;
-	
+
 	private Button btnBrowse;
 
-	public AFileDataAdapterComposite(Composite parent, int style,
-			JasperReportsContext jrContext) {
+	public AFileDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 		super(parent, style, jrContext);
 	}
 
@@ -69,8 +69,7 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 		textFileName.setToolTipText(Messages.AFileDataAdapterComposite_0);
 
 		btnBrowse = new Button(parent, SWT.PUSH);
-		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false,
-				false, 1, 1);
+		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		gd_btnBrowse.widthHint = 100;
 		btnBrowse.setLayoutData(gd_btnBrowse);
 		btnBrowse.setText(Messages.AFileDataAdapterComposite_2);
@@ -85,53 +84,50 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 				if (textFileName.getText().matches("^(?i)(https?)://.*$")) { //$NON-NLS-1$
 					FileDataAdapter fda = getFileDataAdapter();
 					DataFile dataFile = fda.getDataFile();
-					HttpParametersDialog d = new HttpParametersDialog(
-							getShell(), (StandardHttpDataLocation) dataFile
-									.clone());
-					if (d.open() == Dialog.OK)
+					HttpParametersDialog d = new HttpParametersDialog(getShell(),
+							(StandardHttpDataLocation) dataFile.clone());
+					if (d.open() == Dialog.OK) {
 						fda.setDataFile(d.getDataFile());
+						fireFileChanged(!Misc.isNullOrEmpty(((StandardHttpDataLocation) dataFile).getUrl()));
+					}
 				} else {
-					IWorkspaceRoot root = ResourcesPlugin.getWorkspace()
-							.getRoot();
+					String old = textFileName.getText();
+					IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 					FileDialog fd = new FileDialog(UIUtils.getShell());
 					fd.setFileName(textFileName.getText());
 					fd.setFilterPath(root.getLocation().toOSString());
-					fd.setFilterExtensions(getFileExtensions()); //$NON-NLS-1$ //$NON-NLS-2$
+					fd.setFilterExtensions(getFileExtensions()); // $NON-NLS-1$
+																	// //$NON-NLS-2$
 					String selection = fd.open();
 					if (selection != null) {
-						IFile contextfile = (IFile) getJrContext().getValue(
-								FileUtils.KEY_FILE);
+						IFile contextfile = (IFile) getJrContext().getValue(FileUtils.KEY_FILE);
 
-						IFile[] resource = root
-								.findFilesForLocationURI(new File(selection)
-										.toURI());
-						if (contextfile != null
-								&& resource != null
-								&& resource.length > 0
-								&& contextfile.getProject().equals(
-										resource[0].getProject()))
-							selection = resource[0].getProjectRelativePath()
-									.toOSString();
+						IFile[] resource = root.findFilesForLocationURI(new File(selection).toURI());
+						if (contextfile != null && resource != null && resource.length > 0
+								&& contextfile.getProject().equals(resource[0].getProject()))
+							selection = resource[0].getProjectRelativePath().toOSString();
 						textFileName.setText(selection);
+						if (!selection.equals(textFileName))
+							fireFileChanged(!Misc.isNullOrEmpty(old));
 					}
 				}
 			}
 		});
 	}
 
+	protected void fireFileChanged(boolean showWarning) {
+
+	}
+
 	protected abstract String[] getFileExtensions();
 
 	protected void doBindFileNameWidget(DataAdapter dataAdapter) {
-		NotEmptyFileValidator nefValidator = new NotEmptyFileValidator(
-				getJrContext());
-		Binding binding = bindingContext.bindValue(SWTObservables.observeText(
-				textFileName, SWT.Modify), PojoObservables.observeValue(
-				new DAProxy((FileDataAdapter) dataAdapter), "dataFile"), //$NON-NLS-1$
-				new UpdateValueStrategy()
-						.setAfterConvertValidator(nefValidator), null);
+		NotEmptyFileValidator nefValidator = new NotEmptyFileValidator(getJrContext());
+		Binding binding = bindingContext.bindValue(SWTObservables.observeText(textFileName, SWT.Modify),
+				PojoObservables.observeValue(new DAProxy((FileDataAdapter) dataAdapter), "dataFile"), //$NON-NLS-1$
+				new UpdateValueStrategy().setAfterConvertValidator(nefValidator), null);
 		nefValidator.setBinding(binding);
-		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null,
-				new ControlDecorationUpdater());
+		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null, new ControlDecorationUpdater());
 	}
 
 	private FileDataAdapter getFileDataAdapter() {
@@ -150,8 +146,7 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 			if (str.matches("^(?i)(https?)://.*$")) { //$NON-NLS-1$
 				btnBrowse.setText(Messages.AFileDataAdapterComposite_5);
 				DataFile dl = da.getDataFile();
-				if (dataFile == null
-						|| !(dataFile instanceof StandardHttpDataLocation)) {
+				if (dataFile == null || !(dataFile instanceof StandardHttpDataLocation)) {
 					dl = new StandardHttpDataLocation();
 					da.setDataFile(dl);
 				}
@@ -159,8 +154,7 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 			} else {
 				btnBrowse.setText(Messages.AFileDataAdapterComposite_2);
 				DataFile dl = da.getDataFile();
-				if (dataFile == null
-						|| !(dataFile instanceof StandardRepositoryDataLocation)) {
+				if (dataFile == null || !(dataFile instanceof StandardRepositoryDataLocation)) {
 					dl = new StandardRepositoryDataLocation();
 					da.setDataFile(dl);
 				}

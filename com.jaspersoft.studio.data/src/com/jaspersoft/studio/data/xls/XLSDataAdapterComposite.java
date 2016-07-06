@@ -76,10 +76,10 @@ public class XLSDataAdapterComposite extends AFileDataAdapterComposite {
 
 	// The data model
 	private java.util.List<String[]> rows;
-	
+
 	/**
-	 * Temp. JR configuration used only to get the fields from
-	 * a fake design. It is disposed at the end
+	 * Temp. JR configuration used only to get the fields from a fake design. It
+	 * is disposed at the end
 	 */
 	private JasperReportsConfiguration jConfig;
 
@@ -504,6 +504,19 @@ public class XLSDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 	}
 
+	@Override
+	protected void fireFileChanged(boolean showWarning) {
+		try {
+			if (showWarning) {
+				if (UIUtils.showConfirmation(Messages.CSVDataAdapterComposite_0, Messages.CSVDataAdapterComposite_1))
+					getExcelColumns();
+			} else
+				getExcelColumns();
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		}
+	}
+
 	/**
 	 * This method will populate the data model with the Excel columns This also
 	 * checks the button "Skip the first line " and enables the delete button
@@ -552,8 +565,9 @@ public class XLSDataAdapterComposite extends AFileDataAdapterComposite {
 
 	@Override
 	public void dispose() {
-		if (jConfig != null){
-			//it is safe to dispose this jConfig since it was for sure created internally
+		if (jConfig != null) {
+			// it is safe to dispose this jConfig since it was for sure created
+			// internally
 			jConfig.dispose();
 			jConfig = null;
 		}

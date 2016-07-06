@@ -85,13 +85,13 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 	// The data model
 	private java.util.List<String[]> rows;
-	
+
 	/**
-	 * Temp. JR configuration used only to get the fields from
-	 * a fake design. It is disposed at the end
+	 * Temp. JR configuration used only to get the fields from a fake design. It
+	 * is disposed at the end
 	 */
 	private JasperReportsConfiguration jConfig;
-	
+
 	private Combo format;
 
 	/**
@@ -162,22 +162,23 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		gd.widthHint = 100;
 		table.setLayoutData(gd);
 		table.setHeaderVisible(true);
-		
-//		TableLayout tlayout = new TableLayout();
-//		tlayout.addColumnData(new ColumnWeightData(100, false));
-//		table.setLayout(tlayout);
+
+		// TableLayout tlayout = new TableLayout();
+		// tlayout.addColumnData(new ColumnWeightData(100, false));
+		// table.setLayout(tlayout);
 
 		tableViewer = new TableViewer(table);
-		
-//		tableViewer = new TableViewer(composite_3,
-//				SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+
+		// tableViewer = new TableViewer(composite_3,
+		// SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL |
+		// SWT.H_SCROLL);
 		tableViewer.setContentProvider(new XLSContentProvider());
 		tableViewer.setInput(rows);
 
-//		table = tableViewer.getTable();
-//		table.setLayoutData(new GridData(GridData.FILL_BOTH));
-//		table.setLinesVisible(true);
-//		table.setHeaderVisible(true);
+		// table = tableViewer.getTable();
+		// table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		// table.setLinesVisible(true);
+		// table.setHeaderVisible(true);
 
 		tableViewerColumnName = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnColumnName = tableViewerColumnName.getColumn();
@@ -195,9 +196,9 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		tableViewerColumnIndex.setLabelProvider(new ColumnNameIndexLabelProvider(1));
 		tableViewerColumnIndex.setEditingSupport(new NameIndexEditingSupport(tableViewer, 1));
 
-//		for (int i = 0, n = table.getColumnCount(); i < n; i++) {
-//			table.getColumn(i).pack();
-//		}
+		// for (int i = 0, n = table.getColumnCount(); i < n; i++) {
+		// table.getColumn(i).pack();
+		// }
 
 		Composite composite_4 = new Composite(composite_3, SWT.NONE);
 		composite_4.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
@@ -238,7 +239,7 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		grpOther.setLayout(gl_grpOther);
 
 		dnf = new DateNumberFormatWidget(grpOther);
-		  gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		dnf.setLayoutData(gd);
 
@@ -602,6 +603,19 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 	}
 
+	@Override
+	protected void fireFileChanged(boolean showWarning) {
+		try {
+			if (showWarning) {
+				if (UIUtils.showConfirmation(Messages.CSVDataAdapterComposite_0, Messages.CSVDataAdapterComposite_1))
+					getExcelColumns();
+			} else
+				getExcelColumns();
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		}
+	}
+
 	/**
 	 * This method will populate the data model with the Excel columns This also
 	 * checks the button "Skip the first line " and enables the delete button
@@ -612,13 +626,13 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 		if (textFileName.getText().length() > 0) {
 			DataAdapterDescriptor da = getDataAdapter();
-			if (jConfig == null){
+			if (jConfig == null) {
 				jConfig = JasperReportsConfiguration.getDefaultJRConfig();
 			}
 			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
 			((AbstractDataAdapterService) das).getDataAdapter();
 			JasperDesign jd = new JasperDesign();
- 			jd.setJasperReportsContext(jConfig);
+			jd.setJasperReportsContext(jConfig);
 			jConfig.setJasperDesign(jd);
 
 			// The get fields method call once a next on the data adapter to get
@@ -636,7 +650,8 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 			XlsDataAdapter xlsAdapter = (XlsDataAdapter) da.getDataAdapter();
 			boolean useRowHeader = xlsAdapter.isUseFirstRowAsHeader();
 			xlsAdapter.setUseFirstRowAsHeader(true);
-			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, new JRDesignDataset(jConfig, false));
+			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig,
+					new JRDesignDataset(jConfig, false));
 			xlsAdapter.setUseFirstRowAsHeader(useRowHeader);
 
 			rows.clear();
@@ -654,8 +669,9 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 	@Override
 	public void dispose() {
-		if (jConfig != null){
-			//it is safe to dispose this jConfig since it was for sure created internally
+		if (jConfig != null) {
+			// it is safe to dispose this jConfig since it was for sure created
+			// internally
 			jConfig.dispose();
 			jConfig = null;
 		}
