@@ -16,13 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.SashForm;
@@ -212,14 +214,20 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 		FilteredTree filteredTree = new FilteredTree(parent, SWT.SINGLE, new PropertiesPatternFilter(), true);
 		filteredTree.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_BACKGROUND));	
 		final TreeViewer viewer = filteredTree.getViewer();
-		viewer.setLabelProvider( new LabelProvider() {
-
-			public String getText(Object element) {
-		        return ((IPropertiesViewerNode) element).getName();
-		    }
-
+		ColumnViewerToolTipSupport.enableFor(viewer);
+		viewer.setLabelProvider( new CellLabelProvider() {
+			
+			@Override
+			public void update(ViewerCell cell) {
+				cell.setText(((IPropertiesViewerNode) cell.getElement()).getName());
+			}
+			
+			@Override
+			public String getToolTipText(Object element) {
+				return ((IPropertiesViewerNode) element).getDescription();
+			}
+			
 		});
-		
 		viewer.setContentProvider(new PropertiesViewerContentProvider<T>(nodes));		
 		return filteredTree;
 	}

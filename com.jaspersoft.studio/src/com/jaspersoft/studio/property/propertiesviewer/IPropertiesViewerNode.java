@@ -44,6 +44,13 @@ public interface IPropertiesViewerNode {
 	public String getName();
 	
 	/**
+	 * Returns the grouping description of this set of properties.
+	 *  
+	 * @return a description for the group of properties
+	 */
+	public String getDescription();
+	
+	/**
 	 * Returns the category ID for this node.
 	 * This attribute is used to build the hierarchy of the nodes.
 	 * It represents the ID of the parent node. 

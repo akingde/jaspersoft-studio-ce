@@ -35,27 +35,29 @@ public class PropertiesViewerNode implements IPropertiesViewerNode {
 	private String id;
 	private String category;
 	private String name;
+	private String description;
 	private Collection<String> keywords;
 
-	public PropertiesViewerNode(String id, String name){
-		this(id,name,null,null);
+	public PropertiesViewerNode(String id, String name, String description){
+		this(id,name,description,null,null);
 	}
 	
-	public PropertiesViewerNode(String id, String name, String category){
-		this(id,name,category,null);
+	public PropertiesViewerNode(String id, String name, String description, String category){
+		this(id,name,description,category,null);
 	}
 	
-	public PropertiesViewerNode(String id, String name, Collection<String> keywords){
-		this(id,name,null,keywords);
+	public PropertiesViewerNode(String id, String name, String description, Collection<String> keywords){
+		this(id,name,description,null,keywords);
 	}
 	
-	public PropertiesViewerNode(String id, String name, String category, Collection<String> keywords){
+	public PropertiesViewerNode(String id, String name, String description, String category, Collection<String> keywords){
 		// Sanity checks - Must have ID and NAME
 		Assert.isNotNull(id);
 		Assert.isNotNull(name);
 		
 		this.id=id;
 		this.name=name;
+		this.description=description;
 		this.category=category;
 		this.keywords=keywords;
 	}
@@ -66,6 +68,14 @@ public class PropertiesViewerNode implements IPropertiesViewerNode {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+	
+	public void setDescription(String description){
+		this.description = description;
 	}
 
 	public String getCategory() {
