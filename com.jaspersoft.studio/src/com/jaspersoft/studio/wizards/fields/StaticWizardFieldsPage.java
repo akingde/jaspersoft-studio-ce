@@ -83,7 +83,7 @@ public class StaticWizardFieldsPage extends JSSWizardPage {
 		setControl(mainComposite);
 
 		leftTable = new Table(mainComposite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
-		GridData gd = new GridData(GridData.FILL_VERTICAL);
+		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.widthHint = 300;
 		leftTable.setLayoutData(gd);
 		leftTable.setHeaderVisible(true);
