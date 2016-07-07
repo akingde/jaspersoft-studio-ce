@@ -31,17 +31,16 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class MCodabar extends MBarcode4j {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private static IPropertyDescriptor[] descriptors;
 
 	public MCodabar() {
 		super();
 	}
 
-	public MCodabar(ANode parent, JRDesignComponentElement jrBarcode,
-			int newIndex) {
+	public MCodabar(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
 		super(parent, jrBarcode, newIndex);
 	}
 
@@ -53,10 +52,11 @@ public class MCodabar extends MBarcode4j {
 		exp.setText("\"123456789\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr","Codabar")); //$NON-NLS-1$
-		
+		el.setComponentKey(
+				new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "Codabar")); //$NON-NLS-1$
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
-		
+
 		return el;
 	}
 
@@ -80,15 +80,14 @@ public class MCodabar extends MBarcode4j {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		super.createPropertyDescriptors(desc);
 
-		DoublePropertyDescriptor wideFactorD = new DoublePropertyDescriptor(
-				CodabarComponent.PROPERTY_WIDE_FACTOR,
+		DoublePropertyDescriptor wideFactorD = new DoublePropertyDescriptor(CodabarComponent.PROPERTY_WIDE_FACTOR,
 				Messages.common_wide_factor);
 		wideFactorD.setDescription(Messages.MCodabar_wide_factor_description);
 		desc.add(wideFactorD);
 
 		wideFactorD.setCategory(Messages.MCodabar_properties_category);
 	}
-	
+
 	@Override
 	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> properties = super.generateGraphicalProperties();
@@ -114,20 +113,20 @@ public class MCodabar extends MBarcode4j {
 
 		if (id.equals(CodabarComponent.PROPERTY_WIDE_FACTOR))
 			jrList.setWideFactor((Double) value);
-
-		super.setPropertyValue(id, value);
+		else
+			super.setPropertyValue(id, value);
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
 		CodabarComponent jrSourceBarcode = (CodabarComponent) jrSourceElement.getComponent();
-		
+
 		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
 		CodabarComponent jrTargetBarcode = (CodabarComponent) jrTargetElement.getComponent();
-		
+
 		jrTargetBarcode.setWideFactor(jrSourceBarcode.getWideFactor());
 	}
 }
