@@ -294,7 +294,7 @@ public class ReportEditor extends AbstractVisualEditor {
 		List<AContributorAction> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
 		for (AContributorAction a : contributedActions) {
 			a.setJrConfig((JasperReportsConfiguration) getGraphicalViewer().getProperty("JRCONTEXT"));
-			item = new ActionContributionItem(getActionRegistry().getAction(CompileAction.ID));
+			item = new ActionContributionItem(a);
 			act4TextIcon.add(item);
 			toolbarManager.add(item);
 		}
