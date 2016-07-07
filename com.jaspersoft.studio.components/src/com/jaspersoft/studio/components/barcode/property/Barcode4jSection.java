@@ -26,20 +26,16 @@ public class Barcode4jSection extends AbstractSection {
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
-	public void createControls(Composite parent,
-			TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSection(parent,
-				"Barcode 4J", false, 2);
+		Composite group = getWidgetFactory().createSection(parent, Messages.Barcode4jSection_0, false, 2);
 
-		createWidget4Property(group,
-				Barcode4jComponent.PROPERTY_PATTERN_EXPRESSION);
+		createWidget4Property(group, Barcode4jComponent.PROPERTY_PATTERN_EXPRESSION);
 
 		createWidget4Property(group, Barcode4jComponent.PROPERTY_QUIET_ZONE);
+		createWidget4Property(group, Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE);
 		createWidget4Property(group, Barcode4jComponent.PROPERTY_MODULE_WIDTH);
-		createWidget4Property(group,
-				Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE);
 
 		createWidget4Property(group, Barcode4jComponent.PROPERTY_ORIENTATION);
 		createWidget4Property(group, Barcode4jComponent.PROPERTY_TEXT_POSITION);
@@ -48,17 +44,11 @@ public class Barcode4jSection extends AbstractSection {
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
-		addProvidedProperties(Barcode4jComponent.PROPERTY_PATTERN_EXPRESSION,
-				Messages.MBarcode4j_pattern_expression);
-		addProvidedProperties(Barcode4jComponent.PROPERTY_QUIET_ZONE,
-				Messages.MBarcode4j_quiet_zone);
-		addProvidedProperties(Barcode4jComponent.PROPERTY_MODULE_WIDTH,
-				Messages.MBarcode4j_module_width);
-		addProvidedProperties(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE,
-				Messages.MBarcode4j_vertical_quiet_zone);
-		addProvidedProperties(Barcode4jComponent.PROPERTY_ORIENTATION,
-				Messages.MBarcode4j_orientation);
-		addProvidedProperties(Barcode4jComponent.PROPERTY_TEXT_POSITION,
-				Messages.MBarcode4j_text_position);
+		addProvidedProperties(Barcode4jComponent.PROPERTY_PATTERN_EXPRESSION, Messages.MBarcode4j_pattern_expression);
+		addProvidedProperties(Barcode4jComponent.PROPERTY_QUIET_ZONE, Messages.MBarcode4j_quiet_zone);
+		addProvidedProperties(Barcode4jComponent.PROPERTY_MODULE_WIDTH, Messages.MBarcode4j_module_width);
+		addProvidedProperties(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
+		addProvidedProperties(Barcode4jComponent.PROPERTY_ORIENTATION, Messages.MBarcode4j_orientation);
+		addProvidedProperties(Barcode4jComponent.PROPERTY_TEXT_POSITION, Messages.MBarcode4j_text_position);
 	}
 }

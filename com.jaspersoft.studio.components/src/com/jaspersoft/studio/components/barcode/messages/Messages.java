@@ -25,6 +25,7 @@ public class Messages extends NLS {
 	public static String common_properties_category;
 	public static String common_top;
 	public static String common_wide_factor;
+	public static String Barcode4jSection_0;
 	public static String BarcodeWizardPage_barbecue_types;
 	public static String BarcodeWizardPage_barcode_wizard_description_a;
 	public static String BarcodeWizardPage_barcode_wizard_description_b;
