@@ -158,7 +158,7 @@ public class MBarcode4j extends MBarcode {
 
 		NamedEnumPropertyDescriptor<TextPositionEnum> textPositionD = new NamedEnumPropertyDescriptor<TextPositionEnum>(
 				Barcode4jComponent.PROPERTY_TEXT_POSITION, Messages.MBarcode4j_text_position, TextPositionEnum.NONE,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		textPositionD.setDescription(Messages.MBarcode4j_text_position_description);
 		desc.add(textPositionD);
 
