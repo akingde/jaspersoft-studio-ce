@@ -31,17 +31,16 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class MEAN128 extends MBarcode4j {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private static IPropertyDescriptor[] descriptors;
 
 	public MEAN128() {
 		super();
 	}
 
-	public MEAN128(ANode parent, JRDesignComponentElement jrBarcode,
-			int newIndex) {
+	public MEAN128(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
 		super(parent, jrBarcode, newIndex);
 	}
 
@@ -50,13 +49,14 @@ public class MEAN128 extends MBarcode4j {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		EAN128Component component = new EAN128Component();
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setText("12345678901234567890");
+		exp.setText("\"12345678901234567890\"");
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "EAN128")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		
+		el.setComponentKey(
+				new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "EAN128")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
-		
+
 		return el;
 	}
 
@@ -81,10 +81,8 @@ public class MEAN128 extends MBarcode4j {
 		super.createPropertyDescriptors(desc);
 
 		JSSComboPropertyDescriptor checksumModeD = new JSSComboPropertyDescriptor(
-				EAN128Component.PROPERTY_CHECKSUM_MODE,
-				Messages.common_checksum_mode, ChecksumMode.getItems());
-		checksumModeD
-				.setDescription(Messages.MEAN128_checksum_mode_description);
+				EAN128Component.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode, ChecksumMode.getItems());
+		checksumModeD.setDescription(Messages.MEAN128_checksum_mode_description);
 		desc.add(checksumModeD);
 
 		checksumModeD.setCategory(Messages.MEAN128_properties_category);
@@ -106,29 +104,28 @@ public class MEAN128 extends MBarcode4j {
 		EAN128Component jrList = (EAN128Component) jrElement.getComponent();
 
 		if (id.equals(EAN128Component.PROPERTY_CHECKSUM_MODE))
-			jrList.setChecksumMode(ChecksumMode
-					.getChecksumMode4Pos((Integer) value));
+			jrList.setChecksumMode(ChecksumMode.getChecksumMode4Pos((Integer) value));
 
 		super.setPropertyValue(id, value);
 	}
-	
+
 	@Override
 	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> properties = super.generateGraphicalProperties();
 		properties.add(EAN128Component.PROPERTY_CHECKSUM_MODE);
 		return properties;
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
 		EAN128Component jrSourceBarcode = (EAN128Component) jrSourceElement.getComponent();
-		
+
 		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
 		EAN128Component jrTargetBarcode = (EAN128Component) jrTargetElement.getComponent();
-		
+
 		jrTargetBarcode.setChecksumMode(jrSourceBarcode.getChecksumMode());
 	}
 }
