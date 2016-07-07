@@ -512,7 +512,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		return errors;
 	}
 
-	private StandardMapComponent getMapComponent() {
+	public StandardMapComponent getMapComponent() {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		if (jrElement == null)
 			return null;

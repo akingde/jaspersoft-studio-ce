@@ -273,6 +273,15 @@
          </propertySection>
          <propertySection
                afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.Code128Section"
+               id="com.jaspersoft.studio.components.barcode.property.Code128Section"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MCode128">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
                class="com.jaspersoft.studio.components.barcode.property.PDF417Section"
                id="com.jaspersoft.studio.components.barcode.property.PDF417Section"
                tab="com.jaspersoft.studio.components.barcode">
@@ -761,6 +770,15 @@
             </input>
             <input
                   type="com.jaspersoft.studio.components.table.model.column.MCell">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.USPSIntelligentSection"
+               id="com.jaspersoft.studio.components.barcode.property.USPSIntelligentSection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MUSPSIntelligent">
             </input>
          </propertySection>
       </propertySections>

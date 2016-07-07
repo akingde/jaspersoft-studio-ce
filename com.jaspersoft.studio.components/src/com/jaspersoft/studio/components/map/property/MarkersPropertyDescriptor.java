@@ -12,12 +12,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,6 +31,7 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.components.map.property.desc.MarkersDescriptor;
+import com.jaspersoft.studio.editor.preview.element.ElementPreviewer;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.property.itemproperty.desc.AItemDataListPropertyDescriptor;
@@ -55,6 +60,7 @@ import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -96,21 +102,6 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 
 					final CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 					tabItem.setText(Messages.MarkersPropertyDescriptor_3);
-					tabFolder.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							if (tabFolder.getSelection() == tabItem) {
-								UIUtils.getDisplay().asyncExec(new Runnable() {
-									public void run() {
-										pmap.refresh();
-									}
-								});
-							} else if (itemsViewer.getTable().isVisible()) {
-								itemsViewer.setInput(itemData.getItems());
-								itemsViewer.refresh();
-							}
-						}
-					});
 
 					Composite cmp = new Composite(tabFolder, SWT.NONE);
 					GridLayout layout = new GridLayout(2, false);
@@ -356,6 +347,66 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 					};
 
 					tabItem.setControl(cmp);
+
+					final CTabItem tpreviewItem = new CTabItem(tabFolder, SWT.NONE);
+					tpreviewItem.setText("Preview");
+
+					final ElementPreviewer ep = new ElementPreviewer(tabFolder);
+
+					tpreviewItem.setControl(ep.getControl());
+
+					tabFolder.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							if (tabFolder.getSelection() == tabItem) {
+								UIUtils.getDisplay().asyncExec(new Runnable() {
+									public void run() {
+										pmap.refresh();
+									}
+								});
+							} else if (itemsViewer.getTable().isVisible()) {
+								itemsViewer.setInput(itemData.getItems());
+								itemsViewer.refresh();
+							} else if (tabFolder.getSelection() == tpreviewItem) {
+								if (el == null) {
+									el = (JRDesignComponentElement) pnode.getValue();
+									el = (JRDesignComponentElement) el.clone();
+									StandardMapComponent mc = (StandardMapComponent) el.getComponent();
+									mc.getMarkerDataList().clear();
+									mc.getMarkerDataList().addAll(itemDatas);
+									
+									// copy also lat/long
+								}
+								final PropertyChangeListener pcl = new PropertyChangeListener() {
+
+									@Override
+									public void propertyChange(PropertyChangeEvent evt) {
+										refreshPreview();
+									}
+								};
+								itemData.getEventSupport().addPropertyChangeListener(pcl);
+								tpreviewItem.addDisposeListener(new DisposeListener() {
+
+									@Override
+									public void widgetDisposed(DisposeEvent e) {
+										itemData.getEventSupport().removePropertyChangeListener(pcl);
+									}
+								});
+								refreshPreview();
+							}
+						}
+
+						private JRDesignComponentElement el;
+
+						private void refreshPreview() {
+							UIUtils.getDisplay().asyncExec(new Runnable() {
+								public void run() {
+									ep.runReport(pnode.getJasperConfiguration(), el);
+								}
+							});
+						}
+					});
+
 				}
 
 			};

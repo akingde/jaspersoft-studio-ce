@@ -38,7 +38,6 @@ public class Barcode4jSection extends AbstractSection {
 		createWidget4Property(group, Barcode4jComponent.PROPERTY_MODULE_WIDTH);
 
 		createWidget4Property(group, Barcode4jComponent.PROPERTY_ORIENTATION);
-		createWidget4Property(group, Barcode4jComponent.PROPERTY_TEXT_POSITION);
 	}
 
 	@Override
@@ -49,6 +48,5 @@ public class Barcode4jSection extends AbstractSection {
 		addProvidedProperties(Barcode4jComponent.PROPERTY_MODULE_WIDTH, Messages.MBarcode4j_module_width);
 		addProvidedProperties(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
 		addProvidedProperties(Barcode4jComponent.PROPERTY_ORIENTATION, Messages.MBarcode4j_orientation);
-		addProvidedProperties(Barcode4jComponent.PROPERTY_TEXT_POSITION, Messages.MBarcode4j_text_position);
 	}
 }
