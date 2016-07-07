@@ -31,17 +31,16 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class MDataMatrix extends MBarcode4j {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private static IPropertyDescriptor[] descriptors;
 
 	public MDataMatrix() {
 		super();
 	}
 
-	public MDataMatrix(ANode parent, JRDesignComponentElement jrBarcode,
-			int newIndex) {
+	public MDataMatrix(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
 		super(parent, jrBarcode, newIndex);
 	}
 
@@ -53,10 +52,11 @@ public class MDataMatrix extends MBarcode4j {
 		exp.setText("\"123456789\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "DataMatrix")); //$NON-NLS-1$
-		
+		el.setComponentKey(
+				new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "DataMatrix")); //$NON-NLS-1$
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
-		
+
 		return el;
 	}
 
@@ -80,9 +80,8 @@ public class MDataMatrix extends MBarcode4j {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		super.createPropertyDescriptors(desc);
 
-		JSSComboPropertyDescriptor shapeD = new JSSComboPropertyDescriptor(
-				DataMatrixComponent.PROPERTY_SHAPE, Messages.MDataMatrix_shape,
-				Orientation.getItems());
+		JSSComboPropertyDescriptor shapeD = new JSSComboPropertyDescriptor(DataMatrixComponent.PROPERTY_SHAPE,
+				Messages.MDataMatrix_shape, DataMatrixShape.getItems());
 		shapeD.setDescription(Messages.MDataMatrix_shape_description);
 		desc.add(shapeD);
 
@@ -92,8 +91,7 @@ public class MDataMatrix extends MBarcode4j {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		DataMatrixComponent jrList = (DataMatrixComponent) jrElement
-				.getComponent();
+		DataMatrixComponent jrList = (DataMatrixComponent) jrElement.getComponent();
 
 		if (id.equals(DataMatrixComponent.PROPERTY_SHAPE))
 			return DataMatrixShape.getPos4Shape(jrList.getShape());
@@ -104,32 +102,31 @@ public class MDataMatrix extends MBarcode4j {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		DataMatrixComponent jrList = (DataMatrixComponent) jrElement
-				.getComponent();
+		DataMatrixComponent jrList = (DataMatrixComponent) jrElement.getComponent();
 
 		if (id.equals(DataMatrixComponent.PROPERTY_SHAPE))
 			jrList.setShape(DataMatrixShape.getShape4Pos((Integer) value));
-
-		super.setPropertyValue(id, value);
+		else
+			super.setPropertyValue(id, value);
 	}
-	
+
 	@Override
 	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> properties = super.generateGraphicalProperties();
 		properties.add(DataMatrixComponent.PROPERTY_SHAPE);
 		return properties;
-	}	
-	
+	}
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
 		DataMatrixComponent jrSourceBarcode = (DataMatrixComponent) jrSourceElement.getComponent();
-		
+
 		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
 		DataMatrixComponent jrTargetBarcode = (DataMatrixComponent) jrTargetElement.getComponent();
-		
+
 		jrTargetBarcode.setShape(getStringClone(jrSourceBarcode.getShape()));
 	}
 }
