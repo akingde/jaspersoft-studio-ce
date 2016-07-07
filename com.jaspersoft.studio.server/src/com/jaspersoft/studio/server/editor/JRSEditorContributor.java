@@ -158,6 +158,8 @@ public class JRSEditorContributor implements IEditorContributor {
 	}
 
 	public static String[] getServerURL(JasperDesign jd, IFile f, IProgressMonitor monitor) {
+		if (jd == null)
+			return null;
 		String[] urls = new String[2];
 		urls[0] = jd.getProperty(AExporter.PROP_SERVERURL);
 		urls[1] = jd.getProperty(AExporter.PROP_USER);
