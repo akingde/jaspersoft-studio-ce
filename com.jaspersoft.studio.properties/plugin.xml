@@ -10,5 +10,13 @@
             class="com.jaspersoft.studio.properties.messages.ResourcePublisher">
       </input>
    </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage"
+            id="com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage"
+            name="Properties View">
+      </page>
+   </extension>
 
 </plugin>
