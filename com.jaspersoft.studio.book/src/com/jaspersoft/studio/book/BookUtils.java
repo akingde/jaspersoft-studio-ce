@@ -120,6 +120,18 @@ public class BookUtils {
 	 */
 	public static int validateBook(InputStream in, IContentDescription description) throws IOException {
 		try {
+			// Preliminary check on empty inputstream to avoid ParseException
+			if(in.markSupported()) {
+				try {
+					in.mark(0);
+					int firstRead = in.read();
+					if(firstRead==-1) {
+						return BOOK_INVALID;
+					}
+				} finally{
+					in.reset();
+				}
+			}
 			Document document = XMLUtils.parseNoValidation(in);
 			document.getDocumentElement().normalize();
 			NodeList bookParts = document.getElementsByTagName("part");

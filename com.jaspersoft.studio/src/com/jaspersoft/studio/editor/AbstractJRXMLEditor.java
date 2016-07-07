@@ -600,8 +600,9 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 				return;
 			}
 			try {
-				if (!resource.exists())
-					resource.create(new ByteArrayInputStream("FILE".getBytes(FileUtils.UTF8_ENCODING)), true, monitor); //$NON-NLS-1$
+				if (!resource.exists()) {
+					resource.create(new ByteArrayInputStream("".getBytes(FileUtils.UTF8_ENCODING)), true, monitor); //$NON-NLS-1$
+				}
 
 				resource.setCharset(FileUtils.UTF8_ENCODING, monitor);
 				((IStorageDocumentProvider) xmlEditor.getDocumentProvider()).setEncoding(getEditorInput(),
@@ -714,8 +715,9 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 								file.create(in, true, monitor);
 							else
 								file.setContents(in, true, true, monitor);
-						} else if (!file.exists())
+						} else if (!file.exists()) {
 							file.create(new ByteArrayInputStream("".getBytes(FileUtils.UTF8_ENCODING)), true, monitor); //$NON-NLS-1$
+						}
 
 						IFileEditorInput modelFile = new FileEditorInput(file);
 						setInputWithNotify(modelFile);
