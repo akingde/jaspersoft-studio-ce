@@ -84,6 +84,7 @@ public class MCodabar extends MBarcode4j {
 				Messages.common_wide_factor);
 		wideFactorD.setDescription(Messages.MCodabar_wide_factor_description);
 		desc.add(wideFactorD);
+		wideFactorD.setBounds(0, 1);
 
 		wideFactorD.setCategory(Messages.MCodabar_properties_category);
 	}

@@ -35,17 +35,16 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class MInterleaved2Of5 extends MBarcode4j {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private static IPropertyDescriptor[] descriptors;
 
 	public MInterleaved2Of5() {
 		super();
 	}
 
-	public MInterleaved2Of5(ANode parent, JRDesignComponentElement jrBarcode,
-			int newIndex) {
+	public MInterleaved2Of5(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
 		super(parent, jrBarcode, newIndex);
 	}
 
@@ -57,10 +56,11 @@ public class MInterleaved2Of5 extends MBarcode4j {
 		exp.setText("\"123456789\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "Interleaved2Of5")); //$NON-NLS-1$
-			
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$
+				"Interleaved2Of5"));
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
-		
+
 		return el;
 	}
 
@@ -85,36 +85,30 @@ public class MInterleaved2Of5 extends MBarcode4j {
 		super.createPropertyDescriptors(desc);
 
 		JSSComboPropertyDescriptor checksumModeD = new JSSComboPropertyDescriptor(
-				Interleaved2Of5Component.PROPERTY_CHECKSUM_MODE,
-				Messages.common_checksum_mode, ChecksumMode.getItems());
-		checksumModeD
-				.setDescription(Messages.MInterleaved2Of5_checksum_mode_description);
+				Interleaved2Of5Component.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode,
+				ChecksumMode.getItems());
+		checksumModeD.setDescription(Messages.MInterleaved2Of5_checksum_mode_description);
 		desc.add(checksumModeD);
 
 		DoublePropertyDescriptor wideFactorD = new DoublePropertyDescriptor(
-				Interleaved2Of5Component.PROPERTY_WIDE_FACTOR,
-				Messages.common_wide_factor);
-		wideFactorD
-				.setDescription(Messages.MInterleaved2Of5_wide_factor_description);
+				Interleaved2Of5Component.PROPERTY_WIDE_FACTOR, Messages.common_wide_factor);
+		wideFactorD.setDescription(Messages.MInterleaved2Of5_wide_factor_description);
 		desc.add(wideFactorD);
+		wideFactorD.setBounds(0, 1);
 
 		CheckBoxPropertyDescriptor displayChecksumD = new CheckBoxPropertyDescriptor(
-				Interleaved2Of5Component.PROPERTY_DISPLAY_CHECKSUM,
-				Messages.common_display_checksum, NullEnum.NULL);
-		displayChecksumD
-				.setDescription(Messages.MInterleaved2Of5_display_checksum_description);
+				Interleaved2Of5Component.PROPERTY_DISPLAY_CHECKSUM, Messages.common_display_checksum, NullEnum.NULL);
+		displayChecksumD.setDescription(Messages.MInterleaved2Of5_display_checksum_description);
 		desc.add(displayChecksumD);
 
 		wideFactorD.setCategory(Messages.MInterleaved2Of5_properties_category);
-		checksumModeD
-				.setCategory(Messages.MInterleaved2Of5_properties_category);
+		checksumModeD.setCategory(Messages.MInterleaved2Of5_properties_category);
 	}
 
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		Interleaved2Of5Component jrList = (Interleaved2Of5Component) jrElement
-				.getComponent();
+		Interleaved2Of5Component jrList = (Interleaved2Of5Component) jrElement.getComponent();
 
 		if (id.equals(Interleaved2Of5Component.PROPERTY_CHECKSUM_MODE))
 			return ChecksumMode.getPos4ChecksumMode(jrList.getChecksumMode());
@@ -129,12 +123,10 @@ public class MInterleaved2Of5 extends MBarcode4j {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		Interleaved2Of5Component jrList = (Interleaved2Of5Component) jrElement
-				.getComponent();
+		Interleaved2Of5Component jrList = (Interleaved2Of5Component) jrElement.getComponent();
 
 		if (id.equals(Interleaved2Of5Component.PROPERTY_CHECKSUM_MODE))
-			jrList.setChecksumMode(ChecksumMode
-					.getChecksumMode4Pos((Integer) value));
+			jrList.setChecksumMode(ChecksumMode.getChecksumMode4Pos((Integer) value));
 		else if (id.equals(Interleaved2Of5Component.PROPERTY_WIDE_FACTOR))
 			jrList.setWideFactor((Double) value);
 		else if (id.equals(Code39Component.PROPERTY_DISPLAY_CHECKSUM))
@@ -142,7 +134,7 @@ public class MInterleaved2Of5 extends MBarcode4j {
 		else
 			super.setPropertyValue(id, value);
 	}
-	
+
 	@Override
 	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> properties = super.generateGraphicalProperties();
@@ -151,17 +143,17 @@ public class MInterleaved2Of5 extends MBarcode4j {
 		properties.add(Interleaved2Of5Component.PROPERTY_DISPLAY_CHECKSUM);
 		return properties;
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
 		Interleaved2Of5Component jrSourceBarcode = (Interleaved2Of5Component) jrSourceElement.getComponent();
-		
+
 		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
 		Interleaved2Of5Component jrTargetBarcode = (Interleaved2Of5Component) jrTargetElement.getComponent();
-		
+
 		jrTargetBarcode.setChecksumMode(jrSourceBarcode.getChecksumMode());
 		jrTargetBarcode.setWideFactor(jrSourceBarcode.getWideFactor());
 		jrTargetBarcode.setDisplayChecksum(jrSourceBarcode.isDisplayChecksum());
