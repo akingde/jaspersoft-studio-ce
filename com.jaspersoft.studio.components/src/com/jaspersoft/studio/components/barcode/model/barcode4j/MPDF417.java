@@ -85,21 +85,25 @@ public class MPDF417 extends MBarcode4j {
 				Messages.MPDF417_min_columns);
 		minColumnsD.setDescription(Messages.MPDF417_min_columns_description);
 		desc.add(minColumnsD);
+		minColumnsD.setBounds(1, 30);
 
 		IntegerPropertyDescriptor maxColumnsD = new IntegerPropertyDescriptor(PDF417Component.PROPERTY_MAX_COLUMNS,
 				Messages.MPDF417_max_columns);
 		maxColumnsD.setDescription(Messages.MPDF417_max_columns_description);
 		desc.add(maxColumnsD);
+		maxColumnsD.setBounds(1, 30);
 
 		IntegerPropertyDescriptor minRowsD = new IntegerPropertyDescriptor(PDF417Component.PROPERTY_MIN_ROWS,
 				Messages.MPDF417_min_rows);
 		minRowsD.setDescription(Messages.MPDF417_min_rows_description);
 		desc.add(minRowsD);
+		minRowsD.setBounds(3, 90);
 
 		IntegerPropertyDescriptor maxRowsD = new IntegerPropertyDescriptor(PDF417Component.PROPERTY_MAX_ROWS,
 				Messages.MPDF417_max_rows);
 		maxRowsD.setDescription(Messages.MPDF417_max_rows_description);
 		desc.add(maxRowsD);
+		maxRowsD.setBounds(3, 90);
 
 		DoublePropertyDescriptor width2HeightRatioD = new DoublePropertyDescriptor(
 				PDF417Component.PROPERTY_WIDTH_TO_HEIGHT_RATIO, Messages.MPDF417_width_to_height_ratio);
