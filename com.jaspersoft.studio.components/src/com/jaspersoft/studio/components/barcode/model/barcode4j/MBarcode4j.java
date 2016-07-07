@@ -207,7 +207,7 @@ public class MBarcode4j extends MBarcode {
 		}
 		if (id.equals(Barcode4jComponent.PROPERTY_TEXT_POSITION)) {
 			TextPositionEnum position = jrBarcodeComponent.getTextPositionValue();
-			return NamedEnumPropertyDescriptor.getIntValue(TextPositionEnum.NONE, NullEnum.NOTNULL, position);
+			return NamedEnumPropertyDescriptor.getIntValue(TextPositionEnum.NONE, NullEnum.NULL, position);
 		}
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
 			return ExprUtil.getExpression(jrBarcodeComponent.getCodeExpression());
@@ -245,8 +245,8 @@ public class MBarcode4j extends MBarcode {
 					value);
 			barcodeComponent.setOrientation(orientation);
 		} else if (id.equals(Barcode4jComponent.PROPERTY_TEXT_POSITION)) {
-			TextPositionEnum position = NamedEnumPropertyDescriptor.getEnumValue(TextPositionEnum.NONE,
-					NullEnum.NOTNULL, value);
+			TextPositionEnum position = NamedEnumPropertyDescriptor.getEnumValue(TextPositionEnum.NONE, NullEnum.NULL,
+					value);
 			barcodeComponent.setTextPosition(position);
 		} else if (id.equals(Barcode4jComponent.PROPERTY_PATTERN_EXPRESSION))
 			barcodeComponent
