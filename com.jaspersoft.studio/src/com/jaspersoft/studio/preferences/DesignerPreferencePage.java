@@ -13,6 +13,9 @@ import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FontFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -29,6 +32,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String DEFAULT_BORDERSTYLE = "shadow"; //$NON-NLS-1$
 	public static final String DEFAULT_MARGINCOLOR = "170,168,255"; //$NON-NLS-1$
 	public static final String DEFAULT_PAGE_BACKGROUND = "255,255,255"; //$NON-NLS-1$
+	public static final String P_TITLEICON = "com.jaspersoft.studio.showTexAndIcon";
 
 	/**
 	 * Key of the behavior used when a field is dragged from the outline into the detail band
@@ -86,7 +90,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public DesignerPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription(Messages.DesignerPreferencePage_description);
+		setMessage(Messages.DesignerPreferencePage_description);
 	}
 
 	/**
@@ -98,8 +102,6 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 						new String[][] { { Messages.DesignerPreferencePage_corners, "corners" }, //$NON-NLS-1$
 								{ Messages.common_rectangle, "rectangle" } }, //$NON-NLS-1$
 						getFieldEditorParent()));
-		// addField(new ColorFieldEditor(P_ELEMENT_DESIGN_BORDER_COLOR, Messages.DesignerPreferencePage_elementbordercolor,
-		// getFieldEditorParent()));
 
 		addField(new ComboFieldEditor(P_PAGE_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_page_border_style,
 				new String[][] { { Messages.DesignerPreferencePage_fancy_shadow, DEFAULT_BORDERSTYLE },
@@ -108,17 +110,22 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
 		addField(new ComboFieldEditor(P_PAGE_DEFAULT_UNITS, Messages.DesignerPreferencePage_unit, Unit.getUnits2(),
 				getFieldEditorParent()));
+		addField(new FontFieldEditor(P_INTERNAL_EDITORS_FONT, Messages.DesignerPreferencePage_InternalEditorsFont,
+				getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(P_SHOW_REPORT_BAND_NAMES, Messages.DesignerPreferencePage_show_band_names,
 				getFieldEditorParent()));
-		// addField(new ColorFieldEditor(P_CONTAINER_MARGIN_COLOR, Messages.DesignerPreferencePage_common_bandmargincolor,
-		// getFieldEditorParent()));
-		// addField(new ColorFieldEditor(P_PAGE_MARGIN_COLOR, Messages.DesignerPreferencePage_pageprintmargincolor,
-		// getFieldEditorParent()));
-		// addField(new ColorFieldEditor(P_PAGE_BACKGROUND, Messages.DesignerPreferencePage_pagebackground,
-		// getFieldEditorParent()));
-		addField(new FontFieldEditor(P_INTERNAL_EDITORS_FONT, Messages.DesignerPreferencePage_InternalEditorsFont,
+		addField(new BooleanFieldEditor(P_SHOW_VARIABLES_DEFAULTS,
+				Messages.DesignerPreferencePage_showDefaultsVariablesParameters, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_DEFAULT_ADVANCED_TAB, Messages.DesignerPreferencePage_advancedDefault,
 				getFieldEditorParent()));
+		addField(
+				new BooleanFieldEditor(P_TITLEICON, "Show icons and text on the report toolbar.", getFieldEditorParent()));
+
+		Label separator = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		separator.setLayoutData(gd);
 
 		addField(new ComboFieldEditor(BEHAVIOR_ON_FIELD_DROP, Messages.DesignerPreferencePage_field_behavior,
 				new String[][] { { Messages.DesignerPreferencePage_field_behavior_label, BEHAVIOR_CREATE_LABEL },
@@ -134,10 +141,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_RESIZE_CONTAINER, Messages.DesignerPreferencePage_autoresizeBand,
 				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_SHOW_VARIABLES_DEFAULTS,
-				Messages.DesignerPreferencePage_showDefaultsVariablesParameters, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_DEFAULT_ADVANCED_TAB, Messages.DesignerPreferencePage_advancedDefault,
-				getFieldEditorParent()));
+
 	}
 
 	/*
@@ -149,6 +153,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
+		store.setDefault(P_TITLEICON, false);
 		store.setDefault(P_PAGE_DESIGN_BORDER_STYLE, DEFAULT_BORDERSTYLE);
 		// store.setDefault(P_ELEMENT_DESIGN_BORDER_COLOR, DEFAULT_ELEMENT_DESIGN_BORDER_COLOR);
 		store.setDefault(P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$

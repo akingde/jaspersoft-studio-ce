@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -43,9 +44,12 @@ import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.gef.ui.parts.TreeViewer;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -164,9 +168,12 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /*
  * The Class AbstractVisualEditor.
@@ -703,35 +710,35 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(RefreshTemplateStyleReference.ID);
 	}
-	
-	protected void createDeleteAction(ActionRegistry registry){
+
+	protected void createDeleteAction(ActionRegistry registry) {
 		List<String> selectionActions = getSelectionActions();
 		CustomDeleteAction deleteAction = new CustomDeleteAction(this);
 		registry.registerAction(deleteAction);
 		selectionActions.add(deleteAction.getId());
 	}
-	
-	protected void createCopyAction(ActionRegistry registry){
+
+	protected void createCopyAction(ActionRegistry registry) {
 		List<String> selectionActions = getSelectionActions();
 		IAction action = new CopyAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
 
-	protected void createPasteAction(ActionRegistry registry){
+	protected void createPasteAction(ActionRegistry registry) {
 		List<String> selectionActions = getSelectionActions();
 		IAction action = new PasteAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
-	
-	protected void createCutAction(ActionRegistry registry){
+
+	protected void createCutAction(ActionRegistry registry) {
 		List<String> selectionActions = getSelectionActions();
 		IAction action = new CutAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -742,20 +749,20 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		super.createActions();
 
 		ActionRegistry registry = getActionRegistry();
-		
+
 		IAction action = null;
-		
+
 		List<String> selectionActions = getSelectionActions();
 
 		// Create the custom delete action that aggregate all the messages when more elements are deleted
 		// the old default action is replaced
 		createDeleteAction(registry);
-		
-		//Create the copy, paste and cut actions
+
+		// Create the copy, paste and cut actions
 		createCutAction(registry);
 		createPasteAction(registry);
 		createCopyAction(registry);
-		
+
 		action = new HideElementsAction(this, true);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -763,7 +770,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new HideElementsAction(this, false);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new CopyFormatAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -1106,6 +1113,39 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	}
 
 	protected RZoomComboContributionItem zoomItem = null;
+	protected IToolBarManager topToolbarManager;
+	protected List<ActionContributionItem> act4TextIcon = new ArrayList<ActionContributionItem>();
+	protected IPropertyChangeListener pcListener;
+
+	public void dispose() {
+		if (pcListener != null)
+			JaspersoftStudioPlugin.getInstance().removePreferenceListener(pcListener);
+		super.dispose();
+	};
+
+	protected void setTextIcon() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				JasperReportsConfiguration jc = getJrContext();
+				Boolean forceText = jc.getPropertyBoolean(DesignerPreferencePage.P_TITLEICON);
+				if (pcListener == null) {
+					pcListener = new IPropertyChangeListener() {
+
+						public void propertyChange(PropertyChangeEvent event) {
+							String property = event.getProperty();
+							if (property.equals(DesignerPreferencePage.P_TITLEICON))
+								setTextIcon();
+						}
+					};
+					JaspersoftStudioPlugin.getInstance().addPreferenceListener(pcListener);
+				}
+
+				for (ActionContributionItem act : act4TextIcon)
+					act.setMode(forceText != null && forceText ? ActionContributionItem.MODE_FORCE_TEXT : 0);
+				topToolbarManager.update(true);
+			}
+		});
+	}
 
 	/**
 	 * Contributes items to the specified toolbar that is supposed to be put on the top right of the current visual editor
@@ -1126,6 +1166,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 *          the toolbar manager to be enriched
 	 */
 	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
+		this.topToolbarManager = toolbarManager;
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_OUT));
 		if (zoomItem != null) {
@@ -1141,6 +1182,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		toolbarManager.add(new Separator());
 		// Global "View" menu items
 		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));
+		setTextIcon();
 	}
 
 	/**

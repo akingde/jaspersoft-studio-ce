@@ -21,6 +21,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
@@ -46,8 +47,15 @@ public class ParameterSetFieldEditor extends TableFieldEditor {
 		super();
 	}
 
-	public ParameterSetFieldEditor(String name, String labelText, Composite parent) {
-		super(name, labelText, new String[] { Messages.ParameterSetFieldEditor_0 }, new int[] { 150 }, parent);
+	public ParameterSetFieldEditor(String name, Composite parent) {
+		super(name, "", new String[] { Messages.ParameterSetFieldEditor_0 }, new int[] { 150 }, parent);
+	}
+
+	@Override
+	protected void adjustForNumColumns(int numColumns) {
+		super.adjustForNumColumns(numColumns);
+		((GridData) getLabelControl().getLayoutData()).exclude = true;
+		getLabelControl().setVisible(false);
 	}
 
 	@Override

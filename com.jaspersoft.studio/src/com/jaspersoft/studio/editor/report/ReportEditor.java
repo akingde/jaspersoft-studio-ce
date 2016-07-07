@@ -1,17 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -22,6 +19,7 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -55,10 +53,10 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
-import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
+import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.plugin.ExtensionManager;
@@ -118,8 +116,8 @@ public class ReportEditor extends AbstractVisualEditor {
 
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
-		if (graphicalViewer instanceof JSSScrollingGraphicalViewer){
-			JSSScrollingGraphicalViewer jssViewer = (JSSScrollingGraphicalViewer)graphicalViewer;
+		if (graphicalViewer instanceof JSSScrollingGraphicalViewer) {
+			JSSScrollingGraphicalViewer jssViewer = (JSSScrollingGraphicalViewer) graphicalViewer;
 			jssViewer.addSelectionOverrider(new ParentSelectionOverrider(IContainer.class, true));
 			jssViewer.addSelectionOverrider(new MarqueeSelectionOverrider());
 		}
@@ -129,80 +127,79 @@ public class ReportEditor extends AbstractVisualEditor {
 	protected List<String> getIgnorePalleteElements() {
 		return null;
 	}
-	
-	
+
 	protected JDReportOutlineView getOutlineView() {
-		//Rebuild the outline only if it's closed or disposed
+		// Rebuild the outline only if it's closed or disposed
 		if (outlinePage == null || outlinePage.isDisposed()) {
 			TreeViewer viewer = new TreeViewer();
 			outlinePage = new JDReportOutlineView(this, viewer) {
 				protected void initActions(ActionRegistry registry, IActionBars bars) {
 					String id = DeleteGroupReportAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateFieldAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateSortFieldAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateVariableAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateScriptletAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateParameterAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-					
+
 					id = CreateParameterSetAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateGroupAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateDatasetAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateStyleAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateConditionalStyleAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-					
+
 					id = SaveStyleAsTemplateAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-					
+
 					id = RefreshTemplateStyleExpression.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 
 					id = RefreshTemplateStyleReference.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-					
+
 					id = ResetStyleAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateStyleTemplateAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CreateBandAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-					
+
 					id = CreateDetailBandAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 
 					id = CreateDetailBandActionOnDetail.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-					
+
 					id = PageFormatAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = PageRemoveMarginsAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = DatasetAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
+
 					id = CompileAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 				}
@@ -213,8 +210,8 @@ public class ReportEditor extends AbstractVisualEditor {
 
 	protected void createEditorActions(ActionRegistry registry) {
 		List<String> selectionActions = getSelectionActions();
-		
-		//Create the action on the dataset element
+
+		// Create the action on the dataset element
 		createDatasetAndStyleActions(registry);
 
 		IAction action = new CreateBandAction(this);
@@ -228,7 +225,7 @@ public class ReportEditor extends AbstractVisualEditor {
 		action = new CreateDetailBandActionOnDetail(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateDetailBandActionOnDetail.ID);
-		
+
 		action = new CreateGroupHeaderAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateGroupHeaderAction.ID);
@@ -236,7 +233,7 @@ public class ReportEditor extends AbstractVisualEditor {
 		action = new CreateGroupFooterAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateGroupFooterAction.ID);
-		
+
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<Action> lst = m.getActions(this);
 		for (Action act : lst) {
@@ -264,7 +261,7 @@ public class ReportEditor extends AbstractVisualEditor {
 		action = new ContextualDatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new CompileAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -272,8 +269,13 @@ public class ReportEditor extends AbstractVisualEditor {
 
 	@Override
 	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
-		toolbarManager.add(getActionRegistry().getAction(CompileAction.ID));
-		toolbarManager.add(getActionRegistry().getAction(DatasetAction.ID));
+		this.topToolbarManager = toolbarManager;
+		ActionContributionItem item = new ActionContributionItem(getActionRegistry().getAction(CompileAction.ID));
+		act4TextIcon.add(item);
+		toolbarManager.add(item);
+		item = new ActionContributionItem(getActionRegistry().getAction(DatasetAction.ID));
+		act4TextIcon.add(item);
+		toolbarManager.add(item);
 		toolbarManager.add(new Separator());
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_OUT));
@@ -283,7 +285,7 @@ public class ReportEditor extends AbstractVisualEditor {
 		}
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		ZoomManager property = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());
-		if (property != null){
+		if (property != null) {
 			zoomItem = new RZoomComboContributionItem(property);
 			toolbarManager.add(zoomItem);
 		}
@@ -292,9 +294,13 @@ public class ReportEditor extends AbstractVisualEditor {
 		List<AContributorAction> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
 		for (AContributorAction a : contributedActions) {
 			a.setJrConfig((JasperReportsConfiguration) getGraphicalViewer().getProperty("JRCONTEXT"));
-			toolbarManager.add(a);
+			item = new ActionContributionItem(getActionRegistry().getAction(CompileAction.ID));
+			act4TextIcon.add(item);
+			toolbarManager.add(item);
 		}
 		// Global "View" menu items
 		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));
+		setTextIcon();
 	}
+
 }

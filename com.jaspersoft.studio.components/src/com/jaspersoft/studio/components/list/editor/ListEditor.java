@@ -19,6 +19,7 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -77,27 +78,20 @@ public class ListEditor extends NamedSubeditor {
 		graphicalViewer.setEditPartFactory(new JasperDesignEditPartFactory());
 
 		// set rulers providers
-		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true,
-				RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER,
-				provider);
+		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true, RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, provider);
 
-		provider = new ReportRulerProvider(new ReportRuler(false,
-				RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
-				provider);
+		provider = new ReportRulerProvider(new ReportRuler(false, RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
 
-		Boolean isRulerVisible = jrContext
-				.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
+		Boolean isRulerVisible = jrContext.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
-				isRulerVisible);
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, isRulerVisible);
 
 		createAdditionalActions();
-		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(
-				graphicalViewer));
-		if (graphicalViewer instanceof JSSScrollingGraphicalViewer){
-			JSSScrollingGraphicalViewer jssViewer = (JSSScrollingGraphicalViewer)graphicalViewer;
+		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
+		if (graphicalViewer instanceof JSSScrollingGraphicalViewer) {
+			JSSScrollingGraphicalViewer jssViewer = (JSSScrollingGraphicalViewer) graphicalViewer;
 			jssViewer.addSelectionOverrider(new ParentSelectionOverrider(IContainer.class, true));
 			jssViewer.addSelectionOverrider(new MarqueeSelectionOverrider());
 		}
@@ -107,15 +101,15 @@ public class ListEditor extends NamedSubeditor {
 	protected void createEditorActions(ActionRegistry registry) {
 		super.createEditorActions(registry);
 
-		createDatasetAndStyleActions(registry);	
-		
+		createDatasetAndStyleActions(registry);
+
 		@SuppressWarnings("unchecked")
 		List<String> selectionActions = getSelectionActions();
 
 		IAction action = new DatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new ContextualDatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -123,7 +117,9 @@ public class ListEditor extends NamedSubeditor {
 
 	@Override
 	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
-		toolbarManager.add(getActionRegistry().getAction(DatasetAction.ID));
+		ActionContributionItem item = new ActionContributionItem(getActionRegistry().getAction(DatasetAction.ID));
+		act4TextIcon.add(item);
+		toolbarManager.add(item);
 		toolbarManager.add(new Separator());
 		super.contributeItemsToEditorTopToolbar(toolbarManager);
 	}
@@ -165,7 +161,7 @@ public class ListEditor extends NamedSubeditor {
 	public String getEditorName() {
 		ANode node = getEditedNode();
 		if (node != null && node.getValue() instanceof JRBaseElement) {
-			JRBaseElement el = (JRBaseElement)node.getValue();
+			JRBaseElement el = (JRBaseElement) node.getValue();
 			return el.getPropertiesMap().getProperty(NameSection.getNamePropertyId(node));
 		}
 		return null;

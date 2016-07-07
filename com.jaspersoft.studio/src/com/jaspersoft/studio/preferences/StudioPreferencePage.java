@@ -10,9 +10,6 @@ package com.jaspersoft.studio.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -38,8 +35,6 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 	 * types of preferences. Each field editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-		Label separator = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
-		separator.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 
 		addField(new BooleanFieldEditor(CHECK_FOR_UPDATE, Messages.StudioPreferencePage_checkForUpdates,
 				getFieldEditorParent()));

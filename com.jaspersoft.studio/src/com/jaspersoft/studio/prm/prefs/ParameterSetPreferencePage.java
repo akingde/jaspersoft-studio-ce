@@ -12,7 +12,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 /*
@@ -31,7 +30,7 @@ public class ParameterSetPreferencePage extends FieldEditorOverlayPage {
 	 *
 	 */
 	public void createFieldEditors() {
-		addField(new ParameterSetFieldEditor("abcd", Messages.ParameterSetPreferencePage_0, getFieldEditorParent())); //$NON-NLS-1$
+		addField(new ParameterSetFieldEditor("abcd", getFieldEditorParent())); //$NON-NLS-1$
 	}
 
 	/*

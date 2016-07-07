@@ -19,6 +19,7 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -101,8 +102,8 @@ public class CrosstabEditor extends NamedSubeditor {
 
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
-		if (graphicalViewer instanceof JSSScrollingGraphicalViewer){
-			JSSScrollingGraphicalViewer jssViewer = (JSSScrollingGraphicalViewer)graphicalViewer;
+		if (graphicalViewer instanceof JSSScrollingGraphicalViewer) {
+			JSSScrollingGraphicalViewer jssViewer = (JSSScrollingGraphicalViewer) graphicalViewer;
 			jssViewer.addSelectionOverrider(new ParentSelectionOverrider(IContainer.class, false));
 			jssViewer.addSelectionOverrider(new MarqueeSelectionOverrider());
 		}
@@ -118,26 +119,26 @@ public class CrosstabEditor extends NamedSubeditor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void createDeleteAction(ActionRegistry registry){
+	protected void createDeleteAction(ActionRegistry registry) {
 		List<String> selectionActions = getSelectionActions();
 		CustomCrosstabDeleteAction deleteAction = new CustomCrosstabDeleteAction(this);
 		registry.registerAction(deleteAction);
 		selectionActions.add(deleteAction.getId());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void createCutAction(ActionRegistry registry){
+	protected void createCutAction(ActionRegistry registry) {
 		List<String> selectionActions = getSelectionActions();
 		IAction action = new CrosstabCutAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
-	
+
 	@Override
 	protected void createEditorActions(ActionRegistry registry) {
 		createDatasetAndStyleActions(registry);
-		
+
 		IAction action = new CreateMeasureAction(this);
 		registry.registerAction(action);
 		@SuppressWarnings("unchecked")
@@ -147,11 +148,11 @@ public class CrosstabEditor extends NamedSubeditor {
 		action = new EditCrosstabStyleAction(this);
 		registry.registerAction(action);
 		selectionActions.add(EditCrosstabStyleAction.ID);
-		
+
 		action = new RemoveCrosstabStylesAction(this);
 		registry.registerAction(action);
 		selectionActions.add(RemoveCrosstabStylesAction.ID);
-		
+
 		action = new CreateColumnGroupAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateColumnGroupAction.ID);
@@ -183,7 +184,7 @@ public class CrosstabEditor extends NamedSubeditor {
 		action = new DatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new ContextualDatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -191,7 +192,8 @@ public class CrosstabEditor extends NamedSubeditor {
 
 	@Override
 	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
-		toolbarManager.add(getActionRegistry().getAction(DatasetAction.ID));
+		ActionContributionItem item = new ActionContributionItem(getActionRegistry().getAction(DatasetAction.ID));
+		act4TextIcon.add(item);
 		toolbarManager.add(new Separator());
 		super.contributeItemsToEditorTopToolbar(toolbarManager);
 	}
@@ -226,7 +228,7 @@ public class CrosstabEditor extends NamedSubeditor {
 	public String getEditorName() {
 		ANode node = getEditedNode();
 		if (node != null && node.getValue() instanceof JRBaseElement) {
-			JRBaseElement el = (JRBaseElement)node.getValue();
+			JRBaseElement el = (JRBaseElement) node.getValue();
 			return el.getPropertiesMap().getProperty(NameSection.getNamePropertyId(node));
 		}
 		return null;

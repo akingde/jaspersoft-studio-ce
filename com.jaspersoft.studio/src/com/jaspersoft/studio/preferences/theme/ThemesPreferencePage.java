@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.theme;
 
@@ -57,7 +53,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 	public ThemesPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription(Messages.ThemesPreferencePage_themsTitle);
+		setMessage(Messages.ThemesPreferencePage_themsTitle);
 	}
 
 	/**
@@ -204,13 +200,14 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 
 			ControlDecoration controlDecoration = new ControlDecoration(tname, SWT.LEFT | SWT.TOP);
 			controlDecoration.setDescriptionText(Messages.ThemesPreferencePage_duplicateName);
-			FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(
-					FieldDecorationRegistry.DEC_ERROR);
+			FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault()
+					.getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 			controlDecoration.setImage(fieldDecoration.getImage());
 
 			binding.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(this, "themename"), //$NON-NLS-1$
-					new UpdateValueStrategy().setAfterConvertValidator(new StringRequiredValidator(Messages.ThemesPreferencePage_enternameMessage,
-							controlDecoration, getButton(IDialogConstants.OK_ID))), null);
+					new UpdateValueStrategy().setAfterConvertValidator(new StringRequiredValidator(
+							Messages.ThemesPreferencePage_enternameMessage, controlDecoration, getButton(IDialogConstants.OK_ID))),
+					null);
 
 			return control;
 		}
