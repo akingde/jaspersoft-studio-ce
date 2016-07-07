@@ -167,15 +167,15 @@ public class MBarcode4j extends MBarcode {
 		quiteZoneD.setDescription(Messages.MBarcode4j_quiet_zone_description);
 		desc.add(quiteZoneD);
 
-		PixelPropertyDescriptor moduleWidthD = new PixelPropertyDescriptor(Barcode4jComponent.PROPERTY_MODULE_WIDTH,
-				Messages.MBarcode4j_module_width);
-		moduleWidthD.setDescription(Messages.MBarcode4j_module_width_description);
-		desc.add(moduleWidthD);
-
 		DoublePropertyDescriptor vertQuietZoneD = new DoublePropertyDescriptor(
 				Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
 		vertQuietZoneD.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
 		desc.add(vertQuietZoneD);
+
+		PixelPropertyDescriptor moduleWidthD = new PixelPropertyDescriptor(Barcode4jComponent.PROPERTY_MODULE_WIDTH,
+				Messages.MBarcode4j_module_width);
+		moduleWidthD.setDescription(Messages.MBarcode4j_module_width_description);
+		desc.add(moduleWidthD);
 
 		vertQuietZoneD.setCategory(Messages.common_properties_category);
 		moduleWidthD.setCategory(Messages.common_properties_category);
