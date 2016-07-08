@@ -20,7 +20,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.forms.widgets.ColumnLayout;
+
+import com.jaspersoft.studio.properties.layout.DiynamicColumnLayout;
 
 /**
  * A property tab is composed by one or more property sections and is used to
@@ -86,12 +87,6 @@ public final class TabContents {
 	public ISection[] getSections() {
 		return sections;
 	}
-	
-	/**
-	 * Store the minimum width of the bigger section inside the tab
-	 */
-	private int widerSection = 0;
-	
 
 	/**
 	 * Creates page's sections controls.
@@ -104,9 +99,7 @@ public final class TabContents {
 		
 		if (sections.length > 1){
 			Composite pageComposite = page.getWidgetFactory().createComposite(parent, SWT.NO_FOCUS);
-			ColumnLayout layout = new ColumnLayout();
-			layout.minNumColumns = 1;
-			layout.maxNumColumns = 5;
+			DiynamicColumnLayout layout = new DiynamicColumnLayout(page);
 			layout.leftMargin = 0;
 			layout.topMargin = 0;
 			layout.verticalSpacing = 0;
@@ -121,10 +114,6 @@ public final class TabContents {
 					public void run() throws Exception {
 						if (section.getElement() != null){
 							section.createControls(sectionComposite, page);
-							//Store the width of the bigger section. This is useful to know when to paint the bottom scrollbar
-							//without do many calculations
-							int width = sectionComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-							if (width > widerSection) widerSection = width;
 						}
 					}
 				};
@@ -138,22 +127,12 @@ public final class TabContents {
 				public void run() throws Exception {
 					if (section.getElement() != null){
 						section.createControls(sectionComposite, page);
-						widerSection = sectionComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 					}
 				}
 			};
 			SafeRunnable.run(runnable);
 		}
 		controlsCreated = true;
-	}
-	
-	/**
-	 * Return the minimum width of the bigger section inside the tab
-	 * 
-	 * @param the width of the bigger section
-	 */
-	public int getWiderSection(){
-		return widerSection;
 	}
 
 	/**

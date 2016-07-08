@@ -31,6 +31,12 @@ public final class Messages extends NLS {
 		// private constructor
 	}
 
+	public static String PropertiesPreferencePage_preferenceDescription;
+
+	public static String PropertiesPreferencePage_preferenceTitle;
+
+	public static String PropertiesPreferencePage_singleColumnProperty;
+
 	/**
 	 * Message when a property section extension is in error.
 	 */

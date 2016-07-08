@@ -16,8 +16,8 @@ import java.util.HashMap;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.GridData;
@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.properties.layout.StackLayout;
 import com.jaspersoft.studio.properties.view.ITabDescriptor;
 import com.jaspersoft.studio.properties.view.TabContents;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -215,8 +216,7 @@ public class TabbedPropertyComposite extends Composite {
 		if (control == null)
 			return TabState.TAB_NOT_DEFINED;
 		else {
-			if (cachedLayout.topControl != control) {
-				cachedLayout.topControl = control;
+			if (cachedLayout.setTopControl(control)) {
 				return TabState.TAB_SET_VISIBLE;
 			}
 			if (contents.hasDynamicContent()) return TabState.TAB_DYNAMIC_VISIBLE;
@@ -246,18 +246,15 @@ public class TabbedPropertyComposite extends Composite {
 	 *          the minimum width of the page, if the width of the properties view
 	 *          is lower of this value then the bottom scrollbar is shown
 	 */
-	public void updatePageMinimumSize(int minimumWidth) {
-		Control topControl = cachedLayout.topControl;
+	public void updatePageMinimumSize() {
+		Control topControl = cachedLayout.getTopControl();
 		if (topControl != null && topControl instanceof ScrolledComposite) {
-			int height = 0;
-			int width = getBounds().width;
 			ScrolledComposite scrolledComposite = (ScrolledComposite) topControl;
 			// When i calculate the height it is really important to give the real width
 			// of the composite, since it is used to calculate the number of columns
-			Point compositeSize = scrolledComposite.getContent().computeSize(width, SWT.DEFAULT);
-			height = compositeSize.y;
-			scrolledComposite.setMinHeight(height);
-			scrolledComposite.setMinWidth(minimumWidth);
+			Point compositeSize = scrolledComposite.getContent().computeSize(SWT.DEFAULT, SWT.DEFAULT);
+			scrolledComposite.setMinHeight(compositeSize.y);
+			scrolledComposite.setMinWidth(compositeSize.x);
 		}
 	}
 
@@ -304,6 +301,10 @@ public class TabbedPropertyComposite extends Composite {
 			cacheMap.put(tab, comp);
 		}
 		return comp;
+	}
+	
+	public Rectangle getPropertiesArea(){
+		return tabComposite.getClientArea();
 	}
 
 	/**

@@ -8,7 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.properties.preferences;
 
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -19,35 +18,46 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.properties.Activator;
+import com.jaspersoft.studio.properties.messages.Messages;
 
-/*
+/**
+ * Preference page used to show a flag to decide if in the properties view we should force to show
+ * only one column
  * 
+ * @author Orlandin Marco
+ *
  */
 public class PropertiesPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	
-	private IAdaptable element;
-	
-	public static final String SINGLE_COLUMN_ID = "com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage.single_column";
+	/**
+	 * Id of the property
+	 */
+	public static final String SINGLE_COLUMN_ID = "com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage.single_column"; //$NON-NLS-1$
 	
 	public PropertiesPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Properties view configuration");
-		setTitle("Properties View");
+		setDescription(Messages.PropertiesPreferencePage_preferenceDescription);
+		setTitle(Messages.PropertiesPreferencePage_preferenceTitle);
 	}
 
 	/**
-	 *
+	 * Create the controls for the property
 	 */
 	public void createFieldEditors() {
 		Composite parent = getFieldEditorParent();
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
-		BooleanFieldEditor be = new BooleanFieldEditor(SINGLE_COLUMN_ID, "Show the properties on a single column", container);
+		BooleanFieldEditor be = new BooleanFieldEditor(SINGLE_COLUMN_ID, Messages.PropertiesPreferencePage_singleColumnProperty, container);
 		addField(be);
 	}
 
-
+	/**
+	 * Initialize the default values of the store, by default the single column property
+	 * is disable
+	 * 
+	 * @param store the current not null preference store
+	 */
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(SINGLE_COLUMN_ID, false);
 	}
@@ -58,15 +68,5 @@ public class PropertiesPreferencePage extends FieldEditorPreferencePage implemen
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
-	}
-
-
-	public IAdaptable getElement() {
-		return element;
-	}
-
-
-	public void setElement(IAdaptable element) {
-		this.element = element;
 	}
 }

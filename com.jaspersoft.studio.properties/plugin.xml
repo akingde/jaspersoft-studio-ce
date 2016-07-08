@@ -11,8 +11,9 @@
       </input>
    </extension>
    <extension
-         point="org.eclipse.ui.propertyPages">
+         point="org.eclipse.ui.preferencePages">
       <page
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             class="com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage"
             id="com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage"
             name="Properties View">

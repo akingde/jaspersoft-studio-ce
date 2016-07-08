@@ -39,8 +39,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -131,6 +129,8 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * Flag to show or not the title bar
 	 */
 	private boolean hasTitleBar;
+	
+	private ControlDecoration cd;
 
 	/**
 	 * SelectionChangedListener for the ListViewer.
@@ -152,8 +152,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 					tab = getTab(descriptor);
 					if (tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
 						// force widgets to be resized
-						tab.setInput(tabbedPropertyViewer.getWorkbenchPart(),
-								(ISelection) tabbedPropertyViewer.getInput());
+						tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
 						TabState state = tabbedPropertyComposite.showTabContents(descriptor, tab);
 						if (state == TabState.TAB_NOT_DEFINED) {
 							// Tab not defined, it need to be created
@@ -172,7 +171,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 							// The layout is done only if the tab was not
 							// visible
 							tabbedPropertyComposite.layout();
-							tabbedPropertyComposite.updatePageMinimumSize(tab.getWiderSection());
+							tabbedPropertyComposite.updatePageMinimumSize();
 						}
 						showErrors();
 					}
@@ -181,8 +180,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 		}
 
 	}
-
-	private ControlDecoration cd;
 
 	public void showErrors() {
 		IStructuredSelection selection = (IStructuredSelection) tabbedPropertyViewer.getSelection();
@@ -333,7 +330,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 */
 	public void updatePageMinimumSize() {
 		if (currentTab != null) {
-			tabbedPropertyComposite.updatePageMinimumSize(currentTab.getWiderSection());
+			tabbedPropertyComposite.updatePageMinimumSize();
 		}
 	}
 
@@ -525,18 +522,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * @return the property tab composite.
 	 */
 	private Composite createTabComposite(ITabDescriptor tab) {
-		if (tab.getSectionDescriptors().size() > 1) {
-			Composite result = widgetFactory.createComposite(tabbedPropertyComposite.createTabContents(tab),
-					SWT.NO_FOCUS);
-			GridLayout layout = new GridLayout();
-			layout.marginWidth = 0;
-			layout.marginHeight = 0;
-			result.setLayout(layout);
-			result.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			return result;
-		} else {
-			return tabbedPropertyComposite.createTabContents(tab);
-		}
+		return tabbedPropertyComposite.createTabContents(tab);
 	}
 
 	private void setInput(IWorkbenchPart part, ISelection selection) {
