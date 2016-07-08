@@ -265,14 +265,13 @@ public class TabbedPropertySearch extends Composite {
 		openIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				if (textArea.getText().equals(Messages.TabbedPropertySearch_searchPropertyLabel)) {
-					textArea.setText("");
-				}
+				textArea.setText("");
 				updateAutocompleteContent();
-				if (autocomplete.isProposalOpened())
+				if (autocomplete.isProposalOpened()) {
 					autocomplete.closeProposalPopup();
-				else
+				} else {
 					autocomplete.openProposalPopup();
+				}
 			}
 		});
 		GridData iconData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
