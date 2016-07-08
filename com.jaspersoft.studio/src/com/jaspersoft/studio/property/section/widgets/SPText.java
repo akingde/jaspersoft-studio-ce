@@ -105,6 +105,7 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 
 	protected void setWidth(Composite parent, int chars) {
 		int w = getCharWidth(ftext) * chars;
+		if (w > 100) w = 100;
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			rd.width = w;
