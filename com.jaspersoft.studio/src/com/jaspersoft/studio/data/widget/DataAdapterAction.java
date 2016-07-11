@@ -11,10 +11,6 @@ package com.jaspersoft.studio.data.widget;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import net.sf.jasperreports.eclipse.viewer.IReportViewerListener;
-import net.sf.jasperreports.eclipse.viewer.ReportViewerEvent;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.SWT;
@@ -30,6 +26,10 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
+
+import net.sf.jasperreports.eclipse.viewer.IReportViewerListener;
+import net.sf.jasperreports.eclipse.viewer.ReportViewerEvent;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 /**
  * 
@@ -49,6 +49,8 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	private Control parent;
 
 	private DataAdapterDescriptor selectedDA;
+
+	private String language;
 
 	/**
 	 * Create the action
@@ -90,6 +92,10 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 		setToolTipText(Messages.DataAdapterAction_2);
 		this.editor = editor;
 		this.dastorages = dastorages;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	public JRDesignDataset getCurrentDataset() {
@@ -152,6 +158,19 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 				for (int i = 0; i < dastorages.length; i++) {
 					final ADataAdapterStorage s = dastorages[i];
 					for (DataAdapterDescriptor d : s.getDataAdapterDescriptors(currentDataset)) {
+						if (language != null) {
+							String[] langs = d.getLanguages();
+							if (langs != null) {
+								boolean exists = false;
+								for (String l : langs)
+									if (language.equalsIgnoreCase(l) || l.equals("*")) {
+										exists = true;
+										break;
+									}
+								if (!exists)
+									continue;
+							}
+						}
 						final MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
 						m1.setImage(d.getIcon(16));
 						m1.addSelectionListener(listener);

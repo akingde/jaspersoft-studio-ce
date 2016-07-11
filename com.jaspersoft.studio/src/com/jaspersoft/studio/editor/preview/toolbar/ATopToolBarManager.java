@@ -46,6 +46,10 @@ public abstract class ATopToolBarManager {
 		refreshToolbar();
 	}
 
+	public ToolBar getTopToolBar() {
+		return topToolBar;
+	}
+
 	protected abstract void fillToolbar(IToolBarManager tbManager);
 
 	public void removeAll() {

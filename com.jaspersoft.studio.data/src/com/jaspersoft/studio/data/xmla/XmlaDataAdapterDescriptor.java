@@ -14,14 +14,6 @@ package com.jaspersoft.studio.data.xmla;
 
 import java.util.List;
 
-import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.xmla.XmlaDataAdapter;
-import net.sf.jasperreports.data.xmla.XmlaDataAdapterImpl;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignField;
-
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
@@ -30,11 +22,20 @@ import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class XmlaDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider{
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.xmla.XmlaDataAdapter;
+import net.sf.jasperreports.data.xmla.XmlaDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.olap.JRMdxQueryExecuterFactory;
+
+public class XmlaDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	protected XmlaFieldsProvider fprovider;
-	
+
 	@Override
 	public XmlaDataAdapter getDataAdapter() {
 		if (dataAdapter == null)
@@ -46,7 +47,7 @@ public class XmlaDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	public DataAdapterEditor getEditor() {
 		return new XmlaDataAdapterEditor();
 	}
-	
+
 	public void getFieldProvider() {
 		if (fprovider == null)
 			fprovider = new XmlaFieldsProvider();
@@ -58,11 +59,12 @@ public class XmlaDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	}
 
 	@Override
-	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
 		getFieldProvider();
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
-	
+
 	/**
 	 * Return an Image. By default this method returns a simple database icon
 	 */
@@ -73,4 +75,8 @@ public class XmlaDataAdapterDescriptor extends DataAdapterDescriptor implements 
 		return null;
 	}
 
+	@Override
+	public String[] getLanguages() {
+		return new String[] { JRMdxQueryExecuterFactory.CANONICAL_LANGUAGE };
+	}
 }

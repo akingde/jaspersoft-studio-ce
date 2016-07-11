@@ -145,4 +145,23 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor, Serializ
 		return true;
 	}
 
+	/**
+	 * Data Adapters can instruct UI wich languages to show when adapter is selected or if data adapter is appropriate for
+	 * a language.
+	 * 
+	 * @return null or * means any language, in case data adapter dictate the language, first language from the list will
+	 *         be used
+	 */
+	public String[] getLanguages() {
+		return null;
+	}
+
+	/**
+	 * This list will help building language list to filter data adapters or languages
+	 * 
+	 * @return null - nothing to exclude or array of languages to exclude
+	 */
+	public String[] getExcludedLanguages() {
+		return null;
+	}
 }

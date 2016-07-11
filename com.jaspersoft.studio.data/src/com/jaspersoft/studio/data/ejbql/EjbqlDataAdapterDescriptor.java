@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.ejbql;
 import net.sf.jasperreports.data.ejbql.EjbqlDataAdapter;
 import net.sf.jasperreports.data.ejbql.EjbqlDataAdapterImpl;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.query.JRJpaQueryExecuterFactory;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
@@ -57,5 +58,10 @@ public class EjbqlDataAdapterDescriptor extends DataAdapterDescriptor implements
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new EjbqlWizardDataEditorComposite(parent, page, this);
+	}
+
+	@Override
+	public String[] getLanguages() {
+		return new String[] { JRJpaQueryExecuterFactory.QUERY_LANGUAGE_EJBQL };
 	}
 }

@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.hibernate.spring;
 import net.sf.jasperreports.data.hibernate.spring.SpringHibernateDataAdapter;
 import net.sf.jasperreports.data.hibernate.spring.SpringHibernateDataAdapterImpl;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.query.JRHibernateQueryExecuter;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -32,7 +33,6 @@ public class SpringHibernateDataAdapterDescriptor extends DataAdapterDescriptor 
 		return (SpringHibernateDataAdapter) dataAdapter;
 	}
 
-
 	@Override
 	public DataAdapterEditor getEditor() {
 		return new SpringHibernateDataAdapterEditor();
@@ -49,5 +49,10 @@ public class SpringHibernateDataAdapterDescriptor extends DataAdapterDescriptor 
 			return Activator.getDefault().getImage("icons/hibernate.png");
 		}
 		return null;
+	}
+
+	@Override
+	public String[] getLanguages() {
+		return new String[] { JRHibernateQueryExecuter.CANONICAL_LANGUAGE };
 	}
 }

@@ -16,14 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.json.JsonDataAdapter;
-import net.sf.jasperreports.data.json.JsonDataAdapterImpl;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignField;
-
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -38,7 +30,17 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.querydesigner.json.JsonDataManager;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.json.JsonDataAdapter;
+import net.sf.jasperreports.data.json.JsonDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.query.JsonQueryExecuter;
+
+public class JsonDataAdapterDescriptor extends DataAdapterDescriptor
+		implements IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
@@ -72,12 +74,13 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	}
 
 	@Override
-	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
 		Throwable err = null;
 		List<JRDesignField> fields = new ArrayList<JRDesignField>();
 		try {
 			JsonDataManager m = new JsonDataManager();
-			m.loadJsonDataFile(getDataAdapter().getDataFile(),jConfig);
+			m.loadJsonDataFile(getDataAdapter().getDataFile(), jConfig);
 			fields.addAll(m.extractFields(jDataset.getQuery().getText()));
 		} catch (JsonProcessingException e) {
 			err = e;
@@ -93,5 +96,10 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new JsonWizardDataEditorComposite(parent, page, this);
+	}
+
+	@Override
+	public String[] getLanguages() {
+		return new String[] { JsonQueryExecuter.CANONICAL_LANGUAGE };
 	}
 }

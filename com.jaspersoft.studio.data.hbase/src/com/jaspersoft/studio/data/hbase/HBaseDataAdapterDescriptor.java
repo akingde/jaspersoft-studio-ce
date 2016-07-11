@@ -41,7 +41,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Eric Diaz
  * 
  */
-public class HBaseDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+public class HBaseDataAdapterDescriptor extends DataAdapterDescriptor
+		implements IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private IFieldsProvider fieldsProvider;
 
@@ -62,7 +63,8 @@ public class HBaseDataAdapterDescriptor extends DataAdapterDescriptor implements
 	}
 
 	@Override
-	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig,
+			JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		getFieldProvider();
 		return fieldsProvider.getFields(con, jConfig, reportDataset);
 	}
@@ -87,5 +89,10 @@ public class HBaseDataAdapterDescriptor extends DataAdapterDescriptor implements
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new WizardQueryEditorComposite(parent, page, this, HBaseDataSource.QUERY_LANGUAGE);
+	}
+
+	@Override
+	public String[] getLanguages() {
+		return new String[] { HBaseDataSource.QUERY_LANGUAGE };
 	}
 }

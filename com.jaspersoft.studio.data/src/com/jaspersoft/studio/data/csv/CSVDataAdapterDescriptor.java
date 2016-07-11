@@ -35,7 +35,8 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.ui.EmptyWizardDataEditorComposite;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+public class CSVDataAdapterDescriptor extends DataAdapterDescriptor
+		implements IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
@@ -52,7 +53,8 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements I
 
 	private IFieldsProvider fprovider;
 
-	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
 		getFieldProvider();
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
@@ -83,5 +85,10 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements I
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new EmptyWizardDataEditorComposite(parent, page, this);
+	}
+
+	@Override
+	public String[] getLanguages() {
+		return new String[] { "csv" };
 	}
 }

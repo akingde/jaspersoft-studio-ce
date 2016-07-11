@@ -32,7 +32,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String DEFAULT_BORDERSTYLE = "shadow"; //$NON-NLS-1$
 	public static final String DEFAULT_MARGINCOLOR = "170,168,255"; //$NON-NLS-1$
 	public static final String DEFAULT_PAGE_BACKGROUND = "255,255,255"; //$NON-NLS-1$
-	public static final String P_TITLEICON = "com.jaspersoft.studio.showTexAndIcon";
+	public static final String P_TITLEICON = "com.jaspersoft.studio.showTexAndIcon"; //$NON-NLS-1$
+	public static final String P_DAFILTER = "com.jaspersoft.studio.data.adapter.filter"; //$NON-NLS-1$
 
 	/**
 	 * Key of the behavior used when a field is dragged from the outline into the detail band
@@ -119,8 +120,12 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				Messages.DesignerPreferencePage_showDefaultsVariablesParameters, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_DEFAULT_ADVANCED_TAB, Messages.DesignerPreferencePage_advancedDefault,
 				getFieldEditorParent()));
-		addField(
-				new BooleanFieldEditor(P_TITLEICON, "Show icons and text on the report toolbar.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_TITLEICON, Messages.DesignerPreferencePage_2, getFieldEditorParent()));
+
+		addField(new ComboFieldEditor(P_DAFILTER, Messages.DesignerPreferencePage_3,
+				new String[][] { { Messages.DesignerPreferencePage_4, "all" }, // $NON-NLS-3$
+						{ Messages.DesignerPreferencePage_6, "lang" }, { Messages.DesignerPreferencePage_8, "da" } }, //$NON-NLS-2$ //$NON-NLS-4$
+				getFieldEditorParent()));
 
 		Label separator = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -156,6 +161,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
+		store.setDefault(P_DAFILTER, "all"); //$NON-NLS-1$
 		store.setDefault(P_TITLEICON, false);
 		store.setDefault(P_PAGE_DESIGN_BORDER_STYLE, DEFAULT_BORDERSTYLE);
 		// store.setDefault(P_ELEMENT_DESIGN_BORDER_COLOR, DEFAULT_ELEMENT_DESIGN_BORDER_COLOR);

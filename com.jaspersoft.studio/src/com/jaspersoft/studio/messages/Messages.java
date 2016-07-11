@@ -564,6 +564,11 @@ public class Messages extends NLS {
 	public static String DeleteToolAction_actionName;
 	public static String DeleteToolAction_messageDescription;
 	public static String DeleteToolAction_messageTitle;
+	public static String DesignerPreferencePage_2;
+	public static String DesignerPreferencePage_3;
+	public static String DesignerPreferencePage_4;
+	public static String DesignerPreferencePage_6;
+	public static String DesignerPreferencePage_8;
 	public static String DesignerPreferencePage_advancedDefault;
 	public static String DesignerPreferencePage_autoresizeBand;
 	public static String DesignerPreferencePage_centerEditorOption;

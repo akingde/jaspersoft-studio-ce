@@ -14,12 +14,6 @@ package com.jaspersoft.studio.data.mongodb;
 
 import java.util.List;
 
-import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignField;
-
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -34,13 +28,20 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.ui.WizardQueryEditorComposite;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
+
 /**
  * 
  * @author gtoffoli
  * @author Eric Diaz
  * 
  */
-public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor
+		implements IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private IFieldsProvider fieldsProvider;
@@ -65,7 +66,8 @@ public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor implemen
 		return null;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig,
+			JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		getFieldProvider();
 		return fieldsProvider.getFields(con, jConfig, reportDataset);
 	}
@@ -83,5 +85,10 @@ public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor implemen
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new WizardQueryEditorComposite(parent, page, this, MongoDbDataSource.QUERY_LANGUAGE);
+	}
+
+	@Override
+	public String[] getLanguages() {
+		return new String[] { MongoDbDataSource.QUERY_LANGUAGE };
 	}
 }

@@ -12,10 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.hibernate;
 
-import net.sf.jasperreports.data.hibernate.HibernateDataAdapter;
-import net.sf.jasperreports.data.hibernate.HibernateDataAdapterImpl;
-import net.sf.jasperreports.engine.JRConstants;
-
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -26,6 +22,11 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.ui.WizardQueryEditorComposite;
+
+import net.sf.jasperreports.data.hibernate.HibernateDataAdapter;
+import net.sf.jasperreports.data.hibernate.HibernateDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.query.JRHibernateQueryExecuter;
 
 public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor implements IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -57,6 +58,11 @@ public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor implem
 
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
-		return new WizardQueryEditorComposite(parent, page, this, "sql");
+		return new WizardQueryEditorComposite(parent, page, this, JRHibernateQueryExecuter.CANONICAL_LANGUAGE);
+	}
+
+	@Override
+	public String[] getLanguages() {
+		return new String[] { JRHibernateQueryExecuter.CANONICAL_LANGUAGE };
 	}
 }

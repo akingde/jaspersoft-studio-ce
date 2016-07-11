@@ -15,21 +15,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.viewer.action.AReportAction;
-import net.sf.jasperreports.eclipse.viewer.action.ZoomActualSizeAction;
-import net.sf.jasperreports.eclipse.viewer.action.ZoomInAction;
-import net.sf.jasperreports.eclipse.viewer.action.ZoomOutAction;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
-import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -81,6 +66,21 @@ import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.viewer.action.AReportAction;
+import net.sf.jasperreports.eclipse.viewer.action.ZoomActualSizeAction;
+import net.sf.jasperreports.eclipse.viewer.action.ZoomInAction;
+import net.sf.jasperreports.eclipse.viewer.action.ZoomOutAction;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
+import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunnable, IParametrable, IRunReport {
 
@@ -529,6 +529,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		if (pt != null && jd != null) {
 			String strda = jd.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 			DataAdapterAction daWidget = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget();
+			pt.refreshDataAdapters();
+
 			if (strda != null) {
 				pt.setDataAdapters(strda);
 				dataAdapterDesc = daWidget.isDefaultDASelected() ? null : daWidget.getSelected();

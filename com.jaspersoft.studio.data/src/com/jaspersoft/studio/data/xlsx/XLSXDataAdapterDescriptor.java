@@ -54,7 +54,8 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.ui.EmptyWizardDataEditorComposite;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor
+		implements IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
@@ -76,7 +77,6 @@ public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	 */
 	@Override
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
 		if (size == 16) {
 			return Activator.getDefault().getImage("icons/document-excel.png");
 		}
@@ -85,7 +85,8 @@ public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements 
 
 	private IFieldsProvider fprovider;
 
-	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig,
+			JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		getFieldProvider();
 		return fprovider.getFields(con, jConfig, reportDataset);
 	}
