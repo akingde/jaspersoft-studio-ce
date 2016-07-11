@@ -18,12 +18,16 @@ import java.util.List;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
+import com.jaspersoft.studio.components.preferences.ComponentsPreferencePageExtension;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -41,6 +45,8 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
+import net.sf.jasperreports.eclipse.ui.util.ExtendedMessageDialog;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -101,9 +107,7 @@ public class RemoveCrosstabStylesAction extends ACachedSelectionAction {
 	@Override
 	public void run() {
 		deleteStyles = false;
-		MessageDialog dialog = new MessageDialog(null, Messages.RemoveStylesAction_messageTitle, null, Messages.RemoveStylesAction_messageText, MessageDialog.QUESTION, 
-												 new String[] {Messages.RemoveStylesAction_option1, Messages.RemoveStylesAction_option2, Messages.RemoveStylesAction_option3  }, 2);
-		int selection = dialog.open();
+		int selection = getResponse();
 		if (selection != 2){
 			deleteStyles = selection == 0;
 			List<EditPart> parts = getSelectedTables();
@@ -114,6 +118,44 @@ public class RemoveCrosstabStylesAction extends ACachedSelectionAction {
 		}
 	}
 	
+	/**
+	 * Return the response on how to handle the old styles, first check if there is something store
+	 * in the preferences and use the information to avoid to propose the question dialog if 
+	 * there is a default behavior stored. Otherwise show the dialog and store the decision if the flag
+	 * to remember it is checked.
+	 * 
+	 * @return 0 if the old styles should be deleted, 1 if old styles should be maintained and the references removed from the element, 
+	 * 2 if the operation is cancelled
+	 */
+	protected int getResponse(){
+		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+		String styleBehavior = store.getString(ComponentsPreferencePageExtension.BEHAVIOR_ON_STYLE_DELETE);
+		if (styleBehavior.equals(ComponentsPreferencePageExtension.BEHAVIOR_DELETE_STYLES)){
+			return 0;
+		} else if (styleBehavior.equals(ComponentsPreferencePageExtension.BEHAVIOR_DELETE_STYLES_REFERENCES)) {
+			return 1;
+		} else { 
+			//no preferences, ask what to do
+			Shell shell = UIUtils.getShell();
+			ExtendedMessageDialog question = new ExtendedMessageDialog(shell, Messages.RemoveStylesAction_messageTitle, null, 
+																			Messages.RemoveStylesAction_messageText, MessageDialog.QUESTION, 
+																			 new String[] {Messages.RemoveStylesAction_option1, 
+																					 			Messages.RemoveStylesAction_option2, 
+																					 				Messages.RemoveStylesAction_option3  }, 
+																			 	2, Messages.EditTableStyleAction_rememberDecision);
+			int response = question.open();
+			//Store the decision if the flag is checked
+			if (question.getCheckboxResult()){
+				if (response == 0){
+					store.setValue(ComponentsPreferencePageExtension.BEHAVIOR_ON_STYLE_DELETE, ComponentsPreferencePageExtension.BEHAVIOR_DELETE_STYLES);
+				} else if (response == 1) {
+					store.setValue(ComponentsPreferencePageExtension.BEHAVIOR_ON_STYLE_DELETE, ComponentsPreferencePageExtension.BEHAVIOR_DELETE_STYLES_REFERENCES);
+				}
+			}
+			return response;
+		}
+	}
+
 	/**
 	 * Create the command to remove the style from a single cell and to delete the style 
 	 * itself if the deleteStyle flag is enabled and if the command to delete the style

@@ -29,10 +29,12 @@ public class Messages extends NLS {
 	public static String ComponentsPreferencePageExtension_optionAsk;
 	public static String ComponentsPreferencePageExtension_optionCreate;
 	public static String ComponentsPreferencePageExtension_optionDelete;
+	public static String ComponentsPreferencePageExtension_optionDeleteReferences;
 	public static String ComponentsPreferencePageExtension_optionKeep;
 	public static String ComponentsPreferencePageExtension_optionUpdate;
 	public static String ComponentsPreferencePageExtension_preferenceDelete;
 	public static String ComponentsPreferencePageExtension_preferenceEditStyle;
+	public static String ComponentsPreferencePageExtension_preferenceRemoveStyle;
 	public static String ExportDialog_fileErrorMessage;
 	public static String ExportDialog_fileErrorTitle;
 	public static String ImportDialog_deselectAllButton;

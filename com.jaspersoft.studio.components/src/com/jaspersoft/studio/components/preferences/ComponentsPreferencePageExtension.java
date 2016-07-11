@@ -41,6 +41,11 @@ public class ComponentsPreferencePageExtension implements IPreferencePageExtensi
 	 * Key of the behavior used when a table or a crosstab style is changed
 	 */
 	public static final String BEHAVIOR_ON_STYLE_CHANGE = "tableCrosstabChangeStyle"; //$NON-NLS-1$
+	
+	/**
+	 * Key of the behavior used when a table or a crosstab style is changed
+	 */
+	public static final String BEHAVIOR_ON_STYLE_DELETE = "tableCrosstabDeleteStyle"; //$NON-NLS-1$
 
 	/**
 	 * This behavior specify to ask to the user what to do when a table/crosstab is deleted or the style is changed
@@ -68,14 +73,25 @@ public class ComponentsPreferencePageExtension implements IPreferencePageExtensi
 	public static final String BEHAVIOR_CREATE_STYLES = "createStyles"; //$NON-NLS-1$
 	
 	/**
+	 * This behavior specify to create delete only the styles references when a table or crosstab style are 
+	 * removed trough the remove styles action
+	 */
+	public static final String BEHAVIOR_DELETE_STYLES_REFERENCES = "deleteStylesReferences"; //$NON-NLS-1$
+	
+	/**
 	 * This constants specify the default behavior when a table/crosstab is deleted
 	 */
 	public static final String DEFAULT_BEHAVIOR_DELETE = BEHAVIOR_ASK_EVERYTIME; // $NON-NLS-1$
 
 	/**
-	 * This constants specify the default behavior when a table/crosstab styles is updated
+	 * This constants specify the default behavior when a table/crosstab styles are updated
 	 */
 	public static final String DEFAULT_BEHAVIOR_CHANGE_STYLE = BEHAVIOR_ASK_EVERYTIME; // $NON-NLS-1$
+	
+	/**
+	 * This constants specify the default behavior when a table/crosstab styles are removed
+	 */
+	public static final String DEFAULT_BEHAVIOR_DELETE_STYLE = BEHAVIOR_ASK_EVERYTIME; // $NON-NLS-1$
 	
 	/**
 	 * Create the two combo for the style preferences
@@ -102,11 +118,18 @@ public class ComponentsPreferencePageExtension implements IPreferencePageExtensi
 						{ Messages.ComponentsPreferencePageExtension_optionUpdate, BEHAVIOR_UPDATE_STYLES },
 						{ Messages.ComponentsPreferencePageExtension_optionCreate, BEHAVIOR_CREATE_STYLES}},
 				parent));
+		page.addField(new ComboFieldEditor(BEHAVIOR_ON_STYLE_DELETE, Messages.ComponentsPreferencePageExtension_preferenceRemoveStyle,
+				new String[][] { 
+						{ Messages.ComponentsPreferencePageExtension_optionAsk, BEHAVIOR_ASK_EVERYTIME }, 
+						{ Messages.ComponentsPreferencePageExtension_optionDeleteReferences, BEHAVIOR_DELETE_STYLES_REFERENCES },
+						{ Messages.ComponentsPreferencePageExtension_optionDelete, BEHAVIOR_DELETE_STYLES}},
+				parent));
 	}
 	
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(BEHAVIOR_ON_ELEMENT_DELETE, DEFAULT_BEHAVIOR_DELETE);
 		store.setDefault(BEHAVIOR_ON_STYLE_CHANGE, DEFAULT_BEHAVIOR_CHANGE_STYLE);
+		store.setDefault(BEHAVIOR_ON_STYLE_DELETE, DEFAULT_BEHAVIOR_DELETE_STYLE);
 	}
 
 	@Override
