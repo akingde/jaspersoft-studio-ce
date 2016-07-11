@@ -23,7 +23,7 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 public abstract class AItemDataListPropertyDescriptor extends NTextPropertyDescriptor
 		implements IExpressionContextSetter {
-	private APropertyNode pNode;
+	protected APropertyNode pNode;
 
 	public AItemDataListPropertyDescriptor(Object id, String displayName, APropertyNode pNode) {
 		super(id, displayName);
