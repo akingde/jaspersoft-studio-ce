@@ -29,8 +29,8 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.Pair;
 
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.type.JREnum;
 
 /**

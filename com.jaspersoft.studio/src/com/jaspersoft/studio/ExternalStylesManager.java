@@ -23,10 +23,10 @@ import org.eclipse.core.resources.IFile;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.utils.ExpressionUtil;
-import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRReportTemplate;

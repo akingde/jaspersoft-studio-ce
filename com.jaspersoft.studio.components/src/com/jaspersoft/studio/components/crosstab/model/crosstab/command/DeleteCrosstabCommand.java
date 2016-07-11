@@ -20,9 +20,12 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.preference.IPreferenceStore;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
+import com.jaspersoft.studio.components.preferences.ComponentsPreferencePageExtension;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MReport;
@@ -31,6 +34,7 @@ import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.eclipse.ui.util.RunnableCancelQuestion.RESPONSE_TYPE;
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
@@ -169,7 +173,7 @@ public class DeleteCrosstabCommand extends DeleteElementCommand {
 				count++;
 			}
 			
-			RESPONSE_TYPE response = UIUtils.showCancellableConfirmation(Messages.DeleteTableCommand_unusedTitle, MessageFormat.format(Messages.DeleteTableCommand_unusedMessage, new Object[]{unusedStylesName}));
+			RESPONSE_TYPE response = getResponse(unusedStylesName);
 			if (response == RESPONSE_TYPE.YES){
 				for(String style : unusedStyles){
 					JRStyle styleObject = jDesign.getStylesMap().get(style);
@@ -198,4 +202,37 @@ public class DeleteCrosstabCommand extends DeleteElementCommand {
 		}
 	}
 	
+	/**
+	 * Return the response on how to handle the element styles, first check if there is something store
+	 * in the preferences and use the information to avoid to propose the question dialog if 
+	 * there is a default behavior stored. Otherwise show the dialog and store the decision if the flag
+	 * to remember it is checked.
+	 * 
+	 * @param unusedStylesName not null string with the unused style names
+	 * 
+	 * @return YES if the old style should be deleted, NO if the old style shouldn't be deleted, CANCEL if the operation
+	 * was cancelled
+	 */
+	protected RESPONSE_TYPE getResponse(String unusedStylesName){
+		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+		String styleBehavior = store.getString(ComponentsPreferencePageExtension.BEHAVIOR_ON_ELEMENT_DELETE);
+		if (styleBehavior.equals(ComponentsPreferencePageExtension.BEHAVIOR_DELETE_STYLES)){
+			return RESPONSE_TYPE.YES;
+		} else if (styleBehavior.equals(ComponentsPreferencePageExtension.BEHAVIOR_DO_NOT_DELETE)) {
+			return RESPONSE_TYPE.NO;
+		} else { 
+			String questionText =  MessageFormat.format(Messages.DeleteTableCommand_unusedMessage, new Object[]{unusedStylesName});
+			Pair<RESPONSE_TYPE, Boolean> response = UIUtils.showCancellableConfirmation(Messages.DeleteTableCommand_unusedTitle, 
+																							questionText,
+																								Messages.EditTableStyleAction_rememberDecision);
+			if (response.getValue()){
+				if (response.getKey() == RESPONSE_TYPE.YES){
+					store.setValue(ComponentsPreferencePageExtension.BEHAVIOR_ON_ELEMENT_DELETE, ComponentsPreferencePageExtension.BEHAVIOR_DELETE_STYLES);
+				} else if (response.getKey() == RESPONSE_TYPE.NO) {
+					store.setValue(ComponentsPreferencePageExtension.BEHAVIOR_ON_ELEMENT_DELETE, ComponentsPreferencePageExtension.BEHAVIOR_DO_NOT_DELETE);
+				}
+			}
+			return response.getKey();
+		}
+	}
 }

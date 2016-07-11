@@ -31,12 +31,12 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.tools.CompositeElementManager;
 import com.jaspersoft.studio.editor.tools.MCompositeElement;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion;
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion.RESPONSE_TYPE;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRElementGroup;

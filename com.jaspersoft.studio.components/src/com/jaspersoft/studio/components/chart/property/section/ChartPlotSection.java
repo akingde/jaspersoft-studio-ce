@@ -55,9 +55,9 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 import com.jaspersoft.studio.swt.widgets.RealSizeStackLayout;
-import com.jaspersoft.studio.utils.Pair;
 
 import net.sf.jasperreports.charts.design.JRDesignChartAxis;
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 
 /**

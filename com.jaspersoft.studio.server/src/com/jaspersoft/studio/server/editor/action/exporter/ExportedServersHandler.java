@@ -53,13 +53,13 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
-import com.jaspersoft.studio.utils.Pair;
 
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion;
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion.RESPONSE_TYPE;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.CastorHelper;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 /**

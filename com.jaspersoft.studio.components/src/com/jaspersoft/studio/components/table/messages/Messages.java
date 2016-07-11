@@ -39,6 +39,7 @@ public class Messages extends NLS {
 	public static String EditStyleAction_dialogTitle;
 	public static String EditStyleAction_dialogUpdateButton;
 	public static String EditStyleAction_okButton;
+	public static String EditTableStyleAction_rememberDecision;
 	public static String MCell_cell_properties_category;
 	public static String MCell_height;
 	public static String MCell_line_box;

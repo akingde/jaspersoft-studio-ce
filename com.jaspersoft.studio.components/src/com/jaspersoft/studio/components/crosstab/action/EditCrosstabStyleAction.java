@@ -18,22 +18,27 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.crosstab.command.UpdateCrosstabStyleCommand;
 import com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabStyleWizard;
 import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle;
+import com.jaspersoft.studio.components.preferences.ComponentsPreferencePageExtension;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+
+import net.sf.jasperreports.eclipse.ui.util.ExtendedMessageDialog;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * Action to open the Style dialog and use it to change the style of a Crosstab
@@ -82,13 +87,7 @@ public class EditCrosstabStyleAction extends ACachedSelectionAction {
 			}
 		};
 		if (dialog.open() == Dialog.OK){
-			//If the user close the dialog with ok then a message box is shown to ask how to edit the styles
-			Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
-			MessageDialog question = new MessageDialog(shell, Messages.EditCrosstabStyleAction_questionTitle, null, Messages.EditCrosstabStyleAction_questionText, MessageDialog.QUESTION, 
-														new String[]{Messages.EditCrosstabStyleAction_questionUpdate, 
-																	 Messages.EditCrosstabStyleAction_questionNewStyles, 
-																	 Messages.EditCrosstabStyleAction_questionCancel}, 0);
-			int response = question.open();
+			int response = getResponse();
 			//response == 0 update the old styles, response == 1 create new styles, response == 2 cancel the operation
 			if (response == 0 || response == 1){
 				CrosstabStyle selectedStyle = wizard.getTableStyle();
@@ -98,8 +97,44 @@ public class EditCrosstabStyleAction extends ACachedSelectionAction {
 			} 
 		}
 	}
-
 	
+	/**
+	 * Return the response on how to handle the old styles, first check if there is something store
+	 * in the preferences and use the information to avoid to propose the question dialog if 
+	 * there is a default behavior stored. Otherwise show the dialog and store the decision if the flag
+	 * to remember it is checked.
+	 * 
+	 * @return 0 if the old styles should be update, 1 if new styles will be created, 2 if the operation is cancelled
+	 */
+	protected int getResponse(){
+		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+		String styleBehavior = store.getString(ComponentsPreferencePageExtension.BEHAVIOR_ON_STYLE_CHANGE);
+		if (styleBehavior.equals(ComponentsPreferencePageExtension.BEHAVIOR_UPDATE_STYLES)){
+			return 0;
+		} else if (styleBehavior.equals(ComponentsPreferencePageExtension.BEHAVIOR_CREATE_STYLES)) {
+			return 1;
+		} else { 
+			//no preferences, ask what to do
+			Shell shell = UIUtils.getShell();
+			ExtendedMessageDialog question = new ExtendedMessageDialog(shell, Messages.EditCrosstabStyleAction_questionTitle, null, 
+																Messages.EditCrosstabStyleAction_questionText, MessageDialog.QUESTION, 
+																	new String[]{Messages.EditCrosstabStyleAction_questionUpdate, 
+																					Messages.EditCrosstabStyleAction_questionNewStyles, 
+																						Messages.EditCrosstabStyleAction_questionCancel}, 
+																		0, Messages.EditCrosstabStyleAction_remeberDecision);
+			int response = question.open();
+			//Store the decision if the flag is checked
+			if (question.getCheckboxResult()){
+				if (response == 0){
+					store.setValue(ComponentsPreferencePageExtension.BEHAVIOR_ON_STYLE_CHANGE, ComponentsPreferencePageExtension.BEHAVIOR_UPDATE_STYLES);
+				} else if (response == 1) {
+					store.setValue(ComponentsPreferencePageExtension.BEHAVIOR_ON_STYLE_CHANGE, ComponentsPreferencePageExtension.BEHAVIOR_CREATE_STYLES);
+				}
+			}
+			return response;
+		}
+	}
+
 	/**
 	 * 
 	 * Return the command to change the crosstab style

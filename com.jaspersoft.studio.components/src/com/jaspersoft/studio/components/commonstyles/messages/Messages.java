@@ -26,6 +26,13 @@ public class Messages extends NLS {
 	public static String CommonViewProvider_editStyleToolButton;
 	public static String CommonViewProvider_exportStylesToolTip;
 	public static String CommonViewProvider_finishLabel;
+	public static String ComponentsPreferencePageExtension_optionAsk;
+	public static String ComponentsPreferencePageExtension_optionCreate;
+	public static String ComponentsPreferencePageExtension_optionDelete;
+	public static String ComponentsPreferencePageExtension_optionKeep;
+	public static String ComponentsPreferencePageExtension_optionUpdate;
+	public static String ComponentsPreferencePageExtension_preferenceDelete;
+	public static String ComponentsPreferencePageExtension_preferenceEditStyle;
 	public static String ExportDialog_fileErrorMessage;
 	public static String ExportDialog_fileErrorTitle;
 	public static String ImportDialog_deselectAllButton;

@@ -44,10 +44,10 @@ import com.jaspersoft.studio.model.style.MStyles;
 import com.jaspersoft.studio.model.style.command.CreateStyleTemplateCommand;
 import com.jaspersoft.studio.model.style.command.SimpleDeleteStyleCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;

@@ -87,6 +87,7 @@ public class Messages extends NLS {
 	public static String EditCrosstabStyleAction_questionText;
 	public static String EditCrosstabStyleAction_questionTitle;
 	public static String EditCrosstabStyleAction_questionUpdate;
+	public static String EditCrosstabStyleAction_remeberDecision;
 	public static String MBucket_comparator_expression;
 	public static String MBucket_comparator_expression_description;
 	public static String MBucket_expression;

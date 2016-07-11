@@ -1081,4 +1081,18 @@
             exporterClass="com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle">
       </resourceExporter>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.jaspersoft.studio.components.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.preferencePageExtension">
+      <pageExtension
+            class="com.jaspersoft.studio.components.preferences.ComponentsPreferencePageExtension"
+            extendedPageId="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"
+            id="com.jaspersoft.studio.components.ComponentsPreferencePage">
+      </pageExtension>
+   </extension>
 </plugin>

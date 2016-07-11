@@ -14,6 +14,7 @@ package com.jaspersoft.studio.server.publish.action;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -169,7 +170,7 @@ public class JrxmlPublishAction extends AContributorAction {
 			}
 
 			Publish2ServerWizard wizard = new Publish2ServerWizard(jd, jrConfig, startpage);
-			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
+			WizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);
 			if (dialog.open() == Dialog.OK) {
 				// ANode node = wizard.getNode();
 				// if (node instanceof AMJrxmlContainer)

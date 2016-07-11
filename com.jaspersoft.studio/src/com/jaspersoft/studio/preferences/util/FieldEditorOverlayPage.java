@@ -49,14 +49,14 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.PreferenceInitializer;
 import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.util.ResourcePreferences;
 
-public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage
-		implements IWorkbenchPropertyPage, IWorkbenchPreferencePage {
+public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage implements IWorkbenchPropertyPage, IWorkbenchPreferencePage {
 	public static final String RESOURCE = "resource";
 
 	private static final String PROJECT = "project";
@@ -83,6 +83,10 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage
 	private String pageId;
 
 	private Composite selectionComposite;
+	
+	private boolean canSwitchScope = true;
+	
+	private QualifiedName reskey = new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(), USERESOURCESETTINGS);
 
 	/**
 	 * Constructor
@@ -165,7 +169,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage
 	 * 
 	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#addField(org.eclipse.jface.preference.FieldEditor)
 	 */
-	protected void addField(FieldEditor editor) {
+	public void addField(FieldEditor editor) {
 		editors.add(editor);
 		super.addField(editor);
 	}
@@ -204,17 +208,6 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage
 		return resource;
 	}
 
-	/**
-	 * We override the createContents method. In case of property pages we insert two radio buttons at the top of the
-	 * page.
-	 * 
-	 * @see org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.widgets.Composite)
-	 */
-	protected Control createContents(Composite parent) {
-		if (isPropertyPage())
-			createSelectionGroup(parent);
-		return super.createContents(parent);
-	}
 
 	/**
 	 * Creates and initializes a selection group with two choice buttons and one push button.
@@ -261,13 +254,10 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage
 		setupWPREnabled();
 	}
 
-	private boolean canSwitchScope = true;
 
 	public void setCanSwitchScope(boolean canSwitchScope) {
 		this.canSwitchScope = canSwitchScope;
 	}
-
-	private QualifiedName reskey = new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(), USERESOURCESETTINGS);
 
 	protected void setupWPREnabled() {
 		try {
@@ -438,7 +428,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage
 
 	/**
 	 * We override the performDefaults method. In case of property pages we switch back to the workspace settings and
-	 * disable the field editors.
+	 * disable the field editors. It call also this method on the contributed extensions pages.
 	 * 
 	 * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
 	 */
@@ -452,6 +442,12 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage
 			if (confPrjButton != null)
 				confPrjButton.setEnabled(false);
 			updateFieldEditors();
+		}
+		List<IPreferencePageExtension> subPages = ExtensionManager.getContributedPreferencePages(getPageId());
+		if (subPages != null){
+			for(IPreferencePageExtension page : subPages){
+				page.performDefaults();
+			}
 		}
 		super.performDefaults();
 	}
@@ -502,4 +498,53 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage
 			}
 		});
 	}
+	
+	/**
+	 * The apply change also the apply method on the extensions of this page
+	 */
+	@Override
+	protected void performApply() {
+		List<IPreferencePageExtension> subPages = ExtensionManager.getContributedPreferencePages(getPageId());
+		if (subPages != null){
+			for(IPreferencePageExtension page : subPages){
+				page.performApply();
+			}
+		}
+		super.performApply();
+	}
+	
+	/**
+	 * The cancel change also the cancel method on the extensions of this page
+	 */
+	@Override
+	public boolean performCancel() {
+		List<IPreferencePageExtension> subPages = ExtensionManager.getContributedPreferencePages(getPageId());
+		if (subPages != null){
+			for(IPreferencePageExtension page : subPages){
+				page.performCancel();
+			}
+		}
+		return super.performCancel();
+	}
+	
+	/**
+	 * Create on this page all the contributed preferences controls 
+	 */
+	protected void createContributedPreferences(){
+		List<IPreferencePageExtension> subPages = ExtensionManager.getContributedPreferencePages(getPageId());
+		if (subPages != null){
+			for(IPreferencePageExtension page : subPages){
+				page.createContributedFields(getFieldEditorParent(), this);
+			}
+		}
+	}
+	
+	/**
+	 * By default this create only the extension of the page
+	 */
+	@Override
+	protected void createFieldEditors() {
+		createContributedPreferences();
+	}
+	
 }

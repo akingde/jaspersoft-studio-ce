@@ -40,11 +40,11 @@ import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator.SCHEMAS;
 import com.jaspersoft.studio.style.view.TemplateStyleView;
 import com.jaspersoft.studio.utils.AlfaRGB;
-import com.jaspersoft.studio.utils.Pair;
 
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion;
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion.RESPONSE_TYPE;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Pair;
 
 /**
  * 

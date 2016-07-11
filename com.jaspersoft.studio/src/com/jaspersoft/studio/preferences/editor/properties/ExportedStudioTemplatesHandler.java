@@ -34,13 +34,13 @@ import com.jaspersoft.studio.editor.action.exporter.IPropertyCustomExporter;
 import com.jaspersoft.studio.editor.action.exporter.IResourceDefinition;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
-import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.ui.FolderDestinationDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Pair;
 
 /**
  * Exporter used to import/export the Jaspersoft Studio templates, it will export and import

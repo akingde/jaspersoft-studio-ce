@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.doc.handlers;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -43,7 +44,7 @@ public class UploadReportCheatAction extends Action {
 			if (servers != null && servers.getChildren().size() > 0) {
 				// Create a fake root to show only the server connection in the list
 				Publish2ServerWizard wizard = new Publish2ServerWizard(design, config, 1);
-				WizardDialog dialogToOpen = new WizardDialog(UIUtils.getShell(), wizard);
+				WizardDialog dialogToOpen = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);
 				dialogToOpen.create();
 				dialogToOpen.open();
 			} else

@@ -33,8 +33,8 @@ import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.Pair;
 
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRCommonElement;
 import net.sf.jasperreports.engine.JRElement;

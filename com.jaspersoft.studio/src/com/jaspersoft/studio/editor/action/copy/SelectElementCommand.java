@@ -18,9 +18,9 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.ISelection;
 
-import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**

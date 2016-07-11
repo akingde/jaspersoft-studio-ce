@@ -49,8 +49,9 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.utils.compatibility.FigureUtilities;
+
+import net.sf.jasperreports.eclipse.util.Pair;
 
 /**
  * This class define a marquee selection tool to select the edit parts by simply dragging on the elements.

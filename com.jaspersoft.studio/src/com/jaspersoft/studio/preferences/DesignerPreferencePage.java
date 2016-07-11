@@ -141,6 +141,9 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_RESIZE_CONTAINER, Messages.DesignerPreferencePage_autoresizeBand,
 				getFieldEditorParent()));
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 
 	}
 

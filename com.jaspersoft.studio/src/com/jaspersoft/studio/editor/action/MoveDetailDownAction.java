@@ -17,8 +17,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.ISelection;
@@ -33,7 +31,9 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroup;
 import com.jaspersoft.studio.model.band.command.ReorderBandCommandByRelativeIndex;
-import com.jaspersoft.studio.utils.Pair;
+
+import net.sf.jasperreports.eclipse.util.Pair;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 /**
  * Action to move a detail before the detail band above it it

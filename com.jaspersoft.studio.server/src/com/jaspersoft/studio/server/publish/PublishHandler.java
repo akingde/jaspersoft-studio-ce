@@ -39,6 +39,7 @@ import com.jaspersoft.studio.server.publish.wizard.PublishFile2ServerWizard;
 import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 
@@ -109,7 +110,7 @@ public class PublishHandler extends AbstractHandler {
 			}
 		}
 		PublishFile2ServerWizard wizard = new PublishFile2ServerWizard(file, 1);
-		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
+		WizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);
 		if (dialog.open() == Dialog.OK) {
 
 		}
