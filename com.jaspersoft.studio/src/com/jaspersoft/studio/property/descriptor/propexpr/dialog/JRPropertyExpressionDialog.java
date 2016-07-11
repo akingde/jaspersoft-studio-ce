@@ -14,9 +14,6 @@ package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
 import java.util.Collections;
 
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -30,7 +27,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
@@ -38,6 +37,9 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 /**
  * Dialog that extend the dialog to define a property as key and value.
@@ -177,7 +179,14 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 	 */
 	private void fillValue(PropertyDTO value) {
 		ANode node =  value.getPnode();
-		evalue.setExpressionContext(ModelUtils.getElementExpressionContext(null, node));		
+		ExpressionContext ec = null;
+		if(node instanceof APropertyNode){
+			ec = ((APropertyNode) node).getExpressionContext();
+		}
+		else {
+			ec = ModelUtils.getElementExpressionContext(null, node);
+		}
+		evalue.setExpressionContext(ec);		
 		cprop.setText(Misc.nvl(value.getName()));
 		buseexpr.setSelection(value.isExpression());
 		String text = Misc.nvl((String) value.getValue());

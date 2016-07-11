@@ -34,6 +34,7 @@ import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 import com.jaspersoft.studio.components.table.util.TableColumnNumerator;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
@@ -571,15 +572,30 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 		return null;
 	}
 	
-	/**
-	 * This type of node return a custom set value command provider that will allow to 
-	 * generate command that will check if the table has the autoresize and if the changed property
-	 * need to trigger its refresh
-	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class adapter) {
-		if (adapter == ISetValueCommandProvider.class) return TableSetValueCommandProvider.INSTANCE;
-		else return super.getAdapter(adapter);
+		if (ISetValueCommandProvider.class.equals(adapter)) {
+			// This type of node return a custom set value command provider that will allow to 
+			// generate command that will check if the table has the auto-resize and if the changed property
+			// need to trigger its refresh
+			return TableSetValueCommandProvider.INSTANCE;
+		}
+		else if (ExpressionContext.class.equals(adapter)) {
+			return getExpressionContext();
+		}
+		else {
+			return super.getAdapter(adapter);
+		}
 	}
+	
+	public ExpressionContext getExpressionContext() {
+		if(containerTable!=null) {
+			return containerTable.getExpressionContext();
+		}
+		else {
+			return null;
+		}
+	}
+	
 }
