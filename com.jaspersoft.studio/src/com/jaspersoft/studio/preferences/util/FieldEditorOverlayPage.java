@@ -204,7 +204,18 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		return resource;
 	}
 
-
+	/**
+	 * We override the createContents method. In case of property pages we insert two radio buttons at the top of the
+	 * page.
+	 * 
+	 * @see org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.widgets.Composite)
+	 */
+	protected Control createContents(Composite parent) {
+		if (isPropertyPage())
+			createSelectionGroup(parent);
+		return super.createContents(parent);
+	}
+	
 	/**
 	 * Creates and initializes a selection group with two choice buttons and one push button.
 	 * 
