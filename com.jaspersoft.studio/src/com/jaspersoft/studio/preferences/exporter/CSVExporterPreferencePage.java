@@ -68,6 +68,9 @@ public class CSVExporterPreferencePage extends FieldEditorOverlayPage {
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 
 	}
 

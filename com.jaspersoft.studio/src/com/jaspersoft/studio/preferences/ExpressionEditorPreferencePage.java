@@ -59,6 +59,9 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 		addField(new BooleanFieldEditor(P_CONFIRMATION_ON_CLOSE, "Ask for confirmation before closing the Expression Editor", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_REMEMBER_EXPEDITOR_SIZE, "Remember the size of the Expression Editor window", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_REMEMBER_EXPEDITOR_LOCATION, "Remember the location of the Expression Editor window", getFieldEditorParent()));
+
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	/*

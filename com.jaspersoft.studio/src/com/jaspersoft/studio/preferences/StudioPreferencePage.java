@@ -40,6 +40,9 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new BooleanLinkFieldEditor(JSS_SEND_USAGE_STATISTICS, Messages.StudioPreferencePage_collectUsageStatistics,
 				getFieldEditorParent()));
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public void init(IWorkbench workbench) {

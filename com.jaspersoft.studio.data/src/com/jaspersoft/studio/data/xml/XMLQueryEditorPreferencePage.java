@@ -54,6 +54,9 @@ public class XMLQueryEditorPreferencePage extends FieldEditorOverlayPage {
 				Messages.XMLQueryEditorPreferencePage_RecursiveReadFields, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_CONSIDER_EMPTY_NODES,
 				Messages.XMLQueryEditorPreferencePage_ConsiderEmptyNodesOption, getFieldEditorParent()));
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

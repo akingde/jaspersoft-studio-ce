@@ -42,6 +42,9 @@ public class CASPreferencePage extends FieldEditorOverlayPage {
 	 */
 	public void createFieldEditors() {
 		addField(new CASListFieldEditor("abcd", getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

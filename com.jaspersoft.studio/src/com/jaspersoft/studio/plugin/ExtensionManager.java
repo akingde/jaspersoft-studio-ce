@@ -53,7 +53,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.HyperlinkDefaultParameter;
 import com.jaspersoft.studio.preferences.bindings.BindingElement;
 import com.jaspersoft.studio.preferences.bindings.JSSKeySequence;
-import com.jaspersoft.studio.preferences.util.IPreferencePageExtension;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.statistics.IFirstStartupAction;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
@@ -452,53 +451,6 @@ public class ExtensionManager {
 			}
 		}
 		return contributedExporters;
-	}
-	
-	/**
-	 * Set of handlers used to existing studio preference pages. It is used as cache for the contributed items
-	 */
-	private static HashMap<String, List<IPreferencePageExtension>> contributedPreferencePages = null;
-
-	/**
-	 * Return the List of extension of Jaspersoft Studio preference page. This is used to add controls to an 
-	 * existing preference page, instead to create a new one
-	 * 
-	 * @param extendedPageId the ID of the page that will be extended
-	 * @return The list of the extensions or null if there are no extension for that page
-	 */
-	public static List<IPreferencePageExtension> getContributedPreferencePages(String extendedPageId) {
-		if (contributedPreferencePages == null) {
-			IConfigurationElement[] config = Platform.getExtensionRegistry()
-					.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "preferencePageExtension");
-
-			contributedPreferencePages = new HashMap<String, List<IPreferencePageExtension>>();
-			List<IConfigurationElement> configList = new ArrayList<IConfigurationElement>(Arrays.asList(config));
-			Collections.sort(configList, extensionSorter);
-			Collections.reverse(configList);
-			for (IConfigurationElement el : configList) {
-				Object defaultSupportClazz;
-				try {
-					defaultSupportClazz = el.createExecutableExtension("class");
-					if (defaultSupportClazz instanceof IPreferencePageExtension) {
-						IPreferencePageExtension handler = (IPreferencePageExtension) defaultSupportClazz;
-						String extendedPage = el.getAttribute("extendedPageId");
-						List<IPreferencePageExtension> pagesExtension = contributedPreferencePages.get(extendedPage);
-						if (pagesExtension == null){
-							pagesExtension = new ArrayList<IPreferencePageExtension>();
-							pagesExtension.add(handler);
-							contributedPreferencePages.put(extendedPage, pagesExtension);
-						} else {
-							pagesExtension.add(handler);
-						}
-					}
-				} catch (CoreException e) {
-					JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-							"An error occurred while trying to create the new class.", e));
-				}
-			}
-		}
-		List<IPreferencePageExtension> pages = contributedPreferencePages.get(extendedPageId);
-		return pages;
 	}
 
 	public List<PaletteGroup> getPaletteGroups() {

@@ -92,6 +92,8 @@ public class PalettePreferencePage extends FieldEditorOverlayPage {
 			}
 		}
 
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static final String getId(PaletteEntry pe) {

@@ -82,6 +82,9 @@ public class CSVMetadataExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(tf);
 		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + tf.getPreferenceName() + ".{suffix}"); //$NON-NLS-1$
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

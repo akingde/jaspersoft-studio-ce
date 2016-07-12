@@ -87,6 +87,9 @@ public class JRVersionPreferencesPages extends FieldEditorOverlayPage {
 
 		createJRXML(cmp);
 		createJASPER(cmp);
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	private void fillJasperVersions() {

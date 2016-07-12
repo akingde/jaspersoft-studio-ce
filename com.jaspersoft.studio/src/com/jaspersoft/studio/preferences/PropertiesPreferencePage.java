@@ -49,6 +49,9 @@ public class PropertiesPreferencePage extends FieldEditorOverlayPage {
 	public void createFieldEditors() {
 		addField(new SearchPropertyListFieldEditor(
 				"properties_list", Messages.PropertiesPreferencePage_jrPropertiesTitle, getFieldEditorParent())); //$NON-NLS-1$
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

@@ -60,6 +60,9 @@ public class KeysPreferencePage extends FieldEditorOverlayPage {
 		addField(tf);
 		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
 				"net.sf.jasperreports.doc/docs/components.schema.reference.html#" + tf.getPreferenceName());
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

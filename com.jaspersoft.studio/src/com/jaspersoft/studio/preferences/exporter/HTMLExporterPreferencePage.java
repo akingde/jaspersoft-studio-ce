@@ -56,6 +56,9 @@ public class HTMLExporterPreferencePage extends FieldEditorOverlayPage {
 		createTabPageBP(tabFolder);
 
 		tabFolder.setSelection(0);
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	private void createTabPageHTML(CTabFolder tabFolder) {

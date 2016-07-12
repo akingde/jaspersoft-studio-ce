@@ -20,10 +20,12 @@
       </page>
    </extension>
    <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="com.jaspersoft.studio.properties.preferences.PreferenceInitializer">
-      </initializer>
+         point="net.sf.jasperreports.preferencePageExtension">
+      <pageExtension
+            class="com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage"
+            extendedPageId="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"
+            id="com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage">
+      </pageExtension>
    </extension>
 
 </plugin>

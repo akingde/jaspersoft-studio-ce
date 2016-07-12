@@ -84,6 +84,9 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 						{ Messages.SQLEditorPreferencesPage_11, FINE },
 						{ Messages.SQLEditorPreferencesPage_12, COARSE }  },
 				getFieldEditorParent()));
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

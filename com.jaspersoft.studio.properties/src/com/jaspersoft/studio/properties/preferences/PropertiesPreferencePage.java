@@ -9,16 +9,17 @@
 package com.jaspersoft.studio.properties.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.properties.Activator;
 import com.jaspersoft.studio.properties.messages.Messages;
+
+import net.sf.jasperreports.eclipse.preferences.IPreferenceExtendablePage;
+import net.sf.jasperreports.eclipse.preferences.IPreferencePageExtension;
 
 /**
  * Preference page used to show a flag to decide if in the properties view we should force to show
@@ -27,30 +28,12 @@ import com.jaspersoft.studio.properties.messages.Messages;
  * @author Orlandin Marco
  *
  */
-public class PropertiesPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PropertiesPreferencePage implements IPreferencePageExtension {
 	
 	/**
 	 * Id of the property
 	 */
 	public static final String SINGLE_COLUMN_ID = "com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage.single_column"; //$NON-NLS-1$
-	
-	public PropertiesPreferencePage() {
-		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription(Messages.PropertiesPreferencePage_preferenceDescription);
-		setTitle(Messages.PropertiesPreferencePage_preferenceTitle);
-	}
-
-	/**
-	 * Create the controls for the property
-	 */
-	public void createFieldEditors() {
-		Composite parent = getFieldEditorParent();
-		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout(1, false));
-		BooleanFieldEditor be = new BooleanFieldEditor(SINGLE_COLUMN_ID, Messages.PropertiesPreferencePage_singleColumnProperty, container);
-		addField(be);
-	}
 
 	/**
 	 * Initialize the default values of the store, by default the single column property
@@ -62,11 +45,38 @@ public class PropertiesPreferencePage extends FieldEditorPreferencePage implemen
 		store.setDefault(SINGLE_COLUMN_ID, false);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
-	 */
-	public void init(IWorkbench workbench) {
+	@Override
+	public void createContributedFields(Composite parent, IPreferenceExtendablePage page) {
+		
+		Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		separator.setLayoutData(gd);
+		
+		BooleanFieldEditor be = new BooleanFieldEditor(SINGLE_COLUMN_ID, Messages.PropertiesPreferencePage_singleColumnProperty, parent){
+			
+			/**
+			 * Force to use the storage of the Preferences plugin to store this property, otherwise it will
+			 * be used the storage of the host page
+			 */
+			@Override
+			public IPreferenceStore getPreferenceStore() {
+				return Activator.getDefault().getPreferenceStore();
+			}
+			
+		};
+		page.addField(be);
+	}
+
+	@Override
+	public void performApply() {	
+	}
+
+	@Override
+	public void performCancel() {
+	}
+
+	@Override
+	public void performDefaults() {		
 	}
 }

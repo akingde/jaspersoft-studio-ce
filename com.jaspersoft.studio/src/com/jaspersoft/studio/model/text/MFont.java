@@ -173,10 +173,10 @@ public class MFont extends APropertyNode {
 		
 		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, new DefaultValue("SansSerif", true)); //$NON-NLS-1$
 		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, new DefaultValue(10f, true)); 
-		defaultsMap.put(JRBaseFont.PROPERTY_STRIKE_THROUGH, new DefaultValue(Boolean.FALSE, false));
-		defaultsMap.put(JRBaseFont.PROPERTY_UNDERLINE, new DefaultValue(Boolean.FALSE, false));
-		defaultsMap.put(JRBaseFont.PROPERTY_ITALIC, new DefaultValue(Boolean.FALSE, false));
-		defaultsMap.put(JRBaseFont.PROPERTY_BOLD, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseFont.PROPERTY_STRIKE_THROUGH, new DefaultValue(Boolean.FALSE, true));
+		defaultsMap.put(JRBaseFont.PROPERTY_UNDERLINE, new DefaultValue(Boolean.FALSE, true));
+		defaultsMap.put(JRBaseFont.PROPERTY_ITALIC, new DefaultValue(Boolean.FALSE, true));
+		defaultsMap.put(JRBaseFont.PROPERTY_BOLD, new DefaultValue(Boolean.FALSE, true));
 		
 		return defaultsMap;
 	}

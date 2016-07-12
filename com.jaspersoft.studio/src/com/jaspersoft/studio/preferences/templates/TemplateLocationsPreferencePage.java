@@ -50,6 +50,9 @@ public class TemplateLocationsPreferencePage extends FieldEditorOverlayPage {
 				new PathEditor(TPP_TEMPLATES_LOCATIONS_LIST,
 						Messages.TemplateLocationsPreferencePage_Locations, 
 						Messages.TemplateLocationsPreferencePage_Message,getFieldEditorParent()));
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 }

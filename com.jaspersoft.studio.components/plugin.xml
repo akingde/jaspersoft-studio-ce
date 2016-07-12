@@ -1088,7 +1088,7 @@
       </initializer>
    </extension>
    <extension
-         point="com.jaspersoft.studio.preferencePageExtension">
+         point="net.sf.jasperreports.preferencePageExtension">
       <pageExtension
             class="com.jaspersoft.studio.components.preferences.ComponentsPreferencePageExtension"
             extendedPageId="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"

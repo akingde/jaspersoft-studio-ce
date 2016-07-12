@@ -36,9 +36,4 @@ public class PathsPreferencePage extends FieldEditorOverlayPage {
 	public String getPageId() {
 		return PAGE_ID;
 	}
-
-	@Override
-	protected void createFieldEditors() {
-	}
-
 }

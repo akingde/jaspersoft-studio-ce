@@ -140,6 +140,9 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		createTabSecurity(tabFolder);
 
 		tabFolder.setSelection(0);
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	private void createTabMetadata(CTabFolder tabFolder) {

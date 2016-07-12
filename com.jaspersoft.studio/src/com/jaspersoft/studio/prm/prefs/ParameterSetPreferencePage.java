@@ -31,6 +31,9 @@ public class ParameterSetPreferencePage extends FieldEditorOverlayPage {
 	 */
 	public void createFieldEditors() {
 		addField(new ParameterSetFieldEditor("abcd", getFieldEditorParent())); //$NON-NLS-1$
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	/*

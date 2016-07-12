@@ -43,6 +43,9 @@ public class FontsPreferencePage extends FieldEditorOverlayPage {
 	 */
 	public void createFieldEditors() {
 		addField(new FontListFieldEditor("FONT_LIST", Messages.FontsPreferencePage_fontListTitle, getFieldEditorParent())); //$NON-NLS-1$
+	
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

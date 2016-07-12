@@ -85,6 +85,9 @@ public class InputControlsPreferencePage extends FieldEditorOverlayPage {
 		addField(new StringFieldEditor(JSS_DATE_FORMAT, Messages.InputControlsPreferencePage_7, getFieldEditorParent()));
 		addField(new StringFieldEditor(JSS_TIME_FORMAT, Messages.InputControlsPreferencePage_8, getFieldEditorParent()));
 		addField(new StringFieldEditor(JSS_TIMESTAMP_FORMAT, Messages.InputControlsPreferencePage_9, getFieldEditorParent()));
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	/*

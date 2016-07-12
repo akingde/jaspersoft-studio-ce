@@ -20,8 +20,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.components.commonstyles.messages.Messages;
-import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
-import com.jaspersoft.studio.preferences.util.IPreferencePageExtension;
+
+import net.sf.jasperreports.eclipse.preferences.IPreferenceExtendablePage;
+import net.sf.jasperreports.eclipse.preferences.IPreferencePageExtension;
 
 /**
  * Preference extension page to add to the designer preference page the controls to 
@@ -97,13 +98,12 @@ public class ComponentsPreferencePageExtension implements IPreferencePageExtensi
 	 * Create the two combo for the style preferences
 	 */
 	@Override
-	public void createContributedFields(Composite parent, FieldEditorOverlayPage page) {
+	public void createContributedFields(Composite parent, IPreferenceExtendablePage page) {
 		
 		Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		separator.setLayoutData(gd);
-		
 		
 		page.addField(new ComboFieldEditor(BEHAVIOR_ON_ELEMENT_DELETE, Messages.ComponentsPreferencePageExtension_preferenceDelete,
 				new String[][] { 

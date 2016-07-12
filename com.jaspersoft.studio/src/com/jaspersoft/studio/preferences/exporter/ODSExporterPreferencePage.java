@@ -94,6 +94,9 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 		createJExcelAPI(tabFolder);
 
 		tabFolder.setSelection(0);
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	private void createTabCommons(CTabFolder tabFolder) {

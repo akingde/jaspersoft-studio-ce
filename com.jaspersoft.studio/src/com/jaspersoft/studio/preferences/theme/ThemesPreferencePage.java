@@ -151,6 +151,9 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 			}
 		};
 		comboeditor.addSelectionListener(comboListener);
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	class NewDialog extends Dialog {

@@ -39,6 +39,9 @@ public class ToolItemsPreferencePage extends FieldEditorOverlayPage {
 			BooleanFieldEditor beditor = new BooleanFieldEditor(tis.getId(), tis.getName(), fieldEditorParent);
 			addField(beditor);
 		}
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

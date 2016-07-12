@@ -43,6 +43,9 @@ public class CVCDescriptorsPreferencePage extends FieldEditorOverlayPage {
 		addField(new PathEditor(RESOURCE_PATHS,
 				Messages.CVCDescriptorsPreferencePage_1,
 				Messages.CVCDescriptorsPreferencePage_2, getFieldEditorParent()));
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 }

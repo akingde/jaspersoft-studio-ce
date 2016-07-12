@@ -55,6 +55,9 @@ public class G2DExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(fe);
 		HelpSystem.setHelp(fe.getTextControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + fe.getPreferenceName());
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

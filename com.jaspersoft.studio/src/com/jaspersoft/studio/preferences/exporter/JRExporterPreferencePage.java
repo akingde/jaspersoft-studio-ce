@@ -103,7 +103,9 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 		bf = new BooleanFieldEditor(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_HTML, Messages.JRExporterPreferencePage_0,
 				getFieldEditorParent());
 		addField(bf);
-
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

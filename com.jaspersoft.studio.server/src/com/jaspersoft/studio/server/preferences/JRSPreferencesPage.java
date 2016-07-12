@@ -47,6 +47,9 @@ public class JRSPreferencesPage extends FieldEditorOverlayPage {
 				new String[][] { { "Always Overwrite", "overwrite" },
 						{ "Overwrite for the first time, then ignore", "true" }, { "Always Ignore", "ignore" } },
 				getFieldEditorParent()));
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

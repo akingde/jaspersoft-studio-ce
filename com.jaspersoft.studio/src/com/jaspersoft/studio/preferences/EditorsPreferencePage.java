@@ -30,12 +30,6 @@ public class EditorsPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	@Override
-	protected void createFieldEditors() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public String getPageId() {
 		return PAGE_ID;
 	}

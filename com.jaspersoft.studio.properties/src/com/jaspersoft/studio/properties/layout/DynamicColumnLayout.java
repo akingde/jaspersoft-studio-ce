@@ -35,7 +35,7 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
  * @author Orlandin Marco
  *
  */
-public class DiynamicColumnLayout extends Layout{
+public class DynamicColumnLayout extends Layout{
 
 	/**
 	 * Horizontal spacing between columns (default is 5).
@@ -86,7 +86,7 @@ public class DiynamicColumnLayout extends Layout{
 	 * 
 	 * @param page the property page where this layout is used, must be not null
 	 */
-	public DiynamicColumnLayout(TabbedPropertySheetPage page) {
+	public DynamicColumnLayout(TabbedPropertySheetPage page) {
 		Assert.isNotNull(page);
 		this.page = page;
 		
@@ -98,11 +98,11 @@ public class DiynamicColumnLayout extends Layout{
 			
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
-				if (DiynamicColumnLayout.this.page.getTabbedPropertyComposite().isDisposed()){
+				if (DynamicColumnLayout.this.page.getTabbedPropertyComposite().isDisposed()){
 					prefStore.removePropertyChangeListener(this);
 				} else if (event.getProperty().equals(PropertiesPreferencePage.SINGLE_COLUMN_ID)){
 					forceSingleColumn = prefStore.getBoolean(PropertiesPreferencePage.SINGLE_COLUMN_ID);
-					DiynamicColumnLayout.this.page.getTabbedPropertyComposite().layout(true, true);
+					DynamicColumnLayout.this.page.getTabbedPropertyComposite().layout(true, true);
 				}
 			}
 		});

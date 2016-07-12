@@ -153,6 +153,9 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		enableLimitRecords(getPreferenceStore().getBoolean(JSS_LIMIT_RECORDS));
 
 		enableSwapVirtualizer(vtype.equals(VirtualizerType.SWAP));
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	private VirtualizerType getVirtualizerType(String type) {

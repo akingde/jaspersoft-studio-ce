@@ -90,7 +90,9 @@ public class RulersGridPreferencePage extends FieldEditorOverlayPage {
 		addField(spaceY);
 
 		addField(new ColorFieldEditor(P_PAGE_GRID_COLOR, Messages.RulersGridPreferencePage_common_gridcolor, group));
-
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

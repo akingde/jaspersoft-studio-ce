@@ -35,7 +35,7 @@ public class SPBooleanToggle extends ASPropertyWidget<CheckBoxPropertyDescriptor
 
 	@Override
 	public Control getControl() {
-		return null;
+		return parent;
 	}
 
 	@Override

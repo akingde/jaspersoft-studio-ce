@@ -21,7 +21,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.properties.layout.DiynamicColumnLayout;
+import com.jaspersoft.studio.properties.layout.DynamicColumnLayout;
 
 /**
  * A property tab is composed by one or more property sections and is used to
@@ -99,7 +99,7 @@ public final class TabContents {
 		
 		if (sections.length > 1){
 			Composite pageComposite = page.getWidgetFactory().createComposite(parent, SWT.NO_FOCUS);
-			DiynamicColumnLayout layout = new DiynamicColumnLayout(page);
+			DynamicColumnLayout layout = new DynamicColumnLayout(page);
 			layout.leftMargin = 0;
 			layout.topMargin = 0;
 			layout.verticalSpacing = 0;

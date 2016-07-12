@@ -56,6 +56,9 @@ public class XMLExporterPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent());
 		ffe.setFileExtensions(new String[] { ".dtd" }); //$NON-NLS-1$
 		addField(ffe);
+		
+		//Eventually create the extensions for the page
+		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

@@ -49,14 +49,17 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.PreferenceInitializer;
 import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
+import net.sf.jasperreports.eclipse.preferences.IPreferenceExtendablePage;
+import net.sf.jasperreports.eclipse.preferences.IPreferencePageExtension;
+import net.sf.jasperreports.eclipse.preferences.PreferencesExtensionsManager;
 import net.sf.jasperreports.eclipse.util.ResourcePreferences;
 
-public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage implements IWorkbenchPropertyPage, IWorkbenchPreferencePage {
+public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage implements IWorkbenchPropertyPage, IWorkbenchPreferencePage, IPreferenceExtendablePage {
+	
 	public static final String RESOURCE = "resource";
 
 	private static final String PROJECT = "project";
@@ -124,13 +127,6 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		super(title, image, style);
 		this.image = image;
 	}
-
-	/**
-	 * Returns the id of the current preference page as defined in plugin.xml Subclasses must implement.
-	 * 
-	 * @return - the qualifier
-	 */
-	public abstract String getPageId();
 
 	/**
 	 * Receives the object that owns the properties shown in this property page.
@@ -443,7 +439,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 				confPrjButton.setEnabled(false);
 			updateFieldEditors();
 		}
-		List<IPreferencePageExtension> subPages = ExtensionManager.getContributedPreferencePages(getPageId());
+		List<IPreferencePageExtension> subPages = PreferencesExtensionsManager.getContributedPreferencePages(getPageId());
 		if (subPages != null){
 			for(IPreferencePageExtension page : subPages){
 				page.performDefaults();
@@ -504,7 +500,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 */
 	@Override
 	protected void performApply() {
-		List<IPreferencePageExtension> subPages = ExtensionManager.getContributedPreferencePages(getPageId());
+		List<IPreferencePageExtension> subPages = PreferencesExtensionsManager.getContributedPreferencePages(getPageId());
 		if (subPages != null){
 			for(IPreferencePageExtension page : subPages){
 				page.performApply();
@@ -518,7 +514,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 */
 	@Override
 	public boolean performCancel() {
-		List<IPreferencePageExtension> subPages = ExtensionManager.getContributedPreferencePages(getPageId());
+		List<IPreferencePageExtension> subPages = PreferencesExtensionsManager.getContributedPreferencePages(getPageId());
 		if (subPages != null){
 			for(IPreferencePageExtension page : subPages){
 				page.performCancel();
@@ -531,7 +527,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 * Create on this page all the contributed preferences controls 
 	 */
 	protected void createContributedPreferences(){
-		List<IPreferencePageExtension> subPages = ExtensionManager.getContributedPreferencePages(getPageId());
+		List<IPreferencePageExtension> subPages = PreferencesExtensionsManager.getContributedPreferencePages(getPageId());
 		if (subPages != null){
 			for(IPreferencePageExtension page : subPages){
 				page.createContributedFields(getFieldEditorParent(), this);
@@ -540,7 +536,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	}
 	
 	/**
-	 * By default this create only the extension of the page
+	 * By default this create only the contributed extensions of the page
 	 */
 	@Override
 	protected void createFieldEditors() {
