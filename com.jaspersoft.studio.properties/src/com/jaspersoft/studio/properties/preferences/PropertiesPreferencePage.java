@@ -65,6 +65,7 @@ public class PropertiesPreferencePage implements IPreferencePageExtension {
 			}
 			
 		};
+		be.getDescriptionControl(parent).setToolTipText(Messages.PropertiesPreferencePage_singleColumnTooltip);
 		page.addField(be);
 	}
 

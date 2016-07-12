@@ -37,6 +37,8 @@ public final class Messages extends NLS {
 
 	public static String PropertiesPreferencePage_singleColumnProperty;
 
+	public static String PropertiesPreferencePage_singleColumnTooltip;
+
 	/**
 	 * Message when a property section extension is in error.
 	 */
