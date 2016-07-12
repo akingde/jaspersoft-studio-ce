@@ -239,6 +239,8 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				for(CopyElementExpressionProperty property : copiedProperties){
 					if (!value.hasProperty(property.getPropertyName(), property.isExpression())){
 						value.addProperty(property.getPropertyName(), property.getValue(), property.isExpression());
+					} else {
+						value.setProperty(property.getPropertyName(), property.getValue(), property.isExpression());
 					}
 				}
 				tableViewer.setInput(value.getProperties());
@@ -255,7 +257,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				if (Clipboard.getDefault().getContents() instanceof PastableProperties){
 					PastableProperties pasteContainer = (PastableProperties)Clipboard.getDefault().getContents();
 					List<CopyElementExpressionProperty> copiedProperties = pasteContainer.getCopiedProperties();
-					pasteEnabled = copiedProperties != null && !copiedProperties.isEmpty() && canPaste(copiedProperties); 
+					pasteEnabled = canPaste(copiedProperties); 
 				} 
 				pasteItem.setEnabled(pasteEnabled);
 			}
@@ -275,12 +277,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	 * @return true if at least one of the copied properties can be pasted, false otherwise
 	 */
 	private boolean canPaste(List<CopyElementExpressionProperty> copiedProperties){
-		for(CopyElementExpressionProperty property : copiedProperties){
-			if (!value.hasProperty(property.getPropertyName(), property.isExpression())){
-				return true;
-			}
-		}
-		return false;
+		return copiedProperties != null && !copiedProperties.isEmpty();
 	}
 
 	private void fillTable() {
