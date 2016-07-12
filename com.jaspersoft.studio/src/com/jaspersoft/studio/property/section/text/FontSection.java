@@ -68,14 +68,31 @@ public class FontSection extends AbstractRealValueSection {
 		createWidget4Property(firstLineContainer, MFont.FONT_INCREMENT, false);
 
 		//END OF THE FIRS LINE
-		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		Composite buttonContainer = new Composite(group, SWT.NONE);
+		GridLayout buttonContainerLayout = new GridLayout(4, false);
+		buttonContainerLayout.horizontalSpacing = 0;
+		buttonContainerLayout.marginHeight = 0;
+		buttonContainerLayout.marginWidth = 0;
+		buttonContainerLayout.verticalSpacing = 0;
+		buttonContainer.setLayout(buttonContainerLayout);
+		buttonContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		createButton(buttonContainer, JRBaseStyle.PROPERTY_BOLD);
+		createButton(buttonContainer, JRBaseStyle.PROPERTY_ITALIC);
+		createButton(buttonContainer, JRBaseStyle.PROPERTY_UNDERLINE);
+		createButton(buttonContainer, JRBaseStyle.PROPERTY_STRIKE_THROUGH);
+	}
+	
+	/**
+	 * Create every button in its own container, this help to handle the toolbar contextual
+	 * menu, since the menu is on the toolbar, not on the item
+	 */
+	protected void createButton(Composite parent, String propertyId){
+		ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.WRAP | SWT.LEFT);
 		GridData gd = new GridData();
 		gd.horizontalAlignment = SWT.LEFT;
 		toolBar.setLayoutData(gd);
-		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_BOLD, false);
-		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_ITALIC, false);
-		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_UNDERLINE, false);
-		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_STRIKE_THROUGH, false);
+		createWidget4Property(toolBar, propertyId, false);
 	}
 
 	protected Composite createFontSection(Composite parent) {

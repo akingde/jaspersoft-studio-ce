@@ -483,10 +483,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, new DefaultValue(null, true));
 
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, new DefaultValue(Boolean.FALSE, false));
-		defaultsMap.put(JRBaseStyle.PROPERTY_STRIKE_THROUGH, new DefaultValue(Boolean.FALSE, false));
-		defaultsMap.put(JRBaseStyle.PROPERTY_UNDERLINE, new DefaultValue(Boolean.FALSE, false));
-		defaultsMap.put(JRBaseStyle.PROPERTY_ITALIC, new DefaultValue(Boolean.FALSE, false));
-		defaultsMap.put(JRBaseStyle.PROPERTY_BOLD, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseStyle.PROPERTY_STRIKE_THROUGH, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_UNDERLINE, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_ITALIC, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_BOLD, new DefaultValue(null, true));
 		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_NAME, new DefaultValue("SansSerif", true)); //$NON-NLS-1$
 		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, new DefaultValue(10f, true)); //$NON-NLS-1$
 		
