@@ -17,14 +17,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRRuntimeException;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.repo.FileRepositoryService;
-import net.sf.jasperreports.repo.RepositoryService;
-import net.sf.jasperreports.repo.Resource;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
@@ -36,7 +28,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.export.AExporter;
@@ -49,6 +40,14 @@ import com.jaspersoft.studio.utils.Callback;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRRuntimeException;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.repo.FileRepositoryService;
+import net.sf.jasperreports.repo.RepositoryService;
+import net.sf.jasperreports.repo.Resource;
 
 public class JRSRepositoryService implements RepositoryService {
 	private JSSFileRepositoryService parent;
