@@ -40,6 +40,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
+import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jasper.JSSReportConverter;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -104,6 +105,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 */
 	public static final String KEY_CONVERTER = "REPORT_CONVERTER";
 	
+	public static final String RESOURCE_LOADED = "RESOURCE_LOADED";
+	
 	/**
 	 * The key which identified the file being edited
 	 */
@@ -131,6 +134,27 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			}
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "preferences", null, event));
 		}
+	}
+	
+	/**
+	 * When an event of resource loaded happen it rebuild the extrenral styles in the
+	 * report drawer and trigger a refresh of the editor
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private final class ResourceLoadedListener implements PropertyChangeListener {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(RESOURCE_LOADED)){
+				//Not sure if the resource is a style, so this call will regenerate first the styles 
+				//and trigger a complete refresh of the editor. Doing so it will cover every case of
+				//late loading of a resource
+				refreshCachedStyles();
+			}
+		}
+		
 	}
 
 	private class ClasspathListener implements PropertyChangeListener {
@@ -166,9 +190,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 	}
 
-	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);;
+	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	private ClasspathListener classpathlistener;
 	private PreferenceListener preferenceListener;
+	private ResourceLoadedListener resourceLoadedListener;
 	private String qualifier;
 	private String[] fontList;
 	private boolean refreshFonts = true;
@@ -234,10 +259,16 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		// file changed, reset properties
 		isPropsCached = false;
+		
 		// service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 		if (preferenceListener == null) {
 			preferenceListener = new PreferenceListener();
 			JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
+		}
+		
+		if (resourceLoadedListener == null){
+			resourceLoadedListener = new ResourceLoadedListener();
+			getPropertyChangeSupport().addPropertyChangeListener(resourceLoadedListener);
 		}
 	}
 
@@ -328,7 +359,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 
 	public void dispose() {
 		ExpressionUtil.removeAllReportInterpreters(this);
+		ExternalStylesManager.removeCachedStyles(this);
 		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
+		getPropertyChangeSupport().removePropertyChangeListener(resourceLoadedListener);
 		if (javaclassloader != null)
 			javaclassloader.removeClasspathListener(classpathlistener);
 		for (PropertyChangeListener l : Arrays.asList(propertyChangeSupport.getPropertyChangeListeners())) {

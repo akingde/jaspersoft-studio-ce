@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -26,7 +27,6 @@ import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRReportTemplate;
@@ -49,7 +49,7 @@ public class ExternalStylesManager {
 	/**
 	 * Map of the cached styles, the key is the absolute path to the template file
 	 */
-	private static HashMap<String, Pair<JRTemplate, List<JRStyle>>> externalStylesCache = new HashMap<String, Pair<JRTemplate, List<JRStyle>>>();
+	private static HashMap<String, StyleCacheEntry> externalStylesCache = new HashMap<String, StyleCacheEntry>();
 	
 	/**
 	 * Initialize the appropriate listener
@@ -195,13 +195,13 @@ public class ExternalStylesManager {
 			String projectPath = project.getLocation().toPortableString();
 			String key = projectPath + location;
 			if (externalStylesCache.containsKey(key)){
-				return externalStylesCache.get(key).getKey();
+				return externalStylesCache.get(key).getTemplate();
 			} else {
 				try {
 					JRTemplate resolvedTemplate = JRXmlTemplateLoader.getInstance(jConf).loadTemplate(location);
 					List<JRStyle> templateStyles = new ArrayList<JRStyle>();
 					loadTemplateStyle(resolvedTemplate, location, jConf, templateStyles);
-					Pair<JRTemplate, List<JRStyle>> cacheEntry = new Pair<JRTemplate, List<JRStyle>>(resolvedTemplate, templateStyles);
+					StyleCacheEntry cacheEntry = new StyleCacheEntry(resolvedTemplate, jConf, templateStyles);
 					externalStylesCache.put(key, cacheEntry);
 					if (!isNestedCall) jConf.refreshCachedStyles();
 					return resolvedTemplate;
@@ -356,12 +356,12 @@ public class ExternalStylesManager {
 			String projectPath = project.getLocation().toPortableString();
 			String key = projectPath + evaluatedExpression;
 			if (externalStylesCache.containsKey(key)){
-				return externalStylesCache.get(key).getValue();
+				return externalStylesCache.get(key).getStyles();
 			} else {
 				JRTemplate loadedTemplate = getTemplate(jConfig, evaluatedExpression);
 				if (loadedTemplate != null){
 					fireEvent(STYLE_FOUND_EVENT, style);
-					return externalStylesCache.get(key).getValue();
+					return externalStylesCache.get(key).getStyles();
 				} else {
 					fireEvent(STYLE_NOT_FOUND_EVENT, style);
 				}
@@ -408,5 +408,20 @@ public class ExternalStylesManager {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Unload for a specific configuration all the template styles requested by it
+	 * 
+	 * @param jConfig a not null {@link JasperReportsConfiguration}, who requested the load
+	 * of the styles
+	 */
+	public synchronized static void removeCachedStyles(JasperReportsConfiguration jConfig){
+		List<Entry<String, StyleCacheEntry>> entries = new ArrayList<Entry<String,StyleCacheEntry>>(externalStylesCache.entrySet());
+		for(Entry<String, StyleCacheEntry> entry : entries){
+			if (entry.getValue().getConfig() == jConfig){
+				externalStylesCache.remove(entry.getKey());
+			}
+		}
 	}
 }
