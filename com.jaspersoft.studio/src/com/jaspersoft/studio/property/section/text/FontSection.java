@@ -52,18 +52,18 @@ public class FontSection extends AbstractRealValueSection {
 		firstLineContainerLayout.marginWidth = 0;
 		firstLineContainer.setLayout(firstLineContainerLayout);
 		GridData firtstLineContainerData = new GridData(GridData.FILL_HORIZONTAL);
-		firtstLineContainerData.minimumWidth = 320;
+		firtstLineContainerData.minimumWidth = 300;
 		firstLineContainer.setLayoutData(firtstLineContainerData);
 		
-		createWidget4Property(firstLineContainer, JRBaseStyle.PROPERTY_FONT_NAME, false);
+		GridData fontNameData = new GridData(GridData.FILL_HORIZONTAL);
+		fontNameData.minimumWidth = 150;
+		fontNameData.minimumWidth = 150;
+		createWidget4Property(firstLineContainer, JRBaseStyle.PROPERTY_FONT_NAME, false).getControl().setLayoutData(fontNameData);
 		
-		Composite fontSizeComposite = new Composite(firstLineContainer, SWT.NONE);
 		GridData fontSizeData = new GridData();
-		fontSizeData.widthHint = 65;
 		fontSizeData.minimumWidth = 65;
-		fontSizeComposite.setLayout(new GridLayout(1, false));
-		fontSizeComposite.setLayoutData(fontSizeData);
-		createWidget4Property(fontSizeComposite, JRBaseStyle.PROPERTY_FONT_SIZE, false).getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		fontSizeData.widthHint = 65;
+		createWidget4Property(firstLineContainer, JRBaseStyle.PROPERTY_FONT_SIZE, false).getControl().setLayoutData(fontSizeData);
 
 		createWidget4Property(firstLineContainer, MFont.FONT_INCREMENT, false);
 

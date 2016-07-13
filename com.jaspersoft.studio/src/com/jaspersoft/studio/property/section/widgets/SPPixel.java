@@ -943,6 +943,21 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	}
 	
 	/**
+	 * Change the text color if the attribute is overridden or not
+	 */
+	@Override
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		setData(pnode, resolvedValue);
+		if (insertField != null && !insertField.isDisposed()){
+			if (elementValue != null){
+				insertField.setForeground(ColorConstants.black);
+			} else {
+				insertField.setForeground(ColorConstants.gray);
+			}
+		}
+	}
+	
+	/**
 	 * Check if the measure unit should be saved into the jr element
 	 * 
 	 * @return true if the unit should be saved, false otherwise

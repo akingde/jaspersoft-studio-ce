@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -19,6 +20,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.tabstops.TabStopsPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
@@ -239,6 +241,19 @@ public class MParagraph extends APropertyNode {
 		return result;
 	}
 
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaults = super.createDefaultsMap();
+		defaults.put(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE, new DefaultValue(true));
+		defaults.put(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT, new DefaultValue(true));
+		defaults.put(JRBaseParagraph.PROPERTY_LEFT_INDENT, new DefaultValue(true));
+		defaults.put(JRBaseParagraph.PROPERTY_RIGHT_INDENT, new DefaultValue(true));
+		defaults.put(JRBaseParagraph.PROPERTY_SPACING_BEFORE, new DefaultValue(true));
+		defaults.put(JRBaseParagraph.PROPERTY_SPACING_AFTER, new DefaultValue(true));
+		defaults.put(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH, new DefaultValue(true));
+		return defaults;
+	}
+	
 	public String getDisplayText() {
 		return null;
 	}
