@@ -23,13 +23,13 @@ public class ChecksumMode {
 	public static int getPos4ChecksumMode(String mode) {
 		if (mode == null) // $NON-NLS-1$
 			return 0;
-		if (mode.equals("Auto")) //$NON-NLS-1$
+		if (mode.equalsIgnoreCase("Auto")) //$NON-NLS-1$
 			return 1;
-		if (mode.equals("Ignore")) //$NON-NLS-1$
+		if (mode.equalsIgnoreCase("Ignore")) //$NON-NLS-1$
 			return 2;
-		if (mode.equals("Add")) //$NON-NLS-1$
+		if (mode.equalsIgnoreCase("Add")) //$NON-NLS-1$
 			return 3;
-		if (mode.equals("Check")) //$NON-NLS-1$
+		if (mode.equalsIgnoreCase("Check")) //$NON-NLS-1$
 			return 4;
 		return 0;
 	}
@@ -39,13 +39,13 @@ public class ChecksumMode {
 		case 0:
 			return null; // $NON-NLS-1$
 		case 1:
-			return "Auto"; //$NON-NLS-1$
+			return "auto"; //$NON-NLS-1$
 		case 2:
-			return "Ignore"; //$NON-NLS-1$
+			return "ignore"; //$NON-NLS-1$
 		case 3:
-			return "Add"; //$NON-NLS-1$
+			return "add"; //$NON-NLS-1$
 		case 4:
-			return "Check"; //$NON-NLS-1$
+			return "check"; //$NON-NLS-1$
 		}
 		return null;
 	}
