@@ -781,6 +781,15 @@
                   type="com.jaspersoft.studio.components.barcode.model.barcode4j.MUSPSIntelligent">
             </input>
          </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.RoyalMailSection"
+               id="com.jaspersoft.studio.components.barcode.property.RoyalMailSection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MRoyalMail">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
