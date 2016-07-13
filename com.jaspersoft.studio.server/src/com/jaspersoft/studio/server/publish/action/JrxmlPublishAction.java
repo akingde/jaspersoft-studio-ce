@@ -14,11 +14,6 @@ package com.jaspersoft.studio.server.publish.action;
 
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -32,6 +27,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -43,6 +39,11 @@ import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard;
 import com.jaspersoft.studio.utils.AContributorAction;
+
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class JrxmlPublishAction extends AContributorAction {
 	private static final String ID = "PUBLISHJRXML"; //$NON-NLS-1$
@@ -153,7 +154,8 @@ public class JrxmlPublishAction extends AContributorAction {
 												showdialog = true;
 												break;
 											}
-										}
+										} else if (obj instanceof AFileResource)
+											po.setOverwrite(OverwriteEnum.ONLY_EXPRESSION);
 									}
 								}
 							}
