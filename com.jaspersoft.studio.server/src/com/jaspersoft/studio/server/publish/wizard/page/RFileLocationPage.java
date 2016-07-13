@@ -297,7 +297,8 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 					try {
 						getContainer().run(false, true, new IRunnableWithProgress() {
 
-							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+							public void run(IProgressMonitor monitor)
+									throws InvocationTargetException, InterruptedException {
 								monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
 								try {
 									if (serverProvider == null)
@@ -336,8 +337,9 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 			ResourceDescriptor rd = AFileResource.createDescriptor(null);
 			rd.setWsType(ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 			rd.setName(null);
-			PublishUtil.initResourceName(file.getName(), rd);
-			rd.setLabel(file.getName());
+			String n = file != null ? file.getName() : "reportunit";
+			PublishUtil.initResourceName(n, rd);
+			rd.setLabel(n);
 			newRes = new MContentResource(null, rd, -1);
 			newRes.setJasperConfiguration(jConfig);
 		}
@@ -418,12 +420,14 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 						if (suri != null) {
 							MServerProfile msp = null;
 							for (INode n : servers.getChildren()) {
-								if (n instanceof MServerProfile && ((MServerProfile) n).getValue().getUrl().equals(suri)) {
+								if (n instanceof MServerProfile
+										&& ((MServerProfile) n).getValue().getUrl().equals(suri)) {
 									if (suser != null) {
 										String[] usr = suser.split("\\|"); //$NON-NLS-1$
 										if (!((MServerProfile) n).getValue().getUser().equals(usr[0]))
 											continue;
-										if (usr.length > 1 && !((MServerProfile) n).getValue().getOrganisation().equals(usr[1]))
+										if (usr.length > 1
+												&& !((MServerProfile) n).getValue().getOrganisation().equals(usr[1]))
 											continue;
 									}
 									msp = (MServerProfile) n;
@@ -440,7 +444,8 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 					}
 				}
 
-				private boolean selectResource(MServerProfile msp, String uri, IProgressMonitor monitor) throws Exception {
+				private boolean selectResource(MServerProfile msp, String uri, IProgressMonitor monitor)
+						throws Exception {
 					if (monitor.isCanceled())
 						return true;
 					ResourceDescriptor rd = new ResourceDescriptor();
