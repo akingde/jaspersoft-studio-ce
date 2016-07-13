@@ -424,4 +424,20 @@ public class ExternalStylesManager {
 			}
 		}
 	}
+	
+	/**
+	 * Remove a single style from the cache
+	 * 
+	 * @param jConfig the config of the report where the template is defined
+	 * @param template the template that should be removed from the cache
+	 */
+	public synchronized static void removeCachedStyle(JasperReportsConfiguration jConfig, JRReportTemplate template){
+		IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		String evaluatedExpression = evaluateStyleExpression(template, project, jConfig);
+		if (evaluatedExpression != null) {
+			String projectPath = project.getLocation().toPortableString();
+			String key = projectPath + evaluatedExpression;
+			externalStylesCache.remove(key);
+		}
+	}
 }

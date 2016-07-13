@@ -148,6 +148,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(RESOURCE_LOADED)){
+				//clear the style cache of this configuration, since a resource could be changed for it
+				//and styles need to be loaded another time
+				ExternalStylesManager.removeCachedStyles(JasperReportsConfiguration.this);
 				//Not sure if the resource is a style, so this call will regenerate first the styles 
 				//and trigger a complete refresh of the editor. Doing so it will cover every case of
 				//late loading of a resource
