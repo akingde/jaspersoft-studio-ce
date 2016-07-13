@@ -67,12 +67,10 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	private static IPropertyDescriptor[] descriptors;
 
 	/**
-	 * Timeout to trigger the refresh Job. The refresh job is used to search the template style resource when it is not
-	 * found, it is triggered when the value of the style is set of when its expression change. A job in background is
-	 * necessary because sometime not all the resources are immediatly available (i.e. resource on the server) and need to
-	 * refresh them until they are found
+	 * Timeout time to wait between the end of an expression change and the refresh of the 
+	 * element content. Used to avoid to many refresh when the user write
 	 */
-	private static final int UPDATE_DELAY = 5000;
+	private static final int UPDATE_DELAY=500;
 
 	/**
 	 * The job that update the styles content in background
@@ -267,13 +265,9 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 				@Override
 				public void run() {
 					if (getParent() != null && getValue() != null) {
-						boolean result = refreshChildren();
-						monitor.done();
-						if (!result) {
-							// If the resource is not found trigger another search
-							performUpdate();
-						}
+						refreshChildren();
 					}
+					monitor.done();
 				}
 			});
 			return Status.OK_STATUS;
@@ -294,11 +288,11 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 * the old one is no more necessary, so it is cancelled
 	 */
 	private void performUpdate() {
-		// if (updateStyleJob == null){
-		// updateStyleJob = new UpdateStyleJob();
-		// }
-		// updateStyleJob.cancel();
-		// updateStyleJob.schedule(UPDATE_DELAY);
+		if (updateStyleJob == null){
+			updateStyleJob = new UpdateStyleJob();
+		}
+		updateStyleJob.cancel();
+		updateStyleJob.schedule(UPDATE_DELAY);
 	}
 
 	/**
