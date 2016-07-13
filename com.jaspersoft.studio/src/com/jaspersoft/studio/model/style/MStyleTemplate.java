@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.style;
 
@@ -47,37 +43,37 @@ import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 
 /**
- * The Class MStyleTemplate. It will also listen on the change of the style expression to reload
- * the style children when it changes
+ * The Class MStyleTemplate. It will also listen on the change of the style expression to reload the style children when
+ * it changes
  * 
  * @author Chicu Veaceslav & Orlandin Marco
  */
 public class MStyleTemplate extends APropertyNode implements IPropertySource, ICopyable {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
+
 	/**
 	 * Icon used when the style can not be resolved
 	 */
-	private static ImageDescriptor styleNotFoundImage = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/no_style_error.png");
-	
+	private static ImageDescriptor styleNotFoundImage = JaspersoftStudioPlugin.getInstance()
+			.getImageDescriptor("icons/resources/no_style_error.png");
+
 	/**
 	 * Array of the descriptors of the element
 	 */
 	private static IPropertyDescriptor[] descriptors;
 
 	/**
-	 * Timeout to trigger the refresh Job. The refresh job is used to 
-	 * search the template style resource when it is not found, it is triggered when
-	 * the value of the style is set of when its expression change. A job in background is
-	 * necessary because sometime not all the resources are immediatly available (i.e. resource
-	 * on the server) and need to refresh them until they are found
+	 * Timeout to trigger the refresh Job. The refresh job is used to search the template style resource when it is not
+	 * found, it is triggered when the value of the style is set of when its expression change. A job in background is
+	 * necessary because sometime not all the resources are immediatly available (i.e. resource on the server) and need to
+	 * refresh them until they are found
 	 */
-	private static final int UPDATE_DELAY=5000;
-	
+	private static final int UPDATE_DELAY = 5000;
+
 	/**
 	 * The job that update the styles content in background
 	 */
@@ -103,7 +99,6 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#template");
 	}
 
-	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -114,12 +109,12 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 			iconDescriptor = new NodeIconDescriptor("styletemplate"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
-	
+
 	/**
 	 * Empty constructor used by the palett builder, do not remove
 	 */
-	public MStyleTemplate(){
-		
+	public MStyleTemplate() {
+
 	}
 
 	/**
@@ -145,36 +140,37 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 */
 	public String getDisplayText() {
 		JRDesignReportTemplate jt = (JRDesignReportTemplate) getValue();
-		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null){
-			return  getIconDescriptor().getTitle() + "(" + jt.getSourceExpression().getText() + ")";
+		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null) {
+			return getIconDescriptor().getTitle() + "(" + jt.getSourceExpression().getText() + ")";
 		}
 		return getIconDescriptor().getTitle();
 	}
-	
+
 	/**
-	 * Return the image for this element, the image change if the style can not be resolved, in this 
-	 * way we can show something like an error decorator if the expression of the style is not solvable
+	 * Return the image for this element, the image change if the style can not be resolved, in this way we can show
+	 * something like an error decorator if the expression of the style is not solvable
 	 */
 	public ImageDescriptor getImagePath() {
 		JRDesignReportTemplate jt = (JRDesignReportTemplate) getValue();
-		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null && ExternalStylesManager.isNotValuable(this)){
+		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null
+				&& ExternalStylesManager.isNotValuable(this)) {
 			return styleNotFoundImage;
 		}
 		return getIconDescriptor().getIcon16();
 	}
 
 	/**
-	 * Return the textual tooltip of the style. If its expression can not be solved an error message is also 
-	 * shown
+	 * Return the textual tooltip of the style. If its expression can not be solved an error message is also shown
 	 */
 	@Override
 	public String getToolTip() {
 		JRDesignReportTemplate jt = (JRDesignReportTemplate) getValue();
-		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null && ExternalStylesManager.isNotValuable(this)){
+		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null
+				&& ExternalStylesManager.isNotValuable(this)) {
 			return "The resource can not be found, fix the expression and reload the style to use it";
-		} else 	return getIconDescriptor().getToolTip();
+		} else
+			return getIconDescriptor().getToolTip();
 	}
-
 
 	/*
 	 * (non-Javadoc)
@@ -199,24 +195,24 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION))
 			jrTemplate.setSourceExpression(ExprUtil.setValues(jrTemplate.getSourceExpression(), value));
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		//If the expression change try to reload the style
-		if (evt.getPropertyName().equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION)){
+		// If the expression change try to reload the style
+		if (evt.getPropertyName().equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION)) {
 			performUpdate();
 		}
 		super.propertyChange(evt);
 	}
-	
+
 	/**
-	 * Since the style don't see when its children are updated (because the the relation between 
-	 * style template and its inner styles is done only by our model, not by the jr structure). So
-	 * when we add children to a style JR don't fire any event. Because of this to have a graphical 
-	 * Refresh we must fire the event manually to have the update and see the children 
+	 * Since the style don't see when its children are updated (because the the relation between style template and its
+	 * inner styles is done only by our model, not by the jr structure). So when we add children to a style JR don't fire
+	 * any event. Because of this to have a graphical Refresh we must fire the event manually to have the update and see
+	 * the children
 	 */
-	private void fireChildrenChangeEvent(){
-		//Need to be executed inside the graphic thread
+	private void fireChildrenChangeEvent() {
+		// Need to be executed inside the graphic thread
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -225,26 +221,26 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 			}
 		});
 	}
-	
+
 	/**
 	 * Refresh the children of a template style by reloading them from the external styles cache
 	 * 
 	 * @return true if the style resource was found, false otherwise
 	 */
-	public boolean refreshChildren(){
+	public boolean refreshChildren() {
 		JasperReportsConfiguration jConf = getJasperConfiguration();
-		if (jConf != null){
+		if (jConf != null) {
 			IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
 			JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
-			
-			//Clear the old children
-			for(INode child : new ArrayList<INode>(getChildren())){
-				((ANode)child).setParent(null, -1);
+
+			// Clear the old children
+			for (INode child : new ArrayList<INode>(getChildren())) {
+				((ANode) child).setParent(null, -1);
 			}
 			getChildren().clear();
-			
+
 			String path = ExternalStylesManager.evaluateStyleExpression(jrTemplate, project, jConf);
-			if (path != null){
+			if (path != null) {
 				boolean result = StyleTemplateFactory.createTemplateReference(this, path, -1, new HashSet<String>(), false);
 				fireChildrenChangeEvent();
 				return result;
@@ -252,30 +248,29 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Job to update the panel UI when expression text changes or
-	 * when caret is moved. This job is supposed to be delayed in order not to call
-	 * UI-update events too often (avoiding flickering effects).
+	 * Job to update the panel UI when expression text changes or when caret is moved. This job is supposed to be delayed
+	 * in order not to call UI-update events too often (avoiding flickering effects).
 	 */
 	private class UpdateStyleJob extends Job {
-		
-		public UpdateStyleJob(){
+
+		public UpdateStyleJob() {
 			super("RefreshStyles");
 			setSystem(true);
 		}
-		
+
 		@Override
-		public IStatus run(final IProgressMonitor monitor) {	
+		public IStatus run(final IProgressMonitor monitor) {
 			UIUtils.getDisplay().syncExec(new Runnable() {
-				
+
 				@Override
 				public void run() {
-					if (getParent() != null && getValue() != null){
+					if (getParent() != null && getValue() != null) {
 						boolean result = refreshChildren();
 						monitor.done();
-						if (!result){
-							//If the resource is not found trigger another search
+						if (!result) {
+							// If the resource is not found trigger another search
 							performUpdate();
 						}
 					}
@@ -284,28 +279,28 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 			return Status.OK_STATUS;
 		}
 	}
-	
+
 	/**
 	 * This reference, used by some inner class
 	 * 
 	 * @return this reference
 	 */
-	private MStyleTemplate getActualStyle(){
+	private MStyleTemplate getActualStyle() {
 		return this;
 	}
-	
+
 	/**
-	 * Create and schedule the background update thread and start it. If there was another
-	 * thread created it means that the old one is no more necessary, so it is cancelled
+	 * Create and schedule the background update thread and start it. If there was another thread created it means that
+	 * the old one is no more necessary, so it is cancelled
 	 */
 	private void performUpdate() {
-		if (updateStyleJob == null){
-			updateStyleJob = new UpdateStyleJob();
-		}
-		updateStyleJob.cancel();
-		updateStyleJob.schedule(UPDATE_DELAY);
+		// if (updateStyleJob == null){
+		// updateStyleJob = new UpdateStyleJob();
+		// }
+		// updateStyleJob.cancel();
+		// updateStyleJob.schedule(UPDATE_DELAY);
 	}
-	
+
 	/**
 	 * Creates the jr template.
 	 * 
@@ -326,7 +321,7 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	public boolean isCuttable(ISelection currentSelection) {
 		return true;
 	}
-	
+
 	@Override
 	public void setValue(Object value) {
 		super.setValue(value);

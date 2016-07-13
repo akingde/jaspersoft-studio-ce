@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.export.AExporter;
@@ -69,7 +70,7 @@ public class JRSRepositoryService implements RepositoryService {
 		return repService;
 	}
 
-	private boolean hasServerUrl() {
+	private <K extends Resource> boolean hasServerUrl(final String objuri, final Class<K> resourceType) {
 		String uri = null;
 		String serverUser = null;
 		if (jDesign == null)
@@ -102,6 +103,8 @@ public class JRSRepositoryService implements RepositoryService {
 					@Override
 					public void completed(IConnection value) {
 						setupConnection(value);
+						if (c != null)
+							getResource(objuri, resourceType);
 					}
 				}));
 			}
@@ -121,6 +124,7 @@ public class JRSRepositoryService implements RepositoryService {
 			repService = new FileRepositoryService(jConfig, rpath, true);
 			int ind = servs.indexOf(JRSRepositoryService.this);
 			servs.add(Math.max(0, Math.max(ind - 2, ind - 1)), repService);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -157,7 +161,7 @@ public class JRSRepositoryService implements RepositoryService {
 
 	@Override
 	public synchronized <K extends Resource> K getResource(String uri, Class<K> resourceType) {
-		if (hasServerUrl() && c != null) {
+		if (hasServerUrl(uri, resourceType) && c != null) {
 			if (uri.startsWith("repo:")) {
 				// it's possible to have a resource with id=repo:something (from
 				// practice)
@@ -279,7 +283,11 @@ public class JRSRepositoryService implements RepositoryService {
 			protected IStatus run(IProgressMonitor monitor) {
 				needNewRefresh = false;
 				try {
-					msp.getTmpDir(monitor).refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					IFolder tmpDir = msp.getTmpDir(monitor);
+					if (tmpDir != null)
+						tmpDir.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					jConfig.getPropertyChangeSupport().firePropertyChange(JasperReportsConfiguration.RESOURCE_LOADED,
+							true, false);
 				} catch (Exception e) {
 					// e.printStackTrace();
 				} finally {
