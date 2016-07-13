@@ -170,6 +170,11 @@ public class JRSRepositoryService implements RepositoryService {
 			}
 			return doGetResource(uri, resourceType);
 		}
+		if (c == null && uri.startsWith("repo:")) {
+			K r = doGetResource(uri.startsWith("repo:") ? uri : "repo:" + uri, resourceType);
+			if (r != null)
+				return r;
+		}
 		return repService != null ? repService.getResource(uri, resourceType) : null;
 	}
 
