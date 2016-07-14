@@ -104,11 +104,12 @@ public class ConsoleExecuter {
 	private Job readOutputJob = new Job("Compiling job") { //$NON-NLS-1$
 
 		private boolean checkJavaVersion(MessageConsoleStream outputStream, IProgressMonitor monitor) {
-			String checkVersionCommand = getJavaCommand() + " -version"; //$NON-NLS-1$
+			String javaCommand = getJavaCommand();
+			String[] checkVersionCommand = {javaCommand, "-version"}; //$NON-NLS-1$
 			try {
 				Process process = Runtime.getRuntime().exec(checkVersionCommand);
 				outputStream.println(Messages.ConsoleExecuter_checkVersionStart);
-				outputStream.println(checkVersionCommand);
+				outputStream.println(javaCommand + " -version");
 
 				// BufferedReader stdInput = new BufferedReader(new
 				// InputStreamReader(process.getInputStream()));
@@ -141,7 +142,7 @@ public class ConsoleExecuter {
 				}
 			} catch (IOException e) {
 				outputStream.println(MessageFormat.format(Messages.ConsoleExecuter_checkBadCommand1,
-						new Object[] { checkVersionCommand }));
+						new Object[] { javaCommand + " -version" }));
 				String aaa = Messages.ConsoleExecuter_checkBadCommand2;
 				outputStream.println(
 						MessageFormat.format(aaa, new Object[] { CustomVisualizationActivator.JAVA_PATH_PROPERTY }));
