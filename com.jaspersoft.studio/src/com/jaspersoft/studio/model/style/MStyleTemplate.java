@@ -208,8 +208,8 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		// If the expression change try to reload the style
 		if (evt.getPropertyName().equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION)) {
 			performUpdate();
-		}
-		if (evt.getPropertyName().equals(FORCE_UPDATE_CHILDREN)){
+		} else if (evt.getPropertyName().equals(FORCE_UPDATE_CHILDREN)){
+			//asked for the refresh of the children
 			refreshChildren();
 		}
 		super.propertyChange(evt);
@@ -222,7 +222,8 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 * the children
 	 */
 	private void fireChildrenChangeEvent() {
-		// Need to be executed inside the graphic thread
+		// Need to be executed inside the graphic thread, but in synch way otherwise it could happen strange behavior
+		// when two styles are resolved at the same time
 		UIUtils.getDisplay().syncExec(new Runnable() {
 			@Override
 			public void run() {
