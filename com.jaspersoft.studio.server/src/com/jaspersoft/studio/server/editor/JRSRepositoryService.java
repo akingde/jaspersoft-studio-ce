@@ -197,78 +197,79 @@ public class JRSRepositoryService implements RepositoryService {
 			if (r != null)
 				return r;
 		}
-		try {
-			IProgressMonitor monitor = new NullProgressMonitor();
+		if (c != null)
+			try {
+				IProgressMonitor monitor = new NullProgressMonitor();
 
-			if (objectUri.contains("/")) { //$NON-NLS-1$
-				// Locate the resource inside the repository...
-				ResourceDescriptor r = new ResourceDescriptor();
-				r.setUriString(objectUri);
-				r = c.get(monitor, r, null);
-				if (r.getIsReference())
-					r = ReferenceResolver.resolveReference(c, r, null);
-				if (rpath == null)
-					initRPath();
-				String fpath = Misc.nvl(rpath);
-				if (!objectUri.startsWith("/")) //$NON-NLS-1$
-					fpath += "/"; //$NON-NLS-1$
-				fpath += objectUri;
-				File f = new File(fpath);
-				if (f.getParentFile() != null)
-					f.getParentFile().mkdirs();
-				if (f.createNewFile()) {
-					if (!r.getIsReference() && r.getHasData() && r.getData() != null) {
-						org.apache.commons.io.FileUtils.writeByteArrayToFile(f, r.getData());
-					} else
-						c.get(monitor, r, f);
-				}
-				fileTypes.put(f, r.getWsType());
-			} else if (runitUri != null) {
-				// Locate the resource inside the report unit, if any...
-				if (reportUnitResources == null) {
-					ResourceDescriptor rd = new ResourceDescriptor();
-					rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
-					rd.setUriString(runitUri);
-					rd = c.get(monitor, rd, null);
-					reportUnitResources = c.list(monitor, rd);
-					if (reportUnitResources == null)
-						reportUnitResources = new ArrayList<ResourceDescriptor>();
-				}
-
-				// find the resource...
-				for (ResourceDescriptor r : reportUnitResources) {
-					if (r.getName() == null || !r.getName().equals(objectUri))
-						continue;
+				if (objectUri.contains("/")) { //$NON-NLS-1$
+					// Locate the resource inside the repository...
+					ResourceDescriptor r = new ResourceDescriptor();
+					r.setUriString(objectUri);
+					r = c.get(monitor, r, null);
 					if (r.getIsReference())
-						r = ReferenceResolver.resolveReference(c, r, monitor);
-					if (ResourceFactory.isFileResourceType(r)) {
-						IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
-
-						File fp = null;
-						IContainer pf = file.getParent();
-						if (pf.getRawLocation() != null)
-							fp = pf.getRawLocation().toFile();
-						else if (pf.getLocationURI() != null)
-							fp = new File(pf.getLocationURI());
-						else
-							return null;
-
-						File f = new File(fp, objectUri);
-						if (f.getParentFile() != null && !f.getParentFile().mkdirs() && f.createNewFile())
+						r = ReferenceResolver.resolveReference(c, r, null);
+					if (rpath == null)
+						initRPath();
+					String fpath = Misc.nvl(rpath);
+					if (!objectUri.startsWith("/")) //$NON-NLS-1$
+						fpath += "/"; //$NON-NLS-1$
+					fpath += objectUri;
+					File f = new File(fpath);
+					if (f.getParentFile() != null)
+						f.getParentFile().mkdirs();
+					if (f.createNewFile()) {
+						if (!r.getIsReference() && r.getHasData() && r.getData() != null) {
+							org.apache.commons.io.FileUtils.writeByteArrayToFile(f, r.getData());
+						} else
 							c.get(monitor, r, f);
-						fileTypes.put(f, r.getWsType());
-						break;
+					}
+					fileTypes.put(f, r.getWsType());
+				} else if (runitUri != null) {
+					// Locate the resource inside the report unit, if any...
+					if (reportUnitResources == null) {
+						ResourceDescriptor rd = new ResourceDescriptor();
+						rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
+						rd.setUriString(runitUri);
+						rd = c.get(monitor, rd, null);
+						reportUnitResources = c.list(monitor, rd);
+						if (reportUnitResources == null)
+							reportUnitResources = new ArrayList<ResourceDescriptor>();
+					}
+
+					// find the resource...
+					for (ResourceDescriptor r : reportUnitResources) {
+						if (r.getName() == null || !r.getName().equals(objectUri))
+							continue;
+						if (r.getIsReference())
+							r = ReferenceResolver.resolveReference(c, r, monitor);
+						if (ResourceFactory.isFileResourceType(r)) {
+							IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
+
+							File fp = null;
+							IContainer pf = file.getParent();
+							if (pf.getRawLocation() != null)
+								fp = pf.getRawLocation().toFile();
+							else if (pf.getLocationURI() != null)
+								fp = new File(pf.getLocationURI());
+							else
+								return null;
+
+							File f = new File(fp, objectUri);
+							if (f.getParentFile() != null && !f.getParentFile().mkdirs() && f.createNewFile())
+								c.get(monitor, r, f);
+							fileTypes.put(f, r.getWsType());
+							break;
+						}
 					}
 				}
+				refresh();
+				String u = uri;
+				if (u.startsWith("repo:"))
+					u = u.substring(5);
+				return getFromParent(u, resourceType);
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-			refresh();
-			String u = uri;
-			if (u.startsWith("repo:"))
-				u = u.substring(5);
-			return getFromParent(u, resourceType);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
 		return null;
 	}
 
