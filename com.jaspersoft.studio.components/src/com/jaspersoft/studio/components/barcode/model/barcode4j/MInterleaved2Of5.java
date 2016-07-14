@@ -25,6 +25,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
+import net.sf.jasperreports.components.barcode4j.Barcode4jComponent;
 import net.sf.jasperreports.components.barcode4j.Code39Component;
 import net.sf.jasperreports.components.barcode4j.Interleaved2Of5Component;
 import net.sf.jasperreports.engine.JRConstants;
@@ -100,6 +101,12 @@ public class MInterleaved2Of5 extends MBarcode4j {
 				Interleaved2Of5Component.PROPERTY_DISPLAY_CHECKSUM, Messages.common_display_checksum, NullEnum.NULL);
 		displayChecksumD.setDescription(Messages.MInterleaved2Of5_display_checksum_description);
 		desc.add(displayChecksumD);
+
+		DoublePropertyDescriptor vertQuietZoneD = new DoublePropertyDescriptor(
+				Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
+		vertQuietZoneD.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
+		desc.add(vertQuietZoneD);
+		vertQuietZoneD.setCategory(Messages.common_properties_category);
 
 		wideFactorD.setCategory(Messages.MInterleaved2Of5_properties_category);
 		checksumModeD.setCategory(Messages.MInterleaved2Of5_properties_category);

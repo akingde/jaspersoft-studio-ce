@@ -22,23 +22,23 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
+import net.sf.jasperreports.components.barcode4j.Barcode4jComponent;
 import net.sf.jasperreports.components.barcode4j.FourStateBarcodeComponent;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 public class MFourStateBarcode extends MBarcode4j {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private static IPropertyDescriptor[] descriptors;
 
 	public MFourStateBarcode() {
 		super();
 	}
 
-	public MFourStateBarcode(ANode parent, JRDesignComponentElement jrBarcode,
-			int newIndex) {
+	public MFourStateBarcode(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
 		super(parent, jrBarcode, newIndex);
 	}
 
@@ -63,32 +63,31 @@ public class MFourStateBarcode extends MBarcode4j {
 		super.createPropertyDescriptors(desc);
 
 		JSSComboPropertyDescriptor checksumModeD = new JSSComboPropertyDescriptor(
-				FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE,
-				Messages.common_checksum_mode, ChecksumMode.getItems());
-		checksumModeD
-				.setDescription(Messages.MFourStateBarcode_checksum_mode_description);
+				FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode,
+				ChecksumMode.getItems());
+		checksumModeD.setDescription(Messages.MFourStateBarcode_checksum_mode_description);
 		desc.add(checksumModeD);
 
 		DoublePropertyDescriptor intercharD = new DoublePropertyDescriptor(
-				FourStateBarcodeComponent.PROPERTY_INTERCHAR_GAP_WIDTH,
-				Messages.common_interchar_gap_width);
-		intercharD
-				.setDescription(Messages.MFourStateBarcode_interchar_gap_width_description);
+				FourStateBarcodeComponent.PROPERTY_INTERCHAR_GAP_WIDTH, Messages.common_interchar_gap_width);
+		intercharD.setDescription(Messages.MFourStateBarcode_interchar_gap_width_description);
 		desc.add(intercharD);
 
 		DoublePropertyDescriptor ascenderHeightD = new DoublePropertyDescriptor(
-				FourStateBarcodeComponent.PROPERTY_ASCENDER_HEIGHT,
-				Messages.MFourStateBarcode_ascender_height);
-		ascenderHeightD
-				.setDescription(Messages.MFourStateBarcode_ascender_height_description);
+				FourStateBarcodeComponent.PROPERTY_ASCENDER_HEIGHT, Messages.MFourStateBarcode_ascender_height);
+		ascenderHeightD.setDescription(Messages.MFourStateBarcode_ascender_height_description);
 		desc.add(ascenderHeightD);
 
 		DoublePropertyDescriptor trackHeightD = new DoublePropertyDescriptor(
-				FourStateBarcodeComponent.PROPERTY_TRACK_HEIGHT,
-				Messages.MFourStateBarcode_track_height);
-		trackHeightD
-				.setDescription(Messages.MFourStateBarcode_track_height_description);
+				FourStateBarcodeComponent.PROPERTY_TRACK_HEIGHT, Messages.MFourStateBarcode_track_height);
+		trackHeightD.setDescription(Messages.MFourStateBarcode_track_height_description);
 		desc.add(trackHeightD);
+
+		DoublePropertyDescriptor vertQuietZoneD = new DoublePropertyDescriptor(
+				Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
+		vertQuietZoneD.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
+		desc.add(vertQuietZoneD);
+		vertQuietZoneD.setCategory(Messages.common_properties_category);
 
 		checksumModeD.setCategory(Messages.common_properties_category);
 		intercharD.setCategory(Messages.common_properties_category);
@@ -99,8 +98,7 @@ public class MFourStateBarcode extends MBarcode4j {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		FourStateBarcodeComponent jrList = (FourStateBarcodeComponent) jrElement
-				.getComponent();
+		FourStateBarcodeComponent jrList = (FourStateBarcodeComponent) jrElement.getComponent();
 
 		if (id.equals(FourStateBarcodeComponent.PROPERTY_INTERCHAR_GAP_WIDTH))
 			return jrList.getIntercharGapWidth();
@@ -119,14 +117,12 @@ public class MFourStateBarcode extends MBarcode4j {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		FourStateBarcodeComponent jrList = (FourStateBarcodeComponent) jrElement
-				.getComponent();
+		FourStateBarcodeComponent jrList = (FourStateBarcodeComponent) jrElement.getComponent();
 
 		if (id.equals(FourStateBarcodeComponent.PROPERTY_INTERCHAR_GAP_WIDTH))
 			jrList.setIntercharGapWidth((Double) value);
 		else if (id.equals(FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE))
-			jrList.setChecksumMode(ChecksumMode
-					.getChecksumMode4Pos((Integer) value));
+			jrList.setChecksumMode(ChecksumMode.getChecksumMode4Pos((Integer) value));
 
 		else if (id.equals(FourStateBarcodeComponent.PROPERTY_ASCENDER_HEIGHT))
 			jrList.setAscenderHeight((Double) value);
@@ -135,7 +131,7 @@ public class MFourStateBarcode extends MBarcode4j {
 		else
 			super.setPropertyValue(id, value);
 	}
-	
+
 	@Override
 	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> properties = super.generateGraphicalProperties();
@@ -145,17 +141,17 @@ public class MFourStateBarcode extends MBarcode4j {
 		properties.add(FourStateBarcodeComponent.PROPERTY_TRACK_HEIGHT);
 		return properties;
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
 		FourStateBarcodeComponent jrSourceBarcode = (FourStateBarcodeComponent) jrSourceElement.getComponent();
-		
+
 		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
 		FourStateBarcodeComponent jrTargetBarcode = (FourStateBarcodeComponent) jrTargetElement.getComponent();
-		
+
 		jrTargetBarcode.setIntercharGapWidth(jrSourceBarcode.getIntercharGapWidth());
 		jrTargetBarcode.setChecksumMode(jrSourceBarcode.getChecksumMode());
 		jrTargetBarcode.setAscenderHeight(jrSourceBarcode.getAscenderHeight());

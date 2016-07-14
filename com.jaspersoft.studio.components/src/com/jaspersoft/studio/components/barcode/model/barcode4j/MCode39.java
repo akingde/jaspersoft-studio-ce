@@ -25,6 +25,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
+import net.sf.jasperreports.components.barcode4j.Barcode4jComponent;
 import net.sf.jasperreports.components.barcode4j.Code39Component;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
@@ -113,6 +114,12 @@ public class MCode39 extends MBarcode4j {
 				Code39Component.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD.setDescription(Messages.MCode39_checksum_mode_description);
 		desc.add(checksumModeD);
+
+		DoublePropertyDescriptor vertQuietZoneD = new DoublePropertyDescriptor(
+				Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
+		vertQuietZoneD.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
+		desc.add(vertQuietZoneD);
+		vertQuietZoneD.setCategory(Messages.common_properties_category);
 
 		checksumModeD.setCategory(Messages.MCode39_properties_category);
 		extendedCharsetD.setCategory(Messages.MCode39_properties_category);

@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import net.sf.jasperreports.components.barcode4j.Barcode4jComponent;
 import net.sf.jasperreports.components.barcode4j.USPSIntelligentMailComponent;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
@@ -19,8 +20,14 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import java.util.List;
+
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
+import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 
 public class MUSPSIntelligent extends MFourStateBarcode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -29,8 +36,7 @@ public class MUSPSIntelligent extends MFourStateBarcode {
 		super();
 	}
 
-	public MUSPSIntelligent(ANode parent, JRDesignComponentElement jrBarcode,
-			int newIndex) {
+	public MUSPSIntelligent(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
 		super(parent, jrBarcode, newIndex);
 	}
 
@@ -42,10 +48,22 @@ public class MUSPSIntelligent extends MFourStateBarcode {
 		exp.setText("\"12345678901234567890\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "USPSIntelligentMail")); //$NON-NLS-1$
-		
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$
+				"USPSIntelligentMail"));
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
-		
+
 		return el;
+	}
+
+	@Override
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
+
+		DoublePropertyDescriptor vertQuietZoneD = new DoublePropertyDescriptor(
+				Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
+		vertQuietZoneD.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
+		desc.add(vertQuietZoneD);
+		vertQuietZoneD.setCategory(Messages.common_properties_category);
 	}
 }

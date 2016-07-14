@@ -32,6 +32,8 @@ public class CodabarSection extends AbstractSection {
 
 		Composite group = getWidgetFactory().createSection(parent, "Codabar", false, 2);
 
+		createWidget4Property(group, Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE);
+
 		createWidget4Property(group, CodabarComponent.PROPERTY_WIDE_FACTOR);
 		createWidget4Property(group, Barcode4jComponent.PROPERTY_TEXT_POSITION);
 	}
@@ -41,6 +43,7 @@ public class CodabarSection extends AbstractSection {
 		super.initializeProvidedProperties();
 		addProvidedProperties(CodabarComponent.PROPERTY_WIDE_FACTOR, Messages.common_wide_factor);
 		addProvidedProperties(Barcode4jComponent.PROPERTY_TEXT_POSITION, Messages.MBarcode4j_text_position);
+		addProvidedProperties(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
 	}
 
 }

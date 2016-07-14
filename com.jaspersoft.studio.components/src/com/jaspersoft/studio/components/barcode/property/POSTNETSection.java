@@ -32,6 +32,8 @@ public class POSTNETSection extends AbstractSection {
 
 		Composite group = getWidgetFactory().createSection(parent, "POSTNET", false, 2);
 
+		createWidget4Property(group, Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE);
+
 		createWidget4Property(group, POSTNETComponent.PROPERTY_SHORT_BAR_HEIGHT);
 
 		createWidget4Property(group, POSTNETComponent.PROPERTY_INTERCHAR_GAP_WIDTH);
@@ -51,6 +53,7 @@ public class POSTNETSection extends AbstractSection {
 		addProvidedProperties(POSTNETComponent.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode);
 		addProvidedProperties(POSTNETComponent.PROPERTY_BASELINE_POSITION, Messages.MPOSTNET_baseline_position);
 		addProvidedProperties(Barcode4jComponent.PROPERTY_TEXT_POSITION, Messages.MBarcode4j_text_position);
+		addProvidedProperties(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
 	}
 
 }

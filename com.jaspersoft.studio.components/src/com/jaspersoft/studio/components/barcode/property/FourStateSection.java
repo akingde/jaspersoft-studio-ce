@@ -32,6 +32,8 @@ public class FourStateSection extends AbstractSection {
 
 		Composite group = getWidgetFactory().createSection(parent, "Four State", false, 2);
 
+		createWidget4Property(group, Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE);
+
 		createWidget4Property(group, FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE);
 		createWidget4Property(group, FourStateBarcodeComponent.PROPERTY_INTERCHAR_GAP_WIDTH);
 		createWidget4Property(group, FourStateBarcodeComponent.PROPERTY_ASCENDER_HEIGHT);
@@ -49,5 +51,6 @@ public class FourStateSection extends AbstractSection {
 				Messages.MFourStateBarcode_ascender_height);
 		addProvidedProperties(FourStateBarcodeComponent.PROPERTY_TRACK_HEIGHT, Messages.MFourStateBarcode_track_height);
 		addProvidedProperties(Barcode4jComponent.PROPERTY_TEXT_POSITION, Messages.MBarcode4j_text_position);
+		addProvidedProperties(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
 	}
 }

@@ -23,6 +23,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
+import net.sf.jasperreports.components.barcode4j.Barcode4jComponent;
 import net.sf.jasperreports.components.barcode4j.PDF417Component;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
@@ -115,6 +116,12 @@ public class MPDF417 extends MBarcode4j {
 		errorCorrectionLevelD.setDescription(Messages.MPDF417_error_correction_level_description);
 		desc.add(errorCorrectionLevelD);
 		errorCorrectionLevelD.setBounds(0, 8);
+
+		DoublePropertyDescriptor vertQuietZoneD = new DoublePropertyDescriptor(
+				Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
+		vertQuietZoneD.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
+		desc.add(vertQuietZoneD);
+		vertQuietZoneD.setCategory(Messages.common_properties_category);
 
 		minColumnsD.setCategory(Messages.MPDF417_properties_category);
 		maxColumnsD.setCategory(Messages.MPDF417_properties_category);

@@ -32,6 +32,8 @@ public class EAN128Section extends AbstractSection {
 
 		Composite group = getWidgetFactory().createSection(parent, "EAN128", false, 2);
 
+		createWidget4Property(group, Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE);
+		
 		createWidget4Property(group, EAN128Component.PROPERTY_CHECKSUM_MODE);
 		createWidget4Property(group, Barcode4jComponent.PROPERTY_TEXT_POSITION);
 	}
@@ -41,5 +43,6 @@ public class EAN128Section extends AbstractSection {
 		super.initializeProvidedProperties();
 		addProvidedProperties(EAN128Component.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode);
 		addProvidedProperties(Barcode4jComponent.PROPERTY_TEXT_POSITION, Messages.MBarcode4j_text_position);
+		addProvidedProperties(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
 	}
 }
