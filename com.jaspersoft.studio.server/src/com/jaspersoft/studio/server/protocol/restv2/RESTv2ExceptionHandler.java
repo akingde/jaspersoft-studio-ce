@@ -52,6 +52,8 @@ public class RESTv2ExceptionHandler {
 		int status = res.getStatus();
 		String ct = res.getHeaderString("Content-Type");
 		switch (status) {
+		case 200:
+			return;
 		case 400:
 			if (ct != null) {
 				if (ct.equals("application/xml"))
@@ -60,7 +62,7 @@ public class RESTv2ExceptionHandler {
 					handleErrorDescriptor(res, monitor, status);
 				else if (ct.equals("application/collection.errorDescriptor+xml"))
 					handleErrorDescriptorList(res, monitor, status);
-				else 
+				else
 					handleErrorDescriptor(res, monitor, status);
 			}
 		case 401:
