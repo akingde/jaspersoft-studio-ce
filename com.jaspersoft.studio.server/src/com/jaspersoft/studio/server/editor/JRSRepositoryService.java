@@ -15,19 +15,26 @@ package com.jaspersoft.studio.server.editor;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.export.AExporter;
@@ -192,6 +199,7 @@ public class JRSRepositoryService implements RepositoryService {
 		}
 		try {
 			IProgressMonitor monitor = new NullProgressMonitor();
+
 			if (objectUri.contains("/")) { //$NON-NLS-1$
 				// Locate the resource inside the repository...
 				ResourceDescriptor r = new ResourceDescriptor();
@@ -214,6 +222,7 @@ public class JRSRepositoryService implements RepositoryService {
 					} else
 						c.get(monitor, r, f);
 				}
+				fileTypes.put(f, r.getWsType());
 			} else if (runitUri != null) {
 				// Locate the resource inside the report unit, if any...
 				if (reportUnitResources == null) {
@@ -236,16 +245,18 @@ public class JRSRepositoryService implements RepositoryService {
 						IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
 
 						File fp = null;
-						if (file.getParent().getRawLocation() != null)
-							fp = file.getParent().getRawLocation().toFile();
-						else if (file.getParent().getLocationURI() != null)
-							fp = new File(file.getParent().getLocationURI());
+						IContainer pf = file.getParent();
+						if (pf.getRawLocation() != null)
+							fp = pf.getRawLocation().toFile();
+						else if (pf.getLocationURI() != null)
+							fp = new File(pf.getLocationURI());
 						else
 							return null;
 
 						File f = new File(fp, objectUri);
 						if (f.getParentFile() != null && !f.getParentFile().mkdirs() && f.createNewFile())
 							c.get(monitor, r, f);
+						fileTypes.put(f, r.getWsType());
 						break;
 					}
 				}
@@ -277,6 +288,8 @@ public class JRSRepositoryService implements RepositoryService {
 
 	private boolean isRefreshing = false;
 	private boolean needNewRefresh = false;
+	private Map<File, String> fileTypes = new HashMap<File, String>();
+	private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 	private void refresh() {
 		needNewRefresh = true;
@@ -292,6 +305,23 @@ public class JRSRepositoryService implements RepositoryService {
 						tmpDir.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 					jConfig.getPropertyChangeSupport().firePropertyChange(JasperReportsConfiguration.RESOURCE_LOADED,
 							true, false);
+					List<File> keys = new ArrayList<File>(fileTypes.keySet());
+					for (File f : keys) {
+						IFile[] fs = root.findFilesForLocationURI(f.toURI());
+						if (!Misc.isNullOrEmpty(fs)) {
+							for (IFile ifile : fs) {
+								String id = null;
+								String wsType = fileTypes.get(f);
+								if (wsType.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
+									id = "com.jaspersoft.studio.JRtxEditor";
+								else if (wsType.equals(ResourceDescriptor.TYPE_JRXML))
+									id = JrxmlEditor.JRXML_EDITOR_ID;
+								if (id != null)
+									IDE.setDefaultEditor(ifile, id);
+								fileTypes.remove(f);
+							}
+						}
+					}
 				} catch (Exception e) {
 					// e.printStackTrace();
 				} finally {
