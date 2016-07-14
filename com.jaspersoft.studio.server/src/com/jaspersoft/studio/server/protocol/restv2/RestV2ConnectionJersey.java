@@ -588,7 +588,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 		WebTarget tgt = target.path("jdbcDrivers"); //$NON-NLS-1$
 		Builder req = tgt.request();
-		connector.post(req, Entity.entity(entity, entity.getMediaType()), monitor);
+		eh.handleException(connector.post(req, Entity.entity(entity, entity.getMediaType()), monitor), monitor);
 	}
 
 	private void prepareResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile) throws Exception {
