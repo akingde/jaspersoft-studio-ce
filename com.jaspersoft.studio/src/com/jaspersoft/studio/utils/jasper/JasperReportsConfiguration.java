@@ -44,6 +44,7 @@ import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jasper.JSSReportConverter;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.prm.ParameterSet;
@@ -62,10 +63,12 @@ import net.sf.jasperreports.eclipse.util.HttpUtils;
 import net.sf.jasperreports.eclipse.util.query.EmptyQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fonts.FontExtensionsCollector;
 import net.sf.jasperreports.engine.fonts.FontFamily;
@@ -155,6 +158,14 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				//and trigger a complete refresh of the editor. Doing so it will cover every case of
 				//late loading of a resource
 				refreshCachedStyles();
+
+				//Fire an event to the template style to ask an update of the nodes
+				JRReportTemplate[] templates = getJasperDesign().getTemplates();
+				if (templates != null){
+					for (int i = 0; i < templates.length; i++){
+						((JRDesignReportTemplate)templates[i]).getEventSupport().firePropertyChange(MStyleTemplate.FORCE_UPDATE_CHILDREN, null, null);
+					}
+				}
 			}
 		}
 		

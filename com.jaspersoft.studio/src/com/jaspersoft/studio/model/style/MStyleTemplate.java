@@ -76,6 +76,12 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 * The job that update the styles content in background
 	 */
 	private UpdateStyleJob updateStyleJob;
+	
+	/**
+	 * Event used to ask the refresh of the node children, necessary when there is a resource
+	 * change event
+	 */
+	public static final String FORCE_UPDATE_CHILDREN = "forceUpdateChildren";
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -127,7 +133,7 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 */
 	public MStyleTemplate(ANode parent, JRReportTemplate jrstyle, int newIndex) {
 		super(parent, newIndex);
-		setValue(jrstyle);
+		super.setValue(jrstyle);
 		setEditable(false);
 	}
 
@@ -190,8 +196,11 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
-		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION))
+		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION)){
+			//remove the old cached expression
+			ExternalStylesManager.removeCachedStyle(getJasperConfiguration(), (JRReportTemplate)getValue());
 			jrTemplate.setSourceExpression(ExprUtil.setValues(jrTemplate.getSourceExpression(), value));
+		}
 	}
 
 	@Override
@@ -199,6 +208,9 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		// If the expression change try to reload the style
 		if (evt.getPropertyName().equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION)) {
 			performUpdate();
+		}
+		if (evt.getPropertyName().equals(FORCE_UPDATE_CHILDREN)){
+			refreshChildren();
 		}
 		super.propertyChange(evt);
 	}
@@ -211,7 +223,7 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 */
 	private void fireChildrenChangeEvent() {
 		// Need to be executed inside the graphic thread
-		UIUtils.getDisplay().asyncExec(new Runnable() {
+		UIUtils.getDisplay().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				PropertyChangeEvent event = new PropertyChangeEvent(getActualStyle(), "refresh", null, null);
@@ -228,6 +240,7 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	public boolean refreshChildren() {
 		JasperReportsConfiguration jConf = getJasperConfiguration();
 		if (jConf != null) {
+			
 			IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
 			JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
 
@@ -264,7 +277,8 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 
 				@Override
 				public void run() {
-					if (getParent() != null && getValue() != null) {
+					JasperReportsConfiguration jConf = getJasperConfiguration();
+					if (getParent() != null && getValue() != null && jConf != null) {
 						refreshChildren();
 					}
 					monitor.done();
