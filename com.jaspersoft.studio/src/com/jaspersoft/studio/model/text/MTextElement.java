@@ -23,6 +23,7 @@ import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IRotatable;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
+import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
@@ -154,33 +155,24 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignTextElement jrElement = (JRDesignTextElement) getValue();
-
-		if (id.equals(JRDesignStyle.PROPERTY_MARKUP))
-			return jrElement.getMarkup();
-
-		if (id.equals(PARAGRAPH)) {
-			if (mParagraph == null) {
-				mParagraph = new MParagraph(this, (JRBaseParagraph) jrElement.getParagraph());
-				setChildListener(mParagraph);
-			}
-			return mParagraph;
-		}
-
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT)) {
+		JSSStyleResolver resolver = getStyleResolver();
+		
+		if (id.equals(JRDesignStyle.PROPERTY_MARKUP)){
+			return resolver.getMarkup(jrElement);
+		} else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT)) {
 			if (hAlignD == null)
 				getPropertyDescriptors();
-			return hAlignD.getIntValue(jrElement.getHorizontalTextAlign());
-		}
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT)) {
+			return hAlignD.getIntValue(resolver.getHorizontalTextAlign(jrElement));
+		} else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT)) {
 			if (vAlignD == null)
 				getPropertyDescriptors();
-			return vAlignD.getIntValue(jrElement.getVerticalTextAlign());
-		}
-		if (id.equals(JRBaseStyle.PROPERTY_ROTATION)) {
+			return vAlignD.getIntValue(resolver.getVerticalTextAlign(jrElement));
+		} else	if (id.equals(JRBaseStyle.PROPERTY_ROTATION)) {
 			if (rotationD == null)
 				getPropertyDescriptors();
-			return rotationD.getIntValue(jrElement.getRotationValue());
+			return rotationD.getIntValue(resolver.getRotationValue(jrElement));
 		}
+		
 		if (getMFont() != null) {
 			Object val = tFont.getPropertyActualValue(id);
 			if (val != null)

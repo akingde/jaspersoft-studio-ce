@@ -29,6 +29,7 @@ import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.NullCheckBoxPropertyDescriptor;
@@ -254,10 +255,13 @@ public class MTextField extends MTextElement {
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
-		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
-			return jrElement.isBlankWhenNull();
-		if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
-			return jrElement.getPattern();
+		JSSStyleResolver resolver = getStyleResolver();
+		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL)){
+			return resolver.isBlankWhenNull(jrElement);
+		} else if (id.equals(JRDesignStyle.PROPERTY_PATTERN)){
+			return resolver.getPattern(jrElement);
+		}
+		
 		return super.getPropertyActualValue(id);
 	}
 

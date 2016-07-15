@@ -21,6 +21,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.DefaultValue;
+import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.tabstops.TabStopsPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
@@ -130,27 +131,30 @@ public class MParagraph extends APropertyNode {
 	}
 
 	public Object getPropertyActualValue(Object id) {
+		JSSStyleResolver resolver = getStyleResolver();
 		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
 		if (jrElement != null) {
-			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING))
-				return lineSpacingD.getIntValue(jrElement.getLineSpacing());
+			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING)){ 
+				LineSpacingEnum spacingEnum = resolver.getLineSpacing(jrElement);
+				return lineSpacingD.getIntValue(spacingEnum);
+			}
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE))
-				return jrElement.getLineSpacingSize();
+				return resolver.getLineSpacingSize(jrElement);
 
 			if (id.equals(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT))
-				return jrElement.getFirstLineIndent();
+				return resolver.getFirstLineIndent(jrElement);
 
 			if (id.equals(JRBaseParagraph.PROPERTY_LEFT_INDENT))
-				return jrElement.getLeftIndent();
+				return resolver.getLeftIndent(jrElement);
 			if (id.equals(JRBaseParagraph.PROPERTY_RIGHT_INDENT))
-				return jrElement.getRightIndent();
+				return resolver.getRightIndent(jrElement);
 
 			if (id.equals(JRBaseParagraph.PROPERTY_SPACING_BEFORE))
-				return jrElement.getSpacingBefore();
+				return resolver.getSpacingBefore(jrElement);
 			if (id.equals(JRBaseParagraph.PROPERTY_SPACING_AFTER))
-				return jrElement.getSpacingAfter();
+				return resolver.getSpacingAfter(jrElement);
 			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH))
-				return jrElement.getTabStopWidth();
+				return resolver.getTabStopWidth(jrElement);
 		}
 		return super.getPropertyActualValue(id);
 	}
