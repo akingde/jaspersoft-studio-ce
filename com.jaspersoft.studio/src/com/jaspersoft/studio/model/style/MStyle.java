@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style;
 
+import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +41,7 @@ import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
@@ -57,7 +59,6 @@ import com.jaspersoft.studio.property.descriptors.ImageVAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.TextHAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.TextVAlignPropertyDescriptor;
@@ -117,8 +118,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	private static ImageVAlignPropertyDescriptor valignImage;
 	
 	private static RotationPropertyDescriptor rotationD;
-	
-	private static OpaqueModePropertyDescriptor modeD;
 	
 	private static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
 	
@@ -331,9 +330,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		rotationD.setDescription(Messages.MStyle_rotation_description);
 		desc.add(rotationD);
 
-		modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, NullEnum.INHERITED);
-		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
-				Messages.common_opaque);
+		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.common_opaque);
 		opaqueDBool.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueDBool);
 
@@ -441,7 +438,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		forecolorD.setCategory(Messages.MStyle_common_category);
 		backcolorD.setCategory(Messages.MStyle_common_category);
-		modeD.setCategory(Messages.MStyle_common_category);
+		opaqueDBool.setCategory(Messages.MStyle_common_category);
 
 		linePenD.setCategory(Messages.common_graphic);
 
@@ -547,10 +544,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(LINE_PEN)) {
 			if (linePen == null) {
 				linePen = new MLinePen(jrstyle.getLinePen());
+				linePen.setJasperConfiguration(getJasperConfiguration());
 				setChildListener(linePen);
 			}
 			return linePen;
 		}
+		
 		if (id.equals(LINE_BOX)) {
 			if (lineBox == null) {
 				lineBox = new MLineBox(jrstyle.getLineBox(), this);
@@ -558,6 +557,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			}
 			return lineBox;
 		}
+		
 		if (id.equals(JRBaseStyle.PROPERTY_PATTERN))
 			return jrstyle.getOwnPattern();
 		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
@@ -584,9 +584,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return rotationD.getIntValue(jrstyle.getOwnRotationValue());
 		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
-			if (modeD == null)
-				modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, NullEnum.INHERITED);
-			ModeEnum modeValue = jrstyle.getOwnModeValue();
+			ModeEnum modeValue = jrstyle.getOwnModeValue(); 
 			return modeValue != null ? modeValue.equals(ModeEnum.TRANSPARENT) : null;
 		}
 		if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
@@ -609,6 +607,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return jrstyle.getOwnPdfEncoding();
 		if (id.equals(JRBaseStyle.PROPERTY_PDF_EMBEDDED))
 			return jrstyle.isOwnPdfEmbedded();
+		
 		if (lineBox != null) {
 			Object val = lineBox.getPropertyValue(id);
 			if (val != null)
@@ -625,66 +624,72 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	public Object getPropertyActualValue(Object id) {
 		if (getValue() == null)
 			return null;
+		JSSStyleResolver resolver = getStyleResolver();
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
-		if (id.equals(JRBaseStyle.PROPERTY_PATTERN))
-			return jrstyle.getPattern();
-		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
-			return jrstyle.getRadius();
-		if (id.equals(JRBaseStyle.PROPERTY_MARKUP))
-			return jrstyle.getMarkup();
-		if (id.equals(JRDesignStyle.PROPERTY_FORECOLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrstyle.getForecolor());
-		else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrstyle.getBackcolor());
-
-		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return fillD.getIntValue(jrstyle.getFillValue());
-		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			return scaleD.getIntValue(jrstyle.getScaleImageValue());
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT))
-			return halignText.getIntValue(jrstyle.getHorizontalTextAlign());
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT))
-			return valignText.getIntValue(jrstyle.getVerticalTextAlign());
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
-			return halignImage.getIntValue(jrstyle.getHorizontalImageAlign());
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
-			return valignImage.getIntValue(jrstyle.getVerticalImageAlign());
-		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
-			return rotationD.getIntValue(jrstyle.getRotationValue());
-		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
-			if (modeD == null) {
-				modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, NullEnum.INHERITED);
-			}
-			if (jrstyle.getModeValue() == null)
-				return true; // By default the style is transparent
-			else
-				return modeD.getEnumValue(jrstyle.getModeValue()).equals(modeD.getEnumValue(ModeEnum.TRANSPARENT));
+		if (id.equals(JRBaseStyle.PROPERTY_PATTERN)){
+			return resolver.getPattern(jrstyle);
+		} else if (id.equals(JRBaseStyle.PROPERTY_RADIUS)){
+			return resolver.getRadius(jrstyle);
+		} else if (id.equals(JRBaseStyle.PROPERTY_MARKUP)){
+			return resolver.getMarkup(jrstyle);
+		} else if (id.equals(JRDesignStyle.PROPERTY_FORECOLOR)){
+			Color color = resolver.getForecolor(jrstyle);
+			return Colors.getSWTRGB4AWTGBColor(color);
+		} else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR)){
+			Color color = resolver.getBackcolor(jrstyle);
+			return Colors.getSWTRGB4AWTGBColor(color);
+		} else if (id.equals(JRBaseStyle.PROPERTY_FILL)){
+			FillEnum fillValue = resolver.getFillValue(jrstyle);
+			return fillD.getIntValue(fillValue);
+		} else if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE)){
+			ScaleImageEnum imageValue = resolver.getScaleImageValue(jrstyle);
+			return scaleD.getIntValue(imageValue);
+		} else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT)){
+			HorizontalTextAlignEnum textAlignValue = resolver.getHorizontalTextAlign(jrstyle);
+			return halignText.getIntValue(textAlignValue);
+		} else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT)){
+			VerticalTextAlignEnum textAlignValue = resolver.getVerticalTextAlign(jrstyle);
+			return valignText.getIntValue(textAlignValue);
+		} else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT)){
+			HorizontalImageAlignEnum imageAlignValue = resolver.getHorizontalImageAlign(jrstyle);
+			return halignImage.getIntValue(imageAlignValue);
+		} else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT)){
+			VerticalImageAlignEnum imageAlignValue = resolver.getVerticalImageAlign(jrstyle);
+			return valignImage.getIntValue(imageAlignValue);
+		} else if (id.equals(JRBaseStyle.PROPERTY_ROTATION)){
+			RotationEnum rotationValue = resolver.getRotationValue(jrstyle);
+			return rotationD.getIntValue(rotationValue);
+		} else if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
+			ModeEnum modeValue = resolver.getModeValue(jrstyle);
+			return modeValue == null ? true : ModeEnum.TRANSPARENT == modeValue;
+		} else if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL)){
+			return resolver.isBlankWhenNull(jrstyle);
+		} else if (id.equals(JRBaseStyle.PROPERTY_STRIKE_THROUGH)){
+			return resolver.isStrikeThrough(jrstyle);
+		} else if (id.equals(JRBaseStyle.PROPERTY_UNDERLINE)){
+			return resolver.isUnderline(jrstyle);
+		} else if (id.equals(JRBaseStyle.PROPERTY_ITALIC)){
+			return resolver.isItalic(jrstyle);
+		} else if (id.equals(JRBaseStyle.PROPERTY_BOLD)){
+			return resolver.isBold(jrstyle);
+		} if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME)){
+			return resolver.getFontName(jrstyle);
+		} if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE)){
+			return resolver.getFontsize(jrstyle); //$NON-NLS-1$
+		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME)){
+			return resolver.getPdfFontName(jrstyle);
+		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING)){
+			return resolver.getPdfEncoding(jrstyle);
+		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_EMBEDDED)){
+			return resolver.isPdfEmbedded(jrstyle);
 		}
-		if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
-			return jrstyle.isBlankWhenNull();
-		if (id.equals(JRBaseStyle.PROPERTY_STRIKE_THROUGH))
-			return jrstyle.isStrikeThrough();
-		if (id.equals(JRBaseStyle.PROPERTY_UNDERLINE))
-			return jrstyle.isUnderline();
-		if (id.equals(JRBaseStyle.PROPERTY_ITALIC))
-			return jrstyle.isItalic();
-		if (id.equals(JRBaseStyle.PROPERTY_BOLD))
-			return jrstyle.isBold();
-		if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
-			return jrstyle.getFontName();
-		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
-			return jrstyle.getFontsize(); //$NON-NLS-1$
-		if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
-			return jrstyle.getPdfFontName();
-		if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))
-			return jrstyle.getPdfEncoding();
-		if (id.equals(JRBaseStyle.PROPERTY_PDF_EMBEDDED))
-			return jrstyle.isPdfEmbedded();
+
 		if (lineBox != null) {
 			Object val = lineBox.getPropertyActualValue(id);
 			if (val != null)
 				return val;
 		}
+		
 		if (linePen != null) {
 			Object val = linePen.getPropertyActualValue(id);
 			if (val != null)

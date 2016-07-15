@@ -49,6 +49,7 @@ import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.prm.ParameterSet;
 import com.jaspersoft.studio.prm.ParameterSetProvider;
+import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -108,6 +109,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 */
 	public static final String KEY_CONVERTER = "REPORT_CONVERTER";
 	
+	/**
+	 * Key of the event that must be fired on the {@link JasperReportsConfiguration} to notify that a physical resource
+	 * not available before was loaded and can be used. Doing this we can refresh some resources on the editor (ie image & styles)
+	 * when new resource are available
+	 */
 	public static final String RESOURCE_LOADED = "RESOURCE_LOADED";
 	
 	/**
@@ -228,6 +234,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	private ClassLoader classLoader;
 	private boolean isPropsCached = false;
 	private ParameterSetProvider prmProvider;
+	
+	protected JSSStyleResolver resolver;
 
 	/**
 	 * @param parent
@@ -236,6 +244,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public JasperReportsConfiguration(JasperReportsContext parent, IFile file) {
 		super(parent);
 		init(file);
+		resolver = new JSSStyleResolver(this);
 	}
 
 	public ScopedPreferenceStore getPrefStore() {
@@ -908,9 +917,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * them another time. Then it trigger the repaint of every element in the report
 	 */
 	public void refreshCachedStyles(){
-		Object converter = get(JasperReportsConfiguration.KEY_CONVERTER);
-		if (converter instanceof JSSReportConverter){
-			JSSReportConverter reportConverter = (JSSReportConverter)converter;
+		JSSReportConverter reportConverter = getReportConverter();
+		if (reportConverter != null){
 			reportConverter.refreshCachedStyles();
 			JasperDesign design = getJasperDesign();
 			PropertyChangeEvent changeEvent = new PropertyChangeEvent(design, MGraphicElement.FORCE_GRAPHICAL_REFRESH, false, true);
@@ -918,6 +926,29 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				element.getEventSupport().firePropertyChange(changeEvent);
 			}
 		}
+	}
+	
+	/**
+	 * Return the report converter used to paint the report elements
+	 * 
+	 * @return return the current report converter or null if it can't be resolved
+	 */
+	public JSSReportConverter getReportConverter(){
+		Object converter = get(JasperReportsConfiguration.KEY_CONVERTER);
+		if (converter instanceof JSSReportConverter){
+			return (JSSReportConverter)converter;
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Return the style resolver for the current report
+	 * 
+	 * @return a not null {@link JSSStyleResolver}
+	 */
+	public JSSStyleResolver getStyleResolver(){
+		return resolver;
 	}
 
 }

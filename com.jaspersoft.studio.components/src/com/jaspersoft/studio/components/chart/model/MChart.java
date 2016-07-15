@@ -50,6 +50,7 @@ import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
@@ -116,7 +117,6 @@ import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
-import net.sf.jasperreports.engine.util.StyleResolver;
 
 /*
  * The Class MChart.
@@ -404,6 +404,35 @@ public class MChart extends MGraphicElementLineBox
 		if (evaluationGroupD != null)
 			evaluationGroupD.setItems(items);
 	}
+	
+	@Override
+	public Object getPropertyActualValue(Object id) {
+		JSSStyleResolver sr = getStyleResolver();
+		JRDesignChart jrElement = (JRDesignChart) getValue();
+		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION)) {
+			EdgeEnum position = jrElement.getTitlePositionValue();
+			return titlePositionD.getIntValue(position != null ? position : EdgeEnum.TOP);
+		}
+		if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION)) {
+			EdgeEnum position = jrElement.getLegendPositionValue();
+			return legendPositionD.getIntValue(position != null ? position : EdgeEnum.BOTTOM);
+		}
+		if (id.equals(JRBaseChart.PROPERTY_TITLE_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(sr.getTitleColor(jrElement));
+		if (id.equals(JRBaseChart.PROPERTY_SUBTITLE_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(sr.getSubtitleColor(jrElement));
+		if (id.equals(JRBaseChart.PROPERTY_LEGEND_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(sr.getLegendColor(jrElement));
+		if (id.equals(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(sr.getLegendBackgroundColor(jrElement));
+		if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
+			return jrElement.getShowLegend() != null ? jrElement.getShowLegend() : true;
+		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
+			tFont = MFontUtil.getMFont(tFont, jrElement.getTitleFont(), jrElement.getStyle(), this);
+			return tFont;
+		}
+		return super.getPropertyActualValue(id);
+	}
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -491,38 +520,6 @@ public class MChart extends MGraphicElementLineBox
 			return ExprUtil.getExpression(jrElement.getSubtitleExpression());
 
 		return super.getPropertyValue(id);
-	}
-
-	private StyleResolver sr;
-
-	@Override
-	public Object getPropertyActualValue(Object id) {
-		if (sr == null)
-			sr = new StyleResolver(getJasperConfiguration());
-		JRDesignChart jrElement = (JRDesignChart) getValue();
-		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION)) {
-			EdgeEnum position = jrElement.getTitlePositionValue();
-			return titlePositionD.getIntValue(position != null ? position : EdgeEnum.TOP);
-		}
-		if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION)) {
-			EdgeEnum position = jrElement.getLegendPositionValue();
-			return legendPositionD.getIntValue(position != null ? position : EdgeEnum.BOTTOM);
-		}
-		if (id.equals(JRBaseChart.PROPERTY_TITLE_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(sr.getTitleColor(jrElement));
-		if (id.equals(JRBaseChart.PROPERTY_SUBTITLE_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(sr.getSubtitleColor(jrElement));
-		if (id.equals(JRBaseChart.PROPERTY_LEGEND_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(sr.getLegendColor(jrElement));
-		if (id.equals(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(sr.getLegendBackgroundColor(jrElement));
-		if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
-			return jrElement.getShowLegend() != null ? jrElement.getShowLegend() : true;
-		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
-			tFont = MFontUtil.getMFont(tFont, jrElement.getTitleFont(), jrElement.getStyle(), this);
-			return tFont;
-		}
-		return super.getPropertyActualValue(id);
 	}
 
 	@Override

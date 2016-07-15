@@ -30,6 +30,7 @@ import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
+import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -657,13 +658,16 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 	public Object getPropertyActualValue(Object id) {
 		JRDesignElement jrElement = (JRDesignElement) getValue();
-		if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getBackcolor());
-		if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getForecolor());
-		// opacity
-		if (id.equals(JRBaseStyle.PROPERTY_MODE))
-			return jrElement.getModeValue().equals(ModeEnum.TRANSPARENT);
+		JSSStyleResolver resolver = getStyleResolver();
+		if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR)){
+			Color backcolor = resolver.getBackcolor(jrElement);
+			return Colors.getSWTRGB4AWTGBColor(backcolor);
+		} if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR)){
+			Color forecolor = resolver.getForecolor(jrElement);
+			return Colors.getSWTRGB4AWTGBColor(forecolor); 
+		} if (id.equals(JRBaseStyle.PROPERTY_MODE)){
+			return ModeEnum.TRANSPARENT.equals(resolver.getMode(jrElement, ModeEnum.OPAQUE));
+		}
 		return super.getPropertyActualValue(id);
 	}
 

@@ -19,6 +19,7 @@ import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
 import net.sf.jasperreports.engine.JRConstants;
@@ -123,8 +124,9 @@ public class MRectangle extends MGraphicElementLinePen {
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignRectangle jrElement = (JRDesignRectangle) getValue();
+		JSSStyleResolver resolver = getStyleResolver();
 		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
-			return jrElement.getRadius();
+			return resolver.getRadius(jrElement);
 		return super.getPropertyActualValue(id);
 	}
 

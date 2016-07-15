@@ -26,7 +26,9 @@ import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.help.HelpPrefixBuilder;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.property.ElementLabelProvider;
+import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -277,6 +279,21 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	
 	public boolean isPropertyResettable(Object id) {
 		return true;
+	}
+	
+	/**
+	 * Return the style resolver of the current report
+	 * 
+	 * @return a {@link JSSStyleResolver}, it never return null. If the {@link JasperReportsConfiguration} is
+	 * not available to get the current style resolver then a default one is returned
+	 */
+	public JSSStyleResolver getStyleResolver(){
+		JasperReportsConfiguration jConfg = getJasperConfiguration();
+		if (jConfg != null){
+			return jConfg.getStyleResolver();
+		} else {
+			return JSSStyleResolver.DEFAULT_INSTANCE;
+		}
 	}
 }
 

@@ -764,6 +764,7 @@ Export-Package: com.jaspersoft.studio;
    com.jaspersoft.studio.model,
    com.jaspersoft.studio.properties.view,
    org.eclipse.swt.widgets",
+ com.jaspersoft.studio.property.section.graphic.borders,
  com.jaspersoft.studio.property.section.obj,
  com.jaspersoft.studio.property.section.report;
   uses:="org.eclipse.gef.ui.actions,

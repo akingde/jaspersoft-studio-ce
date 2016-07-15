@@ -81,6 +81,7 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		if (lineBox == null) {
 			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
 			lineBox = new MLineBox(jrGraphicElement.getLineBox(), this);
+			lineBox.setJasperConfiguration(getJasperConfiguration());
 			setChildListener(lineBox);
 		}
 		return lineBox;

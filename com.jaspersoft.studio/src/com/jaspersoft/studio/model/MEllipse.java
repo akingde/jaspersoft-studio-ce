@@ -23,6 +23,7 @@ import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -103,8 +104,10 @@ public class MEllipse extends MGraphicElementLinePen {
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignEllipse jrElement = (JRDesignEllipse) getValue();
+		JSSStyleResolver resolver = getStyleResolver();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL)) {
-			return EnumHelper.getEnumIndexByTranslatedName(fillEnumNames, jrElement.getOwnFillValue());
+			FillEnum fillValue = resolver.getFillValue(jrElement);
+			return EnumHelper.getEnumIndexByTranslatedName(fillEnumNames, fillValue);
 		}
 		return super.getPropertyActualValue(id);
 	}
