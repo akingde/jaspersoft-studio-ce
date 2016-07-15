@@ -157,7 +157,7 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	public ImageDescriptor getImagePath() {
 		JRDesignReportTemplate jt = (JRDesignReportTemplate) getValue();
 		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null
-				&& ExternalStylesManager.isNotValuable(this)) {
+				&& (ExternalStylesManager.isNotValuable(this) ||  !ExternalStylesManager.isTemplateValid(this))) {
 			return styleNotFoundImage;
 		}
 		return getIconDescriptor().getIcon16();

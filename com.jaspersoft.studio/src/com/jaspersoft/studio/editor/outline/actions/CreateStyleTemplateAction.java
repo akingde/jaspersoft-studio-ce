@@ -14,22 +14,32 @@ package com.jaspersoft.studio.editor.outline.actions;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
+import com.jaspersoft.studio.ExternalStylesManager;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+import com.jaspersoft.studio.jface.dialogs.StyleTemplateSelectionDialog;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.model.style.command.CreateStyleTemplateCommand;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 
 /*
  * The Class CreateStyleTemplateAction.
  */
-public class CreateStyleTemplateAction extends ACreateAndSelectAction {
+public class CreateStyleTemplateAction extends ACachedSelectionAction {
 
 	/** The Constant ID. */
 	public static final String ID = "create_style_template"; //$NON-NLS-1$
@@ -42,15 +52,11 @@ public class CreateStyleTemplateAction extends ACreateAndSelectAction {
 	 */
 	public CreateStyleTemplateAction(IWorkbenchPart part) {
 		super(part);
-		setCreationFactory(new JDPaletteCreationFactory(MStyleTemplate.class));
 	}
 	
 	@Override
 	protected boolean calculateEnabled() {
-		if(!checkSingleSelectedObject(MStyles.class)){
-			return false;
-		}
-		return super.calculateEnabled();
+		return checkSingleSelectedObject(MStyles.class);
 	}
 
 	/**
@@ -67,10 +73,29 @@ public class CreateStyleTemplateAction extends ACreateAndSelectAction {
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED));
 		setEnabled(false);
 	}
-
+	
 	@Override
 	public void run() {
-		super.run();
+		MStyles node = (MStyles)editor.getSelectionCache().getSelectionModelForType(MStyles.class).get(0);
+		JasperReportsConfiguration jConfig = node.getJasperConfiguration();
+		StyleTemplateSelectionDialog fsd = new StyleTemplateSelectionDialog(UIUtils.getShell());
+		fsd.configureDialog(jConfig);
+		if (fsd.open() == Dialog.OK) { 
+			JRDesignReportTemplate jrTemplate = MStyleTemplate.createJRTemplate();
+			jrTemplate.setSourceExpression(fsd.getFileExpression());
+			IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
+			String location = ExternalStylesManager.evaluateStyleExpression(jrTemplate, project, jConfig);
+			if (location != null && ExternalStylesManager.validateTemplate(jConfig, location)){
+				//Check if the template is valid and add it only in that case
+				CreateStyleTemplateCommand command = new CreateStyleTemplateCommand(node, jrTemplate, 0);
+				execute(command);
+				jConfig.refreshCachedStyles();
+			} else {
+				UIUtils.showWarning("The selected resource is not a valid template style");
+			}
+		}
+		
+		
 		ISelection s = getSelection();
 		if (s instanceof StructuredSelection) {
 			Object obj = ((StructuredSelection) s).getFirstElement();

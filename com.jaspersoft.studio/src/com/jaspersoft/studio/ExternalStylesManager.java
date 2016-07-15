@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +38,7 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
+import net.sf.jasperreports.repo.RepositoryUtil;
 
 /**
  * Class that caches the external styles to improve the performance when resolving their names
@@ -198,19 +200,74 @@ public class ExternalStylesManager {
 				return externalStylesCache.get(key).getTemplate();
 			} else {
 				try {
-					JRTemplate resolvedTemplate = JRXmlTemplateLoader.getInstance(jConf).loadTemplate(location);
-					List<JRStyle> templateStyles = new ArrayList<JRStyle>();
-					loadTemplateStyle(resolvedTemplate, location, jConf, templateStyles);
-					StyleCacheEntry cacheEntry = new StyleCacheEntry(resolvedTemplate, jConf, templateStyles);
-					externalStylesCache.put(key, cacheEntry);
-					if (!isNestedCall) jConf.refreshCachedStyles();
-					return resolvedTemplate;
+					byte[] data = RepositoryUtil.getInstance(jConf).getBytesFromLocation(location);
+					if (data != null){
+						JRTemplate resolvedTemplate = JRXmlTemplateLoader.load(new ByteArrayInputStream(data));
+						if (resolvedTemplate != null){
+							//bytestream was found and it is of a valid template
+							List<JRStyle> templateStyles = new ArrayList<JRStyle>();
+							loadTemplateStyle(resolvedTemplate, location, jConf, templateStyles);
+							StyleCacheEntry cacheEntry = new StyleCacheEntry(resolvedTemplate, jConf, templateStyles);
+							externalStylesCache.put(key, cacheEntry);
+							if (!isNestedCall) jConf.refreshCachedStyles();
+							return resolvedTemplate;
+						} else {
+							//bytestram was found but it is not a valid template, cache an empty entry
+							StyleCacheEntry cacheEntry = new StyleCacheEntry(null, jConf, new ArrayList<JRStyle>());
+							externalStylesCache.put(key, cacheEntry);
+						}
+					} else {
+						//bytesteam was not found, cache an empty entry. Will need a manual refresh to reevaluate the template
+						//or a resource change event, that wipe the cache
+						StyleCacheEntry cacheEntry = new StyleCacheEntry(null, jConf, new ArrayList<JRStyle>());
+						externalStylesCache.put(key, cacheEntry);
+					}
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Check if the template on a specific path is a valid TemplateStyle. If the template is 
+	 * was still unresolved it is resolved and checked. If it is valid it is also cached, since
+	 * it can be requested later
+	 * 
+	 * @param jConfig the {@link JasperReportsConfiguration} of the report where the template is, mustbe not null
+	 * @param location the path to resolve the template, must be not null
+	 * @return true if the template can be resolved and it is valid, false otherwise
+	 */
+	public static boolean validateTemplate(JasperReportsConfiguration jConfig, String location){
+			IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
+			String projectPath = project.getLocation().toPortableString();
+			String key = projectPath + location;
+			if (externalStylesCache.containsKey(key)){
+				return externalStylesCache.get(key).getTemplate() != null;
+			} else {
+				try{
+					byte[] data = RepositoryUtil.getInstance(jConfig).getBytesFromLocation(location);
+					if (data != null){
+						JRTemplate template = JRXmlTemplateLoader.load(new ByteArrayInputStream(data));
+						if (template != null){
+							//synce the template was found save it in the cache
+							List<JRStyle> templateStyles = new ArrayList<JRStyle>();
+							loadTemplateStyle(template, location, jConfig, templateStyles);
+							StyleCacheEntry cacheEntry = new StyleCacheEntry(template, jConfig, templateStyles);
+							externalStylesCache.put(key, cacheEntry);
+							return true;
+						} else {
+							return false;
+						}
+					}
+					return true;
+				} catch (Exception ex){
+					ex.printStackTrace();
+					JaspersoftStudioPlugin.getInstance().logError(ex);
+					return false;
+				}
+		}
 	}
 	
 	/**
@@ -368,6 +425,29 @@ public class ExternalStylesManager {
 			}
 		}
 		return new ArrayList<JRStyle>();
+	}
+	
+	public static boolean isTemplateValid(MStyleTemplate template){
+		JasperReportsConfiguration jConfig = template.getJasperConfiguration();
+		IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		return isTemplateValid((JRReportTemplate)template.getValue(), project, jConfig);
+	}
+	
+	public static boolean isTemplateValid(JRReportTemplate style, IFile project, JasperReportsConfiguration jConfig){
+		String evaluatedExpression = evaluateStyleExpression(style, project, jConfig);
+		if (evaluatedExpression != null) {
+			String projectPath = project.getLocation().toPortableString();
+			String key = projectPath + evaluatedExpression;
+			if (externalStylesCache.containsKey(key)){
+				return externalStylesCache.get(key).getTemplate() != null;
+			} else {
+				JRTemplate loadedTemplate = getTemplate(jConfig, evaluatedExpression);
+				if (loadedTemplate != null){
+					return externalStylesCache.get(key).getTemplate() != null;
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**
