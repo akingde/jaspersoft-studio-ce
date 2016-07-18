@@ -39,34 +39,28 @@ public class ChartSection extends AbstractSection {
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
-	public void createControls(Composite parent,
-			TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent.setLayout(new GridLayout(3, false));
 
-		createWidget4Property(parent, JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
-
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRBaseChart.PROPERTY_RENDER_TYPE)
-				.getControl().setLayoutData(gd);
+		createWidget4Property(parent, JRBaseChart.PROPERTY_RENDER_TYPE).getControl().setLayoutData(gd);
 
 		gd = new GridData();
 		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRBaseChart.PROPERTY_THEME).getControl()
-				.setLayoutData(gd);
+		createWidget4Property(parent, JRBaseChart.PROPERTY_THEME).getControl().setLayoutData(gd);
 
 		IPropertyDescriptor pd = getPropertyDesriptor(JRDesignChart.PROPERTY_EVALUATION_TIME);
 		IPropertyDescriptor gpd = getPropertyDesriptor(JRDesignChart.PROPERTY_EVALUATION_GROUP);
 		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
 		widgets.put(pd.getId(), new SPEvaluationTime(parent, this, pd, gpd));
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
-		addProvidedProperties(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS, Messages.MChart_customizer_class);
 		addProvidedProperties(JRBaseChart.PROPERTY_RENDER_TYPE, Messages.MChart_renderer_type);
 		addProvidedProperties(JRBaseChart.PROPERTY_THEME, Messages.MChart_theme);
 		addProvidedProperties(JRDesignChart.PROPERTY_EVALUATION_TIME, Messages.MChart_evaluation_time);
@@ -77,8 +71,7 @@ public class ChartSection extends AbstractSection {
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode md = super.getModelFromEditPart(item);
 		if (md instanceof MChartAxes)
-			return (APropertyNode) md
-					.getPropertyValue(JRDesignChartAxis.PROPERTY_CHART);
+			return (APropertyNode) md.getPropertyValue(JRDesignChartAxis.PROPERTY_CHART);
 		return md;
 	}
 

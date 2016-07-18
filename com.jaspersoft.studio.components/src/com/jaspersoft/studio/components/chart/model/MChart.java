@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
@@ -25,6 +26,7 @@ import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
 import com.jaspersoft.studio.components.chart.model.plot.PlotFactory;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
+import com.jaspersoft.studio.components.chart.property.widget.SPChartCustomizer;
 import com.jaspersoft.studio.components.chart.util.ChartHelper;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.CategorySerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.GanttSeries;
@@ -63,6 +65,8 @@ import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -97,7 +101,9 @@ import net.sf.jasperreports.charts.design.JRDesignXyzSeries;
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.charts.type.TimePeriodEnum;
 import net.sf.jasperreports.charts.type.ValueLocationEnum;
+import net.sf.jasperreports.components.charts.ChartCustomizer;
 import net.sf.jasperreports.engine.JRChart;
+import net.sf.jasperreports.engine.JRChartCustomizer;
 import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
@@ -123,30 +129,30 @@ import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
  */
 public class MChart extends MGraphicElementLineBox
 		implements IContainer, IContainerEditPart, IPastable, IDatasetContainer {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	public static final String PLOTPROPERTY = "PLOTPROPERTY";
-	
+
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
+
 	private static EdgePropertyDescriptor titlePositionD;
-	
+
 	private static EdgePropertyDescriptor legendPositionD;
-	
+
 	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
-	
+
 	private IPropertyDescriptor[] descriptors;
-	
+
 	private RComboBoxPropertyDescriptor evaluationGroupD;
-	
+
 	private MChartPlot mChartPlot;
-	
+
 	private MFont tFont;
-	
+
 	private MFont stFont;
-	
+
 	private MFont lFont;
 
 	private MHyperLink mHyperLink;
@@ -226,7 +232,19 @@ public class MChart extends MGraphicElementLineBox
 		desc.add(evaluationTimeD);
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS,
-				Messages.MChart_customizer_class);
+				Messages.MChart_customizer_class) {
+			public ASPropertyWidget<RWComboBoxPropertyDescriptor> createWidget(Composite parent,
+					AbstractSection section) {
+				SPChartCustomizer classNameWidget = new SPChartCustomizer(parent, section, this);
+				classNameWidget.setClassesOfType(classes);
+				classNameWidget.setReadOnly(readOnly);
+				return classNameWidget;
+			}
+		};
+		List<Class<?>> classes = new ArrayList<Class<?>>();
+		classes.add(JRChartCustomizer.class);
+		classes.add(ChartCustomizer.class);
+		classD.setClasses(classes);
 		classD.setDescription(Messages.MChart_customizer_class_description);
 		desc.add(classD);
 
@@ -372,7 +390,7 @@ public class MChart extends MGraphicElementLineBox
 
 		rendererTypeD.setCategory(Messages.MChart_common_chart_properties_category);
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
@@ -392,9 +410,9 @@ public class MChart extends MGraphicElementLineBox
 		defaultsMap.put(JRBaseChart.PROPERTY_TITLE_POSITION, new DefaultValue(null, true));
 		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_POSITION, new DefaultValue(null, true));
 		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, true));
-		
+
 		defaultsMap.putAll(new MHyperLink(null).getDefaultsPropertiesMap());
-		
+
 		return defaultsMap;
 	}
 

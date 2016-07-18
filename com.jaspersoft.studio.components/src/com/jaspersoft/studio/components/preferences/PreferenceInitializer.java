@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.components.chart.preferences.ChartCustomizerPreferencePage;
 import com.jaspersoft.studio.components.map.pref.KeysPreferencePage;
 
 /*
@@ -22,7 +23,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
+	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
+	 * initializeDefaultPreferences()
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
@@ -33,6 +35,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public static void initDefaultProperties(IPreferenceStore store) {
 		ComponentsPreferencePageExtension.getDefaults(store);
 		KeysPreferencePage.getDefaults(store);
+		ChartCustomizerPreferencePage.getDefaults(store);
 	}
 
 }

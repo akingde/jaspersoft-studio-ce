@@ -43,6 +43,15 @@
          </propertySection>
          <propertySection
                afterSection="com.jaspersoft.studio.components.chart.property.section.Chart"
+               class="com.jaspersoft.studio.components.chart.property.section.ChartCustomizerSection"
+               id="com.jaspersoft.studio.components.chart.property.section.ChartCustomizerSection"
+               tab="com.jaspersoft.studio.components.chart">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.MChart">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.ChartCustomizerSection"
                class="com.jaspersoft.studio.components.chart.property.section.LegendSection"
                id="com.jaspersoft.studio.components.chart.property.section.LegendSection"
                tab="com.jaspersoft.studio.components.chart">
@@ -51,7 +60,7 @@
             </input>
          </propertySection>
          <propertySection
-               afterSection="com.jaspersoft.studio.components.chart.property.section.Chart"
+               afterSection="com.jaspersoft.studio.components.chart.property.section.ChartCustomizerSection"
                class="com.jaspersoft.studio.components.chart.property.section.TitleSection"
                id="com.jaspersoft.studio.components.chart.property.section.TitleSection"
                tab="com.jaspersoft.studio.components.chart">
@@ -1103,5 +1112,14 @@
             extendedPageId="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"
             id="com.jaspersoft.studio.components.ComponentsPreferencePage">
       </pageExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
+            class="com.jaspersoft.studio.components.chart.preferences.ChartCustomizerPreferencePage"
+            id="com.jaspersoft.studio.components.chart.preferences.ChartCustomizerPreferencePage"
+            name="%ChartCustomizers">
+      </page>
    </extension>
 </plugin>

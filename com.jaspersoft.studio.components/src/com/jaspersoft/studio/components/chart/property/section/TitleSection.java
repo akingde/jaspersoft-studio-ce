@@ -34,45 +34,50 @@ import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 public class TitleSection extends AbstractRealValueSection {
 
 	private ExpandableComposite section;
-	
+
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
-	public void createControls(Composite parent,
-			TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSection(parent,Messages.TitleSection_Title_Label, true, 2);
-		section = (ExpandableComposite)group.getParent();
+		Composite group = getWidgetFactory().createSection(parent, Messages.TitleSection_Title_Label, true, 2);
+		section = (ExpandableComposite) group.getParent();
+		section.setExpanded(false);
 
-		getWidgetFactory().createCLabel(group,Messages.TitleSection_Expression_Label);
+		getWidgetFactory().createCLabel(group, Messages.TitleSection_Expression_Label);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		createWidget4Property(group, JRDesignChart.PROPERTY_TITLE_EXPRESSION, false).getControl().setLayoutData(gd);
 
-		getWidgetFactory().createCLabel(group,Messages.TitleSection_Position_Label);
+		getWidgetFactory().createCLabel(group, Messages.TitleSection_Position_Label);
 		createWidget4Property(group, JRBaseChart.PROPERTY_TITLE_POSITION, false);
 
-		getWidgetFactory().createCLabel(group,Messages.TitleSection_Color_Label);
+		getWidgetFactory().createCLabel(group, Messages.TitleSection_Color_Label);
 		createWidget4Property(group, JRBaseChart.PROPERTY_TITLE_COLOR, false);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		createWidget4Property(group, JRDesignChart.PROPERTY_TITLE_FONT, false).getControl().setLayoutData(gd);
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
-		addProvidedProperties(JRDesignChart.PROPERTY_TITLE_EXPRESSION, com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_expression);
-		addProvidedProperties(JRBaseChart.PROPERTY_TITLE_POSITION, com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position);
-		addProvidedProperties(JRBaseChart.PROPERTY_TITLE_COLOR, com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_color);
-		addProvidedProperties(JRDesignChart.PROPERTY_TITLE_FONT, com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_font);
+		addProvidedProperties(JRDesignChart.PROPERTY_TITLE_EXPRESSION,
+				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_expression);
+		addProvidedProperties(JRBaseChart.PROPERTY_TITLE_POSITION,
+				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position);
+		addProvidedProperties(JRBaseChart.PROPERTY_TITLE_COLOR,
+				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_color);
+		addProvidedProperties(JRDesignChart.PROPERTY_TITLE_FONT,
+				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_font);
 	}
-	
+
 	@Override
 	public void expandForProperty(Object propertyId) {
-		if (section != null && !section.isExpanded()) section.setExpanded(true);
+		if (section != null && !section.isExpanded())
+			section.setExpanded(true);
 	}
 
 	@Override
