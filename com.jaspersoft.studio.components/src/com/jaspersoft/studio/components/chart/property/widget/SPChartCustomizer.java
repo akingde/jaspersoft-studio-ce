@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 
 import com.jaspersoft.jasperreports.chartcustomizers.ProxyChartCustomizer;
+import com.jaspersoft.studio.components.chart.preferences.ChartCustomizerPreferencePage;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -97,6 +98,12 @@ public class SPChartCustomizer extends SPClassType<RWComboBoxPropertyDescriptor>
 
 			@Override
 			public Object newElement(List<?> input, int pos) {
+				String cList = section.getJasperReportsContext()
+						.getProperty(ChartCustomizerPreferencePage.CHARTCUSTOMIZER);
+				// we need a dialog, from which user will select a chart
+				// customizer from the preferences list
+				// I'll add also possibility to add a chart customizer class, to
+				// be complete, in advanced mode
 				// TODO add a chart customizer here
 				return "ABCD";
 			}
@@ -124,7 +131,7 @@ public class SPChartCustomizer extends SPClassType<RWComboBoxPropertyDescriptor>
 				gd.horizontalSpan = 3;
 				section.getWidgetFactory().createCLabel(ftext.getParent(), "here we'll have an UI for\n" + path)
 						.setLayoutData(gd);
-				// build ui here
+				// build ui here if we have something in json
 			}
 		} catch (
 

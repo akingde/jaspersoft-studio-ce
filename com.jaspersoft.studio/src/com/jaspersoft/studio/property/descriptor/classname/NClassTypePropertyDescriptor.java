@@ -23,10 +23,15 @@ public class NClassTypePropertyDescriptor extends ClassTypePropertyDescriptor im
 	/**
 	 * Field to check if the widget should be read only
 	 */
-	private boolean readOnly;
+	protected boolean readOnly;
 
 	public NClassTypePropertyDescriptor(Object id, String displayName) {
-		super(id, displayName);
+		super(id, displayName, new String[0]);
+		readOnly = false;
+	}
+
+	public NClassTypePropertyDescriptor(Object id, String displayName, String[] items) {
+		super(id, displayName, items);
 		readOnly = false;
 	}
 
@@ -43,8 +48,9 @@ public class NClassTypePropertyDescriptor extends ClassTypePropertyDescriptor im
 	}
 
 	public ASPropertyWidget<RWComboBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-		ASPropertyWidget<RWComboBoxPropertyDescriptor> classNameWidget = new SPClassType<RWComboBoxPropertyDescriptor>(
-				parent, section, this);
+		SPClassType<RWComboBoxPropertyDescriptor> classNameWidget = new SPClassType<RWComboBoxPropertyDescriptor>(parent,
+				section, this);
+		classNameWidget.setClassesOfType(classes);
 		classNameWidget.setReadOnly(readOnly);
 		return classNameWidget;
 	}

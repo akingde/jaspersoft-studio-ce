@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
@@ -31,11 +27,11 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
 
 public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
-	
+
 	protected Combo combo;
 
 	protected APropertyNode pnode;
-	
+
 	public SPRWCombo(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -79,7 +75,6 @@ public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 		combo.setToolTipText(pDescriptor.getDescription());
 	}
 
-
 	public void setData(APropertyNode pnode, Object b) {
 		createContextualMenu(pnode);
 		refresh = true;
@@ -117,13 +112,13 @@ public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 		}
 		combo.getParent().layout(true);
 	}
-	
+
 	/**
 	 * Return the items inside the combo control
 	 * 
-	 * @return a list of string 
- 	 */
-	public String[] getItems(){
+	 * @return a list of string
+	 */
+	public String[] getItems() {
 		return combo.getItems();
 	}
 

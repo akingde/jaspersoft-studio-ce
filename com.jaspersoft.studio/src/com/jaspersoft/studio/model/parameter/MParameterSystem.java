@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
@@ -30,8 +31,13 @@ import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.ClassTypeComboCellEditor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPClassTypeCombo;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -40,16 +46,16 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav
  */
 public class MParameterSystem extends APropertyNode implements IDragable {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
 	private static IPropertyDescriptor[] descriptors;
-	
+
 	private static ParameterNameValidator validator;
-	
+
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -154,13 +160,22 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 		desc.add(nameD);
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME,
-				Messages.common_class);
+				Messages.common_class, ClassTypeComboCellEditor.DEFAULT_ITEMS) {
+			@Override
+			public ASPropertyWidget<RWComboBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+				SPClassTypeCombo<RWComboBoxPropertyDescriptor> classNameWidget = new SPClassTypeCombo<RWComboBoxPropertyDescriptor>(
+						parent, section, this);
+				classNameWidget.setClassesOfType(classes);
+				classNameWidget.setReadOnly(readOnly);
+				return classNameWidget;
+			}
+		};
 		classD.setDescription(Messages.MParameterSystem_class_description);
 		desc.add(classD);
-		classD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter_class"));
+		classD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter_class"));
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();

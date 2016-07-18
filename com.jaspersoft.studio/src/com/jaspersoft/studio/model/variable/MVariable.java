@@ -8,16 +8,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.variable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
-import net.sf.jasperreports.engine.type.CalculationEnum;
-import net.sf.jasperreports.engine.type.IncrementTypeEnum;
-import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.graphics.Color;
@@ -40,6 +33,15 @@ import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.fill.JRIncrementerFactory;
+import net.sf.jasperreports.engine.type.CalculationEnum;
+import net.sf.jasperreports.engine.type.IncrementTypeEnum;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 /*
  * The Class MVariable.
@@ -169,6 +171,9 @@ public class MVariable extends MVariableSystem implements ICopyable {
 
 		NClassTypePropertyDescriptor factoryClassName = new NClassTypePropertyDescriptor(
 				JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, Messages.MVariable_incrementer_factory_class_name);
+		List<Class<?>> classes = new ArrayList<Class<?>>();
+		classes.add(JRIncrementerFactory.class);
+		factoryClassName.setClasses(classes);
 		factoryClassName.setDescription(Messages.MVariable_incrementer_factory_class_name_description);
 		desc.add(factoryClassName);
 
@@ -350,7 +355,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		super.setValue(value);
 		setEditable(true);
 	}
-	
+
 	@Override
 	public boolean isCuttable(ISelection currentSelection) {
 		return true;

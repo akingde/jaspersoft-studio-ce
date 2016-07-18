@@ -9,10 +9,12 @@
 package com.jaspersoft.studio.model.dataset;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
+import net.sf.jasperreports.engine.JRAbstractScriptlet;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRQuery;
@@ -60,26 +62,26 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Chicu Veaceslav
  */
 public class MDataset extends APropertyNode implements ICopyable {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
-	
+
 	private static NamedEnumPropertyDescriptor<WhenResourceMissingTypeEnum> whenResMissTypeD;
-	
+
 	private static IPropertyDescriptor[] descriptors;
-	
+
 	private static DatasetNameValidator validator;
 
-	/** 
-	 * The icon descriptor. 
+	/**
+	 * The icon descriptor.
 	 */
 	private static IIconDescriptor iconDescriptor;
 
 	private MReport mreport;
 
 	private MQuery mQuery;
-	
+
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -214,15 +216,18 @@ public class MDataset extends APropertyNode implements ICopyable {
 				Messages.common_properties);
 		propertiesD.setDescription(Messages.MDataset_properties_description);
 		desc.add(propertiesD);
-		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property")); //$NON-NLS-1$
+		propertiesD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property")); //$NON-NLS-1$
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
 				Messages.MDataset_scriplet_class);
 		classD.setDescription(Messages.MDataset_class_description);
+		List<Class<?>> classes = new ArrayList<Class<?>>();
+		classes.add(JRAbstractScriptlet.class);
+		classD.setClasses(classes);
 		desc.add(classD);
-		classD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet")); //$NON-NLS-1$
+		classD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet")); //$NON-NLS-1$
 
 		ResourceBundlePropertyDescriptor resBundleD = new ResourceBundlePropertyDescriptor(
 				JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, Messages.MDataset_resource_bundle);
@@ -233,8 +238,8 @@ public class MDataset extends APropertyNode implements ICopyable {
 				Messages.common_query, NullEnum.NULL, Messages.MDataset_Edit_Query_Button_Text);
 		queryD.setDescription(Messages.MDataset_query_description);
 		desc.add(queryD);
-		queryD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#queryString")); //$NON-NLS-1$
+		queryD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#queryString")); //$NON-NLS-1$
 
 		whenResMissTypeD = new NamedEnumPropertyDescriptor<WhenResourceMissingTypeEnum>(
 				JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, Messages.MDataset_when_resource_missing_type,
@@ -242,30 +247,32 @@ public class MDataset extends APropertyNode implements ICopyable {
 		whenResMissTypeD.setDescription(Messages.MDataset_when_resource_missing_type_description);
 		desc.add(whenResMissTypeD);
 
-		DefaultDatasetPropertyDescriptor defaultDatasetDescriptor = new DefaultDatasetPropertyDescriptor(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, "Default Data Adapter");
+		DefaultDatasetPropertyDescriptor defaultDatasetDescriptor = new DefaultDatasetPropertyDescriptor(
+				DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, "Default Data Adapter");
 		defaultDatasetDescriptor.setDescription(Messages.MDataset_defaultDATooltip);
 		desc.add(defaultDatasetDescriptor);
-		
+
 		JRExpressionPropertyDescriptor filterExpression = new JRExpressionPropertyDescriptor(
 				JRDesignDataset.PROPERTY_FILTER_EXPRESSION, Messages.MDataset_filter_expression);
 		filterExpression.setDescription(Messages.MDataset_filter_expression_description);
 		desc.add(filterExpression);
-		filterExpression.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#filterExpression")); //$NON-NLS-1$
+		filterExpression.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#filterExpression")); //$NON-NLS-1$
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subDataset"); //$NON-NLS-1$
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
 		defaultsMap.put(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, new DefaultValue(null, true));
 		defaultsMap.put(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, new DefaultValue(null, true));
-		
-		int whenResourceMissingValue = NamedEnumPropertyDescriptor.getIntValue(WhenResourceMissingTypeEnum.NULL, NullEnum.NOTNULL, 
-																																						WhenResourceMissingTypeEnum.NULL);
-		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, new DefaultValue(whenResourceMissingValue, false));
-		
+
+		int whenResourceMissingValue = NamedEnumPropertyDescriptor.getIntValue(WhenResourceMissingTypeEnum.NULL,
+				NullEnum.NOTNULL, WhenResourceMissingTypeEnum.NULL);
+		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
+				new DefaultValue(whenResourceMissingValue, false));
+
 		return defaultsMap;
 	}
 
@@ -299,14 +306,15 @@ public class MDataset extends APropertyNode implements ICopyable {
 			JRPropertiesMap pmap = jrDataset.getPropertiesMap().cloneProperties();
 			return pmap;
 		}
-		if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE)){
+		if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE)) {
 			return whenResMissTypeD.getIntValue(jrDataset.getWhenResourceMissingTypeValue());
 		}
-		if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE)){
+		if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE)) {
 			return jrDataset.getResourceBundle();
 		}
-		if (id.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)){
-			String location = jrDataset.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+		if (id.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)) {
+			String location = jrDataset.getPropertiesMap()
+					.getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
 			return location;
 		}
 		return null;
@@ -358,13 +366,13 @@ public class MDataset extends APropertyNode implements ICopyable {
 				jrDataset.getPropertiesMap().removeProperty(names[i]);
 			}
 			names = v.getPropertyNames();
-			for (int i = 0; i < names.length; i++){
+			for (int i = 0; i < names.length; i++) {
 				jrDataset.setProperty(names[i], v.getProperty(names[i]));
 			}
-			//really important to trigger the property with source the JR object and not the node
-			//using the node could cause problem with the refresh of the advanced properties view
+			// really important to trigger the property with source the JR object and not the node
+			// using the node could cause problem with the refresh of the advanced properties view
 			firePropertyChange(new PropertyChangeEvent(jrDataset, PROPERTY_MAP, originalMap, jrDataset.getPropertiesMap()));
-		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE)){
+		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE)) {
 			jrDataset.setWhenResourceMissingType(whenResMissTypeD.getEnumValue(value));
 		} else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
 			if (value instanceof MQuery) {
@@ -374,15 +382,18 @@ public class MDataset extends APropertyNode implements ICopyable {
 				JRDesignQuery jrQuery = (JRDesignQuery) mQuery.getValue();
 				jrDataset.setQuery(jrQuery);
 			}
-		} else if (id.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)){
-			if (value == null || value.toString().trim().isEmpty()){
-				jrDataset.getPropertiesMap().removeProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+		} else if (id.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)) {
+			if (value == null || value.toString().trim().isEmpty()) {
+				jrDataset.getPropertiesMap()
+						.removeProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
 			} else {
-				jrDataset.getPropertiesMap().setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, value.toString());
+				jrDataset.getPropertiesMap().setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
+						value.toString());
 			}
-			//really important to trigger the property with source the JR object and not the node
-			//using the node could cause problem with the refresh of the advanced properties view
-			firePropertyChange(new PropertyChangeEvent(jrDataset, DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, null, value));
+			// really important to trigger the property with source the JR object and not the node
+			// using the node could cause problem with the refresh of the advanced properties view
+			firePropertyChange(new PropertyChangeEvent(jrDataset,
+					DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, null, value));
 		}
 	}
 
@@ -447,28 +458,28 @@ public class MDataset extends APropertyNode implements ICopyable {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return the {@link MFields} instance, container for fields
 	 */
 	public MFields getMFields() {
 		return getFirstChildOfType(MFields.class);
 	}
-	
+
 	/**
 	 * @return the {@link MParameters} instance, container for parameters
 	 */
 	public MParameters<?> getMParameters() {
 		return getFirstChildOfType(MParameters.class);
 	}
-	
+
 	/**
 	 * @return the {@link MSortFields} instance, container for sort fields
 	 */
 	public MSortFields getMSortFields() {
 		return getFirstChildOfType(MSortFields.class);
 	}
-	
+
 	/**
 	 * Returns the first child that has the same class of the specified input parameter
 	 * 
@@ -481,14 +492,14 @@ public class MDataset extends APropertyNode implements ICopyable {
 		List<INode> children = getChildren();
 		if (children == null || children.isEmpty())
 			children = mreport.getChildren();
-		for(INode n : children) {
-			if(classType.isInstance(n)) {
+		for (INode n : children) {
+			if (classType.isInstance(n)) {
 				return (T) n;
 			}
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean isCuttable(ISelection currentSelection) {
 		return true;

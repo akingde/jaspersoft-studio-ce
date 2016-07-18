@@ -23,10 +23,14 @@ public class ClassTypePropertyDescriptor extends RWComboBoxPropertyDescriptor {
 		this.classes = classes;
 	}
 
-	private List<Class<?>> classes;
+	protected List<Class<?>> classes;
 
 	public ClassTypePropertyDescriptor(Object id, String displayName) {
 		super(id, displayName, ClassTypeComboCellEditor.DEFAULT_ITEMS, NullEnum.NULL, false);
+	}
+
+	public ClassTypePropertyDescriptor(Object id, String displayName, String[] items) {
+		super(id, displayName, items, NullEnum.NULL, false);
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {

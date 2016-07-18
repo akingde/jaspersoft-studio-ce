@@ -12,15 +12,10 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
@@ -31,10 +26,21 @@ import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.ClassTypeComboCellEditor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPClassTypeCombo;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /*
  * The Class MVariableSystem.
@@ -139,13 +145,13 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		updateNameValidator();
 	}
 
-	protected void updateNameValidator(){
-		if (validator == null){
+	protected void updateNameValidator() {
+		if (validator == null) {
 			validator = new VariableNameValidator();
 		}
 		validator.setTargetNode(this);
 	}
-	
+
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -161,7 +167,16 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		desc.add(nameD);
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,
-				Messages.common_value_class_name);
+				Messages.common_value_class_name, ClassTypeComboCellEditor.DEFAULT_ITEMS) {
+			@Override
+			public ASPropertyWidget<RWComboBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+				SPClassTypeCombo<RWComboBoxPropertyDescriptor> classNameWidget = new SPClassTypeCombo<RWComboBoxPropertyDescriptor>(
+						parent, section, this);
+				classNameWidget.setClassesOfType(classes);
+				classNameWidget.setReadOnly(readOnly);
+				return classNameWidget;
+			}
+		};
 		classD.setDescription(Messages.MVariableSystem_value_class_name_description);
 		desc.add(classD);
 		classD.setHelpRefBuilder(
