@@ -229,8 +229,32 @@ public class ItemPropertyDescription<T> {
 				}
 			});
 			refreshItem.setText(Messages.ASPropertyWidget_0);
-
 		}
+		if (!isMandatory()) {
+			Menu controlMenu = c.getMenu();
+			if (controlMenu == null) {
+				controlMenu = new Menu(c);
+				c.setMenu(controlMenu);
+			}
+			for (MenuItem mi : controlMenu.getItems())
+				if (mi.getText().equals(Messages.ASPropertyWidget_1))
+					return;
+
+			MenuItem refreshItem = new MenuItem(controlMenu, SWT.NONE);
+			refreshItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					StandardItemProperty v = wiProp.getValue();
+					if (v != null) {
+						v.setValue(null);
+						v.setValueExpression(null);
+					}
+					wiProp.setValue(v);
+				}
+			});
+			refreshItem.setText(Messages.ASPropertyWidget_1);
+		}
+
 	}
 
 	public void setValue(Control c, IWItemProperty wip) {
