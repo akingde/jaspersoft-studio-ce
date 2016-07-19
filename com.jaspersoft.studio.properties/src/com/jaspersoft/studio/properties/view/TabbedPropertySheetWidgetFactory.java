@@ -163,7 +163,14 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 		paintBordersFor(c);
 		return c;
 	}
-
+	
+	public SectionContainerComposite createSectionComposite(Composite parent, TabbedPropertySheetPage page, int style) {
+		SectionContainerComposite composite = new SectionContainerComposite(parent, page, style | Window.getDefaultOrientation());
+		adapt(composite);
+		paintBordersFor(composite);
+		return composite;
+	}
+	
 	public Composite createComposite(Composite parent) {
 		Composite c = createComposite(parent, SWT.NONE);
 		return c;

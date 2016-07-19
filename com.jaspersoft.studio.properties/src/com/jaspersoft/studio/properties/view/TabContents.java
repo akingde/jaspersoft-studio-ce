@@ -107,7 +107,8 @@ public final class TabContents {
 			pageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 			for (int i = 0; i < sections.length; i++) {
 				final ISection section = sections[i];
-				final Composite sectionComposite = page.getWidgetFactory().createComposite(pageComposite, SWT.NO_FOCUS);
+				//Create a composite that allow an easy access to the page
+				final Composite sectionComposite = page.getWidgetFactory().createSectionComposite(pageComposite, page, SWT.NO_FOCUS);
 				sectionComposite.setLayout(new GridLayout());
 				ISafeRunnable runnable = new SafeRunnable() {
 	
