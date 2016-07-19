@@ -84,6 +84,8 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 		for (Control c : cp.getChildren())
 			setupContextMenu(c, wiProp);
 		layout.topControl = cp;
+
+		setupContextMenu(textExpression, wiProp);
 		return cmp;
 	}
 
