@@ -120,6 +120,8 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.frame.MFrame;
+import com.jaspersoft.studio.model.image.MImage;
+import com.jaspersoft.studio.model.image.command.CreateImageCommand;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.style.MStyle;
@@ -505,6 +507,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		if (child instanceof MCompositeElement){
 			return CompositeElementManager.INSTANCE.getCommand(parent, (MCompositeElement)child, location, newIndex);
 		}  
+		if (child instanceof MImage && parent instanceof MCell)
+			return new CreateImageCommand((MCell)parent, (MImage)child, location, newIndex);
 		if (child instanceof MGraphicElement && parent instanceof MCell)
 			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, location, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)
