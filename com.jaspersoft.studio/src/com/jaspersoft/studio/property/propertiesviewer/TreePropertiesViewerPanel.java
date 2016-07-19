@@ -60,6 +60,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
  */
 public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends Composite {
 
+	public static final int SASH_WEIGHT_LEFT_PANEL = 25;
+	public static final int SASH_WEIGHT_MAIN_AREA = 75;
 	protected FormToolkit toolkit;
 	private List<T> nodes;
 	private List<PropertiesNodeChangeListener> nodeChangedListeners;
@@ -71,6 +73,7 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 	private StackLayout contentAreaLayout;
 	protected FilteredTree filteredTree;
 	protected CLabel titleLabel;
+	private SashForm panelSash;
 	
 	/**
 	 * Creates the panel.
@@ -96,12 +99,12 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 		gl_panel.marginHeight=0;
 		setLayout(gl_panel);
 		
-		final SashForm sash=new SashForm(this,SWT.HORIZONTAL);
+		panelSash = new SashForm(this,SWT.HORIZONTAL);
 		GridData gdsash=new GridData(SWT.FILL,SWT.FILL,true,true);
-		sash.setLayoutData(gdsash);
-		sash.SASH_WIDTH=1;
+		panelSash.setLayoutData(gdsash);
+		panelSash.SASH_WIDTH=1;
 		
-		Composite treeContainer=toolkit.createComposite(sash);
+		Composite treeContainer=toolkit.createComposite(panelSash);
 		treeContainer.setLayout(new GridLayout());
 		filteredTree=createTreeViewer(treeContainer);
 		filteredTree.getViewer().setInput(new Object());
@@ -109,7 +112,7 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 		
 		// Creates the panel that will contain the title area, a separator and
 		// the content area with currently selected page stuff.
-		Composite panelContainer=new Composite(sash, SWT.NONE);
+		Composite panelContainer=new Composite(panelSash, SWT.NONE);
 		GridLayout gl_panelContainer = new GridLayout(2,false);
 		gl_panelContainer.marginWidth=0;
 		gl_panelContainer.marginHeight=0;
@@ -132,7 +135,20 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 		contentArea.setLayout(contentAreaLayout);
 		
 		// Default weights ("percentages" of the total width)
-		sash.setWeights(new int[] {25, 75});
+		panelSash.setWeights(new int[] {SASH_WEIGHT_LEFT_PANEL, SASH_WEIGHT_MAIN_AREA});
+	}
+	
+	public int[] safeGetPanelSashWeights(){
+		if(panelSash!=null && !panelSash.isDisposed()){
+			return panelSash.getWeights();
+		}
+		return new int[] {SASH_WEIGHT_LEFT_PANEL,SASH_WEIGHT_MAIN_AREA};
+	}
+	
+	public void setPanelSashWeights(int[] weights) {
+		if(panelSash!=null && !panelSash.isDisposed()) {
+			panelSash.setWeights(weights);
+		}
 	}
 	
 	/**
