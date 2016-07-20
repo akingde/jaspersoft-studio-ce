@@ -336,10 +336,10 @@ terminal JRNPARAM:
 terminal STAR:
 	"*";
 
-terminal UNSIGNED returns ecore::EIntegerObject:
+terminal UNSIGNED returns ecore::ELongObject:
 	('0'..'9')+;
 
-terminal INT returns ecore::EIntegerObject:
+terminal INT returns ecore::ELongObject:
 	'-'? UNSIGNED;
 
 terminal SIGNED_DOUBLE returns ecore::EBigDecimal:

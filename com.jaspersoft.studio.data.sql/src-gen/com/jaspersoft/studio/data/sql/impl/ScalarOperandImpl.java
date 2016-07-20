@@ -142,7 +142,7 @@ public class ScalarOperandImpl extends RowValueImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected static final Integer SO_UINT_EDEFAULT = null;
+  protected static final Long SO_UINT_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getSoUInt() <em>So UInt</em>}' attribute.
@@ -152,7 +152,7 @@ public class ScalarOperandImpl extends RowValueImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected Integer soUInt = SO_UINT_EDEFAULT;
+  protected Long soUInt = SO_UINT_EDEFAULT;
 
   /**
    * The default value of the '{@link #getSoint() <em>Soint</em>}' attribute.
@@ -162,7 +162,7 @@ public class ScalarOperandImpl extends RowValueImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected static final Integer SOINT_EDEFAULT = null;
+  protected static final Long SOINT_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getSoint() <em>Soint</em>}' attribute.
@@ -172,7 +172,7 @@ public class ScalarOperandImpl extends RowValueImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected Integer soint = SOINT_EDEFAULT;
+  protected Long soint = SOINT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -315,7 +315,7 @@ public class ScalarOperandImpl extends RowValueImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public Integer getSoUInt()
+  public Long getSoUInt()
   {
     return soUInt;
   }
@@ -325,9 +325,9 @@ public class ScalarOperandImpl extends RowValueImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSoUInt(Integer newSoUInt)
+  public void setSoUInt(Long newSoUInt)
   {
-    Integer oldSoUInt = soUInt;
+    Long oldSoUInt = soUInt;
     soUInt = newSoUInt;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCALAR_OPERAND__SO_UINT, oldSoUInt, soUInt));
@@ -338,7 +338,7 @@ public class ScalarOperandImpl extends RowValueImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public Integer getSoint()
+  public Long getSoint()
   {
     return soint;
   }
@@ -348,9 +348,9 @@ public class ScalarOperandImpl extends RowValueImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSoint(Integer newSoint)
+  public void setSoint(Long newSoint)
   {
-    Integer oldSoint = soint;
+    Long oldSoint = soint;
     soint = newSoint;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCALAR_OPERAND__SOINT, oldSoint, soint));
@@ -410,10 +410,10 @@ public class ScalarOperandImpl extends RowValueImpl implements ScalarOperand
         setSodt((String)newValue);
         return;
       case SqlPackage.SCALAR_OPERAND__SO_UINT:
-        setSoUInt((Integer)newValue);
+        setSoUInt((Long)newValue);
         return;
       case SqlPackage.SCALAR_OPERAND__SOINT:
-        setSoint((Integer)newValue);
+        setSoint((Long)newValue);
         return;
     }
     super.eSet(featureID, newValue);

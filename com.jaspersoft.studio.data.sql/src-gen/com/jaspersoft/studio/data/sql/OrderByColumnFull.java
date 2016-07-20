@@ -58,12 +58,12 @@ public interface OrderByColumnFull extends OrOrderByColumn
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Col Order Int</em>' attribute.
-   * @see #setColOrderInt(Integer)
+   * @see #setColOrderInt(Long)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getOrderByColumnFull_ColOrderInt()
    * @model
    * @generated
    */
-  Integer getColOrderInt();
+  Long getColOrderInt();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.OrderByColumnFull#getColOrderInt <em>Col Order Int</em>}' attribute.
@@ -73,7 +73,7 @@ public interface OrderByColumnFull extends OrOrderByColumn
    * @see #getColOrderInt()
    * @generated
    */
-  void setColOrderInt(Integer value);
+  void setColOrderInt(Long value);
 
   /**
    * Returns the value of the '<em><b>Direction</b></em>' attribute.

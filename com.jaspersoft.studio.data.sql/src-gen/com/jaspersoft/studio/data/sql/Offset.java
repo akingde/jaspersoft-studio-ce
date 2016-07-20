@@ -31,12 +31,12 @@ public interface Offset extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Offset</em>' attribute.
-   * @see #setOffset(Integer)
+   * @see #setOffset(Long)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getOffset_Offset()
    * @model
    * @generated
    */
-  Integer getOffset();
+  Long getOffset();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Offset#getOffset <em>Offset</em>}' attribute.
@@ -46,6 +46,6 @@ public interface Offset extends EObject
    * @see #getOffset()
    * @generated
    */
-  void setOffset(Integer value);
+  void setOffset(Long value);
 
 } // Offset

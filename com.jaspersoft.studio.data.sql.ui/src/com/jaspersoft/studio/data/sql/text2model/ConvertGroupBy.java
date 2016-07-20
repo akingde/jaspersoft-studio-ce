@@ -35,13 +35,11 @@ import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ConvertGroupBy {
-	public static void convertGroupBy(SQLQueryDesigner designer, ANode qroot,
-			OrGroupByColumn cols) {
+	public static void convertGroupBy(SQLQueryDesigner designer, ANode qroot, OrGroupByColumn cols) {
 		if (cols == null)
 			return;
 		if (cols instanceof GroupByColumnFull)
-			doColumn(designer, Util.getKeyword(qroot, MSelect.class),
-					(GroupByColumnFull) cols);
+			doColumn(designer, Util.getKeyword(qroot, MSelect.class), (GroupByColumnFull) cols);
 		else if (cols instanceof OrGroupByColumn) {
 			MSelect msel = Util.getKeyword(qroot, MSelect.class);
 			for (GroupByColumnFull fcol : cols.getEntries())
@@ -49,13 +47,12 @@ public class ConvertGroupBy {
 		}
 	}
 
-	private static void doColumn(SQLQueryDesigner designer, MSelect msel,
-			GroupByColumnFull tf) {
+	private static void doColumn(SQLQueryDesigner designer, MSelect msel, GroupByColumnFull tf) {
 		try {
 			MGroupBy parent = Util.getKeyword(msel.getParent(), MGroupBy.class);
 			if (tf.getGbFunction() != null) {
-				String f = ConvertSelectColumns.getFunctionString(designer,
-						msel.getRoot(), parent, tf.getGbFunction(), msel);
+				String f = ConvertSelectColumns.getFunctionString(designer, msel.getRoot(), parent, tf.getGbFunction(),
+						msel);
 				new MGroupByExpression(parent, f);
 			} else if (tf.getColGrBy() != null) {
 				EList<EObject> eContents = tf.eContents();
@@ -67,31 +64,25 @@ public class ConvertGroupBy {
 				String table = ConvertUtil.getDbObjectName(eContents, 2);
 				String schema = ConvertUtil.getDbObjectName(eContents, 3);
 				// String catalog = getDbObjectName(eContents, 3);
-				KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(
-						msel, schema, table, column, designer);
+				KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column, designer);
 				if (kv != null)
 					new MGroupByColumn(parent, kv.key, kv.value);
 				else {
 					for (INode sn : msel.getChildren()) {
 						if (sn instanceof AMQueryAliased) {
 							String alias = ((AMQueryAliased<?>) sn).getAlias();
-							if (!Misc.isNullOrEmpty(alias)
-									&& alias.equalsIgnoreCase(column)) {
+							if (!Misc.isNullOrEmpty(alias) && alias.equalsIgnoreCase(column)) {
 								if (sn instanceof MSelectColumn)
-									new MGroupByColumn(parent,
-											((MSelectColumn) sn).getValue(),
-											((MSelectColumn) sn)
-													.getMFromTable());
+									new MGroupByColumn(parent, ((MSelectColumn) sn).getValue(),
+											((MSelectColumn) sn).getMFromTable());
 								else if (sn instanceof MSelectExpression)
-									new MGroupByExpression(parent,
-											(MSelectExpression) sn);
+									new MGroupByExpression(parent, (MSelectExpression) sn);
 							}
 						}
 					}
 				}
 			} else
-				new MGroupByExpression(parent,
-						Integer.toString(tf.getGrByInt()));
+				new MGroupByExpression(parent, Long.toString(tf.getGrByInt()));
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

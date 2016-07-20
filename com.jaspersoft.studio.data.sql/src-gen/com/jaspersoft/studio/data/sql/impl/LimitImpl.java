@@ -36,7 +36,7 @@ public class LimitImpl extends MinimalEObjectImpl.Container implements Limit
    * @generated
    * @ordered
    */
-  protected static final Integer L1_EDEFAULT = null;
+  protected static final Long L1_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getL1() <em>L1</em>}' attribute.
@@ -46,7 +46,7 @@ public class LimitImpl extends MinimalEObjectImpl.Container implements Limit
    * @generated
    * @ordered
    */
-  protected Integer l1 = L1_EDEFAULT;
+  protected Long l1 = L1_EDEFAULT;
 
   /**
    * The default value of the '{@link #getL2() <em>L2</em>}' attribute.
@@ -56,7 +56,7 @@ public class LimitImpl extends MinimalEObjectImpl.Container implements Limit
    * @generated
    * @ordered
    */
-  protected static final Integer L2_EDEFAULT = null;
+  protected static final Long L2_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getL2() <em>L2</em>}' attribute.
@@ -66,7 +66,7 @@ public class LimitImpl extends MinimalEObjectImpl.Container implements Limit
    * @generated
    * @ordered
    */
-  protected Integer l2 = L2_EDEFAULT;
+  protected Long l2 = L2_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -94,7 +94,7 @@ public class LimitImpl extends MinimalEObjectImpl.Container implements Limit
    * <!-- end-user-doc -->
    * @generated
    */
-  public Integer getL1()
+  public Long getL1()
   {
     return l1;
   }
@@ -104,9 +104,9 @@ public class LimitImpl extends MinimalEObjectImpl.Container implements Limit
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setL1(Integer newL1)
+  public void setL1(Long newL1)
   {
-    Integer oldL1 = l1;
+    Long oldL1 = l1;
     l1 = newL1;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.LIMIT__L1, oldL1, l1));
@@ -117,7 +117,7 @@ public class LimitImpl extends MinimalEObjectImpl.Container implements Limit
    * <!-- end-user-doc -->
    * @generated
    */
-  public Integer getL2()
+  public Long getL2()
   {
     return l2;
   }
@@ -127,9 +127,9 @@ public class LimitImpl extends MinimalEObjectImpl.Container implements Limit
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setL2(Integer newL2)
+  public void setL2(Long newL2)
   {
-    Integer oldL2 = l2;
+    Long oldL2 = l2;
     l2 = newL2;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.LIMIT__L2, oldL2, l2));
@@ -164,10 +164,10 @@ public class LimitImpl extends MinimalEObjectImpl.Container implements Limit
     switch (featureID)
     {
       case SqlPackage.LIMIT__L1:
-        setL1((Integer)newValue);
+        setL1((Long)newValue);
         return;
       case SqlPackage.LIMIT__L2:
-        setL2((Integer)newValue);
+        setL2((Long)newValue);
         return;
     }
     super.eSet(featureID, newValue);

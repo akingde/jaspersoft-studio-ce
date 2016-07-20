@@ -167,12 +167,12 @@ public interface ScalarOperand extends RowValue, OperandList
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>So UInt</em>' attribute.
-   * @see #setSoUInt(Integer)
+   * @see #setSoUInt(Long)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_SoUInt()
    * @model
    * @generated
    */
-  Integer getSoUInt();
+  Long getSoUInt();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoUInt <em>So UInt</em>}' attribute.
@@ -182,7 +182,7 @@ public interface ScalarOperand extends RowValue, OperandList
    * @see #getSoUInt()
    * @generated
    */
-  void setSoUInt(Integer value);
+  void setSoUInt(Long value);
 
   /**
    * Returns the value of the '<em><b>Soint</b></em>' attribute.
@@ -193,12 +193,12 @@ public interface ScalarOperand extends RowValue, OperandList
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Soint</em>' attribute.
-   * @see #setSoint(Integer)
+   * @see #setSoint(Long)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_Soint()
    * @model
    * @generated
    */
-  Integer getSoint();
+  Long getSoint();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoint <em>Soint</em>}' attribute.
@@ -208,6 +208,6 @@ public interface ScalarOperand extends RowValue, OperandList
    * @see #getSoint()
    * @generated
    */
-  void setSoint(Integer value);
+  void setSoint(Long value);
 
 } // ScalarOperand

@@ -84,12 +84,12 @@ public interface GroupByColumnFull extends OrGroupByColumn
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Gr By Int</em>' attribute.
-   * @see #setGrByInt(Integer)
+   * @see #setGrByInt(Long)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getGroupByColumnFull_GrByInt()
    * @model
    * @generated
    */
-  Integer getGrByInt();
+  Long getGrByInt();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.GroupByColumnFull#getGrByInt <em>Gr By Int</em>}' attribute.
@@ -99,6 +99,6 @@ public interface GroupByColumnFull extends OrGroupByColumn
    * @see #getGrByInt()
    * @generated
    */
-  void setGrByInt(Integer value);
+  void setGrByInt(Long value);
 
 } // GroupByColumnFull

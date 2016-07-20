@@ -5776,13 +5776,13 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return tSTAR;
 	} 
 
-	//terminal UNSIGNED returns ecore::EIntegerObject:
+	//terminal UNSIGNED returns ecore::ELongObject:
 	//	'0'..'9'+;
 	public TerminalRule getUNSIGNEDRule() {
 		return tUNSIGNED;
 	} 
 
-	//terminal INT returns ecore::EIntegerObject:
+	//terminal INT returns ecore::ELongObject:
 	//	'-'? UNSIGNED;
 	public TerminalRule getINTRule() {
 		return tINT;

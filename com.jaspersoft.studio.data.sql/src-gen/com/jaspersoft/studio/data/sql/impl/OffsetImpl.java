@@ -35,7 +35,7 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
    * @generated
    * @ordered
    */
-  protected static final Integer OFFSET_EDEFAULT = null;
+  protected static final Long OFFSET_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getOffset() <em>Offset</em>}' attribute.
@@ -45,7 +45,7 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
    * @generated
    * @ordered
    */
-  protected Integer offset = OFFSET_EDEFAULT;
+  protected Long offset = OFFSET_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -73,7 +73,7 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
    * <!-- end-user-doc -->
    * @generated
    */
-  public Integer getOffset()
+  public Long getOffset()
   {
     return offset;
   }
@@ -83,9 +83,9 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setOffset(Integer newOffset)
+  public void setOffset(Long newOffset)
   {
-    Integer oldOffset = offset;
+    Long oldOffset = offset;
     offset = newOffset;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OFFSET__OFFSET, oldOffset, offset));
@@ -118,7 +118,7 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
     switch (featureID)
     {
       case SqlPackage.OFFSET__OFFSET:
-        setOffset((Integer)newValue);
+        setOffset((Long)newValue);
         return;
     }
     super.eSet(featureID, newValue);
