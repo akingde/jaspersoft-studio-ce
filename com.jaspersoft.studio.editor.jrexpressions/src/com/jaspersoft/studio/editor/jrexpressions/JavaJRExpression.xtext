@@ -203,7 +203,7 @@ JvmLowerBound :
 
 // Numbers related terminals (and fragments)
 terminal LONG returns ecore::ELong:
-	IntegerNumber LongSuffix;
+	IntegerNumber LongSuffix?;
 terminal INT returns ecore::EInt:
 	IntegerNumber;
 terminal FLOAT returns ecore::EFloat:

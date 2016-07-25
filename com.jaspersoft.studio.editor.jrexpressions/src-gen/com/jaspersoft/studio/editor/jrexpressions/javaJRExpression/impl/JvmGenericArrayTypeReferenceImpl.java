@@ -1,29 +1,21 @@
-/*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
- * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
- * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- ******************************************************************************/
 /**
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl;
 
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.xtext.common.types.impl.JvmTypeReferenceImpl;
-
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmGenericArrayTypeReference;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmParameterizedTypeReference;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import org.eclipse.xtext.common.types.JvmTypeReference;
+
+import org.eclipse.xtext.common.types.impl.JvmTypeReferenceImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,10 +23,10 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmParameteri
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JvmGenericArrayTypeReferenceImpl#getComponentType <em>Component Type</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -48,7 +40,7 @@ public class JvmGenericArrayTypeReferenceImpl extends JvmTypeReferenceImpl imple
    * @generated
    * @ordered
    */
-  protected JvmParameterizedTypeReference componentType;
+  protected JvmTypeReference componentType;
 
   /**
    * <!-- begin-user-doc -->
@@ -76,7 +68,7 @@ public class JvmGenericArrayTypeReferenceImpl extends JvmTypeReferenceImpl imple
    * <!-- end-user-doc -->
    * @generated
    */
-  public JvmParameterizedTypeReference getComponentType()
+  public JvmTypeReference getComponentType()
   {
     return componentType;
   }
@@ -86,9 +78,9 @@ public class JvmGenericArrayTypeReferenceImpl extends JvmTypeReferenceImpl imple
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetComponentType(JvmParameterizedTypeReference newComponentType, NotificationChain msgs)
+  public NotificationChain basicSetComponentType(JvmTypeReference newComponentType, NotificationChain msgs)
   {
-    JvmParameterizedTypeReference oldComponentType = componentType;
+    JvmTypeReference oldComponentType = componentType;
     componentType = newComponentType;
     if (eNotificationRequired())
     {
@@ -103,7 +95,7 @@ public class JvmGenericArrayTypeReferenceImpl extends JvmTypeReferenceImpl imple
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setComponentType(JvmParameterizedTypeReference newComponentType)
+  public void setComponentType(JvmTypeReference newComponentType)
   {
     if (newComponentType != componentType)
     {
@@ -162,7 +154,7 @@ public class JvmGenericArrayTypeReferenceImpl extends JvmTypeReferenceImpl imple
     switch (featureID)
     {
       case JavaJRExpressionPackage.JVM_GENERIC_ARRAY_TYPE_REFERENCE__COMPONENT_TYPE:
-        setComponentType((JvmParameterizedTypeReference)newValue);
+        setComponentType((JvmTypeReference)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -179,7 +171,7 @@ public class JvmGenericArrayTypeReferenceImpl extends JvmTypeReferenceImpl imple
     switch (featureID)
     {
       case JavaJRExpressionPackage.JVM_GENERIC_ARRAY_TYPE_REFERENCE__COMPONENT_TYPE:
-        setComponentType((JvmParameterizedTypeReference)null);
+        setComponentType((JvmTypeReference)null);
         return;
     }
     super.eUnset(featureID);
