@@ -27,11 +27,11 @@ import com.jaspersoft.studio.property.descriptor.parameter.dialog.InputParameter
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterPage;
 
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class SubreportParameterPage extends ParameterPage {
-	private JasperDesign jd;
+	private JRReport jd;
 
 	@Override
 	protected void generateButtons(Composite bGroup) {
@@ -43,7 +43,7 @@ public class SubreportParameterPage extends ParameterPage {
 			public void widgetSelected(SelectionEvent e) {
 				if (jd == null)
 					return;
-				for (JRParameter prm : jd.getParametersList()) {
+				for (JRParameter prm : jd.getMainDataset().getParameters()) {
 					if (prm.isSystemDefined())
 						continue;
 					String name = prm.getName();
@@ -89,7 +89,7 @@ public class SubreportParameterPage extends ParameterPage {
 		return result;
 	}
 
-	public void setJasperDesign(JasperDesign jd) {
+	public void setJasperDesign(JRReport jd) {
 		this.jd = jd;
 	}
 
