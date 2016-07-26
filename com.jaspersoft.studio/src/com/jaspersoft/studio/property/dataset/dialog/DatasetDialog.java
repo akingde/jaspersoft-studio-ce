@@ -15,26 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRSortField;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JRDesignSortField;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -47,7 +32,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -80,12 +64,28 @@ import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
+import com.jaspersoft.studio.swt.widgets.CSashForm.ICustomSashFormListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
-public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPreviewInfoProvider {
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationFormDialog;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRSortField;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JRDesignSortField;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
+public class DatasetDialog extends PersistentLocationFormDialog implements IFieldSetter, IDataPreviewInfoProvider {
 	private MDataset mdataset;
 	// private MReport mreport;
 	private JasperReportsConfiguration jConfig;
@@ -126,11 +126,12 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 	@Override
 	protected boolean canHandleShellCloseEvent() {
-		//Create the commands to check if there are changes and popup the dialog
-		//only if there commands to execute
+		// Create the commands to check if there are changes and popup the dialog
+		// only if there commands to execute
 		createCommand();
-		//command is never null after createCommand, but if empty its canExecute will return false
-		if (!command.canExecute()) return true;
+		// command is never null after createCommand, but if empty its canExecute will return false
+		if (!command.canExecute())
+			return true;
 		return UIUtils.showConfirmation(Messages.DatasetDialog_0, Messages.DatasetDialog_1);
 	}
 
@@ -143,8 +144,6 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(Messages.DatasetDialog_title);
-		UIUtils.resizeAndCenterShell(newShell, 1024, 768);
-		// setShellStyle(getShellStyle() | SWT.MIN | SWT.MAX | SWT.RESIZE);
 	}
 
 	@Override
@@ -225,7 +224,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 		dataquery.createToolbar(body);
 
-		SashForm sf = new CSashForm(body, SWT.VERTICAL);
+		sf = new CSashForm(body, SWT.VERTICAL);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 600;
@@ -243,13 +242,42 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		// ctf.setTopRight(c);
 
 		createBottom(sf, toolkit);
-		sf.setWeights(new int[] { 450, 250 });
 
 		JasperDesign jd = mdataset.getJasperDesign();
 		if (jd == null) {
 			jd = mdataset.getMreport().getJasperDesign();
 		}
 		setDataset(jd, newdataset);
+	}
+
+	protected void initSashForm(CSashForm sashform, final JRDesignDataset jDataset) {
+		final String SASH_W1 = getClass().getCanonicalName() + ".sash.w1";
+		final String SASH_W2 = getClass().getCanonicalName() + ".sash.w2";
+		int w1 = 450;
+		int w2 = 250;
+		if (jDataset != null) {
+			try {
+				String sw1 = jDataset.getPropertiesMap().getProperty(SASH_W1);
+				if (sw1 != null)
+					w1 = Integer.parseInt(sw1);
+			} catch (NumberFormatException e) {
+			}
+			try {
+				String sw2 = jDataset.getPropertiesMap().getProperty(SASH_W2);
+				if (sw2 != null)
+					w2 = Integer.parseInt(sw2);
+			} catch (NumberFormatException e) {
+			}
+		}
+		sashform.setWeights(new int[] { w1, w2 });
+		sashform.addCustomSashFormListener(new ICustomSashFormListener() {
+
+			@Override
+			public void dividerMoved(int firstControlWeight, int secondControlWeight) {
+				jDataset.getPropertiesMap().setProperty(SASH_W1, Integer.toString(firstControlWeight));
+				jDataset.getPropertiesMap().setProperty(SASH_W2, Integer.toString(secondControlWeight));
+			}
+		});
 	}
 
 	public void setFields(List<JRDesignField> fields) {
@@ -338,6 +366,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			dataquery.setDataset(jConfig.getJasperDesign(), newdataset);
 		}
 	};
+	private CSashForm sf;
 
 	private void createFields(FormToolkit toolkit, CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
@@ -386,12 +415,13 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	}
 
 	public void setDataset(JasperDesign jDesign, JRDesignDataset ds) {
+		initSashForm(sf, ds);
 		dataquery.setDataset(jDesign, ds);
 	}
 
 	public void createCommand() {
-		JRDesignDataset ds = (JRDesignDataset) (mdataset.getParent() == null ? mdataset.getJasperConfiguration()
-				.getJasperDesign().getMainDesignDataset() : mdataset.getValue());
+		JRDesignDataset ds = (JRDesignDataset) (mdataset.getParent() == null
+				? mdataset.getJasperConfiguration().getJasperDesign().getMainDesignDataset() : mdataset.getValue());
 		command = new JSSCompoundCommand(mdataset.getMreport());
 
 		String lang = newdataset.getQuery().getLanguage();
@@ -461,35 +491,33 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			if (notexists)
 				command.add(new CreateFieldCommand(ds, newf, -1));
 		}
-		
+
 		// checks ordering for fields
-		if(oldfields.size()==newfields.size()) {
-			for(int i=0;i<newfields.size();i++){
-				if(!ModelUtils.areFieldsEquals(oldfields.get(i),newfields.get(i))){
+		if (oldfields.size() == newfields.size()) {
+			for (int i = 0; i < newfields.size(); i++) {
+				if (!ModelUtils.areFieldsEquals(oldfields.get(i), newfields.get(i))) {
 					command.add(new ReplaceAllFieldsCommand(newfields, mdataset.getMFields()));
 					break;
 				}
 			}
+		} else {
+			command.add(new ReplaceAllFieldsCommand(newfields, mdataset.getMFields()));
 		}
-		else {
-			command.add(new ReplaceAllFieldsCommand(newfields, mdataset.getMFields()));	
-		}
-		
+
 		// handle sort fields
 		List<JRSortField> oldSortFields = ds.getSortFieldsList();
 		List<JRDesignSortField> newSortFields = sftable.getFields();
-		if(oldSortFields.size()==newSortFields.size()){
-			for(int i=0;i<newSortFields.size();i++){
-				if(!ModelUtils.areSortFieldsEquals(oldSortFields.get(i), newSortFields.get(i))){
+		if (oldSortFields.size() == newSortFields.size()) {
+			for (int i = 0; i < newSortFields.size(); i++) {
+				if (!ModelUtils.areSortFieldsEquals(oldSortFields.get(i), newSortFields.get(i))) {
 					command.add(new ReplaceAllSortFieldsCommand(newSortFields, mdataset.getMSortFields()));
 					break;
 				}
 			}
-		}
-		else {
+		} else {
 			command.add(new ReplaceAllSortFieldsCommand(newSortFields, mdataset.getMSortFields()));
 		}
-		
+
 		List<JRParameter> oldparams = ds.getParametersList();
 		List<JRDesignParameter> newparams = ptable.getParameters();
 		for (JRParameter f : oldparams) {
@@ -514,7 +542,8 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 					if (mparam != null) {
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_DESCRIPTION, newf.getDescription(), mparam);
-						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,newf.getDefaultValueExpression(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,
+								newf.getDefaultValueExpression(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_FOR_PROMPTING, newf.isForPrompting(), mparam);
 					}
 					notexists = false;
@@ -530,7 +559,8 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_NAME, newf.getName(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_DESCRIPTION, newf.getDescription(), mparam);
-						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION, newf.getDefaultValueExpression(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,
+								newf.getDefaultValueExpression(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_FOR_PROMPTING, newf.isForPrompting(), mparam);
 					}
 					notexists = false;
@@ -541,29 +571,32 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			if (notexists)
 				command.add(new CreateParameterCommand(ds, newf, -1));
 		}
-		
+
 		// handle parameters for a possible reorder
-		if(oldparams.size()==newparams.size()){
-			for(int i=0;i<newparams.size();i++){
-				if(!ModelUtils.areParametersEquals(oldparams.get(i), newparams.get(i))){
+		if (oldparams.size() == newparams.size()) {
+			for (int i = 0; i < newparams.size(); i++) {
+				if (!ModelUtils.areParametersEquals(oldparams.get(i), newparams.get(i))) {
 					command.add(new ReplaceAllParametersCommand(newparams, mdataset.getMParameters()));
 					break;
 				}
 			}
-		}
-		else {
+		} else {
 			command.add(new ReplaceAllParametersCommand(newparams, mdataset.getMParameters()));
 		}
 	}
 
 	/**
-	 * Create a new setvalue command, but only if the old value and the new value are different.
-	 * If created the command is added to the compound command
+	 * Create a new setvalue command, but only if the old value and the new value are different. If created the command is
+	 * added to the compound command
 	 * 
-	 * @param cc the compound command
-	 * @param property the property the set value command will set
-	 * @param value the new value of the property
-	 * @param target the target of the set
+	 * @param cc
+	 *          the compound command
+	 * @param property
+	 *          the property the set value command will set
+	 * @param value
+	 *          the new value of the property
+	 * @param target
+	 *          the target of the set
 	 */
 	private void addSetValueCommand(JSSCompoundCommand cc, String property, Object value, IPropertySource target) {
 		if (!extendedEquals(value, target.getPropertyValue(property))) {
@@ -574,26 +607,28 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			cc.add(cmd);
 		}
 	}
-	
+
 	/**
-	 * Used to compare two values. Since some JR Objects used inside here
-	 * dosen't support the equals method, this one apply some special cases for that
-	 * objects
+	 * Used to compare two values. Since some JR Objects used inside here dosen't support the equals method, this one
+	 * apply some special cases for that objects
 	 * 
-	 * @param value1 the first value to compare, can be null
-	 * @param value2 the second value to compare, can be null
+	 * @param value1
+	 *          the first value to compare, can be null
+	 * @param value2
+	 *          the second value to compare, can be null
 	 * @return true if the two objects are equals, false otherwise
 	 */
-	private boolean extendedEquals(Object value1, Object value2){
-		if (value1 instanceof JRExpression && value2 instanceof JRExpression){
-			JRExpression exp1 = (JRExpression)value1;
-			JRExpression exp2 = (JRExpression)value2;
+	private boolean extendedEquals(Object value1, Object value2) {
+		if (value1 instanceof JRExpression && value2 instanceof JRExpression) {
+			JRExpression exp1 = (JRExpression) value1;
+			JRExpression exp2 = (JRExpression) value2;
 			return ModelUtils.safeEquals(exp1.getText(), exp2.getText());
-		} else if (value1 instanceof JRPropertiesMap && value2 instanceof JRPropertiesMap){
-			JRPropertiesMap map1 = (JRPropertiesMap)value1;
-			JRPropertiesMap map2 = (JRPropertiesMap)value2;
+		} else if (value1 instanceof JRPropertiesMap && value2 instanceof JRPropertiesMap) {
+			JRPropertiesMap map1 = (JRPropertiesMap) value1;
+			JRPropertiesMap map2 = (JRPropertiesMap) value2;
 			return ModelUtils.jrPropertiesMapEquals(map1, map2);
-		} else return ModelUtils.safeEquals(value1, value2);
+		} else
+			return ModelUtils.safeEquals(value1, value2);
 	}
 
 	private Command setValueCommand(String property, Object value, IPropertySource target) {

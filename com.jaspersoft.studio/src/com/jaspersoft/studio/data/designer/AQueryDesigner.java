@@ -14,6 +14,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jface.operation.IRunnableContext;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+
+import com.jaspersoft.studio.data.IQueryDesigner;
+import com.jaspersoft.studio.swt.widgets.CSashForm;
+import com.jaspersoft.studio.swt.widgets.CSashForm.ICustomSashFormListener;
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.AWizardPage;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -21,14 +31,6 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JasperDesign;
-
-import org.eclipse.jface.operation.IRunnableContext;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-
-import com.jaspersoft.studio.data.IQueryDesigner;
-import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.wizards.AWizardPage;
 
 public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext {
 	protected AQueryDesignerContainer container;
@@ -55,8 +57,8 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 		container.getQueryStatus().showInfo(msg);
 	}
 
-	public void run(boolean fork, boolean cancelable, IRunnableWithProgress runnable) throws InvocationTargetException,
-			InterruptedException {
+	public void run(boolean fork, boolean cancelable, IRunnableWithProgress runnable)
+			throws InvocationTargetException, InterruptedException {
 		container.run(fork, cancelable, runnable);
 	}
 
@@ -135,5 +137,35 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 
 	public JasperReportsConfiguration getjConfig() {
 		return jConfig;
+	}
+
+	protected void initSashForm(CSashForm sashform) {
+		final String SASH_W1 = getClass().getCanonicalName() + ".sash.w1";
+		final String SASH_W2 = getClass().getCanonicalName() + ".sash.w2";
+		int w1 = 450;
+		int w2 = 500;
+		if (jDataset != null) {
+			try {
+				String sw1 = jDataset.getPropertiesMap().getProperty(SASH_W1);
+				if (sw1 != null)
+					w1 = Integer.parseInt(sw1);
+			} catch (NumberFormatException e) {
+			}
+			try {
+				String sw2 = jDataset.getPropertiesMap().getProperty(SASH_W2);
+				if (sw2 != null)
+					w2 = Integer.parseInt(sw2);
+			} catch (NumberFormatException e) {
+			}
+		}
+		sashform.setWeights(new int[] { w1, w2 });
+		sashform.addCustomSashFormListener(new ICustomSashFormListener() {
+
+			@Override
+			public void dividerMoved(int firstControlWeight, int secondControlWeight) {
+				jDataset.getPropertiesMap().setProperty(SASH_W1, Integer.toString(firstControlWeight));
+				jDataset.getPropertiesMap().setProperty(SASH_W2, Integer.toString(secondControlWeight));
+			}
+		});
 	}
 }

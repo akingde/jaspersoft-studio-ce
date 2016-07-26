@@ -18,18 +18,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -59,9 +52,15 @@ import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.jobs.CheckedRunnableWithProgress;
 
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	public static final String SQLQUERYDESIGNER = "SQLQUERYDESIGNER"; //$NON-NLS-1$
-	private SashForm sf;
+	private CSashForm sf;
 	private DBMetadata dbMetadata;
 	private SQLQuerySource source;
 	private SQLQueryOutline outline;
@@ -78,8 +77,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	public SQLQueryDesigner() {
 		super();
 		refreshViewer();
-		JaspersoftStudioPlugin.getInstance().addPreferenceListener(
-				preferenceListener);
+		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 	}
 
 	@Override
@@ -109,8 +107,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (source.isDirty())
-					Text2Model.text2model(SQLQueryDesigner.this,
-							source.getXTextDocument(), true);
+					Text2Model.text2model(SQLQueryDesigner.this, source.getXTextDocument(), true);
 				switch (tabFolder.getSelectionIndex()) {
 				case 1:
 					outline.scheduleRefresh();
@@ -135,7 +132,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	// private void showWarning() {
 	// if (!warned && isQueryModelEmpty()) {
-	// UIUtils.showWarning("Attention, SQL Query Builder will overwrite the existing query!");
+	// UIUtils.showWarning("Attention, SQL Query Builder will overwrite the
+	// existing query!");
 	// warned = true;
 	// }
 	// }
@@ -299,13 +297,10 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 					protected void runOperations(IProgressMonitor monitor) {
 						try {
 							runningmonitor = monitor;
-							monitor.beginTask(
-									Messages.SQLQueryDesigner_readmetadata,
-									IProgressMonitor.UNKNOWN);
+							monitor.beginTask(Messages.SQLQueryDesigner_readmetadata, IProgressMonitor.UNKNOWN);
 							dbMetadata.closeConnection();
-							DataAdapterService das = DataAdapterServiceUtil
-									.getInstance(jConfig).getService(
-											da.getDataAdapter());
+							DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig)
+									.getService(da.getDataAdapter());
 							dbMetadata.updateMetadata(da, das, monitor);
 						} finally {
 							monitor.done();
@@ -340,8 +335,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			outline.dispose();
 		if (diagram != null)
 			diagram.dispose();
-		JaspersoftStudioPlugin.getInstance().removePreferenceListener(
-				preferenceListener);
+		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		super.dispose();
 	}
 
@@ -354,22 +348,20 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	@Override
-	public void setQuery(JasperDesign jDesign, JRDataset jDataset,
-			JasperReportsConfiguration jConfig) {
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
 		super.setQuery(jDesign, jDataset, jConfig);
+		initSashForm(sf);
 		doRefreshRoots(false);
 	}
 
 	public MSQLRoot createRoot(MSQLRoot oldRoot) {
 		if (oldRoot != null) {
-			oldRoot.getPropertyChangeSupport().removePropertyChangeListener(
-					tblListener);
+			oldRoot.getPropertyChangeSupport().removePropertyChangeListener(tblListener);
 			roots.remove(oldRoot);
 		}
 		MSQLRoot rt = new MSQLRoot(null, getjDataset());
 		if (jConfig != null)
-			rt.setIdentifierQuote(jConfig.getProperty(
-					SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, "")); //$NON-NLS-1$
+			rt.setIdentifierQuote(jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, "")); //$NON-NLS-1$
 		roots.add(rt);
 		rt.getPropertyChangeSupport().addPropertyChangeListener(tblListener);
 		return rt;
@@ -391,11 +383,9 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 						Object x = ft.getPropertyActualValue(MFromTable.PROP_X);
 						Object y = ft.getPropertyActualValue(MFromTable.PROP_Y);
 						if (x != null && y != null) {
-							String str = ft.getValue().toSQLString()
-									+ ft.getAliasKeyString() + "," + x + ","
-									+ y + "," + ft.getId();
-							String sm = (String) ft
-									.getPropertyValue(MFromTable.SHOW_MODE_PROPERTY);
+							String str = ft.getValue().toSQLString() + ft.getAliasKeyString() + "," + x + "," + y + ","
+									+ ft.getId();
+							String sm = (String) ft.getPropertyValue(MFromTable.SHOW_MODE_PROPERTY);
 							if (sm != null)
 								str += "," + sm;
 
@@ -407,8 +397,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 						Object x = ft.getPropertyActualValue(MFromTable.PROP_X);
 						Object y = ft.getPropertyActualValue(MFromTable.PROP_Y);
 						if (x != null && y != null)
-							tables.add("\t\tFROM," + x + "," + y + ","
-									+ ft.getId() + ";");
+							tables.add("\t\tFROM," + x + "," + y + "," + ft.getId() + ";");
 					}
 					return true;
 				}
@@ -417,15 +406,13 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			for (String t : tables)
 				input += t;
 
-			getjDataset().setProperty(SQLQueryDiagram.SQL_EDITOR_TABLES,
-					new Base64Encoder(input).processString());
+			getjDataset().setProperty(SQLQueryDiagram.SQL_EDITOR_TABLES, new Base64Encoder(input).processString());
 		}
 	};
 
 	private final class PreferenceListener implements IPropertyChangeListener {
 
-		public void propertyChange(
-				org.eclipse.jface.util.PropertyChangeEvent event) {
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			String p = event.getProperty();
 			if (p.equals(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE)) {
 				doRefreshRoots(true);
@@ -445,16 +432,12 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	public void doRefreshRoots(boolean updateText) {
-		String iq = jConfig.getProperty(
-				SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, ""); //$NON-NLS-1$
-		boolean useJDBCQuote = jConfig.getPropertyBoolean(
-				SQLEditorPreferencesPage.P_USE_JDBC_QUOTE, true); //$NON-NLS-1$
+		String iq = jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, ""); //$NON-NLS-1$
+		boolean useJDBCQuote = jConfig.getPropertyBoolean(SQLEditorPreferencesPage.P_USE_JDBC_QUOTE, true); // $NON-NLS-1$
 		if (useJDBCQuote)
 			iq = dbMetadata.getIdentifierQuote();
-		boolean quoteExceptions = jConfig
-				.getPropertyBoolean(
-						SQLEditorPreferencesPage.P_IDENTIFIER_QUOTEONLYEXCEPTIONS,
-						true); //$NON-NLS-1$
+		boolean quoteExceptions = jConfig.getPropertyBoolean(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTEONLYEXCEPTIONS,
+				true); // $NON-NLS-1$
 		for (MSQLRoot r : roots) {
 			r.setIdentifierQuote(iq);
 			r.setQuoteExceptions(quoteExceptions);
