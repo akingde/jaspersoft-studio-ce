@@ -119,7 +119,7 @@ public class ModelUtils {
 	public static final String[] FONT_SIZES = new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
 			"22", "24", "26" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	public static final String MAIN_DATASET = Messages.ModelUtils_13;
-	private static final String[] DEFAULT_LANGUAGES = new String[] { "bsh", "groovy", "java", "javascript" };
+	private static final String[] DEFAULT_LANGUAGES = new String[] { "groovy", "java", "javascript" };
 
 	public static JRDesignDataset getDataset(ANode node) {
 		ANode n = node.getParent();
@@ -770,12 +770,12 @@ public class ModelUtils {
 		List<JRDesignElement> list = getAllGElements(jd);
 		return list;
 	}
-	
+
 	public static List<JRDesignElement> getAllElements(List<JRChild> childElements) {
 		List<JRDesignElement> list2 = new ArrayList<JRDesignElement>();
-		for(JRChild ele : childElements){
-			if (ele instanceof JRDesignElement){
-				list2.add((JRDesignElement)ele);
+		for (JRChild ele : childElements) {
+			if (ele instanceof JRDesignElement) {
+				list2.add((JRDesignElement) ele);
 			}
 			if (ele instanceof JRElementGroup) {
 				list2.addAll(getGElements((JRElementGroup) ele));
@@ -785,14 +785,14 @@ public class ModelUtils {
 				Component cmp = ((JRDesignComponentElement) ele).getComponent();
 				if (cmp instanceof StandardTable) {
 					list2.addAll(getTableElements((StandardTable) cmp));
-				} else if (cmp instanceof StandardListComponent){
+				} else if (cmp instanceof StandardListComponent) {
 					list2.addAll(getListElements((StandardListComponent) cmp));
 				}
 			}
 		}
 		return list2;
 	}
-	
+
 	public static List<JRDesignElement> getListElements(StandardListComponent list) {
 		List<JRDesignElement> list2 = new ArrayList<JRDesignElement>();
 		list2.addAll(getAllElements(list.getContents().getChildren()));
@@ -851,8 +851,8 @@ public class ModelUtils {
 	public static List<JRDesignElement> getCrosstabElements(JRDesignCrosstab crosstab) {
 		List<JRDesignElement> list = new ArrayList<JRDesignElement>();
 		List<JRDesignCellContents> cells = getAllCells(crosstab);
-		for (JRDesignCellContents content : cells){
-			if (content != null){
+		for (JRDesignCellContents content : cells) {
+			if (content != null) {
 				list.addAll(getGElements(content));
 			}
 		}
