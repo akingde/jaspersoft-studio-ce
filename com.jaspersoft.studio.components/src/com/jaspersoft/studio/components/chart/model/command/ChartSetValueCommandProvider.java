@@ -21,10 +21,12 @@ import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.ISetValueCommandProvider;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
  * SetValueCommandProvider for the chart. When a set value command is done for a chart element
@@ -45,14 +47,14 @@ public class ChartSetValueCommandProvider implements ISetValueCommandProvider {
 	
 	@Override
 	public Command getSetValueCommand(IPropertySource source, String commandName, Object propertyId, Object newVal) { 
-		if (MChart.CHART_PROPERTY_CUSTOMIZER.equals(propertyId)){
+		if (isCustomizerProperty(propertyId)){
 			CustomizerPropertyExpressionsDTO currentDTO = (CustomizerPropertyExpressionsDTO)newVal;
 			JSSCompoundCommand command = new JSSCompoundCommand("Set Chart Customizers", (ANode)source);
 			SetValueCommand setDTOCommand = new SetValueCommand();
 			setDTOCommand.setTarget(source);
 			setDTOCommand.setPropertyId(propertyId);
 			setDTOCommand.setPropertyValue(newVal);
-			command.add(new SetValueCommand());
+			command.add(setDTOCommand);
 			int customizersNumber = currentDTO.getCustomizerNumber();
 			if (customizersNumber > 0){
 				SetValueCommand setCustomizer = new SetValueCommand();
@@ -63,15 +65,28 @@ public class ChartSetValueCommandProvider implements ISetValueCommandProvider {
 			} else {
 				SetValueCommand setCustomizer = new SetValueCommand();
 				setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
-				setCustomizer.setPropertyValue(ProxyChartCustomizer.class.getName());
+				setCustomizer.setPropertyValue(null);
 				setCustomizer.setTarget((APropertyNode)source);
 				command.add(setCustomizer);
 			}
- 		} 
-		SetValueCommand setCommand = new SetValueCommand(commandName);
-		setCommand.setPropertyId(propertyId);
-		setCommand.setTarget(source);
-		setCommand.setPropertyValue(newVal);
-		return setCommand;
+			return command;
+ 		}  else {
+			SetValueCommand setCommand = new SetValueCommand(commandName);
+			setCommand.setPropertyId(propertyId);
+			setCommand.setTarget(source);
+			setCommand.setPropertyValue(newVal);
+			return setCommand;
+ 		}
+	}
+	
+	/**
+	 * Return true if the property passed is a property that could affect the chart customizer 
+	 * 
+	 * @param propertyId the property name
+	 */
+	protected boolean isCustomizerProperty(Object propertyId){
+		return (MChart.CHART_PROPERTY_CUSTOMIZER.equals(propertyId) || 
+					JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS.equals(propertyId) ||
+						MGraphicElement.PROPERTY_MAP.equals(propertyId));
 	}
 }
