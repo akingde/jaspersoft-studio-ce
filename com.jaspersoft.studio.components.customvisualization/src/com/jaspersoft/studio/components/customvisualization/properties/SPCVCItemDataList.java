@@ -33,8 +33,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentDatasetDescriptor;
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
+import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptor;
+import com.jaspersoft.studio.components.customvisualization.ui.framework.DatasetPropertyDescriptor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
@@ -78,6 +78,16 @@ public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDes
 	private Button btnModifyDataset;
 	private Button btnRemoveDataset;
 	private Composite dsParent;
+	protected List<ItemData> itemDatas;
+
+	private Button btnUpDataset;
+
+	private Button btnDownDataset;
+	protected APropertyNode pnode;
+
+	private CVCWidgetsDescriptor cd;
+
+	private Composite datasetsCmp;
 
 	public SPCVCItemDataList(Composite parent, AbstractSection section, AItemDataListPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -316,21 +326,19 @@ public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDes
 				if (cd != null && !Misc.isNullOrEmpty(cd.getDatasets())) {
 					int indx = itemDatas.indexOf(element);
 					int c = 0;
-					for (ComponentDatasetDescriptor cdd : cd.getDatasets()) {
+					for (DatasetPropertyDescriptor cdd : cd.getDatasets()) {
 						int card = cdd.getCardinality();
 						if (card > 0)
 							c += card;
 						else if (card <= 0) {
 							if (!cdd.getSections().isEmpty())
-								return cd.i18n(cdd.getSections()
-										.get(Math.max(0, Math.min(indx - c, cdd.getSections().size() - 1))).getName());
-							return cd.i18n(cdd.getLabel());
+								return cd.getLocalizedString(cdd.getSections().get(Math.max(0, Math.min(indx - c, cdd.getSections().size() - 1))).getName());
+							return cd.getLocalizedString(cdd.getLabel());
 						}
 						if (c > indx) {
 							if (!cdd.getSections().isEmpty())
-								return cd.i18n(cdd.getSections()
-										.get(Math.max(0, Math.min(indx - c, cdd.getSections().size() - 1))).getName());
-							return cd.i18n(cdd.getLabel());
+								return cd.getLocalizedString(cdd.getSections().get(Math.max(0, Math.min(indx - c, cdd.getSections().size() - 1))).getName());
+							return cd.getLocalizedString(cdd.getLabel());
 						}
 					}
 				}
@@ -389,17 +397,6 @@ public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDes
 			}
 		}
 	}
-
-	protected List<ItemData> itemDatas;
-
-	private Button btnUpDataset;
-
-	private Button btnDownDataset;
-	protected APropertyNode pnode;
-
-	private ComponentDescriptor cd;
-
-	private Composite datasetsCmp;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -487,7 +484,7 @@ public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDes
 
 		if (cd != null) {
 			int qte = 0;
-			for (ComponentDatasetDescriptor cdd : cd.getDatasets()) {
+			for (DatasetPropertyDescriptor cdd : cd.getDatasets()) {
 				if (cdd.getCardinality() < 0) {
 					qte = -1;
 					break;
@@ -517,12 +514,12 @@ public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDes
 			} else if (sel instanceof ItemData) {
 				int indx = itemDatas.indexOf((ItemData) sel);
 				if (cd != null) {
-					List<ComponentDatasetDescriptor> ds = cd.getDatasets();
-					if (ds != null) {
+					List<DatasetPropertyDescriptor> ds = cd.getDatasets();
+					if (ds.size() > 0) {
 						int c = 0;
 						if (btnAddNewDataset.isEnabled())
 							for (int i = 0; i < ds.size(); i++) {
-								ComponentDatasetDescriptor cdd = ds.get(i);
+								DatasetPropertyDescriptor cdd = ds.get(i);
 								int card = cdd.getCardinality();
 								if (card > 0)
 									c += card;
@@ -538,7 +535,7 @@ public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDes
 								}
 							}
 						if (btnRemoveDataset.isEnabled() && !ds.isEmpty()) {
-							ComponentDatasetDescriptor cdd = ds.get(ds.size() - 1);
+							DatasetPropertyDescriptor cdd = ds.get(ds.size() - 1);
 							btnRemoveDataset.setEnabled(cdd.getCardinality() <= 0 || c < itemDatas.size());
 						}
 					}

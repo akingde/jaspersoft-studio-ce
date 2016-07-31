@@ -75,6 +75,17 @@ public class PropertyExpressionsDTO {
 	}
 	
 	/**
+	 * Create the dto with the properties and the node from another dto
+	 * 
+	 * @param properties the properties
+	 * @param pnode the node
+	 */
+	public PropertyExpressionsDTO(List<PropertyExpressionDTO> properties, ANode pnode){
+		this(pnode);
+		this.properties = properties;
+	}
+	
+	/**
 	 * Return the element from where the properties 
 	 * came
 	 * 
@@ -200,5 +211,11 @@ public class PropertyExpressionsDTO {
 			copy.addProperty(prop.getName(), prop.getValue(), prop.isExpression());
 		}
 		return copy;
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString();
 	}
 }

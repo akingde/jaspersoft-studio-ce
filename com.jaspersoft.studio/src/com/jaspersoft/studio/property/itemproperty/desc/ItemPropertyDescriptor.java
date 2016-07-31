@@ -18,7 +18,6 @@ import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.itemproperty.celleditor.ItemPropertyCellEditor;
-import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
 import com.jaspersoft.studio.property.itemproperty.sp.SPItemProperty;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -34,7 +33,7 @@ public class ItemPropertyDescriptor extends NTextPropertyDescriptor
 		super(id, descriptor.getDescription((String) id).getLabel());
 		this.descriptor = descriptor;
 		setDescription(descriptor.getDescription((String) id).getDescription());
-		setLabelProvider(new ItemPropertyLabelProvider(descriptor));
+		setLabelProvider(new DescriptorPropertyLabelProvider(descriptor));
 	}
 
 	public ADescriptor getDescriptor() {

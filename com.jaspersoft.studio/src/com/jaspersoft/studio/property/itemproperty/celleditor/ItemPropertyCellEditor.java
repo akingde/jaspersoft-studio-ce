@@ -16,13 +16,14 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.descriptor.JSSDialogCellEditor;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
+import com.jaspersoft.studio.property.itemproperty.desc.DescriptorPropertyLabelProvider;
 import com.jaspersoft.studio.property.itemproperty.dialog.ItemPropertyElementDialog;
-import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
 
 import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class ItemPropertyCellEditor extends JSSDialogCellEditor {
+	
 	private String id;
 	private ExpressionContext expContext;
 	private ADescriptor descriptor;
@@ -45,21 +46,21 @@ public class ItemPropertyCellEditor extends JSSDialogCellEditor {
 		StandardItemProperty sip = (StandardItemProperty) getValue();
 		if (sip == null)
 			sip = new StandardItemProperty(id, null, null);
-		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), sip, descriptor);
+		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), sip.getValue(), sip.getValueExpression(), descriptor.getDescription(id));
 		dialog.setExpressionContext(expContext);
 		if (dialog.open() == Dialog.OK)
-			return dialog.getValue();
+			return new StandardItemProperty(id, dialog.getStaticValue(), dialog.getExpressionValue());
 		return null;
 	}
 
-	private ItemPropertyLabelProvider labelProvider;
+	private DescriptorPropertyLabelProvider labelProvider;
 
 	@Override
 	protected void updateContents(Object value) {
 		if (getDefaultLabel() == null)
 			return;
 		if (labelProvider == null)
-			labelProvider = new ItemPropertyLabelProvider(descriptor);
+			labelProvider = new DescriptorPropertyLabelProvider(descriptor);
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
 		if (descriptor == null || id == null)

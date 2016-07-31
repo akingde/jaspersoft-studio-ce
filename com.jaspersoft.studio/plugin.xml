@@ -27,6 +27,7 @@
 <extension-point id="fileSelectors" name="File Selectors" schema="schema/fileSelectors.exsd"/>
 <extension-point id="bindings" name="com.jaspersoft.studio.bindings" schema="schema/bindings.exsd"/>
 <extension-point id="resourceExporter" name="com.jaspersoft.studio.resourceExporter" schema="schema/resourceExporter.exsd"/>
+<extension-point id="dynamicWidgetDefinitions" name="Dynamic Widget Definitions" schema="schema/dynamicWidgetDefinitions.exsd"/>
    <extension
   
          id="xmlProblem"

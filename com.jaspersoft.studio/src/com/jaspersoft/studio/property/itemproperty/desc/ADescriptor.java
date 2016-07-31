@@ -10,11 +10,6 @@ package com.jaspersoft.studio.property.itemproperty.desc;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.items.Item;
-import net.sf.jasperreports.components.items.ItemData;
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -23,14 +18,33 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
  * 
  */
 public abstract class ADescriptor {
+	
 	protected boolean showAllProperties = false;
+	
 	protected ItemPropertyDescription<?>[] itemProperties;
+	
+	protected List<ItemData> itemDatas;
+	
+	protected ItemData itemData;
+	
+	protected Item item;
+	
+	protected ItemProperty oldItemProperty;
+	
+	protected APropertyNode pnode;
+
 
 	public ADescriptor() {
 	}
@@ -63,12 +77,6 @@ public abstract class ADescriptor {
 	}
 
 	protected abstract void initItemPropertyDescriptors();
-
-	protected List<ItemData> itemDatas;
-	protected ItemData itemData;
-	protected Item item;
-	protected ItemProperty oldItemProperty;
-	protected APropertyNode pnode;
 
 	public Image getIcon(Object element) {
 		if (element instanceof ItemData)

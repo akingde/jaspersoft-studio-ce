@@ -88,9 +88,4 @@ public class ComponentDescriptor {
 			return getModule().hashCode();
 		return 0;
 	}
-
-	public String i18n(String key) {
-		return UIManager.getProperty(this, key);
-	}
-
 }

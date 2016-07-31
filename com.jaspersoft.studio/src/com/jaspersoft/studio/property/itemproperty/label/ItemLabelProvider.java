@@ -10,6 +10,18 @@ package com.jaspersoft.studio.property.itemproperty.label;
 
 import java.util.Collection;
 
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
+import com.jaspersoft.studio.property.itemproperty.desc.DescriptorPropertyLabelProvider;
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+
 import net.sf.jasperreports.components.items.Item;
 import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.components.items.ItemProperty;
@@ -19,24 +31,13 @@ import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.type.IncrementTypeEnum;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
-import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
-import com.jaspersoft.studio.utils.Misc;
-
 public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
-	private ItemPropertyLabelProvider iplp;
+	private DescriptorPropertyLabelProvider iplp;
 	private ADescriptor descriptor;
 
 	public ItemLabelProvider(ADescriptor showProperties) {
 		this.descriptor = showProperties;
-		iplp = new ItemPropertyLabelProvider(descriptor);
+		iplp = new DescriptorPropertyLabelProvider(descriptor);
 	}
 
 	@Override

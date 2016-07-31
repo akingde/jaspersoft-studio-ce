@@ -182,22 +182,31 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 		});
 		btnCustomExpression.setText(fileModesAndHeaderTitles[5]);
 
-		btnNoFile = new Button(grpFileSelectionMode, SWT.RADIO);
-		btnNoFile.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				changeFileSelectionMode(cmpNoFile);
-			}
-		});
-		btnNoFile.setText(fileModesAndHeaderTitles[4]);
-
-		createOptionsPanel(container);
-
-		// As default no image radio button selected
-		btnNoFile.setSelection(true);
-		btnNoFile.setFocus();
-
-		changeFileSelectionMode(cmpNoFile);
+		if (allowNoFileOption()){
+			btnNoFile = new Button(grpFileSelectionMode, SWT.RADIO);
+			btnNoFile.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					changeFileSelectionMode(cmpNoFile);
+				}
+			});
+			btnNoFile.setText(fileModesAndHeaderTitles[4]);
+	
+			createOptionsPanel(container);
+	
+			// As default no image radio button selected
+			btnNoFile.setSelection(true);
+			btnNoFile.setFocus();
+	
+			changeFileSelectionMode(cmpNoFile);
+		} else {
+			createOptionsPanel(container);
+			// As default no image radio button selected
+			btnWorkspaceResource.setSelection(true);
+			btnWorkspaceResource.setFocus();
+	
+			changeFileSelectionMode(cmpWorkspaceResourceSelection);
+		}
 
 		return area;
 	}
@@ -277,6 +286,8 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	}
 
 	public void handleTxtFilesystemPathChange() {
+		String resourcePath = txtFilesystemPath.getText();
+		fileExpressionText = resourcePath.replace(System.getProperty("file.separator").charAt(0), '/');
 	}
 
 	/*
@@ -328,7 +339,8 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	}
 
 	public void handleTxtUrlChange() {
-
+		String imageURLText = txtURL.getText();
+		fileExpressionText = imageURLText;
 	}
 	
 	/**
@@ -469,5 +481,14 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 
 	public JRDesignExpression getFileExpression() {
 		return jrFileExpression;
+	}
+	
+	/**
+	 * Override this to change if the no file option should be shown or not
+	 * 
+	 * @return true if the no file option should be shown, false otherwise
+	 */
+	protected boolean allowNoFileOption(){
+		return true;
 	}
 }

@@ -17,7 +17,7 @@ import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent
 import com.jaspersoft.studio.components.customvisualization.CVNodeIconDescriptor;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.components.customvisualization.properties.ItemPropertiesUtil;
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
+import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IDatasetContainer;
@@ -90,9 +90,9 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 
 	@Override
 	public String getDisplayText() {
-		ComponentDescriptor cd = ItemPropertiesUtil.getComponentDescriptor(this);
+		CVCWidgetsDescriptor cd = ItemPropertiesUtil.getComponentDescriptor(this);
 		if (cd != null)
-			return Misc.nvl(cd.i18n(cd.getLabel()), getIconDescriptor().getTitle());
+			return Misc.nvl(cd.getLocalizedString(cd.getLabel()), getIconDescriptor().getTitle());
 		return getIconDescriptor().getTitle();
 	}
 
@@ -103,9 +103,9 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 
 	@Override
 	public String getToolTip() {
-		ComponentDescriptor cd = ItemPropertiesUtil.getComponentDescriptor(this);
+		CVCWidgetsDescriptor cd = ItemPropertiesUtil.getComponentDescriptor(this);
 		if (cd != null)
-			return Misc.nvl(cd.i18n(cd.getLabel()), getIconDescriptor().getToolTip());
+			return Misc.nvl(cd.getLocalizedString(cd.getLabel()), getIconDescriptor().getToolTip());
 		return getIconDescriptor().getToolTip();
 	}
 

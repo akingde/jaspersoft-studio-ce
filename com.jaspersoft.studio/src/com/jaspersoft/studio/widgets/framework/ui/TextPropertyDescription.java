@@ -6,66 +6,77 @@
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.itemproperty.desc;
+package com.jaspersoft.studio.widgets.framework.ui;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
+import com.jaspersoft.studio.widgets.framework.IWItemProperty;
+import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
+import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
+import com.jaspersoft.studio.widgets.framework.ui.menu.IMenuProvider;
 
-import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-public class ItemPropertyDescription<T> {
+public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
+	
 	protected String name;
+	
 	protected String label;
+	
 	protected String description;
+	
 	protected boolean mandatory;
+	
 	protected T defaultValue;
+	
 	protected boolean readOnly;
+	
 	protected JasperReportsConfiguration jConfig;
+	
 	protected Text textExpression;
+	
+	protected IPropertyEditor propertyEditor;
 
-	public ItemPropertyDescription() {
+	public TextPropertyDescription() {
+		this(null);
+	}
+	
+	public TextPropertyDescription(IPropertyEditor propertyEditor) {
 		super();
+		this.propertyEditor = propertyEditor;
 	}
 
-	public ItemPropertyDescription(String name, String description, boolean mandatory) {
-		this(name, name, description, mandatory, null);
+	public TextPropertyDescription(String name, String description, boolean mandatory, IPropertyEditor editor) {
+		this(name, name, description, mandatory, null, editor);
 	}
 
-	public ItemPropertyDescription(String name, String label, String description, boolean mandatory) {
-		this(name, label, description, mandatory, null);
+	public TextPropertyDescription(String name, String label, String description, boolean mandatory, IPropertyEditor editor) {
+		this(name, label, description, mandatory, null, editor);
 	}
 
-	public ItemPropertyDescription(String name, String description, boolean mandatory, T defaultValue) {
-		this(name, name, description, mandatory, defaultValue);
-	}
-
-	public ItemPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue) {
+	public TextPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue, IPropertyEditor editor) {
 		super();
 		this.name = name;
 		this.label = label;
 		this.description = description;
 		this.mandatory = mandatory;
 		this.defaultValue = defaultValue;
+		this.propertyEditor = editor;
 	}
 
 	public void setjConfig(JasperReportsConfiguration jConfig) {
@@ -78,10 +89,6 @@ public class ItemPropertyDescription<T> {
 
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
-	}
-
-	public boolean isMultiline() {
-		return false;
 	}
 
 	public String getLabel() {
@@ -126,27 +133,17 @@ public class ItemPropertyDescription<T> {
 		this.defaultValue = defaultValue;
 	}
 
-	public Class<?> getType() {
-		if (defaultValue != null)
-			return defaultValue.getClass();
-		return String.class;
-	}
-
-	public String toSimpleString(String original) {
-		return original;
-	}
-
-	public void handleEdit(Control txt, StandardItemProperty value) {
-		if (value == null)
+	public void handleEdit(Control txt, IWItemProperty wiProp) {
+		if (wiProp == null)
 			return;
 		if (txt instanceof Text) {
 			String tvalue = ((Text) txt).getText();
 			if (tvalue != null && tvalue.isEmpty())
 				tvalue = null;
-			if (value.getValueExpression() != null)
-				((JRDesignExpression) value.getValueExpression()).setText(tvalue);
+			if (wiProp.isExpressionMode())
+				((JRDesignExpression) wiProp.getExpressionValue()).setText(tvalue);
 			else
-				value.setValue(tvalue);
+				wiProp.setValue(tvalue, null);
 		}
 	}
 
@@ -154,31 +151,21 @@ public class ItemPropertyDescription<T> {
 	// - JSS Bugzilla 42999
 	// - Eclipse Bug 383750
 	// It makes sense only on E4 platform and Mac OS X operating systems.
-	// DO NOT USE THIS FLAG FOR OTHER PURPOSES.
-	private boolean editHappened = false;
-
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
 		textExpression = new Text(parent, SWT.BORDER);
-		textExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData textData = new GridData(GridData.FILL_HORIZONTAL);
+		textData.verticalAlignment = SWT.CENTER;
+		textData.grabExcessVerticalSpace = true;
+		textExpression.setLayoutData(textData);
 		InputHistoryCache.bindText(textExpression, name);
-		if (UIUtil.isMacAndEclipse4()) {
-			textExpression.addModifyListener(new ModifyListener() {
-				public void modifyText(ModifyEvent e) {
-					if (wiProp.isRefresh())
-						return;
-					editHappened = true;
-				}
-			});
-		}
 		textExpression.addFocusListener(new FocusAdapter() {
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				if (UIUtil.isMacAndEclipse4() && editHappened) {
+				if (UIUtil.isMacAndEclipse4()) {
 					if (((Text) e.getSource()).isDisposed())
 						return;
-					setValue(((Text) e.getSource()), wiProp);
-					editHappened = false;
+					wiProp.updateWidget();
 				}
 			}
 
@@ -191,12 +178,7 @@ public class ItemPropertyDescription<T> {
 					return;
 				Point p = ((Text) e.getSource()).getSelection();
 
-				StandardItemProperty v = wiProp.getValue();
-				if (v == null)
-					v = getNewProperty(getName(), null, null);
-				handleEdit(((Text) e.getSource()), v);
-				wiProp.setValue(v);
-				// if (!textExpression.isDisposed())
+				handleEdit(((Text) e.getSource()), wiProp);
 				((Text) e.getSource()).setSelection(p);
 			}
 		});
@@ -205,71 +187,28 @@ public class ItemPropertyDescription<T> {
 		return textExpression;
 	}
 
-	public StandardItemProperty getNewProperty(String name, String value, JRExpression valueExpression) {
-		return new StandardItemProperty(name, null, null);
-	}
-
 	protected void setupContextMenu(final Control c, final IWItemProperty wiProp) {
-		if (getDefaultValue() != null) {
-			Menu controlMenu = c.getMenu();
-			if (controlMenu == null) {
-				controlMenu = new Menu(c);
-				c.setMenu(controlMenu);
-			}
-			for (MenuItem mi : controlMenu.getItems())
-				if (mi.getText().equals(Messages.ASPropertyWidget_0))
-					return;
-
-			MenuItem refreshItem = new MenuItem(controlMenu, SWT.NONE);
-			refreshItem.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					StandardItemProperty v = getNewProperty(getName(), getDefaultValueString(), null);
-					wiProp.setValue(v);
-				}
-			});
-			refreshItem.setText(Messages.ASPropertyWidget_0);
+		IMenuProvider provider = wiProp.getContextualMenuProvider();
+		if (provider != null){
+			provider.setupMenu(wiProp, this, c);
 		}
-		if (!isMandatory()) {
-			Menu controlMenu = c.getMenu();
-			if (controlMenu == null) {
-				controlMenu = new Menu(c);
-				c.setMenu(controlMenu);
-			}
-			for (MenuItem mi : controlMenu.getItems())
-				if (mi.getText().equals(Messages.ASPropertyWidget_1))
-					return;
-
-			MenuItem refreshItem = new MenuItem(controlMenu, SWT.NONE);
-			refreshItem.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					StandardItemProperty v = wiProp.getValue();
-					if (v != null) {
-						v.setValue(null);
-						v.setValueExpression(null);
-					}
-					wiProp.setValue(v);
-				}
-			});
-			refreshItem.setText(Messages.ASPropertyWidget_1);
-		}
-
 	}
 
-	public void setValue(Control c, IWItemProperty wip) {
+	public void update(Control c, IWItemProperty wip) {
 		if (c instanceof Text) {
 			Text txtExpr = (Text) c;
-			if (wip.getValue() == null)
-				wip.setValue(getNewProperty(getName(), null, null));
-			String txt = wip.getLabelProvider().getText(wip.getValue());
-			txt = toSimpleString(txt);
+			
+			String txt;
+
+			if (wip.isExpressionMode()){
+				JRExpression expression = wip.getExpressionValue();
+				txt = Misc.nvl(expression.getText());
+			} else {
+				txt = Misc.nvl(wip.getStaticValue());
+			}
 			Point oldSelection = txtExpr.getSelection();
 
-			boolean r = wip.isRefresh();
-			wip.setRefresh(true);
 			txtExpr.setText(txt);
-			wip.setRefresh(r);
 
 			oldSelection.x = Math.min(txt.length(), oldSelection.x);
 			oldSelection.y = Math.min(txt.length(), oldSelection.y);
@@ -282,7 +221,7 @@ public class ItemPropertyDescription<T> {
 			txtExpr.setToolTipText(tooltip.trim());
 		}
 	}
-
+	
 	public String getToolTip() {
 		String tt = Misc.nvl(getDescription());
 		tt += "\n" + (isMandatory() ? "Mandatory" : "Optional");
@@ -290,5 +229,28 @@ public class ItemPropertyDescription<T> {
 			tt += "\nDefault: " + getDefaultValueString();
 		return tt;
 	}
+	
+	public IPropertyEditor getPropertyEditor(){
+		return propertyEditor;
+	}
 
+	@Override
+	public ItemPropertyDescription<T> clone(IPropertyEditor editor){
+		TextPropertyDescription<T> result = new TextPropertyDescription<T>(editor);
+		result.defaultValue = defaultValue;
+		result.description = description;
+		result.jConfig = jConfig;
+		result.label = label;
+		result.mandatory = mandatory;
+		result.name = name;
+		result.readOnly = readOnly;
+		return result;
+	}
+	
+	@Override
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
+		TextPropertyDescription<?> result = new TextPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), editor);
+		result.setReadOnly(cpd.isReadOnly());
+		return result;
+	}
 }

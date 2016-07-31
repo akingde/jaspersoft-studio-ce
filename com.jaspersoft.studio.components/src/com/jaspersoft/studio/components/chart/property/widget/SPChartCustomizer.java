@@ -8,137 +8,64 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.property.widget;
 
-import java.io.InputStream;
-import java.util.List;
-
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Table;
 
-import com.jaspersoft.jasperreports.chartcustomizers.ProxyChartCustomizer;
-import com.jaspersoft.studio.components.chart.preferences.ChartCustomizerPreferencePage;
+import com.jaspersoft.studio.components.chart.model.MChart;
+import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyDescriptor;
+import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.ChartCustomizerWidget;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.SPClassType;
-import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
-import com.jaspersoft.studio.swt.widgets.table.INewElement;
-import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
-import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
-import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.repo.RepositoryUtil;
-
-public class SPChartCustomizer extends SPClassType<RWComboBoxPropertyDescriptor> {
-
-	public SPChartCustomizer(Composite parent, AbstractSection section, RWComboBoxPropertyDescriptor pDescriptor) {
+/**
+ * The ASPropertyWidget used to handle a chart customizer. It simply set the data
+ * in the widgets used to handle graphically the customizers
+ * 
+ * @author Orlandin Marco
+ *
+ */
+public class SPChartCustomizer extends ASPropertyWidget<CustomizerPropertyDescriptor>  {
+	
+	/**
+	 * The widgets with all the controls to handle the customizer
+	 */
+	private ChartCustomizerWidget widget;
+	
+	public SPChartCustomizer(Composite parent, AbstractSection section, CustomizerPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
+	}
+	
+	@Override
+	protected void createComponent(Composite parent) {
+		widget = new ChartCustomizerWidget(parent){
+			
+			@Override
+			public void changePropertyOn(String property, CustomizerPropertyExpressionsDTO value, APropertyNode target) {
+				section.changePropertyOn(property, value, target);
+			}
+		};
 	}
 
 	@Override
 	public void setData(APropertyNode pnode, Object b) {
-		super.setData(pnode, b);
-		if (b == null)
-			return;
-		Composite p = ftext.getParent();
-		try {
-			for (Control c : p.getChildren()) {
-				if (c == ftext || c == btn || c == getLabel())
-					continue;
-				c.dispose();
-			}
-			if (b.equals(ProxyChartCustomizer.class.getName()))
-				buildProxyUI();
-			else
-				buildUI(((String) b).replaceAll("\\.", "/") + ".json");
-		} finally {
-			p.getParent().layout(true);
+		if (b != null){
+			MChart chart = (MChart)pnode;
+			widget.update(chart, (CustomizerPropertyExpressionsDTO)b);
 		}
 	}
-
-	private void buildProxyUI() {
-		// here we should build a table with add/remove/up/down buttons
-		// when chart customizer is selected from the table, we should call
-		// buildUI if there is a json for it
-
-		Composite cmp = section.getWidgetFactory().createComposite(ftext.getParent());
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		cmp.setLayoutData(gd);
-		cmp.setLayout(new GridLayout(2, false));
-
-		Table tbl = section.getWidgetFactory().createTable(cmp, SWT.BORDER | SWT.SINGLE);
-		tbl.setLinesVisible(false);
-		tbl.setHeaderVisible(false);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		// gd.widthHint = 150;
-		gd.heightHint = 150;
-		// gd.verticalSpan = 4;
-		tbl.setLayoutData(gd);
-
-		TableViewer tviewer = new TableViewer(tbl);
-		tviewer.setContentProvider(new ListContentProvider());
-
-		Composite bcmp = section.getWidgetFactory().createComposite(cmp);
-		bcmp.setLayout(new GridLayout());
-		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.widthHint = 100;
-		bcmp.setLayoutData(gd);
-
-		new NewButton().createNewButtons(bcmp, tviewer, new INewElement() {
-
-			@Override
-			public Object newElement(List<?> input, int pos) {
-				String cList = section.getJasperReportsContext()
-						.getProperty(ChartCustomizerPreferencePage.CHARTCUSTOMIZER);
-				// we need a dialog, from which user will select a chart
-				// customizer from the preferences list
-				// I'll add also possibility to add a chart customizer class, to
-				// be complete, in advanced mode
-				// TODO add a chart customizer here
-				return "ABCD";
-			}
-		});
-		new DeleteButton().createDeleteButton(bcmp, tviewer);
-		new ListOrderButtons().createOrderButtons(bcmp, tviewer);
-
-		// read properties to get the list, populate table
-		((JRDesignElement) pnode.getValue()).getPropertiesMap();
-		tviewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				// TODO for selected chart customizer build ui if any
-			}
-		});
+	
+	@Override
+	public Control getControl() {
+		return widget.getControl();
 	}
-
-	private void buildUI(String path) {
-		InputStream in = null;
-		try {
-			in = RepositoryUtil.getInstance(section.getJasperReportsContext()).getInputStreamFromLocation(path);
-			if (in != null) {
-				GridData gd = new GridData();
-				gd.horizontalSpan = 3;
-				section.getWidgetFactory().createCLabel(ftext.getParent(), "here we'll have an UI for\n" + path)
-						.setLayoutData(gd);
-				// build ui here if we have something in json
-			}
-		} catch (
-
-		JRException e) {
-			e.printStackTrace();
-		} finally {
-			FileUtils.closeStream(in);
-		}
+	
+	/**
+	 * When the section is about to be hiding it must call this method, this 
+	 * will allow to clear the widget cache
+	 */
+	public void sectionAboutToBeHidden(){
+		widget.clearSelection();
 	}
 }

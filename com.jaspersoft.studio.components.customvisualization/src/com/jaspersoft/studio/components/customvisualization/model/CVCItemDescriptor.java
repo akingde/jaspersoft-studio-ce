@@ -15,37 +15,97 @@ package com.jaspersoft.studio.components.customvisualization.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.items.Item;
-import net.sf.jasperreports.components.items.ItemData;
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator;
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentDatasetDescriptor;
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentPropertyDescriptor;
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentSectionDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
+import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptor;
+import com.jaspersoft.studio.components.customvisualization.ui.framework.DatasetPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
-import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.utils.ExpressionInterpreter;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
+import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
+import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
+import com.jaspersoft.studio.widgets.framework.model.SectionPropertyDescriptor;
+import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
+import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
  * 
  */
 public class CVCItemDescriptor extends ADescriptor {
+	
+	private IPropertyEditor standardItemEditor = new PropertyEditorAdapter() {
+		
+		@Override
+		public JRExpression getPropertyValueExpression(String propertyName) {
+
+			for(ItemProperty prop : item.getProperties()){
+				if (prop.getName().equals(propertyName)){
+					StandardItemProperty stdProp = (StandardItemProperty)prop;
+					return stdProp.getValueExpression();
+				}
+			}
+			return null;
+		}
+		
+		@Override
+		public String getPropertyValue(String propertyName) {
+
+			for(ItemProperty prop : item.getProperties()){
+				if (prop.getName().equals(propertyName)){
+					StandardItemProperty stdProp = (StandardItemProperty)prop;
+					return stdProp.getValue();
+				}
+			}
+			return null;
+		}
+		
+		@Override
+		public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
+			boolean found = false;
+			
+			for(ItemProperty prop : item.getProperties()){
+				if (prop.getName().equals(propertyName)){
+					StandardItemProperty stdProp = (StandardItemProperty)prop;
+					stdProp.setValue(value);
+					stdProp.setValueExpression(valueExpression);
+					found = true; 
+					break;
+				}
+			}
+			if (!found){
+				((StandardItem)item).addItemProperty(new StandardItemProperty(propertyName, value, valueExpression));
+			}
+		}
+		
+		@Override
+		public void removeProperty(String propertyName) {
+			for(ItemProperty prop : item.getProperties()){
+				if (prop.getName().equals(propertyName)){
+					((StandardItem)item).removeItemProperty(prop);
+					break;
+				}
+			}
+		}
+	};
 
 	public CVCItemDescriptor() {
 		super();
@@ -116,14 +176,15 @@ public class CVCItemDescriptor extends ADescriptor {
 					if (ip.getName().equals("module")) {
 						String module = ItemPropertyUtil.getItemPropertyString((StandardItemProperty) ip, expIntr);
 						if (!Misc.isNullOrEmpty(module)) {
-							ComponentDescriptor cd = UIManager.getDescriptor(jConf, module);
+							CVCWidgetsDescriptor cd = UIManager.getDescriptor(jConf, module);
 							if (cd != null && !Misc.isNullOrEmpty(cd.getDatasets())) {
-								for (ComponentDatasetDescriptor cdd : cd.getDatasets()) {
+								for (DatasetPropertyDescriptor cdd : cd.getDatasets()) {
 									if (cdd.getSections() != null)
-										for (ComponentSectionDescriptor csd : cdd.getSections())
-											if (csd.getProperties() != null)
-												for (ComponentPropertyDescriptor cpd : csd.getProperties())
-													props.add(UIManager.createItemPropertyDescriptor(cd, cpd, jConf));
+										for (SectionPropertyDescriptor csd : cdd.getSections()){
+											for (WidgetPropertyDescriptor cpd : csd.getProperties()){
+												props.add(WidgetFactory.createItemPropertyDescriptor(cd, cpd, jConf, standardItemEditor));
+											}
+										}
 
 								}
 								itemProperties = props.toArray(new ItemPropertyDescription[props.size()]);

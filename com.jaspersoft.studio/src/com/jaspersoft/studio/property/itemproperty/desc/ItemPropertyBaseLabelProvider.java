@@ -6,82 +6,54 @@
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.itemproperty.label;
+package com.jaspersoft.studio.property.itemproperty.desc;
 
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.properties.view.validation.ValidationError;
-import com.jaspersoft.studio.property.JRPropertySheetEntry;
-import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
-import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.widgets.framework.ui.providers.BaseLabelProvider;
 
 import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.engine.JRExpression;
 
 /*
  * @author Chicu Veaceslav
  */
-public class ItemPropertyLabelProvider extends ColumnLabelProvider implements ITableLabelProvider, IColorProvider {
-	private ADescriptor descriptor;
-
-	public ItemPropertyLabelProvider(ADescriptor descriptor) {
-		super();
-		this.descriptor = descriptor;
-	}
+public class ItemPropertyBaseLabelProvider extends BaseLabelProvider {
 
 	@Override
 	public String getText(Object element) {
 		return getTextLabel(element);
 	}
 
-	private String getTextLabel(Object element) {
+	protected String getTextLabel(Object element) {
 		if (element != null && element instanceof ItemProperty) {
 			ItemProperty ip = (ItemProperty) element;
 			if (ip.getValueExpression() != null)
 				return Misc.nvl(ip.getValueExpression().getText());
-			if (descriptor != null) {
-				ItemPropertyDescription<?> ipDesc = descriptor.getDescription(ip.getName());
-				if (ipDesc != null)
-					return ipDesc.toSimpleString(Misc.nvl(ip.getValue()));
-			}
-			return Misc.nvl(ip.getValue());
+			else return Misc.nvl(ip.getValue());
 		}
 		return ""; //$NON-NLS-1$
 	}
+	
+	public String getTextLabel(JRExpression expressionValue, String staticValue) {
+		if (expressionValue != null)
+			return Misc.nvl(expressionValue.getText());
+		return Misc.nvl(staticValue);
+	}
+
 
 	@Override
 	public Image getImage(Object element) {
-
 		return null;
 	}
 
 	@Override
 	public Color getBackground(Object element) {
-		if (element instanceof JRPropertySheetEntry) {
-			JRPropertySheetEntry pse = (JRPropertySheetEntry) element;
-			pse.getDescriptor().getId();
-			Object[] vals = pse.getValues();
-			if (vals.length == 1)
-				element = vals[0];
-
-			if (element == null || element instanceof ItemProperty)
-				try {
-					descriptor.validateItem((ItemProperty) element);
-				} catch (ValidationError e) {
-					if (e.getProps().contains(pse.getDescriptor().getId())) {
-						if (e.isWarning())
-							return ValidationError.WARN;
-						return ValidationError.ERROR;
-					}
-				}
-		}
 		return super.getBackground(element);
 	}
 
@@ -120,21 +92,6 @@ public class ItemPropertyLabelProvider extends ColumnLabelProvider implements IT
 
 	@Override
 	public String getToolTipText(Object element) {
-		if (element instanceof JRPropertySheetEntry) {
-			JRPropertySheetEntry pse = (JRPropertySheetEntry) element;
-			pse.getDescriptor().getId();
-			Object[] vals = pse.getValues();
-			if (vals.length == 1)
-				element = vals[0];
-
-			if (element == null || element instanceof ItemProperty)
-				try {
-					descriptor.validateItem((ItemProperty) element);
-				} catch (ValidationError e) {
-					if (e.getProps().contains(pse.getDescriptor().getId()))
-						return e.getMessage();
-				}
-		}
 		return getText(element);
 	}
 

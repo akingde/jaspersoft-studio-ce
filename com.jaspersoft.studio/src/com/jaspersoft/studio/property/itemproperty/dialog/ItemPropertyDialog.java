@@ -12,11 +12,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.ui.ATitledDialog;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -41,13 +36,23 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.infoList.SelectableComposite;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
-import com.jaspersoft.studio.property.itemproperty.desc.IWItemProperty;
-import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
-import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
+import com.jaspersoft.studio.widgets.framework.IWItemProperty;
+import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
+import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.menu.IMenuProvider;
+import com.jaspersoft.studio.widgets.framework.ui.menu.StandardContextualMenu;
+
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 /**
  * Dialog that allows editing the information associated to a {@link ItemProperty} element.
@@ -67,6 +72,27 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 	private SelectableComposite infoPanel;
 	private ADescriptor descriptor;
 	private ItemPropertyDescription<?> ipDesc;
+	private boolean refresh = false;
+	private Composite cmp;
+	private StackLayout stackLayout;
+	
+	private String staticValue;
+	
+	private JRExpression expressionValue;
+	
+	private IPropertyEditor internalEditor = new PropertyEditorAdapter() {
+		
+		@Override
+		public JRExpression getPropertyValueExpression(String propertyName) {
+			return getExpressionValue();
+		}
+		
+		@Override
+		public String getPropertyValue(String propertyName) {
+			return getStaticValue();
+		}
+	};
+
 
 	public ItemPropertyDialog(Shell parentShell, ItemProperty itemProperty, ADescriptor descriptor) {
 		super(parentShell);
@@ -76,9 +102,8 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		if (this.itemProperty == null)
 			this.itemProperty = new StandardItemProperty("", "", null); //$NON-NLS-1$ //$NON-NLS-2$
 		this.descriptor = descriptor;
-		ipDesc = descriptor.getDescription(itemProperty.getName());
-		if (ipDesc == null)
-			ipDesc = new ItemPropertyDescription<String>(itemProperty.getName(), "", false);
+		ItemPropertyDescription<?> ipDesc = descriptor.getDescription(itemProperty.getName());
+		this.ipDesc = ipDesc.clone(internalEditor);
 	}
 
 	@Override
@@ -141,17 +166,20 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 
 					propertyValue.dispose();
 
-					ipDesc = descriptor.getDescription(itemProperty.getName());
-					if (ipDesc == null)
-						ipDesc = new ItemPropertyDescription<String>(itemProperty.getName(), "", false);
+					ItemPropertyDescription<?> ipDesc = descriptor.getDescription(itemProperty.getName());
+					if (ipDesc == null){
+						ItemPropertyDialog.this.ipDesc = new TextPropertyDescription<String>(itemProperty.getName(), "", false, internalEditor);
+					} else {
+						ItemPropertyDialog.this.ipDesc = ipDesc.clone(internalEditor);
+					}
 					propertyValue = ipDesc.createControl(ItemPropertyDialog.this, cmp);
 
-					setValue(itemProperty);
+					setValue(itemProperty.getValue(), itemProperty.getValueExpression());
 				}
 			}
 		});
 
-		setValue(itemProperty);
+		setValue(itemProperty.getValue(), getExpressionValue());
 		addListeners();
 
 		return dialogArea;
@@ -163,10 +191,6 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 			descriptions.add(new ElementDescription(ipd.getName(), ipd.getDescription(), false));
 		return descriptions;
 	}
-
-	private boolean refresh = false;
-	private Composite cmp;
-	private StackLayout stackLayout;
 
 	private void addListeners() {
 		propertyName.addModifyListener(new ModifyListener() {
@@ -181,12 +205,15 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 
 				propertyValue.dispose();
 
-				ipDesc = descriptor.getDescription(itemProperty.getName());
-				if (ipDesc == null)
-					ipDesc = new ItemPropertyDescription<String>(itemProperty.getName(), "", false);
+				ItemPropertyDescription<?> ipDesc = descriptor.getDescription(itemProperty.getName());
+				if (ipDesc == null){
+					ItemPropertyDialog.this.ipDesc = new TextPropertyDescription<String>(itemProperty.getName(), "", false, internalEditor);
+				} else {
+					ItemPropertyDialog.this.ipDesc = ipDesc.clone(internalEditor);
+				}
 				propertyValue = ipDesc.createControl(ItemPropertyDialog.this, cmp);
 
-				setValue(itemProperty);
+				setValue(itemProperty.getValue(), itemProperty.getValueExpression());
 
 				propertyName.setSelection(p);
 			}
@@ -198,16 +225,18 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 				validateDialog();
 			}
 		});
+		
 		useExpressionCheckbox.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (refresh)
+				if (isRefresh())
 					return;
-				if (useExpressionCheckbox.getSelection())
+				if (isExpressionMode()){
 					itemProperty.setValueExpression(new JRDesignExpression());
-				else
+				} else {
 					itemProperty.setValueExpression(null);
-				setValue(itemProperty);
+				}
+				setValue(itemProperty.getValue(), itemProperty.getValueExpression());
 				validateDialog();
 				dialogArea.layout();
 			}
@@ -256,12 +285,12 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 	}
 
 	@Override
-	public void setValue(StandardItemProperty exp) {
-		if (refresh)
+	public void setValue(String staticValue, JRExpression expressionValue) {
+		if (isRefresh())
 			return;
-		refresh = true;
+		setRefresh(true);
 		try {
-			propertyName.setText(exp.getName());
+			propertyName.setText(getPropertyName());
 			for (ItemPropertyDescription<?> ipd : descriptor.getItemPropertyDescriptors()) {
 				if (ipd.getName().equals(itemProperty.getName()) && ipd.isMandatory()) {
 					if (propertyName.isEnabled())
@@ -269,7 +298,8 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 					break;
 				}
 			}
-			boolean isExpression = exp.getValueExpression() != null;
+			ipDesc.getPropertyEditor().createUpdateProperty(ipDesc.getName(), staticValue, expressionValue);
+			boolean isExpression = isExpressionMode();
 			if (useExpressionCheckbox.getSelection() != isExpression)
 				useExpressionCheckbox.setSelection(isExpression);
 
@@ -277,26 +307,56 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 				propertyValueExpression.setExpression((JRDesignExpression) itemProperty.getValueExpression());
 				stackLayout.topControl = propertyValueExpression;
 			} else {
-				ipDesc.setValue(propertyValue, this);
+				updateWidget();
 				stackLayout.topControl = propertyValue;
 				propertyValueExpression.setExpression(null);
 			}
 			cmp.layout();
 		} finally {
-			refresh = false;
+			setRefresh(false);
 		}
 	}
 
 	@Override
-	public ItemPropertyLabelProvider getLabelProvider() {
-		return lprovider;
-	}
-
-	private ItemPropertyLabelProvider lprovider = new ItemPropertyLabelProvider(descriptor);
-
-	@Override
 	public Control getControl() {
 		return propertyValue;
+	}
+
+	@Override
+	public String getStaticValue() {
+		return staticValue;
+	}
+
+	@Override
+	public JRExpression getExpressionValue() {
+		return expressionValue;
+	}
+
+
+	@Override
+	public String getPropertyName() {
+		return ipDesc.getName();
+	}
+
+	@Override
+	public boolean isExpressionMode() {
+		return useExpressionCheckbox.getSelection();
+	}
+
+	@Override
+	public IMenuProvider getContextualMenuProvider() {
+		return StandardContextualMenu.INSTANCE;
+	}
+	
+
+	@Override
+	public void updateWidget() {
+		setRefresh(true);
+		try{
+			ipDesc.update(propertyValue, this);
+		} finally {
+			setRefresh(false);
+		}
 	}
 
 }

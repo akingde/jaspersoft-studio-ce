@@ -10,9 +10,6 @@ package com.jaspersoft.studio.property.itemproperty.dialog;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -34,8 +31,7 @@ import org.eclipse.swt.widgets.Table;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
-import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
-import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
+import com.jaspersoft.studio.property.itemproperty.desc.DescriptorPropertyLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
 import com.jaspersoft.studio.swt.widgets.table.IEditElement;
@@ -44,17 +40,21 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class TableItemDialog extends AItemDialog {
+	
+	private EditButton<StandardItemProperty> bpropEdit;
+	private TableViewer tviewer;
+	private Composite vcmp;
 
 	public TableItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig,
 			boolean showDataset) {
 		super(parentShell, descriptor, jrConfig, showDataset);
 	}
-
-	private EditButton<StandardItemProperty> bpropEdit;
-	private TableViewer tviewer;
-	private Composite vcmp;
 
 	protected void createValue(CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
@@ -81,7 +81,7 @@ public class TableItemDialog extends AItemDialog {
 		tviewer = new TableViewer(wtable);
 
 		TableViewerColumn column = new TableViewerColumn(tviewer, SWT.NONE);
-		column.setLabelProvider(new ItemPropertyLabelProvider(descriptor) {
+		column.setLabelProvider(new DescriptorPropertyLabelProvider(descriptor) {
 
 			@Override
 			public String getText(Object element) {
@@ -97,7 +97,7 @@ public class TableItemDialog extends AItemDialog {
 		column.getColumn().setWidth(100);
 
 		column = new TableViewerColumn(tviewer, SWT.NONE);
-		column.setLabelProvider(new ItemPropertyLabelProvider(descriptor) {
+		column.setLabelProvider(new DescriptorPropertyLabelProvider(descriptor) {
 			@Override
 			public Image getImage(Object element) {
 				return getColumnImage(element, 1);
@@ -190,6 +190,7 @@ public class TableItemDialog extends AItemDialog {
 		delb.createDeleteButton(bGroup, tviewer);
 	}
 
+	@Override
 	protected void fillData() {
 		tviewer.setInput(item.getProperties());
 		tviewer.getTable().setSelection(0);

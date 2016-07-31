@@ -6,7 +6,7 @@
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.itemproperty.desc;
+package com.jaspersoft.studio.widgets.framework.ui;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -21,41 +21,36 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jface.dialogs.FileSelectionDialog;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
+import com.jaspersoft.studio.widgets.framework.IWItemProperty;
+import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
+import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
-import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-public class FilePropertyDescription extends ItemPropertyDescription<String> {
+public class FilePropertyDescription extends TextPropertyDescription<String> {
+
+	private boolean refreshing = false;
 
 	public FilePropertyDescription() {
 		super();
 	}
-
-	public FilePropertyDescription(String name, String description, boolean mandatory) {
-		super(name, name, description, mandatory, null);
+	
+	public FilePropertyDescription(IPropertyEditor propertyEditor) {
+		super(propertyEditor);
 	}
 
-	public FilePropertyDescription(String name, String label, String description, boolean mandatory) {
-		super(name, label, description, mandatory, null);
+	public FilePropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue, IPropertyEditor editor) {
+		super(name, label, description, mandatory, defaultValue, editor);
 	}
-
-	public FilePropertyDescription(String name, String description, boolean mandatory, String defaultValue) {
-		super(name, name, description, mandatory, defaultValue);
-	}
-
-	public FilePropertyDescription(String name, String label, String description, boolean mandatory,
-			String defaultValue) {
-		super(name, label, description, mandatory, defaultValue);
-	}
-
-	private boolean refreshing = false;
 
 	@Override
-	public void handleEdit(Control txt, StandardItemProperty value) {
+	public void handleEdit(Control txt, IWItemProperty wProp) {
 		if (refreshing)
 			return;
-		super.handleEdit(txt, value);
+		super.handleEdit(txt, wProp);
 	}
 
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
@@ -66,7 +61,7 @@ public class FilePropertyDescription extends ItemPropertyDescription<String> {
 		layout.horizontalSpacing = 0;
 		layout.verticalSpacing = 0;
 		cmp.setLayout(layout);
-		cmp.setLayoutData(new GridData(GridData.FILL_BOTH));
+		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Control c = super.createControl(wiProp, cmp);
 
@@ -86,12 +81,7 @@ public class FilePropertyDescription extends ItemPropertyDescription<String> {
 							JRDesignExpression exp = fsd.getFileExpression();
 							textExpression.setText(exp.getText());
 
-							StandardItemProperty v = wiProp.getValue();
-							if (v == null)
-								v = new StandardItemProperty(getName(), null, exp);
-							else
-								v.setValueExpression(exp);
-							wiProp.setValue(v);
+							wiProp.setValue(null, exp);
 						}
 					} finally {
 						wiProp.setRefresh(false);
@@ -102,6 +92,27 @@ public class FilePropertyDescription extends ItemPropertyDescription<String> {
 			});
 		}
 		return c;
+	}
+	
+	@Override
+	public ItemPropertyDescription<String> clone(IPropertyEditor editor){
+		FilePropertyDescription result = new FilePropertyDescription(editor);
+		result.defaultValue = defaultValue;
+		result.description = description;
+		result.jConfig = jConfig;
+		result.label = label;
+		result.mandatory = mandatory;
+		result.name = name;
+		result.readOnly = readOnly;
+		return result;
+	}
+	
+	@Override
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
+		FilePropertyDescription fileDesc = new FilePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), editor);
+		fileDesc.setjConfig(jConfig);
+		fileDesc.setReadOnly(cpd.isReadOnly());
+		return fileDesc;
 	}
 
 }

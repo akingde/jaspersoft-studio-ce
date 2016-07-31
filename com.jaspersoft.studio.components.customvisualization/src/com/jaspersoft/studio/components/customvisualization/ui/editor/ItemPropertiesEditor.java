@@ -3,7 +3,6 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-
 package com.jaspersoft.studio.components.customvisualization.ui.editor;
 
 import java.io.ByteArrayInputStream;
@@ -34,13 +33,14 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentSectionDescriptor;
-import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
+import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class ItemPropertiesEditor extends EditorPart {
-	private ComponentSectionDescriptor model = new ComponentSectionDescriptor();;
+	private ComponentSectionDescriptor model = new ComponentSectionDescriptor();
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
@@ -141,10 +141,8 @@ public class ItemPropertiesEditor extends EditorPart {
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				PropertyDescriptorDialog d = new PropertyDescriptorDialog(
-						UIUtils.getShell());
-				d.setDescriptor(new ItemPropertyDescription<String>("property",
-						"Property Label", "Property description", false));
+				PropertyDescriptorDialog d = new PropertyDescriptorDialog(UIUtils.getShell());
+				d.setDescriptor(new TextPropertyDescription<String>("property", "Property Label", "Property description", false, new PropertyEditorAdapter()));
 				if (d.open() == Dialog.OK) {
 					new Label(c, SWT.NONE)
 							.setText(d.getDescriptor().getLabel());

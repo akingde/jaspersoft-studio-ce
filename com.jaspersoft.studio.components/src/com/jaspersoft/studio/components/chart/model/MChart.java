@@ -18,15 +18,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.components.chart.model.command.ChartSetValueCommandProvider;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
 import com.jaspersoft.studio.components.chart.model.plot.PlotFactory;
+import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyDescriptor;
+import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
-import com.jaspersoft.studio.components.chart.property.widget.SPChartCustomizer;
 import com.jaspersoft.studio.components.chart.util.ChartHelper;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.CategorySerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.GanttSeries;
@@ -52,21 +53,20 @@ import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.property.ISetValueCommandProvider;
 import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
-import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -101,9 +101,7 @@ import net.sf.jasperreports.charts.design.JRDesignXyzSeries;
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.charts.type.TimePeriodEnum;
 import net.sf.jasperreports.charts.type.ValueLocationEnum;
-import net.sf.jasperreports.components.charts.ChartCustomizer;
 import net.sf.jasperreports.engine.JRChart;
-import net.sf.jasperreports.engine.JRChartCustomizer;
 import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
@@ -133,6 +131,8 @@ public class MChart extends MGraphicElementLineBox
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String PLOTPROPERTY = "PLOTPROPERTY";
+	
+	public static final String CHART_PROPERTY_CUSTOMIZER = "multiCustomizerProperty";
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -231,20 +231,8 @@ public class MChart extends MGraphicElementLineBox
 		evaluationTimeD.setDescription(Messages.MChart_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
-		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS,
-				Messages.MChart_customizer_class) {
-			public ASPropertyWidget<RWComboBoxPropertyDescriptor> createWidget(Composite parent,
-					AbstractSection section) {
-				SPChartCustomizer classNameWidget = new SPChartCustomizer(parent, section, this);
-				classNameWidget.setClassesOfType(classes);
-				classNameWidget.setReadOnly(readOnly);
-				return classNameWidget;
-			}
-		};
-		List<Class<?>> classes = new ArrayList<Class<?>>();
-		classes.add(JRChartCustomizer.class);
-		classes.add(ChartCustomizer.class);
-		classD.setClasses(classes);
+		//Fake property to handle the customizer as a special case (since the descriptor need to handle more properties)
+		CustomizerPropertyDescriptor classD = new CustomizerPropertyDescriptor(CHART_PROPERTY_CUSTOMIZER, Messages.MChart_customizer_class);
 		classD.setDescription(Messages.MChart_customizer_class_description);
 		desc.add(classD);
 
@@ -455,7 +443,10 @@ public class MChart extends MGraphicElementLineBox
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignChart jrElement = (JRDesignChart) getValue();
-
+		if (id.equals(CHART_PROPERTY_CUSTOMIZER)){
+			PropertyExpressionsDTO dto =  (PropertyExpressionsDTO)super.getPropertyValue(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS);
+			return new CustomizerPropertyExpressionsDTO(dto);
+		}
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
 			return titlePositionD.getIntValue(jrElement.getTitlePositionValue());
 		if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION))
@@ -543,8 +534,9 @@ public class MChart extends MGraphicElementLineBox
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignChart jrElement = (JRDesignChart) getValue();
-
-		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
+		if (id.equals(CHART_PROPERTY_CUSTOMIZER)){
+			super.setPropertyValue(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, value);
+		} else if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
 			jrElement.setTitleFont(MFontUtil.setMFont(value));
 		} else if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_FONT)) {
 			jrElement.setSubtitleFont(MFontUtil.setMFont(value));
@@ -995,5 +987,17 @@ public class MChart extends MGraphicElementLineBox
 			jrTarget.setLegendColor(getColorClone(jrSource.getOwnLegendColor()));
 			jrTarget.setLegendBackgroundColor(getColorClone(jrSource.getOwnLegendBackgroundColor()));
 		}
+	}
+	
+	/**
+	 * This type of node return a custom set value command provider that will allow to 
+	 * generate command that will check if the table has the autoresize and if the changed property
+	 * need to trigger its refresh
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (adapter == ISetValueCommandProvider.class) return ChartSetValueCommandProvider.INSTANCE;
+		else return super.getAdapter(adapter);
 	}
 }

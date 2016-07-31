@@ -856,6 +856,12 @@ Export-Package: com.jaspersoft.studio;
    net.sf.jasperreports.engine",
  com.jaspersoft.studio.utils.jobs;uses:="org.eclipse.jface.operation",
  com.jaspersoft.studio.utils.parameter;uses:="net.sf.jasperreports.engine.design,com.jaspersoft.studio.utils.jasper,net.sf.jasperreports.engine",
+ com.jaspersoft.studio.widgets.framework,
+ com.jaspersoft.studio.widgets.framework.manager,
+ com.jaspersoft.studio.widgets.framework.model,
+ com.jaspersoft.studio.widgets.framework.ui,
+ com.jaspersoft.studio.widgets.framework.ui.menu,
+ com.jaspersoft.studio.widgets.framework.ui.providers,
  com.jaspersoft.studio.wizards;
   uses:="org.eclipse.jface.wizard,
    org.eclipse.jface.operation,

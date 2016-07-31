@@ -24,8 +24,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Scale;
 
 import com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator;
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
+import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
@@ -33,20 +33,20 @@ import com.jaspersoft.studio.wizards.JSSWizardPage;
 public class CVCTypeWizardPage extends JSSWizardPage {
 	private static final int GALLERY_HEIGHT = 100;
 	private static final int GALLERY_WIDTH = 100;
-	private List<ComponentDescriptor> modules;
-	private ComponentDescriptor module;
+	private List<CVCWidgetsDescriptor> modules;
+	private CVCWidgetsDescriptor module;
 	private Scale zoomFactor;
 	private Gallery chartsGallery;
 	private GalleryItem itemGroup;
 
-	protected CVCTypeWizardPage(List<ComponentDescriptor> modules) {
+	protected CVCTypeWizardPage(List<CVCWidgetsDescriptor> modules) {
 		super("cvcwizard"); //$NON-NLS-1$
 		setTitle("Custom Visualisation Components");
 		setDescription("Select one Custom Visualisation Component from the list.");
 		this.modules = modules;
 	}
 
-	public ComponentDescriptor getModule() {
+	public CVCWidgetsDescriptor getModule() {
 		return module;
 	}
 
@@ -97,7 +97,7 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 				System.out.println("Selection changed..." + e.item);
 
 				if (e.item != null && e.item instanceof GalleryItem) {
-					module = (ComponentDescriptor) ((GalleryItem) e.item).getData();
+					module = (CVCWidgetsDescriptor) ((GalleryItem) e.item).getData();
 				} else {
 					// Empty selection...
 					module = null;
@@ -145,17 +145,17 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 		setGallyeryItemImageInfo(tib, "icons/blank_a4.png"); //$NON-NLS-1$
 
 		JasperReportsConfiguration jConf = getConfig();
-		Collections.sort(modules, new Comparator<ComponentDescriptor>() {
+		Collections.sort(modules, new Comparator<CVCWidgetsDescriptor>() {
 
 			@Override
-			public int compare(ComponentDescriptor o1, ComponentDescriptor o2) {
-				return o1.i18n(o1.getLabel()).compareTo(o2.i18n(o2.getLabel()));
+			public int compare(CVCWidgetsDescriptor o1, CVCWidgetsDescriptor o2) {
+				return o1.getLocalizedString(o1.getLabel()).compareTo(o2.getLocalizedString(o2.getLabel()));
 			}
 		});
 
-		for (ComponentDescriptor cd : modules) {
+		for (CVCWidgetsDescriptor cd : modules) {
 			GalleryItem ti = new GalleryItem(rootItem, SWT.NONE);
-			ti.setText(cd.i18n(cd.getLabel()));
+			ti.setText(cd.getLocalizedString(cd.getLabel()));
 
 			setGallyeryItemImageInfo(ti, cd, jConf); // $NON-NLS-1$
 
@@ -164,7 +164,7 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 		table.setRedraw(true);
 	}
 
-	private static void setGallyeryItemImageInfo(GalleryItem item, ComponentDescriptor cd,
+	private static void setGallyeryItemImageInfo(GalleryItem item, CVCWidgetsDescriptor cd,
 			JasperReportsConfiguration jConf) {
 		if (!Misc.isNullOrEmpty(cd.getThumbnail())) {
 			Image img = UIManager.getThumbnail(cd);

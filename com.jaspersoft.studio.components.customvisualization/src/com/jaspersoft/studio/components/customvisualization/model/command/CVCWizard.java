@@ -7,14 +7,14 @@ package com.jaspersoft.studio.components.customvisualization.model.command;
 
 import java.util.List;
 
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
+import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptor;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 public class CVCWizard extends JSSWizard {
-	private List<ComponentDescriptor> modules;
+	private List<CVCWidgetsDescriptor> modules;
 	private CVCTypeWizardPage page0;
 
-	public CVCWizard(List<ComponentDescriptor> modules) {
+	public CVCWizard(List<CVCWidgetsDescriptor> modules) {
 		super();
 		setNeedsProgressMonitor(false);
 		this.modules = modules;
@@ -26,7 +26,7 @@ public class CVCWizard extends JSSWizard {
 		addPage(page0);
 	}
 
-	public ComponentDescriptor getModule() {
+	public CVCWidgetsDescriptor getModule() {
 		return page0.getModule();
 	}
 }

@@ -63,6 +63,10 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	protected Combo dsviewer;
 	protected EditableDatasetBaseComposite compositeDatasetInfo;
 	protected boolean showDataset = true;
+	protected ExpressionContext currentExpContext;
+	protected ExpressionContext expContext;
+
+	private Composite dsCmp;
 
 	public AItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig,
 			boolean showDataset) {
@@ -168,11 +172,6 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 		}
 		setError(str);
 	}
-
-	protected ExpressionContext currentExpContext;
-	protected ExpressionContext expContext;
-
-	private Composite dsCmp;
 
 	@Override
 	public void setExpressionContext(ExpressionContext expContext) {

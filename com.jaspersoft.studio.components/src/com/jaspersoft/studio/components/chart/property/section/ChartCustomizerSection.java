@@ -12,17 +12,17 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.property.section;
 
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
+import com.jaspersoft.studio.components.chart.property.widget.SPChartCustomizer;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 import net.sf.jasperreports.charts.design.JRDesignChartAxis;
-import net.sf.jasperreports.engine.design.JRDesignChart;
 
 /*
  * The location section on the location tab.
@@ -37,16 +37,13 @@ public class ChartCustomizerSection extends AbstractSection {
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-
-		parent.setLayout(new GridLayout(3, false));
-
-		createWidget4Property(parent, JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
+		createWidget4Property(parent, MChart.CHART_PROPERTY_CUSTOMIZER, false);
 	}
 
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
-		addProvidedProperties(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS, Messages.MChart_customizer_class);
+		addProvidedProperties(MChart.CHART_PROPERTY_CUSTOMIZER, Messages.MChart_customizer_class);
 
 	}
 
@@ -58,4 +55,10 @@ public class ChartCustomizerSection extends AbstractSection {
 		return md;
 	}
 
+	@Override
+	public void aboutToBeHidden() {
+		super.aboutToBeHidden();
+		SPChartCustomizer customizerWidget = (SPChartCustomizer)widgets.get(MChart.CHART_PROPERTY_CUSTOMIZER);
+		customizerWidget.sectionAboutToBeHidden();
+	}
 }

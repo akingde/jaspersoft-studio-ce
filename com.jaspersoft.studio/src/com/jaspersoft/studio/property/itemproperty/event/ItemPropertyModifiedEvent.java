@@ -9,12 +9,12 @@
 package com.jaspersoft.studio.property.itemproperty.event;
  
 
-import net.sf.jasperreports.components.items.StandardItemProperty;
-
 import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.widgets.Widget;
 
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
+
+import net.sf.jasperreports.engine.JRExpression;
 
 /**
  * The event that should be notified/received when dealing with expression widgets, like for example the
@@ -30,8 +30,11 @@ public class ItemPropertyModifiedEvent extends TypedEvent {
 
 	private static final long serialVersionUID = -8192762845793694496L;
 
-	/** The modified expression */
-	public StandardItemProperty modifiedExpression = null;
+	public String staticValue;
+	
+	public JRExpression expressionValue;
+	
+	public String propertyName;
 
 	public ItemPropertyModifiedEvent(Widget expressionWidget) {
 		super(expressionWidget);

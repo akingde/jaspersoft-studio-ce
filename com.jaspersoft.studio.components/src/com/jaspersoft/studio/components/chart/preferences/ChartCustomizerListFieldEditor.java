@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
@@ -31,12 +31,12 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 public class ChartCustomizerListFieldEditor extends TableFieldEditor {
 
-	public ChartCustomizerListFieldEditor() {
-		super();
-	}
-
+	private List<String> items = new ArrayList<String>();
+	
 	public ChartCustomizerListFieldEditor(String name, Composite parent) {
 		super(name, "", new String[] { "Chart Customizer Class" }, new int[] { 100 }, parent);
 	}
@@ -50,18 +50,14 @@ public class ChartCustomizerListFieldEditor extends TableFieldEditor {
 	protected String[][] parseString(String string) {
 		return new String[0][0];
 	}
-
-	private List<String> items = new ArrayList<String>();
-
 	@Override
 	protected String[] getNewInputObject() {
-		// PEditDialog dialog = new PEditDialog(UIUtils.getShell(), new
-		// SSOServer());
-		// if (dialog.open() == Window.OK) {
-		// SSOServer srv = dialog.getValue();
-		// items.add(srv);
-		// return new String[] { srv.getType().name(), srv.getUrl() };
-		// }
+		ChartCustomizerSelectionDialog fd = new ChartCustomizerSelectionDialog(UIUtils.getShell(), "Select the definition file", "Select the Chart Customizer definition file");
+		if (fd.open() == Dialog.OK){
+			String selection = fd.getSelectedResource();
+			items.add(selection);
+			return new String[]{selection};
+		}
 		return null;
 	}
 
@@ -128,20 +124,17 @@ public class ChartCustomizerListFieldEditor extends TableFieldEditor {
 		selectionListener = new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				Widget widget = event.widget;
-				if (widget == addButton)
+				if (widget == addButton){
 					addPressed();
-				else if (widget == removeButton)
+				} else if (widget == removeButton){
 					removePressed();
+				} else if (widget == table) {
+					selectionChanged();
+				}
 			}
 		};
 	}
 
-	@Override
-	protected Button createPushButton(Composite parent, String key) {
-		if (key.equals(Messages.common_duplicate))
-			return null;
-		return super.createPushButton(parent, key);
-	}
 
 	@Override
 	protected void removePressed() {
@@ -158,6 +151,7 @@ public class ChartCustomizerListFieldEditor extends TableFieldEditor {
 	@Override
 	protected void createButtons(Composite box) {
 		addButton = createPushButton(box, Messages.common_add);
+		
 		removeButton = createPushButton(box, Messages.common_delete);
 	}
 }

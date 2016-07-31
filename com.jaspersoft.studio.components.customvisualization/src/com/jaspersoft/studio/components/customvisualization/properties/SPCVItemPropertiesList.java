@@ -8,15 +8,7 @@ package com.jaspersoft.studio.components.customvisualization.properties;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
-import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -26,7 +18,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -38,25 +29,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.components.customvisualization.model.CVItemPropertiesDescriptor;
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentPropertyDescriptor;
-import com.jaspersoft.studio.components.customvisualization.ui.ComponentSectionDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
+import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
-import com.jaspersoft.studio.property.itemproperty.WItemProperty;
+import com.jaspersoft.studio.properties.layout.StackLayout;
+import com.jaspersoft.studio.properties.view.SectionContainerComposite;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
-import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
+import com.jaspersoft.studio.property.itemproperty.desc.DescriptorPropertyLabelProvider;
 import com.jaspersoft.studio.property.itemproperty.dialog.FormItemDialog;
-import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
-import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.ExpressionInterpreter;
@@ -64,6 +50,17 @@ import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.widgets.framework.WItemProperty;
+import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
+import com.jaspersoft.studio.widgets.framework.model.SectionPropertyDescriptor;
+import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
+import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Widget to modify the {@link CVDesignComponent#PROPERTY_ITEM_PROPERTIES}
@@ -83,6 +80,10 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 	private StackLayout stackLayout;
 	private Composite form;
 	private Composite cmp;
+	private Composite mainContainer;
+	private CVCWidgetsDescriptor currentDescriptor;
+	private List<WItemProperty> wIProps = new ArrayList<WItemProperty>();
+	private SectionContainerComposite propertyPageContainer;
 
 	public SPCVItemPropertiesList(Composite parent, AbstractSection section, CVItemPropertiesDescriptor pdescriptor) {
 		super(parent, section, pdescriptor);
@@ -90,18 +91,35 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 
 	@Override
 	protected void createComponent(Composite parent) {
-		cmp = new Composite(parent, SWT.NONE);
+		mainContainer = new Composite(parent, SWT.NONE);
+		GridLayout mainContainerLayout = new GridLayout(1, false);
+		mainContainerLayout.horizontalSpacing = 0;
+		mainContainerLayout.marginHeight = 0;
+		mainContainerLayout.marginWidth = 0;
+		mainContainerLayout.verticalSpacing = 0;
+		mainContainer.setLayout(mainContainerLayout);
+		
+		cmp = new Composite(mainContainer, SWT.NONE);
+		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		stackLayout = new StackLayout();
 		cmp.setLayout(stackLayout);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		cmp.setLayoutData(gd);
 
 		createPropertiesTable(cmp);
-		stackLayout.topControl = propertiesGrp;
+		stackLayout.setTopControl(propertiesGrp);
 
 		form = new Composite(cmp, SWT.NONE);
-		form.setLayout(new GridLayout(2, false));
+		GridLayout formLayout = new GridLayout(2, false);
+		formLayout.horizontalSpacing = 0;
+		formLayout.marginHeight = 0;
+		formLayout.marginWidth = 0;
+		formLayout.verticalSpacing = 0;
+		form.setLayout(formLayout);
+		
+		if (parent instanceof SectionContainerComposite){
+			propertyPageContainer = (SectionContainerComposite)parent;
+		} else {
+			propertyPageContainer = null;
+		}
 	}
 
 	private void addNewPropertyBtnPressed() {
@@ -148,27 +166,29 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 		propertiesGrp = new Group(parent, SWT.NONE);
 		propertiesGrp.setLayout(new GridLayout(2, false));
 
-		Composite cmpItemPropertiesTableViewer = new Composite(propertiesGrp, SWT.NONE);
-		cmpItemPropertiesTableViewer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
-		TableColumnLayout tl_itemPropertiesTableViewer = new TableColumnLayout();
-		cmpItemPropertiesTableViewer.setLayout(tl_itemPropertiesTableViewer);
-
-		propertiesTV = new TableViewer(cmpItemPropertiesTableViewer,
-				SWT.BORDER | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
+		//Composite cmpItemPropertiesTableViewer = new Composite(propertiesGrp, SWT.NONE);
+		//cmpItemPropertiesTableViewer.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//TableColumnLayout tl_itemPropertiesTableViewer = new TableColumnLayout();
+		//cmpItemPropertiesTableViewer.setLayout(tl_itemPropertiesTableViewer);
+		final Composite tableContainer = new Composite(propertiesGrp, SWT.NONE);
+		tableContainer.setLayout(new GridLayout(1, false));
+		tableContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		
+		propertiesTV = new TableViewer(tableContainer, SWT.BORDER | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
 		propertiesTV.getTable().setHeaderVisible(true);
 		propertiesTV.getTable().setLinesVisible(true);
+		propertiesTV.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		TableViewerColumn tvcName = new TableViewerColumn(propertiesTV, SWT.NONE);
 		tvcName.getColumn().setText(Messages.SPCVItemPropertiesList_ColName);
+		tvcName.getColumn().setWidth(100);
 		tvcName.setLabelProvider(new ItemPropertyNameLabelProvider());
-		tl_itemPropertiesTableViewer.setColumnData(tvcName.getColumn(),
-				new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
 
 		TableViewerColumn tvcValue = new TableViewerColumn(propertiesTV, SWT.NONE);
 		tvcValue.getColumn().setText(Messages.SPCVItemPropertiesList_ColValue);
 		tvcValue.setLabelProvider(new ItemPropertyValueLabelProvider());
-		tl_itemPropertiesTableViewer.setColumnData(tvcValue.getColumn(),
-				new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
+		tvcValue.getColumn().setWidth(100);
 
 		propertiesTV.setContentProvider(new ArrayContentProvider());
 
@@ -179,9 +199,17 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 			}
 		});
 
-		btnAddProperty = new Button(propertiesGrp, SWT.PUSH);
+		Composite buttonsComposite = new Composite(propertiesGrp,SWT.NONE);
+		GridLayout buttonsCompositeLayout = new GridLayout(1, false);
+		buttonsCompositeLayout.horizontalSpacing = 0;
+		buttonsCompositeLayout.marginWidth = 0;
+		buttonsCompositeLayout.marginHeight = 0;
+		buttonsComposite.setLayout(buttonsCompositeLayout);
+		buttonsComposite.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		
+		btnAddProperty = new Button(buttonsComposite, SWT.PUSH);
 		btnAddProperty.setText(Messages.SPCVItemPropertiesList_Add);
-		btnAddProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+		btnAddProperty.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		btnAddProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -189,9 +217,9 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 			}
 		});
 
-		btnModifyProperty = new Button(propertiesGrp, SWT.PUSH);
+		btnModifyProperty = new Button(buttonsComposite, SWT.PUSH);
 		btnModifyProperty.setText(Messages.SPCVItemPropertiesList_Edit);
-		btnModifyProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+		btnModifyProperty.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		btnModifyProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -199,9 +227,9 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 			}
 		});
 
-		btnRemoveProperty = new Button(propertiesGrp, SWT.PUSH);
+		btnRemoveProperty = new Button(buttonsComposite, SWT.PUSH);
 		btnRemoveProperty.setText(Messages.SPCVItemPropertiesList_Remove);
-		btnRemoveProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+		btnRemoveProperty.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		btnRemoveProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -221,12 +249,10 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 					removePropertyBtnPressed();
 			}
 		});
+		
 		enablePropertiesTVButtons();
 		return propertiesTV;
 	}
-
-	private ComponentDescriptor cd;
-	private List<WItemProperty> wIProps = new ArrayList<WItemProperty>();
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -245,169 +271,118 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 			dataset = (JRDesignDataset) jd.getMainDataset();
 
 		ExpressionInterpreter expIntr = ExpressionUtil.getCachedInterpreter(dataset, jd, jConf);
+		String module = null;
 		for (ItemProperty ip : itemProps) {
 			// let's get our description
 			if (ip.getName().equals("module")) {
-				String module = ItemPropertyUtil.getItemPropertyString((StandardItemProperty) ip, expIntr);
+				 module = ItemPropertyUtil.getItemPropertyString((StandardItemProperty) ip, expIntr);
 				if (!Misc.isNullOrEmpty(module)) {
-					ComponentDescriptor newCd = UIManager.getDescriptor(jConf, module);
-					if (newCd == null) {
-						stackLayout.topControl = propertiesGrp;
-						cmp.layout(true);
-						return;
-					}
-					if (newCd == cd) {
-						refresh = true;
-						try {
-							for (WItemProperty wip : wIProps)
-								wip.setValue((StandardItemProperty) ItemPropertyUtil.getProperty(itemProps,
-										wip.getIpDesc().getName()));
-						} finally {
-							refresh = false;
+					CVCWidgetsDescriptor newDescriptor = UIManager.getDescriptor(jConf, module);
+					if (newDescriptor == null) {
+						stackLayout.setTopControl(propertiesGrp);
+						//Refresh the scrollbars
+						if (propertyPageContainer != null){
+							propertyPageContainer.refreshPageComposite();
 						}
-						form.layout(true);
-						stackLayout.topControl = form;
-						cmp.layout(true);
-						return;
-					}
-					cd = newCd;
-					wIProps.clear();
-					for (Control c : form.getChildren())
-						c.dispose();
-					ExpressionContext ec = getExpressionContext();
-					CVCPropertyDescriptor descriptor = new CVCPropertyDescriptor();
-					if (cd != null && cd.getSections() != null) {
-						boolean first = true;
-						for (ComponentSectionDescriptor csd : cd.getSections()) {
-							Composite c = null;
-							if (csd.isExpandable())
-								c = createSection(form, csd.getName());
-							else if (!Misc.isNullOrEmpty(csd.getName()))
-								c = createGroup(form, csd.getName());
-							else {
-								c = form;
-								if (!first)
-									FormItemDialog.createSeparator(form);
+					} else {
+						if (newDescriptor == currentDescriptor) {
+							//same descriptor, only update the data
+							setDataIntoWidgets();
+							stackLayout.setTopControl(form);
+						} else {
+							//need to dispose the onld controls and create the new ones
+							currentDescriptor = newDescriptor;
+							wIProps.clear();
+							for (Control c : form.getChildren()){
+								c.dispose();
 							}
-							first = false;
-							for (ComponentPropertyDescriptor pd : csd.getProperties()) {
-								ItemPropertyDescription<?> ipdesc = UIManager.createItemPropertyDescriptor(cd, pd,
-										jConf);
-								descriptor.addItemPropertyDescriptor(ipdesc);
-								wIProps.add(createItemProperty(c, ipdesc, descriptor, ec));
+							ExpressionContext ec = getExpressionContext();
+							CVCPropertyDescriptor descriptor = new CVCPropertyDescriptor();
+							DescriptorPropertyLabelProvider descriptorLabelProvider = new DescriptorPropertyLabelProvider(descriptor);
+							if (currentDescriptor != null && currentDescriptor.getSections() != null) {
+								boolean first = true;
+								for (SectionPropertyDescriptor csd : currentDescriptor.getSections()) {
+									Composite c = null;
+									if (csd.isExpandable()){
+										c = createSection(form, csd.getName());
+									} else if (!Misc.isNullOrEmpty(csd.getName())){
+										c = createGroup(form, csd.getName());
+									} else {
+										c = form;
+										if (!first){
+											FormItemDialog.createSeparator(form);
+										}
+									}
+									first = false;
+									for (WidgetPropertyDescriptor pd : csd.getProperties()) {
+										CVCPropertyEditor editor = new CVCPropertyEditor(this.section, itemProps);
+										ItemPropertyDescription<?> ipdesc = WidgetFactory.createItemPropertyDescriptor(currentDescriptor, pd, jConf, editor);
+										descriptor.addItemPropertyDescriptor(ipdesc);
+										wIProps.add(createItemProperty(c, ipdesc, descriptorLabelProvider, ec));
+									}
+								}
+								setDataIntoWidgets();
+								stackLayout.setTopControl(form);
+								//Refresh the scrollbars
+								if (propertyPageContainer != null){
+									propertyPageContainer.refreshPageComposite();
+								}
 							}
 						}
-						form.layout(true);
-						stackLayout.topControl = form;
-						cmp.layout(true);
 					}
-					return;
 				}
 			}
 		}
-		stackLayout.topControl = propertiesGrp;
-		cmp.layout(true);
+		if (Misc.isNullOrEmpty(module)){
+			stackLayout.setTopControl(propertiesGrp);
+			cmp.layout(true);
+		}
 	}
+	
+	private void setDataIntoWidgets(){
+		for (WItemProperty wip : wIProps){
+			wip.updateWidget();
+		}
+	}
+
 
 	@Override
 	public Control getControl() {
-		return propertiesGrp;
+		return mainContainer;
 	}
 
 	private ExpressionContext getExpressionContext() {
 		return ModelUtils.getElementExpressionContext(null, section.getElement());
 	}
 
-	protected WItemProperty createItemProperty(Composite cmp, final ItemPropertyDescription<?> ipd,
-			CVCPropertyDescriptor descriptor, ExpressionContext ec) {
-		Label lbl = new Label(cmp, SWT.NONE);
-		lbl.setText(Misc.nvl(ipd.getLabel()));
-		lbl.setToolTipText(ipd.getToolTip());
-
-		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, descriptor, ipd);
-		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		expr.setExpressionContext(ec);
-		if (ipd.isReadOnly())
-			expr.setEnabled(false);
-		final ItemProperty p = ItemPropertyUtil.getProperty(itemProps, ipd.getName());
-		if (p != null)
-			expr.setValue((StandardItemProperty) p);
-		expr.addModifyListener(new ItemPropertyModifiedListener() {
-
-			@Override
-			public void itemModified(ItemPropertyModifiedEvent event) {
-				if (refresh)
-					return;
-				UIUtils.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						ItemProperty p = ItemPropertyUtil.getProperty(itemProps, ipd.getName());
-						if (p != null) {
-							int idx = itemProps.indexOf(p);
-							if (idx >= 0)
-								itemProps.set(idx, expr.getValue());
-							else
-								itemProps.add(expr.getValue());
-						} else
-							itemProps.add(expr.getValue());
-						section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
-					}
-				});
-
-			}
-		});
-
-		return expr;
-	}
-
-	private boolean refresh = false;
-
 	protected Composite createSection(Composite parent, String text) {
-		Section ec = new Section(parent, Section.TREE_NODE);
-		ec.setText(cd.i18n(Misc.nvl(text)));
-		ec.setExpanded(true);
-		ec.setFont(ResourceManager.getBoldFont(ec.getFont()));
-
-		Label lbl = new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL);
-		ec.setSeparatorControl(lbl);
-
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		ec.setLayoutData(gd);
-
-		Composite c = new Composite(ec, SWT.WRAP);
-		c.setLayout(new GridLayout(2, false));
-		ec.setClient(c);
-
+		Composite c = section.getWidgetFactory().createSection(parent, text, true, 2, 2);
 		return c;
 	}
 
 	protected Composite createGroup(Composite parent, String text) {
-		Composite ec = new Composite(parent, Section.TREE_NODE);
-		ec.setLayout(new GridLayout());
-
-		if (!Misc.isNullOrEmpty(text)) {
-			Label lbl = new Label(ec, SWT.NONE);
-			lbl.setText(cd.i18n(text));
-			lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
-		}
-		new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		ec.setLayoutData(gd);
-
-		Composite c = new Composite(ec, SWT.WRAP);
-		c.setLayout(new GridLayout(2, false));
-		c.setLayoutData(new GridData(GridData.FILL_BOTH));
-
+		Composite c = section.getWidgetFactory().createSection(parent, text, false, 2, 2);
 		return c;
 	}
 
 	private void enablePropertiesTVButtons() {
 		btnModifyProperty.setEnabled(!propertiesTV.getSelection().isEmpty());
 		btnRemoveProperty.setEnabled(!propertiesTV.getSelection().isEmpty());
+	}
+
+	protected WItemProperty createItemProperty(Composite cmp, final ItemPropertyDescription<?> ipd,  DescriptorPropertyLabelProvider descriptorLabelProvider, ExpressionContext ec) {
+		Label lbl = new Label(cmp, SWT.NONE);
+		lbl.setText(Misc.nvl(ipd.getLabel()));
+		lbl.setToolTipText(ipd.getToolTip());
+
+		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, ipd);
+		expr.setLabelProvider(descriptorLabelProvider);
+		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		expr.setExpressionContext(ec);
+		if (ipd.isReadOnly()){
+			expr.setEnabled(false);
+		}
+		return expr;
 	}
 
 	private class CVCPropertyDescriptor extends ADescriptor {
@@ -429,5 +404,4 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 		}
 
 	}
-
 }
