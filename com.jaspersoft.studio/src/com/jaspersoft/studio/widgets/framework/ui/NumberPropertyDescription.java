@@ -9,7 +9,6 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -18,8 +17,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.swt.widgets.NumericText;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
+import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 
 public abstract class NumberPropertyDescription<T extends Number> extends TextPropertyDescription<T> {
 	
@@ -61,27 +62,31 @@ public abstract class NumberPropertyDescription<T extends Number> extends TextPr
 
 	@Override
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
-		Composite cmp = new Composite(parent, SWT.NONE);
-		StackLayout layout = new StackLayout();
-		cmp.setLayout(layout);
+		DoubleControlComposite cmp = new DoubleControlComposite(parent, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		super.createControl(wiProp, cmp);
+		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
+		cmp.getFirstContainer().setData(expressionControl);
 
-		final NumericText cp = createSimpleEditor(cmp);
-		cp.addSelectionListener(new SelectionAdapter() {
+		final NumericText simpleControl = createSimpleEditor(cmp.getSecondContainer());
+		cmp.getSecondContainer().setData(simpleControl);
+		GridData textData = new GridData(GridData.FILL_HORIZONTAL);
+		textData.verticalAlignment = SWT.CENTER;
+		textData.grabExcessVerticalSpace = true;
+		simpleControl.setLayoutData(textData);
+		simpleControl.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (wiProp.isRefresh())
 					return;
-				handleEdit(cp, wiProp);
+				handleEdit(simpleControl, wiProp);
 			}
 			
 		});
-		setupContextMenu(cp, wiProp);
-		layout.topControl = cp;
+		setupContextMenu(simpleControl, wiProp);
 		setupContextMenu(textExpression, wiProp);
+		cmp.switchToFirstContainer();
 		return cmp;
 	}
 	
@@ -104,19 +109,17 @@ public abstract class NumberPropertyDescription<T extends Number> extends TextPr
 	 */
 	@Override
 	public void update(Control c, IWItemProperty wip) {
-		Composite cmp = (Composite) wip.getControl();
-		StackLayout layout = (StackLayout) cmp.getLayout();
+		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
 		if (wip.isExpressionMode()) {
-			Text txt = (Text) cmp.getChildren()[0];
-			super.update(txt, wip);
-			layout.topControl = txt;
+			Text expressionControl = (Text) cmp.getFirstContainer().getData();
+			super.update(expressionControl, wip);
+			cmp.switchToFirstContainer();
 		} else {
-			NumericText colorPicker = (NumericText) cmp.getChildren()[1];
-			layout.topControl = colorPicker;
+			NumericText simpleControl = (NumericText)cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
-			colorPicker.setValue(convertValue(v));
+			simpleControl.setValue(convertValue(Misc.nvl(v)));
+			cmp.switchToSecondContainer();
 		}
-		cmp.layout();
 	}
 
 	@Override

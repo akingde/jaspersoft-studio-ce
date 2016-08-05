@@ -1,7 +1,6 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -17,6 +16,7 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
+import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
@@ -82,50 +82,54 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 	}
 
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
-		Composite cmp = new Composite(parent, SWT.NONE);
-		StackLayout layout = new StackLayout();
-		cmp.setLayout(layout);
+		DoubleControlComposite cmp = new DoubleControlComposite(parent, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		super.createControl(wiProp, cmp);
+		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
+		cmp.getFirstContainer().setData(expressionControl);
 
-		final Combo c = new Combo(cmp, readOnly ? SWT.READ_ONLY : SWT.NONE);
-		c.setItems(convert2Value(keyValues));
-		c.addSelectionListener(new SelectionAdapter() {
+		final Combo simpleControl = new Combo(cmp.getSecondContainer(), readOnly ? SWT.READ_ONLY : SWT.NONE);
+		cmp.getSecondContainer().setData(simpleControl);
+		
+		GridData comboData = new GridData(GridData.FILL_HORIZONTAL);
+		comboData.verticalAlignment = SWT.CENTER;
+		comboData.grabExcessVerticalSpace = true;
+		simpleControl.setLayoutData(comboData);
+		
+		simpleControl.setItems(convert2Value(keyValues));
+		simpleControl.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (wiProp.isRefresh())
 					return;
-				handleEdit(c, wiProp);
+				handleEdit(simpleControl, wiProp);
 			}
 		});
-		c.addModifyListener(new ModifyListener() {
+		simpleControl.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
 				if (wiProp.isRefresh())
 					return;
-				Point p = c.getSelection();
-				handleEdit(c, wiProp);
-				c.setSelection(p);
+				Point p = simpleControl.getSelection();
+				handleEdit(simpleControl, wiProp);
+				simpleControl.setSelection(p);
 			}
 		});
-		setupContextMenu(c, wiProp);
-		layout.topControl = c;
+		setupContextMenu(simpleControl, wiProp);
+		cmp.switchToSecondContainer();
 		return cmp;
 	}
 
 	@Override
 	public void update(Control c, IWItemProperty wip) {
-		Composite cmp = (Composite) wip.getControl();
-		StackLayout layout = (StackLayout) cmp.getLayout();
-		if (wip.getExpressionValue() != null) {
-			Text txt = (Text) cmp.getChildren()[0];
+		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
+		if (wip.isExpressionMode()) {
+			Text txt = (Text) cmp.getFirstContainer().getData();
 			super.update(txt, wip);
-			layout.topControl = txt;
+			cmp.switchToFirstContainer();
 		} else {
-			Combo combo = (Combo) cmp.getChildren()[1];
-			layout.topControl = combo;
+			Combo combo = (Combo) cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
 			if (readOnly){
 				for (int i = 0; i < keyValues.length; i++) {
@@ -137,8 +141,9 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 			} else {
 				combo.setText(Misc.nvl(v));
 			}
+			cmp.switchToSecondContainer();
 		}
-		cmp.layout();
+
 	}
 	
 	@Override

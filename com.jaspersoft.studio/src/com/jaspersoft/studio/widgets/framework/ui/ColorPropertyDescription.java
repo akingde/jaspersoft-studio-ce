@@ -9,7 +9,6 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -24,6 +23,7 @@ import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
+import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
@@ -65,47 +65,46 @@ public class ColorPropertyDescription<T> extends TextPropertyDescription<T> {
 	}
 
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
-		Composite cmp = new Composite(parent, SWT.NONE);
-		StackLayout layout = new StackLayout();
-		cmp.setLayout(layout);
+		DoubleControlComposite cmp = new DoubleControlComposite(parent, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		super.createControl(wiProp, cmp);
+		Control expressionEditor = super.createControl(wiProp, cmp.getFirstContainer());
+		cmp.getFirstContainer().setData(expressionEditor);
 
-		final WColorPicker cp = new WColorPicker(new AlfaRGB(new RGB(0, 0, 0), 0), cmp);
-		cp.setHaveTransparency(isTransaprent());
-		cp.addColorSelectionListener(new ColorSelectionListener() {
+		final WColorPicker simpleEditor = new WColorPicker(new AlfaRGB(new RGB(0, 0, 0), 0), cmp.getSecondContainer());
+		cmp.getSecondContainer().setData(simpleEditor);
+		simpleEditor.setHaveTransparency(isTransaprent());
+		simpleEditor.addColorSelectionListener(new ColorSelectionListener() {
 
 			@Override
 			public void changed(ColorSelectedEvent e) {
 				if (wiProp.isRefresh())
 					return;
-				handleEdit(cp, wiProp);
+				handleEdit(simpleEditor, wiProp);
 			}
 		});
-		for (Control c : cp.getChildren())
+		for (Control c : simpleEditor.getChildren()){
 			setupContextMenu(c, wiProp);
-		layout.topControl = cp;
+		}
 
 		setupContextMenu(textExpression, wiProp);
+		cmp.switchToSecondContainer();
 		return cmp;
 	}
 
 	@Override
 	public void update(Control c, IWItemProperty wip) {
-		Composite cmp = (Composite) wip.getControl();
-		StackLayout layout = (StackLayout) cmp.getLayout();
+		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
 		if (wip.isExpressionMode()) {
-			Text txt = (Text) cmp.getChildren()[0];
+			Text txt = (Text) cmp.getFirstContainer().getData();
 			super.update(txt, wip);
-			layout.topControl = txt;
+			cmp.switchToFirstContainer();
 		} else {
-			WColorPicker colorPicker = (WColorPicker) cmp.getChildren()[1];
-			layout.topControl = colorPicker;
+			WColorPicker colorPicker = (WColorPicker) cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
 			colorPicker.setColor(new AlfaRGB(Colors.decodeHexStringAsSWTRGB(v), 0));
+			cmp.switchToSecondContainer();
 		}
-		cmp.layout();
 	}
 	
 	/**

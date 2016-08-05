@@ -174,5 +174,19 @@ public class WidgetFactory {
 		return cmp;
 	}
 	
-	
+	/**
+	 * Create a grid layout with no margins around it
+	 * 
+	 * @param colNumber the number of columns of the GridLayout
+	 * @return a not null {@link GridLayout}
+	 */
+	public static GridLayout getNoPadLayout(int colNumber){
+		GridLayout result = new GridLayout(colNumber, false);
+		//result.horizontalSpacing = 0;
+		result.verticalSpacing = 0;
+		result.marginWidth = 0;
+		result.marginHeight = 0;
+		return result;
+	}
+		
 }

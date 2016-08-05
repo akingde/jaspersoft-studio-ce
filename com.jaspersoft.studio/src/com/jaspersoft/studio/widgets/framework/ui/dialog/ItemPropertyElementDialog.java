@@ -28,6 +28,7 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
+import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.menu.IMenuProvider;
 import com.jaspersoft.studio.widgets.framework.ui.menu.StandardContextualMenu;
@@ -98,15 +99,15 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		stackComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		editorComposite = new Composite(stackComposite, SWT.NONE);
-		editorComposite.setLayout(getNoPadLayout(1));
+		editorComposite.setLayout(WidgetFactory.getNoPadLayout(1));
 		//Need a second composite to force the control to not grow on all the visible space
 		Composite editorControlComposite = new Composite(editorComposite, SWT.NONE);
-		editorControlComposite.setLayout(getNoPadLayout(1));
+		editorControlComposite.setLayout(WidgetFactory.getNoPadLayout(1));
 		editorControlComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		propertyValue = ipDesc.createControl(this, editorControlComposite);
 		
 		expressionComposite = new Composite(stackComposite, SWT.NONE);
-		expressionComposite.setLayout(getNoPadLayout(1));
+		expressionComposite.setLayout(WidgetFactory.getNoPadLayout(1));
 		propertyValueExpression = new WTextExpression(expressionComposite, SWT.NONE);
 		propertyValueExpression.setExpressionContext(this.expContext);
 		propertyValueExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -117,15 +118,6 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		return dialogArea;
 	}
 	
-	protected GridLayout getNoPadLayout(int colNumber){
-		GridLayout result = new GridLayout(colNumber, false);
-		result.horizontalSpacing = 0;
-		result.verticalSpacing = 0;
-		result.marginWidth = 0;
-		result.marginHeight = 0;
-		return result;
-	}
-		
 	private void addListeners() {
 		propertyValueExpression.addModifyListener(new ExpressionModifiedListener() {
 			@Override
@@ -224,7 +216,7 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 	
 	@Override
 	public boolean close() {
-		if (isExpressionMode()){
+		if (useExpressionCheckbox.getSelection()){
 			staticValue = null;
 		} else {
 			expressionValue = null;
@@ -232,9 +224,13 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		return super.close();
 	}
 
+	/**
+	 * This dialog has is own controls for the expression, so it will force the expression mode to
+	 * false for the {@link ItemPropertyDescription}
+	 */
 	@Override
 	public boolean isExpressionMode() {
-		return useExpressionCheckbox.getSelection();
+		return false;
 	}
 	
 	@Override
