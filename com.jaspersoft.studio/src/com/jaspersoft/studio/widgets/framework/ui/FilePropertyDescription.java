@@ -61,7 +61,8 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 		layout.horizontalSpacing = 0;
 		layout.verticalSpacing = 0;
 		cmp.setLayout(layout);
-		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData cmpData = new GridData(GridData.FILL_HORIZONTAL);
+		cmp.setLayoutData(cmpData);
 
 		Control c = super.createControl(wiProp, cmp);
 

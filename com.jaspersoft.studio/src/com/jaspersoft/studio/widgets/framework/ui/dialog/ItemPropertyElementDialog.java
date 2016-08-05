@@ -6,7 +6,7 @@
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.itemproperty.dialog;
+package com.jaspersoft.studio.widgets.framework.ui.dialog;
 
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -32,7 +32,7 @@ import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.menu.IMenuProvider;
 import com.jaspersoft.studio.widgets.framework.ui.menu.StandardContextualMenu;
 
-import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationTitleAreaDialog;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -41,7 +41,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class ItemPropertyElementDialog extends ATitledDialog implements IExpressionContextSetter, IWItemProperty {
+public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog implements IExpressionContextSetter, IWItemProperty {
 
 	private Button useExpressionCheckbox;
 	private Control propertyValue;
@@ -50,7 +50,9 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 	private Composite dialogArea;
 	private ItemPropertyDescription<?> ipDesc;
 	private StackLayout layout;
-	private Composite cmp;
+	private Composite stackComposite;
+	private Composite editorComposite;
+	private Composite expressionComposite;
 	
 	private String staticValue;
 	
@@ -60,12 +62,10 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 
 	public ItemPropertyElementDialog(Shell parentShell, String staticValue, JRExpression expressionValue, ItemPropertyDescription<?> ipDesc) {
 		super(parentShell);
-		setTitle(NLS.bind(Messages.ItemPropertyElementDialog_0, ipDesc.getName() != null ? ipDesc.getName() : "")); // $NON-NLS-2$
 		this.staticValue = staticValue;
 		this.expressionValue = expressionValue != null ? (JRExpression)expressionValue.clone() : null;
-		setDescription(ipDesc.getDescription());
-		setDefaultSize(500, -1);
-		
+		setDefaultSize(500, 210);
+		setSaveSettings(false);
 		this.ipDesc = ipDesc.clone(new PropertyEditorAdapter() {
 			
 			@Override
@@ -82,29 +82,50 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		dialogArea = (Composite) super.createDialogArea(parent);
+		setTitle(NLS.bind(Messages.ItemPropertyElementDialog_0, ipDesc.getName() != null ? ipDesc.getName() : "")); // $NON-NLS-2$
+		setMessage(ipDesc.getDescription());
+		dialogArea = new Composite(parent, SWT.NONE);
+		dialogArea.setLayoutData(new GridData(GridData.FILL_BOTH));
 		dialogArea.setLayout(new GridLayout(1, false));
 
 		useExpressionCheckbox = new Button(dialogArea, SWT.CHECK);
 		useExpressionCheckbox.setText(Messages.ItemPropertyElementDialog_2);
 		useExpressionCheckbox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-
-		cmp = new Composite(dialogArea, SWT.NONE);
+		
+		stackComposite = new Composite(dialogArea, SWT.NONE);
 		layout = new StackLayout();
-		cmp.setLayout(layout);
-		cmp.setLayoutData(new GridData(GridData.FILL_BOTH));
+		stackComposite.setLayout(layout);
+		stackComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		propertyValue = ipDesc.createControl(this, cmp);
-
-		propertyValueExpression = new WTextExpression(cmp, SWT.NONE);
+		editorComposite = new Composite(stackComposite, SWT.NONE);
+		editorComposite.setLayout(getNoPadLayout(1));
+		//Need a second composite to force the control to not grow on all the visible space
+		Composite editorControlComposite = new Composite(editorComposite, SWT.NONE);
+		editorControlComposite.setLayout(getNoPadLayout(1));
+		editorControlComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		propertyValue = ipDesc.createControl(this, editorControlComposite);
+		
+		expressionComposite = new Composite(stackComposite, SWT.NONE);
+		expressionComposite.setLayout(getNoPadLayout(1));
+		propertyValueExpression = new WTextExpression(expressionComposite, SWT.NONE);
 		propertyValueExpression.setExpressionContext(this.expContext);
+		propertyValueExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		setValue(staticValue, expressionValue);
 		addListeners();
 
 		return dialogArea;
 	}
-
+	
+	protected GridLayout getNoPadLayout(int colNumber){
+		GridLayout result = new GridLayout(colNumber, false);
+		result.horizontalSpacing = 0;
+		result.verticalSpacing = 0;
+		result.marginWidth = 0;
+		result.marginHeight = 0;
+		return result;
+	}
+		
 	private void addListeners() {
 		propertyValueExpression.addModifyListener(new ExpressionModifiedListener() {
 			@Override
@@ -126,15 +147,16 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 				if (isRefresh())
 					return;
 				if (useExpressionCheckbox.getSelection()){
-					layout.topControl = propertyValueExpression;
+					layout.topControl = expressionComposite;
 					useExpressionCheckbox.setSelection(true);
 					propertyValueExpression.setFocus();
 				} else {
 					useExpressionCheckbox.setSelection(false);
-					layout.topControl = propertyValue;
+					updateWidget();
+					layout.topControl = editorComposite;
 					propertyValue.setFocus();
 				}
-				cmp.layout(true);
+				stackComposite.layout(true);
 			}
 		});
 	}
@@ -166,17 +188,17 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 				this.staticValue = staticValue;
 			}
 			if (expressionValue != null) {
-				layout.topControl = propertyValueExpression;
+				layout.topControl = expressionComposite;
 				propertyValueExpression.setExpression((JRDesignExpression)expressionValue);
 				useExpressionCheckbox.setSelection(true);
 				propertyValueExpression.setFocus();
 			} else {
 				useExpressionCheckbox.setSelection(false);
 				ipDesc.update(propertyValue,  this);
-				layout.topControl = propertyValue;
+				layout.topControl = editorComposite;
 				propertyValue.setFocus();
 			}
-			cmp.layout(true);
+			stackComposite.layout(true);
 		} finally {
 			setRefresh(false);
 		}

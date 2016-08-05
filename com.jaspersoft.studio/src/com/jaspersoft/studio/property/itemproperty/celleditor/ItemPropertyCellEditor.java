@@ -17,7 +17,7 @@ import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.descriptor.JSSDialogCellEditor;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.DescriptorPropertyLabelProvider;
-import com.jaspersoft.studio.property.itemproperty.dialog.ItemPropertyElementDialog;
+import com.jaspersoft.studio.widgets.framework.ui.dialog.ItemPropertyElementDialog;
 
 import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
