@@ -59,7 +59,6 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
  * Widget used to show the table and the dynamic controls to add/remove and 
@@ -227,7 +226,7 @@ public abstract class ChartCustomizerWidget {
 						selectedCustomizers.add(definition);
 						CustomizerPropertyExpressionsDTO dto = getPropertyDTO();
 						dto.addProperty(uniqueKey + "class", definition.getCustomizerClass(), false);
-						changePropertyOn(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, dto, selectedElement);
+						changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
 						customizerTable.refresh();	
 					}
 				}
@@ -280,7 +279,7 @@ public abstract class ChartCustomizerWidget {
 							dto.removeProperty(property.getName(), property.isExpression());
 						}
 					}
-					changePropertyOn(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, dto, selectedElement);
+					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
 				} 
 				customizerTable.refresh();	
 			}
@@ -367,7 +366,7 @@ public abstract class ChartCustomizerWidget {
 		for(ChartCustomizerDefinition definition : selectedCustomizers){
 			dto.addProperty(definition.getKey() + classAttribute, definition.getCustomizerClass(), false);
 		}
-		changePropertyOn(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, dto, selectedElement);
+		changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
 	}
 
 	/**
@@ -496,7 +495,7 @@ public abstract class ChartCustomizerWidget {
 					selectedCustomizers.set(index, definition);
 					CustomizerPropertyExpressionsDTO dto = getPropertyDTO();
 					dto.addProperty(editElement.getKey() + "class", definition.getCustomizerClass(), false);
-					changePropertyOn(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, dto, selectedElement);
+					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
 					customizerTable.refresh();	
 				}
 			}					
