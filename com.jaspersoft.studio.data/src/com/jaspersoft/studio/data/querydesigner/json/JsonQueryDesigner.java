@@ -411,7 +411,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 					}
 				});
 			}
-			return null;
+			return Status.CANCEL_STATUS;
 		}
 		
 	}
