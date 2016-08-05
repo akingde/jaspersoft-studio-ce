@@ -73,7 +73,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 	/** The wizard ID */
 	public static final String WIZARD_ID = "com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard"; //$NON-NLS-1$
 	/* default name for data adapter file */
-	private static final String NEW_DATAADAPTER_XML = "NEW_DATAADAPTER.xml"; //$NON-NLS-1$
+	private static final String NEW_DATAADAPTER_XML = "DataAdapter.xml"; //$NON-NLS-1$
 	private ISelection selection;
 	private WizardNewFileCreationPage step1;
 
@@ -198,7 +198,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 
 					int i = 1;
 					while (file.getProject().getFile(f).exists()) {
-						filename = "NEW_DATAADAPTER" + i + ".xml"; //$NON-NLS-1$ //$NON-NLS-2$
+						filename = "DataAdapter" + i + ".xml"; //$NON-NLS-1$ //$NON-NLS-2$
 						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename; //$NON-NLS-1$
 						i++;
 					}
