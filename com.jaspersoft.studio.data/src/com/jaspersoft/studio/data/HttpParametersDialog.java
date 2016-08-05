@@ -15,12 +15,6 @@ package com.jaspersoft.studio.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.data.http.HttpLocationParameter;
-import net.sf.jasperreports.data.http.RequestMethod;
-import net.sf.jasperreports.data.http.StandardHttpDataLocation;
-import net.sf.jasperreports.eclipse.ui.ATitledDialog;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -55,6 +49,12 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 
+import net.sf.jasperreports.data.http.HttpLocationParameter;
+import net.sf.jasperreports.data.http.RequestMethod;
+import net.sf.jasperreports.data.http.StandardHttpDataLocation;
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
  * 
@@ -66,8 +66,7 @@ public class HttpParametersDialog extends ATitledDialog {
 	/**
 	 * @param parentShell
 	 */
-	protected HttpParametersDialog(Shell parentShell,
-			StandardHttpDataLocation dataFile) {
+	protected HttpParametersDialog(Shell parentShell, StandardHttpDataLocation dataFile) {
 		super(parentShell);
 		setTitle(Messages.HttpParametersDialog_0);
 		setDescription(Messages.HttpParametersDialog_3);
@@ -115,8 +114,7 @@ public class HttpParametersDialog extends ATitledDialog {
 		new Label(cmp, SWT.NONE).setText(Messages.HttpParametersDialog_4);
 
 		final Combo cmb = new Combo(cmp, SWT.READ_ONLY);
-		cmb.setItems(new String[] { RequestMethod.GET.name(),
-				RequestMethod.POST.name() });
+		cmb.setItems(new String[] { RequestMethod.GET.name(), RequestMethod.POST.name() });
 		if (dataFile.getMethod() == RequestMethod.POST)
 			cmb.select(1);
 		else
@@ -138,9 +136,10 @@ public class HttpParametersDialog extends ATitledDialog {
 			dataFile.setUrlParameters(new ArrayList<HttpLocationParameter>());
 		if (dataFile.getPostParameters() == null)
 			dataFile.setPostParameters(new ArrayList<HttpLocationParameter>());
+		if (dataFile.getHeaders() == null)
+			dataFile.setHeaders(new ArrayList<HttpLocationParameter>());
 
-		final TableViewer tv = createParameters(tabFolder,
-				Messages.HttpParametersDialog_5);
+		final TableViewer tv = createParameters(tabFolder, Messages.HttpParametersDialog_5);
 
 		tabFolder.setSelection(0);
 		setupMethod(cmb);
@@ -150,6 +149,16 @@ public class HttpParametersDialog extends ATitledDialog {
 			@Override
 			public void run() {
 				tv.setInput(dataFile.getUrlParameters());
+			}
+		});
+
+		final TableViewer tvh = createParameters(tabFolder, "Http Headers");
+
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				tvh.setInput(dataFile.getHeaders());
 			}
 		});
 
@@ -177,8 +186,7 @@ public class HttpParametersDialog extends ATitledDialog {
 			label.setText(Messages.HttpParametersDialog_6);
 
 			final Text text = new Text(composite, SWT.BORDER);
-			text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
-					| GridData.HORIZONTAL_ALIGN_FILL));
+			text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 			text.setText(Misc.nvl(pname, "net.sf.jasperreports.")); //$NON-NLS-1$
 			text.addModifyListener(new ModifyListener() {
 
@@ -192,8 +200,7 @@ public class HttpParametersDialog extends ATitledDialog {
 			label.setText(Messages.HttpParametersDialog_7);
 
 			final Text tname = new Text(composite, SWT.BORDER);
-			tname.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
-					| GridData.HORIZONTAL_ALIGN_FILL));
+			tname.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 			tname.setText(Misc.nvl(pvalue, Messages.HttpParametersDialog_7));
 			tname.addModifyListener(new ModifyListener() {
 
@@ -217,14 +224,17 @@ public class HttpParametersDialog extends ATitledDialog {
 	}
 
 	private TableViewer createParameters(CTabFolder tFolder, String title) {
-		CTabItem bptab = new CTabItem(tFolder, SWT.NONE);
+		return createParameters(tFolder, title, tFolder.getItemCount());
+	}
+
+	private TableViewer createParameters(CTabFolder tFolder, String title, int pos) {
+		CTabItem bptab = new CTabItem(tFolder, SWT.NONE, pos);
 		bptab.setText(title);
 
 		Composite cmp = new Composite(tFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
 
-		TableViewer tviewer = new TableViewer(cmp, SWT.V_SCROLL | SWT.MULTI
-				| SWT.FULL_SELECTION | SWT.BORDER);
+		TableViewer tviewer = new TableViewer(cmp, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.widthHint = 500;
 		gd.heightHint = 200;
@@ -271,8 +281,7 @@ public class HttpParametersDialog extends ATitledDialog {
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				HttpLocationParameter hlp = new HttpLocationParameter(
-						Messages.HttpParametersDialog_12,
+				HttpLocationParameter hlp = new HttpLocationParameter(Messages.HttpParametersDialog_12,
 						Messages.HttpParametersDialog_13);
 				PEditDialog pd = new PEditDialog(UIUtils.getShell(), hlp);
 				if (pd.open() == Dialog.OK) {
@@ -286,21 +295,18 @@ public class HttpParametersDialog extends ATitledDialog {
 		});
 
 		final EditButton<HttpLocationParameter> bEditPrm = new EditButton<HttpLocationParameter>();
-		bEditPrm.createEditButtons(bGroup, tviewer,
-				new IEditElement<HttpLocationParameter>() {
+		bEditPrm.createEditButtons(bGroup, tviewer, new IEditElement<HttpLocationParameter>() {
 
-					@Override
-					public void editElement(List<HttpLocationParameter> input,
-							int pos) {
-						HttpLocationParameter hlp = input.get(pos);
-						PEditDialog pd = new PEditDialog(UIUtils.getShell(),
-								hlp);
-						if (pd.open() == Dialog.OK) {
-							hlp.setName(pd.getPName());
-							hlp.setValue(pd.getPValue());
-						}
-					}
-				});
+			@Override
+			public void editElement(List<HttpLocationParameter> input, int pos) {
+				HttpLocationParameter hlp = input.get(pos);
+				PEditDialog pd = new PEditDialog(UIUtils.getShell(), hlp);
+				if (pd.open() == Dialog.OK) {
+					hlp.setName(pd.getPName());
+					hlp.setValue(pd.getPValue());
+				}
+			}
+		});
 		tviewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override
@@ -319,13 +325,15 @@ public class HttpParametersDialog extends ATitledDialog {
 		switch (cmb.getSelectionIndex()) {
 		case 0:
 			dataFile.setMethod(RequestMethod.GET);
-			if (tabFolder.getItemCount() > 1)
-				tabFolder.getItem(1).dispose();
+			for (int i = 0; i < tabFolder.getItemCount(); i++) {
+				CTabItem item = tabFolder.getItem(i);
+				if (item.getText().equals(Messages.HttpParametersDialog_14))
+					item.dispose();
+			}
 			break;
 		case 1:
 			dataFile.setMethod(RequestMethod.POST);
-			final TableViewer tvp = createParameters(tabFolder,
-					Messages.HttpParametersDialog_14);
+			final TableViewer tvp = createParameters(tabFolder, Messages.HttpParametersDialog_14, 1);
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 
 				@Override
