@@ -1,5 +1,9 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+
+import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
@@ -62,5 +66,21 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 		IntegerPropertyDescription intDesc = new IntegerPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max, editor);
 		intDesc.setReadOnly(cpd.isReadOnly());
 		return intDesc;
+	}
+	
+	@Override
+	protected NumericText createSimpleEditor(Composite parent) {
+		NumericText text = new NumericText(parent, SWT.BORDER, 0, 0);
+		text.setRemoveTrailZeroes(true);
+		Number max = getMax() != null ? getMax() : Integer.MAX_VALUE;
+		Number min = getMin() != null ? getMin() : Integer.MIN_VALUE;
+		text.setMaximum(max.doubleValue());
+		text.setMinimum(min.doubleValue());
+		return text;
+	}
+
+	@Override
+	protected Number convertValue(String v) {
+		return Integer.valueOf(v);
 	}
 }

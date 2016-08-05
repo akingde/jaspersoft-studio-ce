@@ -2,6 +2,10 @@ package com.jaspersoft.studio.widgets.framework.ui;
 
 import java.math.BigDecimal;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+
+import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
@@ -64,5 +68,21 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 		DoublePropertyDescription doubleDesc = new DoublePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max, editor);
 		doubleDesc.setReadOnly(cpd.isReadOnly());
 		return doubleDesc;
+	}
+
+	@Override
+	protected NumericText createSimpleEditor(Composite parent) {
+		NumericText text = new NumericText(parent, SWT.BORDER, 6, 10);
+		text.setRemoveTrailZeroes(true);
+		Number max = getMax() != null ? getMax() : Double.MAX_VALUE;
+		Number min = getMin() != null ? getMin() : Double.MIN_VALUE;
+		text.setMaximum(max.doubleValue());
+		text.setMinimum(min.doubleValue());
+		return text;
+	}
+
+	@Override
+	protected Number convertValue(String v) {
+		return Double.valueOf(v);
 	}
 }

@@ -95,7 +95,7 @@ public class ColorPropertyDescription<T> extends TextPropertyDescription<T> {
 	public void update(Control c, IWItemProperty wip) {
 		Composite cmp = (Composite) wip.getControl();
 		StackLayout layout = (StackLayout) cmp.getLayout();
-		if (wip.getExpressionValue() != null) {
+		if (wip.isExpressionMode()) {
 			Text txt = (Text) cmp.getChildren()[0];
 			super.update(txt, wip);
 			layout.topControl = txt;
