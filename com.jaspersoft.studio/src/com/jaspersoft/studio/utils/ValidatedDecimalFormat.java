@@ -28,6 +28,17 @@ import org.eclipse.core.runtime.Assert;
  *
  */
 public class ValidatedDecimalFormat extends DecimalFormat{
+	
+	/**
+	 * Static variable with the decimal separator
+	 */
+	public static final char DECIMAL_SEPARATOR = getDecimalSeparator();
+	
+	/**
+	 * The decimal separator string that can be used into a regular expression
+	 * it is already escaped
+	 */
+	public static final String PATTERN_DECIMAL_SEPARATOR = getPatternDecimalSeparator();
 
 	private static final long serialVersionUID = -8953035800738294624L;
 	
@@ -61,14 +72,10 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 			pattern = "######";
 		}
 		
-		DecimalFormat format= (DecimalFormat)DecimalFormat.getInstance();
-		DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();
-		char decimalSeparator=symbols.getDecimalSeparator();
-		
 		if (maxAcceptedDigits == 0){
 			patternToMatch = Pattern.compile("[0-9]+");
 		} else {
-			patternToMatch = Pattern.compile("[0-9]+([" + decimalSeparator + "]{0,1}[0-9]{0," + maxAcceptedDigits + "})?");
+			patternToMatch = Pattern.compile("[0-9]+([" + DECIMAL_SEPARATOR + "]{0,1}[0-9]{0," + maxAcceptedDigits + "})?");
 		}
 		applyPattern(pattern);
 	}
@@ -98,6 +105,24 @@ public class ValidatedDecimalFormat extends DecimalFormat{
      } else {
     	 throw new ParseException(valueToParse, pp.getIndex());
      }
+	}
+	
+	/**
+	 * Return the decimal separator of the current instance
+	 */
+	protected static char getDecimalSeparator(){
+		DecimalFormat format= (DecimalFormat)DecimalFormat.getInstance();
+		DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();
+		return symbols.getDecimalSeparator();
+	}
+	
+	/**
+	 * Return the escaped version of the decimal separator
+	 */
+	protected static String getPatternDecimalSeparator(){
+		if (".".equals(String.valueOf(DECIMAL_SEPARATOR))){
+			return "\\.";
+		} else return String.valueOf(DECIMAL_SEPARATOR);
 	}
 	
 }

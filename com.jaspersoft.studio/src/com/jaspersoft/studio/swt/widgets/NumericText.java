@@ -103,6 +103,11 @@ public class NumericText extends Text {
 	private Number defaultValue = null;
 	
 	/**
+	 * Flag used to know if the trailing zeroes after the decimal separator should be removed or not
+	 */
+	private boolean removeTrailZeroes = false;
+	
+	/**
 	 * Verify listener used to check if the typed value is valid or not
 	 */
 	private VerifyListener inputVerifier = new VerifyListener() {
@@ -275,14 +280,14 @@ public class NumericText extends Text {
 	 * 
 	 * @param newValue the first value
 	 * @param storedValue the second value
-	 * @return  true if the values have the same textual rappresentation, false otherwise
+	 * @return  true if the values have the same textual representation, false otherwise
 	 */
 	protected boolean hasSameValue(Number newValue, Number storedValue){
 		if (ModelUtils.safeEquals(newValue, storedValue)) return true;
 		String newFormat = null;
-		if (newValue != null) newFormat = formatter.format(newValue);
+		if (newValue != null) newFormat = formatNumber(newValue);
 		String storedFormat = null;
-		if (storedValue != null) storedFormat = formatter.format(storedValue);
+		if (storedValue != null) storedFormat = formatNumber(storedValue);
 		return ModelUtils.safeEquals(newFormat, storedFormat);
 	}
 	
@@ -315,6 +320,22 @@ public class NumericText extends Text {
 	}
 	
 	/**
+	 * Method that convert the number value to a string. The perfect place to do this
+	 * could be the formatter, but since the format method is final we do this workaround
+	 * to allow custom implementation
+	 * 
+	 * @param value the number to romat, must be not null
+	 * @return the number as a string
+	 */
+	protected String formatNumber(Number value){
+		String result = formatter.format(value);
+		if (removeTrailZeroes && result.indexOf(ValidatedDecimalFormat.DECIMAL_SEPARATOR) != -1){
+			result = result.replaceAll("0*$", "").replaceAll(ValidatedDecimalFormat.PATTERN_DECIMAL_SEPARATOR + "$", "");
+		}
+		return result;
+	}
+	
+	/**
 	 * Sets the <em>selection</em>, which is the receiver's position, to the
 	 * argument. If the argument is not within the range specified by minimum
 	 * and maximum, it will be adjusted to fall within this range.
@@ -335,7 +356,7 @@ public class NumericText extends Text {
 			}
 			storedValue = selection;
 			if (formatText) {
-				setText(formatter.format(selection));
+				setText(formatNumber(selection));
 			} else {
 				setText(selection.toString());
 			}
@@ -346,7 +367,7 @@ public class NumericText extends Text {
 				storedValue = null;
 				if (defaultValue != null){
 					if (formatText) {
-						setText(formatter.format(defaultValue));
+						setText(formatNumber(defaultValue));
 					} else {
 						setText(defaultValue.toString());
 					}
@@ -629,5 +650,15 @@ public class NumericText extends Text {
 	 */
 	public void setDefaultValue(Number value){
 		this.defaultValue = value;
+	}
+	
+	/**
+	 * Set the flag to know if the trailing zeroes after the decimal separator should be removed or not.
+	 * By default they are not removed
+	 * 
+	 * @param value true to remove the zeroes, false otherwise
+	 */
+	public void setRemoveTrailZeroes(boolean value){
+		this.removeTrailZeroes = value;
 	}
 }
