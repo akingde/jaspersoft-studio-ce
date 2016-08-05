@@ -38,8 +38,8 @@ public class ParameterSetProvider {
 
 	public static Mapping mapping = new Mapping();
 	static {
-		mapping.loadMapping(new InputSource(ParameterSetProvider.class
-				.getResourceAsStream("/com/jaspersoft/studio/prm/ParameterSet.xml")));
+		mapping.loadMapping(
+				new InputSource(ParameterSetProvider.class.getResourceAsStream("/com/jaspersoft/studio/prm/ParameterSet.xml")));
 	}
 
 	private void init() {
@@ -58,7 +58,11 @@ public class ParameterSetProvider {
 					e.printStackTrace();
 					return null;
 				}
-				return (ParameterSet) CastorHelper.read(new ByteArrayInputStream(tmp.getBytes()), mapping);
+				try {
+					return (ParameterSet) CastorHelper.read(new ByteArrayInputStream(tmp.getBytes()), mapping);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return null;
