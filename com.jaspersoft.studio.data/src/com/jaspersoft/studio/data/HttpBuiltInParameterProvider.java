@@ -71,7 +71,7 @@ public class HttpBuiltInParameterProvider {
 			pset.getParameters().add(p);
 
 			p = new JRDesignParameter();
-			p.setName("PARAMETER_PREFIX_HEADER_PARAMETER");
+			p.setName("HTTP_DATA_HEADER_PARAMETER_");
 			p.setDescription("Http Header parameter prefix");
 			p.setValueClassName("java.lang.String");
 			p.setDefaultValueExpression(new JRDesignExpression("\"value\""));
