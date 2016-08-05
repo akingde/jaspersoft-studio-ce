@@ -225,7 +225,8 @@ public abstract class ChartCustomizerWidget {
 					if (definition != null){
 						selectedCustomizers.add(definition);
 						CustomizerPropertyExpressionsDTO dto = getPropertyDTO();
-						dto.addProperty(uniqueKey + "class", definition.getCustomizerClass(), false);
+						String classProp = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
+						dto.addProperty(uniqueKey + classProp, definition.getCustomizerClass(), false);
 						changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
 						customizerTable.refresh();	
 					}
@@ -494,7 +495,8 @@ public abstract class ChartCustomizerWidget {
 					int index = selectedCustomizers.indexOf(editElement);
 					selectedCustomizers.set(index, definition);
 					CustomizerPropertyExpressionsDTO dto = getPropertyDTO();
-					dto.addProperty(editElement.getKey() + "class", definition.getCustomizerClass(), false);
+					String classProp = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
+					dto.addProperty(editElement.getKey() + classProp, definition.getCustomizerClass(), false);
 					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
 					customizerTable.refresh();	
 				}
