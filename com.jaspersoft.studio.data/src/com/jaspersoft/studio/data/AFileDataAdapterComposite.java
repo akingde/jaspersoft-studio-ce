@@ -89,6 +89,7 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 					if (d.open() == Dialog.OK) {
 						fda.setDataFile(d.getDataFile());
 						fireFileChanged(!Misc.isNullOrEmpty(((StandardHttpDataLocation) dataFile).getUrl()));
+
 					}
 				} else {
 					String old = textFileName.getText();
@@ -116,7 +117,7 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 	}
 
 	protected void fireFileChanged(boolean showWarning) {
-
+		pchangesuport.firePropertyChange("datafile", true, false);
 	}
 
 	protected abstract String[] getFileExtensions();
