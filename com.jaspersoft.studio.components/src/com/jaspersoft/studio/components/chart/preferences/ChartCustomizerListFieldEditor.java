@@ -77,16 +77,18 @@ public class ChartCustomizerListFieldEditor extends TableFieldEditor {
 			items.clear();
 			String v = null;
 			v = getPreferenceStore().getString(ChartCustomizerPreferencePage.CHARTCUSTOMIZER);
-			for (String line : v.split("\n")) {
-				if (line.isEmpty())
-					continue;
-				try {
-					String srv = new String(Base64.decodeBase64(line));
-					items.add(srv);
-					TableItem tableItem = new TableItem(getTable(), SWT.NONE);
-					tableItem.setText(new String[] { srv });
-				} catch (Exception e) {
-					e.printStackTrace();
+			if (v != null){
+				for (String line : v.split("\n")) {
+					if (line.isEmpty())
+						continue;
+					try {
+						String srv = new String(Base64.decodeBase64(line));
+						items.add(srv);
+						TableItem tableItem = new TableItem(getTable(), SWT.NONE);
+						tableItem.setText(new String[] { srv });
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			// Add an help listener to the table

@@ -15,7 +15,9 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -169,9 +171,19 @@ public class SelectCustomizerDialog extends PersistentLocationTitleAreaDialog {
 				validate();
 			}
 		});
+		return tabFolder;
+	}
+	
+	/**
+	 * Create the contents of the page, and trigger the opening of the edited value
+	 * in case it is used for this reason, and validate the content
+	 */
+	@Override
+	protected Control createContents(Composite parent) {
+		Control result = super.createContents(parent);
 		openEditedValues();
 		validate();
-		return tabFolder;
+		return result;
 	}
 	
 	/**
@@ -268,6 +280,7 @@ public class SelectCustomizerDialog extends PersistentLocationTitleAreaDialog {
 			String text = textArea.getText();
 			if (text.trim().isEmpty()){
 				setErrorMessage("The classname can not be empty");
+				setOkButtonStatus(false);
 				return;
 			} else {
 				try{
@@ -275,17 +288,33 @@ public class SelectCustomizerDialog extends PersistentLocationTitleAreaDialog {
 				}catch (Exception ex){
 					setErrorMessage(null);
 					setMessage("The selected class cannot be found", IMessageProvider.WARNING);
+					setOkButtonStatus(true);
 					return;
 				}
 			}
 		} else {
-			if (table.getSelection() == null){
+			ISelection seletion = table.getSelection();
+			if (seletion == null || seletion.isEmpty()){
 				setErrorMessage("You need to select a Chart Customizer from the table");
+				setOkButtonStatus(false);
 				return;
 			} 
 		}
+		setOkButtonStatus(true);
 		setErrorMessage(null);
 		setTabMessage();
+	}
+	
+	/**
+	 * Set the enablement status of the ok button
+	 * 
+	 * @param status true if the button should be enabled, false otherwise
+	 */
+	protected void setOkButtonStatus(boolean status){
+		Button okButton = getButton(IDialogConstants.OK_ID);
+		if (okButton != null){
+			okButton.setEnabled(status);
+		}
 	}
 	
 	/**

@@ -66,18 +66,20 @@ public class CustomizerDefinitionManager {
 		if (definitions == null){
 			definitions = new ArrayList<CustomizerWidgetsDescriptor>();
 			String cList = jConfig.getProperty(ChartCustomizerPreferencePage.CHARTCUSTOMIZER);
-			StandardJSONWidgetsDescriptorResolver resolver = new StandardJSONWidgetsDescriptorResolver(CustomizerWidgetsDescriptor.class);
-			for (String line : cList.split("\n")) {
-				if (line.isEmpty())
-					continue;
-				try {
-					String customizerPath = new String(Base64.decodeBase64(line));
-					CustomizerWidgetsDescriptor loadedDecriptor = (CustomizerWidgetsDescriptor)WidgetsDefinitionManager.getWidgetsDefinition(jConfig, customizerPath, resolver);
-					if (loadedDecriptor != null){
-						definitions.add(loadedDecriptor);
+			if (cList != null){
+				StandardJSONWidgetsDescriptorResolver resolver = new StandardJSONWidgetsDescriptorResolver(CustomizerWidgetsDescriptor.class);
+				for (String line : cList.split("\n")) {
+					if (line.isEmpty())
+						continue;
+					try {
+						String customizerPath = new String(Base64.decodeBase64(line));
+						CustomizerWidgetsDescriptor loadedDecriptor = (CustomizerWidgetsDescriptor)WidgetsDefinitionManager.getWidgetsDefinition(jConfig, customizerPath, resolver);
+						if (loadedDecriptor != null){
+							definitions.add(loadedDecriptor);
+						}
+					} catch (Exception e) {
+						JaspersoftStudioPlugin.getInstance().logError(e);
 					}
-				} catch (Exception e) {
-					JaspersoftStudioPlugin.getInstance().logError(e);
 				}
 			}
 			customizers.put(jConfig, definitions);
