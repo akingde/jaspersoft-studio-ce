@@ -121,6 +121,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		addField(new BooleanFieldEditor(P_DEFAULT_ADVANCED_TAB, Messages.DesignerPreferencePage_advancedDefault,
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_TITLEICON, Messages.DesignerPreferencePage_2, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_SAVE_ON_PREVIEW, Messages.DesignerPreferencePage_savereportonpreview,
+				getFieldEditorParent()));
 
 		addField(new ComboFieldEditor(P_DAFILTER, Messages.DesignerPreferencePage_3,
 				new String[][] { { Messages.DesignerPreferencePage_4, "all" }, // $NON-NLS-3$
@@ -140,14 +142,13 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
 		addField(new BooleanFieldEditor(P_USE_FIELD_DESCRIPTION, Messages.DesignerPreferencePage_UseDescriptionForLabelText,
 				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_SAVE_ON_PREVIEW, Messages.DesignerPreferencePage_savereportonpreview,
-				getFieldEditorParent()));
+
 		addField(new BooleanFieldEditor(P_CENTER_SELECTION, Messages.DesignerPreferencePage_centerEditorOption,
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_RESIZE_CONTAINER, Messages.DesignerPreferencePage_autoresizeBand,
 				getFieldEditorParent()));
-		
-		//Eventually create the extensions for the page
+
+		// Eventually create the extensions for the page
 		super.createFieldEditors();
 
 	}
