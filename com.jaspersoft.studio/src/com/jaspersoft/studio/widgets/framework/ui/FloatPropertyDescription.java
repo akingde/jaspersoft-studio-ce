@@ -81,6 +81,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 
 	@Override
 	protected Number convertValue(String v) {
+		if (v == null || v.isEmpty()) return null;
 		return Float.valueOf(v);
 	}
 }

@@ -81,6 +81,7 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 
 	@Override
 	protected Number convertValue(String v) {
+		if (v == null || v.isEmpty()) return null;
 		return Integer.valueOf(v);
 	}
 }

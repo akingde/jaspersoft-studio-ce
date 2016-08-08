@@ -22,7 +22,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
 public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> {
 
-	private String[][] keyValues;
+	protected String[][] keyValues;
 
 	public ComboItemPropertyDescription() {
 		super();
@@ -143,7 +143,6 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 			}
 			cmp.switchToSecondContainer();
 		}
-
 	}
 	
 	@Override

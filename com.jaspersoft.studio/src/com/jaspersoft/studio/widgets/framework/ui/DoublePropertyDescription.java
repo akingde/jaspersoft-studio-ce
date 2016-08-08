@@ -83,6 +83,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 
 	@Override
 	protected Number convertValue(String v) {
+		if (v == null || v.isEmpty()) return null;
 		return Double.valueOf(v);
 	}
 }

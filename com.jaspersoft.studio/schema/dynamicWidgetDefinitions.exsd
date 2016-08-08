@@ -49,6 +49,13 @@
 
    <element name="definition">
       <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="widgetName" type="string" use="required">
             <annotation>
                <documentation>
