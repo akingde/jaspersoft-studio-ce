@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.swt.widgets.JSSAngleSlider;
 
@@ -64,6 +65,12 @@ public class SPDegree extends SPNumber {
 		};
 		angleSlider.addSelectionListener(degreeSelectionListener);
 		super.createComponent(composite);
+	}
+	
+	@Override
+	protected void createContextualMenu(APropertyNode node) {
+		createContextualMenu(node, angleSlider, pDescriptor.getId().toString());
+		createContextualMenu(node, ftext, pDescriptor.getId().toString());
 	}
 
 	@Override

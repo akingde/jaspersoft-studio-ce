@@ -71,14 +71,9 @@ public class SPChartItemLabel extends ASPropertyWidget<PlotPropertyDescriptor> {
 	public void setData(APropertyNode pnode, Object value) {
 		ml = (MChartItemLabel) value;
 		if (value != null) {
-			ilColor.setData(pnode,
-					ml.getPropertyValue(JRDesignItemLabel.PROPERTY_COLOR));
-			ilBGColor
-					.setData(
-							pnode,
-							ml.getPropertyValue(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR));
-			ilFont.setData(pnode,
-					ml.getPropertyValue(JRDesignItemLabel.PROPERTY_FONT));
+			ilColor.setData(pnode,ml.getPropertyValue(JRDesignItemLabel.PROPERTY_COLOR));
+			ilBGColor.setData(pnode, ml.getPropertyValue(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR));
+			ilFont.setData(pnode,ml.getPropertyValue(JRDesignItemLabel.PROPERTY_FONT));
 		}
 	}
 }

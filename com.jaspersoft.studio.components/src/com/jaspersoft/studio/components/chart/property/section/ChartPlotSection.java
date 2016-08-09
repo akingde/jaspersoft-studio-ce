@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.property.section;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 
 import org.eclipse.swt.SWT;
@@ -69,6 +71,27 @@ import net.sf.jasperreports.engine.base.JRBaseChartPlot;
  *
  */
 public class ChartPlotSection extends AbstractRealValueSection {
+	
+	/**
+	 * Listener used to refresh the dynamic controls when something in the chart changes
+	 */
+	private PropertyChangeListener refreshListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			setRefreshing(true);
+			//Refresh the chart specific properties
+			APropertyNode plot = getElement();
+			if (plot != null){
+				Pair<AbstractRealValueSection, Composite> configPanel = getSubplotContainer(plot);
+				if (configPanel != null){
+					AbstractRealValueSection section = configPanel.getKey();
+					section.refresh();
+				}
+			}
+			setRefreshing(false);
+		}
+	};
 	
 	/**
 	 * Stack layout used to show the correct panel
@@ -188,6 +211,17 @@ public class ChartPlotSection extends AbstractRealValueSection {
 			Pair<AbstractRealValueSection, Composite> configPanel = getSubplotContainer(plot);
 			dyinamicCompositeLayout.topControl = configPanel.getValue();
 			mainComposite.layout();
+			((JRBaseChartPlot)plot.getValue()).getEventSupport().removePropertyChangeListener(refreshListener);
+			((JRBaseChartPlot)plot.getValue()).getEventSupport().addPropertyChangeListener(refreshListener);
+		}
+	}
+	
+	@Override
+	public void aboutToBeHidden() {
+		super.aboutToBeShown();
+		APropertyNode plot = getElement();
+		if (plot != null){
+			((JRBaseChartPlot)plot.getValue()).getEventSupport().removePropertyChangeListener(refreshListener);
 		}
 	}
 	

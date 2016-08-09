@@ -44,12 +44,10 @@ public class AreaPlot extends AbstractRealValueSection {
 		gd.horizontalSpan = 2;
 		createWidget4Property(group, JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, false).getControl().setLayoutData(gd);
 
-		group = getWidgetFactory().createSection(parent, Messages.AreaPlot_tick, false, 4, 2);
+		group = getWidgetFactory().createSection(parent, Messages.AreaPlot_tick, false, 2, 2);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 4;
-		createWidget4Property(group,
-				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, false)
-				.getControl().setLayoutData(gd);
+		gd.horizontalSpan = 2;
+		createWidget4Property(group, JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, false).getControl().setLayoutData(gd);
 
 		getWidgetFactory().createCLabel(group, Messages.AreaPlot_color);
 		createWidget4Property(group,
@@ -62,14 +60,10 @@ public class AreaPlot extends AbstractRealValueSection {
 		getWidgetFactory().createCLabel(group, Messages.AreaPlot_rotation);
 		createWidget4Property(group, JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION, false);
 
-		getWidgetFactory().createCLabel(group, Messages.AreaPlot_verticalTick); createWidget4Property(group,
-				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
-				false);
+		getWidgetFactory().createCLabel(group, Messages.AreaPlot_verticalTick); createWidget4Property(group, JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS, false);
 
-		createWidget4Property(parent,
-				JRDesignAreaPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION);
-		createWidget4Property(parent,
-				JRDesignAreaPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION);
+		createWidget4Property(parent, JRDesignAreaPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION);
+		createWidget4Property(parent, JRDesignAreaPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION);
 	}
 
 	private void createValue(Composite parent,

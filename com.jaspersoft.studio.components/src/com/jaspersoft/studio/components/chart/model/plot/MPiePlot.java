@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.components.chart.model.plot;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -20,6 +21,7 @@ import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -33,6 +35,8 @@ public class MPiePlot extends MChartPlot {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	
 	private static IPropertyDescriptor[] descriptors;
+	
+	private MChartItemLabel itemLabelModel;
 
 	public MPiePlot(JRPiePlot value) {
 		super(value);
@@ -93,6 +97,15 @@ public class MPiePlot extends MChartPlot {
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#piePlot");
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.putAll(((MChartItemLabel)getPropertyValue(JRDesignPiePlot.PROPERTY_ITEM_LABEL)).getDefaultsPropertiesMap());
+		
+		return defaultsMap;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -104,9 +117,9 @@ public class MPiePlot extends MChartPlot {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignPiePlot jrElement = (JRDesignPiePlot) getValue();
-		if (ilFont == null) {
-			ilFont = new MChartItemLabel(jrElement.getItemLabel());
-			setChildListener(ilFont);
+		if (itemLabelModel == null) {
+			itemLabelModel = new MChartItemLabel(jrElement.getItemLabel());
+			setChildListener(itemLabelModel);
 		}
 		if (id.equals(JRDesignPiePlot.PROPERTY_SHOW_LABELS))
 			return jrElement.getShowLabels();
@@ -117,9 +130,9 @@ public class MPiePlot extends MChartPlot {
 		if (id.equals(JRDesignPiePlot.PROPERTY_LABEL_FORMAT))
 			return jrElement.getLabelFormat();
 		if (id.equals(JRDesignPiePlot.PROPERTY_ITEM_LABEL)) {
-			return ilFont;
+			return itemLabelModel;
 		} else {
-			Object value = ilFont.getPropertyValue(id);
+			Object value = itemLabelModel.getPropertyValue(id);
 			if (value == null)
 				value = super.getPropertyValue(id);
 			return value;
@@ -140,8 +153,6 @@ public class MPiePlot extends MChartPlot {
 		return super.getPropertyActualValue(id);
 	}
 
-	private MChartItemLabel ilFont;
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -161,7 +172,7 @@ public class MPiePlot extends MChartPlot {
 		else if (id.equals(JRDesignPiePlot.PROPERTY_LABEL_FORMAT))
 			jrElement.setLabelFormat((String) value);
 		else
-			ilFont.setPropertyValue(id, value);
+			itemLabelModel.setPropertyValue(id, value);
 		super.setPropertyValue(id, value);
 	}
 }

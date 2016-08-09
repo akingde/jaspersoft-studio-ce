@@ -13,11 +13,13 @@
 package com.jaspersoft.studio.components.chart.model.plot;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -180,6 +182,19 @@ public class MAreaPlot extends MChartPlot {
 		catAxisTickLabelFontD.setCategory(Messages.MAreaPlot_category_axis);
 		catAxisTickLabelRotation.setCategory(Messages.MAreaPlot_category_axis);
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap =  super.createDefaultsMap();
+		defaultsMap.put(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION, new DefaultValue(true));
+		defaultsMap.put(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, new DefaultValue(true));
+		defaultsMap.put(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, new DefaultValue(true));
+		defaultsMap.put(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, new DefaultValue(true));
+		defaultsMap.put(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, new DefaultValue(true));
+		defaultsMap.put(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR, new DefaultValue(true));
+		defaultsMap.put(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, new DefaultValue(true));
+		return defaultsMap;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -273,17 +288,17 @@ public class MAreaPlot extends MChartPlot {
 			jrElement.setValueAxisTickLabelFont(MFontUtil.setMFont(value));
 		} else
 
-		if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR) && value instanceof AlfaRGB)
+		if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setCategoryAxisLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setCategoryAxisTickLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setCategoryAxisLineColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setValueAxisLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setValueAxisTickLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LINE_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LINE_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setValueAxisLineColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 
 		else if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS))

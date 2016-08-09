@@ -290,7 +290,7 @@ public class ColorStyledText {
 		lineColor.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				if (enabled){
+				if (enabled && e.button == 1){
 					ColorDialog cd = new ColorDialog(centeredShell(paintArea.getShell()));
 					cd.setText(Messages.common_line_color);
 					if (getColor() != null) cd.setRGB(getColor());

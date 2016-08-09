@@ -13,11 +13,14 @@
 package com.jaspersoft.studio.components.chart.model.plot;
 
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -174,6 +177,20 @@ public class MHighLowPlot extends MChartPlot {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#highLowPlot");
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LABEL_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		defaultsMap.put(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LINE_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		defaultsMap.put(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		defaultsMap.put(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		defaultsMap.put(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		defaultsMap.put(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		
+		return defaultsMap;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -267,17 +284,17 @@ public class MHighLowPlot extends MChartPlot {
 			jrElement.setValueAxisLabelFont(MFontUtil.setMFont(value));
 		} else if (id.equals(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT)) {
 			jrElement.setValueAxisTickLabelFont(MFontUtil.setMFont(value));
-		} else if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LABEL_COLOR) && value instanceof AlfaRGB)
+		} else if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setTimeAxisLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setTimeAxisTickLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LINE_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LINE_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setTimeAxisLineColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setValueAxisLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setValueAxisTickLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LINE_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LINE_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setValueAxisLineColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 
 		else if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS))

@@ -13,11 +13,14 @@
 package com.jaspersoft.studio.components.chart.model.plot;
 
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -173,6 +176,18 @@ public class MScatterPlot extends MChartPlot {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scatterPlot");
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		defaultsMap.put(JRDesignScatterPlot.PROPERTY_X_AXIS_LINE_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		defaultsMap.put(JRDesignScatterPlot.PROPERTY_X_AXIS_TICK_LABEL_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		defaultsMap.put(JRDesignScatterPlot.PROPERTY_Y_AXIS_LABEL_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		defaultsMap.put(JRDesignScatterPlot.PROPERTY_Y_AXIS_LINE_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		defaultsMap.put(JRDesignScatterPlot.PROPERTY_Y_AXIS_TICK_LABEL_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
+		return defaultsMap;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -266,17 +281,17 @@ public class MScatterPlot extends MChartPlot {
 			jrElement.setYAxisLabelFont(MFontUtil.setMFont(value));
 		} else if (id.equals(JRDesignScatterPlot.PROPERTY_Y_AXIS_TICK_LABEL_FONT)) {
 			jrElement.setYAxisTickLabelFont(MFontUtil.setMFont(value));
-		} else if (id.equals(JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_COLOR) && value instanceof AlfaRGB)
+		} else if (id.equals(JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setXAxisLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignScatterPlot.PROPERTY_X_AXIS_TICK_LABEL_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignScatterPlot.PROPERTY_X_AXIS_TICK_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setXAxisTickLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignScatterPlot.PROPERTY_X_AXIS_LINE_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignScatterPlot.PROPERTY_X_AXIS_LINE_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setXAxisLineColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignScatterPlot.PROPERTY_Y_AXIS_LABEL_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignScatterPlot.PROPERTY_Y_AXIS_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setYAxisLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignScatterPlot.PROPERTY_Y_AXIS_TICK_LABEL_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignScatterPlot.PROPERTY_Y_AXIS_TICK_LABEL_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setYAxisTickLabelColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignScatterPlot.PROPERTY_Y_AXIS_LINE_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignScatterPlot.PROPERTY_Y_AXIS_LINE_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setYAxisLineColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 
 		else if (id.equals(JRDesignScatterPlot.PROPERTY_X_AXIS_VERTICAL_TICK_LABELS))

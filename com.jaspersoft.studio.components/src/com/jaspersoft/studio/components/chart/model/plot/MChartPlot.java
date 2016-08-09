@@ -97,9 +97,9 @@ public class MChartPlot extends APropertyNode {
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
 		
-		defaultsMap.put(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA, new DefaultValue(null, true));
-		defaultsMap.put(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA, new DefaultValue(null, true));
-		
+		defaultsMap.put(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA, new DefaultValue(true));
+		defaultsMap.put(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA, new DefaultValue(true));
+		defaultsMap.put(JRBaseChartPlot.PROPERTY_BACKCOLOR, new DefaultValue(true));
 		return defaultsMap;
 	}
 
@@ -161,9 +161,9 @@ public class MChartPlot extends APropertyNode {
 	public void setPropertyValue(Object id, Object value) {
 		JRBaseChartPlot jrElement = (JRBaseChartPlot) getValue();
 		if (id.equals(JRBaseChartPlot.PROPERTY_BACKCOLOR)) {
-			if (value instanceof AlfaRGB)
-				jrElement.setBackcolor(Colors
-						.getAWT4SWTRGBColor((AlfaRGB) value));
+			if (value == null|| value instanceof AlfaRGB){
+				jrElement.setBackcolor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
+			}
 		} else if (id.equals(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA))
 			jrElement.setBackgroundAlpha((Float) value);
 		else if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA))

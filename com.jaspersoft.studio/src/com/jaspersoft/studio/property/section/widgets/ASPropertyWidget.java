@@ -125,6 +125,12 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 		setData(pnode, resolvedValue);
 	}
 	
+	protected void createContextualMenu(final APropertyNode node){
+		Control control = getControl();
+
+		createContextualMenu(node, control, pDescriptor.getId().toString());
+	}
+	
 	/**
 	 * Create a contextual menu for the current control. This contextual menu
 	 * will contains the action to reset the value of a property if the property
@@ -133,9 +139,12 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	 * 
 	 * Since on mac the combo item doens't have a contextual menu it add a special listneer
 	 * for them as workaround to the problem
+	 * 
+	 * @param node node where the the command will be executed and from where the default map is extracted
+	 * @param control control where the contextual menu will be set
+	 * @param propertyID id of the property to set
 	 */
-	protected void createContextualMenu(final APropertyNode node){
-		Control control = getControl();
+	protected void createContextualMenu(final APropertyNode node, Control control, final String propertyID){
 		if (node != null && control != null && !control.isDisposed()){
 		
 			//MacOS fix, the combo on MacOS doesn't have a contextual menu, so we need to handle this listener manually
@@ -147,7 +156,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 			boolean entryCreated = false;
 			Map<String, DefaultValue> defaultMap = node.getDefaultsPropertiesMap();
 			if (defaultMap != null){
-				DefaultValue defaultEntry = defaultMap.get(pDescriptor.getId().toString());
+				DefaultValue defaultEntry = defaultMap.get(propertyID);
 				if (defaultEntry != null && (defaultEntry.isNullable() || defaultEntry.hasDefault())){
 					Menu controlMenu = new Menu(control);
 					
@@ -159,7 +168,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 							@Override
 							public void widgetSelected(SelectionEvent e) {
 								ResetValueCommand cmd = new ResetValueCommand();
-								cmd.setPropertyId(pDescriptor.getId());
+								cmd.setPropertyId(propertyID);
 								cmd.setTarget(node);
 								section.getEditDomain().getCommandStack().execute(cmd);
 							}
@@ -175,7 +184,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 							@Override
 							public void widgetSelected(SelectionEvent e) {
 								SetValueCommand cmd = new SetValueCommand();
-								cmd.setPropertyId(pDescriptor.getId());
+								cmd.setPropertyId(propertyID);
 								cmd.setTarget(node);
 								cmd.setPropertyValue(null);
 								section.getEditDomain().getCommandStack().execute(cmd);

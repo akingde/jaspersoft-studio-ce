@@ -108,7 +108,7 @@ public class MRectangle extends MGraphicElementLinePen {
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
 		
-		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_RADIUS, new DefaultValue(null, true));
 		
 		return defaultsMap;
 	}

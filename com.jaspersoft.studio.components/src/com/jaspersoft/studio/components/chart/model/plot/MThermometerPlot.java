@@ -13,11 +13,13 @@
 package com.jaspersoft.studio.components.chart.model.plot;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -202,6 +204,14 @@ public class MThermometerPlot extends MChartPlot {
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#thermometerPlot");
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR, new DefaultValue(true));
+		defaultsMap.put(JRDesignThermometerPlot.PROPERTY_MERCURY_COLOR, new DefaultValue(true));
+		return defaultsMap;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -290,19 +300,15 @@ public class MThermometerPlot extends MChartPlot {
 				.getLowRange();
 		JRDesignDataRange jrMedRange = (JRDesignDataRange) jrElement
 				.getMediumRange();
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_MERCURY_COLOR)
-				&& value instanceof AlfaRGB)
-			jrElement.setMercuryColor(Colors
-					.getAWT4SWTRGBColor((AlfaRGB) value));
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_MERCURY_COLOR) && (value == null || value instanceof AlfaRGB))
+			jrElement.setMercuryColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY
 				+ "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$
 			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(
 					jrElement.getValueDisplay(), jrElement.getChart());
 			jrDesignValueDisplay.setFont(MFontUtil.setMFont(value));
 			jrElement.setValueDisplay(jrDesignValueDisplay);
-		} else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY
-				+ "." + JRDesignValueDisplay.PROPERTY_COLOR) //$NON-NLS-1$
-				&& value instanceof AlfaRGB) {
+		} else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR) && (value == null || value instanceof AlfaRGB)) {
 			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(
 					jrElement.getValueDisplay(), jrElement.getChart());
 			jrDesignValueDisplay.setColor(Colors

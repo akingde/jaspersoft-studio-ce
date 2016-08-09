@@ -41,7 +41,7 @@ public class CustomizerDefinitionManager {
 	private static HashMap<JasperReportsConfiguration, List<CustomizerWidgetsDescriptor>> customizers = new HashMap<JasperReportsConfiguration, List<CustomizerWidgetsDescriptor>>();
 	
 	static {
-		//Listner used to clear the cache when somethign about the chart customizer change in the preferences
+		//Listener used to clear the cache when something about the chart customizer change in the preferences
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(new IPropertyChangeListener() {
 			
 			@Override

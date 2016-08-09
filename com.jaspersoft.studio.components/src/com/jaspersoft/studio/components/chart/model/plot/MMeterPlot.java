@@ -15,12 +15,14 @@ package com.jaspersoft.studio.components.chart.model.plot;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.MeterIntervalPropertyDescriptor;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -185,6 +187,19 @@ public class MMeterPlot extends MChartPlot {
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#meterPlot");
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR, new DefaultValue(true));
+		defaultsMap.put(JRDesignMeterPlot.PROPERTY_NEEDLE_COLOR, new DefaultValue(true));
+		defaultsMap.put(JRDesignMeterPlot.PROPERTY_TICK_COLOR, new DefaultValue(true));
+		defaultsMap.put(JRDesignMeterPlot.PROPERTY_TICK_INTERVAL, new DefaultValue(true));
+		defaultsMap.put(JRDesignMeterPlot.PROPERTY_METER_ANGLE, new DefaultValue(true));
+		
+		return defaultsMap;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -223,12 +238,10 @@ public class MMeterPlot extends MChartPlot {
 				+ "." + JRDesignValueDisplay.PROPERTY_MASK)) //$NON-NLS-1$
 			return jrElement.getValueDisplay().getMask();
 
-		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "."
-				+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION))
-			return ExprUtil.getExpression(jrDataRange.getHighExpression());
-		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "."
-				+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION))
-			return ExprUtil.getExpression(jrDataRange.getLowExpression());
+		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION))
+			return jrDataRange != null ? ExprUtil.getExpression(jrDataRange.getHighExpression()) : null;
+		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION))
+			return jrDataRange != null ?  ExprUtil.getExpression(jrDataRange.getLowExpression()) : null;
 		if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT)) {
 			tlFont = MFontUtil.getMFont(tlFont, jrElement.getTickLabelFont(),
 					null, this);
@@ -277,9 +290,7 @@ public class MMeterPlot extends MChartPlot {
 					jrElement.getValueDisplay(), jrElement.getChart());
 			jrDesignValueDisplay.setFont(MFontUtil.setMFont(value));
 			jrElement.setValueDisplay(jrDesignValueDisplay);
-		} else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY
-				+ "." + JRDesignValueDisplay.PROPERTY_COLOR) //$NON-NLS-1$
-				&& value instanceof AlfaRGB) {
+		} else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR) && (value == null || value instanceof AlfaRGB)) {
 			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(
 					jrElement.getValueDisplay(), jrElement.getChart());
 			jrDesignValueDisplay.setColor(Colors
@@ -292,17 +303,12 @@ public class MMeterPlot extends MChartPlot {
 			jrDesignValueDisplay.setMask((String) value);
 			jrElement.setValueDisplay(jrDesignValueDisplay);
 
-		} else if (id.equals(JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR)
-				&& value instanceof AlfaRGB)
-			jrElement.setMeterBackgroundColor(Colors
-					.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_COLOR)
-				&& value instanceof AlfaRGB)
+		} else if (id.equals(JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR) && (value == null || value instanceof AlfaRGB))
+			jrElement.setMeterBackgroundColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
+		else if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setTickColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_NEEDLE_COLOR)
-				&& value instanceof AlfaRGB)
-			jrElement
-					.setNeedleColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
+		else if (id.equals(JRDesignMeterPlot.PROPERTY_NEEDLE_COLOR) && (value == null || value instanceof AlfaRGB))
+			jrElement.setNeedleColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_METER_ANGLE))
 			jrElement.setMeterAngle((Integer) value);
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_INTERVAL))

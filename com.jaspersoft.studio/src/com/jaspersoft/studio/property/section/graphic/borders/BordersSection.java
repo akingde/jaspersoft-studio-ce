@@ -917,6 +917,8 @@ public class BordersSection extends AbstractSection {
 			// Set the border data only if it is visible
 			if (lineWidth != null && !lineWidth.isDisposed()) {
 				lineWidth.setValue(propertyValue);
+				JRBoxPen pen = (JRBoxPen) lp.getValue();
+				lineWidth.setInherited(pen.getOwnLineWidth() == null);
 			}
 
 			if (lineStyle != null && !isDisposed()) {

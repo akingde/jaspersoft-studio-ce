@@ -62,7 +62,9 @@ public class MChartItemLabel extends APropertyNode {
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
-		defaultsMap.put(JRDesignItemLabel.PROPERTY_FONT, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignItemLabel.PROPERTY_FONT, new DefaultValue(true));
+		defaultsMap.put(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR, new DefaultValue(true));
+		defaultsMap.put(JRDesignItemLabel.PROPERTY_COLOR, new DefaultValue(true));
 		return defaultsMap;
 	}
 
@@ -105,9 +107,9 @@ public class MChartItemLabel extends APropertyNode {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignItemLabel jrElement = (JRDesignItemLabel) getValue();
-		if (id.equals(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR) && value instanceof AlfaRGB)
+		if (id.equals(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setBackgroundColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		else if (id.equals(JRDesignItemLabel.PROPERTY_COLOR) && value instanceof AlfaRGB)
+		else if (id.equals(JRDesignItemLabel.PROPERTY_COLOR) && (value == null || value instanceof AlfaRGB))
 			jrElement.setColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		else if (id.equals(JRDesignItemLabel.PROPERTY_FONT)) {
 			jrElement.setFont(MFontUtil.setMFont(value));

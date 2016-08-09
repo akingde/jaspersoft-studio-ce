@@ -8,7 +8,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.util.Map;
+
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -22,12 +26,16 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
@@ -36,7 +44,6 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.swt.widgets.NumericCombo;
 
-import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -76,21 +83,41 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	 * Buttom for the attribute bold
 	 */
 	private ToolItem boldButton;
+	
+	/**
+	 * Toolbar used for the bold button
+	 */
+	private ToolBar boldToolbar;
 
 	/**
 	 * Button for the attribute italic
 	 */
 	private ToolItem italicButton;
+	
+	/**
+	 * Toolbar used for the italic button
+	 */
+	private ToolBar italicToolbar;
 
 	/**
 	 * Button for the attribute underline
 	 */
 	private ToolItem underlineButton;
+	
+	/**
+	 * Toolbar used for the underlne button
+	 */
+	private ToolBar underlineToolbar;
 
 	/**
 	 * Button for the attribute striketrought
 	 */
 	private ToolItem strikeTroughtButton;
+	
+	/**
+	 * Toolbar used for the strike trough button
+	 */
+	private ToolBar strikeTroughtToolbar;
 
 	/**
 	 * Flag to check if the font name was already been inserted into the combo popup
@@ -144,15 +171,10 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	 */
 	private class SPChartButtom<T extends IPropertyDescriptor> extends SPButton<T> {
 
-		/**
-		 * The type of font represented (title, legend, subtitle)
-		 */
-		private String fontNameProperty;
 
 		public SPChartButtom(Composite parent, AbstractSection section, T pDescriptor, APropertyNode fontValue,
 				String fontNameProperty) {
 			super(parent, section, pDescriptor, fontValue);
-			this.fontNameProperty = fontNameProperty;
 		}
 
 		/**
@@ -176,9 +198,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 				} else if ((newValue + plus) > 0) {
 					newValue += plus;
 				}
-				section.changePropertyOn(JRBaseFont.PROPERTY_FONT_SIZE, newValue, mfont);
-				section.changePropertyOn(fontNameProperty, new MFont((JRFont) ((JRCloneable) mfont.getValue()).clone()),
-						parentNode);
+				changeProperty(section, SPFont.this.pDescriptor.getId(), JRBaseFont.PROPERTY_FONT_SIZE, newValue);
 			}
 		}
 	}
@@ -264,22 +284,33 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		fontSize.setToolTipText(pd1.getDescription());
 
 		/*
-		 * Button to increment\decrment the font size
+		 * Button to increment\decrement the font size
 		 */
 		new SPChartButtom<IPropertyDescriptor>(group, section, pd1, mfont, pDescriptor.getId().toString());
-
-		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
-		GridData gd = new GridData();
+		
+		Composite toolbarsConainer = new Composite(group, SWT.NONE);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
-		toolBar.setLayoutData(gd);
+		toolbarsConainer.setLayoutData(gd);
+		GridLayout containerLayout = new GridLayout(4, false);
+		containerLayout.horizontalSpacing = 0;
+		containerLayout.verticalSpacing = 0;
+		containerLayout.marginWidth = 0;
+		containerLayout.marginHeight = 0;
+		toolbarsConainer.setLayout(containerLayout);
+		
 
-		boldButton = createItem(toolBar, JRBaseStyle.PROPERTY_BOLD, "icons/resources/edit-bold.png");
+		boldToolbar = new ToolBar(toolbarsConainer, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		boldButton = createItem(boldToolbar, JRBaseStyle.PROPERTY_BOLD, "icons/resources/edit-bold.png");
 
-		italicButton = createItem(toolBar, JRBaseStyle.PROPERTY_ITALIC, "icons/resources/edit-italic.png");
+		italicToolbar = new ToolBar(toolbarsConainer, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		italicButton = createItem(italicToolbar, JRBaseStyle.PROPERTY_ITALIC, "icons/resources/edit-italic.png");
 
-		underlineButton = createItem(toolBar, JRBaseStyle.PROPERTY_UNDERLINE, "icons/resources/edit-underline.png");
+		underlineToolbar = new ToolBar(toolbarsConainer, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		underlineButton = createItem(underlineToolbar, JRBaseStyle.PROPERTY_UNDERLINE, "icons/resources/edit-underline.png");
 
-		strikeTroughtButton = createItem(toolBar, JRBaseStyle.PROPERTY_STRIKE_THROUGH, "icons/resources/edit-strike.png");
+		strikeTroughtToolbar = new ToolBar(toolbarsConainer, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		strikeTroughtButton = createItem(strikeTroughtToolbar, JRBaseStyle.PROPERTY_STRIKE_THROUGH, "icons/resources/edit-strike.png");
 	}
 
 	/**
@@ -309,8 +340,10 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 
 	private void changeProperty(AbstractSection section, Object property, Object prop, Object value) {
 		section.changePropertyOn(prop, value, mfont);
-		if (property != null && parentNode != null)
-			section.changePropertyOn(property, new MFont((JRFont) mfont.getValue()), parentNode);
+		if (property != null && parentNode != null){
+			JRDesignFont oldFont = (JRDesignFont)mfont.getValue();
+			section.changePropertyOn(property, new MFont((JRFont)oldFont.clone()), parentNode);
+		}
 	}
 
 	/**
@@ -322,31 +355,15 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	 *          the font size value of the element selected
 	 */
 	public void setFontSizeNumber(Number resolvedNumber, Number ownNumber) {
-		if (resolvedNumber != null) {
-			int oldpos = fontSize.getCaretPosition();
-			if (ownNumber == null) {
-				fontSize.setDefaultValue(resolvedNumber);
-			}
-			fontSize.setValue(ownNumber);
-			if (fontSize.getText().length() >= oldpos) {
-				fontSize.setSelection(new Point(oldpos, oldpos));
-			}
-		} else if (ownNumber != null) {
-			int oldpos = fontSize.getCaretPosition();
-			fontSize.setValue(ownNumber);
-			if (fontSize.getText().length() >= oldpos) {
-				fontSize.setSelection(new Point(oldpos, oldpos));
-			}
-		} else {
-			fontSize.setValue(null);
-		}
+		fontSize.setValue(resolvedNumber);
+		fontSize.setInherited(ownNumber == null);
+		createContextualMenu(mfont, fontSize, JRBaseFont.PROPERTY_FONT_SIZE);
 	}
 
 	/**
 	 * Set the font name, the font size and the font attribute in the respective controls
 	 */
 	public void setData(APropertyNode pnode, Object value) {
-		createContextualMenu(pnode);
 		this.parentNode = pnode;
 		this.mfont = (MFont) value;
 		if (mfont != null) {
@@ -355,21 +372,91 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 
 			if (!itemsSetted) {
 				fontName.setItems(parentNode.getJasperConfiguration().getFontList());
+				createContextualMenu(mfont, fontName, JRBaseFont.PROPERTY_FONT_NAME);
 				itemsSetted = true;
 			}
 			String strfontname = StyleResolver.getInstance().getFontName(fontValue);
 			fontName.setText(strfontname);
+			if (fontValue.getOwnFontName() != null){
+				fontName.setForeground(ColorConstants.black);
+			} else {
+				fontName.setForeground(ColorConstants.gray);
+			}
 
 			setFontSizeNumber(fontValue.getFontsize(), fontValue.getOwnFontsize());
 
 			Boolean b = StyleResolver.getInstance().isBold(fontValue);
 			boldButton.setSelection(b != null ? b.booleanValue() : false);
+			createContextualMenu(mfont, boldToolbar, JRBaseFont.PROPERTY_BOLD);
 			b = StyleResolver.getInstance().isItalic(fontValue);
 			italicButton.setSelection(b != null ? b.booleanValue() : false);
+			createContextualMenu(mfont, italicToolbar, JRBaseFont.PROPERTY_ITALIC);
 			b = StyleResolver.getInstance().isUnderline(fontValue);
 			underlineButton.setSelection(b != null ? b.booleanValue() : false);
+			createContextualMenu(mfont, underlineToolbar, JRBaseFont.PROPERTY_UNDERLINE);
 			b = StyleResolver.getInstance().isStrikeThrough(fontValue);
 			strikeTroughtButton.setSelection(b != null ? b.booleanValue() : false);
+			createContextualMenu(mfont, strikeTroughtToolbar, JRBaseFont.PROPERTY_STRIKE_THROUGH);
+		}
+	}
+	
+	/**
+	 * Create the contextual menu for a specific control calling the correct API to set the value
+	 * from a chart
+	 */
+	@Override
+	protected void createContextualMenu(final APropertyNode node, Control control, final String propertyID){
+		if (node != null && control != null && !control.isDisposed()){
+		
+			//MacOS fix, the combo on MacOS doesn't have a contextual menu, so we need to handle this listener manually
+			boolean handleComboListener = Util.isMac() && control.getClass() == Combo.class;
+			if (handleComboListener){
+				control.removeMouseListener(macComboMenuOpener);
+			}
+			
+			boolean entryCreated = false;
+			Map<String, DefaultValue> defaultMap = node.getDefaultsPropertiesMap();
+			if (defaultMap != null){
+				final DefaultValue defaultEntry = defaultMap.get(propertyID);
+				if (defaultEntry != null && (defaultEntry.isNullable() || defaultEntry.hasDefault())){
+					Menu controlMenu = new Menu(control);
+					
+					//Create the reset entry if necessary
+					if (defaultEntry.hasDefault()){
+						MenuItem resetItem = new MenuItem(controlMenu, SWT.NONE);
+						entryCreated = true;
+						resetItem.addSelectionListener(new SelectionAdapter() {
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								changeProperty(section, pDescriptor.getId(), propertyID, defaultEntry.getValue());
+							}
+						});
+				    resetItem.setText(Messages.ASPropertyWidget_0);
+					}
+					
+					//Create the null entry if necessary
+					if (defaultEntry.isNullable()){
+						MenuItem nullItem = new MenuItem(controlMenu, SWT.NONE);
+						entryCreated = true;
+						nullItem.addSelectionListener(new SelectionAdapter() {
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								changeProperty(section, pDescriptor.getId(), propertyID, null);
+							}
+						});
+				    nullItem.setText(Messages.ASPropertyWidget_1);
+					}
+					
+					control.setMenu(controlMenu);
+					if (handleComboListener){
+						control.addMouseListener(macComboMenuOpener);
+					}
+				}
+			}
+			if (!entryCreated) {
+				//if no entry was created remove the contextual menu
+				control.setMenu(null);
+			}
 		}
 	}
 }
