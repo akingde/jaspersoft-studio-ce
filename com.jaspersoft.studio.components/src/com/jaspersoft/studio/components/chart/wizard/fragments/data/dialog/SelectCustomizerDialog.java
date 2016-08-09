@@ -174,6 +174,18 @@ public class SelectCustomizerDialog extends PersistentLocationTitleAreaDialog {
 		return tabFolder;
 	}
 	
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		if (newShell != null){
+			if (valueAdvanced == null && valueSelection == null){
+				newShell.setText("New Chart Customizer");
+			} else {
+				newShell.setText("Edit Chart Customizer");
+			}
+		}
+	}
+	
 	/**
 	 * Create the contents of the page, and trigger the opening of the edited value
 	 * in case it is used for this reason, and validate the content
