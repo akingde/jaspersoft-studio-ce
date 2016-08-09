@@ -1,5 +1,8 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
+import java.util.Locale;
+
+import org.apache.commons.validator.routines.IntegerValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -82,6 +85,6 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 	@Override
 	protected Number convertValue(String v) {
 		if (v == null || v.isEmpty()) return null;
-		return Integer.valueOf(v);
+		return IntegerValidator.getInstance().validate(v, Locale.getDefault());
 	}
 }

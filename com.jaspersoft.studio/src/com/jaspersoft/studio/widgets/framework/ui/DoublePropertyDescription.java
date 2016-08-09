@@ -1,7 +1,9 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
+import org.apache.commons.validator.routines.DoubleValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -84,6 +86,6 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 	@Override
 	protected Number convertValue(String v) {
 		if (v == null || v.isEmpty()) return null;
-		return Double.valueOf(v);
+		return DoubleValidator.getInstance().validate(v, Locale.getDefault());
 	}
 }

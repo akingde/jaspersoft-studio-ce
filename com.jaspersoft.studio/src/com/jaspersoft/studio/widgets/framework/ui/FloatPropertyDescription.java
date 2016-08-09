@@ -1,5 +1,8 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
+import java.util.Locale;
+
+import org.apache.commons.validator.routines.FloatValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -82,6 +85,6 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	@Override
 	protected Number convertValue(String v) {
 		if (v == null || v.isEmpty()) return null;
-		return Float.valueOf(v);
+		return FloatValidator.getInstance().validate(v, Locale.getDefault());
 	}
 }
