@@ -211,8 +211,8 @@ public class ChartPlotSection extends AbstractRealValueSection {
 			Pair<AbstractRealValueSection, Composite> configPanel = getSubplotContainer(plot);
 			dyinamicCompositeLayout.topControl = configPanel.getValue();
 			mainComposite.layout();
-			((JRBaseChartPlot)plot.getValue()).getEventSupport().removePropertyChangeListener(refreshListener);
-			((JRBaseChartPlot)plot.getValue()).getEventSupport().addPropertyChangeListener(refreshListener);
+			plot.getPropertyChangeSupport().removePropertyChangeListener(refreshListener);
+			plot.getPropertyChangeSupport().addPropertyChangeListener(refreshListener);
 		}
 	}
 	
@@ -221,7 +221,7 @@ public class ChartPlotSection extends AbstractRealValueSection {
 		super.aboutToBeShown();
 		APropertyNode plot = getElement();
 		if (plot != null){
-			((JRBaseChartPlot)plot.getValue()).getEventSupport().removePropertyChangeListener(refreshListener);
+			plot.getPropertyChangeSupport().removePropertyChangeListener(refreshListener);
 		}
 	}
 	

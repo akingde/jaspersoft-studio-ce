@@ -22,6 +22,7 @@ import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
@@ -47,6 +48,16 @@ public class MBarPlot extends MChartPlot {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	
 	private static IPropertyDescriptor[] descriptors;
+	
+	private MFont clFont;
+	
+	private MFont ctFont;
+	
+	private MFont vlFont;
+	
+	private MFont vtFont;
+	
+	private MChartItemLabel chartItemLabel;
 
 	public MBarPlot(JRBarPlot value) {
 		super(value);
@@ -208,6 +219,8 @@ public class MBarPlot extends MChartPlot {
 		defaultsMap.put(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
 		defaultsMap.put(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, new DefaultValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)), true));
 		
+		defaultsMap.putAll(((APropertyNode)getPropertyValue(JRDesignPiePlot.PROPERTY_ITEM_LABEL)).getDefaultsPropertiesMap());
+		
 		return defaultsMap;
 	}
 
@@ -238,9 +251,9 @@ public class MBarPlot extends MChartPlot {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignBarPlot jrElement = (JRDesignBarPlot) getValue();
-		if (ilFont == null) {
-			ilFont = new MChartItemLabel(jrElement.getItemLabel());
-			setChildListener(ilFont);
+		if (chartItemLabel == null) {
+			chartItemLabel = new MChartItemLabel(jrElement.getItemLabel());
+			setChildListener(chartItemLabel);
 		}
 		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getOwnCategoryAxisLabelColor());
@@ -304,20 +317,14 @@ public class MBarPlot extends MChartPlot {
 			return vtFont;
 		}
 		if (id.equals(JRDesignPiePlot.PROPERTY_ITEM_LABEL)) {
-			return ilFont;
+			return chartItemLabel;
 		} else {
-			Object value = ilFont.getPropertyValue(id);
+			Object value = chartItemLabel.getPropertyValue(id);
 			if (value == null)
 				value = super.getPropertyValue(id);
 			return value;
 		}
 	}
-
-	private MFont clFont;
-	private MFont ctFont;
-	private MFont vlFont;
-	private MFont vtFont;
-	private MChartItemLabel ilFont;
 
 	/*
 	 * (non-Javadoc)
@@ -382,7 +389,7 @@ public class MBarPlot extends MChartPlot {
 		else if (id.equals(JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION))
 			jrElement.setDomainAxisMinValueExpression(ExprUtil.setValues(jrElement.getDomainAxisMinValueExpression(), value));
 		else {
-			ilFont.setPropertyValue(id, value);
+			chartItemLabel.setPropertyValue(id, value);
 			super.setPropertyValue(id, value);
 		}
 
