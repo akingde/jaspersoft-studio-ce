@@ -193,7 +193,13 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 				JRExpression expression = wip.getExpressionValue();
 				txt = Misc.nvl(expression.getText());
 			} else {
-				txt = Misc.nvl(wip.getStaticValue());
+				if (wip.getStaticValue() != null){
+					txt = wip.getStaticValue();
+				} else if (defaultValue != null){
+					txt = Misc.nvl(defaultValue.toString());
+				} else {
+					txt = "";
+				}
 			}
 			Point oldSelection = txtExpr.getSelection();
 

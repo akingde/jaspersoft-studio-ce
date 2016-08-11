@@ -97,6 +97,9 @@ public class ColorPropertyDescription<T> extends TextPropertyDescription<T> {
 		} else {
 			WColorPicker colorPicker = (WColorPicker) cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
+			if (v == null && defaultValue != null){
+				v = defaultValue.toString();
+			}
 			colorPicker.setColor(new AlfaRGB(Colors.decodeHexStringAsSWTRGB(v), 0));
 			cmp.switchToSecondContainer();
 		}

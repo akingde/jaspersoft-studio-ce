@@ -130,6 +130,9 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 		} else {
 			Combo combo = (Combo) cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
+			if (v == null && defaultValue != null){
+				v = defaultValue.toString();
+			}
 			if (readOnly){
 				for (int i = 0; i < keyValues.length; i++) {
 					if (keyValues[i][0].equals(v)) {

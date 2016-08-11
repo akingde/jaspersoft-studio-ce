@@ -127,7 +127,6 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	
 	protected void createContextualMenu(final APropertyNode node){
 		Control control = getControl();
-
 		createContextualMenu(node, control, pDescriptor.getId().toString());
 	}
 	

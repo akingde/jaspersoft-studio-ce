@@ -109,6 +109,9 @@ public abstract class NumberPropertyDescription<T extends Number> extends TextPr
 		} else {
 			NumericText simpleControl = (NumericText)cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
+			if (v == null && defaultValue != null){
+				v = defaultValue.toString();
+			}
 			simpleControl.setValue(convertValue(Misc.nvl(v)));
 			cmp.switchToSecondContainer();
 		}

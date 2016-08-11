@@ -32,7 +32,7 @@ public class StandardContextualMenu implements IMenuProvider {
 
 	@Override
 	public void setupMenu(final IWItemProperty wiProp, final ItemPropertyDescription<?> item, Control c){
-		if (item.getDefaultValue() != null) {
+		if (item.getDefaultValue() != null && !item.isMandatory()) {
 			Menu controlMenu = c.getMenu();
 			if (controlMenu == null) {
 				controlMenu = new Menu(c);
