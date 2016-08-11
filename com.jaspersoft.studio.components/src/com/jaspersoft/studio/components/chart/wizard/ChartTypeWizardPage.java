@@ -357,6 +357,8 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 		Field f = chart.getClass().getDeclaredField("plot"); //$NON-NLS-1$
 		f.setAccessible(true);
 		f.set(chart, plot);
+		//need to call the setup to initialize orrectly the new plot
+		MChart.setupChart(chart);
 	}
 
 	protected JRDesignMeterPlot merge2MeterPlot(JRDesignChart chart, JRChartPlot plot) throws JRException {
