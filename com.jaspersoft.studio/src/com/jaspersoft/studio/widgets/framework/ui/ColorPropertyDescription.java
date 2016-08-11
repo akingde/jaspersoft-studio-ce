@@ -21,7 +21,6 @@ import com.jaspersoft.studio.swt.widgets.WColorPicker;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
@@ -37,17 +36,13 @@ public class ColorPropertyDescription<T> extends TextPropertyDescription<T> {
 	public ColorPropertyDescription() {
 		super();
 	}
-	
-	public ColorPropertyDescription(IPropertyEditor propertyEditor) {
-		super(propertyEditor);
+
+	public ColorPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue) {
+		super(name, label, description, mandatory, defaultValue);
 	}
 
-	public ColorPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue, IPropertyEditor editor) {
-		super(name, label, description, mandatory, defaultValue, editor);
-	}
-
-	public ColorPropertyDescription(String name, String label, String description, boolean mandatory, IPropertyEditor editor) {
-		super(name, label, description, mandatory, editor);
+	public ColorPropertyDescription(String name, String label, String description, boolean mandatory) {
+		super(name, label, description, mandatory);
 	}
 
 	@Override
@@ -117,8 +112,8 @@ public class ColorPropertyDescription<T> extends TextPropertyDescription<T> {
 	}
 	
 	@Override
-	public ItemPropertyDescription<T> clone(IPropertyEditor editor){
-		ColorPropertyDescription<T> result = new ColorPropertyDescription<T>(editor);
+	public ItemPropertyDescription<T> clone(){
+		ColorPropertyDescription<T> result = new ColorPropertyDescription<T>();
 		result.defaultValue = defaultValue;
 		result.description = description;
 		result.jConfig = jConfig;
@@ -130,8 +125,8 @@ public class ColorPropertyDescription<T> extends TextPropertyDescription<T> {
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
-		ColorPropertyDescription<?> result = new ColorPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), editor);
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
+		ColorPropertyDescription<?> result = new ColorPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
 		result.setReadOnly(cpd.isReadOnly());
 		return result;
 	}

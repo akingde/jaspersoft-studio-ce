@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jface.dialogs.FileSelectionDialog;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
@@ -38,12 +37,8 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 		super();
 	}
 	
-	public FilePropertyDescription(IPropertyEditor propertyEditor) {
-		super(propertyEditor);
-	}
-
-	public FilePropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue, IPropertyEditor editor) {
-		super(name, label, description, mandatory, defaultValue, editor);
+	public FilePropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue) {
+		super(name, label, description, mandatory, defaultValue);
 	}
 
 	@Override
@@ -64,7 +59,7 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 		GridData cmpData = new GridData(GridData.FILL_HORIZONTAL);
 		cmp.setLayoutData(cmpData);
 
-		Control c = super.createControl(wiProp, cmp);
+		super.createControl(wiProp, cmp);
 
 		if (!isReadOnly()) {
 			ToolBar toolBar = new ToolBar(cmp, SWT.NONE);
@@ -92,12 +87,18 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 
 			});
 		}
-		return c;
+		return cmp;
 	}
 	
 	@Override
-	public ItemPropertyDescription<String> clone(IPropertyEditor editor){
-		FilePropertyDescription result = new FilePropertyDescription(editor);
+	public void update(Control c, IWItemProperty wip) {
+		//Update the textual control, that is the first child of the returned composite
+		super.update(((Composite)c).getChildren()[0], wip);
+	}
+	
+	@Override
+	public ItemPropertyDescription<String> clone(){
+		FilePropertyDescription result = new FilePropertyDescription();
 		result.defaultValue = defaultValue;
 		result.description = description;
 		result.jConfig = jConfig;
@@ -109,8 +110,8 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
-		FilePropertyDescription fileDesc = new FilePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), editor);
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
+		FilePropertyDescription fileDesc = new FilePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
 		fileDesc.setjConfig(jConfig);
 		fileDesc.setReadOnly(cpd.isReadOnly());
 		return fileDesc;

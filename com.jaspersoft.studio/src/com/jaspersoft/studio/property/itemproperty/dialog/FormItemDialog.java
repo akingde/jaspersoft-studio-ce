@@ -124,7 +124,7 @@ public abstract class FormItemDialog extends AItemDialog {
 		lbl.setText(ipd.getLabel());
 		lbl.setToolTipText(ipd.getToolTip());
 
-		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, ipd);
+		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, ipd, descriptor.getPropertyEditor());
 		expr.setLabelProvider(new DescriptorPropertyLabelProvider(descriptor));
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		expr.setLayoutData(gd);

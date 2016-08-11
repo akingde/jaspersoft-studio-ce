@@ -10,6 +10,8 @@ package com.jaspersoft.studio.widgets.framework.manager;
 
 import java.io.InputStream;
 
+import org.eclipse.core.resources.IFile;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -56,6 +58,26 @@ public class StandardJSONWidgetsDescriptorResolver implements IWidgetsDescriptor
 			FileUtils.closeStream(in);
 		}
 		return result;
+	}
+	
+	/**
+	 * Create the key for a specific definition location information
+	 * 
+	 * @param jConfig the current {@link JasperReportsConfiguration}
+	 * @param url the url of the loaded location
+	 * @return an unique key for the resource
+	 */
+	@Override
+	public String getKey(JasperReportsConfiguration jConfig, String URL) {
+		IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		String projectPath = project.getLocation().toPortableString();
+		String key = projectPath + URL;		
+		return key;
+	}
+
+	@Override
+	public boolean unloadOnConfigurationDispose() {
+		return true;
 	}
 
 }

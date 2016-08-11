@@ -9,7 +9,6 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
@@ -24,12 +23,8 @@ public class TransparentColorPropertyDescription<T> extends ColorPropertyDescrip
 		super();
 	}
 	
-	public TransparentColorPropertyDescription(IPropertyEditor propertyEditor) {
-		super(propertyEditor);
-	}
-	
-	public TransparentColorPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue, IPropertyEditor editor) {
-		super(name, label, description, mandatory, defaultValue, editor);
+	public TransparentColorPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue) {
+		super(name, label, description, mandatory, defaultValue);
 	}
 	
 	@Override
@@ -38,8 +33,8 @@ public class TransparentColorPropertyDescription<T> extends ColorPropertyDescrip
 	}
 
 	@Override
-	public ItemPropertyDescription<T> clone(IPropertyEditor editor){
-		TransparentColorPropertyDescription<T> result = new TransparentColorPropertyDescription<T>(editor);
+	public ItemPropertyDescription<T> clone(){
+		TransparentColorPropertyDescription<T> result = new TransparentColorPropertyDescription<T>();
 		result.defaultValue = defaultValue;
 		result.description = description;
 		result.jConfig = jConfig;
@@ -51,8 +46,8 @@ public class TransparentColorPropertyDescription<T> extends ColorPropertyDescrip
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
-		TransparentColorPropertyDescription<?> result = new TransparentColorPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), editor);
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
+		TransparentColorPropertyDescription<?> result = new TransparentColorPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
 		result.setReadOnly(cpd.isReadOnly());
 		return result;
 	}

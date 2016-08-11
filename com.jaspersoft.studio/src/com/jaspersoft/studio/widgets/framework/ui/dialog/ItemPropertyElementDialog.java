@@ -13,6 +13,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -26,6 +27,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
+import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
@@ -60,25 +62,26 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 	private JRExpression expressionValue;
 	
 	private boolean refresh = false;
+	
+	private IPropertyEditor dialogPropertyEditor = new PropertyEditorAdapter() {
+		
+		@Override
+		public JRExpression getPropertyValueExpression(String propertyName) {
+			return getExpressionValue();
+		}
+		
+		@Override
+		public String getPropertyValue(String propertyName) {
+			return getStaticValue();
+		}
+	};
 
 	public ItemPropertyElementDialog(Shell parentShell, String staticValue, JRExpression expressionValue, ItemPropertyDescription<?> ipDesc) {
 		super(parentShell);
 		this.staticValue = staticValue;
 		this.expressionValue = expressionValue != null ? (JRExpression)expressionValue.clone() : null;
-		setDefaultSize(500, 210);
 		setSaveSettings(false);
-		this.ipDesc = ipDesc.clone(new PropertyEditorAdapter() {
-			
-			@Override
-			public JRExpression getPropertyValueExpression(String propertyName) {
-				return getExpressionValue();
-			}
-			
-			@Override
-			public String getPropertyValue(String propertyName) {
-				return getStaticValue();
-			}
-		});
+		this.ipDesc = ipDesc.clone();
 	}
 
 	@Override
@@ -105,6 +108,13 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		editorControlComposite.setLayout(WidgetFactory.getNoPadLayout(1));
 		editorControlComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		propertyValue = ipDesc.createControl(this, editorControlComposite);
+		
+		//Use as default width a static value, compute the height of the main control basing
+		//assuming as its width the same of the dialog and use the result to calculate the height
+		//to he control height is added a padding of 200 because the dialog has also the title and
+		//buttons area that require space
+		Point controlSize = editorControlComposite.computeSize(500, SWT.DEFAULT);
+		setDefaultSize(500, controlSize.y + 200);
 		
 		expressionComposite = new Composite(stackComposite, SWT.NONE);
 		expressionComposite.setLayout(WidgetFactory.getNoPadLayout(1));
@@ -246,6 +256,11 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		} finally {
 			setRefresh(false);
 		}
+	}
+
+	@Override
+	public IPropertyEditor getPropertyEditor() {
+		return dialogPropertyEditor;
 	}
 
 }

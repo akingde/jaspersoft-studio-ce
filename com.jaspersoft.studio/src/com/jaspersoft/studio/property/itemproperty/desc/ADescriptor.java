@@ -18,6 +18,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
 import net.sf.jasperreports.components.items.Item;
@@ -77,6 +78,8 @@ public abstract class ADescriptor {
 	}
 
 	protected abstract void initItemPropertyDescriptors();
+	
+	public abstract IPropertyEditor getPropertyEditor();
 
 	public Image getIcon(Object element) {
 		if (element instanceof ItemData)

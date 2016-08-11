@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 
@@ -28,24 +27,17 @@ public abstract class NumberPropertyDescription<T extends Number> extends TextPr
 	
 	protected Number max;
 
-
 	public NumberPropertyDescription() {
-		this(null);
 	}
 	
-	public NumberPropertyDescription(IPropertyEditor propertyEditor) {
-		super(propertyEditor);
-	}
-
-	public NumberPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue,
-			Number min, Number max, IPropertyEditor editor) {
-		super(name, label, description, mandatory, defaultValue, editor);
+	public NumberPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue, Number min, Number max) {
+		super(name, label, description, mandatory, defaultValue);
 		this.min = min;
 		this.max = max;
 	}
 
-	public NumberPropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max, IPropertyEditor editor) {
-		super(name, label, description, mandatory, editor);
+	public NumberPropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max) {
+		super(name, label, description, mandatory);
 		this.min = min;
 		this.max = max;
 	}

@@ -360,8 +360,6 @@ public class NumericText extends Text {
 			} else {
 				setText(selection.toString());
 			}
-			selectAll();
-			setFocus();
 		} else {
 			if (isNullable){
 				storedValue = null;
@@ -374,8 +372,6 @@ public class NumericText extends Text {
 				} else {
 					setText("");
 				}
-				selectAll();
-				setFocus();
 			} else {
 				throw new IllegalArgumentException("The widget can not accept null values when the isNullable property is false");
 			}

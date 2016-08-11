@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
@@ -27,29 +26,25 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 	public ComboItemPropertyDescription() {
 		super();
 	}
-	
-	public ComboItemPropertyDescription(IPropertyEditor propertyEditor) {
-		super(propertyEditor);
-	}
 
-	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue, String[] values, IPropertyEditor editor) {
-		super(name, label, description, mandatory, defaultValue, editor);
+	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue, String[] values) {
+		super(name, label, description, mandatory, defaultValue);
 		keyValues = convert2KeyValue(values);
 	}
 
-	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, String[] values, IPropertyEditor editor) {
-		super(name, label, description, mandatory, editor);
+	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, String[] values) {
+		super(name, label, description, mandatory);
 		keyValues = convert2KeyValue(values);
 	}
 
-	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, String[] values, boolean readOnly, IPropertyEditor editor) {
-		super(name, label, description, mandatory, editor);
+	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, String[] values, boolean readOnly) {
+		super(name, label, description, mandatory);
 		keyValues = convert2KeyValue(values);
 		this.readOnly = readOnly;
 	}
 
-	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue,	String[][] keyValues, IPropertyEditor editor) {
-		super(name, label, description, mandatory, defaultValue, editor);
+	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue,	String[][] keyValues) {
+		super(name, label, description, mandatory, defaultValue);
 		this.keyValues = keyValues;
 	}
 	
@@ -80,6 +75,10 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 			wProp.setValue(tvalue, null);
 		}
 	}
+	
+	protected Combo createComboControl(Composite parent){
+		return new Combo(parent, SWT.NONE);
+	}
 
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
 		DoubleControlComposite cmp = new DoubleControlComposite(parent, SWT.NONE);
@@ -88,7 +87,7 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
 		cmp.getFirstContainer().setData(expressionControl);
 
-		final Combo simpleControl = new Combo(cmp.getSecondContainer(), readOnly ? SWT.READ_ONLY : SWT.NONE);
+		final Combo simpleControl = createComboControl(cmp.getSecondContainer());
 		cmp.getSecondContainer().setData(simpleControl);
 		
 		GridData comboData = new GridData(GridData.FILL_HORIZONTAL);
@@ -146,8 +145,8 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 	}
 	
 	@Override
-	public ItemPropertyDescription<T> clone(IPropertyEditor editor){
-		ComboItemPropertyDescription<T> result = new ComboItemPropertyDescription<T>(editor);
+	public ItemPropertyDescription<T> clone(){
+		ComboItemPropertyDescription<T> result = new ComboItemPropertyDescription<T>();
 		result.defaultValue = defaultValue;
 		result.description = description;
 		result.jConfig = jConfig;
@@ -160,7 +159,7 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
 		if (cpd.getComboOptions() != null) {
 			String[][] opts = cpd.getComboOptions();
 			String[][] i18nOpts = new String[opts.length][2];
@@ -168,7 +167,7 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 				i18nOpts[i][0] = opts[i][0];
 				i18nOpts[i][1] = cd.getLocalizedString(opts[i][1]);
 			}
-			ComboItemPropertyDescription<String> result = new ComboItemPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), i18nOpts, editor);
+			ComboItemPropertyDescription<String> result = new ComboItemPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), i18nOpts);
 			result.setReadOnly(cpd.isReadOnly());
 			return result;
 		}

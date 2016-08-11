@@ -50,6 +50,7 @@ import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
 import com.jaspersoft.studio.widgets.framework.model.SectionPropertyDescriptor;
@@ -316,9 +317,9 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 									first = false;
 									for (WidgetPropertyDescriptor pd : csd.getProperties()) {
 										CVCPropertyEditor editor = new CVCPropertyEditor(this.section, itemProps);
-										ItemPropertyDescription<?> ipdesc = WidgetFactory.createItemPropertyDescriptor(currentDescriptor, pd, jConf, editor);
+										ItemPropertyDescription<?> ipdesc = WidgetFactory.createItemPropertyDescriptor(currentDescriptor, pd, jConf);
 										descriptor.addItemPropertyDescriptor(ipdesc);
-										wIProps.add(createItemProperty(c, ipdesc, descriptorLabelProvider, ec));
+										wIProps.add(createItemProperty(c, ipdesc, descriptorLabelProvider, ec, editor));
 									}
 								}
 								setDataIntoWidgets();
@@ -370,12 +371,12 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 		btnRemoveProperty.setEnabled(!propertiesTV.getSelection().isEmpty());
 	}
 
-	protected WItemProperty createItemProperty(Composite cmp, final ItemPropertyDescription<?> ipd,  DescriptorPropertyLabelProvider descriptorLabelProvider, ExpressionContext ec) {
+	protected WItemProperty createItemProperty(Composite cmp, final ItemPropertyDescription<?> ipd,  DescriptorPropertyLabelProvider descriptorLabelProvider, ExpressionContext ec, IPropertyEditor editor) {
 		Label lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(Misc.nvl(ipd.getLabel()));
 		lbl.setToolTipText(ipd.getToolTip());
 
-		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, ipd);
+		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, ipd, editor);
 		expr.setLabelProvider(descriptorLabelProvider);
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		expr.setExpressionContext(ec);
@@ -401,6 +402,11 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 		@Override
 		protected void initItemPropertyDescriptors() {
 
+		}
+		
+		@Override
+		public IPropertyEditor getPropertyEditor() {
+			return null;
 		}
 
 	}

@@ -157,8 +157,7 @@ public class CVCItemDescriptor extends ADescriptor {
 	protected void initItemPropertyDescriptors() {
 		if (pnode != null) {
 			// let's look if we have some files with our properties
-			List<ItemProperty> p = (List<ItemProperty>) pnode
-					.getPropertyValue(CVDesignComponent.PROPERTY_ITEM_PROPERTIES);
+			List<ItemProperty> p = (List<ItemProperty>) pnode.getPropertyValue(CVDesignComponent.PROPERTY_ITEM_PROPERTIES);
 			if (!Misc.isNullOrEmpty(p)) {
 				// let's get our description
 				// let's get our description
@@ -182,7 +181,7 @@ public class CVCItemDescriptor extends ADescriptor {
 									if (cdd.getSections() != null)
 										for (SectionPropertyDescriptor csd : cdd.getSections()){
 											for (WidgetPropertyDescriptor cpd : csd.getProperties()){
-												props.add(WidgetFactory.createItemPropertyDescriptor(cd, cpd, jConf, standardItemEditor));
+												props.add(WidgetFactory.createItemPropertyDescriptor(cd, cpd, jConf));
 											}
 										}
 
@@ -196,5 +195,10 @@ public class CVCItemDescriptor extends ADescriptor {
 
 		}
 		itemProperties = new ItemPropertyDescription[] {};
+	}
+
+	@Override
+	public IPropertyEditor getPropertyEditor() {
+		return standardItemEditor;
 	}
 }

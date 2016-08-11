@@ -8,14 +8,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.manager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.eclipse.core.resources.IFile;
+import java.util.List;
+import java.util.Map.Entry;
 
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
-
-import net.sf.jasperreports.eclipse.util.FileUtils;
 
 /**
  * Handle the load of the caching of the {@link WidgetsDescriptor}
@@ -24,11 +23,11 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
  *
  */
 public class WidgetsDefinitionManager {
-
+	
 	/**
 	 * The cache map for the descriptors
 	 */
-	private static HashMap<String, WidgetsDescriptor> descriptrosCache = new HashMap<String, WidgetsDescriptor>();
+	private static HashMap<String, CacheContainer> descriptrosCache = new HashMap<String, CacheContainer>();
 	
 	/**
 	 * Search for a {@link WidgetsDescriptor} starting from an URL and a {@link JasperReportsConfiguration}, first it look
@@ -43,26 +42,29 @@ public class WidgetsDefinitionManager {
 	 * @return the {@link WidgetsDescriptor} loaded from the provided data or null if it can't be resolved
 	 */
 	public static WidgetsDescriptor getWidgetsDefinition(JasperReportsConfiguration jConfig, String URL, IWidgetsDescriptorResolver resolver){
-		String key = getKey(jConfig, URL);
-		WidgetsDescriptor result = descriptrosCache.get(key);
+		String key = resolver.getKey(jConfig, URL);
+		CacheContainer result = descriptrosCache.get(key);
 		if (result == null){
-			result = resolver.loadDescriptor(jConfig, URL);
-			descriptrosCache.put(key, result);
+			WidgetsDescriptor desc = resolver.loadDescriptor(jConfig, URL);
+			if (desc != null){
+				result = new CacheContainer(desc, jConfig, resolver.unloadOnConfigurationDispose());
+				descriptrosCache.put(key, result);
+			}
 		}
-		return result;
+		return result != null ? result.getDescriptor() : null;
 	}
 	
 	/**
-	 * Create the key for a specific definition location information
-	 * 
-	 * @param jConfig the current {@link JasperReportsConfiguration}
-	 * @param url the url of the loaded location
-	 * @return an unique key for the resource
+	 * Dispose all the Definition loaded trough the passed {@link JasperReportsConfiguration}, except
+	 * for the one that are marked to be keep in memory
 	 */
-	protected static String getKey(JasperReportsConfiguration jConfig, String url){
-		IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
-		String projectPath = project.getLocation().toPortableString();
-		String key = projectPath + url;		
-		return key;
-	}	
+	public static void disposedConfiguration(JasperReportsConfiguration jConfig){
+		List<Entry<String, CacheContainer>> entries = new ArrayList<Entry<String, CacheContainer>>(descriptrosCache.entrySet());
+		for(Entry<String, CacheContainer> entry: entries){
+			CacheContainer cacheContainer = entry.getValue();
+			if (cacheContainer.getjConfig() == jConfig && cacheContainer.isUnloadOnConfigDispose()){
+				entries.remove(entry.getKey());
+			}
+		}
+	}
 }

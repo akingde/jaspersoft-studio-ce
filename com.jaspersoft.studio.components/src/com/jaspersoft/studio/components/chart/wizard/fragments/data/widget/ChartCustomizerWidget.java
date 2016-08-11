@@ -522,8 +522,8 @@ public abstract class ChartCustomizerWidget {
 				CustomizerPropertyEditor pEditor = new CustomizerPropertyEditor(this, customizerKey, dto);
 				for(WidgetPropertyDescriptor p : cd.getPlainWidgets()) {
 					WidgetFactory.createLabelForProperty(dynamicWidgetsContainer, p);
-					ItemPropertyDescription<?> descriptor = WidgetFactory.createItemPropertyDescriptor(cd, p, jConfig, pEditor);
-					WItemProperty widgetEditor = new WItemProperty(dynamicWidgetsContainer, SWT.NONE, 1, descriptor);
+					ItemPropertyDescription<?> descriptor = WidgetFactory.createItemPropertyDescriptor(cd, p, jConfig);
+					WItemProperty widgetEditor = new WItemProperty(dynamicWidgetsContainer, SWT.NONE, 1, descriptor, pEditor);
 					widgetEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 					widgetEditor.setExpressionContext(ec);
 					widgetEditors.add(widgetEditor);

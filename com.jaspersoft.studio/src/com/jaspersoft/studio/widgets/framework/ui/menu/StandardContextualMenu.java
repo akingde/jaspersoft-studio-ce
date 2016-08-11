@@ -65,7 +65,7 @@ public class StandardContextualMenu implements IMenuProvider {
 			refreshItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					item.getPropertyEditor().removeProperty(item.getName());
+					wiProp.getPropertyEditor().removeProperty(item.getName());
 					wiProp.updateWidget();
 				}
 			});

@@ -264,6 +264,8 @@ public class NullableSpinner extends Composite {
 	 */
 	public void increaseValue() {
 		text.increment();
+		text.selectAll();
+		text.setFocus();
 	}
 
 	/**
@@ -272,6 +274,8 @@ public class NullableSpinner extends Composite {
 	 */
 	public void decreaseValue() {
 		text.decrement();
+		text.selectAll();
+		text.setFocus();
 	}
 
 	/**

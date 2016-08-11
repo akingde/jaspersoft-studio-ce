@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
 import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
@@ -60,32 +59,32 @@ public class PropertyDescriptorDialog extends ATitledDialog {
 		case 0:
 			descriptor = new TextPropertyDescription<String>(tname.getText(),
 					tlabel.getText(), tdesc.getText(),
-					bMandatory.getSelection(), new PropertyEditorAdapter());
+					bMandatory.getSelection());
 			break;
 		case 1:
 			descriptor = new TextPropertyDescription<Float>(tname.getText(),
 					tlabel.getText(), tdesc.getText(),
-					bMandatory.getSelection(), new PropertyEditorAdapter());
+					bMandatory.getSelection());
 			break;
 		case 2:
 			descriptor = new TextPropertyDescription<Integer>(tname.getText(),
 					tlabel.getText(), tdesc.getText(),
-					bMandatory.getSelection(), new PropertyEditorAdapter());
+					bMandatory.getSelection());
 			break;
 		case 3:
 			descriptor = new TextPropertyDescription<Double>(tname.getText(),
 					tlabel.getText(), tdesc.getText(),
-					bMandatory.getSelection(), new PropertyEditorAdapter());
+					bMandatory.getSelection());
 			break;
 		case 4:
 			descriptor = new ComboItemPropertyDescription<String>(
 					tname.getText(), tlabel.getText(), tdesc.getText(),
-					bMandatory.getSelection(), new String[] {}, new PropertyEditorAdapter());
+					bMandatory.getSelection(), new String[] {});
 			break;
 		case 5:
 			descriptor = new ColorPropertyDescription<String>(tname.getText(),
 					tlabel.getText(), tdesc.getText(),
-					bMandatory.getSelection(), new PropertyEditorAdapter());
+					bMandatory.getSelection());
 		}
 	}
 

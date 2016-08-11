@@ -136,44 +136,44 @@ public class StyleDescriptor extends ADescriptor {
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_name,
 						com.jaspersoft.studio.messages.Messages.common_name,
 						com.jaspersoft.studio.messages.Messages.StyleDescriptor_0, true,
-						com.jaspersoft.studio.messages.Messages.StyleDescriptor_1, standardItemEditor),
+						com.jaspersoft.studio.messages.Messages.StyleDescriptor_1),
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_style,
 						com.jaspersoft.studio.messages.Messages.StyleDescriptor_2,
-						com.jaspersoft.studio.messages.Messages.StyleDescriptor_3, false, standardItemEditor),
+						com.jaspersoft.studio.messages.Messages.StyleDescriptor_3, false),
 
 				new ColorPropertyDescription<String>(MapComponent.ITEM_PROPERTY_STYLE_strokeColor,
-						Messages.PathDescriptor_7, Messages.PathDescriptor_8, false, standardItemEditor),
+						Messages.PathDescriptor_7, Messages.PathDescriptor_8, false),
 
 				new FloatPropertyDescription(MapComponent.ITEM_PROPERTY_STYLE_strokeOpacity,
-						Messages.PathDescriptor_9, Messages.PathDescriptor_10, false, new Float(0), new Float(1), standardItemEditor),
+						Messages.PathDescriptor_9, Messages.PathDescriptor_10, false, new Float(0), new Float(1)),
 				new IntegerPropertyDescription(MapComponent.ITEM_PROPERTY_STYLE_strokeWeight,
-						Messages.PathDescriptor_11, Messages.PathDescriptor_12, false, new Integer(0), null, standardItemEditor),
+						Messages.PathDescriptor_11, Messages.PathDescriptor_12, false, new Integer(0), null),
 
 				new ColorPropertyDescription<String>(MapComponent.ITEM_PROPERTY_STYLE_fillColor,
-						Messages.PathDescriptor_13, Messages.PathDescriptor_14, false, standardItemEditor),
+						Messages.PathDescriptor_13, Messages.PathDescriptor_14, false),
 
 				new FloatPropertyDescription(MapComponent.ITEM_PROPERTY_STYLE_fillOpacity,
-						Messages.PathDescriptor_15, Messages.PathDescriptor_16, false, null, null, standardItemEditor),
+						Messages.PathDescriptor_15, Messages.PathDescriptor_16, false, null, null),
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_STYLE_isPolygon,
 						Messages.PathDescriptor_17, Messages.PathDescriptor_18, false, Boolean.FALSE,
-						new String[] { "", "true", "false" }, standardItemEditor), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_clickable,
 						Messages.PathDescriptor_19, Messages.PathDescriptor_20, false, Boolean.TRUE,
-						new String[] { "", "true", "false" }, standardItemEditor), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_STYLE_editable,
 						Messages.PathDescriptor_21, Messages.PathDescriptor_22, false, Boolean.FALSE,
-						new String[] { "", "true", "true" }, standardItemEditor), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						new String[] { "", "true", "true" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_draggable,
 						Messages.PathDescriptor_23, Messages.PathDescriptor_24, false, Boolean.FALSE,
-						new String[] { "", "true", "false" }, standardItemEditor), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_STYLE_geodesic,
 						Messages.PathDescriptor_25, Messages.PathDescriptor_26, false, Boolean.FALSE,
-						new String[] { "", "true", "false" }, standardItemEditor), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_visible,
 						Messages.PathDescriptor_27, Messages.PathDescriptor_28, false, Boolean.FALSE,
-						new String[] { "", "true", "false" }, standardItemEditor), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new IntegerPropertyDescription(MapComponent.ITEM_PROPERTY_MARKER_zIndex,
-						Messages.PathDescriptor_29, Messages.PathDescriptor_30, false, new Integer(0), null, standardItemEditor) };
+						Messages.PathDescriptor_29, Messages.PathDescriptor_30, false, new Integer(0), null) };
 	}
 
 	/*
@@ -226,5 +226,10 @@ public class StyleDescriptor extends ADescriptor {
 				}
 			}
 		}
+	}
+
+	@Override
+	public IPropertyEditor getPropertyEditor() {
+		return standardItemEditor;
 	}
 }

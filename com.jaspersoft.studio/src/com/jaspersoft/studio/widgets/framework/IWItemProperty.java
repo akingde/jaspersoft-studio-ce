@@ -99,4 +99,12 @@ public interface IWItemProperty {
 	 * @return the contextual menu provider or null if not present
 	 */
 	public IMenuProvider getContextualMenuProvider();
+	
+	/**
+	 * Get the property editor of this widget, used to read and write the property
+	 * from the handled element
+	 * 
+	 * @return a not null {@link IPropertyEditor}
+ 	 */
+	public IPropertyEditor getPropertyEditor();
 }

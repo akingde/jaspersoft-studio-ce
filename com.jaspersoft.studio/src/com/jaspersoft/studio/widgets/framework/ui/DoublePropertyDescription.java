@@ -9,26 +9,20 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
 public class DoublePropertyDescription extends NumberPropertyDescription<BigDecimal> {
 	
 	public DoublePropertyDescription() {
-		this(null);
 	}
 	
-	public DoublePropertyDescription(IPropertyEditor propertyEditor) {
-		super(propertyEditor);
+	public DoublePropertyDescription(String name, String label, String description, boolean mandatory,  BigDecimal defaultValue, Number min, Number max) {
+		super(name, label, description, mandatory, defaultValue, min, max);
 	}
 	
-	public DoublePropertyDescription(String name, String label, String description, boolean mandatory,  BigDecimal defaultValue, Number min, Number max, IPropertyEditor editor) {
-		super(name, label, description, mandatory, defaultValue, min, max, editor);
-	}
-	
-	public DoublePropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max, IPropertyEditor editor) {
-		super(name, label, description, mandatory, min, max, editor);
+	public DoublePropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max) {
+		super(name, label, description, mandatory, min, max);
 	}
 	
 	@Override
@@ -39,8 +33,8 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 	}
 	
 	@Override
-	public ItemPropertyDescription<BigDecimal> clone(IPropertyEditor editor){
-		DoublePropertyDescription result = new DoublePropertyDescription(editor);
+	public ItemPropertyDescription<BigDecimal> clone(){
+		DoublePropertyDescription result = new DoublePropertyDescription();
 		result.defaultValue = defaultValue;
 		result.description = description;
 		result.jConfig = jConfig;
@@ -54,7 +48,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
 		BigDecimal min = null;
 		BigDecimal max = null;
 		BigDecimal def = null;
@@ -67,7 +61,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 		if (cpd.getDefaultValue() != null){
 			def = new BigDecimal(cpd.getDefaultValue());
 		}
-		DoublePropertyDescription doubleDesc = new DoublePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max, editor);
+		DoublePropertyDescription doubleDesc = new DoublePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max);
 		doubleDesc.setReadOnly(cpd.isReadOnly());
 		return doubleDesc;
 	}

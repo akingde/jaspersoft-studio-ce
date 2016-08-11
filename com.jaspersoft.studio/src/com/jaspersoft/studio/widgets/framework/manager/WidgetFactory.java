@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
@@ -29,7 +28,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
@@ -42,6 +40,7 @@ import com.jaspersoft.studio.widgets.framework.ui.FilePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FloatPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.SelectableComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TransparentColorPropertyDescription;
 
@@ -76,7 +75,7 @@ public class WidgetFactory {
 				try {
 					String widgetName = el.getAttribute("widgetName").toLowerCase();
 					defaultSupportClazz = el.createExecutableExtension("widgetClass");
-					if (defaultSupportClazz instanceof IExportedResourceHandler) {
+					if (defaultSupportClazz instanceof ItemPropertyDescription<?>) {
 						ItemPropertyDescription<?> widgetClass = (ItemPropertyDescription<?>) defaultSupportClazz;
 						contributedWidgets.put(widgetName, widgetClass);
 					}
@@ -98,29 +97,30 @@ public class WidgetFactory {
 	 * @param editor a not null {@link IPropertyEditor} that will be used inside the widget to provide the read/write logic between the widget and the element
 	 * @return the {@link ItemPropertyDescription} to handle the type defined by the WidgetPropertyDescription, or null if the type can not be resolved
 	 */
-	public static ItemPropertyDescription<?> createItemPropertyDescriptor(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
-		Assert.isNotNull(editor);
+	public static ItemPropertyDescription<?> createItemPropertyDescriptor(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
 		ItemPropertyDescription<?> desc = null;
 		if (cpd.getType().equalsIgnoreCase("path")) {
-			desc = new FilePropertyDescription().getInstance(cd, cpd, jConfig, editor);
+			desc = new FilePropertyDescription().getInstance(cd, cpd, jConfig);
 		} else if (cpd.getType().equalsIgnoreCase("combo")) {
-				desc = new ComboItemPropertyDescription<String>().getInstance(cd, cpd, jConfig, editor);
+				desc = new ComboItemPropertyDescription<String>().getInstance(cd, cpd, jConfig);
 		} else if (cpd.getType().equalsIgnoreCase("color")) {
-			desc = new ColorPropertyDescription<String>().getInstance(cd, cpd, jConfig, editor);
+			desc = new ColorPropertyDescription<String>().getInstance(cd, cpd, jConfig);
 		} else if (cpd.getType().equalsIgnoreCase("transparent_color")) {
-			desc = new TransparentColorPropertyDescription<String>().getInstance(cd, cpd, jConfig, editor);
+			desc = new TransparentColorPropertyDescription<String>().getInstance(cd, cpd, jConfig);
 		} else if (cpd.getType().equalsIgnoreCase("float")) {
-			desc = new FloatPropertyDescription().getInstance(cd, cpd, jConfig, editor);
+			desc = new FloatPropertyDescription().getInstance(cd, cpd, jConfig);
 		} else if (cpd.getType().equalsIgnoreCase("integer")) {
-			desc = new IntegerPropertyDescription().getInstance(cd, cpd, jConfig, editor);
+			desc = new IntegerPropertyDescription().getInstance(cd, cpd, jConfig);
 		} else if (cpd.getType().equalsIgnoreCase("double")) {
-			desc = new FloatPropertyDescription().getInstance(cd, cpd, jConfig, editor);
+			desc = new FloatPropertyDescription().getInstance(cd, cpd, jConfig);
 		} else if (cpd.getType().equalsIgnoreCase("text")){
-			desc = new TextPropertyDescription<String>().getInstance(cd, cpd, jConfig, editor);
+			desc = new TextPropertyDescription<String>().getInstance(cd, cpd, jConfig);
+		} else if (cpd.getType().equalsIgnoreCase("selectable_combo")){
+			desc = new SelectableComboItemPropertyDescription<String>().getInstance(cd, cpd, jConfig);
 		} else {
 			//Build the contributed widget if any
 			ItemPropertyDescription<?> contribuitedType = getContributedWidgets().get(cpd.getType().toLowerCase());
-			desc = contribuitedType.getInstance(cd, cpd, jConfig, editor);
+			desc = contribuitedType.getInstance(cd, cpd, jConfig);
 		}
 		return desc;
 	}

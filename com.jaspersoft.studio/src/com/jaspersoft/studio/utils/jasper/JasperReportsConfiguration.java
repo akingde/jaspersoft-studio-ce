@@ -53,6 +53,7 @@ import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.widgets.framework.manager.WidgetsDefinitionManager;
 
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.IDisposeListener;
@@ -383,6 +384,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public void dispose() {
 		ExpressionUtil.removeAllReportInterpreters(this);
 		ExternalStylesManager.removeCachedStyles(this);
+		WidgetsDefinitionManager.disposedConfiguration(this);
 		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		getPropertyChangeSupport().removePropertyChangeListener(resourceLoadedListener);
 		if (javaclassloader != null)

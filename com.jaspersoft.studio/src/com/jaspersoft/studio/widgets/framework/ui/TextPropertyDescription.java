@@ -23,7 +23,6 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
@@ -50,33 +49,24 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 	
 	protected Text textExpression;
 	
-	protected IPropertyEditor propertyEditor;
-
 	public TextPropertyDescription() {
-		this(null);
-	}
-	
-	public TextPropertyDescription(IPropertyEditor propertyEditor) {
-		super();
-		this.propertyEditor = propertyEditor;
 	}
 
-	public TextPropertyDescription(String name, String description, boolean mandatory, IPropertyEditor editor) {
-		this(name, name, description, mandatory, null, editor);
+	public TextPropertyDescription(String name, String description, boolean mandatory) {
+		this(name, name, description, mandatory, null);
 	}
 
-	public TextPropertyDescription(String name, String label, String description, boolean mandatory, IPropertyEditor editor) {
-		this(name, label, description, mandatory, null, editor);
+	public TextPropertyDescription(String name, String label, String description, boolean mandatory) {
+		this(name, label, description, mandatory, null);
 	}
 
-	public TextPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue, IPropertyEditor editor) {
+	public TextPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue) {
 		super();
 		this.name = name;
 		this.label = label;
 		this.description = description;
 		this.mandatory = mandatory;
 		this.defaultValue = defaultValue;
-		this.propertyEditor = editor;
 	}
 
 	public void setjConfig(JasperReportsConfiguration jConfig) {
@@ -155,7 +145,6 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 		textExpression = new Text(parent, SWT.BORDER);
 		GridData textData = new GridData(GridData.FILL_HORIZONTAL);
 		textData.verticalAlignment = SWT.CENTER;
-		textData.grabExcessVerticalSpace = true;
 		textExpression.setLayoutData(textData);
 		InputHistoryCache.bindText(textExpression, name);
 		textExpression.addFocusListener(new FocusAdapter() {
@@ -229,14 +218,10 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 			tt += "\nDefault: " + getDefaultValueString();
 		return tt;
 	}
-	
-	public IPropertyEditor getPropertyEditor(){
-		return propertyEditor;
-	}
 
 	@Override
-	public ItemPropertyDescription<T> clone(IPropertyEditor editor){
-		TextPropertyDescription<T> result = new TextPropertyDescription<T>(editor);
+	public ItemPropertyDescription<T> clone(){
+		TextPropertyDescription<T> result = new TextPropertyDescription<T>();
 		result.defaultValue = defaultValue;
 		result.description = description;
 		result.jConfig = jConfig;
@@ -248,8 +233,8 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
-		TextPropertyDescription<?> result = new TextPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), editor);
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
+		TextPropertyDescription<?> result = new TextPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
 		result.setReadOnly(cpd.isReadOnly());
 		return result;
 	}

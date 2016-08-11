@@ -55,7 +55,7 @@ public class SPItemProperty extends AHistorySPropertyWidget<ItemPropertyDescript
 	protected void createComponent(Composite parent) {
 		ADescriptor d = pDescriptor.getDescriptor();
 		ItemPropertyDescription<?> ipd = d.getDescription((String) pDescriptor.getId());
-		expr = new WItemProperty(parent, SWT.NONE, 1, ipd);
+		expr = new WItemProperty(parent, SWT.NONE, 1, ipd, d.getPropertyEditor());
 		expr.setLabelProvider(new DescriptorPropertyLabelProvider(d));
 		
 		expr.addModifyListener(new ItemPropertyModifiedListener() {

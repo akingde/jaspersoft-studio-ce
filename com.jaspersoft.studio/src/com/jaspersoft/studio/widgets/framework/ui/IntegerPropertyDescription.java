@@ -8,26 +8,20 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
 public class IntegerPropertyDescription extends NumberPropertyDescription<Integer> {
 	
 	public IntegerPropertyDescription() {
-		this(null);
+	}
+
+	public IntegerPropertyDescription(String name, String label, String description, boolean mandatory,  Integer defaultValue, Number min, Number max) {
+		super(name, label, description, mandatory, defaultValue, min, max);
 	}
 	
-	public IntegerPropertyDescription(IPropertyEditor propertyEditor) {
-		super(propertyEditor);
-	}
-	
-	public IntegerPropertyDescription(String name, String label, String description, boolean mandatory,  Integer defaultValue, Number min, Number max, IPropertyEditor editor) {
-		super(name, label, description, mandatory, defaultValue, min, max, editor);
-	}
-	
-	public IntegerPropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max, IPropertyEditor editor) {
-		super(name, label, description, mandatory, min, max, editor);
+	public IntegerPropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max) {
+		super(name, label, description, mandatory, min, max);
 	}
 	
 	@Override
@@ -38,8 +32,8 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 	}
 	
 	@Override
-	public ItemPropertyDescription<Integer> clone(IPropertyEditor editor){
-		IntegerPropertyDescription result = new IntegerPropertyDescription(editor);
+	public ItemPropertyDescription<Integer> clone(){
+		IntegerPropertyDescription result = new IntegerPropertyDescription();
 		result.defaultValue = defaultValue;
 		result.description = description;
 		result.jConfig = jConfig;
@@ -53,7 +47,7 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
 		Integer min = null;
 		Integer max = null;
 		Integer def = null;
@@ -66,7 +60,7 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 		if (cpd.getDefaultValue() != null){
 			def = new Integer(cpd.getDefaultValue());
 		}
-		IntegerPropertyDescription intDesc = new IntegerPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max, editor);
+		IntegerPropertyDescription intDesc = new IntegerPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max);
 		intDesc.setReadOnly(cpd.isReadOnly());
 		return intDesc;
 	}

@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
@@ -93,24 +92,17 @@ public interface ItemPropertyDescription<T> {
 	 * Update the value iside the widget with the one inside the model element
 	 * 
 	 * @param c the current control
- * @param wiProp the {@link IWItemProperty} in which this widget is wrapped
+	 * @param wiProp the {@link IWItemProperty} in which this widget is wrapped
 	 */
 	public void update(Control c, IWItemProperty wip);
-	
-	/**
-	 * Get the property editor of this widget
-	 * 
-	 * @return a not null {@link IPropertyEditor}
- 	 */
-	public IPropertyEditor getPropertyEditor();
+
 
 	/**
-	 * Clone the current descriptor with a different editor
+	 * Clone the current descriptor 
 	 * 
-	 * @param editor the editor for the clone, must be not null
 	 * @return the cloned {@link ItemPropertyDescription}
 	 */
-	public ItemPropertyDescription<T> clone(IPropertyEditor editor);
+	public ItemPropertyDescription<T> clone();
 	
 	/**
 	 * Create an instance of the widget from a {@link WidgetPropertyDescriptor}. It is used to
@@ -119,10 +111,9 @@ public interface ItemPropertyDescription<T> {
 	 * @param cd the {@link WidgetsDescriptor}, typically used for the localization
 	 * @param cpd the description of the widget to create
 	 * @param jConfig the current {@link JasperReportsConfiguration}
-	 * @param editor the editor that will be used by the widget to read/write the property to and from the model
 	 * @return an instance of an {@link ItemPropertyDescription} or null if the passed {@link WidgetPropertyDescriptor} doesn't describe a 
 	 * the current implementation
 	 */
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor);
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig);
 
 }

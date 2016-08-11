@@ -11,6 +11,7 @@ package com.jaspersoft.studio.widgets.framework;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -20,8 +21,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -37,7 +36,7 @@ import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyBaseLabelPro
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
-import com.jaspersoft.studio.utils.UIUtil;
+import com.jaspersoft.studio.widgets.framework.manager.ItemPropertyLayout;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.dialog.ItemPropertyElementDialog;
 import com.jaspersoft.studio.widgets.framework.ui.menu.IMenuProvider;
@@ -48,9 +47,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-/**
- * 
- */
+
 public class WItemProperty extends Composite implements IExpressionContextSetter, IWItemProperty {
 
 	/** Number of lines for the text expression widget */
@@ -69,8 +66,6 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 
 	private BaseLabelProvider lprovider = null;
 	
-	private Composite controlsCmp;
-	
 	private Label expressionEditLabel;
 	
 	private boolean isRefresh = false;
@@ -78,6 +73,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	private boolean isUpdating = false;
 
 	private ItemPropertyDescription<?> ipDesc;
+	
+	private IPropertyEditor editor;
 	
 	/**
 	 * Expression modify listeners
@@ -92,38 +89,22 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * @param linesNum the number of line of the expression widget
 	 * @param widgetDescriptor the descriptor of the value control
 	 */
-	public WItemProperty(Composite parent, int style, int linesNum, ItemPropertyDescription<?> widgetDescriptor) {
+	public WItemProperty(Composite parent, int style, int linesNum, ItemPropertyDescription<?> widgetDescriptor, IPropertyEditor editor) {
 		super(parent, style);
+		Assert.isNotNull(editor);
 		this.ipDesc = widgetDescriptor;
+		this.editor = editor;
 		this.customTextLinesNumber = linesNum;
-		GridLayout mainLayout = new GridLayout(2, false); 
-		mainLayout.marginHeight = 0;
-		mainLayout.marginWidth = 0;
-		mainLayout.horizontalSpacing = 0;
-		mainLayout.verticalSpacing = 0;
-		setLayout(mainLayout);
-
-		controlsCmp = new Composite(this, SWT.NONE);
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		layout.horizontalSpacing = 5;
-		layout.verticalSpacing = 0;
-		controlsCmp.setLayout(layout);
 
 		//Create the expression label
-		expressionEditLabel = new Label(controlsCmp, SWT.NONE);
-		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.HORIZONTAL_ALIGN_CENTER);
-		gd.widthHint = 24;
-		gd.heightHint = 24;
-		expressionEditLabel.setLayoutData(gd);
+		expressionEditLabel = new Label(this, SWT.NONE);
 		expressionEditLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 				if (!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
 					JRExpressionEditor wizard = new JRExpressionEditor();
-					wizard.setValue((JRDesignExpression)getEditor().getPropertyValueExpression(ipDesc.getName()));
+					wizard.setValue((JRDesignExpression)getPropertyEditor().getPropertyValueExpression(ipDesc.getName()));
 					wizard.setExpressionContext(expContext);
 					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(Display.getDefault().getActiveShell(), wizard);
 					if (dialog.open() == Dialog.OK) {
@@ -136,7 +117,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		});
 
 		//Create the simple control
-		textExpression = ipDesc.createControl(this, controlsCmp);
+		textExpression = ipDesc.createControl(this, this);
 
 		//Create the edit expression button
 		btnEditExpression = new Button(this, SWT.FLAT);
@@ -156,6 +137,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			textExpression.setToolTipText(widgetDescriptor.getToolTip());
 			btnEditExpression.setToolTipText(widgetDescriptor.getToolTip());
 		}
+		
+		setLayout(new ItemPropertyLayout(this, expressionEditLabel, textExpression, btnEditExpression));
 	}
 
 	@Override
@@ -175,12 +158,6 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * Sets the layout data information for the custom widget controls.
 	 */
 	private void configureWidgetsLayoutData() {
-		int heightHint = Math.max(UIUtil.getCharHeight(textExpression), 24);
-		// Standard configuration
-		GridData controlsCmpLayoutData = new GridData(GridData.FILL_HORIZONTAL);
-		controlsCmpLayoutData.heightHint = heightHint;
-		controlsCmp.setLayoutData(controlsCmpLayoutData);
-		
 		addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
@@ -198,7 +175,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	public void setValue(String staticValue, JRExpression expressionValue) {
 		setRefresh(true);
 		try {
-			getEditor().createUpdateProperty(ipDesc.getName(), staticValue, expressionValue);
+			getPropertyEditor().createUpdateProperty(ipDesc.getName(), staticValue, expressionValue);
 			updateWidget();
 			
 			// Notifies the listeners of the new expression
@@ -320,8 +297,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * Open the dialog to switch between expression and static value
 	 */
 	private void handleEditButton() {
-		String staticValue = getEditor().getPropertyValue(ipDesc.getName());
-		JRExpression expressionValue = getEditor().getPropertyValueExpression(ipDesc.getName());
+		String staticValue = getPropertyEditor().getPropertyValue(ipDesc.getName());
+		JRExpression expressionValue = getPropertyEditor().getPropertyValueExpression(ipDesc.getName());
 		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), staticValue, expressionValue, ipDesc);
 		dialog.setExpressionContext(expContext);
 		if (dialog.open() == Dialog.OK) {
@@ -329,23 +306,15 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		}
 	}
 
-	/**
-	 * Return the property editor associated with the internal widget descriptor
-	 * 
-	 * @return a not null property editor
-	 */
-	public IPropertyEditor getEditor(){
-		return ipDesc.getPropertyEditor();
-	}
 
 	@Override
 	public String getStaticValue() {
-		return getEditor().getPropertyValue(ipDesc.getName());
+		return getPropertyEditor().getPropertyValue(ipDesc.getName());
 	}
 
 	@Override
 	public JRExpression getExpressionValue() {
-		return getEditor().getPropertyValueExpression(ipDesc.getName());
+		return getPropertyEditor().getPropertyValueExpression(ipDesc.getName());
 	}
 
 	@Override
@@ -360,7 +329,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 */
 	@Override
 	public boolean isExpressionMode() {
-		return getEditor().getPropertyValueExpression(ipDesc.getName()) != null;
+		return getPropertyEditor().getPropertyValueExpression(ipDesc.getName()) != null;
 	}
 
 	/**
@@ -383,17 +352,18 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			//show or hide the expression label
 			if (isExpressionMode()){
 				expressionEditLabel.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/functions_icon.png"));
-				expressionEditLabel.setVisible(true);
-				((GridData)expressionEditLabel.getLayoutData()).exclude = false;
 				layout(true, true);
 			} else {
 				expressionEditLabel.setImage(null);
-				expressionEditLabel.setVisible(false);
-				((GridData)expressionEditLabel.getLayoutData()).exclude = true;
 				layout(true, true);
 			}
 		} finally {
 			isUpdating = false;
 		}
+	}
+	
+	@Override
+	public IPropertyEditor getPropertyEditor(){
+		return editor;
 	}
 }

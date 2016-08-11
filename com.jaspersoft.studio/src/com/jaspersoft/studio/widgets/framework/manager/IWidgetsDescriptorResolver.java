@@ -31,4 +31,20 @@ public interface IWidgetsDescriptorResolver {
 	 */
 	public WidgetsDescriptor loadDescriptor(JasperReportsConfiguration jConfig, String URL);
 	
+	/**
+	 * Return an unique identifier for this specific definition, it will be used for caching
+	 * 
+	 * @param jConfig the configuration that triggered the load of the definition
+	 * @param URL the url of the loaded resource
+	 * @return a not null key for this definition
+	 */
+	public String getKey(JasperReportsConfiguration jConfig, String URL);
+	
+	/**
+	 * Used to know if a loaded definition with this Resolver should be unloaded after the config
+	 * that triggered its loading is closed
+	 * 
+	 * @return true if the definition should be unloaded with the {@link JasperReportsConfiguration}, flase otherwise
+	 */
+	public boolean unloadOnConfigurationDispose();
 }

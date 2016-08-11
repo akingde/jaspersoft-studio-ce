@@ -103,7 +103,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 			this.itemProperty = new StandardItemProperty("", "", null); //$NON-NLS-1$ //$NON-NLS-2$
 		this.descriptor = descriptor;
 		ItemPropertyDescription<?> ipDesc = descriptor.getDescription(itemProperty.getName());
-		this.ipDesc = ipDesc.clone(internalEditor);
+		this.ipDesc = ipDesc.clone();
 	}
 
 	@Override
@@ -168,9 +168,9 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 
 					ItemPropertyDescription<?> ipDesc = descriptor.getDescription(itemProperty.getName());
 					if (ipDesc == null){
-						ItemPropertyDialog.this.ipDesc = new TextPropertyDescription<String>(itemProperty.getName(), "", false, internalEditor);
+						ItemPropertyDialog.this.ipDesc = new TextPropertyDescription<String>(itemProperty.getName(), "", false);
 					} else {
-						ItemPropertyDialog.this.ipDesc = ipDesc.clone(internalEditor);
+						ItemPropertyDialog.this.ipDesc = ipDesc.clone();
 					}
 					propertyValue = ipDesc.createControl(ItemPropertyDialog.this, cmp);
 
@@ -207,9 +207,9 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 
 				ItemPropertyDescription<?> ipDesc = descriptor.getDescription(itemProperty.getName());
 				if (ipDesc == null){
-					ItemPropertyDialog.this.ipDesc = new TextPropertyDescription<String>(itemProperty.getName(), "", false, internalEditor);
+					ItemPropertyDialog.this.ipDesc = new TextPropertyDescription<String>(itemProperty.getName(), "", false);
 				} else {
-					ItemPropertyDialog.this.ipDesc = ipDesc.clone(internalEditor);
+					ItemPropertyDialog.this.ipDesc = ipDesc.clone();
 				}
 				propertyValue = ipDesc.createControl(ItemPropertyDialog.this, cmp);
 
@@ -298,7 +298,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 					break;
 				}
 			}
-			ipDesc.getPropertyEditor().createUpdateProperty(ipDesc.getName(), staticValue, expressionValue);
+			getPropertyEditor().createUpdateProperty(ipDesc.getName(), staticValue, expressionValue);
 			boolean isExpression = isExpressionMode();
 			if (useExpressionCheckbox.getSelection() != isExpression)
 				useExpressionCheckbox.setSelection(isExpression);
@@ -359,4 +359,8 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		}
 	}
 
+	@Override
+	public IPropertyEditor getPropertyEditor() {
+		return internalEditor;
+	}
 }

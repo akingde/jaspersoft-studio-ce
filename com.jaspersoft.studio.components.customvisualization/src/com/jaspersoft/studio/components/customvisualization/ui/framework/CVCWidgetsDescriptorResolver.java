@@ -167,4 +167,23 @@ public class CVCWidgetsDescriptorResolver implements IWidgetsDescriptorResolver 
 		} else return oldWidget.getOptions2();
 	}
 
+	/**
+	 * Create the key for a specific definition location information
+	 * 
+	 * @param jConfig the current {@link JasperReportsConfiguration}
+	 * @param url the url of the loaded location
+	 * @return an unique key for the resource, it is independent from the {@link JasperReportsConfiguration}
+	 */
+	public String getKey(JasperReportsConfiguration jConfig, String URL) {
+		return URL;
+	}
+	
+	/**
+	 * The CVC definitions are not unloaded when the report who requested them
+	 * is closed
+	 */
+	@Override
+	public boolean unloadOnConfigurationDispose() {
+		return false;
+	}
 }

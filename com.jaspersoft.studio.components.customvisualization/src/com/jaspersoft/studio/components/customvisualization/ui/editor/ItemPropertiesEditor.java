@@ -33,7 +33,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentSectionDescriptor;
-import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -142,7 +141,7 @@ public class ItemPropertiesEditor extends EditorPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				PropertyDescriptorDialog d = new PropertyDescriptorDialog(UIUtils.getShell());
-				d.setDescriptor(new TextPropertyDescription<String>("property", "Property Label", "Property description", false, new PropertyEditorAdapter()));
+				d.setDescriptor(new TextPropertyDescription<String>("property", "Property Label", "Property description", false));
 				if (d.open() == Dialog.OK) {
 					new Label(c, SWT.NONE)
 							.setText(d.getDescriptor().getLabel());

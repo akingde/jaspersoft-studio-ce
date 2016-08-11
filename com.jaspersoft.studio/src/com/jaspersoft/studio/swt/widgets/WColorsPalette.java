@@ -32,10 +32,10 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.color.chooser.ColorDialog;
 import com.jaspersoft.studio.swt.events.IRefreshableList;
 import com.jaspersoft.studio.swt.events.PaletteListener;
 import com.jaspersoft.studio.utils.AlfaRGB;
@@ -79,6 +79,7 @@ public class WColorsPalette extends Composite implements IRefreshableList{
 		this.colors = new ArrayList<String>();
 		GridLayout widgetGl = new GridLayout(2, false);
 		widgetGl.verticalSpacing = 0;
+		widgetGl.marginHeight = 0;
 		this.setLayout(widgetGl);
 		createWidgetContent();	
 	}
@@ -262,7 +263,7 @@ public class WColorsPalette extends Composite implements IRefreshableList{
 			colorChooseDialog.setText(Messages.WColorsPalette_PickNewColor);
 			RGB decodedRGB = Colors.decodeHexStringAsSWTRGB((String)selected);
 			colorChooseDialog.setRGB(decodedRGB);
-			RGB newRGB = colorChooseDialog.open();
+			RGB newRGB = colorChooseDialog.openRGB();
 			if(newRGB!=null){
 				String hexEncodedRGBColor = Colors.getHexEncodedRGBColor(newRGB);
 				int indexOfSelected = colors.indexOf(selected);
@@ -284,7 +285,7 @@ public class WColorsPalette extends Composite implements IRefreshableList{
 	protected void addButtonPressed() {
 		ColorDialog colorChooseDialog = new ColorDialog(getShell());
 		colorChooseDialog.setText(Messages.WColorsPalette_PickNewColor);
-		RGB newRGB = colorChooseDialog.open();
+		RGB newRGB = colorChooseDialog.openRGB();
 		if(newRGB!=null){
 			String hexEncodedRGBColor = Colors.getHexEncodedRGBColor(newRGB);
 			colors.add(hexEncodedRGBColor);

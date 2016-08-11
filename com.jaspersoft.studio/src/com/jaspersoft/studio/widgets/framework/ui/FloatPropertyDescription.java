@@ -8,26 +8,20 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
 public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	
 	public FloatPropertyDescription() {
-		this(null);
 	}
 	
-	public FloatPropertyDescription(IPropertyEditor propertyEditor) {
-		super(propertyEditor);
+	public FloatPropertyDescription(String name, String label, String description, boolean mandatory,  Float defaultValue, Number min, Number max) {
+		super(name, label, description, mandatory, defaultValue, min, max);
 	}
 	
-	public FloatPropertyDescription(String name, String label, String description, boolean mandatory,  Float defaultValue, Number min, Number max, IPropertyEditor editor) {
-		super(name, label, description, mandatory, defaultValue, min, max, editor);
-	}
-	
-	public FloatPropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max, IPropertyEditor editor) {
-		super(name, label, description, mandatory, min, max, editor);
+	public FloatPropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max) {
+		super(name, label, description, mandatory, min, max);
 	}
 	
 	@Override
@@ -38,8 +32,8 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	}
 	
 	@Override
-	public ItemPropertyDescription<Float> clone(IPropertyEditor editor){
-		FloatPropertyDescription result = new FloatPropertyDescription(editor);
+	public ItemPropertyDescription<Float> clone(){
+		FloatPropertyDescription result = new FloatPropertyDescription();
 		result.defaultValue = defaultValue;
 		result.description = description;
 		result.jConfig = jConfig;
@@ -53,7 +47,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, IPropertyEditor editor) {
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
 		Float min = null;
 		Float max = null;
 		Float def = null;
@@ -66,7 +60,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 		if (cpd.getDefaultValue() != null){
 			def = new Float(cpd.getDefaultValue());
 		}
-		FloatPropertyDescription floatDesc = new FloatPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max, editor);
+		FloatPropertyDescription floatDesc = new FloatPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max);
 		floatDesc.setReadOnly(cpd.isReadOnly());
 		return floatDesc;
 	}
