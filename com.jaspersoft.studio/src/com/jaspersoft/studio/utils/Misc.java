@@ -145,6 +145,9 @@ public class Misc {
 	public static boolean isNullOrEmpty(Collection<?> value) {
 		return value == null || value.isEmpty();
 	}
+	public static boolean isNullOrEmpty(Map<?, ?> value) {
+		return value == null || value.isEmpty();
+	}
 
 	public static <T> boolean isNullOrEmpty(T[] value) {
 		return value == null || value.length == 0;

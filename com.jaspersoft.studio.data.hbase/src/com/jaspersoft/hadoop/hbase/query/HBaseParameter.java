@@ -16,6 +16,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRValueParameter;
+import net.sf.jasperreports.engine.type.ParameterEvaluationTimeEnum;
 
 /**
  * 
@@ -27,6 +28,7 @@ public class HBaseParameter implements JRValueParameter {
 	private String name;
 
 	private Object value;
+	protected ParameterEvaluationTimeEnum evaluationTime;
 
 	public HBaseParameter(String name, Object value) {
 		this.name = name;
@@ -114,5 +116,14 @@ public class HBaseParameter implements JRValueParameter {
 
 	@Override
 	public void setValue(Object value) {
+	}
+
+	@Override
+	public ParameterEvaluationTimeEnum getEvaluationTime() {
+		return evaluationTime;
+	}
+
+	public void setEvaluationTime(ParameterEvaluationTimeEnum evaluationTime) {
+		this.evaluationTime = evaluationTime;
 	}
 }
