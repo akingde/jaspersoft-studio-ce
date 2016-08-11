@@ -80,6 +80,8 @@ public class RESTv2ExceptionHandler {
 					System.out.println(res.readEntity(String.class));
 					msg = res.getStatusInfo().getReasonPhrase() + "\n";
 					throw new HttpResponseException(status, msg);
+				} else if (ct.contains("application/errorDescriptor+json")) {
+					handleErrorDescriptor(res, monitor, status);
 				}
 			} else {
 				System.out.println(res.readEntity(String.class));
