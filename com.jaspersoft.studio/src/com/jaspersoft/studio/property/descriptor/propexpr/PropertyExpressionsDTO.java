@@ -15,10 +15,10 @@ package com.jaspersoft.studio.property.descriptor.propexpr;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jaspersoft.studio.model.ANode;
+
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
-
-import com.jaspersoft.studio.model.ANode;
 
 /**
  * Container used to represent all the standard properties and the expression properties of
@@ -167,6 +167,26 @@ public class PropertyExpressionsDTO {
 	}
 	
 	/**
+	 * Add a property to the list into a specific position, only if a property with the same name and 
+	 * of the same type is not already present
+	 * 
+	 * @param name the name of the property
+	 * @param value the value of the property
+	 * @param isExpression true if the property is an expression property, false if it is a standard property
+	 * @param position the position where the property should be inserted
+	 * @return true if a property with the same name\type was not found and the new one was inserted, false otherwise
+	 */
+	public boolean addProperty(String name, String value, boolean isExpression, int position){
+		if (!hasProperty(name, isExpression)){
+			PropertyExpressionDTO newProp = new PropertyExpressionDTO(isExpression, name,value);
+			newProp.setPnode(pnode);
+			properties.add(position, newProp);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * Set a property to the list, if there is a property with the same name and type then the value
 	 * of that property is changed with the passed value parameter. Otherwise a new property is created.
 	 * 
@@ -211,11 +231,5 @@ public class PropertyExpressionsDTO {
 			copy.addProperty(prop.getName(), prop.getValue(), prop.isExpression());
 		}
 		return copy;
-	}
-	
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
 	}
 }
