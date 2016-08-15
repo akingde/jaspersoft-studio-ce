@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.property.widget.ChartCustomizerCellEditor;
 import com.jaspersoft.studio.components.chart.property.widget.SPChartCustomizer;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -55,9 +56,12 @@ public class CustomizerPropertyDescriptor extends PropertyDescriptor implements 
 	public static ILabelProvider labelProvider = new LabelProvider() {
 		
 		public String getText(Object element) {
+			if (element instanceof MChart){
+				element = ((MChart)element).getPropertyValue(MChart.CHART_PROPERTY_CUSTOMIZER);
+			}
 			CustomizerPropertyExpressionsDTO currentDTO = (CustomizerPropertyExpressionsDTO)element;
 			if (currentDTO != null){	
-				return "Chart Customizers: " + currentDTO.getCustomizerNumber();
+				return "Chart Customizers: " + currentDTO.getCustomizersNumber();
 			}
 			return "Chart Customizers: 0";
 		};

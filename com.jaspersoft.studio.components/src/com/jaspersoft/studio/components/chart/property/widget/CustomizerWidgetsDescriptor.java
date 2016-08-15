@@ -29,6 +29,8 @@ public class CustomizerWidgetsDescriptor extends WidgetsDescriptor{
 	 */
 	private String customizerClass;
 	
+	private String[] supportedPlot;
+	
 	public String getCustomizerClass(){
 		return customizerClass;
 	}
@@ -40,5 +42,13 @@ public class CustomizerWidgetsDescriptor extends WidgetsDescriptor{
 	@Override
 	public String toString() {
 		return getLabel();
+	}
+	
+	public String[] getSupportedPlot(){
+		return supportedPlot;
+	}
+	
+	public void setSupportedPlot(String[] supportedPlot){
+		this.supportedPlot = supportedPlot;
 	}
 }

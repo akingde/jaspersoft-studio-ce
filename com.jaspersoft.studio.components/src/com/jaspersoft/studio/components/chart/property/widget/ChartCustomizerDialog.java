@@ -13,8 +13,6 @@
 package com.jaspersoft.studio.components.chart.property.widget;
 
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -23,7 +21,6 @@ import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.ChartCustomizerWidget;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
 /**
  * Dialog to show the widget handle the chart customizer
@@ -70,14 +67,6 @@ public class ChartCustomizerDialog extends TitleAreaDialog {
 			@Override
 			public void changePropertyOn(String property, CustomizerPropertyExpressionsDTO value, APropertyNode target) {
 				
-			}
-			
-			@Override
-			protected void buildUI(WidgetsDescriptor cd, String customizerKey) {
-				super.buildUI(cd, customizerKey);
-				Point size = parent.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				size.x = Math.max(getShell().getSize().x, size.x);
-				getShell().setSize(size.x, size.y);
 			}
 		};
 		widget.update(chart, currentDTO);

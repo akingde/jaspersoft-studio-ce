@@ -1,0 +1,13 @@
+{
+    "label": "Spline Marker",
+    "description": "A chart customizer for XY Charts",
+    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.SplineCustomizer",
+    "supportedPlot": ["XYPlot"],
+    "sections": [
+        {
+            "name": "Customizer configuration",
+            "expandable": false,
+            "properties": []
+        }
+    ]
+}

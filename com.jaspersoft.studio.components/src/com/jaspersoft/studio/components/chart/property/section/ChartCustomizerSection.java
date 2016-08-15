@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
-import com.jaspersoft.studio.components.chart.property.widget.SPChartCustomizer;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -53,12 +52,5 @@ public class ChartCustomizerSection extends AbstractSection {
 		if (md instanceof MChartAxes)
 			return (APropertyNode) md.getPropertyValue(JRDesignChartAxis.PROPERTY_CHART);
 		return md;
-	}
-
-	@Override
-	public void aboutToBeHidden() {
-		super.aboutToBeHidden();
-		SPChartCustomizer customizerWidget = (SPChartCustomizer)widgets.get(MChart.CHART_PROPERTY_CUSTOMIZER);
-		customizerWidget.sectionAboutToBeHidden();
 	}
 }

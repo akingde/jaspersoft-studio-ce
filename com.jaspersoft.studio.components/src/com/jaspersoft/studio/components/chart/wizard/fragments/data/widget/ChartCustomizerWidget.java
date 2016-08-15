@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -41,8 +42,8 @@ import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
-import com.jaspersoft.studio.components.chart.property.widget.CustomizerPropertyEditor;
-import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.SelectCustomizerDialog;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.CustomizerEditWizard;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.CustomizerNewWizard;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -51,13 +52,8 @@ import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.IWItemProperty;
-import com.jaspersoft.studio.widgets.framework.WItemProperty;
-import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
-import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
-import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
-import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
+import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
@@ -71,11 +67,6 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
  *
  */
 public abstract class ChartCustomizerWidget {
-
-	/**
-	 * Composite where the dynamic widgets of the selected customizer are placed
-	 */
-	private Composite dynamicWidgetsContainer;
 	
 	/**
 	 * Main composite that contains all the other controls of the widget
@@ -89,11 +80,6 @@ public abstract class ChartCustomizerWidget {
 	private SectionContainerComposite container;
 
 	/**
-	 * The customizer key of the currently loaded customizer
-	 */
-	private String currentCustomizerKey = null;
-	
-	/**
 	 * The list of the customizer currently set on the element and shown on the table
 	 */
 	private List<ChartCustomizerDefinition> selectedCustomizers;
@@ -102,12 +88,6 @@ public abstract class ChartCustomizerWidget {
 	 * The viewer to show the table of all the customizers associated to the element
 	 */
 	private TableViewer customizerTable;
-	
-	/**
-	 * The list of dynamic widgets used to configure the selected chart customizer, could be
-	 * empty if the current customizer has not something to configure
-	 */
-	private	List<IWItemProperty> widgetEditors;
 	
 	/**
 	 * The {@link CustomizerPropertyExpressionsDTO} of the selected element
@@ -174,11 +154,6 @@ public abstract class ChartCustomizerWidget {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		proxyContainer.setLayoutData(gd);	
 		buildTableArea(proxyContainer);
-		
-		dynamicWidgetsContainer = new Composite(controlsContainer, SWT.NONE);
-		dynamicWidgetsContainer.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_BOTH);
-		dynamicWidgetsContainer.setLayoutData(gd);	
 	}
 	
 	/**
@@ -196,15 +171,6 @@ public abstract class ChartCustomizerWidget {
 	}
 	
 	/**
-	 * Clean all the dynamic controls inside the dynamic area
-	 */
-	private void cleanControls(){
-		for (Control c : dynamicWidgetsContainer.getChildren()) {
-			c.dispose();
-		}
-	}
-	
-	/**
 	 * Create the button to add a new chart customizer 
 	 * 
 	 * @param parent composite where the button should be placed
@@ -218,16 +184,18 @@ public abstract class ChartCustomizerWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String uniqueKey = getPropertyDTO().getUniqueKey();
-				SelectCustomizerDialog dialog = new SelectCustomizerDialog(UIUtils.getShell(), jConfig, uniqueKey);
 				
+				CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone());
+				CustomizerNewWizard wizard = new CustomizerNewWizard(uniqueKey, getExpressionContext(), dto, jConfig);		
+				WizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);		
 				if (dialog.open() == Dialog.OK){
-					ChartCustomizerDefinition definition = dialog.getResult();
+					ChartCustomizerDefinition definition = wizard.getDefinition();
 					if (definition != null){
 						selectedCustomizers.add(definition);
-						CustomizerPropertyExpressionsDTO dto = getPropertyDTO();
 						String classProp = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
 						dto.addProperty(uniqueKey + classProp, definition.getCustomizerClass(), false);
 						changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
+						currentDTO = dto;
 						customizerTable.refresh();	
 					}
 				}
@@ -311,6 +279,7 @@ public abstract class ChartCustomizerWidget {
 					index --;
 					selectedCustomizers.add(index, definition);
 					rebuildPositionsList();
+					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, getPropertyDTO(), selectedElement);
 					customizerTable.refresh();
 					updateButtonEnablemenet(definition);
 				}
@@ -342,6 +311,7 @@ public abstract class ChartCustomizerWidget {
 					index ++;
 					selectedCustomizers.add(index, definition);
 					rebuildPositionsList();
+					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, getPropertyDTO(), selectedElement);
 					customizerTable.refresh();
 					updateButtonEnablemenet(definition);
 				}
@@ -367,7 +337,6 @@ public abstract class ChartCustomizerWidget {
 		for(ChartCustomizerDefinition definition : selectedCustomizers){
 			dto.addProperty(definition.getKey() + classAttribute, definition.getCustomizerClass(), false);
 		}
-		changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
 	}
 
 	/**
@@ -424,22 +393,9 @@ public abstract class ChartCustomizerWidget {
 				try {
 					StructuredSelection selection = (StructuredSelection)event.getSelection();
 					if (selection.size() > 0){
-						ChartCustomizerDefinition definition = (ChartCustomizerDefinition)selection.getFirstElement();						
-						
-						editButton.setEnabled(true);
-						deleteButton.setEnabled(true);
-
-						if (definition.isOnlyClass()){
-							cleanControls();
-							widgetEditors = new ArrayList<IWItemProperty>();
-							currentCustomizerKey = null;
-						} else {
-							//the customizer has an ui definition, build it
-							buildUI(definition.getDescriptor(), definition.getKey());
-						}
+						ChartCustomizerDefinition definition = (ChartCustomizerDefinition)selection.getFirstElement();									
 						updateButtonEnablemenet(definition);
 					} else {
-						cleanControls();
 						updateButtonEnablemenet(null);
 					}
 				} finally {
@@ -472,7 +428,12 @@ public abstract class ChartCustomizerWidget {
 			upButton.setEnabled(false);
 			downButton.setEnabled(false);	
 		} else {
-			editButton.setEnabled(true);
+			//Enable the edit button only if there are widgets to edit
+			if (!definition.isOnlyClass() && !definition.getDescriptor().hasWidgets()){
+				editButton.setEnabled(false);
+			} else {
+				editButton.setEnabled(true);
+			}
 			deleteButton.setEnabled(true);
 			int selectionIndex = selectedCustomizers.indexOf(definition);
 			upButton.setEnabled(selectionIndex > 0);
@@ -485,58 +446,33 @@ public abstract class ChartCustomizerWidget {
 	 */
 	protected void editAction(){
 		StructuredSelection selection = (StructuredSelection)customizerTable.getSelection();
-		if (!selection.isEmpty()){
+		if (!selection.isEmpty()){	
 			ChartCustomizerDefinition editElement = (ChartCustomizerDefinition)selection.getFirstElement();
-			SelectCustomizerDialog dialog = new SelectCustomizerDialog(UIUtils.getShell(), jConfig, editElement);
+			
+			//Avoid the edit action is the selected elements has not widgets to show
+			if (!editElement.isOnlyClass() && !editElement.getDescriptor().hasWidgets()){
+				return;
+			}
+			
+			CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone());
+			CustomizerEditWizard wizard = new CustomizerEditWizard(editElement, getExpressionContext(), dto, jConfig);		
+			WizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);
 			
 			if (dialog.open() == Dialog.OK){
-				ChartCustomizerDefinition definition = dialog.getResult();
-				if (definition != null){
-					int index = selectedCustomizers.indexOf(editElement);
-					selectedCustomizers.set(index, definition);
-					CustomizerPropertyExpressionsDTO dto = getPropertyDTO();
+				ChartCustomizerDefinition definition = wizard.getDefinition();
+				if (definition != null && definition.isOnlyClass()){
 					String classProp = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
-					dto.addProperty(editElement.getKey() + classProp, definition.getCustomizerClass(), false);
+					dto.setProperty(editElement.getKey() + classProp, definition.getCustomizerClass(), false);
+					//Commit the new dto
 					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
-					customizerTable.refresh();	
+					currentDTO = dto;
+					selectedCustomizers = getPropertyDTO().getDefinedCustomizers();
+					customizerTable.setInput(selectedCustomizers);
+				} else {
+					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
+					currentDTO = dto;
 				}
 			}					
-		}
-	}
-	
-	/**
-	 * Build the dynamic UI to configure a customizer
-	 * 
-	 * @param cd the ui definition of the customizer
-	 * @param customizerKey the key of the customizer
-	 */
-	protected void buildUI(WidgetsDescriptor cd, String customizerKey) {
-		if (cd != null){
-			if (customizerKey != currentCustomizerKey){
-				currentCustomizerKey = customizerKey;
-				//clean the old cotnrols
-				cleanControls();
-				widgetEditors = new ArrayList<IWItemProperty>();
-				ExpressionContext ec = getExpressionContext();
-				CustomizerPropertyExpressionsDTO dto = getPropertyDTO();
-				CustomizerPropertyEditor pEditor = new CustomizerPropertyEditor(this, customizerKey, dto);
-				for(WidgetPropertyDescriptor p : cd.getPlainWidgets()) {
-					WidgetFactory.createLabelForProperty(dynamicWidgetsContainer, p);
-					ItemPropertyDescription<?> descriptor = WidgetFactory.createItemPropertyDescriptor(cd, p, jConfig);
-					WItemProperty widgetEditor = new WItemProperty(dynamicWidgetsContainer, SWT.NONE, 1, descriptor, pEditor);
-					widgetEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-					widgetEditor.setExpressionContext(ec);
-					widgetEditors.add(widgetEditor);
-				}
-			}
-			dynamicWidgetsContainer.layout(true, true);
-			for(IWItemProperty editor : widgetEditors){
-				editor.updateWidget();
-			}
-		} else {
-			currentCustomizerKey = null;
-			cleanControls();
-			widgetEditors = new ArrayList<IWItemProperty>();
 		}
 	}
 
@@ -565,19 +501,9 @@ public abstract class ChartCustomizerWidget {
 	 * @return a not null {@link CustomizerPropertyDescriptor}
 	 */
 	public CustomizerPropertyExpressionsDTO getPropertyDTO(){
-		if (currentDTO == null || currentDTO.getPnode() != selectedElement){
-			currentDTO = (CustomizerPropertyExpressionsDTO)selectedElement.getPropertyValue(MChart.CHART_PROPERTY_CUSTOMIZER);
-		}
 		return currentDTO;
 	}
-	
-	/**
-	 * Clear the current selection of controls
-	 */
-	public void clearSelection(){
-		currentDTO = null;
-	}
-	
+
 	/**
 	 * Create a section composite where some controls could be placed
 	 * 

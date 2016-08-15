@@ -60,12 +60,4 @@ public class SPChartCustomizer extends ASPropertyWidget<CustomizerPropertyDescri
 	public Control getControl() {
 		return widget.getControl();
 	}
-	
-	/**
-	 * When the section is about to be hiding it must call this method, this 
-	 * will allow to clear the widget cache
-	 */
-	public void sectionAboutToBeHidden(){
-		widget.clearSelection();
-	}
 }

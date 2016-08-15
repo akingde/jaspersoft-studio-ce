@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.property.widget;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.chart.preferences.ChartCustomizerPreferencePage;
 import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -65,9 +67,24 @@ public class CustomizerDefinitionManager {
 		
 		if (definitions == null){
 			definitions = new ArrayList<CustomizerWidgetsDescriptor>();
+			StandardJSONWidgetsDescriptorResolver resolver = new StandardJSONWidgetsDescriptorResolver(CustomizerWidgetsDescriptor.class);
+			
+			//Create the hardcoded definitions
+			String folder = "/resources/customizers";
+			try{
+				File resourceFolder = new File(Activator.getDefault().getFileLocation(folder));
+				for(File definition : resourceFolder.listFiles()){
+					CustomizerWidgetsDescriptor loadedDecriptor = (CustomizerWidgetsDescriptor)WidgetsDefinitionManager.getWidgetsDefinition(jConfig, definition.getAbsolutePath(), resolver);
+					if (loadedDecriptor != null){
+						definitions.add(loadedDecriptor);
+					}
+				}
+			} catch (Exception ex){
+				Activator.getDefault().logError(ex);
+			}
+			
 			String cList = jConfig.getProperty(ChartCustomizerPreferencePage.CHARTCUSTOMIZER);
 			if (cList != null){
-				StandardJSONWidgetsDescriptorResolver resolver = new StandardJSONWidgetsDescriptorResolver(CustomizerWidgetsDescriptor.class);
 				for (String line : cList.split("\n")) {
 					if (line.isEmpty())
 						continue;

@@ -119,7 +119,7 @@ public class ChartCustomizerDefinition {
 	@Override
 	public String toString() {
 		if (isOnlyClass()){
-			return name + "[class only]";
+			return name + "[user defined]";
 		} else {
 			return name;
 		}

@@ -142,8 +142,7 @@ public class MarkersDescriptor extends ADescriptor {
 				new ComboItemPropertyDescription<String>(MapComponent.ITEM_PROPERTY_MARKER_target,
 						Messages.MarkersDescriptor_7, Messages.MarkersDescriptor_8, false,
 						new String[] { "_blank", "_parent", "_self", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-								"_top", "" }, //$NON-NLS-1$ //$NON-NLS-2$
-						false),
+								"_top", "" }),
 
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_MARKER_icon,
 						Messages.MarkersDescriptor_14, Messages.MarkersDescriptor_15, false),
