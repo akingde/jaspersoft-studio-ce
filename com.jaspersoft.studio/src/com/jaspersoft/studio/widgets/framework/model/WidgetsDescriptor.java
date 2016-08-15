@@ -83,5 +83,19 @@ public class WidgetsDescriptor {
 		}
 		return result;
 	}
+	
+	/**
+	 * Check if the descriptor has widgets to shown
+	 * 
+	 * @return true if it has at least on widget, false otherwise
+	 */
+	public boolean hasWidgets(){
+		for(SectionPropertyDescriptor section : getSections()){
+			if(!section.getProperties().isEmpty()){
+				return true;
+			}
+		}
+		return false;
+	}
 
 }
