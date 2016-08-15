@@ -58,7 +58,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 		if (cpd.getMax() != null){
 			max = new BigDecimal(cpd.getMax());
 		}
-		if (cpd.getDefaultValue() != null){
+		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
 			def = new BigDecimal(cpd.getDefaultValue());
 		}
 		DoublePropertyDescription doubleDesc = new DoublePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max);

@@ -37,12 +37,6 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 		keyValues = convert2KeyValue(values);
 	}
 
-	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, String[] values, boolean readOnly) {
-		super(name, label, description, mandatory);
-		keyValues = convert2KeyValue(values);
-		this.readOnly = readOnly;
-	}
-
 	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue,	String[][] keyValues) {
 		super(name, label, description, mandatory, defaultValue);
 		this.keyValues = keyValues;
@@ -133,16 +127,7 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 			if (v == null && defaultValue != null){
 				v = defaultValue.toString();
 			}
-			if (readOnly){
-				for (int i = 0; i < keyValues.length; i++) {
-					if (keyValues[i][0].equals(v)) {
-						combo.select(i);
-						break;
-					}
-				}
-			} else {
-				combo.setText(Misc.nvl(v));
-			}
+			combo.setText(Misc.nvl(v));
 			cmp.switchToSecondContainer();
 		}
 	}
@@ -156,7 +141,6 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 		result.label = label;
 		result.mandatory = mandatory;
 		result.name = name;
-		result.readOnly = readOnly;
 		result.keyValues = keyValues;
 		return result;
 	}

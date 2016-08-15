@@ -19,6 +19,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.widgets.framework.IWItemProperty;
+import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
@@ -57,11 +59,7 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 	public SelectableComboItemPropertyDescription(String name, String label, String description, boolean mandatory, String[] values) {
 		super(name, label, description, mandatory, values);
 	}
-
-	public SelectableComboItemPropertyDescription(String name, String label, String description, boolean mandatory, String[] values, boolean readOnly) {
-		super(name, label, description, mandatory, values);
-	}
-
+	
 	public SelectableComboItemPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue,	String[][] keyValues) {
 		super(name, label, description, mandatory, defaultValue, keyValues);
 	}
@@ -89,6 +87,27 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 		result.readOnly = readOnly;
 		result.keyValues = keyValues;
 		return result;
+	}
+	
+	@Override
+	public void update(Control c, IWItemProperty wip) {
+		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
+		if (wip.isExpressionMode()) {
+			super.update(c, wip);
+		} else {
+			Combo combo = (Combo) cmp.getSecondContainer().getData();
+			String v = wip.getStaticValue();
+			if (v == null && defaultValue != null){
+				v = defaultValue.toString();
+			}
+			for (int i = 0; i < keyValues.length; i++) {
+				if (keyValues[i][0].equals(v)) {
+					combo.select(i);
+					break;
+				}
+			}
+			cmp.switchToSecondContainer();
+		}
 	}
 	
 	@Override

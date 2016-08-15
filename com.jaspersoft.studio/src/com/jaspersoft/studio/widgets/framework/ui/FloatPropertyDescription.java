@@ -57,7 +57,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 		if (cpd.getMax() != null){
 			max = new Float(cpd.getMax());
 		}
-		if (cpd.getDefaultValue() != null){
+		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
 			def = new Float(cpd.getDefaultValue());
 		}
 		FloatPropertyDescription floatDesc = new FloatPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max);
