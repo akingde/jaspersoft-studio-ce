@@ -44,11 +44,26 @@ public class ParameterEditor extends Wizard implements IExpressionContextSetter{
 	 */
 	private ExpressionContext exprContext;
 
+	/* A possible custom title used in the inner wizard page */ 
+	private String customTitle;
+	
+	/* A possible custom message used in the inner wizard page */
+	private String customMessage;
+
+	/* A possible custom window title used in wizard */
+	private String customWindowTitle;
 
 	public ParameterEditor() {
 		super();
-		setWindowTitle(getWindowTitle());
 		setNeedsProgressMonitor(false);
+	}
+	
+	public ParameterEditor(String windowTitle, String title, String message) {
+		super();
+		setNeedsProgressMonitor(false);
+		this.customWindowTitle = windowTitle;
+		this.customTitle = title;
+		this.customMessage = message;
 	}
 	
 	/**
@@ -104,7 +119,12 @@ public class ParameterEditor extends Wizard implements IExpressionContextSetter{
 	 * @return a not null window title
 	 */
 	public String getWindowTitle(){
-		return Messages.common_properties;
+		if(customWindowTitle!=null) {
+			return customTitle;
+		}
+		else {
+			return Messages.common_properties;
+		}
 	}
 	
 	@Override
@@ -119,7 +139,14 @@ public class ParameterEditor extends Wizard implements IExpressionContextSetter{
 	 * @return a not null ParameterPage
 	 */
 	protected ParameterPage getEditingPage(){
-		return new ParameterPage(); 
+		ParameterPage parameterPage = new ParameterPage();
+		if(customTitle!=null){
+			parameterPage.setTitle(customTitle);
+		}
+		if(customMessage!=null){
+			parameterPage.setDescription(customMessage);
+		}
+		return parameterPage; 
 	}
 	
 }
