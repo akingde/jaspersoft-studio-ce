@@ -35,8 +35,10 @@ public class NumberValidator implements VerifyListener {
 
 	@Override
 	public void verifyText(VerifyEvent e) {
-		if (Misc.isNullOrEmpty(e.text))
+		if (Misc.isNullOrEmpty(e.text)) {
+			e.doit = false;
 			return;
+		}
 		String number = e.text;
 		String oldText = ((Text) e.widget).getText();
 		if (e.start != e.end)
