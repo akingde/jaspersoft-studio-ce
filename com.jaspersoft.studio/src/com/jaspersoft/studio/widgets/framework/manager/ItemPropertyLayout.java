@@ -39,9 +39,20 @@ public class ItemPropertyLayout extends Layout {
 	
 	private IWItemProperty wItemProperty;
 	
+	/**
+	 * Margin under the layout
+	 */
 	public int bottomMargin = 3;
 	
+	/**
+	 * Margin between a control and the following one
+	 */
 	public int horizontalSpacing = 5;
+	
+	/**
+	 * Margin before the start of the first control
+	 */
+	public int leftMargin = 5;
 	
 	protected Point buttonSize = new Point(24, 24);
 	
@@ -56,7 +67,7 @@ public class ItemPropertyLayout extends Layout {
 
 	@Override
 	protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
-		int width = 0;
+		int width = leftMargin;
 		
 		//Start as height from the higher between button and label
 		int height = Math.max(labelSize.y, buttonSize.y);
@@ -100,16 +111,16 @@ public class ItemPropertyLayout extends Layout {
 			isControlFillingVertical = true;
 		}
 		
-		int availableWidth  = compositeSize.width;
-		int startEditorX = 0;
+		int availableWidth = compositeSize.width - leftMargin;
+		int startEditorX = leftMargin;
 		if (wItemProperty.isExpressionMode()){
 			expressionLabel.setVisible(true);
 			int labelStartY =  0;
-			expressionLabel.setBounds(new Rectangle(0, labelStartY, labelSize.x, labelSize.y));
+			expressionLabel.setBounds(new Rectangle(leftMargin, labelStartY, labelSize.x, labelSize.y));
 			
 			//Created the label, update the available space and start of the editor
 			availableWidth -= labelSize.x + horizontalSpacing;
-			startEditorX = labelSize.x + horizontalSpacing;
+			startEditorX = leftMargin + labelSize.x + horizontalSpacing;
 		} else {
 			expressionLabel.setVisible(false);
 			expressionLabel.setBounds(new Rectangle(0, 0, 0, 0));			
