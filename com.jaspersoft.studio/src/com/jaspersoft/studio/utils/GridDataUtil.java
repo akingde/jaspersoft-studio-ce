@@ -162,5 +162,27 @@ public class GridDataUtil
 			((Control)actionItem.getWidget()).setLayoutData(gd);
 		}
 	}
+	
+	/**
+	 * Sets the GridData exclude flag for the specified control.
+	 * When specifying to exclude/include a control also the enablement and visibility
+	 * are updated accordingly.
+	 * <p>
+	 * 
+	 * NOTE: no operation is performed on controls which does not have a layout data of
+	 * type GridData associated.
+	 * 
+	 * @param control the control
+	 * @param exclude the exclude flag to set
+	 */
+	public static void setGridDataExcludeAndVisibility(Control control, boolean exclude){
+		Assert.isNotNull(control);
+		Object layoutData = control.getLayoutData();
+		if(layoutData instanceof GridData) {
+			control.setEnabled(!exclude);
+			control.setVisible(!exclude);
+			((GridData)control.getLayoutData()).exclude = exclude;
+		}
+	}
 }
 
