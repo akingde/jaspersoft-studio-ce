@@ -15,20 +15,17 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -56,28 +53,26 @@ import net.sf.jasperreports.engine.JRChartPlot;
 public class SelectCustomizerPage extends JSSHelpWizardPage {
 	
 	/**
-	 * Provider to show in gray the customizer not compatible with the current chart plot,
-	 * but only if the combo to show this is enabled
+	 * Provider to show show only the compatible charts customizer if the first option of the combo
 	 */
-	private class CustomizerLabelProvier extends ColumnLabelProvider implements ITableColorProvider {
-
+	private class CompatibleContentProvider extends ListContentProvider {
 		@Override
-		public Color getForeground(Object element, int columnIndex) {
-			boolean showAll = false;
-			if (showAllElements != null && !showAllElements.isDisposed()){
-				showAll = showAllElements.getSelectionIndex() == 1;
+		public Object[] getElements(Object inputElement) {
+			if (inputElement != null && inputElement instanceof List){
+				if (showAllElements != null && !showAllElements.isDisposed() && showAllElements.getSelectionIndex() == 1){
+					return ((List<?>)inputElement).toArray();
+				}
+				List<Object> result = new ArrayList<Object>();
+				for(Object element : (List<?>)inputElement){
+					CustomizerWidgetsDescriptor desc = (CustomizerWidgetsDescriptor)element;
+					if (desc.isPlotSupported(selectedChartPlot)){
+						result.add(element);
+					}
+				}
+				return result.toArray();
 			}
-			CustomizerWidgetsDescriptor desc = (CustomizerWidgetsDescriptor)element;
-			if (showAll || desc.isPlotSupported(selectedChartPlot)){
-				return ColorConstants.black;
-			}
-			return ColorConstants.gray;
+			return new Object[0];
 		}
-
-		@Override
-		public Color getBackground(Object element, int columnIndex) {
-			return null;
-		}	
 	}
 	
 	/**
@@ -146,8 +141,7 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 	protected void createTableArea(Composite parent){
 		table = new TableViewer(parent, SWT.FULL_SELECTION | SWT.SINGLE | SWT.BORDER);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		table.setContentProvider(new ListContentProvider());
-		table.setLabelProvider(new CustomizerLabelProvier());
+		table.setContentProvider(new CompatibleContentProvider());
 		table.setInput(tableInput);
 		table.addSelectionChangedListener(new ISelectionChangedListener() {
 			
@@ -189,13 +183,12 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 		
 		//Create the combo 
 		Composite comboContainer = new Composite(container, SWT.NONE);
-		comboContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comboContainer.setLayout(new GridLayout(2, true));
+		GridData comboContainerData = new GridData();
+		comboContainerData.horizontalAlignment = SWT.CENTER;
+		comboContainer.setLayoutData(comboContainerData);
+		comboContainer.setLayout(new RowLayout());
 		Label comboText = new Label(comboContainer, SWT.NONE);
 		comboText.setText(Messages.SelectCustomizerPage_comboLabel);
-		GridData data = new GridData();
-		data.horizontalAlignment = SWT.END;
-		comboText.setLayoutData(data);
 		showAllElements = new Combo(comboContainer, SWT.READ_ONLY);
 		showAllElements.setItems(new String[]{Messages.SelectCustomizerPage_comboEntryCompatible,Messages.SelectCustomizerPage_comboEntryAll});
 		showAllElements.select(0);
