@@ -55,6 +55,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRChartPlot;
 
 /**
  * Widget used to show the table and the dynamic controls to add/remove and 
@@ -117,7 +118,7 @@ public abstract class ChartCustomizerWidget {
 	/**
 	 * The selected element
 	 */
-	private APropertyNode selectedElement;
+	private MChart selectedElement;
 	
 	/**
 	 * The {@link JasperReportsConfiguration} of the current report
@@ -184,9 +185,10 @@ public abstract class ChartCustomizerWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String uniqueKey = getPropertyDTO().getUniqueKey();
-				
+				JRChartPlot selectedPlot = selectedElement.getValue().getPlot();
+
 				CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone());
-				CustomizerNewWizard wizard = new CustomizerNewWizard(uniqueKey, getExpressionContext(), dto, jConfig);		
+				CustomizerNewWizard wizard = new CustomizerNewWizard(uniqueKey, getExpressionContext(), dto, jConfig, selectedPlot);		
 				WizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);		
 				if (dialog.open() == Dialog.OK){
 					ChartCustomizerDefinition definition = wizard.getDefinition();

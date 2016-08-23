@@ -20,6 +20,8 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.engine.JRChartPlot;
+
 /**
  * Wizard to crate a new chart customizer definition
  * 
@@ -58,6 +60,8 @@ public class CustomizerNewWizard extends Wizard {
 	 */
 	private String definitionKey;
 	
+	private JRChartPlot selectedChartPlot;
+	
 	/**
 	 * Create the new customizer wizard
 	 *  
@@ -65,9 +69,11 @@ public class CustomizerNewWizard extends Wizard {
 	 * @param ec the expression context
 	 * @param dto the dto changed by the new operation, should be a copy in case the user press cancel
 	 * @param jConfig the {@link JasperReportsConfiguration} of the current report
+	 * @param selectedChartPlot the plot of the modfied chart
 	 */
-	public CustomizerNewWizard(String newDefinitionKey, ExpressionContext ec, CustomizerPropertyExpressionsDTO dto, JasperReportsConfiguration jConfig){
+	public CustomizerNewWizard(String newDefinitionKey, ExpressionContext ec, CustomizerPropertyExpressionsDTO dto, JasperReportsConfiguration jConfig, JRChartPlot selectedChartPlot){
 		definitionKey = newDefinitionKey;
+		this.selectedChartPlot = selectedChartPlot;
 		this.ec = ec;
 		this.dto = dto;
 		this.jConfig = jConfig;
@@ -75,7 +81,7 @@ public class CustomizerNewWizard extends Wizard {
 	
 	@Override
 	public void addPages() {
-		selectionPage = new SelectCustomizerPage(jConfig, definitionKey, dto);
+		selectionPage = new SelectCustomizerPage(jConfig, definitionKey, dto, selectedChartPlot);
 		editPage = new EditCustomizerPage(jConfig, ec, dto){
 			
 			protected boolean isUsingCustomDefinition() {

@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -82,7 +83,7 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	 * Store the class name typed in the textArea, is used when the edited customizer
 	 * is a raw class
 	 */
-	private String advancedClass = "";
+	private String advancedClass = ""; //$NON-NLS-1$
 	
 	/**
 	 * The text are where the class name can be typed 
@@ -110,11 +111,11 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	 * @param dto {@link CustomizerPropertyExpressionsDTO} from where the value are read and stored
 	 */
 	public EditCustomizerPage(JasperReportsConfiguration jConfig, ExpressionContext ec, CustomizerPropertyExpressionsDTO dto) {
-		super("customizerEditPage");
+		super("customizerEditPage"); //$NON-NLS-1$
 		this.dto = dto;
 		this.jConfig = jConfig;
 		this.ec = ec;
-		setMessage("Provide the configuration information of the customizer");
+		setMessage(Messages.EditCustomizerPage_pageMessage);
 	}
 	
 	@Override
@@ -135,15 +136,15 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 			}
 			if (isUsingCustomDefinition()){
 				mainParent.setLayout(new GridLayout(3, false));
-				setTitle("User Defined Customizer");
-				new Label(mainParent, SWT.NONE).setText("Customizer Class");
+				setTitle(Messages.EditCustomizerPage_pageTitle);
+				new Label(mainParent, SWT.NONE).setText(Messages.EditCustomizerPage_customizerClassLabel);
 				textArea = new Text(mainParent, SWT.BORDER);
 				textArea.addModifyListener(textModifyListener);
 				textArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 				textArea.setText(advancedClass);
 				
 				Button browseButton = new Button(mainParent, SWT.PUSH);
-				browseButton.setText("...");
+				browseButton.setText("..."); //$NON-NLS-1$
 				browseButton.addSelectionListener(new SelectionAdapter() {
 					
 					@Override
@@ -206,7 +207,7 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 		if (isUsingCustomDefinition()){
 			String text = textArea.getText();
 			if (text.trim().isEmpty()){
-				setErrorMessage("The classname can not be empty");
+				setErrorMessage(Messages.EditCustomizerPage_errorClassEmpty);
 				getContainer().updateButtons();
 				return;
 			} else {
@@ -214,13 +215,13 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 					JRClassLoader.loadClassForName(text);
 				}catch (Exception ex){
 					setErrorMessage(null);
-					setMessage("The selected class cannot be found", IMessageProvider.WARNING);
+					setMessage(Messages.EditCustomizerPage_warningClassNotFound, IMessageProvider.WARNING);
 					getContainer().updateButtons();
 					return;
 				}
 			}
 		}
-		setMessage("Provide the configuration information of the customizer");
+		setMessage(Messages.EditCustomizerPage_pageMessage);
 		setErrorMessage(null);
 		getContainer().updateButtons();
 	}

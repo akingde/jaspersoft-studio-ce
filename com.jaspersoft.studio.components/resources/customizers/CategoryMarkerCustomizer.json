@@ -2,7 +2,7 @@
     "label": "Category Marker",
     "description": "A chart customizer for Category Charts",
     "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.CategoryMarkerCustomizer",
-    "supportedPlot": ["CategoryPlot"],
+    "supportedPlot": ["1","2","3","7","8","11","12","20","21"],
     "sections": [
         {
             "name": "Customizer configuration",

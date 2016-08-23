@@ -165,6 +165,11 @@ public class Messages extends NLS {
 	public static String DSXyz_xTooltip;
 	public static String DSXyz_yTooltip;
 	public static String DSXyz_zTooltip;
+	public static String EditCustomizerPage_customizerClassLabel;
+	public static String EditCustomizerPage_errorClassEmpty;
+	public static String EditCustomizerPage_pageMessage;
+	public static String EditCustomizerPage_pageTitle;
+	public static String EditCustomizerPage_warningClassNotFound;
 	public static String ElementDatasetWidget_buttonTooltip;
 	public static String ElementDatasetWidget_datasetLabel;
 	public static String ElementDatasetWidget_incrementOnLabel;
@@ -727,6 +732,13 @@ public class Messages extends NLS {
 	public static String OtherSectionPage_groupValue;
 	public static String OtherSectionPage_keyExpression;
 	public static String OtherSectionPage_labelExpression;
+	public static String SelectCustomizerPage_comboEntryAll;
+	public static String SelectCustomizerPage_comboEntryCompatible;
+	public static String SelectCustomizerPage_comboLabel;
+	public static String SelectCustomizerPage_customzierClassEntry;
+	public static String SelectCustomizerPage_errorNoSelection;
+	public static String SelectCustomizerPage_pageMessage;
+	public static String SelectCustomizerPage_pageTitle;
 	public static String SeriesColorPage_description;
 	public static String SeriesDialog_0;
 	public static String SeriesDialog_1;

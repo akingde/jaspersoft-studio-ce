@@ -2,7 +2,7 @@
     "label": "Range Value Marker",
     "description": "A chart customizer for XY Charts",
     "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.RangeValueMarkerCustomizer",
-    "supportedPlot": ["XYPlot"],
+    "supportedPlot": ["13","14","15"],
     "sections": [
         {
             "name": "Customizer configuration",

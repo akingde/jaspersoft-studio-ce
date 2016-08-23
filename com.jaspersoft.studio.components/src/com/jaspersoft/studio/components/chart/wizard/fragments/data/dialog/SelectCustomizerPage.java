@@ -15,16 +15,25 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.components.chart.property.widget.CustomizerDefinitionManager;
@@ -35,6 +44,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 import net.sf.jasperreports.engine.JRChartCustomizer;
+import net.sf.jasperreports.engine.JRChartPlot;
 
 /**
  * Dialog to select a chart customizer definition from the preferences or providing 
@@ -44,6 +54,31 @@ import net.sf.jasperreports.engine.JRChartCustomizer;
  *
  */
 public class SelectCustomizerPage extends JSSHelpWizardPage {
+	
+	/**
+	 * Provider to show in gray the customizer not compatible with the current chart plot,
+	 * but only if the combo to show this is enabled
+	 */
+	private class CustomizerLabelProvier extends ColumnLabelProvider implements ITableColorProvider {
+
+		@Override
+		public Color getForeground(Object element, int columnIndex) {
+			boolean showAll = false;
+			if (showAllElements != null && !showAllElements.isDisposed()){
+				showAll = showAllElements.getSelectionIndex() == 1;
+			}
+			CustomizerWidgetsDescriptor desc = (CustomizerWidgetsDescriptor)element;
+			if (showAll || desc.isPlotSupported(selectedChartPlot)){
+				return ColorConstants.black;
+			}
+			return ColorConstants.gray;
+		}
+
+		@Override
+		public Color getBackground(Object element, int columnIndex) {
+			return null;
+		}	
+	}
 	
 	/**
 	 * The {@link ChartCustomizerDefinition} created from the controls of the preferences customizer (first tab)
@@ -72,19 +107,35 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 	private TableViewer table;
 	
 	/**
+	 * The plot of the selected chart
+	 */
+	private JRChartPlot selectedChartPlot;
+	
+	/**
+	 * Combo to show all the customizers, even those not compatible with the current plot
+	 */
+	private Combo showAllElements;
+	
+	/**
 	 * Create a dialog to define a new customizer
 	 * 
 	 * @param jConfig the {@link JasperReportsConfiguration} of the current report
 	 * @param definitionKey an unique new key for the new {@link ChartCustomizerDefinition}
 	 * @param dto the dto changed during this wizard page, it should be a copy in case the wizard is cancelled
+	 * @param selectedChartPlot the plot of the chart where the customizer is added
 	 */
-	public SelectCustomizerPage(JasperReportsConfiguration jConfig, String definitionKey, CustomizerPropertyExpressionsDTO dto) {
-		super("customizerTypeSelection");
+	public SelectCustomizerPage(JasperReportsConfiguration jConfig, String definitionKey, CustomizerPropertyExpressionsDTO dto, JRChartPlot selectedChartPlot) {
+		super("customizerTypeSelection"); //$NON-NLS-1$
 		tableInput = new ArrayList<CustomizerWidgetsDescriptor>(CustomizerDefinitionManager.getCustomizerDefinitions(jConfig));
-		userDefinedEntry = new CustomizerWidgetsDescriptor();
-		userDefinedEntry.setLabel("User defined customizer...");
+		userDefinedEntry = new CustomizerWidgetsDescriptor(){
+			public boolean isPlotSupported(JRChartPlot plot) {
+				return true;
+			};
+		};
+		userDefinedEntry.setLabel(Messages.SelectCustomizerPage_customzierClassEntry);
 		tableInput.add(userDefinedEntry);
 		this.definitionKey = definitionKey;
+		this.selectedChartPlot = selectedChartPlot;
 	}
 	
 	/**
@@ -96,6 +147,7 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 		table = new TableViewer(parent, SWT.FULL_SELECTION | SWT.SINGLE | SWT.BORDER);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.setContentProvider(new ListContentProvider());
+		table.setLabelProvider(new CustomizerLabelProvier());
 		table.setInput(tableInput);
 		table.addSelectionChangedListener(new ISelectionChangedListener() {
 			
@@ -118,7 +170,7 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 	protected void validate(){
 		ISelection seletion = table.getSelection();
 		if (seletion == null || seletion.isEmpty()){
-			setErrorMessage("You need to select a Chart Customizer from the table");
+			setErrorMessage(Messages.SelectCustomizerPage_errorNoSelection);
 		}  else {
 			setErrorMessage(null);
 		}
@@ -127,13 +179,33 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		setTitle("Select the new Chart Customizer");
-		setMessage("Select the type of you chart customizer");
+		setTitle(Messages.SelectCustomizerPage_pageTitle);
+		setMessage(Messages.SelectCustomizerPage_pageMessage);
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		createTableArea(container);	
+		
+		//Create the combo 
+		Composite comboContainer = new Composite(container, SWT.NONE);
+		comboContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboContainer.setLayout(new GridLayout(2, true));
+		Label comboText = new Label(comboContainer, SWT.NONE);
+		comboText.setText(Messages.SelectCustomizerPage_comboLabel);
+		GridData data = new GridData();
+		data.horizontalAlignment = SWT.END;
+		comboText.setLayoutData(data);
+		showAllElements = new Combo(comboContainer, SWT.READ_ONLY);
+		showAllElements.setItems(new String[]{Messages.SelectCustomizerPage_comboEntryCompatible,Messages.SelectCustomizerPage_comboEntryAll});
+		showAllElements.select(0);
+		showAllElements.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//refresh when the combo change value
+				table.refresh();
+			}
+		});
 		setControl(container);
 	}
 	
