@@ -50,6 +50,12 @@ public class FileSelector implements IFileSelection {
 	private FileSelectionDialog dialog;
 	private Text txtURL;
 	private JasperDesign jd;
+	private ModifyListener listener = new ModifyListener() {
+		@Override
+		public void modifyText(ModifyEvent e) {
+			dialog.setFileExpressionText(txtURL.getText());
+		}
+	};
 
 	@Override
 	public void createRadioButton(Composite parent, FileSelectionDialog d, JasperDesign jd) {
@@ -83,13 +89,7 @@ public class FileSelector implements IFileSelection {
 
 		txtURL = new Text(cmpExpr, SWT.BORDER);
 		txtURL.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtURL.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				dialog.handleTxtUrlChange();
-				;
-			}
-		});
+		txtURL.addModifyListener(listener);
 
 		Button btn = new Button(cmpExpr, SWT.PUSH);
 		btn.setText("..."); //$NON-NLS-1$
@@ -135,7 +135,9 @@ public class FileSelector implements IFileSelection {
 					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, incl, null, true);
 					if (rd != null) {
 						dialog.setFileExpressionText("repo:" + rd.getUriString()); //$NON-NLS-1$
+						txtURL.removeModifyListener(listener);
 						txtURL.setText(rd.getUriString());
+						txtURL.addModifyListener(listener);
 					}
 				} else {
 					RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
@@ -155,7 +157,9 @@ public class FileSelector implements IFileSelection {
 						AMResource rs = rd.getResource();
 						if (rs != null) {
 							dialog.setFileExpressionText("repo:" + rs.getValue().getUriString()); //$NON-NLS-1$
+							txtURL.removeModifyListener(listener);
 							txtURL.setText(rs.getValue().getUriString());
+							txtURL.addModifyListener(listener);
 						}
 					}
 				}
