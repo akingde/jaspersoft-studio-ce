@@ -19,9 +19,11 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,12 +41,27 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
 
 /**
- * Extension of an swt widget to handle only numeric values
+ * Extension of an swt widget to handle only numeric values. It will forbid invalid characters.
+ * It will handle also min and max values. It is not possible to forbid the input of numbers
+ * outside the max min bounds in some cases. For example if the minimum is 1.5 and the user want
+ * to type a number it will start with 1, but at this point the platform would not allow him 
+ * to input because it is lower of the minimum, but maybe the user want to add other digits that
+ * in the end will keep the value inside the bounds. For this reason when the value is out of bounds
+ * the control is colored in red and the user is allow to type any number. Until the value is not valid
+ * it is not stored at model level, and it is reverted to a valid value when the focus is lost
+ * 
  * 
  * @author Orlandin Marco
  *
  */
 public class NumericText extends Text {
+	
+	/**
+	 * Enumeration used as a result of the validation, valid it means the inserted text is 
+	 * a valid number, not valid means it can not be formatted as a number, out of bounds means
+	 * it is a valid number but exceeds the min or max accepted values
+	 */
+	private enum VALIDATION_RESULT {VALID, NOT_VALID, OUT_OF_BOUNDS};
 	
 	/**
 	 * The listeners on this widget
@@ -92,12 +109,6 @@ public class NumericText extends Text {
 	private int increamentStep = 1;
 	
 	/**
-	 * Flag used to avoid to fire the listener when the focus is lost but the value
-	 * was not modified
-	 */
-	private boolean changedAfterFocus = false;
-	
-	/**
 	 * The default value shown in the text area when the value is null
 	 */
 	private Number defaultValue = null;
@@ -108,12 +119,30 @@ public class NumericText extends Text {
 	private boolean removeTrailZeroes = false;
 	
 	/**
+	 * Flag used to avoid to fire the listener when the focus is lost but the value
+	 * was not modified
+	 */
+	private boolean changedAfterFocus = false;
+	
+	/**
+	 * The background color to use when there aren't validation errors
+	 */
+	private Color defaultBackgroundColor;
+	
+	/**
+	 * The status of the value displayed
+	 */
+	private VALIDATION_RESULT currentState = VALIDATION_RESULT.VALID;
+	
+	/**
 	 * Verify listener used to check if the typed value is valid or not
 	 */
 	private VerifyListener inputVerifier = new VerifyListener() {
 		@Override
 		public void verifyText(final VerifyEvent e) {
-			e.doit = verifyEntryAndStoreValue(e.text, e.keyCode);
+			//Update the validation status
+			currentState = verifyEntryAndStoreValue(e.text, e.keyCode);
+			e.doit = currentState != VALIDATION_RESULT.NOT_VALID;
 		}
 	};
 	
@@ -125,11 +154,41 @@ public class NumericText extends Text {
 		
 		@Override
 		public void modifyText(ModifyEvent e) {
-			fireListeners();
+			if (currentState == VALIDATION_RESULT.VALID){
+				//Fire the listeners only if the value is valid
+				fireListeners();
+			}
 			//open the flag to fire the listeners
 			changedAfterFocus = true;
 		}
 	};
+	
+	private FocusListener focusNotifier = new FocusAdapter() {
+		@Override
+		public void focusLost(final FocusEvent e) {
+			if (changedAfterFocus){
+				//The listener are fired instead only if the value changed
+				//after the focus gain
+				if (currentState == VALIDATION_RESULT.VALID) {
+					//Fire the listeners only if the value is valid
+					fireListeners();
+				}
+				//Refresh the value
+				setValue(storedValue, true);
+			}
+		}
+		
+		@Override
+		public void focusGained(FocusEvent e) {
+			changedAfterFocus = false;
+			//The set value on focus lost is done always to avoid
+			//the mac text reset bug
+			if (Util.isMac()){
+				setValue(storedValue, true);
+			}
+		}
+	};
+
 	
 	/**
 	 * Create the textual control
@@ -145,6 +204,7 @@ public class NumericText extends Text {
 		currentColor = getForeground();
 		this.formatter = new ValidatedDecimalFormat(decimalDigitsShown, decimalDigitsAccepted);
 		addListeners();
+		defaultBackgroundColor = getBackground();
 	}
 	
 	/**
@@ -160,6 +220,7 @@ public class NumericText extends Text {
 		addListeners();
 		this.formatter = formatter;
 		Assert.isTrue(formatter != null, "The formatter can't be null");
+		defaultBackgroundColor = getBackground();
 	}
 	
 	/**
@@ -168,25 +229,7 @@ public class NumericText extends Text {
 	protected void addListeners(){
 		addVerifyListener(inputVerifier);
 		addModifyListener(inputNotifier);
-		addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(final FocusEvent e) {
-				//The set value on focus lost is done always to avoid
-				//the mac text reset bug
-				setValue(storedValue, true);
-				if (changedAfterFocus){
-					//The listener are fired instead only if the value changed
-					//after the focus gain
-					fireListeners();
-				}
-				changedAfterFocus = false;
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				changedAfterFocus = false;
-			}
-		});
+		addFocusListener(focusNotifier);
 		
 	}
 	
@@ -292,6 +335,22 @@ public class NumericText extends Text {
 	}
 	
 	/**
+	 * Method that convert the number value to a string. The perfect place to do this
+	 * could be the formatter, but since the format method is final we do this workaround
+	 * to allow custom implementation
+	 * 
+	 * @param value the number to romat, must be not null
+	 * @return the number as a string
+	 */
+	protected String formatNumber(Number value){
+		String result = formatter.format(value);
+		if (removeTrailZeroes && result.indexOf(ValidatedDecimalFormat.DECIMAL_SEPARATOR) != -1){
+			result = result.replaceAll("0*$", "").replaceAll(ValidatedDecimalFormat.PATTERN_DECIMAL_SEPARATOR + "$", "");
+		}
+		return result;
+	}
+	
+	/**
 	 * Sets the <em>selection</em>, which is the receiver's position, to the
 	 * argument. If the argument is not within the range specified by minimum
 	 * and maximum, it will be adjusted to fall within this range. The value is
@@ -320,22 +379,6 @@ public class NumericText extends Text {
 	}
 	
 	/**
-	 * Method that convert the number value to a string. The perfect place to do this
-	 * could be the formatter, but since the format method is final we do this workaround
-	 * to allow custom implementation
-	 * 
-	 * @param value the number to romat, must be not null
-	 * @return the number as a string
-	 */
-	protected String formatNumber(Number value){
-		String result = formatter.format(value);
-		if (removeTrailZeroes && result.indexOf(ValidatedDecimalFormat.DECIMAL_SEPARATOR) != -1){
-			result = result.replaceAll("0*$", "").replaceAll(ValidatedDecimalFormat.PATTERN_DECIMAL_SEPARATOR + "$", "");
-		}
-		return result;
-	}
-	
-	/**
 	 * Sets the <em>selection</em>, which is the receiver's position, to the
 	 * argument. If the argument is not within the range specified by minimum
 	 * and maximum, it will be adjusted to fall within this range.
@@ -349,12 +392,16 @@ public class NumericText extends Text {
 	protected void setValue(Number selection, boolean formatText) {
 		this.checkWidget();
 		if (selection != null){	
-			if (selection.doubleValue() < minimum) {
-				selection = this.minimum;
-			} else if (selection.doubleValue() > maximum) {
-				selection = this.maximum;
+			if (selection.doubleValue() < minimum || selection.doubleValue() > maximum) {
+				//out of bounds, update the validation status
+				updateBackground(ColorConstants.red);
+				currentState = VALIDATION_RESULT.OUT_OF_BOUNDS;
+			} else {
+				//valid value, update the validation status
+				updateBackground(defaultBackgroundColor);
+				currentState = VALIDATION_RESULT.VALID;
+				storedValue = selection;
 			}
-			storedValue = selection;
 			if (formatText) {
 				setText(formatNumber(selection));
 			} else {
@@ -362,6 +409,9 @@ public class NumericText extends Text {
 			}
 		} else {
 			if (isNullable){
+				//valid value, update the validation status
+				updateBackground(defaultBackgroundColor);
+				currentState = VALIDATION_RESULT.VALID;
 				storedValue = null;
 				if (defaultValue != null){
 					if (formatText) {
@@ -386,7 +436,7 @@ public class NumericText extends Text {
 	 * @return <code>true</code> if the entry if correct, <code>false</code>
 	 *         otherwise
 	 */
-	private boolean verifyEntryAndStoreValue(final String entry, final int keyCode) {
+	private VALIDATION_RESULT verifyEntryAndStoreValue(final String entry, final int keyCode) {
 		String work = "";
 		if (keyCode == SWT.DEL) {
 			Point cursorSelection = getSelection();
@@ -421,18 +471,47 @@ public class NumericText extends Text {
 			if (isNullable){
 				storedValue = null;
 			} else {
-				return false;
+				return VALIDATION_RESULT.NOT_VALID;
 			}
 		} else {
 			try {			
 				Number newValue = formatter.parse(work);
-				if (newValue.doubleValue() < minimum || newValue.doubleValue() > maximum) return false;
-				storedValue = newValue;
+				if (newValue.doubleValue() < minimum || newValue.doubleValue() > maximum) {
+					updateBackground(ColorConstants.red);
+					return VALIDATION_RESULT.OUT_OF_BOUNDS;
+				} else {
+					storedValue = newValue;
+				}
 			} catch (ParseException nfe) {
-				return false;
+				return VALIDATION_RESULT.NOT_VALID;
 			}
 		}
-		return true;
+		updateBackground(defaultBackgroundColor);
+		return VALIDATION_RESULT.VALID;
+	}
+	
+	/**
+	 * On macos the update of the color need some additional operation because of an SWT bug
+	 * (https://bugs.eclipse.org/bugs/show_bug.cgi?id=346361). If the widget is focused it need
+	 * to lose the focus to be updated correctly. For this reason the widget is forced to loose
+	 * the focus and the it will regain it
+	 * 
+	 * @param color the color to set
+	 */
+	protected void updateBackground(Color color){
+		if (Util.isMac() && isFocusControl() && !ModelUtils.safeEquals(color, super.getBackground())){
+			removeFocusListener(focusNotifier);
+			Point caretPosition = getSelection();
+			boolean oldEnabled = getEnabled();
+			setEnabled(false);//Force the focus lost
+			super.setBackground(color);
+			setEnabled(oldEnabled);
+			setFocus();
+			setSelection(caretPosition.x);
+			addFocusListener(focusNotifier);
+		} else {
+			super.setBackground(color);
+		}
 	}
 
 	/**
@@ -619,7 +698,9 @@ public class NumericText extends Text {
 	public void setText(String string) {
 		removeVerifyListener(inputVerifier);
 		removeModifyListener(inputNotifier);
+		Point location = getSelection();
 		super.setText(string);
+		setSelection(location.x);
 		addVerifyListener(inputVerifier);
 		addModifyListener(inputNotifier);
 	}
@@ -656,5 +737,17 @@ public class NumericText extends Text {
 	 */
 	public void setRemoveTrailZeroes(boolean value){
 		this.removeTrailZeroes = value;
+	}
+	
+	/**
+	 * When the background is set the original color is stored to be restored when 
+	 * switching between a valid and invalid state
+	 */
+	@Override
+	public void setBackground(Color color) {
+		if (currentState != VALIDATION_RESULT.OUT_OF_BOUNDS) {
+			super.setBackground(color);
+		}
+		defaultBackgroundColor = color;
 	}
 }
