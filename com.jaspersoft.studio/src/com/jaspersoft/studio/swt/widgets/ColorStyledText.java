@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
@@ -405,6 +406,14 @@ public class ColorStyledText {
 	public void setEnabled(boolean enabled){
 		this.enabled = enabled;
 		textArea.setEnabled(enabled);
+	}
+	
+	public void setInhterited(boolean isInherithed){
+		if (isInherithed && !textArea.isDisposed()){
+			textArea.setForeground(ColorConstants.gray);
+		} else {
+			textArea.setForeground(ColorConstants.black);
+		}
 	}
 
 }

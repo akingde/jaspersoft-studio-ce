@@ -913,11 +913,11 @@ public class BordersSection extends AbstractSection {
 	public void refreshLinePen(MLineBox lb, String property) {
 		if (lb != null) {
 			MLinePen lp = (MLinePen) lb.getPropertyActualValue(property);
+			JRBoxPen pen = (JRBoxPen) lp.getValue();
 			Float propertyValue = (Float) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_WIDTH);
 			// Set the border data only if it is visible
 			if (lineWidth != null && !lineWidth.isDisposed()) {
 				lineWidth.setValue(propertyValue);
-				JRBoxPen pen = (JRBoxPen) lp.getValue();
 				lineWidth.setInherited(pen.getOwnLineWidth() == null);
 			}
 
@@ -930,6 +930,7 @@ public class BordersSection extends AbstractSection {
 			if (lineColor != null) {
 				if (backcolor != null) lineColor.setColor(backcolor);
 				else lineColor.setColor(AlfaRGB.getFullyOpaque(ColorConstants.black.getRGB()));
+				lineColor.setInhterited(pen.getOwnLineColor() == null);
 			}
 		}
 	}
@@ -987,6 +988,7 @@ public class BordersSection extends AbstractSection {
 					AlfaRGB backcolor = Colors.getSWTRGB4AWTGBColor(pen.getLineColor());
 					lineColor.setColor(backcolor);
 				}
+				lineColor.setInhterited(pen.getOwnLineColor() == null);
 			}
 		}
 	}
