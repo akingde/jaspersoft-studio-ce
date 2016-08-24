@@ -22,6 +22,7 @@ import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 
+import net.sf.jasperreports.components.barcode4j.Barcode4jComponent;
 import net.sf.jasperreports.components.barcode4j.CodabarComponent;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
@@ -85,6 +86,12 @@ public class MCodabar extends MBarcode4j {
 		wideFactorD.setDescription(Messages.MCodabar_wide_factor_description);
 		desc.add(wideFactorD);
 		wideFactorD.setBounds(1.000001, Double.MAX_VALUE);
+
+		DoublePropertyDescriptor vertQuietZoneD = new DoublePropertyDescriptor(
+				Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
+		vertQuietZoneD.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
+		desc.add(vertQuietZoneD);
+		vertQuietZoneD.setCategory(Messages.common_properties_category);
 
 		wideFactorD.setCategory(Messages.MCodabar_properties_category);
 	}
