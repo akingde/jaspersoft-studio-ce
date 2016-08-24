@@ -173,19 +173,30 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 
 	@Override
 	public IWizardPage getNextPage() {
-		if (finishPage())
+		if (finishPage()) {
+			lastPageShown = true;
 			return super.getNextPage();
+		}
 		return this;
+	}
+
+	private boolean lastPageShown = false;
+
+	public void setLastPageShown(boolean lastPageShown) {
+		this.lastPageShown = lastPageShown;
 	}
 
 	public boolean finishPage() {
 		JRDesignChart oldChart = (JRDesignChart) chart.getValue();
 		if (chartType != oldChart.getChartType()) {
-			if (UIUtils.showConfirmation(Messages.ChartTypeWizardPage_0, Messages.ChartTypeWizardPage_1)) {
-				setChartType(oldChart, chartType);
-				// MChart.setupChart(oldChart);
+			if ((lastPageShown)) {
+				if (UIUtils.showConfirmation(Messages.ChartTypeWizardPage_0, Messages.ChartTypeWizardPage_1)) {
+					setChartType(oldChart, chartType);
+				} else
+					return false;
 			} else
-				return false;
+				setChartType(oldChart, chartType);
+			// MChart.setupChart(oldChart);
 		}
 		return true;
 	}
@@ -299,6 +310,8 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 					setPlot(merge2AreaPlot(chart, plot), chart);
 				break;
 			case JRChart.CHART_TYPE_XYBAR:
+				if (!(ds instanceof JRDesignXyDataset))
+					chart.setDataset(merge2XyDataset(ds));
 				if (!(plot instanceof JRDesignBarPlot))
 					setPlot(merge2BarPlot(chart, plot), chart);
 				break;
@@ -357,8 +370,8 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 		Field f = chart.getClass().getDeclaredField("plot"); //$NON-NLS-1$
 		f.setAccessible(true);
 		f.set(chart, plot);
-		//need to call the setup to initialize orrectly the new plot
-		MChart.setupChart(chart);
+		// need to call the setup to initialize correctly the new plot
+		MChart.setupPlot(chart);
 	}
 
 	protected JRDesignMeterPlot merge2MeterPlot(JRDesignChart chart, JRChartPlot plot) throws JRException {

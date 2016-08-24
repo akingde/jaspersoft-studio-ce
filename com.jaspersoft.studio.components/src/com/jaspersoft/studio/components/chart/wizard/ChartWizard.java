@@ -26,7 +26,7 @@ import com.jaspersoft.studio.wizards.JSSWizard;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 
-public class ChartWizard extends JSSWizard implements IExpressionContextSetter{
+public class ChartWizard extends JSSWizard implements IExpressionContextSetter {
 	private ChartTypeWizardPage page0;
 	private ChartDataPage step1a;
 	private ChartAxesWizardPage step1b;
@@ -38,8 +38,7 @@ public class ChartWizard extends JSSWizard implements IExpressionContextSetter{
 	private int height;
 	private boolean skipFirstPage = false;
 
-	public ChartWizard(MGraphicElement chart, JRDesignElementDataset edataset,
-			boolean skipFirstPage) {
+	public ChartWizard(MGraphicElement chart, JRDesignElementDataset edataset, boolean skipFirstPage) {
 		this(chart, edataset);
 		this.skipFirstPage = skipFirstPage;
 		setNeedsProgressMonitor(false);
@@ -65,7 +64,7 @@ public class ChartWizard extends JSSWizard implements IExpressionContextSetter{
 		step1a = new ChartDataPage((JRDesignElement) chart.getValue(), edataset, getConfig());
 		step1a.setExpressionContext(expContext);
 		addPage(step1a);
-		
+
 		step1b = new ChartAxesWizardPage();
 		// don't add the page, we will handle with method #fixLastPage(boolean)
 	}
@@ -79,8 +78,10 @@ public class ChartWizard extends JSSWizard implements IExpressionContextSetter{
 
 	@Override
 	public IWizardPage getStartingPage() {
-		if (skipFirstPage && page0 != null)
+		if (skipFirstPage && page0 != null) {
+			page0.setLastPageShown(true);
 			return step1a;
+		}
 		return super.getStartingPage();
 	}
 
@@ -100,35 +101,33 @@ public class ChartWizard extends JSSWizard implements IExpressionContextSetter{
 		if (chart != null)
 			chart.setJasperConfiguration(config);
 	}
-	
+
 	public void setExpressionContext(ExpressionContext expContext) {
-		this.expContext=expContext;
-		if(step1a!=null){
+		this.expContext = expContext;
+		if (step1a != null) {
 			step1a.setExpressionContext(expContext);
 		}
 	}
 
 	public void fixLastPage(boolean isMultiAxis) {
 		IWizardPage[] pages = getPages();
-		if(pages[pages.length-1] instanceof ChartDataPage) {
-			if(isMultiAxis){
+		if (pages[pages.length - 1] instanceof ChartDataPage) {
+			if (isMultiAxis) {
 				removePage(step1a);
 				addPage(step1b);
 			}
-		}
-		else if(pages[pages.length-1] instanceof ChartAxesWizardPage) {
-			if(!isMultiAxis){
+		} else if (pages[pages.length - 1] instanceof ChartAxesWizardPage) {
+			if (!isMultiAxis) {
 				removePage(step1b);
 				addPage(step1a);
 			}
-		}
-		else {
+		} else {
 			throw new RuntimeException("Use case not expected!");
 		}
 	}
 
 	public byte getChoseAxis() {
-		if(step1b!=null) {
+		if (step1b != null) {
 			return step1b.getChartAxis();
 		}
 		return 0;

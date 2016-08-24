@@ -131,7 +131,7 @@ public class MChart extends MGraphicElementLineBox
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String PLOTPROPERTY = "PLOTPROPERTY";
-	
+
 	public static final String CHART_PROPERTY_CUSTOMIZER = "multiCustomizerProperty";
 
 	/** The icon descriptor. */
@@ -231,8 +231,10 @@ public class MChart extends MGraphicElementLineBox
 		evaluationTimeD.setDescription(Messages.MChart_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
-		//Fake property to handle the customizer as a special case (since the descriptor need to handle more properties)
-		CustomizerPropertyDescriptor classD = new CustomizerPropertyDescriptor(CHART_PROPERTY_CUSTOMIZER, Messages.MChart_customizer_class);
+		// Fake property to handle the customizer as a special case (since the
+		// descriptor need to handle more properties)
+		CustomizerPropertyDescriptor classD = new CustomizerPropertyDescriptor(CHART_PROPERTY_CUSTOMIZER,
+				Messages.MChart_customizer_class);
 		classD.setDescription(Messages.MChart_customizer_class_description);
 		desc.add(classD);
 
@@ -382,7 +384,7 @@ public class MChart extends MGraphicElementLineBox
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
-		
+
 		defaultsMap.put(JRBaseChart.PROPERTY_THEME, new DefaultValue(null, true));
 		defaultsMap.put(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS, new DefaultValue(null, true));
 		defaultsMap.put(JRBaseChart.PROPERTY_SHOW_LEGEND, new DefaultValue(true, true));
@@ -410,7 +412,7 @@ public class MChart extends MGraphicElementLineBox
 		if (evaluationGroupD != null)
 			evaluationGroupD.setItems(items);
 	}
-	
+
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JSSStyleResolver sr = getStyleResolver();
@@ -443,8 +445,9 @@ public class MChart extends MGraphicElementLineBox
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignChart jrElement = (JRDesignChart) getValue();
-		if (id.equals(CHART_PROPERTY_CUSTOMIZER)){
-			PropertyExpressionsDTO dto =  (PropertyExpressionsDTO)super.getPropertyValue(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS);
+		if (id.equals(CHART_PROPERTY_CUSTOMIZER)) {
+			PropertyExpressionsDTO dto = (PropertyExpressionsDTO) super.getPropertyValue(
+					JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS);
 			return new CustomizerPropertyExpressionsDTO(dto);
 		}
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
@@ -534,7 +537,7 @@ public class MChart extends MGraphicElementLineBox
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignChart jrElement = (JRDesignChart) getValue();
-		if (id.equals(CHART_PROPERTY_CUSTOMIZER)){
+		if (id.equals(CHART_PROPERTY_CUSTOMIZER)) {
 			super.setPropertyValue(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, value);
 		} else if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
 			jrElement.setTitleFont(MFontUtil.setMFont(value));
@@ -648,7 +651,7 @@ public class MChart extends MGraphicElementLineBox
 
 	public static void setupChart(JRDesignChart jrChart) {
 		jrChart.setEvaluationTime(EvaluationTimeEnum.REPORT);
-		if (jrChart.getChartType() == JRDesignChart.CHART_TYPE_XYBAR)
+		if (jrChart.getChartType() == JRDesignChart.CHART_TYPE_XYBAR && jrChart.getDataset() == null)
 			jrChart.setDataset(new JRDesignXyDataset(null));
 		// dataset initialisation
 		if (jrChart.getDataset() instanceof JRDesignHighLowDataset) {
@@ -665,37 +668,57 @@ public class MChart extends MGraphicElementLineBox
 				jds.setLowExpression(ExprUtil.setValues(new JRDesignExpression(), "100"));
 			if (jds.getDateExpression() == null)
 				jds.setDateExpression(ExprUtil.setValues(new JRDesignExpression(), "new Date()"));
-			jds.setSeriesExpression(new JRDesignExpression("\"CHANGE_ME\""));
+			if (jds.getSeriesExpression() == null)
+				jds.setSeriesExpression(new JRDesignExpression("\"CHANGE_ME\""));
 		} else if (jrChart.getDataset() instanceof JRDesignPieDataset) {
-			JRDesignPieSeries pieSeries = new PieSerie().createSerie();
-			((JRDesignPieDataset) jrChart.getDataset()).addPieSeries(pieSeries);
+			if (Misc.isNullOrEmpty(((JRDesignPieDataset) jrChart.getDataset()).getSeriesList())) {
+				JRDesignPieSeries pieSeries = new PieSerie().createSerie();
+				((JRDesignPieDataset) jrChart.getDataset()).addPieSeries(pieSeries);
+			}
 		} else if (jrChart.getDataset() instanceof JRDesignCategoryDataset) {
-			JRCategorySeries catSeries = new CategorySerie().createSerie();
-			((JRDesignCategoryDataset) jrChart.getDataset()).addCategorySeries(catSeries);
+			if (Misc.isNullOrEmpty(((JRDesignCategoryDataset) jrChart.getDataset()).getSeriesList())) {
+				JRCategorySeries catSeries = new CategorySerie().createSerie();
+				((JRDesignCategoryDataset) jrChart.getDataset()).addCategorySeries(catSeries);
+			}
 		} else if (jrChart.getDataset() instanceof JRDesignValueDataset) {
 			JRDesignValueDataset valueDataset = (JRDesignValueDataset) jrChart.getDataset();
-			if (jrChart.getChartType() == JRDesignChart.CHART_TYPE_METER) {
-				valueDataset.setValueExpression(new JRDesignExpression("50"));
-			} else {
-				valueDataset.setValueExpression(new JRDesignExpression("\"CHANGE_ME\""));
-			}
+			if (valueDataset.getValueExpression() == null)
+				if (jrChart.getChartType() == JRDesignChart.CHART_TYPE_METER) {
+					valueDataset.setValueExpression(new JRDesignExpression("50"));
+				} else {
+					valueDataset.setValueExpression(new JRDesignExpression("\"CHANGE_ME\""));
+				}
 		} else if (jrChart.getDataset() instanceof JRDesignXyDataset) {
-			JRDesignXySeries series = new XySerie().createSerie();
-			((JRDesignXyDataset) jrChart.getDataset()).addXySeries(series);
+			if (Misc.isNullOrEmpty(((JRDesignXyDataset) jrChart.getDataset()).getSeriesList())) {
+				JRDesignXySeries series = new XySerie().createSerie();
+				((JRDesignXyDataset) jrChart.getDataset()).addXySeries(series);
+			}
 		} else if (jrChart.getDataset() instanceof JRDesignXyzDataset) {
-			JRDesignXyzSeries series = new XyzSerie().createSerie();
-			((JRDesignXyzDataset) jrChart.getDataset()).addXyzSeries(series);
+			if (Misc.isNullOrEmpty(((JRDesignXyzDataset) jrChart.getDataset()).getSeriesList())) {
+				JRDesignXyzSeries series = new XyzSerie().createSerie();
+				((JRDesignXyzDataset) jrChart.getDataset()).addXyzSeries(series);
+			}
 		} else if (jrChart.getDataset() instanceof JRDesignTimeSeriesDataset) {
-			JRDesignTimeSeries series = new TimeSerie().createSerie();
-			((JRDesignTimeSeriesDataset) jrChart.getDataset()).addTimeSeries(series);
-			((JRDesignTimeSeriesDataset) jrChart.getDataset()).setTimePeriod(TimePeriodEnum.DAY.getTimePeriod());
+			if (Misc.isNullOrEmpty(((JRDesignTimeSeriesDataset) jrChart.getDataset()).getSeriesList())) {
+				JRDesignTimeSeries series = new TimeSerie().createSerie();
+				((JRDesignTimeSeriesDataset) jrChart.getDataset()).addTimeSeries(series);
+				((JRDesignTimeSeriesDataset) jrChart.getDataset()).setTimePeriod(TimePeriodEnum.DAY.getTimePeriod());
+			}
 		} else if (jrChart.getDataset() instanceof JRDesignTimePeriodDataset) {
-			JRDesignTimePeriodSeries series = new TimePeriodSerie().createSerie();
-			((JRDesignTimePeriodDataset) jrChart.getDataset()).addTimePeriodSeries(series);
+			if (Misc.isNullOrEmpty(((JRDesignTimePeriodDataset) jrChart.getDataset()).getSeriesList())) {
+				JRDesignTimePeriodSeries series = new TimePeriodSerie().createSerie();
+				((JRDesignTimePeriodDataset) jrChart.getDataset()).addTimePeriodSeries(series);
+			}
 		} else if (jrChart.getDataset() instanceof JRDesignGanttDataset) {
-			JRDesignGanttSeries series = new GanttSeries().createSerie();
-			((JRDesignGanttDataset) jrChart.getDataset()).addGanttSeries(series);
+			if (Misc.isNullOrEmpty(((JRDesignGanttDataset) jrChart.getDataset()).getSeriesList())) {
+				JRDesignGanttSeries series = new GanttSeries().createSerie();
+				((JRDesignGanttDataset) jrChart.getDataset()).addGanttSeries(series);
+			}
 		}
+		setupPlot(jrChart);
+	}
+
+	public static void setupPlot(JRDesignChart jrChart) {
 		// plot initialisation
 		JRChartPlot plot = jrChart.getPlot();
 		if (plot instanceof JRDesignBar3DPlot) {
@@ -988,16 +1011,18 @@ public class MChart extends MGraphicElementLineBox
 			jrTarget.setLegendBackgroundColor(getColorClone(jrSource.getOwnLegendBackgroundColor()));
 		}
 	}
-	
+
 	/**
-	 * This type of node return a custom set value command provider that will allow to 
-	 * generate command that will check if the table has the autoresize and if the changed property
-	 * need to trigger its refresh
+	 * This type of node return a custom set value command provider that will
+	 * allow to generate command that will check if the table has the autoresize
+	 * and if the changed property need to trigger its refresh
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class adapter) {
-		if (adapter == ISetValueCommandProvider.class) return ChartSetValueCommandProvider.INSTANCE;
-		else return super.getAdapter(adapter);
+		if (adapter == ISetValueCommandProvider.class)
+			return ChartSetValueCommandProvider.INSTANCE;
+		else
+			return super.getAdapter(adapter);
 	}
 }
