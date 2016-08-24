@@ -1,23 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.command;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-import net.sf.jasperreports.engine.type.ResetTypeEnum;
+import java.util.regex.Matcher;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -33,6 +24,13 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 public class CreateE4ObjectCommand extends CreateElementCommand {
 	protected ANode child;
@@ -60,7 +58,8 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 		}
 		// calculate position, fix position relative to parent
 		MBand band = null;
-		if (destNode instanceof MReport) band = ModelUtils.getBand4Point(destNode, new Point(position.x, position.y));
+		if (destNode instanceof MReport)
+			band = ModelUtils.getBand4Point(destNode, new Point(position.x, position.y));
 		// set proposed bounds
 		if (band == null) {
 			if (destNode instanceof MBand)
@@ -97,25 +96,31 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 				JRDesignBand b = (JRDesignBand) n.getValue();
 				BandTypeEnum btype = b.getOrigin().getBandTypeValue();
 				if (btype.equals(BandTypeEnum.DETAIL)) {
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
+							jasperDesign);
 				} else if (btype.equals(BandTypeEnum.COLUMN_FOOTER) || btype.equals(BandTypeEnum.COLUMN_HEADER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.COLUMN, null, jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
+							jasperDesign);
 				} else if (btype.equals(BandTypeEnum.GROUP_FOOTER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupFooter) n).getJrGroup(),
 							jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
+							jasperDesign);
 				} else if (btype.equals(BandTypeEnum.GROUP_HEADER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupHeader) n).getJrGroup(),
 							jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
+							jasperDesign);
 				} else if (btype.equals(BandTypeEnum.SUMMARY) || btype.equals(BandTypeEnum.TITLE)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null, jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
+							jasperDesign);
 				} else if (btype.equals(BandTypeEnum.PAGE_FOOTER) || btype.equals(BandTypeEnum.PAGE_HEADER)
 						|| btype.equals(BandTypeEnum.LAST_PAGE_FOOTER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.PAGE, null, jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jasperDesign); //$NON-NLS-1$
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
+							jasperDesign);
 				} else {
 					srcNode = Tag.createStaticText(tag.name, jasperDesign);
 				}
@@ -139,7 +144,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 
 	@Override
 	public boolean canExecute() {
-		return  parent == null || parent.canAcceptChildren(child);
+		return parent == null || parent.canAcceptChildren(child);
 	}
 
 	private JRDesignVariable var;

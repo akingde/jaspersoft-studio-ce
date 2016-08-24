@@ -21,6 +21,8 @@ import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
+import java.util.regex.Matcher;
+
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.components.table.TableManager;
@@ -58,26 +60,29 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 			switch (mparent.getType()) {
 			case TableUtil.COLUMN_HEADER:
 			case TableUtil.COLUMN_FOOTER:
-				var = Tag.createVariable(tag, ResetTypeEnum.COLUMN, null,
-						jDataset);
-				srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jd);
+				var = Tag.createVariable(tag, ResetTypeEnum.COLUMN, null, jDataset);
+				srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)),
+						tag.classname, jd);
 				break;
 			case TableUtil.COLUMN_GROUP_HEADER:
 				var = Tag.createVariable(tag, ResetTypeEnum.GROUP, mparent.getJrGroup(), jDataset);
-				srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jd);
+				srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)),
+						tag.classname, jd);
 				break;
 			case TableUtil.COLUMN_GROUP_FOOTER:
-				var = Tag.createVariable(tag, ResetTypeEnum.GROUP,
-						mparent.getJrGroup(), jDataset);
-				srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jd);
+				var = Tag.createVariable(tag, ResetTypeEnum.GROUP, mparent.getJrGroup(), jDataset);
+				srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)),
+						tag.classname, jd);
 				break;
 			case TableUtil.COLUMN_DETAIL:
-				srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jd);
+				srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)),
+						tag.classname, jd);
 				break;
 			case TableUtil.TABLE_FOOTER:
 			case TableUtil.TABLE_HEADER:
 				var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null, jDataset);
-				srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname, jd);
+				srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)),
+						tag.classname, jd);
 				break;
 			default:
 				srcNode = Tag.createStaticText(tag.name, jd);
