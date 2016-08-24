@@ -170,7 +170,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 				for (INode n : msel.getChildren()) {
 					if (n instanceof MSelectColumn) {
 						MSelectColumn msc = (MSelectColumn) n;
-						if (((MSelectColumn) n).getMFromTable() == fromTable)
+						if (((MSelectColumn) n).getMFromTable().equals(fromTable))
 							set.put(msc.getValue().getValue(), msc);
 					}
 				}

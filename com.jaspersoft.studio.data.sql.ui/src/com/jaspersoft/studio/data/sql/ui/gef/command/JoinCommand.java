@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -130,6 +131,8 @@ public class JoinCommand extends ACommand {
 		if (!Misc.isNullOrEmpty(nsrc.getChildren()))
 			for (INode n : new ArrayList<INode>(nsrc.getChildren()))
 				reparent((ANode) n, parent);
+		Util.cleanTableVersions(join, nsrc);
+
 		return join;
 	}
 
