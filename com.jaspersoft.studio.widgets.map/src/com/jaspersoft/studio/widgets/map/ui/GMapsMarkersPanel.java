@@ -68,7 +68,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 	 * the . separator. This is required because when passing the location to the javascript it expects double with
 	 * the standard dot separator
 	 */
-	protected static DecimalFormat coordinatesFormatter = new DecimalFormat(".######", new DecimalFormatSymbols(Locale.ENGLISH));
+	protected static DecimalFormat coordinatesFormatter = new DecimalFormat("#.######", new DecimalFormatSymbols(Locale.ENGLISH));
 
 	protected List markersList;
 
