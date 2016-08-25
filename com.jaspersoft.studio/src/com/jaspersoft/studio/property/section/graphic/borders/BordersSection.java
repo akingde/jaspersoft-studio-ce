@@ -422,6 +422,7 @@ public class BordersSection extends AbstractSection {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, lineColor.getColor());
+				refresh();
 			}
 		});
 		createLineContextualMenu(lineColor.getPaintArea(), JRBasePen.PROPERTY_LINE_COLOR);
@@ -648,25 +649,27 @@ public class BordersSection extends AbstractSection {
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 				// it's a change of a border attribute
 				boolean areAllUnselected = bd.areAllUnslected();
-				if (areAllUnselected || bd.isBottomSelected()) {
+				if (areAllUnselected){
+					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN);
+					c = getChangePropertyCommand(property, newValue, lp);
+					if (c != null)
+						cc.add(c);
+				} else if (bd.isBottomSelected()) {
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
 					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
-				}
-				if (areAllUnselected || bd.isTopSelected()) {
+				} else if (bd.isTopSelected()) {
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
 					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
-				}
-				if (areAllUnselected || bd.isLeftSelected()) {
+				} else if (bd.isLeftSelected()) {
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
 					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
-				}
-				if (areAllUnselected || bd.isRightSelected()) {
+				} else if (bd.isRightSelected()) {
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
 					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
