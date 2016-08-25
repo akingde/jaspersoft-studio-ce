@@ -43,6 +43,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 		result.readOnly = readOnly;
 		result.min = min;
 		result.max = max;
+		result.fallbackValue = fallbackValue;
 		return result;
 	}
 	
@@ -51,6 +52,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 		Float min = null;
 		Float max = null;
 		Float def = null;
+		Float fallBack = null;
 		if (cpd.getMin() != null){
 			min = new Float(cpd.getMin());
 		}
@@ -60,8 +62,12 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
 			def = new Float(cpd.getDefaultValue());
 		}
+		if (cpd.getFallbackValue() != null && !cpd.getFallbackValue().isEmpty()){
+			fallBack = new Float(cpd.getFallbackValue());
+		}
 		FloatPropertyDescription floatDesc = new FloatPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max);
 		floatDesc.setReadOnly(cpd.isReadOnly());
+		floatDesc.setFallbackValue(fallBack);
 		return floatDesc;
 	}
 	

@@ -339,11 +339,19 @@ public class NumericText extends Text {
 	 * could be the formatter, but since the format method is final we do this workaround
 	 * to allow custom implementation
 	 * 
-	 * @param value the number to romat, must be not null
+	 * @param value the number to format, must be not null
 	 * @return the number as a string
 	 */
 	protected String formatNumber(Number value){
-		String result = formatter.format(value);
+		String result;
+		if (value instanceof Float){
+			//When using a decimal format there is a conversion error done passing from float to double
+			//explained here (http://programmingjungle.blogspot.it/2013/03/float-to-double-conversion-in-java.html)
+			//Doing this will avoid the conversion error
+			result = formatter.format(Double.parseDouble(value.toString()));
+		} else {
+			result = formatter.format(value);
+		}
 		if (removeTrailZeroes && result.indexOf(ValidatedDecimalFormat.DECIMAL_SEPARATOR) != -1){
 			result = result.replaceAll("0*$", "").replaceAll(ValidatedDecimalFormat.PATTERN_DECIMAL_SEPARATOR + "$", "");
 		}

@@ -86,6 +86,7 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 		result.name = name;
 		result.readOnly = readOnly;
 		result.keyValues = keyValues;
+		result.fallbackValue = fallbackValue;
 		return result;
 	}
 	
@@ -95,10 +96,11 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 		if (wip.isExpressionMode()) {
 			super.update(c, wip);
 		} else {
+			boolean isFallback = false;
 			Combo combo = (Combo) cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
-			if (v == null && defaultValue != null){
-				v = defaultValue.toString();
+			if (v == null && wip.getFallbackValue() != null){
+				v = wip.getFallbackValue().toString();
 			}
 			for (int i = 0; i < keyValues.length; i++) {
 				if (keyValues[i][0].equals(v)) {
@@ -106,6 +108,7 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 					break;
 				}
 			}
+			changeFallbackForeground(isFallback, combo);
 			cmp.switchToSecondContainer();
 		}
 	}
@@ -121,6 +124,7 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 			}
 			SelectableComboItemPropertyDescription<String> result = new SelectableComboItemPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), i18nOpts);
 			result.setReadOnly(cpd.isReadOnly());
+			result.setFallbackValue(cpd.getFallbackValue());
 			return result;
 		}
 		return null;

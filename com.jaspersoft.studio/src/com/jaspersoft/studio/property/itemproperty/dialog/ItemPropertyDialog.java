@@ -363,4 +363,9 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 	public IPropertyEditor getPropertyEditor() {
 		return internalEditor;
 	}
+
+	@Override
+	public Object getFallbackValue() {
+		return ipDesc.getFallbackValue();
+	}
 }

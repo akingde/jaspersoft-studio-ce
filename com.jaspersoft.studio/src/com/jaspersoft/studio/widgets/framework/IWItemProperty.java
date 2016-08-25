@@ -72,6 +72,12 @@ public interface IWItemProperty {
 	public String getStaticValue();
 	
 	/**
+	 * Get the fallback value for the current property. The fallback value is
+	 * used when no value is provided. Can be overridden to provide a custom behavior
+	 */
+	public Object getFallbackValue();
+	
+	/**
 	 * Return the expression value of the property
 	 * 
 	 * @return the expression, can be null

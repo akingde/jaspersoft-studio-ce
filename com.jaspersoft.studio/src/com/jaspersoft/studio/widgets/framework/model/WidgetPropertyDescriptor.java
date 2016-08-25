@@ -31,6 +31,8 @@ public class WidgetPropertyDescriptor {
 	
 	private String defaultValue;
 	
+	private String fallbackValue;
+	
 	private boolean readOnly = false;
 	
 	private String min;
@@ -155,5 +157,13 @@ public class WidgetPropertyDescriptor {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getFallbackValue() {
+		return fallbackValue;
+	}
+
+	public void setFallbackValue(String fallbackValue) {
+		this.fallbackValue = fallbackValue;
 	}
 }

@@ -366,4 +366,9 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	public IPropertyEditor getPropertyEditor(){
 		return editor;
 	}
+	
+	@Override
+	public Object getFallbackValue() {
+		return ipDesc.getFallbackValue();
+	}
 }

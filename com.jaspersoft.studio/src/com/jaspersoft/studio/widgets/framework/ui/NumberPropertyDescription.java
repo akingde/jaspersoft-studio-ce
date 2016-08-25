@@ -107,12 +107,15 @@ public abstract class NumberPropertyDescription<T extends Number> extends TextPr
 			super.update(expressionControl, wip);
 			cmp.switchToFirstContainer();
 		} else {
+			boolean isFallback = false;
 			NumericText simpleControl = (NumericText)cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
-			if (v == null && defaultValue != null){
-				v = defaultValue.toString();
+			if (v == null && wip.getFallbackValue() != null){
+				v = wip.getFallbackValue().toString();
+				isFallback = true;
 			}
 			simpleControl.setValue(convertValue(Misc.nvl(v)));
+			changeFallbackForeground(isFallback, simpleControl);
 			cmp.switchToSecondContainer();
 		}
 	}

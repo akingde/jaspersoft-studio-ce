@@ -65,6 +65,8 @@ public interface ItemPropertyDescription<T> {
 	 */
 	public T getDefaultValue();
 	
+	public T getFallbackValue();
+	
 	/**
 	 * Return the tooltip text
 	 * @return a not null tooltip

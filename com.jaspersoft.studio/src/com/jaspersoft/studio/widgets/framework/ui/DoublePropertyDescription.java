@@ -44,6 +44,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 		result.readOnly = readOnly;
 		result.min = min;
 		result.max = max;
+		result.fallbackValue = fallbackValue;
 		return result;
 	}
 	
@@ -52,6 +53,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 		BigDecimal min = null;
 		BigDecimal max = null;
 		BigDecimal def = null;
+		BigDecimal fallBack = null;
 		if (cpd.getMin() != null){
 			min = new BigDecimal(cpd.getMin());
 		}
@@ -61,8 +63,12 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
 			def = new BigDecimal(cpd.getDefaultValue());
 		}
+		if (cpd.getFallbackValue() != null && !cpd.getFallbackValue().isEmpty()){
+			fallBack = new BigDecimal(cpd.getFallbackValue());
+		}
 		DoublePropertyDescription doubleDesc = new DoublePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max);
 		doubleDesc.setReadOnly(cpd.isReadOnly());
+		doubleDesc.setFallbackValue(fallBack);
 		return doubleDesc;
 	}
 

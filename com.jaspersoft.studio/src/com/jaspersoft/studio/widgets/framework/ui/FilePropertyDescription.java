@@ -106,6 +106,7 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 		result.mandatory = mandatory;
 		result.name = name;
 		result.readOnly = readOnly;
+		result.fallbackValue = fallbackValue;
 		return result;
 	}
 	
@@ -114,6 +115,7 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 		FilePropertyDescription fileDesc = new FilePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
 		fileDesc.setjConfig(jConfig);
 		fileDesc.setReadOnly(cpd.isReadOnly());
+		fileDesc.setFallbackValue(cpd.getFallbackValue());
 		return fileDesc;
 	}
 

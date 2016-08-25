@@ -117,6 +117,7 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 	@Override
 	public void update(Control c, IWItemProperty wip) {
 		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
+		boolean isFallback = false;
 		if (wip.isExpressionMode()) {
 			Text txt = (Text) cmp.getFirstContainer().getData();
 			super.update(txt, wip);
@@ -124,10 +125,12 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 		} else {
 			Combo combo = (Combo) cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
-			if (v == null && defaultValue != null){
-				v = defaultValue.toString();
+			if (v == null && wip.getFallbackValue() != null){
+				v = wip.getFallbackValue().toString();
+				isFallback = true;
 			}
 			combo.setText(Misc.nvl(v));
+			changeFallbackForeground(isFallback, combo);
 			cmp.switchToSecondContainer();
 		}
 	}
@@ -142,6 +145,7 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 		result.mandatory = mandatory;
 		result.name = name;
 		result.keyValues = keyValues;
+		result.fallbackValue = fallbackValue;
 		return result;
 	}
 	
@@ -156,6 +160,7 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 			}
 			ComboItemPropertyDescription<String> result = new ComboItemPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), i18nOpts);
 			result.setReadOnly(cpd.isReadOnly());
+			result.setFallbackValue(cpd.getFallbackValue());
 			return result;
 		}
 		return null;

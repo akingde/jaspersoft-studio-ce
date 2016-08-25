@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.ui;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -42,6 +44,8 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 	protected boolean mandatory;
 	
 	protected T defaultValue;
+	
+	protected T fallbackValue;
 	
 	protected boolean readOnly;
 	
@@ -73,6 +77,7 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 		this.jConfig = jConfig;
 	}
 
+	@Override
 	public boolean isReadOnly() {
 		return readOnly;
 	}
@@ -81,10 +86,12 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 		this.readOnly = readOnly;
 	}
 
+	@Override
 	public String getLabel() {
 		return label;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -93,6 +100,7 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 		this.name = name;
 	}
 
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -101,6 +109,7 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 		this.description = description;
 	}
 
+	@Override
 	public boolean isMandatory() {
 		return mandatory;
 	}
@@ -109,18 +118,29 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 		this.mandatory = mandatory;
 	}
 
+	@Override
 	public String getDefaultValueString() {
 		if (defaultValue != null)
 			return defaultValue.toString();
 		return ""; //$NON-NLS-1$
 	}
 
+	@Override
 	public T getDefaultValue() {
 		return defaultValue;
 	}
 
 	public void setDefaultValue(T defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+	
+	@Override
+	public T getFallbackValue() {
+		return fallbackValue;
+	}
+	
+	public void setFallbackValue(T fallbackValue){
+		this.fallbackValue = fallbackValue;
 	}
 
 	public void handleEdit(Control txt, IWItemProperty wiProp) {
@@ -188,15 +208,16 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 			Text txtExpr = (Text) c;
 			
 			String txt;
-
+			boolean isFallback = false;
 			if (wip.isExpressionMode()){
 				JRExpression expression = wip.getExpressionValue();
 				txt = Misc.nvl(expression.getText());
 			} else {
 				if (wip.getStaticValue() != null){
 					txt = wip.getStaticValue();
-				} else if (defaultValue != null){
-					txt = Misc.nvl(defaultValue.toString());
+				} else if (wip.getFallbackValue() != null){
+					txt = Misc.nvl(wip.getFallbackValue().toString());
+					isFallback = true;
 				} else {
 					txt = "";
 				}
@@ -204,6 +225,7 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 			Point oldSelection = txtExpr.getSelection();
 
 			txtExpr.setText(txt);
+			changeFallbackForeground(isFallback, txtExpr);
 
 			oldSelection.x = Math.min(txt.length(), oldSelection.x);
 			oldSelection.y = Math.min(txt.length(), oldSelection.y);
@@ -214,6 +236,14 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 				tooltip += "\n\n" + txt;
 			tooltip += "\n" + getToolTip();
 			txtExpr.setToolTipText(tooltip.trim());
+		}
+	}
+	
+	protected void changeFallbackForeground(boolean isUsingFallback, Control control){
+		if (isUsingFallback && !ModelUtils.safeEquals(control.getForeground(), ColorConstants.gray)){
+			control.setForeground(ColorConstants.gray);
+		} else if (!isUsingFallback && !ModelUtils.safeEquals(control.getForeground(), ColorConstants.black)){
+			control.setForeground(ColorConstants.black);
 		}
 	}
 	
@@ -235,13 +265,15 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 		result.mandatory = mandatory;
 		result.name = name;
 		result.readOnly = readOnly;
+		result.fallbackValue = fallbackValue;
 		return result;
 	}
 	
 	@Override
 	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
-		TextPropertyDescription<?> result = new TextPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
+		TextPropertyDescription<String> result = new TextPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
 		result.setReadOnly(cpd.isReadOnly());
+		result.setFallbackValue(cpd.getFallbackValue());
 		return result;
 	}
 }

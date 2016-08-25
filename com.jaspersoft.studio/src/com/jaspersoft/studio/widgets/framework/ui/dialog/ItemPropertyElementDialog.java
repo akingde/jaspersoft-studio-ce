@@ -263,4 +263,8 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		return dialogPropertyEditor;
 	}
 
+	@Override
+	public Object getFallbackValue() {
+		return ipDesc.getFallbackValue();
+	}
 }

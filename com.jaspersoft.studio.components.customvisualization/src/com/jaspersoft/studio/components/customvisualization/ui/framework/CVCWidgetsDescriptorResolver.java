@@ -143,6 +143,7 @@ public class CVCWidgetsDescriptorResolver implements IWidgetsDescriptorResolver 
 		widget.setReadOnly(oldWidget.isReadOnly());
 		widget.setType(getType(oldWidget));
 		widget.setComboOptions(getOptions(oldWidget));
+		widget.setFallbackValue(null);
 		
 		return widget;
 	}

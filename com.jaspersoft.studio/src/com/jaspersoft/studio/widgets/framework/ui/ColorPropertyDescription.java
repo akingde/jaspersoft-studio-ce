@@ -124,13 +124,15 @@ public class ColorPropertyDescription<T> extends TextPropertyDescription<T> {
 		result.mandatory = mandatory;
 		result.name = name;
 		result.readOnly = readOnly;
+		result.fallbackValue = fallbackValue;
 		return result;
 	}
 	
 	@Override
 	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
-		ColorPropertyDescription<?> result = new ColorPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
+		ColorPropertyDescription<String> result = new ColorPropertyDescription<String>(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
 		result.setReadOnly(cpd.isReadOnly());
+		result.setFallbackValue(cpd.getFallbackValue());
 		return result;
 	}
 }

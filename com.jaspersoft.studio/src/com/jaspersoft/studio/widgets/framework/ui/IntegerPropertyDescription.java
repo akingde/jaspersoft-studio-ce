@@ -43,6 +43,7 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 		result.readOnly = readOnly;
 		result.min = min;
 		result.max = max;
+		result.fallbackValue = fallbackValue;
 		return result;
 	}
 	
@@ -51,6 +52,7 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 		Integer min = null;
 		Integer max = null;
 		Integer def = null;
+		Integer fallBack = null;
 		if (cpd.getMin() != null){
 			min = new Integer(cpd.getMin());
 		}
@@ -60,8 +62,12 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
 			def = new Integer(cpd.getDefaultValue());
 		}
+		if (cpd.getFallbackValue() != null && !cpd.getFallbackValue().isEmpty()){
+			fallBack = new Integer(cpd.getFallbackValue());
+		}
 		IntegerPropertyDescription intDesc = new IntegerPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max);
 		intDesc.setReadOnly(cpd.isReadOnly());
+		intDesc.setFallbackValue(fallBack);
 		return intDesc;
 	}
 	
