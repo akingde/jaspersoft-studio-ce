@@ -101,6 +101,7 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 			String v = wip.getStaticValue();
 			if (v == null && wip.getFallbackValue() != null){
 				v = wip.getFallbackValue().toString();
+				isFallback = true;
 			}
 			for (int i = 0; i < keyValues.length; i++) {
 				if (keyValues[i][0].equals(v)) {

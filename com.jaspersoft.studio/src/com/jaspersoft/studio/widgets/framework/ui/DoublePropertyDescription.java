@@ -1,13 +1,10 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
 import java.math.BigDecimal;
-import java.util.Locale;
 
-import org.apache.commons.validator.routines.DoubleValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
@@ -80,12 +77,9 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 		if (wiProp == null)
 			return;
 		if (txt instanceof NumericText){
-			String tvalue = ((Text) txt).getText();
-			char separator = ValidatedDecimalFormat.DECIMAL_SEPARATOR;
-			if (tvalue != null && separator != '.'){
-				//internally store a standard double notation
-				tvalue = tvalue.replace(separator, '.');
-			}
+			NumericText widget = (NumericText)txt;
+			Double floatValue =  widget.getValueAsDouble();
+			String tvalue = floatValue != null ? floatValue.toString() : null;
 			if (tvalue != null && tvalue.isEmpty())
 				tvalue = null;
 			wiProp.setValue(tvalue, null);
@@ -107,10 +101,11 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 	protected Number convertValue(String v) {
 		if (v == null || v.isEmpty()) return null;
 		char separator = ValidatedDecimalFormat.DECIMAL_SEPARATOR;
-		//externally convert the current separator to the locale separator
-		if (separator == '.'){
-			v = v.replace(',', separator);
-		}
-		return DoubleValidator.getInstance().validate(v, Locale.getDefault());
+		//convert the separator if necessary, since the internal double always use the dot
+		//as separator
+		if (separator != '.'){
+			v = v.replace(separator, '.');
+		} 
+		return Double.valueOf(v);
 	}
 }
