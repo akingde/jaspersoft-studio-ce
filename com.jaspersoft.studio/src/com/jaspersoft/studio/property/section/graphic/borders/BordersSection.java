@@ -425,7 +425,7 @@ public class BordersSection extends AbstractSection {
 				refresh();
 			}
 		});
-		createLineContextualMenu(lineColor.getPaintArea(), JRBasePen.PROPERTY_LINE_COLOR);
+		createLineContextualMenu(lineColor, JRBasePen.PROPERTY_LINE_COLOR);
 
 		getWidgetFactory().createCLabel(composite, Messages.common_pen_style + ":"); //$NON-NLS-1$
 
@@ -984,7 +984,7 @@ public class BordersSection extends AbstractSection {
 				}
 			}
 
-			if (lineColor != null && !lineColor.getPaintArea().isDisposed()) {
+			if (lineColor != null && !lineColor.isDisposed()) {
 				if (pen.getLineColor() == null) {
 					lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
 				} else {
@@ -1023,7 +1023,7 @@ public class BordersSection extends AbstractSection {
 		else if (propertyId.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING))
 			return new ASHighlightControl(paddingBottom, new BackgroundHighlight(paddingBottom));
 		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_COLOR))
-			return new ASHighlightControl(lineColor.getPaintArea(), new BackgroundHighlight(lineColor.getPaintArea()));
+			return new ASHighlightControl(lineColor, new BackgroundHighlight(lineColor));
 		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_WIDTH))
 			return new ASHighlightControl(lineWidth, new BackgroundHighlight(lineWidth));
 		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_STYLE))

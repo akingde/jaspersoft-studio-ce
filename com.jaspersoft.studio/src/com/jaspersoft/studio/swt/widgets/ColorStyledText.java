@@ -25,13 +25,13 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.help.HelpSystem;
@@ -49,7 +49,7 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  * @author Orlandin Marco
  * 
  */
-public class ColorStyledText {
+public class ColorStyledText extends Composite {
 
 	private static final int LINECOLOR_PREVIEW_WIDTH = 16;
 	private static final int LINECOLOR_PREVIEW_HEIGHT = 16;
@@ -93,11 +93,6 @@ public class ColorStyledText {
 	 * Guard that block the modify event when another is already going
 	 */
 	private boolean refreshingGuard;
-
-	/**
-	 * Area where the component is placed
-	 */
-	private Composite paintArea;
 	
 	/**
 	 * Flag used to know if show or not the controls to define the color alpha
@@ -165,14 +160,6 @@ public class ColorStyledText {
 			}
 		}
 	}
-
-	public void setBackground(Color color) {
-		paintArea.setBackground(color);
-	}
-
-	public void setLayoutData(Object data) {
-		paintArea.setLayoutData(data);
-	}
 	
 	/**
 	 * When the color dialog is opened to select the color 
@@ -226,12 +213,12 @@ public class ColorStyledText {
 	 *          the composite where the the element will be placed
 	 */
 	public ColorStyledText(Composite parent) {
+		super(parent, SWT.BORDER);
 		refreshingGuard = false;
 		listener = new ArrayList<ModifyListener>();
 		provider = new ColorLabelProvider(NullEnum.NULL);
-		paintArea = new Composite(parent, SWT.BORDER);
 		GridLayout layout = new GridLayout(2, false);
-		paintArea.setLayout(layout);
+		setLayout(layout);
 		layout.horizontalSpacing = 1;
 		layout.verticalSpacing = 0;
 		layout.marginHeight = 1;
@@ -243,8 +230,9 @@ public class ColorStyledText {
 		GridData textData = new GridData();
 		textData.verticalAlignment = SWT.CENTER;
 		textData.horizontalAlignment = SWT.LEFT;
-		textArea = new StyledText(paintArea, SWT.SINGLE);
-		textArea.setBackground(paintArea.getBackground());
+		textData.widthHint = 50;
+		textArea = new StyledText(this, SWT.SINGLE);
+		textArea.setBackground(this.getBackground());
 		// When the text area is disposed also the actual color is disposed as well
 		textArea.addDisposeListener(new DisposeListener() {
 
@@ -283,7 +271,7 @@ public class ColorStyledText {
 		lineColorData.widthHint = LINECOLOR_PREVIEW_WIDTH;
 		lineColorData.verticalAlignment = SWT.FILL;
 		lineColorData.horizontalAlignment = SWT.CENTER;
-		lineColor = new Label(paintArea, SWT.NONE);
+		lineColor = new Label(this, SWT.NONE);
 		lineColor.setLayoutData(lineColorData);
 		lineColor.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
 
@@ -292,7 +280,7 @@ public class ColorStyledText {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				if (enabled && e.button == 1){
-					ColorDialog cd = new ColorDialog(centeredShell(paintArea.getShell()));
+					ColorDialog cd = new ColorDialog(centeredShell(getShell()));
 					cd.setText(Messages.common_line_color);
 					if (getColor() != null) cd.setRGB(getColor());
 					AlfaRGB newColor = null;
@@ -394,15 +382,6 @@ public class ColorStyledText {
 		return color;
 	}
 
-	/**
-	 * Return the paint area
-	 * 
-	 * @return composite where all the elements that compose the widget are placed
-	 */
-	public Composite getPaintArea() {
-		return paintArea;
-	}
-	
 	public void setEnabled(boolean enabled){
 		this.enabled = enabled;
 		textArea.setEnabled(enabled);
@@ -416,4 +395,14 @@ public class ColorStyledText {
 		}
 	}
 
+	@Override
+	public Menu getMenu() {
+		return textArea.getMenu();
+	}
+	
+	@Override
+	public void setMenu(Menu menu) {
+		textArea.setMenu(menu);
+		lineColor.setMenu(menu);
+	}
 }

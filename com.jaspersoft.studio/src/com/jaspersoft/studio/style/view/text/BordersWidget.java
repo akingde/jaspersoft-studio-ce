@@ -359,7 +359,7 @@ public class BordersWidget extends Composite {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, lineColor.getColor());	
-				callListeners(lineColor.getPaintArea(), JRBasePen.PROPERTY_LINE_COLOR);
+				callListeners(lineColor, JRBasePen.PROPERTY_LINE_COLOR);
 			}
 		});
 
