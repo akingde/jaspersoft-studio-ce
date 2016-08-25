@@ -57,8 +57,11 @@ public class StandardContextualMenu implements IMenuProvider {
 				controlMenu = new Menu(c);
 				c.setMenu(controlMenu);
 			}
+			
+			//When there is a fallback value show a different action name, since in that case means that there is a value to inherit
+			String actionName = item.getFallbackValue() != null ? Messages.ASPropertyWidget_2 : Messages.ASPropertyWidget_1;
 			for (MenuItem mi : controlMenu.getItems())
-				if (mi.getText().equals(Messages.ASPropertyWidget_1))
+				if (mi.getText().equals(actionName))
 					return;
 
 			MenuItem refreshItem = new MenuItem(controlMenu, SWT.NONE);
@@ -69,7 +72,7 @@ public class StandardContextualMenu implements IMenuProvider {
 					wiProp.updateWidget();
 				}
 			});
-			refreshItem.setText(Messages.ASPropertyWidget_1);
+			refreshItem.setText(actionName);
 		}
 	}
 }
