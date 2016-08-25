@@ -19,6 +19,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -108,7 +109,7 @@ public class RemoveCrosstabStylesAction extends ACachedSelectionAction {
 	public void run() {
 		deleteStyles = false;
 		int selection = getResponse();
-		if (selection != 2){
+		if (selection != 2 && selection != SWT.DEFAULT){
 			deleteStyles = selection == 0;
 			List<EditPart> parts = getSelectedTables();
 			execute(changeStyleCommand(parts));
