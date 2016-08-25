@@ -16,26 +16,27 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.AFileResource;
-import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.preferences.JRSPreferencesPage;
 import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public abstract class AImpObject {
 	protected JasperReportsConfiguration jrConfig;
@@ -47,8 +48,10 @@ public abstract class AImpObject {
 	protected AFileResource findFile(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
 			JRDesignExpression exp, IFile file) {
 		String str = getPath(fileset, exp);
-		if (fileset.contains(str))
+		if (fileset.contains(str)) {
+			setupSameExpression(mrunit, exp, str);
 			return null;
+		}
 		if (str == null)
 			return null;
 		File f = findFile(file, str);
@@ -63,6 +66,24 @@ public abstract class AImpObject {
 			return addResource(monitor, mrunit, fileset, f, popt);
 		}
 		return null;
+	}
+
+	public static void setupSameExpression(MReportUnit mrunit, JRDesignExpression exp, String str) {
+		str = "\"repo:" + IDStringValidator.safeChar(str) + "\"";
+		PublishOptions popt = mrunit.getPublishOptions();
+		if (popt != null && popt.getExpression() != null && popt.getExpression().equals(str)) {
+			popt.setjExpression(exp);
+			return;
+		}
+		for (INode n : mrunit.getChildren()) {
+			if (n instanceof AFileResource) {
+				popt = ((AFileResource) n).getPublishOptions();
+				if (popt != null && popt.getExpression() != null && popt.getExpression().equals(str)) {
+					popt.setjExpression(exp);
+					break;
+				}
+			}
+		}
 	}
 
 	public static PublishOptions createOptions(JasperReportsConfiguration jrConfig, String path) {
@@ -93,8 +114,6 @@ public abstract class AImpObject {
 	protected String preparePath(Set<String> fileset, String str) {
 		if (str != null && str.startsWith("repo:"))
 			str = str.replaceFirst("repo:", "");
-		if (str == null || fileset.contains(str))
-			return null;
 		return str;
 	}
 

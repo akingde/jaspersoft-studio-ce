@@ -12,11 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish;
 
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 /**
  * @author slavic
@@ -24,7 +27,7 @@ import com.jaspersoft.studio.utils.Misc;
  */
 public class PublishOptions {
 	private OverwriteEnum isOverwrite = OverwriteEnum.OVERWRITE;
-	private JRDesignExpression jExpression;
+	private List<JRDesignExpression> jExpression;
 	private String expression;
 	private JRDesignDataset dataset;
 
@@ -48,12 +51,14 @@ public class PublishOptions {
 		this.isOverwrite = isOverwrite;
 	}
 
-	public JRDesignExpression getjExpression() {
+	public List<JRDesignExpression> getjExpression() {
 		return jExpression;
 	}
 
 	public void setjExpression(JRDesignExpression jExpression) {
-		this.jExpression = jExpression;
+		if (this.jExpression == null)
+			this.jExpression = new ArrayList<JRDesignExpression>();
+		this.jExpression.add(jExpression);
 	}
 
 	public String getExpression() {

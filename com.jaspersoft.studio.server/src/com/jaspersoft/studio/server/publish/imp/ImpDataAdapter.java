@@ -66,6 +66,8 @@ public class ImpDataAdapter extends AImpObject {
 	public File publish(JRDesignDataset jd, String dpath, MReportUnit mrunit, IProgressMonitor monitor,
 			Set<String> fileset, IFile file) throws Exception {
 		dpath = preparePath(fileset, dpath);
+		if (fileset.contains(dpath))
+			return null;
 		if (dpath == null)
 			return null;
 		File f = findFile(file, dpath);

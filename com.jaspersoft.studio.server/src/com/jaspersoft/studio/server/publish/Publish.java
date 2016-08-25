@@ -23,6 +23,7 @@ import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.apache.commons.codec.binary.Base64;
@@ -219,11 +220,14 @@ public class Publish {
 					popt.getValueSetter().setup();
 				} else if (popt.getjExpression() != null) {
 					if (popt.getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.ONLY_EXPRESSION))
-						popt.getjExpression().setText(popt.getExpression());
+						for (JRDesignExpression exp : popt.getjExpression())
+							exp.setText(popt.getExpression());
 					if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
-						popt.getjExpression().setText(popt.getRepoExpression());
+						for (JRDesignExpression exp : popt.getjExpression())
+							exp.setText(popt.getRepoExpression());
 					else if (popt.getPublishMethod() == ResourcePublishMethod.LOCAL)
-						popt.getjExpression().setText(popt.getExpression());
+						for (JRDesignExpression exp : popt.getjExpression())
+							exp.setText(popt.getExpression());
 				} else if (popt.getDataset() != null) {
 					String dauri = res.getValue().getUriString();
 					if (popt.getPublishMethod() != null)

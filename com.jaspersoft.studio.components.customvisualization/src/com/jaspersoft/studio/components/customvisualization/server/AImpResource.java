@@ -17,6 +17,7 @@ import java.util.Set;
 
 import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -36,15 +37,18 @@ public abstract class AImpResource extends AImpObject {
 		super(jrConfig);
 	}
 
-	public AFileResource publish(JasperDesign jd, ItemProperty img,
-			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
-			IFile file) throws Exception {
+	public AFileResource publish(JasperDesign jd, ItemProperty img, MReportUnit mrunit, IProgressMonitor monitor,
+			Set<String> fileset, IFile file) throws Exception {
 		String str = img.getValue();
 		JRDesignExpression exp = (JRDesignExpression) img.getValueExpression();
 		if (exp != null)
 			str = getPath(fileset, exp);
 		else
 			str = preparePath(fileset, str);
+		if (fileset.contains(str)) {
+			setupSameExpression(mrunit, exp, str);
+			return null;
+		}
 		if (str == null)
 			return null;
 		File f = findFile(file, str);
@@ -54,10 +58,9 @@ public abstract class AImpResource extends AImpObject {
 			if (exp != null) {
 				popt.setjExpression(exp);
 				if (!f.getName().contains(":"))
-					popt.setExpression("repo:" + f.getName());
+					popt.setExpression("\"repo:" + IDStringValidator.safeChar(f.getName()) + "\"");
 			} else if (Misc.isNullOrEmpty(img.getValue())) {
-				popt.setValueSetter(popt.new ValueSetter<StandardItemProperty>(
-						(StandardItemProperty) img) {
+				popt.setValueSetter(popt.new ValueSetter<StandardItemProperty>((StandardItemProperty) img) {
 
 					@Override
 					public void setup() {
@@ -65,8 +68,7 @@ public abstract class AImpResource extends AImpObject {
 					}
 				});
 				if (!f.getName().contains(":"))
-					popt.getValueSetter().setValue(
-							"\"repo:" + f.getName() + "\"");
+					popt.getValueSetter().setValue("\"repo:" + IDStringValidator.safeChar(f.getName()) + "\"");
 			}
 			fileset.add(str);
 
