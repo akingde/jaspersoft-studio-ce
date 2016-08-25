@@ -617,7 +617,9 @@ public class NumericText extends Text {
 			storedValue = new Double(defaultMin);
 		}
 		double newValue = storedValue.doubleValue() + increamentStep;
-		setValue(newValue, true);
+		if (newValue >= minimum && newValue <= maximum){
+			setValue(newValue, true);
+		}
 		fireListeners();
 	}
 	
@@ -637,7 +639,9 @@ public class NumericText extends Text {
 			setValue(storedValue, true);
 		} else {
 			double newValue = storedValue.doubleValue() - increamentStep;	
-			setValue(newValue, true);
+			if (newValue >= minimum && newValue <= maximum){
+				setValue(newValue, true);
+			}
 		}
 		fireListeners();
 	}
