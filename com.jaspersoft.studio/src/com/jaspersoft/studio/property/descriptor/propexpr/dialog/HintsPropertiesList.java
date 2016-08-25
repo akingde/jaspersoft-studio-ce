@@ -44,6 +44,7 @@ public class HintsPropertiesList {
 	private static List<ElementDescription> addHints() 
 	{
 		List<ElementDescription> result = new ArrayList<ElementDescription>();
+		result.add(new ElementDescription("net.sf.jasperreports.report.description", MessagesByKeys.getString("report.description"), true));
 		result.add(new ElementDescription("net.sf.jasperreports.text.truncate.at.char", MessagesByKeys.getString("JRPropertyDialog.List.Prop1"), true));
 		result.add(new ElementDescription("net.sf.jasperreports.text.truncate.suffix", MessagesByKeys.getString("JRPropertyDialog.List.Prop2"), true));
 		result.add(new ElementDescription("net.sf.jasperreports.print.keep.full.text", MessagesByKeys.getString("JRPropertyDialog.List.Prop3"), true));
@@ -156,7 +157,7 @@ public class HintsPropertiesList {
 		 	result.add(addHint("net.sf.jasperreports.export.xls.sheet.header.right"));
 		 	result.add(addHint("net.sf.jasperreports.export.xls.column.names"));
 		 	result.add(addHint("net.sf.jasperreports.export.xls.sheet.names.{arbitrary_name}"));
-		 	result.add(addHint("net.sf.jasperreports.virtual.page.element.size"));
+		 	result.add(addHint("net.sf.jasperreports.virtual.page.element.size")); 
 		}
 		return result;   
 	}

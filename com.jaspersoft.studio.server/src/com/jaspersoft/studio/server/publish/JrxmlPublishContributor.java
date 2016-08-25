@@ -27,6 +27,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.InputSource;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
@@ -113,9 +114,11 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			publishBundles(mrunit, monitor, jasper, fileset, file, version);
 			publishTemplates(mrunit, monitor, jasper, fileset, file, version);
 			publishParts(mrunit, monitor, jasper, fileset, file, version);
+			setupDescription(mrunit.getValue(), jasper);
 		}
 		// here extend and give possibility to contribute to plugins
 		extManager.publishJrxml(jrConfig, mres, monitor, jasper, fileset, file, version);
+		setupDescription(mres.getValue(), jasper);
 	}
 
 	protected void publishParts(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset,
@@ -126,6 +129,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 				StandardSubreportPartComponent component = (StandardSubreportPartComponent) part.getComponent();
 				MJrxml fres = (MJrxml) impJRXML.publish(jasper, component, mrunit, monitor, fileset, file);
 				publishSubreport(fres, monitor, fileset);
+				setupDescription(fres.getValue(), jasper);
 			}
 		}
 	}
@@ -134,6 +138,13 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			Set<String> fileset, IFile file, JRDesignElement ele, String version) throws Exception {
 		MJrxml fres = (MJrxml) impSRP.publish(jasper, ele, mrunit, monitor, fileset, file);
 		publishSubreport(fres, monitor, fileset);
+		setupDescription(fres.getValue(), jasper);
+	}
+
+	private void setupDescription(ResourceDescriptor rd, JasperDesign jd) {
+		String d = jd.getProperty("net.sf.jasperreports.report.description");
+		if (!Misc.isNullOrEmpty(d))
+			rd.setDescription(d);
 	}
 
 	protected void publishSubreport(MJrxml fres, IProgressMonitor monitor, Set<String> fileset) throws Exception {
