@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property.desc;
 
+import java.math.BigDecimal;
+
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.components.Activator;
@@ -24,6 +26,7 @@ import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
 import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.DoublePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FloatPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
@@ -144,12 +147,10 @@ public class PathDescriptor extends ADescriptor {
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_name, Messages.PathDescriptor_1,
 						Messages.PathDescriptor_2, false, MapComponent.DEFAULT_PATH_NAME),
 
-				new FloatPropertyDescription(MapComponent.ITEM_PROPERTY_latitude,
-						Messages.MarkerPage_LatitudeColumn, "", false, new Float("37.7833"), new Float("-85f"), //$NON-NLS-3$
-						new Float("85f")),
-				new FloatPropertyDescription(MapComponent.ITEM_PROPERTY_longitude,
-						Messages.MarkerPage_LongitudeColumn, "", false, new Float("-122.4167"), new Float("-180"),
-						new Float("180")), //$NON-NLS-1$
+				new DoublePropertyDescription(MapComponent.ITEM_PROPERTY_latitude,
+						Messages.MarkerPage_LatitudeColumn, "", false, new BigDecimal(37.7833d), -85d, 85d),
+				new DoublePropertyDescription(MapComponent.ITEM_PROPERTY_longitude,
+						Messages.MarkerPage_LongitudeColumn, "", false, new BigDecimal(-122.4167d), -180d, 180d),
 
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_address, Messages.PathDescriptor_3,
 						Messages.PathDescriptor_4, false),

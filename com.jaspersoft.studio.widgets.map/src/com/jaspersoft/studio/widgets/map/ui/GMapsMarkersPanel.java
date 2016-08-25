@@ -10,6 +10,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.map.ui;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -58,6 +62,13 @@ import com.jaspersoft.studio.widgets.map.messages.Messages;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  */
 public class GMapsMarkersPanel extends GMapsCenterPanel {
+	
+	/**
+	 * The markers string is formatted with at max 6 decimal digits and using the English locale, that will force
+	 * the . separator. This is required because when passing the location to the javascript it expects double with
+	 * the standard dot separator
+	 */
+	protected static DecimalFormat coordinatesFormatter = new DecimalFormat(".######", new DecimalFormatSymbols(Locale.ENGLISH));
 
 	protected List markersList;
 
@@ -307,34 +318,45 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 		markersList.removeAll();
 	}
 
-	protected void handleNewMarker(Marker newMarker) {
-		if (initMarkers)
-			return;
-		markersList.add(formatMarker(newMarker));
-	}
-
 	protected void handleMarkerDoubleClick(int ind) {
 
 	}
-
+	
 	public void addNewMarker(Marker m) {
 		LatLng p = m.getPosition();
 		if (p != null) {
-			markersList.add(p.getLat() + " : " + p.getLng()); //$NON-NLS-1$
+			markersList.add(formatMarker(m)); 
 			map.getJavascriptMapSupport().addNewMarker(m);
 			map.getJavaMapSupport().addNewMarker(m);
 		}
 	}
 
+	protected void handleNewMarker(Marker newMarker) {
+		if (initMarkers)
+			return;
+		markersList.add(formatMarker(newMarker));
+	}
+	
+	/**
+	 * Format the marker in a format like lat : long
+	 * where each value has at max 6 decimal digits and 
+	 * the decimal separator is a dot. This assure the compatibility
+	 * with the javascript, since for it the decimal separator
+	 * must be a standard .
+	 */
+	protected String formatMarker(Marker m) {
+		LatLng p = m.getPosition();
+		StringBuilder builder = new StringBuilder();
+		builder.append(coordinatesFormatter.format(p.getLat()));
+		builder.append(" : ");
+		builder.append(coordinatesFormatter.format(p.getLng()));
+		return builder.toString();
+	}
+	
 	public void clearMarkers() {
 		map.getJavascriptMapSupport().clearMarkers();
 		if (markersList != null)
 			markersList.removeAll();
-	}
-
-	protected String formatMarker(Marker m) {
-		LatLng p = m.getPosition();
-		return String.format("%.7f : %.7f", p.getLat(), p.getLng()); //$NON-NLS-1$
 	}
 
 	protected void postInitMap() {
