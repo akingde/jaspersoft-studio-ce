@@ -34,10 +34,13 @@ import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.model.SectionPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
+import com.jaspersoft.studio.widgets.framework.ui.CheckboxItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FilePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FloatPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.FontFamilyComboPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.FontStylePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.SelectableComboItemPropertyDescription;
@@ -117,6 +120,12 @@ public class WidgetFactory {
 			desc = new TextPropertyDescription<String>().getInstance(cd, cpd, jConfig);
 		} else if (cpd.getType().equalsIgnoreCase("selectable_combo")){
 			desc = new SelectableComboItemPropertyDescription<String>().getInstance(cd, cpd, jConfig);
+		} else if (cpd.getType().equalsIgnoreCase("fontfamily_combo")){
+			desc = new FontFamilyComboPropertyDescription().getInstance(cd, cpd, jConfig);
+		} else if (cpd.getType().equalsIgnoreCase("fontstyle_selector")){
+			desc = new FontStylePropertyDescription().getInstance(cd, cpd, jConfig);
+		} else if (cpd.getType().equalsIgnoreCase("checkbox_selector")){
+			desc = new CheckboxItemPropertyDescription().getInstance(cd, cpd, jConfig);
 		} else {
 			//Build the contributed widget if any
 			ItemPropertyDescription<?> contribuitedType = getContributedWidgets().get(cpd.getType().toLowerCase());
