@@ -1,0 +1,36 @@
+{
+    "label": "Level Render",
+    "description": "Allow to setup a level render as the chart render",
+    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.LevelRenderCustomizer",
+    "supportedPlot": ["1","2","3","7","8","11","12","20","21"],
+    "sections": [
+        {
+            "name": "Customizer configuration",
+            "expandable": false,
+            "properties": [
+                {
+                    "name": "itemMargin",
+                    "label": "Item Margin",
+                    "description": "Specify the percentage of the item margin, must be between 0 and 1",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "double",
+                    "min" : "0",
+                    "max" : "1"
+                },
+                {
+                    "name": "maximumItemWidth",
+                    "label": "Maximum Item Width",
+                    "description": "Sets the maximum item width, which is specified as a percentage of the available space for all items. Must be between 0 and 1",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "double",
+                    "min" : "0",
+                    "max" : "1"
+                }  
+            ]
+        }
+    ]
+}

@@ -94,6 +94,42 @@
                     "readOnly": false,
                     "type": "selectable_combo",
                     "comboOptions": [["STROKE_SOLID","Solid"],["STROKE_DOTTED", "Dotted"],["STROKE_DASHED","Dashed"]]
+                },
+                {
+                    "name": "fontName",
+                    "label": "Font Name",
+                    "description": "The font used",
+                    "mandatory": false,
+                    "defaultValue": "SansSerif",
+                    "readOnly": false,
+                    "type": "fontfamily_combo"
+                },
+                {
+                    "name": "fontSize",
+                    "label": "Font Size",
+                    "description": "The size of the font",
+                    "mandatory": false,
+                    "defaultValue": "9",
+                    "readOnly": false,
+                    "type": "integer"
+                },
+                {
+                    "name": "isBold",
+                    "label": "Bold",
+                    "description": "Check if the font should be bold",
+                    "mandatory": false,
+                    "defaultValue": "false",
+                    "readOnly": false,
+                    "type": "checkbox_selector"
+                },
+                {
+                    "name": "isItalic",
+                    "label": "Italic",
+                    "description": "Check if the font should be italic",
+                    "mandatory": false,
+                    "defaultValue": "false",
+                    "readOnly": false,
+                    "type": "checkbox_selector"
                 }
             ]
         }
