@@ -47,6 +47,16 @@
                     "comboOptions": [["top","Top"],["top-left","Top Left"],["top-right", "Top Right"],["bottom","Bottom"],["bottom-left","Bottom Left"],["bottom-right","Bottom Right"],["center","Center"],["left","Left"],["right","Right"]]
                 },
                 {
+                    "name": "label-text-position",
+                    "label": "Label Text Anchor",
+                    "description": "Sets the label text anchor and sends a MarkerChangeEvent to all registered listeners",
+                    "mandatory": false,
+                    "defaultValue": "center",
+                    "readOnly": false,
+                    "type": "selectable_combo",
+                    "comboOptions": [["baseline_center","Baseline"],["baseline_left","Baseline Left"],["baseline_right", "Baseline Right"],["bottom_center","Bottom"],["bottom_left","Bottom Left"],["bottom_right","Bottom Right"],["center","Center"],["center_left","Center Left"],["center_right","Center Right"],["half_ascent_center","Half Ascent"],["half_ascent_left","Half Ascent Left"],["half_ascent_right", "Half Ascent Right"],["top_center","Top"],["top_left","Top Left"],["top_right", "Top Right"]]
+                },
+                {
                     "name": "label-position-offset",
                     "label": "Label Position Offset",
                     "description": "The offset of the label, you can provide more numeric value separated with a comma",
