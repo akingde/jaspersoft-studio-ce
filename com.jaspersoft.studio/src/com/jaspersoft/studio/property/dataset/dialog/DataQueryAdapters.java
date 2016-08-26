@@ -11,6 +11,7 @@ package com.jaspersoft.studio.property.dataset.dialog;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.ToolBarManager;
@@ -302,14 +303,19 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				String filter = jConfig.getProperty(DesignerPreferencePage.P_DAFILTER);
 				if (filter != null && filter.equals("lang")) {
 					String[] langs = da.getLanguages();
-					if (!Misc.isNullOrEmpty(langs)) {
-						String lang = langCombo.getText();
-						for (String l : langs)
-							if (l.equals(lang) || l.equals("*"))
-								return;
-						langCombo.setText(langs[0]);
-						changeLanguage();
+					langCombo.removeAll();
+					if (Misc.isNullOrEmpty(langs) || ArrayUtils.contains(langs, "*")) {
+						langCombo.setItems(languages);
+						return;
 					}
+					String lang = langCombo.getText();
+					for (String l : langs) {
+						langCombo.add(l);
+						if (l.equals(lang))
+							return;
+					}
+					langCombo.setText(langs[0]);
+					changeLanguage();
 				}
 				dscombo.getMenu(tb);
 			}
