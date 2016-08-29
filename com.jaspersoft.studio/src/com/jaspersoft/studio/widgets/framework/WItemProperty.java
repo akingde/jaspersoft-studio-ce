@@ -371,4 +371,35 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	public Object getFallbackValue() {
 		return ipDesc.getFallbackValue();
 	}
+	
+	/**
+	 * Return the label of the current property
+	 */
+	public String getPropertyLabel(){
+		return ipDesc.getLabel();
+	}
+	
+	/**
+	 * Validate the current value looking is it is mandatory but still empty.
+	 * Can be ovverriden to provide a complex behavior
+	 * 
+	 * @return false if the value is mandatory and empty both in expression and
+	 * static value, false otherwise
+	 */
+	public boolean isValueValid(){
+		if (ipDesc != null && editor != null && ipDesc.isMandatory()){
+			String staticValue = getStaticValue();
+			boolean hasStaticValue = true;
+			if (staticValue == null  || staticValue.isEmpty()){
+				hasStaticValue = false;
+			}
+			JRExpression expValue = getExpressionValue();
+			boolean hasExpValue = true;
+			if (expValue == null){
+				hasExpValue = false;
+			}
+			return hasStaticValue || hasExpValue;
+		}
+		return true;
+	}
 }

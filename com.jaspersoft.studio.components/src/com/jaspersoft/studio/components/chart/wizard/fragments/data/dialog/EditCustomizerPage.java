@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +59,28 @@ import net.sf.jasperreports.engine.util.JRClassLoader;
  *
  */
 public abstract class EditCustomizerPage extends JSSHelpWizardPage {
+	
+	/**
+	 * {@link DtoPropertyEditor} that simply trigger the validation of this page when 
+	 * a property change value
+	 *
+	 */
+	private class DialogDtoPropertyEditor extends DtoPropertyEditor {
+		
+		public DialogDtoPropertyEditor(String keyPrefix, CustomizerPropertyExpressionsDTO propertiesDTO) {
+			super(keyPrefix, propertiesDTO);
+		}
+
+		public void createUpdateProperty(String propertyName, String value, net.sf.jasperreports.engine.JRExpression valueExpression) {
+			super.createUpdateProperty(propertyName, value, valueExpression);
+			validate();
+		};
+		
+		public void removeProperty(String propertyName) {
+			super.removeProperty(propertyName);
+			validate();
+		};		
+	}; 
 
 	/**
 	 * Composite where the controls are created
@@ -89,6 +112,12 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	 * The text are where the class name can be typed 
 	 */
 	private Text textArea;
+	
+	/**
+	 * The list of item properties used shown in this page
+	 */
+	private List<WItemProperty> properties = new ArrayList<WItemProperty>();
+
 	
 	/**
 	 * The modify listener to update the class result when something in the text area changes
@@ -131,6 +160,7 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (visible){
+			properties.clear();
 			for(Control control : mainParent.getChildren()){
 				control.dispose();
 			}
@@ -162,12 +192,13 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 				mainParent.setLayout(new GridLayout(2, false));
 				setTitle(getCurrentDefinition().getDescriptor().getLabel());
 				ChartCustomizerDefinition selectedDefinition = getCurrentDefinition();
-				DtoPropertyEditor pEditor = new DtoPropertyEditor(selectedDefinition.getKey(), dto);
+				DialogDtoPropertyEditor pEditor = new DialogDtoPropertyEditor(selectedDefinition.getKey(), dto);
 				WidgetsDescriptor cd = selectedDefinition.getDescriptor();
 				for(WidgetPropertyDescriptor p : cd.getPlainWidgets()) {
 					WidgetFactory.createLabelForProperty(mainParent, p);
 					ItemPropertyDescription<?> descriptor = WidgetFactory.createItemPropertyDescriptor(cd, p, jConfig);
 					WItemProperty widgetEditor = new WItemProperty(mainParent, SWT.NONE, 1, descriptor, pEditor);
+					properties.add(widgetEditor);
 					widgetEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 					widgetEditor.setExpressionContext(ec);
 					widgetEditor.updateWidget();
@@ -218,6 +249,15 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 					setMessage(Messages.EditCustomizerPage_warningClassNotFound, IMessageProvider.WARNING);
 					getContainer().updateButtons();
 					return;
+				}
+			}
+		} else {
+			for(WItemProperty property : properties){
+				if (!property.isValueValid()){
+					String message = "Property {0} has not a valid value";
+					setErrorMessage(MessageFormat.format(message, new Object[]{property.getPropertyLabel()}));
+					getContainer().updateButtons();
+					return;	
 				}
 			}
 		}

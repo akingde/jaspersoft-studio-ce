@@ -57,13 +57,40 @@
                     "comboOptions": [["baseline_center","Baseline"],["baseline_left","Baseline Left"],["baseline_right", "Baseline Right"],["bottom_center","Bottom"],["bottom_left","Bottom Left"],["bottom_right","Bottom Right"],["center","Center"],["center_left","Center Left"],["center_right","Center Right"],["half_ascent_center","Half Ascent"],["half_ascent_left","Half Ascent Left"],["half_ascent_right", "Half Ascent Right"],["top_center","Top"],["top_left","Top Left"],["top_right", "Top Right"]]
                 },
                 {
-                    "name": "label-position-offset",
-                    "label": "Label Position Offset",
-                    "description": "The offset of the label, you can provide more numeric value separated with a comma",
+                    "name": "label-position-offset-top",
+                    "label": "Label Position Offset Top",
+                    "description": "The top offset of the label",
                     "mandatory": false,
-                    "defaultValue": "",
+                    "defaultValue": "3.0d",
                     "readOnly": false,
-                    "type": "text"
+                    "type": "double"
+                },
+                {
+                    "name": "label-position-offset-left",
+                    "label": "Label Position Offset Left",
+                    "description": "The left offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "label-position-offset-bottom",
+                    "label": "Label Position Offset Bottom",
+                    "description": "The bottom offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "label-position-offset-right",
+                    "label": "Label Position Offset Right",
+                    "description": "The right offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
                 },
                 {
                     "name": "color",
@@ -121,7 +148,7 @@
                     "mandatory": false,
                     "defaultValue": "9",
                     "readOnly": false,
-                    "type": "integer"
+                    "type": "float"
                 },
                 {
                     "name": "isBold",

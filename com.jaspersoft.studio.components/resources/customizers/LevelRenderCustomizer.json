@@ -8,6 +8,15 @@
             "name": "Customizer configuration",
             "expandable": false,
             "properties": [
+				{
+                    "name": "seriesIndex",
+                    "label": "Series Index",
+                    "description": "The index of the series that will be rendered as a Level",
+                    "mandatory": true,
+                    "defaultValue": "1",
+                    "readOnly": false,
+                    "type": "integer"
+                },
                 {
                     "name": "itemMargin",
                     "label": "Item Margin",
