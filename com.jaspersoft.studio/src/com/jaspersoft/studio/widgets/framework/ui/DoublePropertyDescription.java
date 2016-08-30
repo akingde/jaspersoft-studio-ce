@@ -56,21 +56,32 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 		BigDecimal def = null;
 		BigDecimal fallBack = null;
 		if (cpd.getMin() != null){
-			min = new BigDecimal(cpd.getMin());
+			min = new BigDecimal(new Double(cpd.getMin()));
 		}
 		if (cpd.getMax() != null){
-			max = new BigDecimal(cpd.getMax());
+			max = new BigDecimal(new Double(cpd.getMax()));
 		}
 		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
-			def = new BigDecimal(cpd.getDefaultValue());
+			def = new BigDecimal(new Double(cpd.getDefaultValue()));
 		}
 		if (cpd.getFallbackValue() != null && !cpd.getFallbackValue().isEmpty()){
-			fallBack = new BigDecimal(cpd.getFallbackValue());
+			fallBack = new BigDecimal(new Double(cpd.getFallbackValue()));
 		}
 		DoublePropertyDescription doubleDesc = new DoublePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max);
 		doubleDesc.setReadOnly(cpd.isReadOnly());
 		doubleDesc.setFallbackValue(fallBack);
 		return doubleDesc;
+	}
+	
+	@Override
+	protected NumericText createSimpleEditor(Composite parent) {
+		NumericText text = new NumericText(parent, SWT.BORDER, 6, 10);
+		text.setRemoveTrailZeroes(true);
+		Number max = getMax() != null ? getMax() : Double.MAX_VALUE;
+		Number min = getMin() != null ? getMin() : Double.MIN_VALUE;
+		text.setMaximum(max.doubleValue());
+		text.setMinimum(min.doubleValue());
+		return text;
 	}
 	
 	public void handleEdit(Control txt, IWItemProperty wiProp) {
@@ -84,17 +95,6 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 				tvalue = null;
 			wiProp.setValue(tvalue, null);
 		} else super.handleEdit(txt, wiProp);
-	}
-
-	@Override
-	protected NumericText createSimpleEditor(Composite parent) {
-		NumericText text = new NumericText(parent, SWT.BORDER, 6, 10);
-		text.setRemoveTrailZeroes(true);
-		Number max = getMax() != null ? getMax() : Double.MAX_VALUE;
-		Number min = getMin() != null ? getMin() : Double.MIN_VALUE;
-		text.setMaximum(max.doubleValue());
-		text.setMinimum(min.doubleValue());
-		return text;
 	}
 
 	@Override

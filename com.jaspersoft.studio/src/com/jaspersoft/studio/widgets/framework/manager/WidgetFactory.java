@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.manager;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.CheckboxItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.DoublePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FilePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FloatPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FontFamilyComboPropertyDescription;
@@ -57,9 +59,15 @@ import com.jaspersoft.studio.widgets.framework.ui.TransparentColorPropertyDescri
 public class WidgetFactory {
 	
 	/**
-	 * List of {@link ItemPropertyDescription} contributed by other plusing. The key is the type of widget the {@link ItemPropertyDescription} implement
+	 * List of {@link ItemPropertyDescription} contributed by other plugins. The key is the type of widget the {@link ItemPropertyDescription} implement
 	 */
 	private static Map<String, ItemPropertyDescription<?>> contributedWidgets = null;
+	
+	/**
+	 * List of {@link ItemPropertyDescription} hardcoded inside the application, they are stored into a map to be retrieved fast.
+	 * The key is the type of widget the {@link ItemPropertyDescription} implement
+	 */
+	private static Map<String, ItemPropertyDescription<?>> hardcodedWidgets = null;
 
 	/**
 	 * Return the List of {@link ItemPropertyDescription}, used to build the custom widgets
@@ -90,9 +98,54 @@ public class WidgetFactory {
 		}
 		return contributedWidgets;
 	}
+	
+	/**
+	 * Return the map of the hardcoded widgets, if it was yet not created it is creted 
+	 * on the first call
+	 * 
+	 * @return a not null map of all the hardcoded widgets
+	 */
+	protected static Map<String, ItemPropertyDescription<?>> getHardcodedWidgets() {
+		if (hardcodedWidgets == null){
+			hardcodedWidgets = new HashMap<String, ItemPropertyDescription<?>>();
+			
+			//populate the map
+			hardcodedWidgets.put("path", new FilePropertyDescription());		
+			hardcodedWidgets.put("combo", new ComboItemPropertyDescription<String>());
+			hardcodedWidgets.put("color", new ColorPropertyDescription<String>());
+			hardcodedWidgets.put("transparent_color", new TransparentColorPropertyDescription<String>());
+			hardcodedWidgets.put("float", new FloatPropertyDescription());
+			hardcodedWidgets.put("integer", new IntegerPropertyDescription());
+			hardcodedWidgets.put("double", new DoublePropertyDescription());
+			hardcodedWidgets.put("text", new TextPropertyDescription<String>());
+			hardcodedWidgets.put("selectable_combo", new SelectableComboItemPropertyDescription<String>());
+			hardcodedWidgets.put("fontfamily_combo", new FontFamilyComboPropertyDescription());
+			hardcodedWidgets.put("fontstyle_selector", new FontStylePropertyDescription());
+			hardcodedWidgets.put("checkbox_selector", new CheckboxItemPropertyDescription());
+		}
+		return hardcodedWidgets;
+	}
+	
+	/**
+	 * Return the type of all the available widgets
+	 * 
+	 * @return a not null string containing the type of every widget
+	 */
+	protected static String getValidTypes(){
+		StringBuilder result = new StringBuilder();
+		for(String hardcodedType : getHardcodedWidgets().keySet()){
+			result.append(hardcodedType);
+			result.append(", ");
+		}
+		for(String contributedType : getContributedWidgets().keySet()){
+			result.append(contributedType);
+			result.append(", ");
+		}
+		return result.substring(0, result.length() - 2);
+	}
 
 	/**
-	 * Create a {@link ItemPropertyDescription} from a widget definition
+	 * Create a {@link ItemPropertyDescription} from a widget definition. If the widgets can not be resolved it log an error
 	 * 
 	 * @param cd the container of all the widgets, used for the localization
 	 * @param cpd the descriptor of the widget, the type and the other informations will be used to build the {@link ItemPropertyDescription}
@@ -101,35 +154,20 @@ public class WidgetFactory {
 	 * @return the {@link ItemPropertyDescription} to handle the type defined by the WidgetPropertyDescription, or null if the type can not be resolved
 	 */
 	public static ItemPropertyDescription<?> createItemPropertyDescriptor(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
+		ItemPropertyDescription<?> hardcodedType = getHardcodedWidgets().get(cpd.getType().toLowerCase());	
 		ItemPropertyDescription<?> desc = null;
-		if (cpd.getType().equalsIgnoreCase("path")) {
-			desc = new FilePropertyDescription().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("combo")) {
-				desc = new ComboItemPropertyDescription<String>().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("color")) {
-			desc = new ColorPropertyDescription<String>().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("transparent_color")) {
-			desc = new TransparentColorPropertyDescription<String>().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("float")) {
-			desc = new FloatPropertyDescription().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("integer")) {
-			desc = new IntegerPropertyDescription().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("double")) {
-			desc = new FloatPropertyDescription().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("text")){
-			desc = new TextPropertyDescription<String>().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("selectable_combo")){
-			desc = new SelectableComboItemPropertyDescription<String>().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("fontfamily_combo")){
-			desc = new FontFamilyComboPropertyDescription().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("fontstyle_selector")){
-			desc = new FontStylePropertyDescription().getInstance(cd, cpd, jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("checkbox_selector")){
-			desc = new CheckboxItemPropertyDescription().getInstance(cd, cpd, jConfig);
+		if (hardcodedType != null){
+			 desc = hardcodedType.getInstance(cd, cpd, jConfig);
 		} else {
 			//Build the contributed widget if any
 			ItemPropertyDescription<?> contribuitedType = getContributedWidgets().get(cpd.getType().toLowerCase());
-			desc = contribuitedType.getInstance(cd, cpd, jConfig);
+			if (contribuitedType == null){
+				String errorString = "Invalid widget type {0}, valid types are: {1}";
+				String errorMessage = MessageFormat.format(errorString, new Object[]{cpd.getType().toLowerCase(), getValidTypes()});
+				JaspersoftStudioPlugin.getInstance().logError(errorMessage, new Exception(errorMessage));
+			} else { 	
+				desc = contribuitedType.getInstance(cd, cpd, jConfig);
+			}
 		}
 		return desc;
 	}

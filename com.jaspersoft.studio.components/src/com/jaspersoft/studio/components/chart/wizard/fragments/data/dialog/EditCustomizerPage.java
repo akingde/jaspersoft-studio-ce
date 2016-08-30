@@ -195,13 +195,15 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 				DialogDtoPropertyEditor pEditor = new DialogDtoPropertyEditor(selectedDefinition.getKey(), dto);
 				WidgetsDescriptor cd = selectedDefinition.getDescriptor();
 				for(WidgetPropertyDescriptor p : cd.getPlainWidgets()) {
-					WidgetFactory.createLabelForProperty(mainParent, p);
 					ItemPropertyDescription<?> descriptor = WidgetFactory.createItemPropertyDescriptor(cd, p, jConfig);
-					WItemProperty widgetEditor = new WItemProperty(mainParent, SWT.NONE, 1, descriptor, pEditor);
-					properties.add(widgetEditor);
-					widgetEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-					widgetEditor.setExpressionContext(ec);
-					widgetEditor.updateWidget();
+					if (descriptor != null){
+						WidgetFactory.createLabelForProperty(mainParent, p);
+						WItemProperty widgetEditor = new WItemProperty(mainParent, SWT.NONE, 1, descriptor, pEditor);
+						properties.add(widgetEditor);
+						widgetEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+						widgetEditor.setExpressionContext(ec);
+						widgetEditor.updateWidget();
+					}
 				}
 			}
 			int compositeHeight = Math.max(mainParent.computeSize(500, SWT.DEFAULT).y + 200, 400);

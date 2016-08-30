@@ -316,10 +316,12 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 									}
 									first = false;
 									for (WidgetPropertyDescriptor pd : csd.getProperties()) {
-										CVCPropertyEditor editor = new CVCPropertyEditor(this.section, itemProps);
 										ItemPropertyDescription<?> ipdesc = WidgetFactory.createItemPropertyDescriptor(currentDescriptor, pd, jConf);
-										descriptor.addItemPropertyDescriptor(ipdesc);
-										wIProps.add(createItemProperty(c, ipdesc, descriptorLabelProvider, ec, editor));
+										if (ipdesc != null){
+											CVCPropertyEditor editor = new CVCPropertyEditor(this.section, itemProps);
+											descriptor.addItemPropertyDescriptor(ipdesc);
+											wIProps.add(createItemProperty(c, ipdesc, descriptorLabelProvider, ec, editor));	
+										}
 									}
 								}
 								setDataIntoWidgets();

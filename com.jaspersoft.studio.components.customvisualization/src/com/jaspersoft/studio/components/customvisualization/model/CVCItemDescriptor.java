@@ -181,7 +181,10 @@ public class CVCItemDescriptor extends ADescriptor {
 									if (cdd.getSections() != null)
 										for (SectionPropertyDescriptor csd : cdd.getSections()){
 											for (WidgetPropertyDescriptor cpd : csd.getProperties()){
-												props.add(WidgetFactory.createItemPropertyDescriptor(cd, cpd, jConf));
+												ItemPropertyDescription<?> itemDesc = WidgetFactory.createItemPropertyDescriptor(cd, cpd, jConf);
+												if (itemDesc != null) {
+													props.add(itemDesc);
+												}
 											}
 										}
 
