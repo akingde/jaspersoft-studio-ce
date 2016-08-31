@@ -1,0 +1,30 @@
+{
+    "label": "Domain Axis Maximum and Minimum",
+    "description": "Customizer to set the range for the domain axes",
+    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.DomainAxisMinMaxCustomizer",
+    "supportedPlot": ["13","14","15"],
+    "sections": [
+        {
+            "name": "Customizer configuration",
+            "expandable": false,
+            "properties": [
+				{
+                    "name": "rangeMin",
+                    "label": "Range Min",
+                    "description": "The minimum value on the domain axis",
+                    "mandatory": false,
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "rangeMax",
+                    "label": "Range Max",
+                    "description": "The maximum value on the domain axis",
+                    "mandatory": false,
+                    "readOnly": false,
+                    "type": "double"
+                }
+            ]
+        }
+    ]
+}

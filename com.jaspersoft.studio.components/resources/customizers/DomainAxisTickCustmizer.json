@@ -1,0 +1,23 @@
+{
+    "label": "Domain Axis Tick",
+    "description": "Allow to setup the tick distance on the domain axis",
+    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.DomainAxisTickCustomizer",
+    "supportedPlot": ["13","14","15"],
+    "sections": [
+        {
+            "name": "Customizer configuration",
+            "expandable": false,
+            "properties": [
+				{
+                    "name": "tickSpacingDomain",
+                    "label": "Spacing",
+                    "description": "The space between ticks",
+                    "mandatory": false,
+                    "defaultValue": "1",
+                    "readOnly": false,
+                    "type": "double"
+                }
+            ]
+        }
+    ]
+}
