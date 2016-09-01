@@ -56,6 +56,8 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetsDefinitionManager;
 
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
+import net.sf.jasperreports.data.BuiltinDataFileServiceFactory;
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.IDisposeListener;
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
@@ -97,26 +99,26 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
 
 	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
-	
+
 	/**
-	 * Key used to store the drawer used to paint the JRElements, it is stored in 
-	 * the configuration to be easily accessible
+	 * Key used to store the drawer used to paint the JRElements, it is stored in the configuration to be easily
+	 * accessible
 	 */
 	public static final String KEY_DRAWER = "REPORT_DRAWER";
 
 	/**
-	 * Key used to store the report converter used to paint the JRElements, it is stored in 
-	 * the configuration to be easily accessible
+	 * Key used to store the report converter used to paint the JRElements, it is stored in the configuration to be easily
+	 * accessible
 	 */
 	public static final String KEY_CONVERTER = "REPORT_CONVERTER";
-	
+
 	/**
 	 * Key of the event that must be fired on the {@link JasperReportsConfiguration} to notify that a physical resource
-	 * not available before was loaded and can be used. Doing this we can refresh some resources on the editor (ie image & styles)
-	 * when new resource are available
+	 * not available before was loaded and can be used. Doing this we can refresh some resources on the editor (ie image &
+	 * styles) when new resource are available
 	 */
 	public static final String RESOURCE_LOADED = "RESOURCE_LOADED";
-	
+
 	/**
 	 * The key which identified the file being edited
 	 */
@@ -145,37 +147,38 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "preferences", null, event));
 		}
 	}
-	
+
 	/**
-	 * When an event of resource loaded happen it rebuild the extrenral styles in the
-	 * report drawer and trigger a refresh of the editor
+	 * When an event of resource loaded happen it rebuild the extrenral styles in the report drawer and trigger a refresh
+	 * of the editor
 	 * 
 	 * @author Orlandin Marco
 	 *
 	 */
 	private final class ResourceLoadedListener implements PropertyChangeListener {
-		
+
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(RESOURCE_LOADED)){
-				//clear the style cache of this configuration, since a resource could be changed for it
-				//and styles need to be loaded another time
+			if (evt.getPropertyName().equals(RESOURCE_LOADED)) {
+				// clear the style cache of this configuration, since a resource could be changed for it
+				// and styles need to be loaded another time
 				ExternalStylesManager.removeCachedStyles(JasperReportsConfiguration.this);
-				//Not sure if the resource is a style, so this call will regenerate first the styles 
-				//and trigger a complete refresh of the editor. Doing so it will cover every case of
-				//late loading of a resource
+				// Not sure if the resource is a style, so this call will regenerate first the styles
+				// and trigger a complete refresh of the editor. Doing so it will cover every case of
+				// late loading of a resource
 				refreshCachedStyles();
 
-				//Fire an event to the template style to ask an update of the nodes
+				// Fire an event to the template style to ask an update of the nodes
 				JRReportTemplate[] templates = getJasperDesign().getTemplates();
-				if (templates != null){
-					for (int i = 0; i < templates.length; i++){
-						((JRDesignReportTemplate)templates[i]).getEventSupport().firePropertyChange(MStyleTemplate.FORCE_UPDATE_CHILDREN, null, null);
+				if (templates != null) {
+					for (int i = 0; i < templates.length; i++) {
+						((JRDesignReportTemplate) templates[i]).getEventSupport()
+								.firePropertyChange(MStyleTemplate.FORCE_UPDATE_CHILDREN, null, null);
 					}
 				}
 			}
 		}
-		
+
 	}
 
 	private class ClasspathListener implements PropertyChangeListener {
@@ -235,7 +238,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	private ClassLoader classLoader;
 	private boolean isPropsCached = false;
 	private ParameterSetProvider prmProvider;
-	
+
 	protected JSSStyleResolver resolver;
 
 	/**
@@ -283,14 +286,14 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		// file changed, reset properties
 		isPropsCached = false;
-		
+
 		// service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 		if (preferenceListener == null) {
 			preferenceListener = new PreferenceListener();
 			JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 		}
-		
-		if (resourceLoadedListener == null){
+
+		if (resourceLoadedListener == null) {
 			resourceLoadedListener = new ResourceLoadedListener();
 			getPropertyChangeSupport().addPropertyChangeListener(resourceLoadedListener);
 		}
@@ -580,7 +583,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 
 	public Boolean getPropertyBooleanDef(String key, boolean def) {
 		Boolean p = getPropertyBoolean(key);
-		if (p == null){
+		if (p == null) {
 			p = pstore.getDefaultBoolean(key);
 		}
 		if (p == null)
@@ -804,9 +807,16 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				result = (List<T>) repositoryServices;
 			} else {
 				try {
-					result = super.getExtensions(extensionType);
-					if (result != null)
-						result = new ArrayList<T>(new LinkedHashSet<T>(result));
+					List<T> r = super.getExtensions(extensionType);
+					if (r != null) {
+						result = new ArrayList<T>();
+						for (T item : r) {
+							if (item instanceof BuiltinDataFileServiceFactory
+									|| item instanceof DataAdapterParameterContributorFactory)
+								continue;
+							result.add(item);
+						}
+					}
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
@@ -912,44 +922,45 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public IFile getAssociatedReportFile() {
 		return (IFile) get(FileUtils.KEY_FILE);
 	}
-	
+
 	/**
-	 * Force the reload of the styles for jasperreports, should be called when an 
-	 * used external style change, this will discard all the loaded styles and reload
-	 * them another time. Then it trigger the repaint of every element in the report
+	 * Force the reload of the styles for jasperreports, should be called when an used external style change, this will
+	 * discard all the loaded styles and reload them another time. Then it trigger the repaint of every element in the
+	 * report
 	 */
-	public void refreshCachedStyles(){
+	public void refreshCachedStyles() {
 		JSSReportConverter reportConverter = getReportConverter();
-		if (reportConverter != null){
+		if (reportConverter != null) {
 			reportConverter.refreshCachedStyles();
 			JasperDesign design = getJasperDesign();
-			PropertyChangeEvent changeEvent = new PropertyChangeEvent(design, MGraphicElement.FORCE_GRAPHICAL_REFRESH, false, true);
-			for(JRDesignElement element : ModelUtils.getAllElements(design)){
+			PropertyChangeEvent changeEvent = new PropertyChangeEvent(design, MGraphicElement.FORCE_GRAPHICAL_REFRESH, false,
+					true);
+			for (JRDesignElement element : ModelUtils.getAllElements(design)) {
 				element.getEventSupport().firePropertyChange(changeEvent);
 			}
 		}
 	}
-	
+
 	/**
 	 * Return the report converter used to paint the report elements
 	 * 
 	 * @return return the current report converter or null if it can't be resolved
 	 */
-	public JSSReportConverter getReportConverter(){
+	public JSSReportConverter getReportConverter() {
 		Object converter = get(JasperReportsConfiguration.KEY_CONVERTER);
-		if (converter instanceof JSSReportConverter){
-			return (JSSReportConverter)converter;
+		if (converter instanceof JSSReportConverter) {
+			return (JSSReportConverter) converter;
 		} else {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Return the style resolver for the current report
 	 * 
 	 * @return a not null {@link JSSStyleResolver}
 	 */
-	public JSSStyleResolver getStyleResolver(){
+	public JSSStyleResolver getStyleResolver() {
 		return resolver;
 	}
 
