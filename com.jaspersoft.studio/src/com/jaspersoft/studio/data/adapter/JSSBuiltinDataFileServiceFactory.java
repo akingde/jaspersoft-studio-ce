@@ -26,7 +26,7 @@ import net.sf.jasperreports.data.RepositoryDataLocationService;
 import net.sf.jasperreports.data.http.HttpDataLocation;
 import net.sf.jasperreports.data.http.HttpDataService;
 import net.sf.jasperreports.eclipse.util.HttpUtils;
-import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.ParameterContributorContext;
 
 public class JSSBuiltinDataFileServiceFactory extends BuiltinDataFileServiceFactory {
 	private static final BuiltinDataFileServiceFactory INSTANCE = new JSSBuiltinDataFileServiceFactory();
@@ -39,7 +39,7 @@ public class JSSBuiltinDataFileServiceFactory extends BuiltinDataFileServiceFact
 	}
 
 	@Override
-	public DataFileService createService(JasperReportsContext context, DataFile dataFile) {
+	public DataFileService createService(ParameterContributorContext context, DataFile dataFile) {
 		if (dataFile instanceof RepositoryDataLocation) {
 			return new RepositoryDataLocationService(context, (RepositoryDataLocation) dataFile);
 		}
@@ -52,15 +52,15 @@ public class JSSBuiltinDataFileServiceFactory extends BuiltinDataFileServiceFact
 					// single connection
 					BasicHttpClientConnectionManager connManager = new BasicHttpClientConnectionManager();
 					clientBuilder.setConnectionManager(connManager);
-					
+
 					// ignore cookies for now
 					RequestConfig requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build();
 					clientBuilder.setDefaultRequestConfig(requestConfig);
-					
+
 					HttpClientContext clientContext = HttpClientContext.create();
-					
+
 					setAuthentication(parameters, clientContext);
-					
+
 					CloseableHttpClient client = clientBuilder.build();
 					return client;
 				}
