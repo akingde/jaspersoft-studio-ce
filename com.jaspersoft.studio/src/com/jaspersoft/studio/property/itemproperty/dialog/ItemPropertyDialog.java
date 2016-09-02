@@ -75,24 +75,23 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 	private boolean refresh = false;
 	private Composite cmp;
 	private StackLayout stackLayout;
-	
+
 	private String staticValue;
-	
+
 	private JRExpression expressionValue;
-	
+
 	private IPropertyEditor internalEditor = new PropertyEditorAdapter() {
-		
+
 		@Override
 		public JRExpression getPropertyValueExpression(String propertyName) {
 			return getExpressionValue();
 		}
-		
+
 		@Override
 		public String getPropertyValue(String propertyName) {
 			return getStaticValue();
 		}
 	};
-
 
 	public ItemPropertyDialog(Shell parentShell, ItemProperty itemProperty, ADescriptor descriptor) {
 		super(parentShell);
@@ -103,7 +102,10 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 			this.itemProperty = new StandardItemProperty("", "", null); //$NON-NLS-1$ //$NON-NLS-2$
 		this.descriptor = descriptor;
 		ItemPropertyDescription<?> ipDesc = descriptor.getDescription(itemProperty.getName());
-		this.ipDesc = ipDesc.clone();
+		if (ipDesc == null)
+			this.ipDesc = new TextPropertyDescription<String>(itemProperty.getName(), "", false);
+		else
+			this.ipDesc = ipDesc.clone();
 	}
 
 	@Override
@@ -167,7 +169,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 					propertyValue.dispose();
 
 					ItemPropertyDescription<?> ipDesc = descriptor.getDescription(itemProperty.getName());
-					if (ipDesc == null){
+					if (ipDesc == null) {
 						ItemPropertyDialog.this.ipDesc = new TextPropertyDescription<String>(itemProperty.getName(), "", false);
 					} else {
 						ItemPropertyDialog.this.ipDesc = ipDesc.clone();
@@ -206,7 +208,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 				propertyValue.dispose();
 
 				ItemPropertyDescription<?> ipDesc = descriptor.getDescription(itemProperty.getName());
-				if (ipDesc == null){
+				if (ipDesc == null) {
 					ItemPropertyDialog.this.ipDesc = new TextPropertyDescription<String>(itemProperty.getName(), "", false);
 				} else {
 					ItemPropertyDialog.this.ipDesc = ipDesc.clone();
@@ -225,13 +227,13 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 				validateDialog();
 			}
 		});
-		
+
 		useExpressionCheckbox.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (isRefresh())
 					return;
-				if (isExpressionMode()){
+				if (isExpressionMode()) {
 					itemProperty.setValueExpression(new JRDesignExpression());
 				} else {
 					itemProperty.setValueExpression(null);
@@ -332,7 +334,6 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		return expressionValue;
 	}
 
-
 	@Override
 	public String getPropertyName() {
 		return ipDesc.getName();
@@ -347,12 +348,11 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 	public IMenuProvider getContextualMenuProvider() {
 		return StandardContextualMenu.INSTANCE;
 	}
-	
 
 	@Override
 	public void updateWidget() {
 		setRefresh(true);
-		try{
+		try {
 			ipDesc.update(propertyValue, this);
 		} finally {
 			setRefresh(false);
