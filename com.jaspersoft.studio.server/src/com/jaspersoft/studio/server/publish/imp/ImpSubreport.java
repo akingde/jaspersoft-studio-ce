@@ -41,8 +41,7 @@ public class ImpSubreport extends AImpObject {
 
 	@Override
 	protected File findFile(IFile file, String str) {
-		File f = super.findFile(file, str.replaceAll(FileExtension.PointJASPER,
-				FileExtension.PointJRXML));
+		File f = super.findFile(file, doPath(str));
 		if (f == null) {
 			f = super.findFile(file, str);
 			if (f != null) {
@@ -68,6 +67,11 @@ public class ImpSubreport extends AImpObject {
 			}
 		}
 		return f;
+	}
+
+	@Override
+	protected String doPath(String path) {
+		return path.replaceAll(FileExtension.PointJASPER, FileExtension.PointJRXML);
 	}
 
 	protected ResourceDescriptor createResource(MReportUnit mrunit) {

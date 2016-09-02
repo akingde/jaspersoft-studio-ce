@@ -49,7 +49,7 @@ public abstract class AImpObject {
 			JRDesignExpression exp, IFile file) {
 		String str = getPath(fileset, exp);
 		if (fileset.contains(str)) {
-			setupSameExpression(mrunit, exp, str);
+			setupSameExpression(mrunit, exp, doPath(str));
 			return null;
 		}
 		if (str == null)
@@ -66,6 +66,10 @@ public abstract class AImpObject {
 			return addResource(monitor, mrunit, fileset, f, popt);
 		}
 		return null;
+	}
+
+	protected String doPath(String path) {
+		return path;
 	}
 
 	public static void setupSameExpression(MReportUnit mrunit, JRDesignExpression exp, String str) {

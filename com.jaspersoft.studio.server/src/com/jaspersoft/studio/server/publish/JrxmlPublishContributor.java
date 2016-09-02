@@ -138,7 +138,8 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			Set<String> fileset, IFile file, JRDesignElement ele, String version) throws Exception {
 		MJrxml fres = (MJrxml) impSRP.publish(jasper, ele, mrunit, monitor, fileset, file);
 		publishSubreport(fres, monitor, fileset);
-		setupDescription(fres.getValue(), jasper);
+		if (fres != null)
+			setupDescription(fres.getValue(), jasper);
 	}
 
 	private void setupDescription(ResourceDescriptor rd, JasperDesign jd) {
