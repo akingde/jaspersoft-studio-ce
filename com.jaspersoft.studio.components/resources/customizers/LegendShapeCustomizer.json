@@ -1,0 +1,66 @@
+{
+    "label": "Legend Shape",
+    "description": "Allow to setup a level render as the chart render",
+    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.LegendShapeCustomizer",
+    "supportedPlot": ["13","14","15","1","2","3","7","8","11","12","20","21"],
+    "sections": [
+        {
+            "name": "Customizer configuration",
+            "expandable": false,
+            "properties": [
+				{
+                    "name": "legendItemIndexKey",
+                    "label": "Legend Item Index",
+                    "description": "The index of the legend item that will be changed",
+                    "mandatory": false,
+                    "defaultValue": "1",
+                    "readOnly": false,
+                    "type": "integer"
+                },
+               	{
+                    "name": "legendItemSeriesKey",
+                    "label": "Series Name",
+                    "description": "The series associated to the legend item",
+                    "mandatory": false,
+                    "readOnly": false,
+                    "type": "text"
+                },
+               	{
+                    "name": "allLegendItems",
+                    "label": "Apply to all legend items",
+                    "description": "Apply to all the legend items",
+                    "mandatory": false,
+                    "readOnly": false,
+                    "type": "checkbox_selector"
+                },
+                {
+                    "name": "legendShapeDefinition",
+                    "label": "Shape",
+                    "description": "Specify the points of the shape",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "shape"
+                },
+                {
+                    "name": "legendShapeWidth",
+                    "label": "Width",
+                    "description": "The width of the shape",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "integer"
+                },
+                {
+                    "name": "legendShapeHeight",
+                    "label": "Height",
+                    "description": "Specify the height of the shape",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "integer"
+                }  
+            ]
+        }
+    ]
+}
