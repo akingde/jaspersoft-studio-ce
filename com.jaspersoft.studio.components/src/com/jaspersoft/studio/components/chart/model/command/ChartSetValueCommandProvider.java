@@ -26,6 +26,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.ISetValueCommandProvider;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -51,7 +52,12 @@ public class ChartSetValueCommandProvider implements ISetValueCommandProvider {
 	@Override
 	public Command getSetValueCommand(IPropertySource source, String commandName, Object propertyId, Object newVal) { 
 		if (isCustomizerProperty(propertyId)){
-			CustomizerPropertyExpressionsDTO currentDTO = (CustomizerPropertyExpressionsDTO)newVal;
+			CustomizerPropertyExpressionsDTO currentDTO = null;
+			if (newVal instanceof CustomizerPropertyExpressionsDTO){
+				currentDTO = (CustomizerPropertyExpressionsDTO)newVal;
+			} else {
+				currentDTO = new CustomizerPropertyExpressionsDTO((PropertyExpressionsDTO)newVal);
+			}
 			JSSCompoundCommand command = new JSSCompoundCommand("Set Chart Customizers", (ANode)source);
 			SetValueCommand setDTOCommand = new SetValueCommand();
 			setDTOCommand.setTarget(source);
