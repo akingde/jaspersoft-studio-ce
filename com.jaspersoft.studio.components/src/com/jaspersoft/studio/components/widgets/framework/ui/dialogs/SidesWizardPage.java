@@ -81,7 +81,8 @@ public class SidesWizardPage extends JSSHelpWizardPage {
 	
 	/**
 	 * Compute the points that compose the regular polygon with the specified number of 
-	 * sides. To allow a better rounding the radius is fixed to 1000
+	 * sides. To allow a better rounding the radius is fixed to 1000. All the points 
+	 * returned are positive
 	 * 
 	 * @return the list of points that compose the polygon
 	 */
@@ -89,11 +90,28 @@ public class SidesWizardPage extends JSSHelpWizardPage {
 		List<Point> result = new ArrayList<Point>();
 		int radius = 1000;
 		
+		Integer minX = null;
+		Integer minY = null;
 		for(int i = 0; i < sidesNumber; i++){
 			int x = (int)(radius * Math.cos(2*Math.PI*((float)i/(float)sidesNumber)));
 			int y = (int)(radius * Math.sin(2*Math.PI*((float)i/(float)sidesNumber)));
 			result.add(new Point(x, y));
+			if (minX == null || minX > x){
+				minX = x;
+			}
+			if (minY == null || minY > y){
+				minY = y;
+			}
 		}
+		
+		//Make all the points positives
+		int xOffset = minX < 0 ? Math.abs(minX) : 0;
+		int yOffset = minY < 0 ? Math.abs(minY) : 0;
+		for(Point point : result){
+			point.setX(point.getX() + xOffset);
+			point.setY(point.getY() + yOffset);
+		}
+		
 		return result;
 	}
 	
