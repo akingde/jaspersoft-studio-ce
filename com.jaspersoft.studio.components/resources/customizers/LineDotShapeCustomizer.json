@@ -1,7 +1,7 @@
 {
-    "label": "Legend Shape",
-    "description": "Allow to define the shape and size of the legend items",
-    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.LegendShapeCustomizer",
+    "label": "Line Dot Shape",
+    "description": "Allow to define the shape and size of the dot items for the line charts",
+    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.LineDotShapeCustomizer",
     "supportedPlot": ["13","14","15","1","2","3","7","8","11","12","20","21"],
     "sections": [
         {
@@ -9,16 +9,16 @@
             "expandable": false,
             "properties": [
 				{
-                    "name": "legendItemIndexKey",
-                    "label": "Legend Item Index",
-                    "description": "The index of the legend item that will be changed",
+                    "name": "lineDotItemIndexKey",
+                    "label": "Series Item Index",
+                    "description": "The index of the series dot item that will be changed",
                     "mandatory": false,
                     "defaultValue": "1",
                     "readOnly": false,
                     "type": "integer"
                 },
                	{
-                    "name": "legendItemSeriesKey",
+                    "name": "lineDotItemSeriesKey",
                     "label": "Series Name",
                     "description": "The series associated to the legend item",
                     "mandatory": false,
@@ -26,15 +26,15 @@
                     "type": "text"
                 },
                	{
-                    "name": "allLegendItems",
-                    "label": "Apply to all legend items",
-                    "description": "Apply to all the legend items",
+                    "name": "allLineDotItems",
+                    "label": "Apply to all series",
+                    "description": "Apply to all the series dot items",
                     "mandatory": false,
                     "readOnly": false,
                     "type": "checkbox_selector"
                 },
                 {
-                    "name": "legendShapeDefinition",
+                    "name": "lineDotShapeDefinition",
                     "label": "Shape",
                     "description": "Specify the points of the shape",
                     "mandatory": false,
@@ -43,7 +43,7 @@
                     "type": "shape"
                 },
                 {
-                    "name": "legendShapeWidth",
+                    "name": "lineDotShapeWidth",
                     "label": "Width",
                     "description": "The width of the shape",
                     "mandatory": false,
@@ -52,7 +52,7 @@
                     "type": "integer"
                 },
                 {
-                    "name": "legendShapeHeight",
+                    "name": "lineDotShapeHeight",
                     "label": "Height",
                     "description": "Specify the height of the shape",
                     "mandatory": false,
