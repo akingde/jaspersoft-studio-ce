@@ -118,7 +118,7 @@ public class JRDefaultDataAdapterStorage extends ADataAdapterStorage {
 	 * @return the data adapter if the location was resolved otherwise
 	 * null
 	 */
-	protected DataAdapterDescriptor getDefaultJRDataAdapter(String location){
+	public DataAdapterDescriptor getDefaultJRDataAdapter(String location){
 		if (location != null){
 			DataAdapterLocationResolver resolver = getResolver(location);
 			return resolver.getDataAdapter();

@@ -13,9 +13,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -24,6 +22,7 @@ import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
 import com.jaspersoft.studio.data.reader.DataPreviewScriptlet;
 import com.jaspersoft.studio.data.reader.DatasetReader;
 import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -52,12 +51,6 @@ public class ElementPreviewer {
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 0;
 		cmp.setLayout(layout);
-
-		new Label(cmp, SWT.NONE).setText("Data");
-
-		Combo cmb = new Combo(cmp, SWT.READ_ONLY);
-		cmb.setItems(new String[] { "Template", "Report" });
-		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		browser = BrowserUtils.getSWTBrowserWidget(cmp, SWT.NONE);
 		browser.setJavascriptEnabled(true);
@@ -115,11 +108,15 @@ public class ElementPreviewer {
 	}
 
 	protected void setupDatasets(JasperReportsConfiguration jConf, JasperDesign jDesign) throws JRException {
+		for (JRDataset ds : jd.getDatasets())
+			jd.removeDataset(ds);
+		List<String> columns = new ArrayList<String>();
+		for (JRField f : jDesign.getMainDataset().getFields())
+			columns.add(f.getName());
+		DatasetReader.setupDataset(jd, (JRDesignDataset) jDesign.getMainDesignDataset(), jConf, columns);
+
 		for (JRDataset ds : jDesign.getDatasets()) {
-			List<String> columns = new ArrayList<String>();
-			for (JRField f : ds.getFields())
-				columns.add(f.getName());
-			DatasetReader.setupDataset(jd, (JRDesignDataset) ds, jConf, columns);
+			jd.addDataset((JRDesignDataset) ds.clone());
 		}
 	}
 
@@ -153,9 +150,21 @@ public class ElementPreviewer {
 		}
 	}
 
-	protected DataAdapterDescriptor prepareDataAdapter(JasperReportsConfiguration jConf, JasperDesign jDesign) {
+	public DataAdapterDescriptor prepareDataAdapter(JasperReportsConfiguration jConf, JasperDesign jDesign) {
+		return prepareDataAdapter(jConf, jDesign.getMainDesignDataset());
+	}
+
+	public DataAdapterDescriptor prepareDataAdapter(JasperReportsConfiguration jConf, JRDesignDataset jDataset) {
 		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(jConf);
-		DataAdapterDescriptor da = defaultStorage.getDefaultJRDataAdapter(jDesign.getMainDesignDataset());
+		DataAdapterDescriptor da = null;
+		String defAdapter = jDataset.getPropertiesMap().getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+		if (defAdapter != null) {
+			da = defaultStorage.getDefaultJRDataAdapter(defAdapter);
+			if (da == null)
+				da = DataAdapterManager.getPreferencesStorage().findDataAdapter(defAdapter);
+		}
+		if (da == null)
+			da = defaultStorage.getDefaultJRDataAdapter(jDataset);
 		if (da == null) {
 			// I think we should use some predefined datasets
 			da = new EmptyDataAdapterDescriptor();
@@ -174,6 +183,7 @@ public class ElementPreviewer {
 		element.setHeight(browser.getBounds().height - 20);
 		jd.setPageHeight(element.getHeight());
 		jd.setPageWidth(element.getWidth());
+		jd.setColumnWidth(jd.getPageWidth());
 		bs.setHeight(element.getHeight());
 	}
 }
