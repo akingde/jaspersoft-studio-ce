@@ -207,8 +207,14 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		declareWorkbenchImage(ideBundle,
 				IDEInternalWorkbenchImages.IMG_OBJS_FIXABLE_ERROR,
 				PATH_OBJECT + "quickfix_error_obj.png", true); //$NON-NLS-1$
+		
+//		declareWorkbenchImage(ideBundle,
+//				IDEInternalWorkbenchImages.IMG_OBJS_FIXABLE_INFO,
+//				PATH_OBJECT + "quickfix_info_obj.png", true); //$NON-NLS-1$
+		// FIXME - Temporary fix for make it work in 4.5.2
+		// Uncomment line above when using 4.6.0 platform and remove following line
 		declareWorkbenchImage(ideBundle,
-				IDEInternalWorkbenchImages.IMG_OBJS_FIXABLE_INFO,
+				"IMG_OBJS_FIXABLE_INFO",
 				PATH_OBJECT + "quickfix_info_obj.png", true); //$NON-NLS-1$
 
 
@@ -266,8 +272,13 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		declareWorkbenchImage(ideBundle,
 				IDEInternalWorkbenchImages.IMG_ETOOL_PROBLEMS_VIEW_WARNING,
 				PATH_EVIEW + "problems_view_warning.png", true); //$NON-NLS-1$
+//		declareWorkbenchImage(ideBundle,
+//				IDEInternalWorkbenchImages.IMG_ETOOL_PROBLEMS_VIEW_INFO,
+//				PATH_EVIEW + "problems_view_info.png", true); //$NON-NLS-1$
+		// FIXME - Temporary fix for make it work in 4.5.2
+		// Uncomment line above when using 4.6.0 platform and remove following line
 		declareWorkbenchImage(ideBundle,
-				IDEInternalWorkbenchImages.IMG_ETOOL_PROBLEMS_VIEW_INFO,
+				"IMG_ETOOL_PROBLEMS_VIEW_INFO",
 				PATH_EVIEW + "problems_view_info.png", true); //$NON-NLS-1$
 
 		// synchronization indicator objects
