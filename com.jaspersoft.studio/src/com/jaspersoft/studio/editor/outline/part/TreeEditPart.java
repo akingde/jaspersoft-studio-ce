@@ -68,6 +68,21 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	}
 
 	/**
+	 * Remove the widget of the node, before it check it was not already removed
+	 * 
+	 * @param childEditPart the node to dispose
+	 */
+	@Override
+	protected void removeChildVisual(EditPart childEditPart) {
+		TreeEditPart treeEditPart = (TreeEditPart) childEditPart;
+		//dispose the old widget if any
+		if (treeEditPart.getWidget() != null) {
+			treeEditPart.getWidget().dispose();
+		}
+		treeEditPart.setWidget(null);
+	}
+	
+	/**
 	 * If the request is an add this search an edit part with the same model of the target one on the main editor and
 	 * paint a feedback on it. Before to pain the feedback any previous feedback is removed. All the checks are done to be
 	 * sure that the visual editor exist
