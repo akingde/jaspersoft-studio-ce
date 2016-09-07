@@ -56,6 +56,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetsDefinitionManager;
 
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
+import net.sf.jasperreports.data.BuiltinDataFileServiceFactory;
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.IDisposeListener;
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
@@ -810,7 +811,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 					if (r != null) {
 						result = new ArrayList<T>();
 						for (T item : r) {
-							if (item instanceof DataAdapterParameterContributorFactory)
+							if (item.getClass().getName().equals(BuiltinDataFileServiceFactory.class.getName())
+									|| item instanceof DataAdapterParameterContributorFactory)
 								continue;
 							result.add(item);
 						}
