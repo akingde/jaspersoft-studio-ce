@@ -42,16 +42,20 @@ public class PostSetPadding implements IPostSetValue {
 			if (container instanceof MStyle){
 				JRStyle style = ((MStyle)container).getValue();
 				MReport root = ModelUtils.getReport(container);
-				List<ANode> nodesUsingStyle = root.getUsedStyles().get(style.getName());
-				if (nodesUsingStyle != null){
-					JSSCompoundCommand cmd = new JSSCompoundCommand(root);
-					for(ANode node : nodesUsingStyle){
-						Command layoutCmd = LayoutManager.createRelayoutCommand(node);
-						if (layoutCmd != null){
-							cmd.add(layoutCmd);
+				if (root != null){
+					//in case of a template style file the root will be null, skip this part of 
+					//code since there is no need to refresh the layout into a template style
+					List<ANode> nodesUsingStyle = root.getUsedStyles().get(style.getName());
+					if (nodesUsingStyle != null){
+						JSSCompoundCommand cmd = new JSSCompoundCommand(root);
+						for(ANode node : nodesUsingStyle){
+							Command layoutCmd = LayoutManager.createRelayoutCommand(node);
+							if (layoutCmd != null){
+								cmd.add(layoutCmd);
+							}
 						}
+						if (!cmd.isEmpty()) return cmd;
 					}
-					if (!cmd.isEmpty()) return cmd;
 				}
 			} else {
 				return LayoutManager.createRelayoutCommand(container);
