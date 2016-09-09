@@ -27,6 +27,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.InputSource;
 
+import com.jaspersoft.jasperreports.chartcustomizers.ProxyChartCustomizer;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -39,6 +40,7 @@ import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.server.plugin.IPublishContributor;
+import com.jaspersoft.studio.server.publish.imp.ImpChartCustomizer;
 import com.jaspersoft.studio.server.publish.imp.ImpDataAdapter;
 import com.jaspersoft.studio.server.publish.imp.ImpImage;
 import com.jaspersoft.studio.server.publish.imp.ImpInputControls;
@@ -55,6 +57,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRPart;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -107,8 +110,11 @@ public class JrxmlPublishContributor implements IPublishContributor {
 					publishImage(mrunit, monitor, jasper, fileset, file, ele, version);
 				else if (ele instanceof JRDesignSubreport) {
 					publishSubreport(mrunit, monitor, jasper, fileset, file, ele, version);
-				} else
+				} else if (ele instanceof JRChart){
+					publishChartCustmomizer(mrunit, monitor, jasper, fileset, file, (JRChart)ele, version);
+				} else {
 					publishComponent(mrunit, monitor, jasper, fileset, file, ele, version);
+				}
 			}
 			publishDataAdapters(mrunit, monitor, jasper, fileset, file, version);
 			publishBundles(mrunit, monitor, jasper, fileset, file, version);
@@ -217,6 +223,19 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	protected void publishImage(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset,
 			IFile file, JRDesignElement ele, String version) throws Exception {
 		impImg.publish(jasper, ele, mrunit, monitor, fileset, file);
+	}
+	
+	/**
+	 * Publish the jar resources required by the chart customizers of a specific chart
+	 */
+	protected void publishChartCustmomizer(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, JRChart chart, String version) throws Exception {
+		String customizerClass = chart.getCustomizerClass();
+		if (ProxyChartCustomizer.class.getName().equals(customizerClass)){
+			impChartCustomizer.publish(jasper, customizerClass, mrunit, monitor, fileset, file, version);
+			for(String subCustomizerClass : impChartCustomizer.getSubCustmizersClass(chart)){
+				impChartCustomizer.publish(jasper, subCustomizerClass, mrunit, monitor, fileset, file, version);
+			}
+		}
 	}
 
 	protected void publishTemplates(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper,
@@ -329,6 +348,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	private ImpSubreport impSRP;
 	private ImpInputControls impIC;
 	private ImpJRXML impJRXML;
+	private ImpChartCustomizer impChartCustomizer;
 
 	@Override
 	public void init(JasperReportsConfiguration jrConfig) {
@@ -341,6 +361,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		impSRP = new ImpSubreport(jrConfig);
 		impIC = new ImpInputControls(jrConfig);
 		impJRXML = new ImpJRXML(jrConfig);
+		impChartCustomizer = new ImpChartCustomizer(jrConfig);
 	}
 
 }

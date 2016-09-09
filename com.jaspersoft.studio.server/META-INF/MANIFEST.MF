@@ -141,3 +141,4 @@ Export-Package: com.fasterxml.jackson.module.jaxb,
  org.apache.axis.transport.http,
  org.apache.axis.utils,
  org.glassfish.jersey.client
+Import-Package: com.jaspersoft.studio.components.chart.property.descriptor
