@@ -739,6 +739,7 @@ public class Messages extends NLS {
 	public static String SelectCustomizerPage_errorNoSelection;
 	public static String SelectCustomizerPage_pageMessage;
 	public static String SelectCustomizerPage_pageTitle;
+	public static String SelectCustomizerPage_warningInvalidClass;
 	public static String SeriesColorPage_description;
 	public static String SeriesDialog_0;
 	public static String SeriesDialog_1;

@@ -15,17 +15,20 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -38,6 +41,7 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.jaspersoft.jasperreports.chartcustomizers.ProxyChartCustomizer;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyDescriptor;
@@ -68,6 +72,32 @@ import net.sf.jasperreports.engine.JRChartPlot;
  *
  */
 public abstract class ChartCustomizerWidget {
+	
+	/**
+	 * Provider to show orange the customizer that are defined in the preferences but doesn't have
+	 * the required class in the classpath
+	 */
+	private class CustomizerLabelProvier extends ColumnLabelProvider implements ITableColorProvider {
+
+		@Override
+		public Color getForeground(Object element, int columnIndex) {
+			ChartCustomizerDefinition def = (ChartCustomizerDefinition)element;
+			if (def != null && def.getCustomizerClass() != null){
+				String className = def.getCustomizerClass();
+				try{
+					jConfig.getClassLoader().loadClass(className);
+				} catch(Exception ex){
+					return ColorConstants.orange;
+				}
+			}
+			return ColorConstants.black;
+		}
+
+		@Override
+		public Color getBackground(Object element, int columnIndex) {
+			return null;
+		}	
+	}
 	
 	/**
 	 * Main composite that contains all the other controls of the widget
@@ -189,12 +219,14 @@ public abstract class ChartCustomizerWidget {
 
 				CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone());
 				CustomizerNewWizard wizard = new CustomizerNewWizard(uniqueKey, getExpressionContext(), dto, jConfig, selectedPlot);		
-				WizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);		
+				PersistentLocationWizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);		
+				dialog.setStoreSetting(false);
+				dialog.setDefaultSize(650, 500);
 				if (dialog.open() == Dialog.OK){
 					ChartCustomizerDefinition definition = wizard.getDefinition();
 					if (definition != null){
 						selectedCustomizers.add(definition);
-						String classProp = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
+						String classProp = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
 						dto.addProperty(uniqueKey + classProp, definition.getCustomizerClass(), false);
 						changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
 						currentDTO = dto;
@@ -329,7 +361,7 @@ public abstract class ChartCustomizerWidget {
 	 */
 	protected void rebuildPositionsList(){
 		CustomizerPropertyExpressionsDTO dto = getPropertyDTO();
-		String classAttribute = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
+		String classAttribute = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
 		//Only the class matter for the order determination and the priority is the position in the properties list
 		//so first we remove all the customizer class properties
 		for(ChartCustomizerDefinition definition : selectedCustomizers){
@@ -366,6 +398,7 @@ public abstract class ChartCustomizerWidget {
 
 		customizerTable = new TableViewer(tbl);
 		customizerTable.setContentProvider(new ListContentProvider());
+		customizerTable.setLabelProvider(new CustomizerLabelProvier());
 		selectedCustomizers = new ArrayList<ChartCustomizerDefinition>();
 		customizerTable.setInput(selectedCustomizers);
 
@@ -458,12 +491,13 @@ public abstract class ChartCustomizerWidget {
 			
 			CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone());
 			CustomizerEditWizard wizard = new CustomizerEditWizard(editElement, getExpressionContext(), dto, jConfig);		
-			WizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);
-			
+			PersistentLocationWizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);
+			dialog.setStoreSetting(false);
+			dialog.setDefaultSize(650, 500);
 			if (dialog.open() == Dialog.OK){
 				ChartCustomizerDefinition definition = wizard.getDefinition();
 				if (definition != null && definition.isOnlyClass()){
-					String classProp = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
+					String classProp = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
 					dto.setProperty(editElement.getKey() + classProp, definition.getCustomizerClass(), false);
 					//Commit the new dto
 					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);

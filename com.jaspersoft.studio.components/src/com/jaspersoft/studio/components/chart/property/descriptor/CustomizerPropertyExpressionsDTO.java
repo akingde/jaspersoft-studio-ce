@@ -56,7 +56,7 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	public int getCustomizersNumber(){
 		if (customizerNumber == null){
 			int count = 0;
-			String classAttribute = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
+			String classAttribute = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
 			for(PropertyExpressionDTO property: getProperties()){
 				if (!property.isExpression()){
 					String name = property.getName().trim().toLowerCase();
@@ -89,7 +89,7 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	 */
 	public void createCustomizerEntry(String className, boolean headPosition){
 		String key = getUniqueKey();
-		String classAttribute = key + CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
+		String classAttribute = key + ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
 		if (headPosition){
 			addProperty(classAttribute, className, false, 0);
 		} else {
@@ -105,8 +105,8 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	public List<ChartCustomizerDefinition> getDefinedCustomizers(){
 		List<ChartCustomizerDefinition> selectedCustomizers = new ArrayList<ChartCustomizerDefinition>();
 		JasperReportsConfiguration jConfig = getPnode().getJasperConfiguration();
-		String classAttribute = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
-		String attributeSeparator = CustomizerPropertyDescriptor.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
+		String classAttribute = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
+		String attributeSeparator = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
 		for (PropertyExpressionDTO prop : getProperties()) {
 			if (!prop.isExpression()){
 				String propName = prop.getName().trim().toLowerCase();
@@ -142,7 +142,7 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	 */
 	public String getUniqueKey(){
 		int index = 0;
-		String attributeSeparator = CustomizerPropertyDescriptor.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
+		String attributeSeparator = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
 		String currentKey = CustomizerPropertyDescriptor.CUSTOMIZER_KEY_PREFIX + index + attributeSeparator;
 		HashSet<String> usedKeys = getUsedKeys();
 		boolean existing = usedKeys.contains(currentKey);
@@ -161,7 +161,7 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	 */
 	private HashSet<String> getUsedKeys(){
 		HashSet<String> result = new HashSet<String>();
-		String attributeSeparator = CustomizerPropertyDescriptor.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
+		String attributeSeparator = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
 		for (PropertyExpressionDTO prop : new ArrayList<PropertyExpressionDTO>(getProperties())) {
 			if (!prop.isExpression()){
 				String propName = prop.getName().trim().toLowerCase();
@@ -186,8 +186,8 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	 * flase othwrwise
 	 */
 	public boolean hasCustomizerProperties(String customizerKey){
-		String attributeSeparator = CustomizerPropertyDescriptor.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
-		String classAttribute = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
+		String attributeSeparator = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
+		String classAttribute = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
 		for (PropertyExpressionDTO prop : new ArrayList<PropertyExpressionDTO>(getProperties())) {
 			if (!prop.isExpression()){
 				String propName = prop.getName().trim().toLowerCase();
@@ -214,8 +214,8 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	 * properties should be removed
 	 */
 	public void deleteCustomizer(String customizerKey, boolean removeProperties){
-		String attributeSeparator = CustomizerPropertyDescriptor.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
-		String classAttribute = CustomizerPropertyDescriptor.CUSTOMIZER_CLASS_ATTRIUBUTE;
+		String attributeSeparator = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
+		String classAttribute = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
 		for (PropertyExpressionDTO prop : new ArrayList<PropertyExpressionDTO>(getProperties())) {
 			if (!prop.isExpression()){
 				String propName = prop.getName().trim().toLowerCase();

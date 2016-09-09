@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.jaspersoft.jasperreports.chartcustomizers.ProxyChartCustomizer;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.property.widget.ChartCustomizerCellEditor;
 import com.jaspersoft.studio.components.chart.property.widget.SPChartCustomizer;
@@ -37,17 +38,9 @@ public class CustomizerPropertyDescriptor extends PropertyDescriptor implements 
 	/**
 	 * Prefix of the unique key used to identify a chart customizer property on the element
 	 */
-	public static final String CUSTOMIZER_KEY_PREFIX = "chartcustomizer.customizer";
-	
-	/**
-	 * The attribute name of the class in a chart customizer property
-	 */
-	public static final String CUSTOMIZER_CLASS_ATTRIUBUTE = "class";
-	
-	/**
-	 * The separator used in a chart customizer attribute name
-	 */
-	public static final String CUSTOMIZER_ATTRIBUTE_SEPARATOR = ".";
+	public static final String CUSTOMIZER_KEY_PREFIX = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_PREFIX + 
+															ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR + 
+																"customizer";
 	
 	/**
 	 * The label provider used in the advanced property page to show the label entry. 

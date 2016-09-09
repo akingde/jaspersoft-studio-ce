@@ -15,6 +15,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: patch-library.jar,
  .
-Export-Package: com.jaspersoft.studio.components.chart.property.widget,
+Export-Package: com.jaspersoft.studio.components.chart.property.descriptor,
+ com.jaspersoft.studio.components.chart.property.widget,
  com.jaspersoft.studio.components.map.model.marker,
  com.jaspersoft.studio.components.map.model.marker.dialog

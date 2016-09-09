@@ -18,11 +18,11 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -88,6 +88,11 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	private Composite mainParent;
 	
 	/**
+	 * Scrolled composite where the elements are created
+	 */
+	private ScrolledComposite scrolledContainer;
+	
+	/**
 	 * Expression context for the dynamic controls
 	 */
 	private ExpressionContext ec;
@@ -149,8 +154,12 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	
 	@Override
 	public void createControl(Composite parent) {
-		mainParent = new Composite(parent, SWT.NONE);
-		setControl(mainParent);
+		scrolledContainer = new ScrolledComposite(parent, SWT.V_SCROLL);
+		scrolledContainer.setExpandHorizontal(true);
+		scrolledContainer.setExpandVertical(true);
+		mainParent = new Composite(scrolledContainer, SWT.NONE);
+		scrolledContainer.setContent(mainParent);
+		setControl(scrolledContainer);
 	}
 	
 	/**
@@ -206,8 +215,8 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 					}
 				}
 			}
-			int compositeHeight = Math.max(mainParent.computeSize(500, SWT.DEFAULT).y + 200, 400);
-			getShell().setSize(new Point(500, compositeHeight));
+			int compositeHeight = mainParent.computeSize(500, SWT.DEFAULT).y;
+			scrolledContainer.setMinHeight(compositeHeight);
 			mainParent.layout(true, true);
 			validate();
 		}

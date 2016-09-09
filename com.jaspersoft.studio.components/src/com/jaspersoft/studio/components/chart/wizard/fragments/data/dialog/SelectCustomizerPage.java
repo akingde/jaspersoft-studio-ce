@@ -12,17 +12,24 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.jface.dialogs.DialogPage;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -51,6 +58,32 @@ import net.sf.jasperreports.engine.JRChartPlot;
  *
  */
 public class SelectCustomizerPage extends JSSHelpWizardPage {
+	
+	/**
+	 * Provider to show orange the customizer that are defined in the preferences but doesn't have
+	 * the required class in the classpath
+	 */
+	private class CustomizerLabelProvier extends ColumnLabelProvider implements ITableColorProvider {
+
+		@Override
+		public Color getForeground(Object element, int columnIndex) {
+			CustomizerWidgetsDescriptor desc = (CustomizerWidgetsDescriptor)element;
+			if (desc != userDefinedEntry && desc.getCustomizerClass() != null){
+				String className = desc.getCustomizerClass();
+				try{
+					jConfig.getClassLoader().loadClass(className);
+				} catch(Exception ex){
+					return ColorConstants.orange;
+				}
+			}
+			return ColorConstants.black;
+		}
+
+		@Override
+		public Color getBackground(Object element, int columnIndex) {
+			return null;
+		}	
+	}
 	
 	/**
 	 * Provider to show show only the compatible charts customizer if the first option of the combo
@@ -112,6 +145,11 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 	private Combo showAllElements;
 	
 	/**
+	 * The {@link JasperReportsConfiguration} of the current report
+	 */
+	private JasperReportsConfiguration jConfig;
+	
+	/**
 	 * Create a dialog to define a new customizer
 	 * 
 	 * @param jConfig the {@link JasperReportsConfiguration} of the current report
@@ -121,6 +159,7 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 	 */
 	public SelectCustomizerPage(JasperReportsConfiguration jConfig, String definitionKey, CustomizerPropertyExpressionsDTO dto, JRChartPlot selectedChartPlot) {
 		super("customizerTypeSelection"); //$NON-NLS-1$
+		this.jConfig = jConfig;
 		tableInput = new ArrayList<CustomizerWidgetsDescriptor>(CustomizerDefinitionManager.getCustomizerDefinitions(jConfig));
 		userDefinedEntry = new CustomizerWidgetsDescriptor(){
 			public boolean isPlotSupported(JRChartPlot plot) {
@@ -140,8 +179,10 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 	 */
 	protected void createTableArea(Composite parent){
 		table = new TableViewer(parent, SWT.FULL_SELECTION | SWT.SINGLE | SWT.BORDER);
-		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData tableData = new GridData(GridData.FILL_BOTH);
+		table.getTable().setLayoutData(tableData);
 		table.setContentProvider(new CompatibleContentProvider());
+		table.setLabelProvider(new CustomizerLabelProvier());
 		table.setInput(tableInput);
 		table.addSelectionChangedListener(new ISelectionChangedListener() {
 			
@@ -167,8 +208,39 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 			setErrorMessage(Messages.SelectCustomizerPage_errorNoSelection);
 		}  else {
 			setErrorMessage(null);
+			CustomizerWidgetsDescriptor desc = (CustomizerWidgetsDescriptor)((StructuredSelection)seletion).getFirstElement();
+			if (desc != userDefinedEntry && desc.getCustomizerClass() != null){
+				String fullClassName = desc.getCustomizerClass();
+				try{
+					jConfig.getClassLoader().loadClass(fullClassName);
+				} catch (Exception ex){
+					String className = getClassName(fullClassName);
+					String baseMessage = Messages.SelectCustomizerPage_warningInvalidClass; 
+					setMessage(MessageFormat.format(baseMessage, className), DialogPage.WARNING);
+					getContainer().updateButtons();
+					return;
+				}
+			}
+			setMessage(Messages.SelectCustomizerPage_pageMessage);
 		}
 		getContainer().updateButtons();
+	}
+	
+	/**
+	 * Return the last segment of the classname, placed after the 
+	 * last . separator. If there are no separator the full class
+	 * name is returned
+	 * 
+	 * @param fullClassName the full classname
+	 * @return the last segment of the classname
+	 */
+	private String getClassName(String fullClassName){
+		int separatorIndex = fullClassName.lastIndexOf('.');
+		if (separatorIndex != -1){
+			return fullClassName.substring(separatorIndex + 1);
+		} else {
+			return fullClassName;
+		}
 	}
 
 	@Override
@@ -202,6 +274,9 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 		setControl(container);
 	}
 	
+	/**
+	 * When the page is visible validate the content
+	 */
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
