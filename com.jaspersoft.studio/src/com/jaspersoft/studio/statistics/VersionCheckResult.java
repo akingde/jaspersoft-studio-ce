@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.statistics;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
 /**
  * Contains the result for the check of a newer version of the JSS
  * 
@@ -83,7 +85,7 @@ public class VersionCheckResult {
 	 * @return true if the there is an update available, false otherwise
 	 */
 	public boolean canUpdate(){
-		return serverVersion != null && !serverVersion.equals("ko") && serverVersion.compareTo(currentVersion) > 0;
+		return serverVersion != null && !serverVersion.equals("ko") && FileUtils.versionCompare(serverVersion, currentVersion) > 0;
 	}
 }
 
