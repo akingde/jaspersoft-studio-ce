@@ -18,6 +18,7 @@ import org.apache.commons.validator.routines.DoubleValidator;
 import org.apache.commons.validator.routines.FloatValidator;
 import org.apache.commons.validator.routines.IntegerValidator;
 import org.apache.commons.validator.routines.ShortValidator;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Text;
@@ -35,6 +36,14 @@ public class NumberValidator implements VerifyListener {
 
 	@Override
 	public void verifyText(VerifyEvent e) {
+		switch (e.keyCode) {
+		case SWT.BS:
+		case SWT.DEL:
+		case SWT.HOME:
+		case SWT.END:
+		case SWT.ARROW:
+			return;
+		}
 		if (Misc.isNullOrEmpty(e.text)) {
 			e.doit = false;
 			return;
