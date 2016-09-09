@@ -51,7 +51,7 @@ import net.sf.jasperreports.engine.design.JRDesignFont;
 import net.sf.jasperreports.engine.util.StyleResolver;
 
 /**
- * This class implement the subsection into the cart property tab, for the font name is used a standard combo.
+ * This class implement the subsection into the chart property tab, for the font name is used a standard combo.
  * 
  * @author Chicu Veaceslav & Orlandin Marco
  * 
@@ -148,7 +148,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 
 	@Override
 	public Control getControl() {
-		return group.getParent();
+		return group;
 	}
 
 	/**
