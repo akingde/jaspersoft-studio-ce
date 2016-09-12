@@ -130,6 +130,7 @@ public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> 
 				isFallback = true;
 			}
 			combo.setText(Misc.nvl(v));
+			combo.setToolTipText(getToolTip());
 			changeFallbackForeground(isFallback, combo);
 			cmp.switchToSecondContainer();
 		}

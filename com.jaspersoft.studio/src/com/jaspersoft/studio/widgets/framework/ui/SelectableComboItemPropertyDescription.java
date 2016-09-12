@@ -109,6 +109,7 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 					break;
 				}
 			}
+			combo.setToolTipText(getToolTip());
 			changeFallbackForeground(isFallback, combo);
 			cmp.switchToSecondContainer();
 		}

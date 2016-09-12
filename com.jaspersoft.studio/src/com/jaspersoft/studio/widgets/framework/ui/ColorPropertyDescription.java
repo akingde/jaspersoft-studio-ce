@@ -101,6 +101,7 @@ public class ColorPropertyDescription<T> extends TextPropertyDescription<T> {
 				v = defaultValue.toString();
 			}
 			colorPicker.setColor(new AlfaRGB(Colors.decodeHexStringAsSWTRGB(v), 0));
+			colorPicker.setToolTipText(getToolTip());
 			cmp.switchToSecondContainer();
 		}
 	}

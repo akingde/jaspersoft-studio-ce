@@ -55,15 +55,31 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 		BigDecimal max = null;
 		BigDecimal def = null;
 		BigDecimal fallBack = null;
+		
+		//setup the minimum
 		if (cpd.getMin() != null){
 			min = new BigDecimal(new Double(cpd.getMin()));
+		} else {
+			//The IEEE 754 format has one bit reserved for the sign and the remaining bits representing the magnitude. 
+			//This means that it is "symmetrical" around origin (as opposed to the Integer values, which have one more negative value). 
+			//Thus the minimum value is simply the same as the maximum value, with the sign-bit changed, so -Double.MAX_VALUE is the smallest possible 
+			//actual number you can represent with a double.
+			min = new BigDecimal(-Double.MAX_VALUE);
 		}
+		
+		//setup the maximum
 		if (cpd.getMax() != null){
 			max = new BigDecimal(new Double(cpd.getMax()));
+		} else {
+			max = new BigDecimal(Double.MAX_VALUE);
 		}
+		
+		//setup the default value
 		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
 			def = new BigDecimal(new Double(cpd.getDefaultValue()));
 		}
+		
+		//setup the fallback value
 		if (cpd.getFallbackValue() != null && !cpd.getFallbackValue().isEmpty()){
 			fallBack = new BigDecimal(new Double(cpd.getFallbackValue()));
 		}

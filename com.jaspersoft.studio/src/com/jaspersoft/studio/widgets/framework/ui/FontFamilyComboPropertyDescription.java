@@ -48,6 +48,7 @@ public class FontFamilyComboPropertyDescription extends ComboItemPropertyDescrip
 				fontCombo.setText(wip.getFallbackValue().toString());
 				isFallback = true;
 			}
+			fontCombo.setToolTipText(getToolTip());
 			changeFallbackForeground(isFallback, fontCombo);
 			cmp.switchToSecondContainer();
 		}

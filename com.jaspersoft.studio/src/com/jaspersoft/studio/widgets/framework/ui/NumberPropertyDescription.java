@@ -115,6 +115,7 @@ public abstract class NumberPropertyDescription<T extends Number> extends TextPr
 				isFallback = true;
 			}
 			simpleControl.setValue(convertValue(Misc.nvl(v)));
+			simpleControl.setToolTipText(getToolTip());
 			changeFallbackForeground(isFallback, simpleControl);
 			cmp.switchToSecondContainer();
 		}

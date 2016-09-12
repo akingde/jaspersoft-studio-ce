@@ -83,14 +83,15 @@ public class CheckboxItemPropertyDescription extends TextPropertyDescription<Boo
 			super.update(txt, wip);
 			cmp.switchToFirstContainer();
 		} else {
-			Button combo = (Button) cmp.getSecondContainer().getData();
+			Button button = (Button) cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
 			if (v == null && wip.getFallbackValue() != null){
 				v = wip.getFallbackValue().toString();
 				isFallback = true;
 			}
-			combo.setSelection(Boolean.parseBoolean(Misc.nvl(v)));
-			changeFallbackForeground(isFallback, combo);
+			button.setSelection(Boolean.parseBoolean(Misc.nvl(v)));
+			button.setToolTipText(getToolTip());
+			changeFallbackForeground(isFallback, button);
 			cmp.switchToSecondContainer();
 		}
 	}

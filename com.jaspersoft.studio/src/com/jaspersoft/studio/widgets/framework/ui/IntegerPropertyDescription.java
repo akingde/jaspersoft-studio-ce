@@ -53,15 +53,27 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 		Integer max = null;
 		Integer def = null;
 		Integer fallBack = null;
+		
+		//Setup the minimum
 		if (cpd.getMin() != null){
 			min = new Integer(cpd.getMin());
+		} else {
+			min = Integer.MIN_VALUE;
 		}
+	 	
+		//Setup the maximum
 		if (cpd.getMax() != null){
 			max = new Integer(cpd.getMax());
+		} else {
+			max = Integer.MAX_VALUE;
 		}
+		
+		//Setup the default value
 		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
 			def = new Integer(cpd.getDefaultValue());
 		}
+		
+		//Setup the fallback value
 		if (cpd.getFallbackValue() != null && !cpd.getFallbackValue().isEmpty()){
 			fallBack = new Integer(cpd.getFallbackValue());
 		}

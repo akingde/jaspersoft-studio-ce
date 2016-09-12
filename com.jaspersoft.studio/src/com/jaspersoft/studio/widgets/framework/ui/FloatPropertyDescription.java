@@ -53,15 +53,27 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 		Float max = null;
 		Float def = null;
 		Float fallBack = null;
+		
+		//Setup the minimum
 		if (cpd.getMin() != null){
 			min = new Float(cpd.getMin());
+		} else {
+			min = Float.MIN_VALUE;
 		}
+		
+		//Setup the maximum
 		if (cpd.getMax() != null){
 			max = new Float(cpd.getMax());
+		} else {
+			max = Float.MAX_VALUE;
 		}
+		
+		//Setup the default value
 		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
 			def = new Float(cpd.getDefaultValue());
 		}
+		
+		//Setup the fallback value
 		if (cpd.getFallbackValue() != null && !cpd.getFallbackValue().isEmpty()){
 			fallBack = new Float(cpd.getFallbackValue());
 		}
