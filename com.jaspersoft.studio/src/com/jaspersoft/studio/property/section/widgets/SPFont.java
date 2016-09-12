@@ -133,9 +133,14 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	 * Node represented
 	 */
 	private APropertyNode parentNode;
+	
+	/**
+	 * Main container where all the other controls are created 
+	 */
+	private Composite mainContainer;
 
 	/**
-	 * Composite where the control will be placed
+	 * Section where the control will be placed
 	 */
 	private Composite group;
 
@@ -148,7 +153,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 
 	@Override
 	public Control getControl() {
-		return group;
+		return mainContainer;
 	}
 
 	/**
@@ -221,9 +226,18 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	}
 
 	protected void createComponent(Composite parent) {
+		mainContainer = new Composite(parent, SWT.NONE);
+		GridLayout mainContainerLayout = new GridLayout(1, false);
+		mainContainerLayout.horizontalSpacing = 0;
+		mainContainerLayout.verticalSpacing = 0;
+		mainContainerLayout.marginHeight = 0;
+		mainContainerLayout.marginWidth = 0;
+		mainContainer.setLayout(mainContainerLayout);
+		
 		mfont = new MFont(new JRDesignFont(null));
 		mfont.setJasperConfiguration(section.getElement().getJasperConfiguration());
-		group = section.getWidgetFactory().createSection(parent, pDescriptor.getDisplayName(), true, 3);
+		group = section.getWidgetFactory().createSection(mainContainer, pDescriptor.getDisplayName(), true, 3);
+		group.getParent().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		final FontNamePropertyDescriptor pd = (FontNamePropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
