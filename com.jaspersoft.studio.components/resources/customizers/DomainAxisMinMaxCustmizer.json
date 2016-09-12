@@ -9,16 +9,16 @@
             "expandable": false,
             "properties": [
 				{
-                    "name": "rangeMin",
-                    "label": "Range Min",
+                    "name": "domainMin",
+                    "label": "Domain Min",
                     "description": "The minimum value on the domain axis",
                     "mandatory": false,
                     "readOnly": false,
                     "type": "double"
                 },
                 {
-                    "name": "rangeMax",
-                    "label": "Range Max",
+                    "name": "domainMax",
+                    "label": "Domain Max",
                     "description": "The maximum value on the domain axis",
                     "mandatory": false,
                     "readOnly": false,

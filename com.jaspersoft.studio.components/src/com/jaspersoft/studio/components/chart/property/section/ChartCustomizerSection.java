@@ -24,6 +24,7 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 import net.sf.jasperreports.charts.design.JRDesignChartAxis;
+import net.sf.jasperreports.engine.design.JRDesignChart;
 
 /*
  * The location section on the location tab.
@@ -70,7 +71,7 @@ public class ChartCustomizerSection extends AbstractSection {
 			if (element != null) {
 				element.getPropertyDescriptors();
 				for (Object key : widgets.keySet()) {
-					if (n.equals(APropertyNode.PROPERTY_MAP))
+					if (n.equals(APropertyNode.PROPERTY_MAP) || n.equals(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS))
 						widgets.get(key).setData(element, element.getPropertyValue(key));
 				}
 			}
