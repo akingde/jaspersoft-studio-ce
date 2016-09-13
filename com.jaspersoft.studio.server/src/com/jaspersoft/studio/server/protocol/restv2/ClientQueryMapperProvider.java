@@ -14,6 +14,7 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -47,7 +48,8 @@ public class ClientQueryMapperProvider implements ContextResolver<ObjectMapper> 
 
     private ObjectMapper getObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
-
+        mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
+        
         JaxbAnnotationModule jaxbModule = new JaxbAnnotationModule();
         mapper.registerModule(jaxbModule);
         mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
