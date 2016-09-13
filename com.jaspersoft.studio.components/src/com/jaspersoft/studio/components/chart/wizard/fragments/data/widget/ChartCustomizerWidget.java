@@ -41,7 +41,6 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.jaspersoft.jasperreports.chartcustomizers.ProxyChartCustomizer;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyDescriptor;
@@ -57,6 +56,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.chartcustomizers.ProxyChartCustomizer;
 import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRChartPlot;
@@ -87,6 +87,8 @@ public abstract class ChartCustomizerWidget {
 				try{
 					jConfig.getClassLoader().loadClass(className);
 				} catch(Exception ex){
+					return ColorConstants.orange;
+				} catch (Error e) {
 					return ColorConstants.orange;
 				}
 			}

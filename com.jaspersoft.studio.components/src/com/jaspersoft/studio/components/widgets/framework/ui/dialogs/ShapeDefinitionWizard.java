@@ -10,8 +10,8 @@ package com.jaspersoft.studio.components.widgets.framework.ui.dialogs;
 
 import org.eclipse.jface.wizard.Wizard;
 
-import com.jaspersoft.jasperreports.chartcustomizers.utils.ShapeDefinition;
-import com.jaspersoft.jasperreports.chartcustomizers.utils.ShapeDefinition.FigureShape;
+import net.sf.jasperreports.chartcustomizers.utils.ShapeDefinition;
+import net.sf.jasperreports.chartcustomizers.utils.ShapeDefinition.FigureShape;
 
 /**
  * Wizard to define the shape of an element

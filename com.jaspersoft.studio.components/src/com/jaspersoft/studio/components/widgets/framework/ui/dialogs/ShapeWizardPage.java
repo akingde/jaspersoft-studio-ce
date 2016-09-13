@@ -21,9 +21,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.jasperreports.chartcustomizers.utils.ShapeDefinition.FigureShape;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+
+import net.sf.jasperreports.chartcustomizers.utils.ShapeDefinition.FigureShape;
 
 /**
  * Wizard page to define the shape of the item

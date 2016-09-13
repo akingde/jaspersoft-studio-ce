@@ -27,8 +27,6 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.osgi.framework.Bundle;
 
-import com.jaspersoft.jasperreports.chartcustomizers.ProxyChartCustomizer;
-import com.jaspersoft.jasperreports.chartcustomizers.utils.ChartCustomizerUtils;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJar;
@@ -36,6 +34,8 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.chartcustomizers.ProxyChartCustomizer;
+import net.sf.jasperreports.chartcustomizers.utils.ChartCustomizerUtils;
 import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRChart;

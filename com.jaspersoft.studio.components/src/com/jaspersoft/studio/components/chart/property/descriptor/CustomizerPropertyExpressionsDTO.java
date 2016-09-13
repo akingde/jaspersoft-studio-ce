@@ -16,12 +16,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import com.jaspersoft.jasperreports.chartcustomizers.ProxyChartCustomizer;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.property.widget.CustomizerDefinitionManager;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.chartcustomizers.ProxyChartCustomizer;
 
 /**
  * Utility class used to extend the properties container of an element adding

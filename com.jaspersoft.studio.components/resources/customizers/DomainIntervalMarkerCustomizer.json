@@ -1,7 +1,7 @@
 {
     "label": "Domain Interval Marker",
     "description": "A chart customizer for the Domain Interval Marker",
-    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.DomainIntervalMarkerCustomizer",
+    "customizerClass": "net.sf.jasperreports.chartcustomizers.DomainIntervalMarkerCustomizer",
     "supportedPlot": ["13","14","15"],
     "sections": [
         {

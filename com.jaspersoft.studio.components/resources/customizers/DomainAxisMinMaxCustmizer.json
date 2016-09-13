@@ -1,7 +1,7 @@
 {
     "label": "Domain Axis Maximum and Minimum",
     "description": "Customizer to set the range for the domain axes",
-    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.DomainAxisMinMaxCustomizer",
+    "customizerClass": "net.sf.jasperreports.chartcustomizers.DomainAxisMinMaxCustomizer",
     "supportedPlot": ["13","14","15"],
     "sections": [
         {

@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.jasperreports.chartcustomizers.utils.ShapeDefinition;
 import com.jaspersoft.studio.components.widgets.framework.ui.dialogs.ShapeDefinitionWizard;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -33,6 +32,8 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
+
+import net.sf.jasperreports.chartcustomizers.utils.ShapeDefinition;
 
 /**
  * Property description to define a shape for a chart. The shape can be configured from

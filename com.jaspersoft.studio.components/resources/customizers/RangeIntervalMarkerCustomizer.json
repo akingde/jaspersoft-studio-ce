@@ -1,7 +1,7 @@
 {
     "label": "Range Interval Marker",
     "description": "A chart customizer for Category and XY Charts",
-    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.RangeIntervalMarkerCustomizer",
+    "customizerClass": "net.sf.jasperreports.chartcustomizers.RangeIntervalMarkerCustomizer",
     "supportedPlot": ["13","14","15","1","2","3","7","8","11","12","20","21"],
     "sections": [
         {

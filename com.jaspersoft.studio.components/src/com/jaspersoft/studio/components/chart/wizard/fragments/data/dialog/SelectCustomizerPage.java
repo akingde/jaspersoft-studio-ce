@@ -74,6 +74,8 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 					jConfig.getClassLoader().loadClass(className);
 				} catch(Exception ex){
 					return ColorConstants.orange;
+				} catch (Error e) {
+					return ColorConstants.orange;
 				}
 			}
 			return ColorConstants.black;

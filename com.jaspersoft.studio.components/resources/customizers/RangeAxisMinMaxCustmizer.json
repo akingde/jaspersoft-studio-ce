@@ -1,7 +1,7 @@
 {
     "label": "Range Axis Maximum and Minimum",
     "description": "Customizer to set the range for the range axes",
-    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.RangeAxisMinMaxCustomizer",
+    "customizerClass": "net.sf.jasperreports.chartcustomizers.RangeAxisMinMaxCustomizer",
     "supportedPlot": ["13","14","15","1","2","3","7","8","11","12","20","21"],
     "sections": [
         {

@@ -40,9 +40,10 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.jaspersoft.jasperreports.chartcustomizers.utils.Point;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+
+import net.sf.jasperreports.chartcustomizers.utils.Point;
 
 /**
  * Wizard page to define the points that compose a polyline. A preview of 

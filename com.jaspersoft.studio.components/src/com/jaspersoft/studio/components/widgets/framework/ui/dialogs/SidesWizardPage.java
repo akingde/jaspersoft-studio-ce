@@ -20,9 +20,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import com.jaspersoft.jasperreports.chartcustomizers.utils.Point;
 import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+
+import net.sf.jasperreports.chartcustomizers.utils.Point;
 
 /**
  * Page used to define the number of sides of a polygon shape

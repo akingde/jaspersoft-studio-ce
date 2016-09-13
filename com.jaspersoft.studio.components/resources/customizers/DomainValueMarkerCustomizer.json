@@ -1,7 +1,7 @@
 {
     "label": "Domain Value Marker",
     "description": "A chart customizer for XY Charts",
-    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.DomainValueMarkerCustomizer",
+    "customizerClass": "net.sf.jasperreports.chartcustomizers.DomainValueMarkerCustomizer",
     "supportedPlot": ["13","14","15"],
     "sections": [
         {

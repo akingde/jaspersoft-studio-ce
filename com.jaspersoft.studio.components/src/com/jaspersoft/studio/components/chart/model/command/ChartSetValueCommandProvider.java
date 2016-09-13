@@ -15,8 +15,6 @@ package com.jaspersoft.studio.components.chart.model.command;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.jaspersoft.jasperreports.chartcustomizers.ConfigurableChartCustomizer;
-import com.jaspersoft.jasperreports.chartcustomizers.ProxyChartCustomizer;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
@@ -28,6 +26,8 @@ import com.jaspersoft.studio.property.ISetValueCommandProvider;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 
+import net.sf.jasperreports.chartcustomizers.ConfigurableChartCustomizer;
+import net.sf.jasperreports.chartcustomizers.ProxyChartCustomizer;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.util.JRClassLoader;

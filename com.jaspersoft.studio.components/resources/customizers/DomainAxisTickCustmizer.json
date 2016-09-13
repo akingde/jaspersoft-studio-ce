@@ -1,7 +1,7 @@
 {
     "label": "Domain Axis Tick",
     "description": "Allow to setup the tick distance on the domain axis",
-    "customizerClass": "com.jaspersoft.jasperreports.chartcustomizers.DomainAxisTickCustomizer",
+    "customizerClass": "net.sf.jasperreports.chartcustomizers.DomainAxisTickCustomizer",
     "supportedPlot": ["13","14","15"],
     "sections": [
         {
