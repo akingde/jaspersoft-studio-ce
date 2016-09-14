@@ -13,16 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
-import net.sf.jasperreports.engine.JRAbstractScriptlet;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRQuery;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.WhenResourceMissingTypeEnum;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -48,13 +38,28 @@ import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDes
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryButtonPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.resource.DefaultDatasetPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.resource.ResourceBundlePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
+import net.sf.jasperreports.engine.DatasetPropertyExpression;
+import net.sf.jasperreports.engine.JRAbstractScriptlet;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRPropertyExpression;
+import net.sf.jasperreports.engine.JRQuery;
+import net.sf.jasperreports.engine.design.DesignDatasetPropertyExpression;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.WhenResourceMissingTypeEnum;
 
 /*
  * The Class MDataset.
@@ -212,9 +217,9 @@ public class MDataset extends APropertyNode implements ICopyable {
 		nameD.setDescription(Messages.MDataset_name_description);
 		desc.add(nameD);
 
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
-				Messages.common_properties);
-		propertiesD.setDescription(Messages.MDataset_properties_description);
+		JPropertyExpressionsDescriptor propertiesD = new JPropertyExpressionsDescriptor(
+				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, Messages.MGraphicElement_property_expressions);
+		propertiesD.setDescription(Messages.MGraphicElement_property_expressions_description);
 		desc.add(propertiesD);
 		propertiesD.setHelpRefBuilder(
 				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property")); //$NON-NLS-1$
@@ -317,7 +322,22 @@ public class MDataset extends APropertyNode implements ICopyable {
 					.getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
 			return location;
 		}
+		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			JRPropertyExpression[] propertyExpressions = jrDataset.getPropertyExpressions();
+			if (propertyExpressions != null)
+				propertyExpressions = propertyExpressions.clone();
+			return new DatasetPropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrDataset), this);
+		}
+		if (id.equals(PROPERTY_MAP))
+			return getPropertiesMapClone(jrDataset);
 		return null;
+	}
+
+	protected JRPropertiesMap getPropertiesMapClone(JRDesignDataset jrElement) {
+		JRPropertiesMap propertiesMap = jrElement.getPropertiesMap();
+		if (propertiesMap != null)
+			propertiesMap = propertiesMap.cloneProperties();
+		return propertiesMap;
 	}
 
 	@Override
@@ -357,21 +377,40 @@ public class MDataset extends APropertyNode implements ICopyable {
 			jrDataset.setScriptletClass(v);
 		} else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION))
 			jrDataset.setFilterExpression(ExprUtil.setValues(jrDataset.getFilterExpression(), value));
-		else if (id.equals(PROPERTY_MAP)) {
-			// to avoid duplication I remove it first
-			JRPropertiesMap originalMap = jrDataset.getPropertiesMap().cloneProperties();
-			JRPropertiesMap v = (JRPropertiesMap) value;
-			String[] names = jrDataset.getPropertiesMap().getPropertyNames();
-			for (int i = 0; i < names.length; i++) {
-				jrDataset.getPropertiesMap().removeProperty(names[i]);
+		else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			if (value instanceof DatasetPropertyExpressionsDTO) {
+				DatasetPropertyExpressionsDTO dto = (DatasetPropertyExpressionsDTO) value;
+				DatasetPropertyExpression[] expr = jrDataset.getPropertyExpressions();
+				// Remove the old expression properties if any
+				if (expr != null)
+					for (DatasetPropertyExpression ex : expr)
+						jrDataset.removePropertyExpression(ex);
+				// Add the new expression properties
+				for (PropertyExpressionDTO p : dto.getProperties()) {
+					if (p.isExpression()) {
+						DesignDatasetPropertyExpression newExp = new DesignDatasetPropertyExpression();
+						newExp.setName(p.getName());
+						newExp.setValueExpression(p.getValueAsExpression());
+						newExp.setEvaluationTime(((DatasetPropertyExpressionDTO) p).getEvalTime());
+						jrDataset.addPropertyExpression((DatasetPropertyExpression) newExp);
+					}
+				}
+				// now change properties, first remove the old ones if any
+				JRPropertiesMap originalMap = jrDataset.getPropertiesMap().cloneProperties();
+				String[] names = jrDataset.getPropertiesMap().getPropertyNames();
+				for (int i = 0; i < names.length; i++) {
+					jrDataset.getPropertiesMap().removeProperty(names[i]);
+				}
+				// now add the new properties
+				for (PropertyExpressionDTO p : dto.getProperties()) {
+					if (!p.isExpression()) {
+						jrDataset.getPropertiesMap().setProperty(p.getName(), p.getValue());
+					}
+				}
+				// really important to trigger the property with source the JR object and not the node
+				// using the node could cause problem with the refresh of the advanced properties view
+				firePropertyChange(new PropertyChangeEvent(jrDataset, PROPERTY_MAP, originalMap, jrDataset.getPropertiesMap()));
 			}
-			names = v.getPropertyNames();
-			for (int i = 0; i < names.length; i++) {
-				jrDataset.setProperty(names[i], v.getProperty(names[i]));
-			}
-			// really important to trigger the property with source the JR object and not the node
-			// using the node could cause problem with the refresh of the advanced properties view
-			firePropertyChange(new PropertyChangeEvent(jrDataset, PROPERTY_MAP, originalMap, jrDataset.getPropertiesMap()));
 		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE)) {
 			jrDataset.setWhenResourceMissingType(whenResMissTypeD.getEnumValue(value));
 		} else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {

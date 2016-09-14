@@ -29,6 +29,9 @@ import com.jaspersoft.studio.property.descriptor.classname.ClassTypeComboCellEdi
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
@@ -41,9 +44,12 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 
 /*
  * The Class MField.
@@ -151,9 +157,9 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
-				Messages.common_properties);
-		propertiesD.setDescription(Messages.MField_properties_description);
+		JPropertyExpressionsDescriptor propertiesD = new JPropertyExpressionsDescriptor(
+				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, Messages.MGraphicElement_property_expressions);
+		propertiesD.setDescription(Messages.MGraphicElement_property_expressions_description);
 		desc.add(propertiesD);
 		propertiesD.setHelpRefBuilder(
 				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
@@ -204,6 +210,12 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 			return jrField.getValueClassName();
 		if (id.equals(JRDesignField.PROPERTY_DESCRIPTION))
 			return jrField.getDescription();
+		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			JRPropertyExpression[] propertyExpressions = jrField.getPropertyExpressions();
+			if (propertyExpressions != null)
+				propertyExpressions = propertyExpressions.clone();
+			return new PropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrField), this);
+		}
 		if (id.equals(PROPERTY_MAP))
 			return getPropertiesMapClone(jrField);
 		return null;
@@ -261,6 +273,40 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 			jrField.setValueClassName((String) value);
 		} else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION)) {
 			jrField.setDescription((String) value);
+		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			if (value instanceof PropertyExpressionsDTO) {
+				PropertyExpressionsDTO dto = (PropertyExpressionsDTO) value;
+				JRPropertyExpression[] expr = jrField.getPropertyExpressions();
+				// Remove the old expression properties if any
+				if (expr != null) {
+					for (JRPropertyExpression ex : expr)
+						jrField.removePropertyExpression(ex);
+				}
+				// Add the new expression properties
+				for (PropertyExpressionDTO p : dto.getProperties()) {
+					if (p.isExpression()) {
+						JRDesignPropertyExpression newExp = new JRDesignPropertyExpression();
+						newExp.setName(p.getName());
+						newExp.setValueExpression(p.getValueAsExpression());
+						jrField.addPropertyExpression(newExp);
+					}
+				}
+				// now change properties, first remove the old ones if any
+				JRPropertiesMap originalMap = jrField.getPropertiesMap().cloneProperties();
+				String[] names = jrField.getPropertiesMap().getPropertyNames();
+				for (int i = 0; i < names.length; i++) {
+					jrField.getPropertiesMap().removeProperty(names[i]);
+				}
+				// now add the new properties
+				for (PropertyExpressionDTO p : dto.getProperties()) {
+					if (!p.isExpression()) {
+						jrField.getPropertiesMap().setProperty(p.getName(), p.getValue());
+					}
+				}
+				// really important to trigger the property with source the JR object and not the node
+				// using the node could cause problem with the refresh of the advanced properties view
+				firePropertyChange(new PropertyChangeEvent(jrField, PROPERTY_MAP, originalMap, jrField.getPropertiesMap()));
+			}
 		} else if (id.equals(PROPERTY_MAP)) {
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrField.getPropertiesMap().getPropertyNames();

@@ -32,12 +32,12 @@ public class PropertyExpressionsDTO {
 	/**
 	 * The list of the element properties
 	 */
-	private List<PropertyExpressionDTO> properties = new ArrayList<PropertyExpressionDTO>();
+	protected List<PropertyExpressionDTO> properties = new ArrayList<PropertyExpressionDTO>();
 	
 	/**
 	 * The element from where the properties came from
 	 */
-	private ANode pnode;
+	protected ANode pnode;
 
 	/**
 	 * Build the class with some properties inside

@@ -84,7 +84,8 @@ import net.sf.jasperreports.engine.type.StretchTypeEnum;
 /*
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IDesignDragable, IGraphicalPropertiesHandler {
+public class MGraphicElement extends APropertyNode
+		implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IDesignDragable, IGraphicalPropertiesHandler {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -93,7 +94,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	private static NamedEnumPropertyDescriptor<PositionTypeEnum> positionTypeD;
 
 	private static NamedEnumPropertyDescriptor<StretchTypeEnum> stretchTypeD;
-
 
 	private IPropertyDescriptor[] descriptors;
 
@@ -326,7 +326,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		return new Rectangle(jr.getX(), jr.getY(), jr.getWidth(), jr.getHeight());
 	}
 
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
@@ -536,7 +535,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		backcolorD.setCategory(Messages.common_graphic);
 		styleD.setCategory(Messages.common_graphic);
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
@@ -545,16 +544,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, new DefaultValue(null, true));
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, new DefaultValue(Boolean.FALSE, true));
-		
-		int positionDefault = NamedEnumPropertyDescriptor.getIntValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP, 
-																																		NullEnum.NOTNULL, PositionTypeEnum.FIX_RELATIVE_TO_TOP);
+
+		int positionDefault = NamedEnumPropertyDescriptor.getIntValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP,
+				NullEnum.NOTNULL, PositionTypeEnum.FIX_RELATIVE_TO_TOP);
 		defaultsMap.put(JRDesignElement.PROPERTY_POSITION_TYPE, new DefaultValue(positionDefault, false));
-		
-		StretchTypeEnum stretchDefault = NamedEnumPropertyDescriptor.getEnumValue(StretchTypeEnum.NO_STRETCH, 
-																																								NullEnum.NOTNULL, 
-																																									StretchTypeEnum.NO_STRETCH);
+
+		StretchTypeEnum stretchDefault = NamedEnumPropertyDescriptor.getEnumValue(StretchTypeEnum.NO_STRETCH,
+				NullEnum.NOTNULL, StretchTypeEnum.NO_STRETCH);
 		defaultsMap.put(JRDesignElement.PROPERTY_STRETCH_TYPE, new DefaultValue(stretchDefault, false));
-		
+
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, new DefaultValue(Boolean.TRUE, true));
 		defaultsMap.put(JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK, new DefaultValue(Boolean.FALSE, true));
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND, new DefaultValue(Boolean.FALSE, true));
@@ -659,13 +657,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	public Object getPropertyActualValue(Object id) {
 		JRDesignElement jrElement = (JRDesignElement) getValue();
 		JSSStyleResolver resolver = getStyleResolver();
-		if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR)){
+		if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR)) {
 			Color backcolor = resolver.getBackcolor(jrElement);
 			return Colors.getSWTRGB4AWTGBColor(backcolor);
-		} if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR)){
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR)) {
 			Color forecolor = resolver.getForecolor(jrElement);
-			return Colors.getSWTRGB4AWTGBColor(forecolor); 
-		} if (id.equals(JRBaseStyle.PROPERTY_MODE)){
+			return Colors.getSWTRGB4AWTGBColor(forecolor);
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
 			return ModeEnum.TRANSPARENT.equals(resolver.getMode(jrElement, ModeEnum.OPAQUE));
 		}
 		return super.getPropertyActualValue(id);
@@ -1105,7 +1105,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	public boolean isVisible() {
 		return super.isVisible() && checkVisibleFrame();
 	}
-	
+
 	@Override
 	public boolean isCuttable(ISelection currentSelection) {
 		return true;

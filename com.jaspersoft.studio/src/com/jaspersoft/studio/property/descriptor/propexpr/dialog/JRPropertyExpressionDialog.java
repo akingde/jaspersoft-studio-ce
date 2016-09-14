@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
@@ -22,6 +18,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -30,6 +27,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
@@ -40,79 +38,81 @@ import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.type.PropertyEvaluationTimeEnum;
 
 /**
- * Dialog that extend the dialog to define a property as key and value.
- * This extension allow to use an expression as value
+ * Dialog that extend the dialog to define a property as key and value. This extension allow to use an expression as
+ * value
  * 
  * @author Orlandin Marco
  *
  */
-public class JRPropertyExpressionDialog extends JRPropertyDialog 
-{
+public class JRPropertyExpressionDialog extends JRPropertyDialog {
 	/**
 	 * Checkbutton to choose if to use a textual value or an expression
 	 */
 	protected Button buseexpr;
-	
+
 	/**
 	 * Control where the expression can be placed
 	 */
 	protected WTextExpression evalue;
-	
+
 	/**
 	 * Container of the expression control
 	 */
 	protected Composite vexp;
-	
+
 	/**
-	 * Boolean guard to avoid recursive calls when the text of the value
-	 * is modified from the modify listener itself
+	 * Boolean guard to avoid recursive calls when the text of the value is modified from the modify listener itself
 	 */
 	private boolean updating = false;
-	
+
+	private Combo cevalTime;
+
 	public JRPropertyExpressionDialog(Shell parentShell) {
 		super(parentShell);
 	}
-	
+
 	/**
 	 * The hints are initialized using the type of the actual node
 	 */
 	@Override
-	protected void initializeHints(){
+	protected void initializeHints() {
 		hints = HintsPropertiesList.getElementProperties(value.getPnode().getValue());
 		Collections.sort(hints);
 	}
-	
+
 	@Override
-	protected ModifyListener getModifyListener(){
+	protected ModifyListener getModifyListener() {
 		return new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
 				String newtext = cprop.getText();
-				if (propertiesSuggestions != null) propertiesSuggestions.showOnlyElement(newtext);
+				if (propertiesSuggestions != null)
+					propertiesSuggestions.showOnlyElement(newtext);
 				value.setName(newtext);
 			}
 		};
 	}
-	
+
 	/**
 	 * Create the checkbox
 	 */
-	protected void createAdditionalControls(Composite parent){
+	protected void createAdditionalControls(Composite parent) {
 		buseexpr = new Button(parent, SWT.CHECK);
 		buseexpr.setText("Use An Expression");
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		buseexpr.setLayoutData(gd);
 	}
-	
+
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite composite = (Composite)super.createDialogArea(parent);
+		Composite composite = (Composite) super.createDialogArea(parent);
 		tvalue.addModifyListener(new ModifyListener() {
-			
+
 			@Override
 			public void modifyText(ModifyEvent e) {
 				synchText();
@@ -125,7 +125,7 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 			public void widgetSelected(SelectionEvent e) {
 				stackLayout.topControl = buseexpr.getSelection() ? vexp : vcmp;
 				stackComposite.layout();
-				((PropertyExpressionDTO)value).setExpression(buseexpr.getSelection());
+				((PropertyExpressionDTO) value).setExpression(buseexpr.getSelection());
 				if (buseexpr.getSelection())
 					value.setValue(evalue.getExpression().getText());
 				else
@@ -140,28 +140,50 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 		fillValue(value);
 		return composite;
 	}
-	
+
 	/**
 	 * Crate the control to insert an expression
 	 * 
-	 * @param cmp the parent where the control will be placed
+	 * @param cmp
+	 *          the parent where the control will be placed
 	 * @return container of the control
 	 */
 	private Composite createValueExpressionControl(Composite cmp) {
 		Composite composite = new Composite(cmp, SWT.NONE);
-		composite.setLayout(new GridLayout());
+		composite.setLayout(new GridLayout(2, false));
+
+		if (value instanceof DatasetPropertyExpressionDTO) {
+			Label label = new Label(composite, SWT.NONE);
+			label.setText("Evaluation Time");
+
+			cevalTime = new Combo(composite, SWT.READ_ONLY);
+			cevalTime.setItems(new String[] { PropertyEvaluationTimeEnum.EARLY.getName(),
+					PropertyEvaluationTimeEnum.REPORT.getName(), PropertyEvaluationTimeEnum.LATE.getName() });
+			cevalTime.addModifyListener(new ModifyListener() {
+
+				@Override
+				public void modifyText(ModifyEvent e) {
+					((DatasetPropertyExpressionDTO) value).setEvalTime(PropertyEvaluationTimeEnum.byName(cevalTime.getText()));
+				}
+			});
+		}
 
 		Label label = new Label(composite, SWT.NONE);
 		label.setText("Value Expression");
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		label.setLayoutData(gd);
 
 		evalue = new WTextExpression(composite, SWT.NONE, 1);
 		evalue.addModifyListener(new ExpressionModifiedListener() {
 			@Override
 			public void expressionModified(ExpressionModifiedEvent event) {
-				synchText();	
+				synchText();
 			}
 		});
-		evalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+		gd = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
+		gd.horizontalSpan = 2;
+		evalue.setLayoutData(gd);
 		evalue.addModifyListener(new ExpressionModifiedListener() {
 			@Override
 			public void expressionModified(ExpressionModifiedEvent event) {
@@ -171,37 +193,45 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 
 		return composite;
 	}
-	
+
 	/**
 	 * Set the current value insde the value controls
 	 * 
-	 * @param value value to set
+	 * @param value
+	 *          value to set
 	 */
 	private void fillValue(PropertyDTO value) {
-		ANode node =  value.getPnode();
+		ANode node = value.getPnode();
 		ExpressionContext ec = null;
-		if(node instanceof APropertyNode){
+		if (node instanceof APropertyNode) {
 			ec = ((APropertyNode) node).getExpressionContext();
-		}
-		else {
+		} else {
 			ec = ModelUtils.getElementExpressionContext(null, node);
 		}
-		evalue.setExpressionContext(ec);		
+		evalue.setExpressionContext(ec);
 		cprop.setText(Misc.nvl(value.getName()));
 		buseexpr.setSelection(value.isExpression());
+		if (value.isExpression()) {
+			stackLayout.topControl = vexp;
+			stackComposite.layout();
+		}
+
 		String text = Misc.nvl((String) value.getValue());
 		tvalue.setText(text);
 		evalue.setExpression(new JRDesignExpression(text));
+		if (value instanceof DatasetPropertyExpressionDTO) {
+			PropertyEvaluationTimeEnum etime = ((DatasetPropertyExpressionDTO) value).getEvalTime();
+			cevalTime.setText(etime != null ? etime.getName() : "");
+		}
 	}
 
 	/**
-	 * Method called when one of the value controls are modfied
-	 * and it synch the value on the other control
+	 * Method called when one of the value controls are modfied and it synch the value on the other control
 	 */
-	protected synchronized void synchText(){
-		if (!updating){
+	protected synchronized void synchText() {
+		if (!updating) {
 			updating = true;
-			if (buseexpr.getSelection()){
+			if (buseexpr.getSelection()) {
 				tvalue.setText(evalue.getText());
 			} else {
 				evalue.setExpression(new JRDesignExpression(tvalue.getText()));
@@ -209,18 +239,17 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 			updating = false;
 		}
 	}
-	
+
 	/**
-	 * Return a value as string, it can handle string
-	 * and expressions. If the value can't be converted
-	 * it return an empty string
+	 * Return a value as string, it can handle string and expressions. If the value can't be converted it return an empty
+	 * string
 	 */
 	@Override
 	protected String getValueText(Object value) {
-		if(value instanceof String) {
+		if (value instanceof String) {
 			return (String) value;
-		} else if (value instanceof JRExpression){
-			return ((JRExpression)value).getText();
+		} else if (value instanceof JRExpression) {
+			return ((JRExpression) value).getText();
 		}
 		return "";
 	}

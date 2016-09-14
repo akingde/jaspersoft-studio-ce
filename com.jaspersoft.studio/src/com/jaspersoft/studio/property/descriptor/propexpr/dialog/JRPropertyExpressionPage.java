@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
@@ -43,6 +39,8 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.CopyElementExpressionProperty;
 import com.jaspersoft.studio.model.CopyElementProperty;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionDTO;
+import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.TPropertyLabelProvider;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
@@ -57,16 +55,19 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 public class JRPropertyExpressionPage extends JSSHelpWizardPage {
-	
+
 	private final class EditElement implements IEditElement<PropertyDTO> {
 		@Override
 		public void editElement(List<PropertyDTO> input, int pos) {
 			PropertyDTO v = (PropertyDTO) input.get(pos);
-			if (v == null) return;
-			JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
-			//the edited value must be a clone, otherwise changes done in the dialog 
-			//will be propagated even if the cancel button is pressed
+			if (v == null)
+				return;
+			JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(UIUtils.getShell());
+			// the edited value must be a clone, otherwise changes done in the dialog
+			// will be propagated even if the cancel button is pressed
 			PropertyDTO editedValue = v.clone();
 			dialog.setValue(editedValue);
 			if (dialog.open() == Window.OK)
@@ -85,7 +86,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 	public void setValue(PropertyExpressionsDTO value) {
 		this.value = value;
-		if (table != null){
+		if (table != null) {
 			fillTable();
 		}
 	}
@@ -95,7 +96,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		setTitle(Messages.common_properties);
 		setDescription(Messages.JRPropertyPage_description);
 	}
-	
+
 	/**
 	 * Return the context name for the help of this page
 	 */
@@ -128,7 +129,9 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				while (getName(input, name, i) == null)
 					i++;
 				name += "_" + i; //$NON-NLS-1$
-				PropertyExpressionDTO v = new PropertyExpressionDTO(false,name, "NEW_VALUE");
+				PropertyExpressionDTO v = value instanceof DatasetPropertyExpressionsDTO
+						? new DatasetPropertyExpressionDTO(false, name, "NEW_VALUE", null)
+						: new PropertyExpressionDTO(false, name, "NEW_VALUE");
 				v.setPnode(value.getPnode());
 				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
 				dialog.setValue(v);
@@ -173,13 +176,13 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				editButton.push();
 			}
 		});
-		//set the help for the elements inside the table
+		// set the help for the elements inside the table
 		TableHelpListener.setTableHelp(table);
-		
+
 		tableViewer = new TableViewer(table);
 		tableViewer.setContentProvider(new ListContentProvider());
 		tableViewer.setLabelProvider(new TPropertyLabelProvider());
-		
+
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
 		column[0].setText(Messages.common_name);
@@ -196,48 +199,48 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		tlayout.addColumnData(new ColumnWeightData(50, true));
 		tlayout.addColumnData(new ColumnWeightData(50, true));
 		table.setLayout(tlayout);
-		
-		//Crete the popup menu
+
+		// Crete the popup menu
 		createPopoupMenu();
 	}
-	
-	private void createPopoupMenu(){
+
+	private void createPopoupMenu() {
 		Menu tableMenu = new Menu(table);
 		final MenuItem copyItem = new MenuItem(tableMenu, SWT.NONE);
 		copyItem.setText(Messages.common_copy);
 		copyItem.addSelectionListener(new SelectionAdapter() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
+				StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
 				List<ICopyable> copyList = new ArrayList<ICopyable>();
-				for(Object selected : selection.toList()){
-					PropertyDTO prop = (PropertyDTO)selected;
-					if (prop.isExpression()){
+				for (Object selected : selection.toList()) {
+					PropertyDTO prop = (PropertyDTO) selected;
+					if (prop.isExpression()) {
 						copyList.add(new CopyElementExpressionProperty(prop.getName(), prop.getValue()));
 					} else {
 						copyList.add(new CopyElementProperty(prop.getName(), prop.getValue()));
 					}
 				}
-				//set the container inside the clipboard
-				if (!copyList.isEmpty()){
+				// set the container inside the clipboard
+				if (!copyList.isEmpty()) {
 					PastableProperties container = new PastableProperties(copyList);
 					Clipboard.getDefault().setContents(container);
 				}
 			}
-			
+
 		});
-		
+
 		final MenuItem pasteItem = new MenuItem(tableMenu, SWT.NONE);
 		pasteItem.setText(Messages.common_paste);
 		pasteItem.addSelectionListener(new SelectionAdapter() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				PastableProperties pasteContainer = (PastableProperties)Clipboard.getDefault().getContents();
+				PastableProperties pasteContainer = (PastableProperties) Clipboard.getDefault().getContents();
 				List<CopyElementExpressionProperty> copiedProperties = pasteContainer.getCopiedProperties();
-				for(CopyElementExpressionProperty property : copiedProperties){
-					if (!value.hasProperty(property.getPropertyName(), property.isExpression())){
+				for (CopyElementExpressionProperty property : copiedProperties) {
+					if (!value.hasProperty(property.getPropertyName(), property.isExpression())) {
 						value.addProperty(property.getPropertyName(), property.getValue(), property.isExpression());
 					} else {
 						value.setProperty(property.getPropertyName(), property.getValue(), property.isExpression());
@@ -245,38 +248,39 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				}
 				tableViewer.setInput(value.getProperties());
 			}
-			
+
 		});
-		
+
 		tableMenu.addMenuListener(new MenuListener() {
-			
+
 			@Override
 			public void menuShown(MenuEvent e) {
 				copyItem.setEnabled(!tableViewer.getSelection().isEmpty());
 				boolean pasteEnabled = false;
-				if (Clipboard.getDefault().getContents() instanceof PastableProperties){
-					PastableProperties pasteContainer = (PastableProperties)Clipboard.getDefault().getContents();
+				if (Clipboard.getDefault().getContents() instanceof PastableProperties) {
+					PastableProperties pasteContainer = (PastableProperties) Clipboard.getDefault().getContents();
 					List<CopyElementExpressionProperty> copiedProperties = pasteContainer.getCopiedProperties();
-					pasteEnabled = canPaste(copiedProperties); 
-				} 
+					pasteEnabled = canPaste(copiedProperties);
+				}
 				pasteItem.setEnabled(pasteEnabled);
 			}
-			
+
 			@Override
 			public void menuHidden(MenuEvent e) {
 			}
 		});
-		
+
 		table.setMenu(tableMenu);
 	}
-	
+
 	/**
 	 * Check if at least one of the copied properties can be pasted on the current element
 	 * 
-	 * @param copiedProperties the copied properties
+	 * @param copiedProperties
+	 *          the copied properties
 	 * @return true if at least one of the copied properties can be pasted, false otherwise
 	 */
-	private boolean canPaste(List<CopyElementExpressionProperty> copiedProperties){
+	private boolean canPaste(List<CopyElementExpressionProperty> copiedProperties) {
 		return copiedProperties != null && !copiedProperties.isEmpty();
 	}
 
