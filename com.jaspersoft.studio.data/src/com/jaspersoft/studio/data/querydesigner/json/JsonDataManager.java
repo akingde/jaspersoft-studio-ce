@@ -19,15 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.data.DataFile;
-import net.sf.jasperreports.data.DataFileStream;
-import net.sf.jasperreports.data.DataFileUtils;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignField;
-
 import org.apache.commons.io.IOUtils;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +31,18 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.data.DataFile;
+import net.sf.jasperreports.data.DataFileStream;
+import net.sf.jasperreports.data.DataFileUtils;
+import net.sf.jasperreports.data.json.JsonExpressionLanguageEnum;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.ParameterContributorContext;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.json.JRJsonNode;
+import net.sf.jasperreports.engine.util.JsonUtil;
+import net.sf.jasperreports.engine.util.json.DefaultJsonQLExecuter;
 
 /**
  * This class works with the specified Json data information. Usually this will
@@ -51,6 +56,11 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	private JsonNode jsonRoot;
 	private MRoot jsonSupportModel;
 	private Map<JsonSupportNode, JsonNode> jsonNodesMap;
+	private String language;
+	
+	public JsonDataManager(String language){
+		this.language = language;
+	}
 
 	/**
 	 * Tries to load a JSON tree structure using the specified data file and
@@ -60,19 +70,21 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 *            the resource information to get the JSON
 	 * @param jconfig
 	 *            the context
+	 * @param jDataset 
 	 * @throws IOException
 	 * @throws JRException
 	 */
-	public void loadJsonDataFile(DataFile dataFile, JasperReportsConfiguration jconfig)
+	public void loadJsonDataFile(DataFile dataFile, JasperReportsConfiguration jconfig, JRDataset jDataset)
 			throws IOException, JRException {
 		getJsonNodesMap().clear();
 		DataFileStream ins = null;
 		try {
 			Map<String, Object> parameters = jconfig.getJRParameters();
-			if (parameters == null)
+			if (parameters == null) {
 				parameters = new HashMap<String, Object>();
-			// FIXME - We need to proper populate the map!!!
-			ins = DataFileUtils.instance(jconfig).getDataStream(dataFile, parameters);
+			}
+			ParameterContributorContext paramContributorCtx = new ParameterContributorContext(jconfig, jDataset, parameters);
+			ins = DataFileUtils.instance(paramContributorCtx).getDataStream(dataFile, parameters);
 			jsonRoot = getJsonMapper().readTree(ins);
 			buildJsonSupportTree();
 		} catch (IOException e) {
@@ -103,10 +115,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 */
 	private ObjectMapper getJsonMapper() {
 		if (mapper == null) {
-			mapper = new ObjectMapper();
-			mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-			mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-			mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+			mapper = JsonUtil.createObjectMapper();
 		}
 		return mapper;
 	}
@@ -189,30 +198,51 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 */
 	public List<JsonSupportNode> getSelectableNodes(String query) {
 		List<JsonSupportNode> selectedList = new ArrayList<JsonSupportNode>();
-		JsonQueryHelper jsonQueryHelper = new JsonQueryHelper(mapper);
-		try {
-			JsonNode jsonData = jsonQueryHelper.getJsonData(jsonRoot, query);
-			if (jsonData != null) {
+		if(language.equalsIgnoreCase(JsonExpressionLanguageEnum.JSONQL.getName())) {
+			JRJsonNode jrJsonNode = new JRJsonNode(null, jsonRoot);
+			DefaultJsonQLExecuter jsonqlExec = new DefaultJsonQLExecuter();
+			try {
+				List<JRJsonNode> jrSelectedNodes = jsonqlExec.selectNodes(jrJsonNode, query);
 				List<JsonNode> elementsList = new ArrayList<JsonNode>();
-				if (jsonData.isArray()) {
-					Iterator<JsonNode> elements = jsonData.elements();
-					while (elements.hasNext()) {
-						elementsList.add(elements.next());
+				if(jrSelectedNodes!=null){
+					for(JRJsonNode n : jrSelectedNodes) {
+						elementsList.add(n.getDataNode());
 					}
-				} else if (jsonData.isObject()) {
-					elementsList.add(jsonData);
-				}
-
-				for (JsonSupportNode sn : getJsonNodesMap().keySet()) {
-					if (elementsList.contains(getJsonNodesMap().get(sn))) {
-						selectedList.add(sn);
+					for (JsonSupportNode sn : getJsonNodesMap().keySet()) {
+						if (elementsList.contains(getJsonNodesMap().get(sn))) {
+							selectedList.add(sn);
+						}
 					}
 				}
+			} catch (Exception e) {
+				// Do not care about error in node selection
 			}
-		} catch (JRException e) {
-			// Do not care about error in node selection
 		}
-
+		else {
+			JsonQueryHelper jsonQueryHelper = new JsonQueryHelper(mapper);
+			try {
+				JsonNode jsonData = jsonQueryHelper.getJsonData(jsonRoot, query);
+				if (jsonData != null) {
+					List<JsonNode> elementsList = new ArrayList<JsonNode>();
+					if (jsonData.isArray()) {
+						Iterator<JsonNode> elements = jsonData.elements();
+						while (elements.hasNext()) {
+							elementsList.add(elements.next());
+						}
+					} else if (jsonData.isObject()) {
+						elementsList.add(jsonData);
+					}
+	
+					for (JsonSupportNode sn : getJsonNodesMap().keySet()) {
+						if (elementsList.contains(getJsonNodesMap().get(sn))) {
+							selectedList.add(sn);
+						}
+					}
+				}
+			} catch (Exception e) {
+				// Do not care about error in node selection
+			}
+		}
 		return selectedList;
 	}
 
@@ -225,27 +255,60 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 * @return a list of fields
 	 */
 	public List<JRDesignField> extractFields(String query) {
-		JsonQueryHelper jsonQueryHelper = new JsonQueryHelper(mapper);
+		ArrayList<JRDesignField> result = new ArrayList<JRDesignField>();
+		JsonNode jsonData = null;
 		try {
-			JsonNode jsonData = jsonQueryHelper.getJsonData(jsonRoot, query);
-			if (jsonData != null) {
-				if (jsonData.isArray()) {
-					return getFieldsFromArrayNode((ArrayNode) jsonData);
-				} else if (jsonData.isObject()) {
-					return getFieldsFromObjectNode((ObjectNode) jsonData);
+			if(language.equalsIgnoreCase(JsonExpressionLanguageEnum.JSONQL.getName())) {
+				JRJsonNode jrJsonNode = new JRJsonNode(null, jsonRoot);
+				DefaultJsonQLExecuter jsonqlExec = new DefaultJsonQLExecuter();
+				List<JRJsonNode> jrSelectedNodes = jsonqlExec.selectNodes(jrJsonNode, query);
+				List<JsonNode> elementsList = new ArrayList<JsonNode>();
+				if(jrSelectedNodes!=null){
+					for(JRJsonNode n : jrSelectedNodes) {
+						elementsList.add(n.getDataNode());
+					}
+				}
+				if(elementsList.size()>0){
+					// FIXME - for now select the first found
+					// we should find a good way to digg all possible ones
+					jsonData = elementsList.get(0);
 				}
 			}
-		} catch (JRException e) {
+			else {
+				JsonQueryHelper jsonQueryHelper = new JsonQueryHelper(mapper);
+				jsonData = jsonQueryHelper.getJsonData(jsonRoot, query);
+			}
+		} catch (Exception e) {
 			// Do not care about error in node selection
 		}
-		return new ArrayList<JRDesignField>();
+		if (jsonData != null) {
+			if (jsonData.isArray()) {
+				return getFieldsFromArrayNode((ArrayNode) jsonData, result);
+			} else if (jsonData.isObject()) {
+				return getFieldsFromObjectNode((ObjectNode) jsonData, result);
+			} else {
+				return getFieldFromGenericJsonNode(jsonData, result);
+			}
+		}
+		return result;
 	}
 
 	/*
+	 * Gets a field from a generic JSON node.
+	 */
+	private List<JRDesignField> getFieldFromGenericJsonNode(JsonNode node, List<JRDesignField> fields) {
+		JRDesignField f = new JRDesignField();
+		f.setName(ModelUtils.getNameForField(fields, "node"));
+		f.setDescription(".");
+		f.setValueClass(String.class); // FIXME improve with type checking
+		fields.add(f);
+		return fields;
+	}
+	
+	/*
 	 * Gets the fields from a JSON node of type object.
 	 */
-	private List<JRDesignField> getFieldsFromObjectNode(ObjectNode node) {
-		List<JRDesignField> fields = new ArrayList<JRDesignField>();
+	private List<JRDesignField> getFieldsFromObjectNode(ObjectNode node, List<JRDesignField> fields) {
 		Iterator<String> fieldNames = node.fieldNames();
 		while (fieldNames.hasNext()) {
 			String name = fieldNames.next();
@@ -261,15 +324,16 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	/*
 	 * Gets the fields from a JSON node of type array.
 	 */
-	private List<JRDesignField> getFieldsFromArrayNode(ArrayNode node) {
+	private List<JRDesignField> getFieldsFromArrayNode(ArrayNode node,List<JRDesignField> fields) {
 		// Assumption: consider the first element as template
 		JsonNode firstEl = node.get(0);
 		if (firstEl instanceof ObjectNode) {
-			return getFieldsFromObjectNode((ObjectNode) firstEl);
+			return getFieldsFromObjectNode((ObjectNode) firstEl,fields);
 		} else if (firstEl instanceof ArrayNode) {
-			return getFieldsFromArrayNode((ArrayNode) firstEl);
+			return getFieldsFromArrayNode((ArrayNode) firstEl,fields);
+		} else {
+			return getFieldFromGenericJsonNode(firstEl,fields);
 		}
-		return new ArrayList<JRDesignField>();
 	}
 
 	public Map<JsonSupportNode, JsonNode> getJsonNodesMap() {

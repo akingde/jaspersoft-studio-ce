@@ -33,11 +33,11 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
 import net.sf.jasperreports.data.json.JsonDataAdapterImpl;
+import net.sf.jasperreports.data.json.JsonExpressionLanguageEnum;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.query.JsonQueryExecuter;
 
 public class JsonDataAdapterDescriptor extends DataAdapterDescriptor
 		implements IFieldsProvider, IWizardDataEditorProvider {
@@ -79,8 +79,15 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor
 		Throwable err = null;
 		List<JRDesignField> fields = new ArrayList<JRDesignField>();
 		try {
-			JsonDataManager m = new JsonDataManager();
-			m.loadJsonDataFile(getDataAdapter().getDataFile(), jConfig);
+			String language = JsonExpressionLanguageEnum.JSON.getName();
+			if(getDataAdapter().getLanguage()!=null) {
+				language = getDataAdapter().getLanguage().getName();
+			}
+			if(jDataset!=null && jDataset.getQuery()!=null){
+				language = jDataset.getQuery().getLanguage();
+			}
+			JsonDataManager m = new JsonDataManager(language);
+			m.loadJsonDataFile(getDataAdapter().getDataFile(), jConfig, jDataset);
 			fields.addAll(m.extractFields(jDataset.getQuery().getText()));
 		} catch (JsonProcessingException e) {
 			err = e;
@@ -100,6 +107,8 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public String[] getLanguages() {
-		return new String[] { JsonQueryExecuter.CANONICAL_LANGUAGE };
+		return new String[] { 
+				JsonExpressionLanguageEnum.JSON.getName(),
+				JsonExpressionLanguageEnum.JSONQL.getName()};
 	}
 }

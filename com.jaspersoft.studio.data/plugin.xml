@@ -69,6 +69,10 @@
             language="json">      	
       </queryDesigner>
       <queryDesigner
+            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.jsonql.JsonQLQueryDesigner"
+            language="jsonql">      	
+      </queryDesigner>      
+      <queryDesigner
             QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner"
             language="mdx">
       </queryDesigner>      

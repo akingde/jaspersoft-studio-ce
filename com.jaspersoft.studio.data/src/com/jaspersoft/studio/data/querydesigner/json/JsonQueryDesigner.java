@@ -12,10 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.querydesigner.json;
 
-import net.sf.jasperreports.data.DataFile;
-import net.sf.jasperreports.data.json.JsonDataAdapter;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -57,6 +53,11 @@ import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
+import net.sf.jasperreports.data.DataFile;
+import net.sf.jasperreports.data.json.JsonDataAdapter;
+import net.sf.jasperreports.data.json.JsonExpressionLanguageEnum;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 /**
  * Json query designer that provides a basic syntax highlighting support, plus a
  * tree viewer where the json file is visualized.
@@ -76,11 +77,15 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 
 	public JsonQueryDesigner() {
 		super();
-		this.jsonDataManager = new JsonDataManager();
+		this.jsonDataManager = new JsonDataManager(getLanguage());
 		this.lineStyler = new JsonLineStyler();
 		this.decorateJob = new DecorateTreeViewerJob();
 		this.jsonLoaderJob = new JsonLoaderJob();
 		this.treeLabelProvider = new NodeBoldStyledLabelProvider<JsonSupportNode>();
+	}
+	
+	protected String getLanguage() {
+		return JsonExpressionLanguageEnum.JSON.getName();
 	}
 
 	@Override
@@ -342,8 +347,8 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 				monitor.beginTask(Messages.JsonQueryDesigner_JobTask,
 						IProgressMonitor.UNKNOWN);
 				String query = queryTextArea.getText();
-				treeLabelProvider.setSelectedNodes(jsonDataManager
-						.getSelectableNodes(query));
+				treeLabelProvider.setSelectedNodes(
+						jsonDataManager.getSelectableNodes(query));
 				treeViewer.refresh();
 				monitor.done();
 				return Status.OK_STATUS;
@@ -395,7 +400,8 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 		protected IStatus run(IProgressMonitor monitor) {
 			try {
 				if(dataFile!=null) {
-					JsonQueryDesigner.this.jsonDataManager.loadJsonDataFile(dataFile,getjConfig());
+					JsonQueryDesigner.this.jsonDataManager.loadJsonDataFile(
+							dataFile,getjConfig(),getjDataset());
 					return Status.OK_STATUS;
 				}
 			} catch (final Exception e) {
