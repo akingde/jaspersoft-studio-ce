@@ -39,6 +39,8 @@ import net.sf.jasperreports.data.json.JsonExpressionLanguageEnum;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.ParameterContributorContext;
+import net.sf.jasperreports.engine.data.JsonDataSource;
+import net.sf.jasperreports.engine.data.JsonQLDataSource;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.json.JRJsonNode;
 import net.sf.jasperreports.engine.util.JsonUtil;
@@ -300,6 +302,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 		JRDesignField f = new JRDesignField();
 		f.setName(ModelUtils.getNameForField(fields, "node"));
 		f.setDescription(".");
+		f.getPropertiesMap().setProperty(getFieldExpressionName(), ".");
 		f.setValueClass(String.class); // FIXME improve with type checking
 		fields.add(f);
 		return fields;
@@ -315,6 +318,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 			JRDesignField f = new JRDesignField();
 			f.setName(ModelUtils.getNameForField(fields, name));
 			f.setDescription(name);
+			f.getPropertiesMap().setProperty(getFieldExpressionName(), name);
 			f.setValueClass(String.class);
 			fields.add(f);
 		}
@@ -333,6 +337,15 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 			return getFieldsFromArrayNode((ArrayNode) firstEl,fields);
 		} else {
 			return getFieldFromGenericJsonNode(firstEl,fields);
+		}
+	}
+	
+	private String getFieldExpressionName() {
+		if(JsonExpressionLanguageEnum.JSONQL.getName().equalsIgnoreCase(language)){
+			return JsonQLDataSource.PROPERTY_FIELD_EXPRESSION;
+		}
+		else {
+			return JsonDataSource.PROPERTY_FIELD_EXPRESSION;
 		}
 	}
 
