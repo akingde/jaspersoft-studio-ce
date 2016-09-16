@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.jface.IFileSelection;
+import com.jaspersoft.studio.jface.dialogs.FilePreviewSelectionDialog;
 import com.jaspersoft.studio.jface.dialogs.FileSelectionDialog;
 import com.jaspersoft.studio.jface.dialogs.ImageSelectionDialog;
 import com.jaspersoft.studio.jface.dialogs.StyleTemplateSelectionDialog;
@@ -138,6 +139,8 @@ public class FileSelector implements IFileSelection {
 						txtURL.removeModifyListener(listener);
 						txtURL.setText(rd.getUriString());
 						txtURL.addModifyListener(listener);
+						if (dialog instanceof FilePreviewSelectionDialog)
+							((FilePreviewSelectionDialog) dialog).loadImagePreview();
 					}
 				} else {
 					RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
@@ -160,6 +163,8 @@ public class FileSelector implements IFileSelection {
 							txtURL.removeModifyListener(listener);
 							txtURL.setText(rs.getValue().getUriString());
 							txtURL.addModifyListener(listener);
+							if (dialog instanceof FilePreviewSelectionDialog)
+								((FilePreviewSelectionDialog) dialog).loadImagePreview();
 						}
 					}
 				}
