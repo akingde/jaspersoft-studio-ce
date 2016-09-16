@@ -868,7 +868,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			localRepositoryService = new DefaultRepositoryService(this) {
 				@Override
 				public InputStream getInputStream(String uri) {
-					if (Misc.isNullOrEmpty(uri))
+					if (Misc.isNullOrEmpty(uri) || uri.startsWith("repo:"))
 						return null;
 					try {
 						URL url = JRResourcesUtil.createURL(uri, urlHandlerFactory);

@@ -167,6 +167,7 @@ public class JRSRepositoryService implements RepositoryService {
 
 	@Override
 	public synchronized <K extends Resource> K getResource(String uri, Class<K> resourceType) {
+		//System.out.println("getResource: " + uri);
 		if (hasServerUrl(uri, resourceType) && c != null) {
 			if (uri.startsWith("repo:")) {
 				// it's possible to have a resource with id=repo:something (from
@@ -185,22 +186,30 @@ public class JRSRepositoryService implements RepositoryService {
 		return repService != null ? repService.getResource(uri, resourceType) : null;
 	}
 
-	protected <K extends Resource> K doGetResource(String uri, Class<K> resourceType) {
-		if (negCache.containsKey(uri))
-			return null;
-		negCache.put(uri, null);
+	private <K extends Resource> K addToCache(K res, String uri) {
+		// System.out.println("Add to " + (res == null ? "neg" : "pos") + " cache: " + uri);
+		if (res == null)
+			negCache.put(uri, null);
+		return res;
+	}
 
+	protected <K extends Resource> K doGetResource(String uri, Class<K> resourceType) {
+		//System.out.println("doGetResource: " + uri);
+		if (negCache.containsKey(uri)) {
+			//System.out.println("in negative cache " + uri);
+			return null;
+		}
 		String objectUri = uri;
 		if (uri.startsWith("repo:")) { //$NON-NLS-1$
 			objectUri = uri.substring(5);
 			K r = getFromParent(objectUri, resourceType);
 			if (r != null)
-				return r;
+				return addToCache(r, uri);
 		}
 		if (c != null)
 			try {
 				IProgressMonitor monitor = new NullProgressMonitor();
-
+				//System.out.println("get from server " + uri);
 				if (objectUri.contains("/")) { //$NON-NLS-1$
 					// Locate the resource inside the repository...
 					ResourceDescriptor r = new ResourceDescriptor();
@@ -252,7 +261,7 @@ public class JRSRepositoryService implements RepositoryService {
 							else if (pf.getLocationURI() != null)
 								fp = new File(pf.getLocationURI());
 							else
-								return null;
+								return addToCache(null, uri);
 
 							File f = new File(fp, objectUri);
 							if (f.getParentFile() != null && !f.getParentFile().mkdirs() && f.createNewFile())
@@ -266,14 +275,15 @@ public class JRSRepositoryService implements RepositoryService {
 				String u = uri;
 				if (u.startsWith("repo:"))
 					u = u.substring(5);
-				return getFromParent(u, resourceType);
+				return addToCache(getFromParent(u, resourceType), uri);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		return null;
+		return addToCache(null, uri);
 	}
 
 	protected <K extends Resource> K getFromParent(String uri, Class<K> resourceType) {
+		//System.out.println("get from parent " + uri);
 		for (RepositoryService rs : parent.getRepositoryServices()) {
 			if (rs == this)
 				continue;
@@ -284,6 +294,7 @@ public class JRSRepositoryService implements RepositoryService {
 			} catch (JRRuntimeException e) {
 			}
 		}
+		//System.out.println("get from server not found " + uri);
 		return null;
 	}
 

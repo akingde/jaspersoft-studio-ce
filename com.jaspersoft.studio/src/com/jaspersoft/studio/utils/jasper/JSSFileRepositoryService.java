@@ -109,7 +109,7 @@ public class JSSFileRepositoryService implements RepositoryService {
 				InputStreamResource inr = rs.getResource(uri, InputStreamResource.class);
 				if (inr == null)
 					return null;
-				String jruri = uri +FileExtension.PointJASPER;
+				String jruri = uri + FileExtension.PointJASPER;
 				if (rs instanceof DefaultRepositoryService) {
 					URI dUri = new URI(jruri);
 					JasperCompileManager.getInstance(jConfig).compileToFile(new URI(uri).getRawPath(), dUri.getRawPath());
