@@ -117,10 +117,7 @@ public class CustomizerEditWizard extends Wizard {
 	 */
 	@Override
 	public boolean canFinish() {
-		if (editedElement.isOnlyClass()){
-			return editPage.getRawClass() != null && !editPage.getRawClass().trim().isEmpty();
-		} 
-		return true;
+		return editPage.isPageComplete();
 	}
 	
 	@Override

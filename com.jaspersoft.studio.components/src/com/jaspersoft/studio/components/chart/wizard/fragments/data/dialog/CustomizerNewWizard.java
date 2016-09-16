@@ -133,7 +133,14 @@ public class CustomizerNewWizard extends Wizard {
 		if (selectionPage.isUsingCustomDefinition()){
 			return editPage.getRawClass() != null && !editPage.getRawClass().trim().isEmpty();
 		} else {
-			return selectionPage.isPageComplete();
+			if (selectionPage.isPageComplete()){
+				if (selectionPage.getSelectedDefinition().getDescriptor().hasWidgets()){
+					//force the dialog to advance to the configuration page
+					if (getContainer().getCurrentPage() == editPage){
+						return editPage.isPageComplete();
+					} else return false;
+				} else return true;		
+			} else return false;
 		}
 	}
 	

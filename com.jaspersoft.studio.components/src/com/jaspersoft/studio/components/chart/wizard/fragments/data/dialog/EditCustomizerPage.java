@@ -73,12 +73,14 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 
 		public void createUpdateProperty(String propertyName, String value, net.sf.jasperreports.engine.JRExpression valueExpression) {
 			super.createUpdateProperty(propertyName, value, valueExpression);
-			validate();
+			//this will trigger the validate
+			getContainer().updateButtons();
 		};
 		
 		public void removeProperty(String propertyName) {
 			super.removeProperty(propertyName);
-			validate();
+			//this will trigger the validate
+			getContainer().updateButtons();
 		};		
 	}; 
 
@@ -133,7 +135,8 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 		public void modifyText(ModifyEvent e) {
 			String text = ((Text)e.widget).getText();
 			advancedClass = text;
-			validate();
+			//this will trigger the validate
+			getContainer().updateButtons();
 		}
 	};
 	
@@ -149,7 +152,13 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 		this.dto = dto;
 		this.jConfig = jConfig;
 		this.ec = ec;
-		setMessage(Messages.EditCustomizerPage_pageMessage);
+		setMessage(getCustmizerMessage());
+	}
+	
+	protected String getCustmizerMessage(){
+		if (getCurrentDefinition() != null && getCurrentDefinition().getDescriptor() != null){
+			return getCurrentDefinition().getDescriptor().getDescription();
+		} else return Messages.EditCustomizerPage_pageMessage;
 	}
 	
 	@Override
@@ -218,7 +227,8 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 			int compositeHeight = mainParent.computeSize(500, SWT.DEFAULT).y;
 			scrolledContainer.setMinHeight(compositeHeight);
 			mainParent.layout(true, true);
-			validate();
+			//this will trigger the validate
+			getContainer().updateButtons();
 		}
 	}
 	
@@ -245,21 +255,19 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	 * raw class customizer. The only restriction is that the classname can't be empty. But
 	 * if the name is not a valid classname then a warning message is shown
 	 */
-	protected void validate(){
+	protected boolean validate(){
 		if (isUsingCustomDefinition()){
 			String text = textArea.getText();
 			if (text.trim().isEmpty()){
 				setErrorMessage(Messages.EditCustomizerPage_errorClassEmpty);
-				getContainer().updateButtons();
-				return;
+				return false;
 			} else {
 				try{
 					JRClassLoader.loadClassForName(text);
 				}catch (Exception ex){
 					setErrorMessage(null);
 					setMessage(Messages.EditCustomizerPage_warningClassNotFound, IMessageProvider.WARNING);
-					getContainer().updateButtons();
-					return;
+					return true;
 				}
 			}
 		} else {
@@ -267,19 +275,18 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 				if (!property.isValueValid()){
 					String message = "Property {0} has not a valid value";
 					setErrorMessage(MessageFormat.format(message, new Object[]{property.getPropertyLabel()}));
-					getContainer().updateButtons();
-					return;	
+					return false;	
 				}
 			}
 		}
-		setMessage(Messages.EditCustomizerPage_pageMessage);
+		setMessage(getCustmizerMessage());
 		setErrorMessage(null);
-		getContainer().updateButtons();
+		return true;
 	}
 	
 	@Override
 	public boolean isPageComplete() {
-		return getErrorMessage() == null;
+		return validate();
 	}
 	
 	@Override
