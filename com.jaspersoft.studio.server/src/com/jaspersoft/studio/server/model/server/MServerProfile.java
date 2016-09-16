@@ -273,14 +273,19 @@ public class MServerProfile extends ANode {
 				int indx = path.indexOf("/"); //$NON-NLS-1$
 				String ppath = indx >= 0 ? path.substring(0, indx) : path;
 				String fpath = indx >= 0 ? path.substring(indx) : ""; //$NON-NLS-1$
-
-				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
-				if (prj != null) {
-					if (fpath.isEmpty()) {
-						if (prj.getLocation() != null)
-							tmpDir = ResourcesPlugin.getWorkspace().getRoot().getFolder(prj.getLocation());
+				try {
+					IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
+					if (prj != null && prj.isOpen()) {
+						if (fpath.isEmpty()) {
+							if (prj.getLocation() != null)
+								tmpDir = ResourcesPlugin.getWorkspace().getRoot().getFolder(prj.getLocation());
+						} else
+							tmpDir = prj.getFolder(fpath);
 					} else
-						tmpDir = prj.getFolder(fpath);
+						tmpDir = null;
+				} catch (Throwable ce) {
+					ce.printStackTrace();
+					tmpDir = null;
 				}
 			}
 			if (tmpDir == null) {
