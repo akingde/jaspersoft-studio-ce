@@ -6,7 +6,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.ibm.icu.text.DecimalFormat;
 import com.jaspersoft.studio.swt.widgets.NumericText;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
@@ -123,5 +125,23 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 			v = v.replace(separator, '.');
 		} 
 		return Double.valueOf(v);
+	}
+	
+	@Override
+	public String getToolTip() {
+		String tt = Misc.nvl(getDescription());
+		tt += "\n" + (isMandatory() ? "Mandatory" : "Optional");
+		if (!Misc.isNullOrEmpty(getDefaultValueString()))
+			tt += "\nDefault: " + getDefaultValueString();
+		if (getMin() != null || getMax() != null){
+			DecimalFormat formatter = new DecimalFormat("0.#####E0");
+	 	
+			if (getMin() != null)
+				tt += "\nmin: " + formatter.format(getMin());
+
+			if (getMax() != null)
+				tt += "\nmax: " + formatter.format(getMax());
+		}
+		return tt;
 	}
 }
