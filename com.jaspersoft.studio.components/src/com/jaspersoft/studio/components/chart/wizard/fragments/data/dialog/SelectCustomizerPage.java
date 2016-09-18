@@ -26,6 +26,7 @@ import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -329,6 +330,25 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 			}
 		}
 		return value;
+	}
+	
+	/**
+	 * Return the next page of the wizard, depending if the current selected customizer
+	 * is the definition for a raw class or it is a customizer with a UI
+	 */
+	@Override
+	public IWizardPage getNextPage() {
+		if (isUsingCustomDefinition()){
+			CustomizerNewWizard parentWizard = (CustomizerNewWizard)getWizard();
+			EditClassPage editClassPage = parentWizard.getEditClassPage();
+			editClassPage.setRawClass("");
+			return editClassPage;
+		} else {
+			CustomizerNewWizard parentWizard = (CustomizerNewWizard)getWizard();
+			EditCustomizerPage editCustmizerPage = parentWizard.getEditCustomizerPage();
+			editCustmizerPage.setEditedElement(getSelectedDefinition());
+			return editCustmizerPage;			
+		}
 	}
 
 	@Override

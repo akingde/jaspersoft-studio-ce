@@ -13,52 +13,33 @@
 package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
+import com.jaspersoft.studio.widgets.framework.manager.panel.BasePanelManager;
+import com.jaspersoft.studio.widgets.framework.manager.panel.IPanelManager;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-import net.sf.jasperreports.engine.JRChartCustomizer;
-import net.sf.jasperreports.engine.util.JRClassLoader;
-
 /**
- * Page used to edit the properties of a customizer. There are two type of view, one
- * when using a full customizer definition so the dynamic controls will be created.
- * One when using a definition of a customizer composed of only a class. In this 
- * case only a text area for the class name is created. Some methods are abstract
- * because the behavior of this page is slightly different when editing a customizer
- * just created or when editing a previously created one
+ * Page used to edit the properties of a customizer. It show the controls defined
+ * by the {@link ChartCustomizerDefinition} to build a UI for the custmizer
  * 
  * @author Orlandin Marco
  *
  */
-public abstract class EditCustomizerPage extends JSSHelpWizardPage {
+public class EditCustomizerPage extends JSSHelpWizardPage {
 	
 	/**
 	 * {@link DtoPropertyEditor} that simply trigger the validation of this page when 
@@ -87,7 +68,7 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	/**
 	 * Composite where the controls are created
 	 */
-	private Composite mainParent;
+	private Composite dynamicParent;
 	
 	/**
 	 * Scrolled composite where the elements are created
@@ -110,36 +91,15 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	private JasperReportsConfiguration jConfig;
 	
 	/**
-	 * Store the class name typed in the textArea, is used when the edited customizer
-	 * is a raw class
+	 * The currently edited element 
 	 */
-	private String advancedClass = ""; //$NON-NLS-1$
+	private ChartCustomizerDefinition editedElement;
 	
 	/**
-	 * The text are where the class name can be typed 
+	 * The panel manager used to build the UI of the customizer
 	 */
-	private Text textArea;
-	
-	/**
-	 * The list of item properties used shown in this page
-	 */
-	private List<WItemProperty> properties = new ArrayList<WItemProperty>();
+	private IPanelManager currentPanelManager = null;
 
-	
-	/**
-	 * The modify listener to update the class result when something in the text area changes
-	 */
-	private ModifyListener textModifyListener = new ModifyListener() {
-		
-		@Override
-		public void modifyText(ModifyEvent e) {
-			String text = ((Text)e.widget).getText();
-			advancedClass = text;
-			//this will trigger the validate
-			getContainer().updateButtons();
-		}
-	};
-	
 	/**
 	 * Create the page 
 	 * 
@@ -162,12 +122,12 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	}
 	
 	@Override
-	public void createControl(Composite parent) {
+	public void createControl(Composite parent) {		
 		scrolledContainer = new ScrolledComposite(parent, SWT.V_SCROLL);
 		scrolledContainer.setExpandHorizontal(true);
 		scrolledContainer.setExpandVertical(true);
-		mainParent = new Composite(scrolledContainer, SWT.NONE);
-		scrolledContainer.setContent(mainParent);
+		dynamicParent = new Composite(scrolledContainer, SWT.NONE);
+		scrolledContainer.setContent(dynamicParent);
 		setControl(scrolledContainer);
 	}
 	
@@ -178,105 +138,50 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (visible){
-			properties.clear();
-			for(Control control : mainParent.getChildren()){
-				control.dispose();
+			//Dispose the old panel manager if present
+			if(currentPanelManager != null){
+				currentPanelManager.disposeWidgets();
+				currentPanelManager = null;
+			}	
+			setTitle(getCurrentDefinition().getDescriptor().getLabel());
+			ChartCustomizerDefinition selectedDefinition = getCurrentDefinition();
+			DialogDtoPropertyEditor pEditor = new DialogDtoPropertyEditor(selectedDefinition.getKey(), dto);
+			WidgetsDescriptor cd = selectedDefinition.getDescriptor();
+			
+			//Get the panel manager from the customizer or use a default one if not available
+			currentPanelManager = cd.getPanelManager(dynamicParent);
+			if (currentPanelManager == null) {
+				currentPanelManager = new BasePanelManager(dynamicParent);
 			}
-			if (isUsingCustomDefinition()){
-				mainParent.setLayout(new GridLayout(3, false));
-				setTitle(Messages.EditCustomizerPage_pageTitle);
-				new Label(mainParent, SWT.NONE).setText(Messages.EditCustomizerPage_customizerClassLabel);
-				textArea = new Text(mainParent, SWT.BORDER);
-				textArea.addModifyListener(textModifyListener);
-				textArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-				textArea.setText(advancedClass);
-				
-				Button browseButton = new Button(mainParent, SWT.PUSH);
-				browseButton.setText("..."); //$NON-NLS-1$
-				browseButton.addSelectionListener(new SelectionAdapter() {
-					
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						List<Class<?>> acceptedClasses = new ArrayList<Class<?>>();
-						acceptedClasses.add(JRChartCustomizer.class);
-						String classname = ClassTypeCellEditor.getJavaClassDialog(getShell(), acceptedClasses);
-						if (classname != null){
-							textArea.setText(classname);
-						}
-					}
-					
-				});	
-			} else {		
-				mainParent.setLayout(new GridLayout(2, false));
-				setTitle(getCurrentDefinition().getDescriptor().getLabel());
-				ChartCustomizerDefinition selectedDefinition = getCurrentDefinition();
-				DialogDtoPropertyEditor pEditor = new DialogDtoPropertyEditor(selectedDefinition.getKey(), dto);
-				WidgetsDescriptor cd = selectedDefinition.getDescriptor();
-				for(WidgetPropertyDescriptor p : cd.getPlainWidgets()) {
-					ItemPropertyDescription<?> descriptor = WidgetFactory.createItemPropertyDescriptor(cd, p, jConfig);
-					if (descriptor != null){
-						WidgetFactory.createLabelForProperty(mainParent, p);
-						WItemProperty widgetEditor = new WItemProperty(mainParent, SWT.NONE, 1, descriptor, pEditor);
-						properties.add(widgetEditor);
-						widgetEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-						widgetEditor.setExpressionContext(ec);
-						widgetEditor.updateWidget();
-					}
-				}
+			
+			//Create the widgets trough the panel manager
+			for(WidgetPropertyDescriptor p : cd.getPlainWidgets()) {
+				ItemPropertyDescription<?> descriptor = WidgetFactory.createItemPropertyDescriptor(cd, p, jConfig);
+				currentPanelManager.createWidget(p, descriptor, pEditor, ec);
 			}
-			int compositeHeight = mainParent.computeSize(500, SWT.DEFAULT).y;
+			
+			//Update the widgets value
+			currentPanelManager.updateWidgets();
+			int compositeHeight = dynamicParent.computeSize(500, SWT.DEFAULT).y;
 			scrolledContainer.setMinHeight(compositeHeight);
-			mainParent.layout(true, true);
+			dynamicParent.layout(true, true);
+			
 			//this will trigger the validate
 			getContainer().updateButtons();
 		}
 	}
 	
 	/**
-	 * Return the raw class
-	 * 
-	 * @return return the rawclass typed in the text area
-	 */
-	public String getRawClass(){
-		return advancedClass;
-	}
-	
-	/**
-	 * Set the raw class that will be shown in the text area
-	 * 
-	 * @param advancedClass the full classname
-	 */
-	public void setRawClass(String advancedClass){
-		this.advancedClass = advancedClass;
-	}
-	
-	/**
-	 * Validate the input. Typically this validate only the classname when using a 
-	 * raw class customizer. The only restriction is that the classname can't be empty. But
-	 * if the name is not a valid classname then a warning message is shown
+	 * Validate the input. It check if there is at least a widget that fails its validation and
+	 * return an error
 	 */
 	protected boolean validate(){
-		if (isUsingCustomDefinition()){
-			String text = textArea.getText();
-			if (text.trim().isEmpty()){
-				setErrorMessage(Messages.EditCustomizerPage_errorClassEmpty);
+		if (currentPanelManager != null){
+			WItemProperty invalidProperty = (WItemProperty)currentPanelManager.validateWidgets();
+			if (invalidProperty != null){
+				String message = "Property {0} has not a valid value";
+				setErrorMessage(MessageFormat.format(message, new Object[]{invalidProperty.getPropertyLabel()}));
 				return false;
-			} else {
-				try{
-					JRClassLoader.loadClassForName(text);
-				}catch (Exception ex){
-					setErrorMessage(null);
-					setMessage(Messages.EditCustomizerPage_warningClassNotFound, IMessageProvider.WARNING);
-					return true;
-				}
-			}
-		} else {
-			for(WItemProperty property : properties){
-				if (!property.isValueValid()){
-					String message = "Property {0} has not a valid value";
-					setErrorMessage(MessageFormat.format(message, new Object[]{property.getPropertyLabel()}));
-					return false;	
-				}
 			}
 		}
 		setMessage(getCustmizerMessage());
@@ -293,20 +198,23 @@ public abstract class EditCustomizerPage extends JSSHelpWizardPage {
 	protected String getContextName() {
 		return null;
 	}
-
-	/**
-	 * Return if the edited definition is a raw class definition or is based
-	 * on a Customizer Definition file
-	 * 
-	 * @return true if the definition is based on raw class, false otherwise
-	 */
-	protected abstract boolean isUsingCustomDefinition();
 	
 	/**
-	 * Return the edited definition. It is used to read the controls that will
-	 * be created when it is based on a Customizer Definition file
+	 * Set the edited definition
+	 * 
+	 * @param editedElement the {@link ChartCustomizerDefinition} edited in this step, must
+	 * be not null
+	 */
+	public void setEditedElement(ChartCustomizerDefinition editedElement){
+		this.editedElement = editedElement;
+	}
+	
+	/**
+	 * Return the edited definition.
 	 * 
 	 * @return the definition edited in this step
 	 */
-	protected abstract ChartCustomizerDefinition getCurrentDefinition();
+	protected ChartCustomizerDefinition getCurrentDefinition(){
+		return editedElement;
+	}
 }

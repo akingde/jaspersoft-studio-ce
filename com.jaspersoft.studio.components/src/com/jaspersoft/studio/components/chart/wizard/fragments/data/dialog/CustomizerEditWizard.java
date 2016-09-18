@@ -20,7 +20,8 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Wizard used to edit the properties of a customizer
+ * Wizard used to edit the properties of a customizer. It uses two different pages
+ * if the edited customizer has a configuration or it is a raw class
  * 
  * @author Orlandin Marco
  *
@@ -28,9 +29,14 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class CustomizerEditWizard extends Wizard {
 	
 	/**
-	 * Page with the controls to edit the customizer
+	 * Page with the controls to edit the customizer with a configuration
 	 */
-	private EditCustomizerPage editPage;
+	private EditCustomizerPage editCustomizerPage = null;
+	
+	/**
+	 * Page used to edit a raw class customizer
+	 */
+	private EditClassPage editClassPage = null;
 	
 	/**
 	 * The {@link JasperReportsConfiguration} of the current report
@@ -52,26 +58,6 @@ public class CustomizerEditWizard extends Wizard {
 	 */
 	private ChartCustomizerDefinition editedElement;
 	
-	@Override
-	public void addPages() {
-		editPage = new EditCustomizerPage(jConfig, ec, dto){
-			
-			@Override
-			protected boolean isUsingCustomDefinition() {
-				return editedElement.isOnlyClass();
-			}
-			
-			@Override
-			protected ChartCustomizerDefinition getCurrentDefinition() {
-				return editedElement;
-			}
-		};
-		if (editedElement.isOnlyClass()){
-			editPage.setRawClass(editedElement.getRawClass());
-		}
-		addPage(editPage);
-	}
-	
 	/**
 	 * Create the wizard
 	 * 
@@ -85,6 +71,23 @@ public class CustomizerEditWizard extends Wizard {
 		this.ec = ec;
 		this.dto = dto;
 		this.jConfig = jConfig;
+	}
+	
+	/**
+	 * Create the correct edit page depending is the edited element is a raw class or 
+	 * a customzier with a ui definition
+	 */
+	@Override
+	public void addPages() {
+		if (editedElement.isOnlyClass()){
+			editClassPage = new EditClassPage();
+			editClassPage.setRawClass(editedElement.getRawClass());
+			addPage(editClassPage);
+		} else {
+			editCustomizerPage = new EditCustomizerPage(jConfig, ec, dto);
+			editCustomizerPage.setEditedElement(editedElement);
+			addPage(editCustomizerPage);
+		}
 	}
 	
 	/**
@@ -105,7 +108,7 @@ public class CustomizerEditWizard extends Wizard {
 		if (editedElement.isOnlyClass()){
 			//the class could be changed
 			String key = editedElement.getKey();
-			ChartCustomizerDefinition result = new ChartCustomizerDefinition(editPage.getRawClass(), key);
+			ChartCustomizerDefinition result = new ChartCustomizerDefinition(editClassPage.getRawClass(), key);
 			return result;
 		} else {
 			return editedElement;
@@ -117,7 +120,11 @@ public class CustomizerEditWizard extends Wizard {
 	 */
 	@Override
 	public boolean canFinish() {
-		return editPage.isPageComplete();
+		if (editedElement.isOnlyClass()){
+			return editClassPage.isPageComplete();
+		} else {
+			return editCustomizerPage.isPageComplete();	
+		}
 	}
 	
 	@Override

@@ -23,7 +23,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.engine.JRChartPlot;
 
 /**
- * Wizard to crate a new chart customizer definition
+ * Wizard to crate a new chart customizer definition. It uses different pages
+ * to edit the customizer if it has a UI definition or if it is a raw class
  * 
  * @author Orlandin Marco
  *
@@ -36,9 +37,14 @@ public class CustomizerNewWizard extends Wizard {
 	private SelectCustomizerPage selectionPage;
 	
 	/**
-	 * Page where the properties of the customizer can be edited
+	 * Page where the properties of the customizer can be edited if it has a UI definition
 	 */
-	private EditCustomizerPage editPage;
+	private EditCustomizerPage editCustomizerPage = null;
+
+	/**
+	 * Page where the properties of the customizer can be edited if it is a raw class
+	 */
+	private EditClassPage editClassPage = null;
 	
 	/**
 	 * The current {@link JasperReportsConfiguration}
@@ -60,6 +66,9 @@ public class CustomizerNewWizard extends Wizard {
 	 */
 	private String definitionKey;
 	
+	/**
+	 * The plot of the edited chart
+	 */
 	private JRChartPlot selectedChartPlot;
 	
 	/**
@@ -69,7 +78,7 @@ public class CustomizerNewWizard extends Wizard {
 	 * @param ec the expression context
 	 * @param dto the dto changed by the new operation, should be a copy in case the user press cancel
 	 * @param jConfig the {@link JasperReportsConfiguration} of the current report
-	 * @param selectedChartPlot the plot of the modfied chart
+	 * @param selectedChartPlot the plot of the modified chart
 	 */
 	public CustomizerNewWizard(String newDefinitionKey, ExpressionContext ec, CustomizerPropertyExpressionsDTO dto, JasperReportsConfiguration jConfig, JRChartPlot selectedChartPlot){
 		definitionKey = newDefinitionKey;
@@ -82,20 +91,11 @@ public class CustomizerNewWizard extends Wizard {
 	@Override
 	public void addPages() {
 		selectionPage = new SelectCustomizerPage(jConfig, definitionKey, dto, selectedChartPlot);
-		editPage = new EditCustomizerPage(jConfig, ec, dto){
-			
-			protected boolean isUsingCustomDefinition() {
-				return selectionPage.isUsingCustomDefinition();
-			}
-			
-			@Override
-			protected ChartCustomizerDefinition getCurrentDefinition() {
-				return selectionPage.getSelectedDefinition();
-			}
-			
-		};
+		editCustomizerPage = new EditCustomizerPage(jConfig, ec, dto);
+		editClassPage = new EditClassPage();
 		addPage(selectionPage);
-		addPage(editPage);
+		addPage(editCustomizerPage);
+		addPage(editClassPage);
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class CustomizerNewWizard extends Wizard {
 	public ChartCustomizerDefinition getDefinition(){
 		if (selectionPage.isUsingCustomDefinition()){
 			String key = selectionPage.getSelectedDefinition().getKey();
-			ChartCustomizerDefinition result = new ChartCustomizerDefinition(editPage.getRawClass(), key);
+			ChartCustomizerDefinition result = new ChartCustomizerDefinition(editClassPage.getRawClass(), key);
 			return result;
 		} else {
 			return selectionPage.getSelectedDefinition();
@@ -131,13 +131,13 @@ public class CustomizerNewWizard extends Wizard {
 	@Override
 	public boolean canFinish() {
 		if (selectionPage.isUsingCustomDefinition()){
-			return editPage.getRawClass() != null && !editPage.getRawClass().trim().isEmpty();
+			return editClassPage.getRawClass() != null && !editClassPage.getRawClass().trim().isEmpty();
 		} else {
 			if (selectionPage.isPageComplete()){
 				if (selectionPage.getSelectedDefinition().getDescriptor().hasWidgets()){
 					//force the dialog to advance to the configuration page
-					if (getContainer().getCurrentPage() == editPage){
-						return editPage.isPageComplete();
+					if (getContainer().getCurrentPage() == editCustomizerPage){
+						return editCustomizerPage.isPageComplete();
 					} else return false;
 				} else return true;		
 			} else return false;
@@ -148,5 +148,22 @@ public class CustomizerNewWizard extends Wizard {
 	public boolean performFinish() {
 		return true;
 	}
+	
+	/**
+	 * Return the page used to edit a customizer trough a UI defined by it
+	 * 
+	 * @return a not null {@link EditCustomizerPage}
+	 */
+	protected EditCustomizerPage getEditCustomizerPage(){
+		return editCustomizerPage;
+	}
 
+	/**
+	 * Return the page used to edit a customizer class name
+	 * 
+	 * @return a not null {@link EditClassPage}
+	 */
+	protected EditClassPage getEditClassPage(){
+		return editClassPage;
+	}
 }

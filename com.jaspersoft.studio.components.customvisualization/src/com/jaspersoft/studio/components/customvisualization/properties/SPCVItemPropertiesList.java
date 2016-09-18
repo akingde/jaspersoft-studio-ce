@@ -373,12 +373,12 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 		btnRemoveProperty.setEnabled(!propertiesTV.getSelection().isEmpty());
 	}
 
-	protected WItemProperty createItemProperty(Composite cmp, final ItemPropertyDescription<?> ipd,  DescriptorPropertyLabelProvider descriptorLabelProvider, ExpressionContext ec, IPropertyEditor editor) {
+	protected WItemProperty createItemProperty(Composite cmp, ItemPropertyDescription<?> ipd,  DescriptorPropertyLabelProvider descriptorLabelProvider, ExpressionContext ec, IPropertyEditor editor) {
 		Label lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(Misc.nvl(ipd.getLabel()));
 		lbl.setToolTipText(ipd.getToolTip());
 
-		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, ipd, editor);
+		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, ipd, editor);
 		expr.setLabelProvider(descriptorLabelProvider);
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		expr.setExpressionContext(ec);
