@@ -33,10 +33,11 @@ import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyBaseLabelProvider;
-import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
-import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
+import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedEvent;
+import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.widgets.framework.manager.ItemPropertyLayout;
+import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.dialog.ItemPropertyElementDialog;
 import com.jaspersoft.studio.widgets.framework.ui.menu.IMenuProvider;
@@ -47,34 +48,76 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-
+/**
+ * Main component of the widgets framework. It will contains the widget for the editing of the value, both
+ * expression and static value, and the button to open the edit dialog. It can have also a label set before
+ * the widget and  it will show the button/label to open the expression editor when the widget is in 
+ * expression mode.
+ * It will use internally a custom layout to align the element to provide better performances. Be carefull
+ * into changing it
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class WItemProperty extends Composite implements IExpressionContextSetter, IWItemProperty {
 
-	/** Number of lines for the text expression widget */
-	public static final int TEXT_LINE_NUMBERS = 3;
-
+	/**
+	 * Icon used in the button to open the edit dialog
+	 */
 	public static final String BUTTON_ICON_PATH = "icons/resources/expressionedit-16.png"; //$NON-NLS-1$
 	
-	private int customTextLinesNumber = -1;
-	
+	/**
+	 * The context for the expression
+	 */
 	private ExpressionContext expContext;
 
-	// Widgets
-	private Control textExpression;
+	/**
+	 * The control used to edit the value
+	 */
+	private Control editorControl;
 	
+	/**
+	 * The button to open the dialog to switch between the static value or expression
+	 */
 	private Button btnEditExpression;
 
+	/**
+	 * Label provider, not used internally but can be used from outside to resolve
+	 * the string
+	 */
 	private BaseLabelProvider lprovider = null;
 	
+	/**
+	 * The label that can be clicked to open the expression editor
+	 */
 	private Label expressionEditLabel;
 	
+	/**
+	 * Flag typically set when the widget are writing the value
+	 * into the model element
+	 */
 	private boolean isRefresh = false;
 	
+	/**
+	 * Flag set when the widget are updating their value, by reading if from the 
+	 * model element
+	 */
 	private boolean isUpdating = false;
 
+	/**
+	 * {@link ItemPropertyDescription} from where the editor control is build
+	 */
 	private ItemPropertyDescription<?> ipDesc;
 	
+	/**
+	 * {@link IPropertyEditor} used to store the value into the element
+	 */
 	private IPropertyEditor editor;
+	
+	/**
+	 * Optional label that can be show before the control
+	 */
+	private Label titleLabel = null;
 	
 	/**
 	 * Expression modify listeners
@@ -82,19 +125,37 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	private List<ItemPropertyModifiedListener> listeners = new ArrayList<ItemPropertyModifiedListener>();
 	
 	/**
-	 * Create the widget 
+	 * Create the widget without a label
 	 * 
 	 * @param parent the parent of the widget
 	 * @param style the style of the main composite for this element
-	 * @param linesNum the number of line of the expression widget
 	 * @param widgetDescriptor the descriptor of the value control
+	 * @param editor the editor used to write and read the values from the target object, must be not null
 	 */
-	public WItemProperty(Composite parent, int style, int linesNum, ItemPropertyDescription<?> widgetDescriptor, IPropertyEditor editor) {
+	public WItemProperty(Composite parent, int style, ItemPropertyDescription<?> widgetDescriptor, IPropertyEditor editor) {
+		this(parent, style, null, widgetDescriptor, editor);
+	}
+	
+	/**
+	 * Create the widget with a label
+	 * 
+	 * @param parent the parent of the widget
+	 * @param style the style of the main composite for this element
+	 * @param descriptor the descriptor used to create the label. If null no label is created
+	 * @param widgetDescriptor the descriptor of the value control
+	 * @param editor the editor used to write and read the values from the target object, must be not null
+	 */
+	public WItemProperty(Composite parent, int style,  WidgetPropertyDescriptor descriptor, ItemPropertyDescription<?> widgetDescriptor, IPropertyEditor editor) {
 		super(parent, style);
 		Assert.isNotNull(editor);
 		this.ipDesc = widgetDescriptor;
 		this.editor = editor;
-		this.customTextLinesNumber = linesNum;
+		
+		if(descriptor != null){
+			titleLabel = new Label(this, SWT.NONE);
+			titleLabel.setText(descriptor.getLabel());
+			titleLabel.setToolTipText(descriptor.getDescription());
+		}
 
 		//Create the expression label
 		expressionEditLabel = new Label(this, SWT.NONE);
@@ -117,7 +178,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		});
 
 		//Create the simple control
-		textExpression = ipDesc.createControl(this, this);
+		editorControl = ipDesc.createControl(this, this);
 
 		//Create the edit expression button
 		btnEditExpression = new Button(this, SWT.FLAT);
@@ -134,11 +195,12 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		if (widgetDescriptor != null) {
 			String tt = widgetDescriptor.getToolTip();
 			expressionEditLabel.setToolTipText(tt);
-			textExpression.setToolTipText(widgetDescriptor.getToolTip());
+			editorControl.setToolTipText(widgetDescriptor.getToolTip());
 			btnEditExpression.setToolTipText(widgetDescriptor.getToolTip());
 		}
 		
-		setLayout(new ItemPropertyLayout(this, expressionEditLabel, textExpression, btnEditExpression));
+		setLayout(new ItemPropertyLayout(this, titleLabel, expressionEditLabel, editorControl, btnEditExpression));
+		layout();
 	}
 
 	@Override
@@ -188,20 +250,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
-		this.textExpression.setEnabled(enabled);
+		this.editorControl.setEnabled(enabled);
 		this.btnEditExpression.setEnabled(enabled);
-	}
-
-	/**
-	 * Gets the currently set number of lines for the widget. This value is used for the calculation of the text
-	 * expression height hint. Default value is {@value #TEXT_LINE_NUMBERS}.
-	 * 
-	 * @return the number of lines
-	 */
-	protected int getTextLinesNumber() {
-		if (customTextLinesNumber > 0)
-			return customTextLinesNumber;
-		return TEXT_LINE_NUMBERS;
 	}
 
 	/**
@@ -266,7 +316,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * 	Return the control widget
 	 */
 	public Control getControl() {
-		return textExpression;
+		return editorControl;
 	}
 
 	/**
@@ -317,6 +367,9 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		return getPropertyEditor().getPropertyValueExpression(ipDesc.getName());
 	}
 
+	/**
+	 * Return the name of the property handled by this {@link WItemProperty}
+	 */
 	@Override
 	public String getPropertyName() {
 		return ipDesc.getName();
@@ -348,7 +401,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	public void updateWidget() {
 		isUpdating = true;
 		try{
-			ipDesc.update(textExpression, this);
+			ipDesc.update(editorControl, this);
 			//show or hide the expression label
 			if (isExpressionMode()){
 				expressionEditLabel.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/functions_icon.png"));
@@ -381,7 +434,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	
 	/**
 	 * Validate the current value looking is it is mandatory but still empty.
-	 * Can be ovverriden to provide a complex behavior
+	 * Can be overridden to provide a complex behavior
 	 * 
 	 * @return false if the value is mandatory and empty both in expression and
 	 * static value, false otherwise
@@ -401,5 +454,23 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			return hasStaticValue || hasExpValue;
 		}
 		return true;
+	}
+	
+	/**
+	 * Set the visibility of the control and re-layout it
+	 */
+	@Override
+	public void setVisible(boolean value){
+		super.setVisible(value);
+		layout(true, true);
+	}
+	
+	/**
+	 * The visibility of this controls depends only from it and not from the parent
+	 */
+	@Override
+	public boolean isVisible() {
+		if (!isDisposed()) return getVisible();
+		return false;
 	}
 }

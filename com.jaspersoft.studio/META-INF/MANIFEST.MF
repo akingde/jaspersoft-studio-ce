@@ -738,7 +738,6 @@ Export-Package: com.jaspersoft.studio;
  com.jaspersoft.studio.property.itemproperty,
  com.jaspersoft.studio.property.itemproperty.desc,
  com.jaspersoft.studio.property.itemproperty.dialog,
- com.jaspersoft.studio.property.itemproperty.event,
  com.jaspersoft.studio.property.itemproperty.label,
  com.jaspersoft.studio.property.itemproperty.sp,
  com.jaspersoft.studio.property.propertiesviewer;
@@ -857,7 +856,9 @@ Export-Package: com.jaspersoft.studio;
  com.jaspersoft.studio.utils.jobs;uses:="org.eclipse.jface.operation",
  com.jaspersoft.studio.utils.parameter;uses:="net.sf.jasperreports.engine.design,com.jaspersoft.studio.utils.jasper,net.sf.jasperreports.engine",
  com.jaspersoft.studio.widgets.framework,
+ com.jaspersoft.studio.widgets.framework.events,
  com.jaspersoft.studio.widgets.framework.manager,
+ com.jaspersoft.studio.widgets.framework.manager.panel,
  com.jaspersoft.studio.widgets.framework.model,
  com.jaspersoft.studio.widgets.framework.ui,
  com.jaspersoft.studio.widgets.framework.ui.menu,

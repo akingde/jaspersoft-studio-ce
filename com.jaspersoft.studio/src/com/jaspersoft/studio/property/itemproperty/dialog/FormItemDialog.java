@@ -30,12 +30,12 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.DescriptorPropertyLabelProvider;
-import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
-import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
+import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedEvent;
+import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
 import net.sf.jasperreports.components.items.ItemProperty;
@@ -124,7 +124,7 @@ public abstract class FormItemDialog extends AItemDialog {
 		lbl.setText(ipd.getLabel());
 		lbl.setToolTipText(ipd.getToolTip());
 
-		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, ipd, descriptor.getPropertyEditor());
+		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, ipd, descriptor.getPropertyEditor());
 		expr.setLabelProvider(new DescriptorPropertyLabelProvider(descriptor));
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		expr.setLayoutData(gd);

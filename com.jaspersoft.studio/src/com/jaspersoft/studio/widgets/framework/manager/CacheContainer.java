@@ -45,6 +45,11 @@ public class CacheContainer {
 		return jConfig;
 	}
 
+	/**
+	 * Return if the descriptor should be unloaded when the config requested it is disposed
+	 * 
+	 * @return true if the descriptor should be unloaded, false otherwise
+	 */
 	public boolean isUnloadOnConfigDispose() {
 		return unloadOnConfigDispose;
 	}

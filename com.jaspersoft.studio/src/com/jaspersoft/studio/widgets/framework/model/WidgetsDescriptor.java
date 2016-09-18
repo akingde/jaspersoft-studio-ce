@@ -11,7 +11,11 @@ package com.jaspersoft.studio.widgets.framework.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.widgets.Composite;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.widgets.framework.manager.panel.IPanelManager;
 
 /**
  * Definition a series of dynamic widgets. A set of wdigets is composed of 
@@ -27,6 +31,8 @@ public class WidgetsDescriptor {
 	private String label;
 	
 	private String description;
+	
+	private String panelManagerClass;
 	
 	private List<SectionPropertyDescriptor> sections;
 
@@ -55,6 +61,14 @@ public class WidgetsDescriptor {
 
 	public void setSections(List<SectionPropertyDescriptor> sections) {
 		this.sections = sections;
+	}
+	
+	public String getPanelManagerClass(){
+		return panelManagerClass;
+	}
+	
+	public void setPanelManagerClass(String className){
+		panelManagerClass = className;
 	}
 
 	/**
@@ -96,6 +110,30 @@ public class WidgetsDescriptor {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Return an instance of the loaded panel manager. The panel manager must have a constructor with a composite
+	 * that will be used a parent of the controls
+	 * 
+	 * @param parent the composite used to instantiate and {@link IPanelManager}
+	 * @return and {@link IPanelManager} if it is defined, or null if it is not defined or it is defined but can not be loaded
+	 */ 
+	public IPanelManager getPanelManager(Composite parent){
+		if (panelManagerClass != null){
+			try{
+				Class<?> panelManager = Class.forName(panelManagerClass);
+				if (IPanelManager.class.isAssignableFrom(panelManager)){
+					IPanelManager result = (IPanelManager) panelManager.getConstructor(Composite.class).newInstance(parent);
+					return result;
+				}
+			} catch (Error err){
+				JaspersoftStudioPlugin.getInstance().logError(err);
+			} catch (Exception ex){
+				JaspersoftStudioPlugin.getInstance().logError(ex);
+			}
+		}
+		return null;
 	}
 
 }

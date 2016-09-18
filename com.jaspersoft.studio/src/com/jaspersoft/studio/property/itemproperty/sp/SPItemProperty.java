@@ -22,14 +22,14 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.DescriptorPropertyLabelProvider;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescriptor;
-import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
-import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.AHistorySPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.CustomAutoCompleteField;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
+import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedEvent;
+import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
 import net.sf.jasperreports.components.items.StandardItemProperty;
@@ -55,7 +55,7 @@ public class SPItemProperty extends AHistorySPropertyWidget<ItemPropertyDescript
 	protected void createComponent(Composite parent) {
 		ADescriptor d = pDescriptor.getDescriptor();
 		ItemPropertyDescription<?> ipd = d.getDescription((String) pDescriptor.getId());
-		expr = new WItemProperty(parent, SWT.NONE, 1, ipd, d.getPropertyEditor());
+		expr = new WItemProperty(parent, SWT.NONE, ipd, d.getPropertyEditor());
 		expr.setLabelProvider(new DescriptorPropertyLabelProvider(d));
 		
 		expr.addModifyListener(new ItemPropertyModifiedListener() {
