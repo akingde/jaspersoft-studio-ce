@@ -228,6 +228,10 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 	public boolean close() {
 		if (useExpressionCheckbox.getSelection()){
 			staticValue = null;
+			//if the user deosn't set an expression create it anyway
+			if (expressionValue == null){
+				expressionValue = new JRDesignExpression();
+			}
 		} else {
 			expressionValue = null;
 		}

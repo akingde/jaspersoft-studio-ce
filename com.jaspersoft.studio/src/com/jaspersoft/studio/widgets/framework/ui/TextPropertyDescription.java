@@ -151,7 +151,7 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 			if (tvalue != null && tvalue.isEmpty())
 				tvalue = null;
 			if (wiProp.isExpressionMode())
-				((JRDesignExpression) wiProp.getExpressionValue()).setText(tvalue);
+				wiProp.setValue(null, new JRDesignExpression(Misc.nvl(tvalue)));
 			else
 				wiProp.setValue(tvalue, null);
 		}
