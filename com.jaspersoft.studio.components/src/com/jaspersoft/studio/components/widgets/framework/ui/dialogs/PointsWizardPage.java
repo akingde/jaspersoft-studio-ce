@@ -43,7 +43,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-import net.sf.jasperreports.chartcustomizers.utils.Point;
+import net.sf.jasperreports.customizers.shape.Point;
+import net.sf.jasperreports.customizers.shape.ShapeTypeEnum;
 
 /**
  * Wizard page to define the points that compose a polyline. A preview of 
@@ -83,6 +84,8 @@ public class PointsWizardPage extends JSSHelpWizardPage {
 	 * The currently selected point
 	 */
 	private Point currentSelectedPoint = null;
+	
+	private ShapeTypeEnum editedShape;
 	
 	/**
 	 * Composite where the preview is painted. The previewed element
@@ -163,8 +166,11 @@ public class PointsWizardPage extends JSSHelpWizardPage {
 						points[i + 1] = Math.round(currentPointY);
 					}
 			
-					context.drawPolyline(points);
-					
+					if (editedShape == ShapeTypeEnum.POLYLINE){
+						context.drawPolyline(points);	
+					} else {
+						context.drawPolygon(points);
+					}
 				}
 			});
 			
@@ -204,18 +210,20 @@ public class PointsWizardPage extends JSSHelpWizardPage {
 	/**
 	 * Create the page with an empty set of points
 	 */
-	public PointsWizardPage() {
+	public PointsWizardPage(ShapeTypeEnum editedShape) {
 		super("pointsDefinitionPage");
 		definedPoints = new ArrayList<Point>();
+		this.editedShape = editedShape;
 	}
 	
 	/**
 	 * Create the page with a preinitialized set of point
 	 * 
+	 * @param editedShape the defined shape, used to draw correctly a polygon or a polyline
 	 * @param currentPoints the current set of points
 	 */
-	public PointsWizardPage(List<Point> currentPoints) {
-		this();
+	public PointsWizardPage(ShapeTypeEnum editedShape, List<Point> currentPoints) {
+		this(editedShape);
 		if (currentPoints != null){
 			definedPoints = new ArrayList<Point>(currentPoints);	
 		} else {

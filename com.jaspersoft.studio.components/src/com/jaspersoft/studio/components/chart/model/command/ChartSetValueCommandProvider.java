@@ -17,7 +17,6 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.chart.model.MChart;
-import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -26,8 +25,7 @@ import com.jaspersoft.studio.property.ISetValueCommandProvider;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 
-import net.sf.jasperreports.chartcustomizers.ConfigurableChartCustomizer;
-import net.sf.jasperreports.chartcustomizers.ProxyChartCustomizer;
+import net.sf.jasperreports.engine.NamedChartCustomizer;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.util.JRClassLoader;
@@ -59,60 +57,67 @@ public class ChartSetValueCommandProvider implements ISetValueCommandProvider {
 				currentDTO = new CustomizerPropertyExpressionsDTO((PropertyExpressionsDTO)newVal);
 			}
 			JSSCompoundCommand command = new JSSCompoundCommand("Set Chart Customizers", (ANode)source);
+			
+			//Create the command to set the DTO
 			SetValueCommand setDTOCommand = new SetValueCommand();
 			setDTOCommand.setTarget(source);
 			setDTOCommand.setPropertyId(propertyId);
 			setDTOCommand.setPropertyValue(currentDTO);
 			command.add(setDTOCommand);
+			
+			//Check if the other properties need to be updated to support the proxy
 			int customizersNumber = currentDTO.getCustomizersNumber();
 			if (customizersNumber == 1){
-				ChartCustomizerDefinition definition = currentDTO.getDefinedCustomizers().get(0);
-				boolean requireProxyCustomizer = false;
-				if (definition.isOnlyClass()){
+				String currentCustomizer = currentDTO.getCustomizerClassValue();
+				if (currentCustomizer != null && !currentCustomizer.trim().isEmpty()){
+					//it is set as the old customizer, check if it should be moved to the properties
+					boolean isConfigurableCustmizer = false;
 					try{
-						Class<?> customizerClass = JRClassLoader.loadClassForName(definition.getCustomizerClass());
-						requireProxyCustomizer = (ConfigurableChartCustomizer.class.isAssignableFrom(customizerClass));
+						Class<?> customizerClass = JRClassLoader.loadClassForName(currentCustomizer);
+						isConfigurableCustmizer = (NamedChartCustomizer.class.isAssignableFrom(customizerClass));
 					}catch (Exception ex){
-						requireProxyCustomizer = true;
 					}
-				} else {
-					requireProxyCustomizer = true;		
+					
+					if (isConfigurableCustmizer){
+						//the customizer in the property is a configurable customizer and need to be migrated to be loaded by the proxy one
+						//first remove it from the property
+						SetValueCommand setCustomizer = new SetValueCommand();
+						setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
+						setCustomizer.setPropertyValue(null);
+						setCustomizer.setTarget((APropertyNode)source);
+						command.add(setCustomizer);
+						if (currentCustomizer != null && !currentCustomizer.trim().isEmpty()){
+							//Migrate the old customizer as a children of the proxy one
+							currentDTO.createCustomizerEntry(currentCustomizer, true);
+						}
+					} else {
+						SetValueCommand setCustomizer = new SetValueCommand();
+						setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
+						setCustomizer.setPropertyValue(currentDTO.getCustomizerClassValue());
+						setCustomizer.setTarget((APropertyNode)source);
+						command.add(setCustomizer);
+					}
 				}
-				if (requireProxyCustomizer){
-					SetValueCommand setCustomizer = new SetValueCommand();
-					setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
-					setCustomizer.setPropertyValue(ProxyChartCustomizer.class.getName());
-					setCustomizer.setTarget((APropertyNode)source);
-					command.add(setCustomizer);
-				} else {
-					//Set the customizer selected as main customizer
-					SetValueCommand setCustomizer = new SetValueCommand();
-					setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
-					setCustomizer.setPropertyValue(definition.getCustomizerClass());
-					setCustomizer.setTarget((APropertyNode)source);
-					command.add(setCustomizer);
-					currentDTO.deleteCustomizer(definition.getKey(), true);
-				}
+				//if the customizer is already on the properties there is nothing to do since the proxy chart customizer
+				//will be used by default
 			} else if (customizersNumber > 1){
-				SetValueCommand setCustomizer = new SetValueCommand();
-				setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
-				setCustomizer.setPropertyValue(ProxyChartCustomizer.class.getName());
-				setCustomizer.setTarget((APropertyNode)source);
-				command.add(setCustomizer);
-				String currentCustomizer = currentDTO.getPnode().getValue().getCustomizerClass();
-				if (currentCustomizer != null && !currentCustomizer.equals(ProxyChartCustomizer.class.getName())){
-					//Migrate the old customizer as a children of the proxy one
-					currentDTO.createCustomizerEntry(currentCustomizer, true);
-				}
-			} else {
+				//remove the any customizer, since the proxy one is used automatically
 				SetValueCommand setCustomizer = new SetValueCommand();
 				setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
 				setCustomizer.setPropertyValue(null);
 				setCustomizer.setTarget((APropertyNode)source);
 				command.add(setCustomizer);
+				
+				//check if there is a customizer that should be migrated on the properties to be used among the others
+				String currentCustomizer = currentDTO.getPnode().getValue().getCustomizerClass();
+				if (currentCustomizer != null && !currentCustomizer.trim().isEmpty()){
+					//Migrate the old customizer as a children of the proxy one
+					currentDTO.createCustomizerEntry(currentCustomizer, true);
+				}		
 			}
 			return command;
  		}  else {
+ 			//it is not a property that concern the customizers, create a simple SetValueCommand
 			SetValueCommand setCommand = new SetValueCommand(commandName);
 			setCommand.setPropertyId(propertyId);
 			setCommand.setTarget(source);

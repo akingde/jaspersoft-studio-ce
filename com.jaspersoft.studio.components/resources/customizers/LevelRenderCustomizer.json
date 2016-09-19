@@ -1,21 +1,39 @@
 {
     "label": "Level Render",
     "description": "Allow to setup a level render as the chart render",
-    "customizerClass": "net.sf.jasperreports.chartcustomizers.LevelRenderCustomizer",
+    "customizerClass": "net.sf.jasperreports.customizers.LevelRenderCustomizer",
     "supportedPlot": ["1","2","3","7","8","11","12","20","21"],
+    "panelManagerClass": "com.jaspersoft.studio.components.widgets.framework.ui.SeriesSelectionPanelManager",
     "sections": [
         {
             "name": "Customizer configuration",
             "expandable": false,
             "properties": [
-				{
-                    "name": "seriesIndex",
-                    "label": "Series Index",
-                    "description": "The index of the series that will be rendered as a Level",
+                {
+                    "name": "selectionMode",
+                    "label": "Apply to",
+                    "description": "Apply to all the legend items",
                     "mandatory": true,
+                    "readOnly": false,
+                    "type": "selectable_combo",
+                    "comboOptions": [["allItems","All Items"], ["itemSeries","Series by name"], ["itemIndex", "Series by index"]]
+                },
+				{
+                    "name": "itemIndex",
+                    "label": "Legend Item Index",
+                    "description": "The index of the legend item that will be changed",
+                    "mandatory": false,
                     "defaultValue": "1",
                     "readOnly": false,
                     "type": "integer"
+                },
+               	{
+                    "name": "itemSeries",
+                    "label": "Series Name",
+                    "description": "The series associated to the legend item",
+                    "mandatory": false,
+                    "readOnly": false,
+                    "type": "text"
                 },
                 {
                     "name": "itemMargin",
@@ -29,7 +47,7 @@
                     "max" : "1"
                 },
                 {
-                    "name": "maximumItemWidth",
+                    "name": "maxItemWidth",
                     "label": "Maximum Item Width",
                     "description": "Sets the maximum item width, which is specified as a percentage of the available space for all items. Must be between 0 and 1",
                     "mandatory": false,

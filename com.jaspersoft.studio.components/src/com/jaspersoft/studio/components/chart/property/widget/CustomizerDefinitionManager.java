@@ -123,6 +123,6 @@ public class CustomizerDefinitionManager {
 				return new ChartCustomizerDefinition(descriptor, key);
 			}
 		}
-		return new ChartCustomizerDefinition(className, key);
+		return new ChartCustomizerDefinition(className, key, true);
 	}
 }

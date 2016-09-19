@@ -1126,7 +1126,7 @@
          point="com.jaspersoft.studio.dynamicWidgetDefinitions">
       <definition
             id="com.jaspersoft.studio.components.widgets.framework.ui.ShapePropertyDescription"
-            widgetClass="com.jaspersoft.studio.components.widgets.framework.ui.ShapePropertyDescription"
+            widgetClass="com.jaspersoft.studio.components.widgets.framework.ui.ShapePointsDescription"
             widgetName="shape">
       </definition>
    </extension>

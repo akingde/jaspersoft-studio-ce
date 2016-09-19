@@ -1,7 +1,7 @@
 {
     "label": "Domain Value Marker",
     "description": "A chart customizer for XY Charts",
-    "customizerClass": "net.sf.jasperreports.chartcustomizers.DomainValueMarkerCustomizer",
+    "customizerClass": "net.sf.jasperreports.customizers.marker.DomainValueMarkerCustomizer",
     "supportedPlot": ["13","14","15"],
     "sections": [
         {
@@ -9,7 +9,7 @@
             "expandable": false,
             "properties": [
                 {
-                    "name": "value-value",
+                    "name": "value",
                     "label": "Value",
                     "description": "The value",
                     "mandatory": true,
@@ -26,24 +26,61 @@
                     "readOnly": false,
                     "type": "text"
                 },
-                {
-                    "name": "label-position",
-                    "label": "Label Position",
-                    "description": "The position of the label",
+ 				{
+                    "name": "labelAnchor",
+                    "label": "Label Anchor",
+                    "description": "The anchor of the label",
                     "mandatory": false,
                     "defaultValue": "top-left",
                     "readOnly": false,
                     "type": "selectable_combo",
-                    "comboOptions": [["top","Top"],["top-left","Top Left"],["top-right", "Top Right"],["bottom","Bottom"],["bottom-left","Bottom Left"],["bottom-right","Bottom Right"],["center","Center"],["left","Left"],["right","Right"]]
+                    "comboOptions": [["top","Top"],["topLeft","Top Left"],["topRight", "Top Right"],["bottom","Bottom"],["bottomLeft","Bottom Left"],["bottomRight","Bottom Right"],["center","Center"],["left","Left"],["right","Right"]]
                 },
                 {
-                    "name": "label-position-offset",
-                    "label": "Label Position Offset",
-                    "description": "The offset of the label, you can provide more numeric value separated with a comma",
+                    "name": "labelTextAnchor",
+                    "label": "Label Text Anchor",
+                    "description": "Sets the label text anchor and sends a MarkerChangeEvent to all registered listeners",
                     "mandatory": false,
-                    "defaultValue": "",
+                    "defaultValue": "center",
                     "readOnly": false,
-                    "type": "text"
+                    "type": "selectable_combo",
+                    "comboOptions": [["baselineCenter","Baseline"],["baselineLeft","Baseline Left"],["baselineRight", "Baseline Right"],["bottomCenter","Bottom"],["bottomLeft","Bottom Left"],["bottomRight","Bottom Right"],["center","Center"],["centerLeft","Center Left"],["centerRight","Center Right"],["halfAscentCenter","Half Ascent"],["halfAscentLeft","Half Ascent Left"],["halfAscentRight", "Half Ascent Right"],["topCenter","Top"],["topLeft","Top Left"],["topRight", "Top Right"]]
+                },
+                {
+                    "name": "labelOffsetTop",
+                    "label": "Label Position Offset Top",
+                    "description": "The top offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "labelOffsetLeft",
+                    "label": "Label Position Offset Left",
+                    "description": "The left offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "labelOffsetBottom",
+                    "label": "Label Position Offset Bottom",
+                    "description": "The bottom offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "labelOffsetRight",
+                    "label": "Label Position Offset Right",
+                    "description": "The right offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
                 },
                 {
                     "name": "color",
@@ -66,7 +103,7 @@
                     "min": "0"
                 },
                 {
-                    "name": "stroke-width",
+                    "name": "strokeWidth",
                     "label": "Stroke Width",
                     "description": "The width of the stroke",
                     "mandatory": false,
@@ -76,14 +113,14 @@
                     "min": "0"
                 },
                 {
-                    "name": "stroke-style",
+                    "name": "strokeStyle",
                     "label": "Stroke Style",
                     "description": "The width of the stroke",
                     "mandatory": false,
                     "defaultValue": "",
                     "readOnly": false,
                     "type": "selectable_combo",
-                    "comboOptions": [["STROKE_SOLID","Solid"],["STROKE_DOTTED", "Dotted"],["STROKE_DASHED","Dashed"]]
+                    "comboOptions": [["solid","Solid"],["dotted", "Dotted"],["dashed","Dashed"]]
                 }
             ]
         }

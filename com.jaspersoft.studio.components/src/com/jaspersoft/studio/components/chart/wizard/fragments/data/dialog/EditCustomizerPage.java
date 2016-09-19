@@ -32,6 +32,8 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
+import net.sf.jasperreports.engine.NamedChartCustomizer;
+
 /**
  * Page used to edit the properties of a customizer. It show the controls defined
  * by the {@link ChartCustomizerDefinition} to build a UI for the custmizer
@@ -145,7 +147,8 @@ public class EditCustomizerPage extends JSSHelpWizardPage {
 			}	
 			setTitle(getCurrentDefinition().getDescriptor().getLabel());
 			ChartCustomizerDefinition selectedDefinition = getCurrentDefinition();
-			DialogDtoPropertyEditor pEditor = new DialogDtoPropertyEditor(selectedDefinition.getKey(), dto);
+			String propertyKeyPrefix = NamedChartCustomizer.CUSTOMIZER_PROPERTY_PREFIX + selectedDefinition.getKey() + '.';
+			DialogDtoPropertyEditor pEditor = new DialogDtoPropertyEditor(propertyKeyPrefix, dto);
 			WidgetsDescriptor cd = selectedDefinition.getDescriptor();
 			
 			//Get the panel manager from the customizer or use a default one if not available

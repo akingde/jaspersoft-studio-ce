@@ -47,13 +47,19 @@ public class ChartCustomizerDefinition {
 	private String classDefinition;
 	
 	/**
-	 * The key of the customizer, it will be something like "chartcustomizer.customizerX." where X is an unique associated
-	 * to the properties of this specific customizer
+	 * The key of the customizer
 	 */
 	private String key;
 	
 	/**
-	 * Create the customizer definition for a customizer that provide also a UI
+	 * Flag to know if this custmizer definition was loaded from the proeprties of the element
+	 * or from its custmizer class
+	 */
+	private boolean isPropertiesCustomizer;
+	
+	/**
+	 * Create the customizer definition for a customizer that provide also a UI. The flag to know
+	 * if the element was loaded from the properties will have a default value true
 	 * 
 	 * @param definition A not null {@link CustomizerWidgetsDescriptor} that define the ui and the class of this customizer
 	 * @param key The key of the customizer, it will be something like "chartcustomizer.customizerX." where X is an unique associated
@@ -63,6 +69,7 @@ public class ChartCustomizerDefinition {
 		this.definition = definition;
 		this.name = definition.getLabel();
 		classDefinition = null;
+		isPropertiesCustomizer = true;
 		this.key = key;
 	}
 	
@@ -72,8 +79,9 @@ public class ChartCustomizerDefinition {
 	 * @param definition A not null and a full classname that handle this customizer, it should be and implementation of {@link JRChartCustomizer}
 	 * @param key The key of the customizer, it will be something like "chartcustomizer.customizerX." where X is an unique associated
 	 * to the properties of this specific customizer
+	 * @param true if the customizer was loaded from the properties of the element, false otherwise
 	 */
-	public ChartCustomizerDefinition(String classDefinition, String key) {
+	public ChartCustomizerDefinition(String classDefinition, String key, boolean isPropertiesCustmizer) {
 		this.definition = null;
 		this.classDefinition = classDefinition;
 		try{
@@ -83,6 +91,7 @@ public class ChartCustomizerDefinition {
 			this.name = splitClassname[splitClassname.length-1];
 		}	
 		this.key = key;
+		this.isPropertiesCustomizer = isPropertiesCustmizer;
 	}
 	
 	/**
@@ -126,10 +135,9 @@ public class ChartCustomizerDefinition {
 	}
 	
 	/**
-	 * Return the key prefix of this customizer
+	 * Return the key  of this customizer
 	 * 
-	 * @return a not null key of the customizer, it will be something like "chartcustomizer.customizerX." where X is an unique associated
-	 * to the properties of this specific customizer
+	 * @return a not null key of the customizer
 	 */
 	public String getKey(){
 		return key;
@@ -143,13 +151,23 @@ public class ChartCustomizerDefinition {
 	public String getRawClass(){
 		return classDefinition;
 	}
+	
+	/**
+	 * Check if the definition was loaded from the properties of an element
+	 * 
+	 * @return true if the definition was loaded from the properties, false
+	 * if it was loaded from the old custmizer class
+	 */
+	public boolean isPropertiesCustmizer(){
+		return isPropertiesCustomizer;
+	}
 
 	/**
 	 * Clone this customizer
 	 */
 	public ChartCustomizerDefinition clone(){
 		if (isOnlyClass()){ 
-			return new ChartCustomizerDefinition(classDefinition, key);
+			return new ChartCustomizerDefinition(classDefinition, key, isPropertiesCustmizer());
 		} else {
 			return new ChartCustomizerDefinition(definition, key);
 		}

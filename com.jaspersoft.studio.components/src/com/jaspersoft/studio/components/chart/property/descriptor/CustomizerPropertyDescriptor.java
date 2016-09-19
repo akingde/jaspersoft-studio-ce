@@ -25,8 +25,6 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 
-import net.sf.jasperreports.chartcustomizers.ProxyChartCustomizer;
-
 /**
  * Descriptor used to define the controls to handle the chart customizer property both in 
  * the properties page and in the advance one
@@ -36,13 +34,6 @@ import net.sf.jasperreports.chartcustomizers.ProxyChartCustomizer;
  */
 public class CustomizerPropertyDescriptor extends PropertyDescriptor implements IPropertyDescriptorWidget {
 
-	/**
-	 * Prefix of the unique key used to identify a chart customizer property on the element
-	 */
-	public static final String CUSTOMIZER_KEY_PREFIX = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_PREFIX + 
-															ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR + 
-																"customizer";
-	
 	/**
 	 * The label provider used in the advanced property page to show the label entry. 
 	 * It count the number of chart customizers; It is static so it can be accessed from outside

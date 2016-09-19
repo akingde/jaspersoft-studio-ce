@@ -8,10 +8,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.widgets.framework.ui.dialogs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.wizard.Wizard;
 
-import net.sf.jasperreports.chartcustomizers.utils.ShapeDefinition;
-import net.sf.jasperreports.chartcustomizers.utils.ShapeDefinition.FigureShape;
+import net.sf.jasperreports.customizers.shape.Point;
+import net.sf.jasperreports.customizers.shape.ShapePoints;
+import net.sf.jasperreports.customizers.shape.ShapeTypeEnum;
 
 /**
  * Wizard to define the shape of an element
@@ -22,60 +26,43 @@ import net.sf.jasperreports.chartcustomizers.utils.ShapeDefinition.FigureShape;
 public class ShapeDefinitionWizard extends Wizard {
 
 	/**
-	 * Page for the shape type
-	 */
-	private ShapeWizardPage page0;
-	
-	/**
-	 * Page for the polyline points, shown only if the type of the first page is polyline
+	 * Page for the shape points, if the selected shape is a polygon or a polyline
 	 */
 	private PointsWizardPage page1;
-	
-	/**
-	 * Page for the polygon sides, shown only if the type of the first page is polygon
-	 */
-	private SidesWizardPage page2;
-	
+
 	/**
 	 * The edited shape
 	 */
-	private ShapeDefinition editedShape;
+	private ShapeTypeEnum editedShape;
+	
+	/**
+	 * The list of points that compose the shape
+	 */
+	private List<Point> points;
 	
 	/**
 	 * Create the wizard
 	 * 
 	 * @param editedShape shape used to pre-initialize the controls, it can be null
 	 */
-	public ShapeDefinitionWizard(ShapeDefinition editedShape) {
+	public ShapeDefinitionWizard(ShapeTypeEnum editedShape, ShapePoints shapePoints) {
 		this.editedShape = editedShape;
+		if (shapePoints == null || shapePoints.getPoints() == null){
+			points = new ArrayList<Point>();
+		} else {
+			points = shapePoints.getPoints();
+		}
 	}
 	
 	@Override
 	public void addPages() {
-		page0 = new ShapeWizardPage(editedShape != null ? editedShape.getShape() : null);
-		page1 = new PointsWizardPage(editedShape != null ? editedShape.getPoints() : null);
-		page2 = new SidesWizardPage(editedShape != null ? editedShape.getPoints() : null);
-		
-		addPage(page0);
+		page1 = new PointsWizardPage(editedShape, points);
 		addPage(page1);
-		addPage(page2);
 	}
 	
 	@Override
 	public boolean performFinish() {
 		return true;
-	}
-
-	protected ShapeWizardPage getShapeDefinitionPage(){
-		return page0;
-	}
-	
-	protected PointsWizardPage getPointsDefinitionPage(){
-		return page1;
-	}
-	
-	protected SidesWizardPage getSidesDefinitionPage(){
-		return page2;
 	}
 	
 	/**
@@ -83,16 +70,9 @@ public class ShapeDefinitionWizard extends Wizard {
 	 * 
 	 * @return the shape definition string
 	 */
-	public String getEncodedShapeDefinition(){
-		ShapeDefinition definition = new ShapeDefinition();
-		
-		definition.setShape(page0.getShape());
-		
-		if(definition.getShape().equals(FigureShape.POLYLINE)){
-			definition.setPoints(page1.getPoints());		
-		} else if (definition.getShape().equals(FigureShape.POLYGON)){
-			definition.setPoints(page2.getPoints());
-		}
-		return ShapeDefinition.encode(definition);
+	public String getEncodedPoints(){
+		ShapePoints shapePoints = new ShapePoints();
+		shapePoints.setPoints(page1.getPoints());
+		return shapePoints.encode();
 	}
 }

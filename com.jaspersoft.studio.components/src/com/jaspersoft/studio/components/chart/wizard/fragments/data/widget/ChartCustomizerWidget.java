@@ -51,15 +51,14 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.SectionContainerComposite;
-import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-import net.sf.jasperreports.chartcustomizers.ProxyChartCustomizer;
 import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRChartPlot;
+import net.sf.jasperreports.engine.NamedChartCustomizer;
 
 /**
  * Widget used to show the table and the dynamic controls to add/remove and 
@@ -81,7 +80,7 @@ public abstract class ChartCustomizerWidget {
 
 		@Override
 		public Color getForeground(Object element, int columnIndex) {
-			ChartCustomizerDefinition def = (ChartCustomizerDefinition)element;
+			/*ChartCustomizerDefinition def = (ChartCustomizerDefinition)element;
 			if (def != null && def.getCustomizerClass() != null){
 				String className = def.getCustomizerClass();
 				try{
@@ -91,7 +90,7 @@ public abstract class ChartCustomizerWidget {
 				} catch (Error e) {
 					return ColorConstants.orange;
 				}
-			}
+			}*/
 			return ColorConstants.black;
 		}
 
@@ -229,8 +228,8 @@ public abstract class ChartCustomizerWidget {
 					ChartCustomizerDefinition definition = wizard.getDefinition();
 					if (definition != null){
 						selectedCustomizers.add(definition);
-						String classProp = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
-						dto.addProperty(uniqueKey + classProp, definition.getCustomizerClass(), false);
+						String classProperty = NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX + uniqueKey;
+						dto.addProperty(classProperty, definition.getCustomizerClass(), false);
 						changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
 						currentDTO = dto;
 						customizerTable.refresh();	
@@ -280,10 +279,10 @@ public abstract class ChartCustomizerWidget {
 				if (selection != null && selection.size() > 0){
 					ChartCustomizerDefinition definition = (ChartCustomizerDefinition)selection.getFirstElement();
 					selectedCustomizers.remove(definition);
-					for(PropertyExpressionDTO property : new ArrayList<PropertyExpressionDTO>(dto.getProperties())){
-						if (property.getName().startsWith(definition.getKey())){
-							dto.removeProperty(property.getName(), property.isExpression());
-						}
+					if (definition.isPropertiesCustmizer()){
+						dto.deleteCustomizer(definition.getKey(), true);
+					} else {
+						dto.setCustomizerClassValue(null);
 					}
 					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
 				} 
@@ -364,15 +363,14 @@ public abstract class ChartCustomizerWidget {
 	 */
 	protected void rebuildPositionsList(){
 		CustomizerPropertyExpressionsDTO dto = getPropertyDTO();
-		String classAttribute = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
 		//Only the class matter for the order determination and the priority is the position in the properties list
 		//so first we remove all the customizer class properties
 		for(ChartCustomizerDefinition definition : selectedCustomizers){
-			dto.removeProperty(definition.getKey() + classAttribute, false);
+			dto.deleteCustomizer(definition.getKey(), false);
 		}
 		//And then we re-add them in the same order of the customizers list
 		for(ChartCustomizerDefinition definition : selectedCustomizers){
-			dto.addProperty(definition.getKey() + classAttribute, definition.getCustomizerClass(), false);
+			dto.addProperty(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX + definition.getKey(), definition.getCustomizerClass(), false);
 		}
 	}
 
@@ -500,17 +498,22 @@ public abstract class ChartCustomizerWidget {
 			dialog.setDefaultSize(650, 500);
 			if (dialog.open() == Dialog.OK){
 				ChartCustomizerDefinition definition = wizard.getDefinition();
-				if (definition != null && definition.isOnlyClass()){
-					String classProp = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
-					dto.setProperty(editElement.getKey() + classProp, definition.getCustomizerClass(), false);
-					//Commit the new dto
-					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
-					currentDTO = dto;
-					selectedCustomizers = getPropertyDTO().getDefinedCustomizers();
-					customizerTable.setInput(selectedCustomizers);
-				} else {
-					changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
-					currentDTO = dto;
+				if (definition != null){
+					if(!definition.isPropertiesCustmizer()){
+						dto.setCustomizerClassValue(definition.getCustomizerClass());
+						changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
+					}else if (definition.isOnlyClass()){
+						String classProp = NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX + editElement.getKey();
+						dto.setProperty(classProp, definition.getCustomizerClass(), false);
+						//Commit the new dto
+						changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
+						currentDTO = dto;
+						selectedCustomizers = getPropertyDTO().getDefinedCustomizers();
+						customizerTable.setInput(selectedCustomizers);
+					} else {
+						changePropertyOn(MChart.CHART_PROPERTY_CUSTOMIZER, dto, selectedElement);
+						currentDTO = dto;
+					}
 				}
 			}					
 		}

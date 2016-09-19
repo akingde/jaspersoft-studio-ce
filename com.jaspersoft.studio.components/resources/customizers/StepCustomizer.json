@@ -1,7 +1,7 @@
 {
     "label": "Step Marker",
     "description": "A chart customizer for XY Charts",
-    "customizerClass": "net.sf.jasperreports.chartcustomizers.StepCustomizer",
+    "customizerClass": "net.sf.jasperreports.customizers.StepCustomizer",
     "supportedPlot": ["13","14","15"],
     "sections": [
         {

@@ -22,7 +22,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.components.widgets.framework.ui.dialogs.ShapeDefinitionWizard;
-import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
@@ -33,21 +34,27 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
 
-import net.sf.jasperreports.chartcustomizers.utils.ShapeDefinition;
+import net.sf.jasperreports.customizers.shape.Point;
+import net.sf.jasperreports.customizers.shape.ShapePoints;
+import net.sf.jasperreports.customizers.shape.ShapeTypeEnum;
 
 /**
- * Property description to define a shape for a chart. The shape can be configured from
- * a sperated dialog opened trough a button
+ * Property description to define a shape for a chart. It allow to define the shape points
+ * that compose the shape
  * 
  * @author Orlandin Marco
  *
  */
-public class ShapePropertyDescription extends TextPropertyDescription<String> {
+public class ShapePointsDescription extends TextPropertyDescription<String> {
+	
+	public static final String SHAPE_TYPE_PROPERTY = "shapeType";
+	
+	public static final String SHAPE_POINTS_PROPERTY = "shapePoints";
 
-	public ShapePropertyDescription() {
+	public ShapePointsDescription() {
 	}
 	
-	public ShapePropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue) {
+	public ShapePointsDescription(String name, String label, String description, boolean mandatory, String defaultValue) {
 		super(name, label, description, mandatory, defaultValue);
 	}
 
@@ -94,11 +101,16 @@ public class ShapePropertyDescription extends TextPropertyDescription<String> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String currentValue = wiProp.getStaticValue();
-				ShapeDefinition currentDefinition = ShapeDefinition.decode(currentValue);
-				ShapeDefinitionWizard wizard = new ShapeDefinitionWizard(currentDefinition);
+				ShapePoints currentPoints = ShapePoints.decode(currentValue);
+				String shapeType = wiProp.getPropertyEditor().getPropertyValue(SHAPE_TYPE_PROPERTY);
+				ShapeTypeEnum shapeTypeEnum = ShapeTypeEnum.POLYLINE;
+				if (shapeType != null){
+					shapeTypeEnum =  NamedEnumPropertyDescriptor.getEnumValue(ShapeTypeEnum.ELLIPSE, NullEnum.NOTNULL, shapeType);
+				}
+				ShapeDefinitionWizard wizard = new ShapeDefinitionWizard(shapeTypeEnum, currentPoints);
 				WizardDialog dialog = new WizardDialog(simpleControl.getShell(), wizard);
 				if (dialog.open() == Dialog.OK){
-					wiProp.setValue(wizard.getEncodedShapeDefinition(), null);
+					wiProp.setValue(wizard.getEncodedPoints(), null);
 				}
 			}
 		});
@@ -127,22 +139,35 @@ public class ShapePropertyDescription extends TextPropertyDescription<String> {
 			if (v == null && wip.getFallbackValue() != null){
 				v = wip.getFallbackValue().toString();
 				isFallback = true;
-			}
-			ShapeDefinition definition = ShapeDefinition.decode(v);
-			if (definition != null){
-				simpleControl.setText(Misc.nvl(definition.getShape().toString()));	
+			}		
+			
+			ShapePoints points = ShapePoints.decode(v);
+			if (points != null && points.getPoints() != null && !points.getPoints().isEmpty()){
+				simpleControl.setText(getPointsAsString(points));	
 			} else {
 				//if the shape can not be decoded show this message
-				simpleControl.setText("No shape defined");
+				simpleControl.setText("No points defined");
 			}
 			changeFallbackForeground(isFallback, simpleControl);
 			cmp.switchToSecondContainer();
 		}
 	}
 
+	protected String getPointsAsString(ShapePoints points){
+		StringBuilder result = new StringBuilder();
+		for(Point point: points.getPoints()){
+			result.append("(");
+			result.append(point.getX());
+			result.append(",");
+			result.append(point.getY());
+			result.append("),");
+		}
+		return result.substring(0, result.length() -1);
+	}
+	
 	@Override
-	public ShapePropertyDescription clone(){
-		ShapePropertyDescription result = new ShapePropertyDescription();
+	public ShapePointsDescription clone(){
+		ShapePointsDescription result = new ShapePointsDescription();
 		result.defaultValue = defaultValue;
 		result.description = description;
 		result.jConfig = jConfig;
@@ -156,7 +181,7 @@ public class ShapePropertyDescription extends TextPropertyDescription<String> {
 	
 	@Override
 	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
-		ShapePropertyDescription result = new ShapePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
+		ShapePointsDescription result = new ShapePointsDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
 		result.setReadOnly(cpd.isReadOnly());
 		result.setFallbackValue(cpd.getFallbackValue());
 		return result;

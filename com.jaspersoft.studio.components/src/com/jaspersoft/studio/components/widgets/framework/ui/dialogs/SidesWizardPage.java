@@ -11,7 +11,6 @@ package com.jaspersoft.studio.components.widgets.framework.ui.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -23,7 +22,7 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-import net.sf.jasperreports.chartcustomizers.utils.Point;
+import net.sf.jasperreports.customizers.shape.Point;
 
 /**
  * Page used to define the number of sides of a polygon shape
@@ -114,13 +113,5 @@ public class SidesWizardPage extends JSSHelpWizardPage {
 		}
 		
 		return result;
-	}
-	
-	/**
-	 * When returning back from this page it return to the first one
-	 */
-	@Override
-	public IWizardPage getPreviousPage() {
-		return ((ShapeDefinitionWizard)getWizard()).getShapeDefinitionPage();
 	}
 }

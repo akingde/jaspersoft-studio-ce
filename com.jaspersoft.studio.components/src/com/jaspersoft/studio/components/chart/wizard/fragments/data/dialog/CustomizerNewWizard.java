@@ -115,7 +115,7 @@ public class CustomizerNewWizard extends Wizard {
 	public ChartCustomizerDefinition getDefinition(){
 		if (selectionPage.isUsingCustomDefinition()){
 			String key = selectionPage.getSelectedDefinition().getKey();
-			ChartCustomizerDefinition result = new ChartCustomizerDefinition(editClassPage.getRawClass(), key);
+			ChartCustomizerDefinition result = new ChartCustomizerDefinition(editClassPage.getRawClass(), key, true);
 			return result;
 		} else {
 			return selectionPage.getSelectedDefinition();

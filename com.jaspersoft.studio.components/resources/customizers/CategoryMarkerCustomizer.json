@@ -1,7 +1,7 @@
 {
     "label": "Category Marker",
     "description": "A chart customizer for Category Charts",
-    "customizerClass": "net.sf.jasperreports.chartcustomizers.CategoryMarkerCustomizer",
+    "customizerClass": "net.sf.jasperreports.customizers.marker.CategoryMarkerCustomizer",
     "supportedPlot": ["1","2","3","7","8","11","12","20","21"],
     "sections": [
         {
@@ -9,23 +9,22 @@
             "expandable": false,
             "properties": [
                 {
-                    "name": "key",
-                    "label": "Key",
-                    "description": "The key",
+                    "name": "category",
+                    "label": "Category",
+                    "description": "The key of the category",
                     "mandatory": true,
                     "defaultValue": "",
                     "readOnly": false,
                     "type": "text"
                 },
                 {
-                    "name": "type",
-                    "label": "Type",
-                    "description": "The type",
+                    "name": "drawAsLine",
+                    "label": "Draw as a Line",
+                    "description": "The type of drawing used for the marker",
                     "mandatory": false,
                     "defaultValue": "",
                     "readOnly": false,
-                    "type": "selectable_combo",
-                    "comboOptions": [["",""], ["line","Line"]]
+                    "type": "checkbox_selector"
                 },
                 {
                     "name": "label",
@@ -37,27 +36,27 @@
                     "type": "text"
                 },
                 {
-                    "name": "label-position",
-                    "label": "Label Position",
-                    "description": "The position of the label",
+                    "name": "labelAnchor",
+                    "label": "Label Anchor",
+                    "description": "The anchor of the label",
                     "mandatory": false,
                     "defaultValue": "top-left",
                     "readOnly": false,
                     "type": "selectable_combo",
-                    "comboOptions": [["top","Top"],["top-left","Top Left"],["top-right", "Top Right"],["bottom","Bottom"],["bottom-left","Bottom Left"],["bottom-right","Bottom Right"],["center","Center"],["left","Left"],["right","Right"]]
+                    "comboOptions": [["top","Top"],["topLeft","Top Left"],["topRight", "Top Right"],["bottom","Bottom"],["bottomLeft","Bottom Left"],["bottomRight","Bottom Right"],["center","Center"],["left","Left"],["right","Right"]]
                 },
                 {
-                    "name": "label-text-position",
+                    "name": "labelTextAnchor",
                     "label": "Label Text Anchor",
                     "description": "Sets the label text anchor and sends a MarkerChangeEvent to all registered listeners",
                     "mandatory": false,
                     "defaultValue": "center",
                     "readOnly": false,
                     "type": "selectable_combo",
-                    "comboOptions": [["baseline_center","Baseline"],["baseline_left","Baseline Left"],["baseline_right", "Baseline Right"],["bottom_center","Bottom"],["bottom_left","Bottom Left"],["bottom_right","Bottom Right"],["center","Center"],["center_left","Center Left"],["center_right","Center Right"],["half_ascent_center","Half Ascent"],["half_ascent_left","Half Ascent Left"],["half_ascent_right", "Half Ascent Right"],["top_center","Top"],["top_left","Top Left"],["top_right", "Top Right"]]
+                    "comboOptions": [["baselineCenter","Baseline"],["baselineLeft","Baseline Left"],["baselineRight", "Baseline Right"],["bottomCenter","Bottom"],["bottomLeft","Bottom Left"],["bottomRight","Bottom Right"],["center","Center"],["centerLeft","Center Left"],["centerRight","Center Right"],["halfAscentCenter","Half Ascent"],["halfAscentLeft","Half Ascent Left"],["halfAscentRight", "Half Ascent Right"],["topCenter","Top"],["topLeft","Top Left"],["topRight", "Top Right"]]
                 },
                 {
-                    "name": "label-position-offset-top",
+                    "name": "labelOffsetTop",
                     "label": "Label Position Offset Top",
                     "description": "The top offset of the label",
                     "mandatory": false,
@@ -66,7 +65,7 @@
                     "type": "double"
                 },
                 {
-                    "name": "label-position-offset-left",
+                    "name": "labelOffsetLeft",
                     "label": "Label Position Offset Left",
                     "description": "The left offset of the label",
                     "mandatory": false,
@@ -75,7 +74,7 @@
                     "type": "double"
                 },
                 {
-                    "name": "label-position-offset-bottom",
+                    "name": "labelOffsetBottom",
                     "label": "Label Position Offset Bottom",
                     "description": "The bottom offset of the label",
                     "mandatory": false,
@@ -84,7 +83,7 @@
                     "type": "double"
                 },
                 {
-                    "name": "label-position-offset-right",
+                    "name": "labelOffsetRight",
                     "label": "Label Position Offset Right",
                     "description": "The right offset of the label",
                     "mandatory": false,
@@ -113,7 +112,7 @@
                     "min": "0"
                 },
                 {
-                    "name": "stroke-width",
+                    "name": "strokeWidth",
                     "label": "Stroke Width",
                     "description": "The width of the stroke",
                     "mandatory": false,
@@ -123,14 +122,14 @@
                     "min": "0"
                 },
                 {
-                    "name": "stroke-style",
+                    "name": "strokeStyle",
                     "label": "Stroke Style",
                     "description": "The width of the stroke",
                     "mandatory": false,
                     "defaultValue": "",
                     "readOnly": false,
                     "type": "selectable_combo",
-                    "comboOptions": [["STROKE_SOLID","Solid"],["STROKE_DOTTED", "Dotted"],["STROKE_DASHED","Dashed"]]
+                    "comboOptions": [["solid","Solid"],["dotted", "Dotted"],["dashed","Dashed"]]
                 },
                 {
                     "name": "fontName",

@@ -72,11 +72,7 @@ public class DtoPropertyEditor implements IPropertyEditor {
 	public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
 		String fullPropertyName = keyPrefix + propertyName;
 		if (valueExpression != null){
-			if (valueExpression.getText().isEmpty()){
-				propertiesDTO.removeProperty(fullPropertyName, true);
-			} else {
-				propertiesDTO.setProperty(fullPropertyName, valueExpression.getText(), true);
-			}
+			propertiesDTO.setProperty(fullPropertyName, valueExpression.getText(), true);
 		} else if (value != null){
 			if (value.isEmpty()){
 				propertiesDTO.removeProperty(fullPropertyName, false);

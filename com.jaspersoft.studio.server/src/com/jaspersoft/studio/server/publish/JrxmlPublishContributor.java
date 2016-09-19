@@ -54,7 +54,6 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-import net.sf.jasperreports.chartcustomizers.ProxyChartCustomizer;
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRChart;
@@ -111,7 +110,8 @@ public class JrxmlPublishContributor implements IPublishContributor {
 				else if (ele instanceof JRDesignSubreport) {
 					publishSubreport(mrunit, monitor, jasper, fileset, file, ele, version);
 				} else if (ele instanceof JRChart){
-					publishChartCustmomizer(mrunit, monitor, jasper, fileset, file, (JRChart)ele, version);
+					//Currently not used since we decided that the user need to create by its own a working environment
+					//publishChartCustmomizer(mrunit, monitor, jasper, fileset, file, (JRChart)ele, version);
 				} else {
 					publishComponent(mrunit, monitor, jasper, fileset, file, ele, version);
 				}
@@ -230,11 +230,9 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	 */
 	protected void publishChartCustmomizer(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, JRChart chart, String version) throws Exception {
 		String customizerClass = chart.getCustomizerClass();
-		if (ProxyChartCustomizer.class.getName().equals(customizerClass)){
-			impChartCustomizer.publish(jasper, customizerClass, mrunit, monitor, fileset, file, version);
-			for(String subCustomizerClass : impChartCustomizer.getSubCustmizersClass(chart)){
-				impChartCustomizer.publish(jasper, subCustomizerClass, mrunit, monitor, fileset, file, version);
-			}
+		impChartCustomizer.publish(jasper, customizerClass, mrunit, monitor, fileset, file, version);
+		for(String subCustomizerClass : impChartCustomizer.getSubCustmizersClass(chart)){
+			impChartCustomizer.publish(jasper, subCustomizerClass, mrunit, monitor, fileset, file, version);
 		}
 	}
 

@@ -22,7 +22,7 @@ import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-import net.sf.jasperreports.chartcustomizers.ProxyChartCustomizer;
+import net.sf.jasperreports.engine.NamedChartCustomizer;
 
 /**
  * Utility class used to extend the properties container of an element adding
@@ -41,39 +41,42 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	private Integer customizerNumber = null;
 	
 	/**
+	 * The class of the customizer set in the old customizer class field of the chart
+	 */
+	private String customizerClass = null;
+	
+	/**
 	 * Build the class from a standard {@link PropertyExpressionsDTO}
 	 * 
 	 * @param dto a not null {@link PropertyExpressionsDTO}
 	 */
 	public CustomizerPropertyExpressionsDTO(PropertyExpressionsDTO dto) {
 		super(dto.getProperties(), dto.getPnode());
+		customizerClass = getPnode().getValue().getCustomizerClass();
 	}
 	
 	/**
-	 * Return the number of customizers defined in the properties of the element 
+	 * Return the number of customizers defined in the properties of the element.
 	 * 
 	 * @return an integer >=0
 	 */
 	public int getCustomizersNumber(){
 		if (customizerNumber == null){
 			int count = 0;
-			String classAttribute = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
+			String classAttribute = NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX;
 			for(PropertyExpressionDTO property: getProperties()){
 				if (!property.isExpression()){
 					String name = property.getName().trim().toLowerCase();
 					//Search the properties related to a customizer
-					if (name.startsWith(CustomizerPropertyDescriptor.CUSTOMIZER_KEY_PREFIX)){
-						String[] splitString = name.split("\\.");
-						if (splitString.length > 2 && splitString[2].equals(classAttribute)){
-							count++;
-						}
+					if (name.startsWith(classAttribute)){
+						count++;
 					}
 				}
 			}
 			
 			//If it is an old report with an old customizer set as property simply ad it to the count
 			String customizerClass = getPnode().getValue().getCustomizerClass();
-			if (customizerClass != null && !customizerClass.equals(ProxyChartCustomizer.class.getName())){
+			if (customizerClass != null && !customizerClass.trim().isEmpty()){
 				count ++;
 			}
 			customizerNumber = count;
@@ -90,7 +93,7 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	 */
 	public void createCustomizerEntry(String className, boolean headPosition){
 		String key = getUniqueKey();
-		String classAttribute = key + ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
+		String classAttribute = NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX + key;
 		if (headPosition){
 			addProperty(classAttribute, className, false, 0);
 		} else {
@@ -106,30 +109,25 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	public List<ChartCustomizerDefinition> getDefinedCustomizers(){
 		List<ChartCustomizerDefinition> selectedCustomizers = new ArrayList<ChartCustomizerDefinition>();
 		JasperReportsConfiguration jConfig = getPnode().getJasperConfiguration();
-		String classAttribute = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
-		String attributeSeparator = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
 		for (PropertyExpressionDTO prop : getProperties()) {
 			if (!prop.isExpression()){
 				String propName = prop.getName().trim().toLowerCase();
-				if (propName.startsWith(CustomizerPropertyDescriptor.CUSTOMIZER_KEY_PREFIX)){
-					String[] parts = prop.getName().split("\\.");
-					if (parts.length > 2 && parts[2].equals(classAttribute)) {
-						// We have found a chart customizer, build the key prefix
-						String key = parts[0] + attributeSeparator + parts[1] + attributeSeparator;
-						String customizerClass = prop.getValue();
-						ChartCustomizerDefinition definition = CustomizerDefinitionManager.getCustomizerDefinition(customizerClass, key, jConfig);
-						if (definition != null){
-							selectedCustomizers.add(definition);
-						}
+				if (propName.startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
+					// We have found a chart customizer, build the key prefix
+					String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX.length());
+					String customizerClass = prop.getValue();
+					ChartCustomizerDefinition definition = CustomizerDefinitionManager.getCustomizerDefinition(customizerClass, key, jConfig);
+					if (definition != null){
+						selectedCustomizers.add(definition);
 					}
 				}
 			}
 		}
 		
 		//If it is an old report with an old customizer set as property simply ad it to the list
-		String customizerClass = getPnode().getValue().getCustomizerClass();
-		if (customizerClass != null && !customizerClass.equals(ProxyChartCustomizer.class.getName())){
-			selectedCustomizers.add(new ChartCustomizerDefinition(customizerClass, getUniqueKey()));
+		customizerClass = getPnode().getValue().getCustomizerClass();
+		if (customizerClass != null && !customizerClass.trim().isEmpty()){
+			selectedCustomizers.add(new ChartCustomizerDefinition(customizerClass, getUniqueKey(), false));
 		}
 		return selectedCustomizers;
 	}
@@ -143,16 +141,13 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	 */
 	public String getUniqueKey(){
 		int index = 0;
-		String attributeSeparator = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
-		String currentKey = CustomizerPropertyDescriptor.CUSTOMIZER_KEY_PREFIX + index + attributeSeparator;
 		HashSet<String> usedKeys = getUsedKeys();
-		boolean existing = usedKeys.contains(currentKey);
+		boolean existing = usedKeys.contains(String.valueOf(index));
 		while(existing){
 			index++;
-			currentKey = CustomizerPropertyDescriptor.CUSTOMIZER_KEY_PREFIX + index + attributeSeparator;
-			existing = usedKeys.contains(currentKey);
+			existing = usedKeys.contains(String.valueOf(index));
 		}
-		return currentKey;
+		return String.valueOf(index);
 	}
 	
 	/**
@@ -162,49 +157,17 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	 */
 	private HashSet<String> getUsedKeys(){
 		HashSet<String> result = new HashSet<String>();
-		String attributeSeparator = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
 		for (PropertyExpressionDTO prop : new ArrayList<PropertyExpressionDTO>(getProperties())) {
 			if (!prop.isExpression()){
 				String propName = prop.getName().trim().toLowerCase();
-				if (propName.startsWith(CustomizerPropertyDescriptor.CUSTOMIZER_KEY_PREFIX)){
-					String[] parts = prop.getName().split("\\.");
-					if (parts.length > 2) {
-						// We have found a chart customizer, build the key prefix
-						String key = parts[0] + attributeSeparator + parts[1] + attributeSeparator;
-						result.add(key);
-					}
+				if (propName.startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
+					// We have found a chart customizer, get the key
+					String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX.length());
+					result.add(key);
 				}
 			}
 		}	
 		return result;
-	}
-	
-	/**
-	 * Check if there are properties set for a specific customizer, excluding the class
-	 * 
-	 * @param customizerKey the key of the customizer
-	 * @return true if there are properties stored for the specified customizer beside the class,
-	 * flase othwrwise
-	 */
-	public boolean hasCustomizerProperties(String customizerKey){
-		String attributeSeparator = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
-		String classAttribute = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
-		for (PropertyExpressionDTO prop : new ArrayList<PropertyExpressionDTO>(getProperties())) {
-			if (!prop.isExpression()){
-				String propName = prop.getName().trim().toLowerCase();
-				if (propName.startsWith(CustomizerPropertyDescriptor.CUSTOMIZER_KEY_PREFIX)){
-					String[] parts = prop.getName().split("\\.");
-					if (parts.length > 2) {
-						// We have found a chart customizer, build the key prefix
-						String key = parts[0] + attributeSeparator + parts[1] + attributeSeparator;
-						if (key.equals(customizerKey)  && !parts[2].equals(classAttribute)){
-							return true;
-						}
-					}
-				}
-			}
-		}	
-		return false;
 	}
 	
 	/**
@@ -215,31 +178,37 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	 * properties should be removed
 	 */
 	public void deleteCustomizer(String customizerKey, boolean removeProperties){
-		String attributeSeparator = ProxyChartCustomizer.CUSTOMIZER_ATTRIBUTE_SEPARATOR;
-		String classAttribute = ProxyChartCustomizer.CUSTOMIZER_CLASS_ATTRIUBUTE;
 		for (PropertyExpressionDTO prop : new ArrayList<PropertyExpressionDTO>(getProperties())) {
 			if (!prop.isExpression()){
 				String propName = prop.getName().trim().toLowerCase();
-				if (propName.startsWith(CustomizerPropertyDescriptor.CUSTOMIZER_KEY_PREFIX)){
-					String[] parts = prop.getName().split("\\.");
-					if (parts.length > 2) {
-						// We have found a chart customizer, build the key prefix
-						String key = parts[0] + attributeSeparator + parts[1] + attributeSeparator;
-						if (key.equals(customizerKey)){
-							if (parts[2].equals(classAttribute)){
-								removeProperty(prop.getName(), prop.isExpression());
-								if (!removeProperties){
-									//I've removed the class, break the cycle if the attributes could stay
-									break;
-								}
-							} else if (removeProperties){
+				if (propName.startsWith(NamedChartCustomizer.CUSTOMIZER_PROPERTY_PREFIX)){
+					//it is customizer property and a class property
+					if(propName.startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
+						String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX.length());
+						if (customizerKey.equalsIgnoreCase(key)){
+							removeProperty(prop.getName(), prop.isExpression());
+							if (!removeProperties){
+								//I've removed the class, break the cycle if the attributes could stay
+								break;
+							}	
+						} 
+					} else {
+						if (removeProperties){
+							String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_PROPERTY_PREFIX.length());
+							//remove the suffix
+							int suffixIndex = key.indexOf('.');
+							if (suffixIndex != -1){
+								key = key.substring(0, suffixIndex);
+							}
+							//it is customizer property but not a class property
+							if (customizerKey.equalsIgnoreCase(key)){
 								removeProperty(prop.getName(), prop.isExpression());
 							}
 						}
 					}
 				}
 			}
-		}	
+		}
 	}
 	
 	/**
@@ -272,5 +241,24 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	@Override
 	public MChart getPnode() {
 		return (MChart)super.getPnode();
+	}
+	
+	/**
+	 * Update the value of the class that should be set in the old customizer class 
+	 * of the chart 
+	 * 
+	 * @param newValue the new value for the customizer class
+	 */
+	public void setCustomizerClassValue(String newValue){
+		this.customizerClass = newValue;
+	}
+	
+	/**
+	 * Get the value of the customizer class of the chart
+	 * 
+	 * @return a string representing the custmizer class, can be null
+	 */
+	public String getCustomizerClassValue(){
+		return customizerClass;
 	}
 }

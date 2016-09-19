@@ -108,7 +108,7 @@ public class CustomizerEditWizard extends Wizard {
 		if (editedElement.isOnlyClass()){
 			//the class could be changed
 			String key = editedElement.getKey();
-			ChartCustomizerDefinition result = new ChartCustomizerDefinition(editClassPage.getRawClass(), key);
+			ChartCustomizerDefinition result = new ChartCustomizerDefinition(editClassPage.getRawClass(), key, editedElement.isPropertiesCustmizer());
 			return result;
 		} else {
 			return editedElement;
