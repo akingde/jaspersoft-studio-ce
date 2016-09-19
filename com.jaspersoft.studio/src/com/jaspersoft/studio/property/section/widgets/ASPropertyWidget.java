@@ -192,6 +192,13 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 				    nullItem.setText(Messages.ASPropertyWidget_1);
 					}
 					
+					//if the control already have a menu dispose it first, since it is a swt widget
+					//it is not disposed automatically by the garbage collector
+					if (control.getMenu() != null){
+						control.getMenu().dispose();
+					}
+					
+					//set the new menu
 					control.setMenu(controlMenu);
 					if (handleComboListener){
 						control.addMouseListener(macComboMenuOpener);

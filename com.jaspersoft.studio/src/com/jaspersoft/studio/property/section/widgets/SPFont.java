@@ -461,7 +461,16 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 				    nullItem.setText(Messages.ASPropertyWidget_1);
 					}
 					
+					//if the control already have a menu dispose it first, since it is a swt widget
+					//it is not disposed automatically by the garbage collector
+					if (control.getMenu() != null){
+						control.getMenu().dispose();
+					}
+					
+					//set the new menu
 					control.setMenu(controlMenu);
+					
+					//add the combo listener for mac
 					if (handleComboListener){
 						control.addMouseListener(macComboMenuOpener);
 					}
