@@ -229,7 +229,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	 * 
 	 * @return copy of the properties map, if the map was null then it retrun null
 	 */
-	protected JRPropertiesMap getPropertiesMapClone(JRDesignField jrField) {
+	public static JRPropertiesMap getPropertiesMapClone(JRDesignField jrField) {
 		JRPropertiesMap propertiesMap = jrField.getPropertiesMap();
 		if (propertiesMap != null)
 			propertiesMap = propertiesMap.cloneProperties();

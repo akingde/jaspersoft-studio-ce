@@ -372,7 +372,7 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText(Messages.DatasetDialog_fieldstab);
 
-		ftable = new FieldsTable(tabFolder, newdataset, background);
+		ftable = new FieldsTable(tabFolder, newdataset, background, mdataset);
 
 		bptab.setControl(ftable.getControl());
 	}
