@@ -322,7 +322,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	/**
 	 * Notifies the listeners of the expression change.
 	 */
-	private void fireModifyEvent(String staticValue, JRExpression expressionValue) {
+	protected void fireModifyEvent(String staticValue, JRExpression expressionValue) {
 		ItemPropertyModifiedEvent event = new ItemPropertyModifiedEvent(this);
 		event.staticValue = staticValue;
 		event.expressionValue = expressionValue;
