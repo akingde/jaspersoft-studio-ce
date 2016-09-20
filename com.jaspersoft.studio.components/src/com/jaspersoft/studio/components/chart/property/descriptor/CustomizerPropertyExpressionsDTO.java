@@ -41,7 +41,7 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	private Integer customizerNumber = null;
 	
 	/**
-	 * The class of the customizer set in the old customizer class field of the chart
+	 * Customizer set in the class field of the chart, not inside the properties map
 	 */
 	private String customizerClass = null;
 	
@@ -74,8 +74,6 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 				}
 			}
 			
-			//If it is an old report with an old customizer set as property simply ad it to the count
-			String customizerClass = getPnode().getValue().getCustomizerClass();
 			if (customizerClass != null && !customizerClass.trim().isEmpty()){
 				count ++;
 			}
@@ -124,8 +122,7 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 			}
 		}
 		
-		//If it is an old report with an old customizer set as property simply ad it to the list
-		customizerClass = getPnode().getValue().getCustomizerClass();
+		//add the customizer class
 		if (customizerClass != null && !customizerClass.trim().isEmpty()){
 			selectedCustomizers.add(new ChartCustomizerDefinition(customizerClass, getUniqueKey(), false));
 		}
@@ -171,43 +168,75 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	}
 	
 	/**
-	 * Delete all the properties related to a customizer
+	 * Delete a customizer and all its properties if it is defined in the properties map, otherwise
+	 * the customizer class value on the customizer chart property  will be set to null 
 	 * 
-	 * @param keyToRemove key of the customizer to remove
+	 * @param definition the customizer to remove
 	 * @param removeProperties true if only the class attribute should be removed, false if all the 
 	 * properties should be removed
 	 */
-	public void deleteCustomizer(String customizerKey, boolean removeProperties){
-		for (PropertyExpressionDTO prop : new ArrayList<PropertyExpressionDTO>(getProperties())) {
-			if (!prop.isExpression()){
-				String propName = prop.getName().trim().toLowerCase();
-				if (propName.startsWith(NamedChartCustomizer.CUSTOMIZER_PROPERTY_PREFIX)){
-					//it is customizer property and a class property
-					if(propName.startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
-						String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX.length());
-						if (customizerKey.equalsIgnoreCase(key)){
-							removeProperty(prop.getName(), prop.isExpression());
-							if (!removeProperties){
-								//I've removed the class, break the cycle if the attributes could stay
-								break;
-							}	
-						} 
-					} else {
-						if (removeProperties){
-							String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_PROPERTY_PREFIX.length());
-							//remove the suffix
-							int suffixIndex = key.indexOf('.');
-							if (suffixIndex != -1){
-								key = key.substring(0, suffixIndex);
-							}
-							//it is customizer property but not a class property
+	public void deleteCustomizer(ChartCustomizerDefinition definition, boolean removeProperties){
+		customizerNumber = null;
+		if (definition.isPropertiesCustomizer()){
+			String customizerKey = definition.getKey();
+			for (PropertyExpressionDTO prop : new ArrayList<PropertyExpressionDTO>(getProperties())) {
+				if (!prop.isExpression()){
+					String propName = prop.getName().trim().toLowerCase();
+					if (propName.startsWith(NamedChartCustomizer.CUSTOMIZER_PROPERTY_PREFIX)){
+						//it is customizer property and a class property
+						if(propName.startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
+							String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX.length());
 							if (customizerKey.equalsIgnoreCase(key)){
 								removeProperty(prop.getName(), prop.isExpression());
+								if (!removeProperties){
+									//I've removed the class, break the cycle if the attributes could stay
+									break;
+								}	
+							} 
+						} else {
+							if (removeProperties){
+								String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_PROPERTY_PREFIX.length());
+								//remove the suffix
+								int suffixIndex = key.indexOf('.');
+								if (suffixIndex != -1){
+									key = key.substring(0, suffixIndex);
+								}
+								//it is customizer property but not a class property
+								if (customizerKey.equalsIgnoreCase(key)){
+									removeProperty(prop.getName(), prop.isExpression());
+								}
 							}
 						}
 					}
 				}
 			}
+		} else {
+			customizerClass = null;
+		}
+	}
+	
+	/**
+	 * Add a customizer to the properties map
+	 * 
+	 * @param definition the customizer to add, must be not null
+	 */
+	public void addCustomizer(ChartCustomizerDefinition definition){
+		String classProperty = NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX + definition.getKey();
+		addProperty(classProperty, definition.getCustomizerClass(), false);
+	}
+	
+	/**
+	 * Update the class value of a customizer. If it is customizer used as direct class on the chart
+	 * then that value is updated. If the passed customizer is not a raw class this doesn't do anything
+	 * 
+	 * @param editElement the element to edit
+	 */
+	public void updateCustomizerClass(ChartCustomizerDefinition editElement){
+		if (!editElement.isPropertiesCustomizer()){
+			customizerClass = editElement.getCustomizerClass();
+		} else if (editElement.isOnlyClass()){
+			String classProp = NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX + editElement.getKey();
+			setProperty(classProp, editElement.getCustomizerClass(), false);
 		}
 	}
 	
@@ -242,23 +271,5 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 	public MChart getPnode() {
 		return (MChart)super.getPnode();
 	}
-	
-	/**
-	 * Update the value of the class that should be set in the old customizer class 
-	 * of the chart 
-	 * 
-	 * @param newValue the new value for the customizer class
-	 */
-	public void setCustomizerClassValue(String newValue){
-		this.customizerClass = newValue;
-	}
-	
-	/**
-	 * Get the value of the customizer class of the chart
-	 * 
-	 * @return a string representing the custmizer class, can be null
-	 */
-	public String getCustomizerClassValue(){
-		return customizerClass;
-	}
+
 }

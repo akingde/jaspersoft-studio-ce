@@ -156,9 +156,9 @@ public class ChartCustomizerDefinition {
 	 * Check if the definition was loaded from the properties of an element
 	 * 
 	 * @return true if the definition was loaded from the properties, false
-	 * if it was loaded from the old custmizer class
+	 * if it was loaded from the old customizer class
 	 */
-	public boolean isPropertiesCustmizer(){
+	public boolean isPropertiesCustomizer(){
 		return isPropertiesCustomizer;
 	}
 
@@ -167,7 +167,7 @@ public class ChartCustomizerDefinition {
 	 */
 	public ChartCustomizerDefinition clone(){
 		if (isOnlyClass()){ 
-			return new ChartCustomizerDefinition(classDefinition, key, isPropertiesCustmizer());
+			return new ChartCustomizerDefinition(classDefinition, key, isPropertiesCustomizer());
 		} else {
 			return new ChartCustomizerDefinition(definition, key);
 		}

@@ -12,11 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.command;
 
+import java.util.List;
+
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.chart.model.MChart;
+import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -65,42 +68,41 @@ public class ChartSetValueCommandProvider implements ISetValueCommandProvider {
 			setDTOCommand.setPropertyValue(currentDTO);
 			command.add(setDTOCommand);
 			
-			//Check if the other properties need to be updated to support the proxy
-			int customizersNumber = currentDTO.getCustomizersNumber();
-			if (customizersNumber == 1){
-				String currentCustomizer = currentDTO.getCustomizerClassValue();
-				if (currentCustomizer != null && !currentCustomizer.trim().isEmpty()){
-					//it is set as the old customizer, check if it should be moved to the properties
-					boolean isConfigurableCustmizer = false;
-					try{
-						Class<?> customizerClass = JRClassLoader.loadClassForName(currentCustomizer);
-						isConfigurableCustmizer = (NamedChartCustomizer.class.isAssignableFrom(customizerClass));
-					}catch (Exception ex){
+			List<ChartCustomizerDefinition> definedCustmizers = currentDTO.getDefinedCustomizers();
+			if (definedCustmizers.isEmpty()){
+				//no customizers defined, delete the class from the chart
+				SetValueCommand setCustomizer = new SetValueCommand();
+				setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
+				setCustomizer.setPropertyValue(null);
+				setCustomizer.setTarget((APropertyNode)source);
+				command.add(setCustomizer);
+			} else if (definedCustmizers.size() == 1){
+				//there is a customizer, look if it should be set as property or as class 
+				ChartCustomizerDefinition definedCustomizer = definedCustmizers.get(0);
+				if (isConfigurableCustmizer(definedCustomizer)){
+					//must be set as a property, remove the class customizer
+					SetValueCommand setCustomizer = new SetValueCommand();
+					setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
+					setCustomizer.setPropertyValue(null);
+					setCustomizer.setTarget((APropertyNode)source);
+					command.add(setCustomizer);
+					//if the customizer wasn't already a property migrate it
+					if (!definedCustomizer.isPropertiesCustomizer()){
+						currentDTO.createCustomizerEntry(definedCustomizer.getCustomizerClass(), true);
 					}
-					
-					if (isConfigurableCustmizer){
-						//the customizer in the property is a configurable customizer and need to be migrated to be loaded by the proxy one
-						//first remove it from the property
-						SetValueCommand setCustomizer = new SetValueCommand();
-						setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
-						setCustomizer.setPropertyValue(null);
-						setCustomizer.setTarget((APropertyNode)source);
-						command.add(setCustomizer);
-						if (currentCustomizer != null && !currentCustomizer.trim().isEmpty()){
-							//Migrate the old customizer as a children of the proxy one
-							currentDTO.createCustomizerEntry(currentCustomizer, true);
-						}
-					} else {
-						SetValueCommand setCustomizer = new SetValueCommand();
-						setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
-						setCustomizer.setPropertyValue(currentDTO.getCustomizerClassValue());
-						setCustomizer.setTarget((APropertyNode)source);
-						command.add(setCustomizer);
+				} else {
+					//it can be set as a customizer class
+					SetValueCommand setCustomizer = new SetValueCommand();
+					setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
+					setCustomizer.setPropertyValue(definedCustomizer.getCustomizerClass());
+					setCustomizer.setTarget((APropertyNode)source);
+					command.add(setCustomizer);
+					//if it was set as a property in the current dto remove it to avoid duplication
+					if (definedCustomizer.isPropertiesCustomizer()){
+						currentDTO.deleteCustomizer(definedCustomizer, true);
 					}
 				}
-				//if the customizer is already on the properties there is nothing to do since the proxy chart customizer
-				//will be used by default
-			} else if (customizersNumber > 1){
+			} else if (definedCustmizers.size() > 1){
 				//remove the any customizer, since the proxy one is used automatically
 				SetValueCommand setCustomizer = new SetValueCommand();
 				setCustomizer.setPropertyId(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
@@ -113,7 +115,7 @@ public class ChartSetValueCommandProvider implements ISetValueCommandProvider {
 				if (currentCustomizer != null && !currentCustomizer.trim().isEmpty()){
 					//Migrate the old customizer as a children of the proxy one
 					currentDTO.createCustomizerEntry(currentCustomizer, true);
-				}		
+				}
 			}
 			return command;
  		}  else {
@@ -124,6 +126,26 @@ public class ChartSetValueCommandProvider implements ISetValueCommandProvider {
 			setCommand.setPropertyValue(newVal);
 			return setCommand;
  		}
+	}
+	
+	/**
+	 * Check if a customizer definition provide a ConfigurableCustomizer or an old customizer
+	 * 
+	 * @param definition the definition to check, must be not null
+	 * @return true if the definition point to a ConfigurableCustomizer, false otherwise. 
+	 */
+	protected boolean isConfigurableCustmizer(ChartCustomizerDefinition definition){
+		if (definition.isOnlyClass()){
+			//I have only the class, check if it is Configurable customizer
+			String classCustomizer = definition.getCustomizerClass();
+			boolean isConfigurableCustmizer = false;
+			try{
+				Class<?> customizerClass = JRClassLoader.loadClassForName(classCustomizer);
+				isConfigurableCustmizer = (NamedChartCustomizer.class.isAssignableFrom(customizerClass));
+			}catch (Exception ex){
+			}
+			return isConfigurableCustmizer;
+		} return true;
 	}
 	
 	/**

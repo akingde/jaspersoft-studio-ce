@@ -1,7 +1,7 @@
 {
     "label": "Range Value Marker",
     "description": "A chart customizer for XY Charts",
-    "customizerClass": "net.sf.jasperreports.chartcustomizers.RangeValueMarkerCustomizer",
+    "customizerClass": "net.sf.jasperreports.customizers.marker.RangeValueMarkerCustomizer",
     "supportedPlot": ["13","14","15"],
     "sections": [
         {
