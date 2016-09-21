@@ -29,6 +29,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
@@ -45,6 +46,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -230,10 +232,11 @@ public class DatasetReader {
 			jConfig.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
 		DataAdapterService das = null;
 		try {
-			das = DataAdapterServiceUtil.getInstance(jConfig).getService(dataAdapterDesc.getDataAdapter());
-
-			das.contributeParameters(hm);
-
+			ReportContext rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
+			if (rc == null || !rc.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)) {
+				das = DataAdapterServiceUtil.getInstance(jConfig).getService(dataAdapterDesc.getDataAdapter());
+				das.contributeParameters(hm);
+			}
 			ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(), jrobj.getMainDataset().getPropertiesMap());
 
 			JaspersoftStudioPlugin.getExtensionManager().onRun(jConfig, jrobj, hm);

@@ -25,16 +25,20 @@ import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.data.cache.ColumnDataCacheHandler;
+import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.SimpleReportContext;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -65,9 +69,10 @@ public class ElementPreviewer {
 
 	private JasperDesign jd;
 
-	public String runReport(JasperReportsConfiguration jConf, JRElement element) {
+	public String runReport(JasperReportsConfiguration jConf, JRElement element, boolean fromCache) {
 		ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(jConf.getClassLoader());
+		Map<String, Object> hm = null;
 		try {
 			JasperDesign jDesign = jConf.getJasperDesign();
 			// initialise the report
@@ -79,9 +84,11 @@ public class ElementPreviewer {
 			JasperReport jrobj = DatasetReader.compile(jConf, jd);
 			if (jrobj == null)
 				return null;
-			Map<String, Object> hm = DatasetReader.prepareParameters(jConf, 100);
+			hm = DatasetReader.prepareParameters(jConf, 100);
 
 			DataAdapterDescriptor da = prepareDataAdapter(jConf, jDesign);
+
+			setupCache(hm, fromCache);
 
 			JasperPrint jrPrint = DatasetReader.fillReport(jConf, jDesign.getMainDesignDataset(), da, jrobj, hm);
 
@@ -102,9 +109,29 @@ public class ElementPreviewer {
 			browser.setText("<HTML><BODY><pre>" + message + "</pre></body></html>");
 		} finally {
 			Thread.currentThread().setContextClassLoader(originalClassLoader);
+			if (hm != null)
+				hm.remove(JRParameter.REPORT_CONTEXT);
 		}
 
 		return null;
+	}
+
+	public void resetCache() {
+		reportContext = null;
+	}
+
+	private SimpleReportContext reportContext;
+
+	private void setupCache(Map<String, Object> hm, boolean fromCache) {
+		if (fromCache) {
+			if (reportContext == null) {
+				reportContext = new SimpleReportContext();
+				ColumnDataCacheHandler cacheHandler = new ColumnDataCacheHandler();
+				reportContext.setParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER, cacheHandler);
+			}
+			hm.put(JRParameter.REPORT_CONTEXT, reportContext);
+		} else
+			reportContext = null;
 	}
 
 	protected void setupDatasets(JasperReportsConfiguration jConf, JasperDesign jDesign) throws JRException {

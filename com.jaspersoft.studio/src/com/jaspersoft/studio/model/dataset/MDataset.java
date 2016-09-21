@@ -24,6 +24,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.field.MField;
@@ -411,6 +412,16 @@ public class MDataset extends APropertyNode implements ICopyable {
 				// using the node could cause problem with the refresh of the advanced properties view
 				firePropertyChange(new PropertyChangeEvent(jrDataset, PROPERTY_MAP, originalMap, jrDataset.getPropertiesMap()));
 			}
+		} else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+			JRPropertiesMap v = (JRPropertiesMap) value;
+			String[] names = jrDataset.getPropertiesMap().getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				jrDataset.getPropertiesMap().removeProperty(names[i]);
+			names = v.getPropertyNames();
+
+			for (String str : v.getPropertyNames())
+				jrDataset.setProperty(str, v.getProperty(str));
+			firePropertyChange(new PropertyChangeEvent(jrDataset, PROPERTY_MAP, false, true));
 		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE)) {
 			jrDataset.setWhenResourceMissingType(whenResMissTypeD.getEnumValue(value));
 		} else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
