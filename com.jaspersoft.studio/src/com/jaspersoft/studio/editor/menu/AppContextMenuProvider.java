@@ -74,6 +74,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
+import com.jaspersoft.studio.editor.outline.actions.RefreshImageAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
@@ -314,6 +315,10 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateStyleTemplateAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
+		
+		action = getActionRegistry().getAction(RefreshImageAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 

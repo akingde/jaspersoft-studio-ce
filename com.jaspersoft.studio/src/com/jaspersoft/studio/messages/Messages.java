@@ -1849,6 +1849,8 @@ public class Messages extends NLS {
 	public static String PropertyListFieldEditor_newPropertyValue;
 	public static String PropertyListFieldEditor_propertyLabel;
 	public static String PropertyListFieldEditor_valueLabel;
+	public static String RefreshImageAction_actionDescription;
+	public static String RefreshImageAction_actionName;
 	public static String RefreshResourcesAction_0;
 	public static String RefreshTemplateStyleExpression_title;
 	public static String RefreshTemplateStyleExpression_tooltip;

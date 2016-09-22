@@ -8,7 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.jasper;
 
-import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.editor.AMultiEditor;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.ExpressionUtil;
@@ -35,7 +34,6 @@ import net.sf.jasperreports.engine.base.JRBasePrintImage;
 import net.sf.jasperreports.engine.convert.ElementConverter;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
@@ -54,9 +52,10 @@ public class LazyImageConverter extends ElementConverter {
 
 	/**
 	 * Timeout time after that an image in the cache is considered old and then is reloaded in case something is changed
-	 * (maybe the user has changed an image with another one with the same name)
+	 * (maybe the user has changed an image with another one with the same name). A value of -1 means that the automatic 
+	 * refresh is disabled. It is disabled by default because it could have a big overhead when using many images
 	 */
-	public static long imageRefreshTime = 10000;
+	public static long imageRefreshTime = -1;
 
 	/**
 	 * 
@@ -126,7 +125,7 @@ public class LazyImageConverter extends ElementConverter {
 		 */
 		public boolean isExpired() {
 			long actualTime = System.currentTimeMillis();
-			return (image == null || ((actualTime - newtime) > timeout));
+			return (image == null || (((actualTime - newtime) > timeout) && timeout != -1));
 		}
 
 	}
@@ -144,10 +143,12 @@ public class LazyImageConverter extends ElementConverter {
 	private HashMap<KeyValue<JasperReportsContext, String>, TimedCache> imgCache = new HashMap<KeyValue<JasperReportsContext, String>, TimedCache>();
 
 	/**
-	 * To avoid that a figure does multiple request at the same for an images a map of the requester is keep. So a new
-	 * request from an element is considered only if it has not another request pending
+	 * Pending request for a specific resource, the key is the pair of {@link JasperReportsConfiguration} and the expression of the resource,
+	 * this information are an unique identification of the resource. The value is a set of the element that are awaiting for this resource. 
+	 * Using this structure allow to queue multiple request from many elements for the same resource, and refresh them all when the resource is
+	 * available
 	 */
-	private HashSet<Object> pendingRequests = new HashSet<Object>();
+	private HashMap<KeyValue<JasperReportsContext, String>, HashSet<MGraphicElement>> pendingRequests = new HashMap<KeyValue<JasperReportsContext,String>, HashSet<MGraphicElement>>();
 
 	/**
 	 * The class can not be build from the outside, so only this instance can be used to request and create the images
@@ -264,7 +265,8 @@ public class LazyImageConverter extends ElementConverter {
 
 	/**
 	 * Start the thread to refresh a specific image. when the thread has cached a new image then the model and the editor
-	 * are notified to ask a refresh
+	 * are notified to ask a refresh. Multiple request for the same resource are queued until the resource is resolved and 
+	 * notifed at the same time
 	 * 
 	 * @param info
 	 *          The timed container of the image requested (where it will be placed)
@@ -277,42 +279,84 @@ public class LazyImageConverter extends ElementConverter {
 	 * @param key
 	 *          the key of the image in the cache map.
 	 */
-	private void refreshImageInfo(final TimedCache info, final MGraphicElement modelElement, final JRExpression expr,
-			final JasperReportsContext jrContext, final KeyValue<JasperReportsContext, String> key) {
-		if (!pendingRequests.contains(modelElement)) {
-			pendingRequests.add(modelElement);
-			Job job = new Job("load image") {
-				protected IStatus run(IProgressMonitor monitor) {
-					try {
-						String location = evaluatedExpression((JasperReportsConfiguration) jrContext, modelElement, expr);
-						if (location != null) {
-							Renderable r = RendererUtil.getInstance(jrContext).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
-							info.update(r);
-							if (modelElement != null) {
-								modelElement.setChangedProperty(true);
-							}
-
-							// The editor refresh must be executed inside the graphic threads
-							Display.getDefault().asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									PropertyChangeEvent event = new PropertyChangeEvent(modelElement.getValue(),
-											JRDesignImage.PROPERTY_EXPRESSION, null, expr);
-									modelElement.setChangedProperty(true);
-									AMultiEditor.refreshElement(jrContext, event);
-								}
-							});
-						}
-					} catch (Throwable e) {
-						e.printStackTrace();
+	private void refreshImageInfo(TimedCache info, MGraphicElement modelElement, JRExpression expr, JasperReportsContext jrContext, KeyValue<JasperReportsContext, String> key) {
+		HashSet<MGraphicElement> resourceRequest = pendingRequests.get(key);
+		if (resourceRequest == null){
+			resourceRequest = new HashSet<MGraphicElement>();
+			pendingRequests.put(key, resourceRequest);
+		}
+		synchronized (resourceRequest) {
+			if (resourceRequest.isEmpty()) {
+				//there are not request for this resource, create one
+				resourceRequest.add(modelElement);
+				startLoadingJob(info, modelElement, expr, jrContext, key);
+			} else {
+				//there are already request for this resource, queue for the notification
+				resourceRequest.add(modelElement);
+			}
+		}
+	}
+	
+	/**
+	 * Start the thread to refresh a specific image. The search of the image will be done in background
+	 * 
+	 * @param info
+	 *          The timed container of the image requested (where it will be placed)
+	 * @param modelElement
+	 *          the model of the element where the image will be placed
+	 * @param expr
+	 *          the expression to get the image
+	 * @param jrContext
+	 *          the context to get the image
+	 * @param key
+	 *          the key of the image in the cache map.
+	 */
+	private void startLoadingJob(final TimedCache info, final MGraphicElement modelElement, final JRExpression expr, final JasperReportsContext jrContext, final KeyValue<JasperReportsContext, String> key){
+		Job job = new Job("load image") {
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					String location = evaluatedExpression((JasperReportsConfiguration) jrContext, modelElement, expr);
+					if (location != null) {
+						Renderable r = RendererUtil.getInstance(jrContext).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
+						info.update(r);
+						refreshElements(key);
 					}
-					pendingRequests.remove(modelElement);
-					return Status.OK_STATUS;
+				} catch (Throwable e) {
+					e.printStackTrace();
 				}
-			};
-			job.setSystem(true);
-			job.setPriority(Job.SHORT);
-			job.schedule();
+				return Status.OK_STATUS;
+			}
+		};
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
+		job.schedule();
+	}
+	
+	/**
+	 * Refresh all the elements that are awaiting for a resource to be loaded.
+	 * This is called when the resource is loaded and trigger a repaint of the elements
+	 * 
+	 * @param key the key of the loaded resource
+	 */
+	protected void refreshElements(KeyValue<JasperReportsContext, String> key){
+		HashSet<MGraphicElement> resourceRequest = pendingRequests.get(key);
+		synchronized (resourceRequest) {
+			if (resourceRequest != null){
+				for(final MGraphicElement refreshElement : resourceRequest){
+					// The editor refresh must be executed inside the graphic threads
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							//PropertyChangeEvent event = new PropertyChangeEvent(refreshElement.getValue(), JRDesignImage.PROPERTY_EXPRESSION, null, null);
+							//refreshElement.setChangedProperty(true);
+							//AMultiEditor.refreshElement(refreshElement.getJasperConfiguration(), event);
+							refreshElement.setChangedProperty(true);
+							refreshElement.getValue().getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
+						}
+					});
+				}
+				resourceRequest.clear();
+			}
 		}
 	}
 
@@ -338,6 +382,31 @@ public class LazyImageConverter extends ElementConverter {
 			e.printStackTrace();
 		}
 		return noImage;
+	}
+	
+	/**
+	 * Remove all the cached images requested by a single report
+	 * 
+	 * @param jConfig the {@link JasperReportsConfiguration} of the report, must be not null
+	 */
+	public void removeCachedImages(JasperReportsConfiguration jConfig){
+		for(KeyValue<JasperReportsContext, String> key : new ArrayList<KeyValue<JasperReportsContext, String>>(imgCache.keySet())){
+			if (key.key == jConfig){
+				imgCache.remove(key);
+			}
+		}
+	}
+	
+	/**
+	 * Remove the cached information of a single image 
+	 * 
+	 * @param jConfig the {@link JasperReportsConfiguration} of the report where the image is used
+	 * @param image the image element with the expression pointing to the image we want to remove from the ache
+	 */
+	public void removeCachedImage(JasperReportsConfiguration jConfig, JRImage image){
+		JRExpression expr = image.getExpression();
+		KeyValue<JasperReportsContext, String> key = new KeyValue<JasperReportsContext, String>(jConfig, expr != null ? expr.getText() : "");
+		imgCache.remove(key);
 	}
 
 }

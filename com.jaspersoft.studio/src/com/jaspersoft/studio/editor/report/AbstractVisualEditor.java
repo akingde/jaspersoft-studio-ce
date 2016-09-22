@@ -139,6 +139,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
+import com.jaspersoft.studio.editor.outline.actions.RefreshImageAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
@@ -709,6 +710,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new RefreshTemplateStyleReference(this);
 		registry.registerAction(action);
 		selectionActions.add(RefreshTemplateStyleReference.ID);
+		
+		action = new RefreshImageAction(this);
+		registry.registerAction(action);
+		selectionActions.add(RefreshImageAction.ID);
 	}
 
 	protected void createDeleteAction(ActionRegistry registry) {

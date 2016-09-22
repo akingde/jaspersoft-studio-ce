@@ -43,6 +43,7 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jasper.JSSReportConverter;
+import com.jaspersoft.studio.jasper.LazyImageConverter;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
@@ -160,6 +161,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(RESOURCE_LOADED)) {
+				//clear the image cache
+				LazyImageConverter.getInstance().removeCachedImages(JasperReportsConfiguration.this);
 				// clear the style cache of this configuration, since a resource could be changed for it
 				// and styles need to be loaded another time
 				ExternalStylesManager.removeCachedStyles(JasperReportsConfiguration.this);
@@ -387,6 +390,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public void dispose() {
 		ExpressionUtil.removeAllReportInterpreters(this);
 		ExternalStylesManager.removeCachedStyles(this);
+		LazyImageConverter.getInstance().removeCachedImages(this);
 		WidgetsDefinitionManager.disposedConfiguration(this);
 		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		getPropertyChangeSupport().removePropertyChangeListener(resourceLoadedListener);
