@@ -113,13 +113,18 @@ public class BasePanelManager implements IPanelManager {
 	}
 
 	@Override
-	public IWItemProperty validateWidgets() {
+	public List<String> validateWidgets(boolean stopToFirst) {
+		List<String> errorMessages = new ArrayList<String>();
 		for(WItemProperty property : properties){
-			if (!property.isValueValid()){
-				return property;
+			List<String> validationResult = property.isValueValid();
+			if (validationResult != null && ! validationResult.isEmpty()){
+				errorMessages.addAll(validationResult);
+				if (stopToFirst){
+					break;
+				}
 			}
 		}
-		return null;
+		return errorMessages;
 	}
 
 }

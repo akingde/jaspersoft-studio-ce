@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -436,10 +437,11 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * Validate the current value looking is it is mandatory but still empty.
 	 * Can be overridden to provide a complex behavior
 	 * 
-	 * @return false if the value is mandatory and empty both in expression and
-	 * static value, false otherwise
+	 * @return a list of string, empty if there are no validation errors or 
+	 * with the list of error messages if there are validation errors
 	 */
-	public boolean isValueValid(){
+	public List<String> isValueValid(){
+		List<String> result = new ArrayList<String>();
 		if (ipDesc != null && editor != null && ipDesc.isMandatory()){
 			String staticValue = getStaticValue();
 			boolean hasStaticValue = true;
@@ -451,9 +453,12 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			if (expValue == null){
 				hasExpValue = false;
 			}
-			return hasStaticValue || hasExpValue;
+			if (!(hasStaticValue || hasExpValue)){
+				String message = "Property {0} is mandatory";
+				result.add(MessageFormat.format(message, new Object[]{getPropertyLabel()}));
+			}
 		}
-		return true;
+		return result;
 	}
 	
 	/**

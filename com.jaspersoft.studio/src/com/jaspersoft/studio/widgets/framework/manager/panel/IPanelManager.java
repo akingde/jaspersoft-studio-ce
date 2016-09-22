@@ -65,8 +65,11 @@ public interface IPanelManager {
 	/**
 	 * Validate all the widgets inside this panel manager
 	 * 
-	 * @return null if every widget has a valid value, otherwise the first widget
-	 * that has a validation error
+	 * @param stopToFirst true if the collection of error messages and validation should stop
+	 * to the first invalid widget, false if it should continue for every widgets
+	 * 
+	 * @return an empty array if every widget has a valid value, otherwise the list
+	 * of validation errors
 	 */
-	public IWItemProperty validateWidgets();
+	public List<String> validateWidgets(boolean stopToFirst);
 }
