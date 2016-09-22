@@ -9,6 +9,7 @@
 package com.jaspersoft.studio.components.chart.preferences;
 
 import java.io.File;
+import java.net.URL;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.JFaceResources;
@@ -28,6 +29,12 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.components.chart.property.widget.CustomizerWidgetsDescriptor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.widgets.framework.manager.StandardJSONWidgetsDescriptorResolver;
+import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
 import net.sf.jasperreports.eclipse.messages.Messages;
 import net.sf.jasperreports.eclipse.ui.util.PersistentLocationTitleAreaDialog;
@@ -148,7 +155,7 @@ public class ChartCustomizerSelectionDialog extends PersistentLocationTitleAreaD
 	 */
 	@Override
 	protected void configureShell(Shell newShell) {
-		String title = "Select Destination Dialog";
+		String title = Messages.ChartCustomizerSelectionDialog_dialogTitle;
 		newShell.setText(title);
 		super.configureShell( newShell );
 	}
@@ -159,7 +166,7 @@ public class ChartCustomizerSelectionDialog extends PersistentLocationTitleAreaD
 	@Override
 	protected Control createContents(Composite parent) {
 		Control c = super.createContents(parent);
-		fDirText.setText("");
+		fDirText.setText(""); //$NON-NLS-1$
 		validate();
 		return c;
 	}
@@ -175,7 +182,8 @@ public class ChartCustomizerSelectionDialog extends PersistentLocationTitleAreaD
 	}
 
 	/**
-	 * Open the file browse dialog
+	 * Open the file browse dialog. When the file is selected it is validated, if it appears to be not 
+	 * valid a message is shown to request to the user if he want to add it anyway
 	 */
 	private void browse() {		
 		String last = fDirText.getText().trim();
@@ -184,7 +192,25 @@ public class ChartCustomizerSelectionDialog extends PersistentLocationTitleAreaD
 		fd.setFilterExtensions(new String[]{"*.json","*.*"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		String selection = fd.open();
 		if(selection!=null){
-			fDirText.setText(selection);
+			boolean isValid = true;
+			//Validate the JSON
+			try {
+				StandardJSONWidgetsDescriptorResolver resolver = new StandardJSONWidgetsDescriptorResolver(CustomizerWidgetsDescriptor.class);
+				URL resourceURL = new File(selection).toURI().toURL();
+				WidgetsDescriptor loadedDecriptor = resolver.loadDescriptor(JasperReportsConfiguration.getDefaultInstance(), resourceURL.toExternalForm());
+				isValid = loadedDecriptor != null;
+			} catch (Exception e) {
+				JaspersoftStudioPlugin.getInstance().logError(e);
+				isValid = false;
+			}
+			
+			if (!isValid){
+				isValid = UIUtils.showConfirmation(Messages.ChartCustomizerSelectionDialog_errorTitle, 
+														Messages.ChartCustomizerSelectionDialog_errorMessages);
+			}
+			if (isValid){
+				fDirText.setText(selection);
+			}
 		} 
 	}
 
