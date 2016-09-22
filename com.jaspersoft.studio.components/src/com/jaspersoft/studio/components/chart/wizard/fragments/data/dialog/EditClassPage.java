@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.components.chart.ContextHelpIDs;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -152,7 +153,7 @@ public class EditClassPage extends JSSHelpWizardPage {
 
 	@Override
 	protected String getContextName() {
-		return null;
+		return ContextHelpIDs.WIZARD_SET_CUSTOMIZER_CLASS;
 	}
 
 }

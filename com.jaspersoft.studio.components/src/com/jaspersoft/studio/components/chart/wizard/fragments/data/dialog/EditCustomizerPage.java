@@ -12,18 +12,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 
-import java.text.MessageFormat;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.ContextHelpIDs;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.widgets.framework.WItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
 import com.jaspersoft.studio.widgets.framework.manager.panel.BasePanelManager;
 import com.jaspersoft.studio.widgets.framework.manager.panel.IPanelManager;
@@ -180,10 +180,9 @@ public class EditCustomizerPage extends JSSHelpWizardPage {
 	 */
 	protected boolean validate(){
 		if (currentPanelManager != null){
-			WItemProperty invalidProperty = (WItemProperty)currentPanelManager.validateWidgets();
-			if (invalidProperty != null){
-				String message = "Property {0} has not a valid value";
-				setErrorMessage(MessageFormat.format(message, new Object[]{invalidProperty.getPropertyLabel()}));
+			List<String> invalidProperty = currentPanelManager.validateWidgets(true);
+			if (invalidProperty != null && !invalidProperty.isEmpty()){
+				setErrorMessage(invalidProperty.get(0));
 				return false;
 			}
 		}
@@ -199,7 +198,7 @@ public class EditCustomizerPage extends JSSHelpWizardPage {
 	
 	@Override
 	protected String getContextName() {
-		return null;
+		return ContextHelpIDs.WIZARD_CONFIGURE_CUSTOMIZER;
 	}
 	
 	/**
