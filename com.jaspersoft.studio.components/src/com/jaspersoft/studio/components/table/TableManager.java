@@ -93,7 +93,7 @@ public class TableManager {
 		// mh.print();
 	}
 
-	public void refresh() {
+	public synchronized void refresh() {
 		tableUtil.refresh();
 		setSize();
 	}
@@ -653,7 +653,7 @@ public class TableManager {
 		return result;
 	}
 
-	public void update() {
+	public void  update() {
 		initMaps();
 		refresh();
 	}
