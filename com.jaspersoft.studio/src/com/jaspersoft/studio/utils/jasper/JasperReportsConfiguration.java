@@ -811,15 +811,14 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				result = (List<T>) repositoryServices;
 			} else {
 				try {
-					List<T> r = super.getExtensions(extensionType);
-					if (r != null) {
-						result = new ArrayList<T>();
-						for (T item : r) {
+					result = super.getExtensions(extensionType);
+					if (result != null) {
+						List<T> toDel = new ArrayList<T>();
+						for (T item : result)
 							if (item.getClass().getName().equals(BuiltinDataFileServiceFactory.class.getName())
 									|| item instanceof DataAdapterParameterContributorFactory)
-								continue;
-							result.add(item);
-						}
+								toDel.add(item);
+						result.removeAll(toDel);
 					}
 				} catch (Throwable e) {
 					e.printStackTrace();
