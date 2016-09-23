@@ -168,6 +168,11 @@ public class JDAdvancedSection extends AdvancedPropertySection
 				}
 			}
 		}
+		//When the page is hidden dispose the root entry. Doing this the listener placed in the stack
+		//by them are removed (and any other listeners). This will avoid to trigger listener when the page
+		//is not visible, also the root entry will be recreated when the page is switched trough the 
+		//setInput method
+		disposeRootEntry();
 	}
 
 	/**
