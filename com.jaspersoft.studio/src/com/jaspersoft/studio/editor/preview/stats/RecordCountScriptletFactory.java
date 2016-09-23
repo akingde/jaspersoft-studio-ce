@@ -28,9 +28,8 @@ public class RecordCountScriptletFactory implements ScriptletFactory {
 	private List<JRAbstractScriptlet> list;
 
 	public List<JRAbstractScriptlet> getScriplets(ScriptletFactoryContext context) throws JRException {
-		if (list == null) {
+		if (list == null)
 			list = new ArrayList<JRAbstractScriptlet>();
-		}
 		list.add(new RecordCountScriptlet());
 		return list;
 	}

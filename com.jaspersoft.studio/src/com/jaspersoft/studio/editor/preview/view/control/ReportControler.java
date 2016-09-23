@@ -10,6 +10,7 @@ package com.jaspersoft.studio.editor.preview.view.control;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +67,8 @@ import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.data.cache.ColumnDataCacheHandler;
+import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -74,12 +77,14 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
 import net.sf.jasperreports.engine.fill.FillListener;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
+import net.sf.jasperreports.engine.util.JRSaver;
 
 public class ReportControler {
 
@@ -324,8 +329,32 @@ public class ReportControler {
 					((IParametrable) pcontainer).showParameters(notprmfiled);
 			}
 		});
+		ReportContext context = (ReportContext) pcontainer.getJrContext().getJRParameters().get(JRParameter.REPORT_CONTEXT);
+		if (context != null && context.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)
+				&& context.containsParameter(SAVE_SNAPSHOT)) {
+			final ColumnDataCacheHandler ch = (ColumnDataCacheHandler) context
+					.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
+			if (ch.isSnapshotPopulated()) {
+				final String path = (String) context.getParameterValue(SAVE_SNAPSHOT);
+				Job job = new Job("Saving snapshot to: " + path) {
+
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						monitor.beginTask("Saving data snapshot to: " + path, IProgressMonitor.UNKNOWN);
+						try {
+							JRSaver.saveObject(ch.getDataSnapshot(), new File(path));
+						} catch (JRException e) {
+							UIUtils.showError(e);
+						}
+						return Status.OK_STATUS;
+					}
+				};
+				job.schedule();
+			}
+		}
 	}
 
+	public static final String SAVE_SNAPSHOT = "SAVESNAPSHOT";
 	private JasperReport jasperReport;
 	private RecordCountScriptletFactory scfactory;
 
@@ -622,15 +651,15 @@ public class ReportControler {
 
 	protected void setupRecordCounters() {
 		List<ScriptletFactory> sexts = jrContext.getExtensions(ScriptletFactory.class);
-		if (sexts == null) {
+		if (sexts == null)
 			sexts = new ArrayList<ScriptletFactory>();
-			jrContext.setExtensions(ScriptletFactory.class, sexts);
-		}
-		if (scfactory == null)
-			scfactory = new RecordCountScriptletFactory();
+		scfactory = new RecordCountScriptletFactory();
 		int ind = sexts.indexOf(scfactory);
-		if (ind < 0)
+		if (ind < 0) {
 			sexts.add(scfactory);
+			jrContext.setExtensions(ScriptletFactory.class, sexts);
+		} else
+			sexts.set(ind, scfactory);
 	}
 
 	private void finishUpdateViewer(final PreviewContainer pcontainer, final JasperPrint jPrint) {

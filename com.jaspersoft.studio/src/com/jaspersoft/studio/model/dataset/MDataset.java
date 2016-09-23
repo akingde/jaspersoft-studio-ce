@@ -49,12 +49,17 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
+import net.sf.jasperreports.data.cache.ColumnDataCacheHandler;
+import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.engine.DatasetPropertyExpression;
 import net.sf.jasperreports.engine.JRAbstractScriptlet;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.JRQuery;
+import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.design.DesignDatasetPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -343,6 +348,13 @@ public class MDataset extends APropertyNode implements ICopyable {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof JRDesignQuery || evt.getSource() instanceof JRField
+				|| evt.getSource() instanceof JRParameter) {
+			ReportContext context = (ReportContext) getJasperConfiguration().getJRParameters()
+					.get(JRParameter.REPORT_CONTEXT);
+			if (context != null && context.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER))
+				context.setParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER, new ColumnDataCacheHandler());
+		}
 		if (JRDesignDataset.PROPERTY_NAME.equals(evt.getPropertyName())) {
 			// When the name is changed, the one inside the jasperdesign is updated also
 			JasperDesign design = getJasperDesign();

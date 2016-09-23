@@ -38,6 +38,7 @@ import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.SimpleReportContext;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -109,29 +110,34 @@ public class ElementPreviewer {
 			browser.setText("<HTML><BODY><pre>" + message + "</pre></body></html>");
 		} finally {
 			Thread.currentThread().setContextClassLoader(originalClassLoader);
-			if (hm != null)
-				hm.remove(JRParameter.REPORT_CONTEXT);
 		}
 
 		return null;
 	}
 
-	public void resetCache() {
-		reportContext = null;
+	public void resetCache(Map<String, Object> hm) {
+		ReportContext rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
+		if (rc != null && rc.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER))
+			rc.setParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER, new ColumnDataCacheHandler());
 	}
 
-	private SimpleReportContext reportContext;
-
 	private void setupCache(Map<String, Object> hm, boolean fromCache) {
+		ReportContext rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
 		if (fromCache) {
-			if (reportContext == null) {
-				reportContext = new SimpleReportContext();
-				ColumnDataCacheHandler cacheHandler = new ColumnDataCacheHandler();
-				reportContext.setParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER, cacheHandler);
+			if (rc == null) {
+				rc = new SimpleReportContext();
+				hm.put(JRParameter.REPORT_CONTEXT, rc);
 			}
-			hm.put(JRParameter.REPORT_CONTEXT, reportContext);
-		} else
-			reportContext = null;
+			ColumnDataCacheHandler cacheHandler = (ColumnDataCacheHandler) rc
+					.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
+			if (cacheHandler == null) {
+				cacheHandler = new ColumnDataCacheHandler();
+				rc.setParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER, cacheHandler);
+			}
+		} else {
+			if (rc != null && rc.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER))
+				rc.getParameterValues().remove(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
+		}
 	}
 
 	protected void setupDatasets(JasperReportsConfiguration jConf, JasperDesign jDesign) throws JRException {
