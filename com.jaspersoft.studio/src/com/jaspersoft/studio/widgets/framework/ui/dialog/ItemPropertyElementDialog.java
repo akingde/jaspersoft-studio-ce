@@ -83,10 +83,16 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		setSaveSettings(false);
 		this.ipDesc = ipDesc.clone();
 	}
+	
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(Messages.ItemPropertyElementDialog_shellTitle);
+	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(NLS.bind(Messages.ItemPropertyElementDialog_0, ipDesc.getName() != null ? ipDesc.getName() : "")); // $NON-NLS-2$
+		setTitle(NLS.bind(Messages.ItemPropertyElementDialog_0, ipDesc.getName() != null ? ipDesc.getName() : "")); // $NON-NLS-2$ //$NON-NLS-1$
 		setMessage(ipDesc.getDescription());
 		dialogArea = new Composite(parent, SWT.NONE);
 		dialogArea.setLayoutData(new GridData(GridData.FILL_BOTH));

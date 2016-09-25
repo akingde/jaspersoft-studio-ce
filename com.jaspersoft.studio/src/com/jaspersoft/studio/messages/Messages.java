@@ -2290,6 +2290,7 @@ public class Messages extends NLS {
 	public static String ItemPropertyDialog_UseExpression;
 	public static String ItemPropertyElementDialog_0;
 	public static String ItemPropertyElementDialog_2;
+	public static String ItemPropertyElementDialog_shellTitle;
 
 	public static String VariableNameValidator_variableDuplicatedName;
 	public static String VErrorPreview_0;
