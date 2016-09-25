@@ -18,13 +18,16 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.image.MImage;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JRPrintElement;
@@ -137,13 +140,13 @@ public class LazyImageConverter extends ElementConverter {
 	private static Renderable noImage;
 
 	/**
-	 * Cache where the actually loaded images are saved. The Key is composed by context + expression and the value is a
+	 * Cache where the actually loaded images are saved. The Key is composed by context + location and the value is a
 	 * timed cache that will contains the real image and the methods to know if it is expired
 	 */
 	private HashMap<KeyValue<JasperReportsContext, String>, TimedCache> imgCache = new HashMap<KeyValue<JasperReportsContext, String>, TimedCache>();
 
 	/**
-	 * Pending request for a specific resource, the key is the pair of {@link JasperReportsConfiguration} and the expression of the resource,
+	 * Pending request for a specific resource, the key is the pair of {@link JasperReportsConfiguration} and the location of the resource,
 	 * this information are an unique identification of the resource. The value is a set of the element that are awaiting for this resource. 
 	 * Using this structure allow to queue multiple request from many elements for the same resource, and refresh them all when the resource is
 	 * available
@@ -226,8 +229,24 @@ public class LazyImageConverter extends ElementConverter {
 	private Renderable getRenderable(ReportConverter reportConverter, JRImage image, MGraphicElement modelElement) {
 		JasperReportsContext jrContext = reportConverter.getJasperReportsContext();
 		JRExpression expr = image.getExpression();
-		KeyValue<JasperReportsContext, String> key = new KeyValue<JasperReportsContext, String>(jrContext,
-				expr != null ? expr.getText() : "");
+		KeyValue<JasperReportsContext, String> key = getKey(jrContext, modelElement, expr);
+		TimedCache imageInfo = getImageInfo(key);
+
+		// If the image is expired (it is also expired when is empty, the refresh thread is started)
+		if (imageInfo.isExpired()){
+			refreshImageInfo(imageInfo, modelElement, key.value, jrContext, key);
+		}
+
+		return imageInfo.getImage();
+	}
+	
+	/**
+	 * Return the cache container for the passed key, if not available is created
+	 * 
+	 * @param key the key of an image resource
+	 * @return the {@link TimedCache} of that resource
+	 */
+	protected TimedCache getImageInfo(KeyValue<JasperReportsContext, String> key){
 		TimedCache imageInfo = imgCache.get(key);
 
 		// Check if the image was cached
@@ -235,23 +254,45 @@ public class LazyImageConverter extends ElementConverter {
 			imageInfo = new TimedCache();
 			imgCache.put(key, imageInfo);
 		}
+		return imageInfo;
+	}
 
-		// If the image is expired (it is also expired when is empty, the refresh thread is started)
-		if (imageInfo.isExpired())
-			refreshImageInfo(imageInfo, modelElement, expr, jrContext, key);
+	/**
+	 * Generate the key to store an image renderable in the Cache
+	 * 
+	 * @param jrContext the context of the report where the image is used
+	 * @param location the location path of the image
+	 * @return a not null key composed of a pair of the passed context and location
+	 */
+	protected KeyValue<JasperReportsContext, String> getKey(JasperReportsContext jrContext, String location){
+		return new KeyValue<JasperReportsContext, String>(jrContext, location);
+	}
 
-		return imageInfo.getImage();
-
+	/**
+	 * Generate the key to store an image renderable in the Cache
+	 * 
+	 * @param jrContext the context of the report where the image is used
+	 * @param modelElement the model of the image element
+	 * @param expr the expression of the image element
+	 * @return a not null key composed of a pair of the passed context and of the evaluated expression
+	 */
+	protected KeyValue<JasperReportsContext, String> getKey(JasperReportsContext jrContext, MGraphicElement modelElement, JRExpression expr){
+		if (expr != null){
+			JasperReportsConfiguration jConfig = (JasperReportsConfiguration)jrContext;
+			return getKey(jrContext, evaluatedExpression(jConfig, modelElement, expr));
+		} else {
+			return getKey(jrContext, "");
+		}
 	}
 
 	/**
 	 * Interpret the expression of an element. If the element uses the main dataset then uses the standard evaluation
-	 * function (that provides a caching functins) otherwise create a simple interpreter to evaluate the expression. If
+	 * function (that provides a caching functions) otherwise create a simple interpreter to evaluate the expression. If
 	 * that interpreter can not evaluate the expression a more complex one is taken
 	 * 
 	 * @param jConf
 	 *          the configuration of the report
-	 * @param modelElement
+	 * @param modelElement 
 	 *          the element that contains the expression
 	 * @param expr
 	 *          the expression
@@ -266,7 +307,7 @@ public class LazyImageConverter extends ElementConverter {
 	/**
 	 * Start the thread to refresh a specific image. when the thread has cached a new image then the model and the editor
 	 * are notified to ask a refresh. Multiple request for the same resource are queued until the resource is resolved and 
-	 * notifed at the same time
+	 * notified at the same time
 	 * 
 	 * @param info
 	 *          The timed container of the image requested (where it will be placed)
@@ -279,7 +320,7 @@ public class LazyImageConverter extends ElementConverter {
 	 * @param key
 	 *          the key of the image in the cache map.
 	 */
-	private void refreshImageInfo(TimedCache info, MGraphicElement modelElement, JRExpression expr, JasperReportsContext jrContext, KeyValue<JasperReportsContext, String> key) {
+	private void refreshImageInfo(TimedCache info, MGraphicElement modelElement, String location, JasperReportsContext jrContext, KeyValue<JasperReportsContext, String> key) {
 		HashSet<MGraphicElement> resourceRequest = pendingRequests.get(key);
 		if (resourceRequest == null){
 			resourceRequest = new HashSet<MGraphicElement>();
@@ -289,7 +330,7 @@ public class LazyImageConverter extends ElementConverter {
 			if (resourceRequest.isEmpty()) {
 				//there are not request for this resource, create one
 				resourceRequest.add(modelElement);
-				startLoadingJob(info, modelElement, expr, jrContext, key);
+				startLoadingJob(info, location, jrContext, key);
 			} else {
 				//there are already request for this resource, queue for the notification
 				resourceRequest.add(modelElement);
@@ -302,20 +343,17 @@ public class LazyImageConverter extends ElementConverter {
 	 * 
 	 * @param info
 	 *          The timed container of the image requested (where it will be placed)
-	 * @param modelElement
-	 *          the model of the element where the image will be placed
-	 * @param expr
-	 *          the expression to get the image
+	 * @param location
+	 * 					the location of the image resource
 	 * @param jrContext
 	 *          the context to get the image
 	 * @param key
 	 *          the key of the image in the cache map.
 	 */
-	private void startLoadingJob(final TimedCache info, final MGraphicElement modelElement, final JRExpression expr, final JasperReportsContext jrContext, final KeyValue<JasperReportsContext, String> key){
+	private void startLoadingJob(final TimedCache info, final String location, final JasperReportsContext jrContext, final KeyValue<JasperReportsContext, String> key){
 		Job job = new Job("load image") {
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					String location = evaluatedExpression((JasperReportsConfiguration) jrContext, modelElement, expr);
 					if (location != null) {
 						Renderable r = RendererUtil.getInstance(jrContext).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
 						info.update(r);
@@ -347,9 +385,6 @@ public class LazyImageConverter extends ElementConverter {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							//PropertyChangeEvent event = new PropertyChangeEvent(refreshElement.getValue(), JRDesignImage.PROPERTY_EXPRESSION, null, null);
-							//refreshElement.setChangedProperty(true);
-							//AMultiEditor.refreshElement(refreshElement.getJasperConfiguration(), event);
 							refreshElement.setChangedProperty(true);
 							refreshElement.getValue().getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
 						}
@@ -401,12 +436,43 @@ public class LazyImageConverter extends ElementConverter {
 	 * Remove the cached information of a single image 
 	 * 
 	 * @param jConfig the {@link JasperReportsConfiguration} of the report where the image is used
-	 * @param image the image element with the expression pointing to the image we want to remove from the ache
+	 * @param imageModel the image element with the expression pointing to the image we want to remove from the ache
 	 */
-	public void removeCachedImage(JasperReportsConfiguration jConfig, JRImage image){
+	public void removeCachedImage(JasperReportsConfiguration jConfig, MImage imageModel){
+		JRImage image = imageModel.getValue();
 		JRExpression expr = image.getExpression();
-		KeyValue<JasperReportsContext, String> key = new KeyValue<JasperReportsContext, String>(jConfig, expr != null ? expr.getText() : "");
+		KeyValue<JasperReportsContext, String> key = getKey(jConfig, imageModel, expr);
 		imgCache.remove(key);
 	}
 
+	/**
+	 * Return a renderable of an Image in a synchronous way. The image is first searched in the 
+	 * internal cache, if not found is loaded and cached then returned. If the load fails it is
+	 * return the error image
+	 * 
+	 * @param context the context of the report where the image is used
+	 * @param location the location of the image
+	 * @return a not null Renderable
+	 */
+	public Renderable getNonLazyRenderable(JasperReportsContext context, String location) {
+		KeyValue<JasperReportsContext, String> key = getKey(context, location);
+		TimedCache imageInfo = getImageInfo(key);
+		
+		// If the image is expired (it is also expired when is empty), it is refreshed
+		if (imageInfo.isExpired()){
+			try {
+				Renderable r = RendererUtil.getInstance(context).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
+				imageInfo.update(r);
+			} catch (JRException e) {
+				try {
+					JaspersoftStudioPlugin.getInstance().logError(e);
+					Renderable errorImage = RendererUtil.getInstance(context).handleImageError(e, OnErrorTypeEnum.ERROR);
+					imageInfo.update(errorImage);
+				} catch (JRException e1) {
+					imageInfo.update(RendererUtil.NO_IMAGE_RENDERER);
+				}
+			}
+		}
+		return imageInfo.getImage();
+	}
 }

@@ -23,7 +23,11 @@ import com.jaspersoft.studio.jasper.LazyImageConverter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.image.MImage;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Action to reload the physical resource of an image and update
@@ -61,7 +65,7 @@ public class RefreshImageAction extends ACachedSelectionAction {
 	}
 
 	/**
-	 * Enable only if there is at least one style that can be exported
+	 * Enable only if there is at least one image to refresh
 	 */
 	@Override
 	protected boolean calculateEnabled() {
@@ -71,12 +75,18 @@ public class RefreshImageAction extends ACachedSelectionAction {
 	@Override
 	public void run() {
 		List<MImage> images = getSelectedImages();
+		JasperDesign jd = null;
 		for(MImage image : images){
 			JasperReportsConfiguration jConfig = image.getJasperConfiguration();
 			//Remove the old resource from the cache
-			LazyImageConverter.getInstance().removeCachedImage(jConfig, image.getValue());
-			//Now the resource is no more on the cache and an update of the element will trigger a reload
-			image.getValue().getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
+			LazyImageConverter.getInstance().removeCachedImage(jConfig, image);
+			if (jd == null){
+				jd = image.getJasperDesign();
+			}
+		}
+		//Force the refresh of all the elements of the report because a single image can be used in other places
+		for (JRDesignElement element : ModelUtils.getAllElements(jd)) {
+			element.getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, false, true);
 		}
 	}
 	

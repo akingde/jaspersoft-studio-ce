@@ -25,7 +25,6 @@ import net.sf.jasperreports.engine.export.draw.TextDrawer;
 import net.sf.jasperreports.engine.util.JRStyledText;
 import net.sf.jasperreports.engine.util.UniformElementVisitor;
 import net.sf.jasperreports.export.Graphics2DReportConfiguration;
-import net.sf.jasperreports.renderers.RenderersCache;
 
 public class JSSDrawVisitor extends UniformElementVisitor {
 
@@ -52,8 +51,10 @@ public class JSSDrawVisitor extends UniformElementVisitor {
 		JRReport report = reportConverter.getReport();
 		minPrintJobSize = putil.getBooleanProperty(report, Graphics2DReportConfiguration.MINIMIZE_PRINTER_JOB_SIZE, true);
 		ignoreFont = putil.getBooleanProperty(report, JRStyledText.PROPERTY_AWT_IGNORE_MISSING_FONT, false);
-
-		this.drawVisitor = new PrintDrawVisitor(jasperReportsContext, new RenderersCache(jasperReportsContext), minPrintJobSize, ignoreFont);
+		
+		//BUild the render cache
+		JSSRenderersCache renderCache = new JSSRenderersCache(jasperReportsContext);
+		this.drawVisitor = new PrintDrawVisitor(jasperReportsContext, renderCache, minPrintJobSize, ignoreFont);
 		this.grx = grx;
 		setGraphics2D(grx);
 		this.drawVisitor.setClip(true);
