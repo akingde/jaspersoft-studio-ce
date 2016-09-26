@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,6 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardPageChangeEvent;
-import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
@@ -65,8 +65,8 @@ public class CrosstabWizard extends JSSWizard {
 	public static final String CROSSTAB_MEASURES = "CROSSTAB_MEASURES";
 
 	private WizardDatasetPage step1;
-	private StaticWizardFieldsPage step2;
-	private StaticWizardFieldsPage step3;
+	private CrosstabWizardColumnPage step2;
+	private CrosstabWizardRowPage step3;
 	private CrosstabWizardMeasurePage step4;
 	private CrosstabWizardLayoutPage step5;
 
@@ -533,9 +533,20 @@ public class CrosstabWizard extends JSSWizard {
 		}
 
 		if (rowGroups != null) {
+			//Get the columns selected in the step2 and avoid to propose them as rows too
+			List<Object> selectedColumns = step2.getSelectedFields();
+			HashSet<String> selectedColExpressions = new HashSet<String>();
+			for(Object obj : selectedColumns){
+				JRDesignCrosstabColumnGroup col = (JRDesignCrosstabColumnGroup)obj;
+				selectedColExpressions.add(col.getBucket().getExpression().getText());
+			}
 			JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
 			for (Object f : rowGroups.getReportObects()) {
-				objects.add(createRowGroups(jdc, f));
+				JRDesignCrosstabRowGroup row = createRowGroups(jdc, f);
+				String rowExpression = row.getBucket().getExpression().getText();
+				if (!selectedColExpressions.contains(rowExpression)){
+					objects.add(row);
+				}
 			}
 		}
 		return objects;
