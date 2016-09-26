@@ -13,10 +13,12 @@ import java.math.BigInteger;
 import java.util.Locale;
 
 import org.apache.commons.validator.routines.BigDecimalValidator;
+import org.apache.commons.validator.routines.BigIntegerValidator;
 import org.apache.commons.validator.routines.ByteValidator;
 import org.apache.commons.validator.routines.DoubleValidator;
 import org.apache.commons.validator.routines.FloatValidator;
 import org.apache.commons.validator.routines.IntegerValidator;
+import org.apache.commons.validator.routines.LongValidator;
 import org.apache.commons.validator.routines.ShortValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.VerifyEvent;
@@ -66,9 +68,9 @@ public class NumberValidator implements VerifyListener {
 			return;
 		}
 		if (type.equals(Long.class)) {
-			Long.parseLong(number);
+			e.doit = LongValidator.getInstance().isValid(number, Locale.US);
 		} else if (type.equals(BigInteger.class)) {
-			new BigInteger(number);
+			e.doit = BigIntegerValidator.getInstance().isValid(number, Locale.US);
 		} else if (type.equals(Float.class)) {
 			e.doit = FloatValidator.getInstance().isValid(number, Locale.US);
 		} else if (type.equals(Double.class)) {
