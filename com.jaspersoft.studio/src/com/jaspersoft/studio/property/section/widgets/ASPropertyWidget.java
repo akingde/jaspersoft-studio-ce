@@ -206,7 +206,11 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 				}
 			}
 			if (!entryCreated) {
-				//if no entry was created remove the contextual menu
+				//if no entry was created remove the contextual menu, but first dispose
+				//the old one
+				if (control.getMenu() != null){
+					control.getMenu().dispose();
+				}
 				control.setMenu(null);
 			}
 		}
