@@ -573,17 +573,21 @@ public class MChart extends MGraphicElementLineBox
 		}
 
 		else if (id.equals(JRBaseChart.PROPERTY_TITLE_COLOR)) {
-			if (value instanceof AlfaRGB)
+			if (value == null || value instanceof AlfaRGB){
 				jrElement.setTitleColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
+			}
 		} else if (id.equals(JRBaseChart.PROPERTY_SUBTITLE_COLOR)) {
-			if (value instanceof AlfaRGB)
+			if (value == null || value instanceof AlfaRGB){
 				jrElement.setSubtitleColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
+			}
 		} else if (id.equals(JRBaseChart.PROPERTY_LEGEND_COLOR)) {
-			if (value instanceof AlfaRGB)
+			if (value == null || value instanceof AlfaRGB){
 				jrElement.setLegendColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
+			}
 		} else if (id.equals(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR)) {
-			if (value instanceof AlfaRGB)
+			if (value == null || value instanceof AlfaRGB){
 				jrElement.setLegendBackgroundColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
+			}
 		} else if (id.equals(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS)) {
 			value = Misc.nullValue((String) value);
 			jrElement.setCustomizerClass((String) value);
