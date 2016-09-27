@@ -63,6 +63,9 @@ public class ChangeImageExpression extends ACachedSelectionAction implements IGl
 	public static void setImageExpression(MImage imageModel) {
 		if (imageModel != null) {
 			ImageSelectionDialog d = new ImageSelectionDialog(UIUtils.getShell());
+			JRDesignExpression expr = (JRDesignExpression) imageModel.getPropertyValue(JRDesignImage.PROPERTY_EXPRESSION);
+			if (expr != null)
+				d.setFileExpressionText(expr.getText());
 			d.configureDialog(imageModel.getJasperConfiguration());
 			if (d.open() == Window.OK) {
 				JRDesignExpression imageExpression = d.getFileExpression();
