@@ -49,7 +49,7 @@ public class EnumInput extends ADataInput {
 			SelectionAdapter listener = new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					updateModel(cmb.getText());
+					updateModel(cmb.getText().isEmpty() ? null : Enum.valueOf((Class<Enum>) prm.getValueClass(), cmb.getText()));
 					setDecoratorNullable(param);
 				}
 			};
