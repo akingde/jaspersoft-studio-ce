@@ -28,6 +28,7 @@ import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -218,8 +219,28 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		//add the traverse to allow to change widget on tab
 		textExpression.addTraverseListener(new TraverseListener() {
 			public void keyTraversed(TraverseEvent e) {
-					if (traverseOnTab &&  (e.detail == SWT.TRAVERSE_TAB_NEXT || e.detail == SWT.TRAVERSE_TAB_PREVIOUS)) {
-						e.doit = true;
+					if (traverseOnTab && e.detail == SWT.TRAVERSE_TAB_NEXT || e.detail == SWT.TRAVERSE_TAB_PREVIOUS){
+						//the traverse on tab is enabled and the tab key is pressed
+						boolean isCtrl = e.stateMask == SWT.CTRL;
+						if (!isCtrl) {
+							//control in not pressed, set the event to true to switch control
+							e.doit = true;
+						} else {
+							//control is pressed, add a tabulation char where the cursor is
+							e.doit = false;
+							String currentValue = textExpression.getText();
+							Point selection = textExpression.getSelection();
+							String firstPart = currentValue.substring(0, selection.x);
+							String secondPart = currentValue.substring(selection.y);
+							currentValue = firstPart + '\t' + secondPart;
+							textExpression.setText(currentValue);
+							//restore the cursor position
+							oldpos = selection.x;
+							textExpression.setSelection(selection.x +1);
+						}	
+					} else {
+						//the listener is not enabled or the key is not a tab, don't do the traverse
+						e.doit = false;
 					}
 			}
 		});
@@ -461,5 +482,15 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	 */
 	public void setTraverseOnTab(boolean value){
 		traverseOnTab = value;
+	}
+	
+	/**
+	 * Get if the widget should traverse on tab or not
+	 * 
+	 * @return true if on tab the widget should change, false to 
+	 * add a tab as text as content of the expression
+	 */
+	public boolean isTraverseOnTab(){
+		return traverseOnTab;
 	}
 }

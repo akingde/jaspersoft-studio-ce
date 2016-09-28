@@ -12,9 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -24,8 +21,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.ibm.icu.text.MessageFormat;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
@@ -33,6 +32,9 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
+
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 public class SPExpression extends AHistorySPropertyWidget<IPropertyDescriptor> implements IExpressionContextSetter {
 	
@@ -79,7 +81,13 @@ public class SPExpression extends AHistorySPropertyWidget<IPropertyDescriptor> i
 		createContextualMenu(pnode);
 		expr.setExpression((JRDesignExpression) b);
 		if (b != null && expr.getTextControl() != null){
-			expr.getTextControl().setToolTipText(((JRDesignExpression)b).getText());
+			String expressionText = ((JRDesignExpression)b).getText();
+			if (expr.isTraverseOnTab()){
+				String tooltip = MessageFormat.format(Messages.SPExpression_tooltipHint, expressionText);
+				expr.getTextControl().setToolTipText(tooltip);
+			} else {
+				expr.getTextControl().setToolTipText(expressionText);
+			}
 		}
 		
 		JRDesignElement designEl = null;

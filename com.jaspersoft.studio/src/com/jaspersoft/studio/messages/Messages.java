@@ -2048,6 +2048,7 @@ public class Messages extends NLS {
 	public static String SPButon_Size_Increment;
 	public static String SPDatasetRun_2;
 	public static String SPDatasetRun_3;
+	public static String SPExpression_tooltipHint;
 	public static String SPGroupTypeCombo_groupNotFounError;
 	public static String SPLegendAlignementEnum_bottom;
 	public static String SPLegendAlignementEnum_default;
