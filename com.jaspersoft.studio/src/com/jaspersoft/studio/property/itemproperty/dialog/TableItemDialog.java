@@ -181,9 +181,10 @@ public class TableItemDialog extends AItemDialog {
 			protected boolean confirmDelete(Object obj) {
 				StandardItemProperty p = (StandardItemProperty) obj;
 				ItemPropertyDescription<?> ipd = descriptor.getDescription(p.getName());
-				if (ipd.isMandatory())
+				if (ipd != null && ipd.isMandatory()){
 					if (!UIUtils.showConfirmation(Messages.ItemDialog_3, Messages.ItemDialog_4))
 						return false;
+				}
 				return super.confirmDelete(obj);
 			}
 		};
