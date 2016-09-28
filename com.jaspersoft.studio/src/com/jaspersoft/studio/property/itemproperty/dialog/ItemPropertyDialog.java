@@ -193,6 +193,17 @@ public class ItemPropertyDialog extends PersistentLocationTitleAreaDialog implem
 
 		return dialogArea;
 	}
+	
+	/**
+	 * Need to do the validation after the contents are created, 
+	 * otherwise the button will not be correctly disabled
+	 */
+	@Override
+	protected Control createContents(Composite parent) {
+		Control cmp = super.createContents(parent);
+		validateDialog();
+		return cmp;
+	}
 
 	private List<ElementDescription> getPropertiesInformation() {
 		List<ElementDescription> descriptions = new ArrayList<ElementDescription>();
