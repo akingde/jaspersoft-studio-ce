@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 
 import java.util.List;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
@@ -218,5 +219,13 @@ public class EditCustomizerPage extends JSSHelpWizardPage {
 	 */
 	protected ChartCustomizerDefinition getCurrentDefinition(){
 		return editedElement;
+	}
+	
+	/**
+	 * This page has never a next page
+	 */
+	@Override
+	public IWizardPage getNextPage() {
+		return null;
 	}
 }
