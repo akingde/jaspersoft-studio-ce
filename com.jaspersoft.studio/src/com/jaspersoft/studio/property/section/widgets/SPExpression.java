@@ -104,4 +104,15 @@ public class SPExpression extends AHistorySPropertyWidget<IPropertyDescriptor> i
 		expr.setExpressionContext(exprContext);
 	}
 
+	/**
+	 * Set if the widget should traverse on tab or not
+	 * 
+	 * @param value true if on tab the widget should change, false to 
+	 * add a tab as text as content of the expression
+	 */
+	public void setTraverseOnTab(boolean value){
+		if (expr != null){
+			expr.setTraverseOnTab(value);
+		}
+	}
 }

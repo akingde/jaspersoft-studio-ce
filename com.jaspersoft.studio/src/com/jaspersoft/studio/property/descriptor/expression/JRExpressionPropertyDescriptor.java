@@ -46,6 +46,7 @@ public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor impl
 
 	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		expEditor = new SPExpression(parent, section, this);
+		expEditor.setTraverseOnTab(false);
 		expEditor.setExpressionContext(expContext);
 		return expEditor;
 	}
