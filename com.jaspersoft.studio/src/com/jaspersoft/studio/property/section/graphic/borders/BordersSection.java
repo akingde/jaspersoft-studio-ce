@@ -17,6 +17,7 @@ import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -651,35 +652,67 @@ public class BordersSection extends AbstractSection {
 				boolean areAllUnselected = bd.areAllUnslected();
 				if (areAllUnselected){
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN);
+					//Since the global LINE_PEN is overridden by the single segment, first I need to
+					//reset them
+					getLinePenClearCommand(cc, MLineBox.LINE_PEN_BOTTOM, lb);
+					getLinePenClearCommand(cc, MLineBox.LINE_PEN_TOP, lb);
+					getLinePenClearCommand(cc, MLineBox.LINE_PEN_LEFT, lb);
+					getLinePenClearCommand(cc, MLineBox.LINE_PEN_RIGHT, lb);
 					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
-				} else if (bd.isBottomSelected()) {
-					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
-					c = getChangePropertyCommand(property, newValue, lp);
-					if (c != null)
-						cc.add(c);
-				} else if (bd.isTopSelected()) {
-					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
-					c = getChangePropertyCommand(property, newValue, lp);
-					if (c != null)
-						cc.add(c);
-				} else if (bd.isLeftSelected()) {
-					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
-					c = getChangePropertyCommand(property, newValue, lp);
-					if (c != null)
-						cc.add(c);
-				} else if (bd.isRightSelected()) {
-					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
-					c = getChangePropertyCommand(property, newValue, lp);
-					if (c != null)
-						cc.add(c);
+				} else {
+					if (bd.isBottomSelected()) {
+						MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
+						c = getChangePropertyCommand(property, newValue, lp);
+						if (c != null)
+							cc.add(c);
+					}
+					if (bd.isTopSelected()) {
+						MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
+						c = getChangePropertyCommand(property, newValue, lp);
+						if (c != null)
+							cc.add(c);
+					} 
+					if (bd.isLeftSelected()) {
+						MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
+						c = getChangePropertyCommand(property, newValue, lp);
+						if (c != null)
+							cc.add(c);
+					} 
+					if (bd.isRightSelected()) {
+						MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
+						c = getChangePropertyCommand(property, newValue, lp);
+						if (c != null)
+							cc.add(c);
+					}
 				}
 			}
 			CommandStack cs = getEditDomain().getCommandStack();
 			cs.execute(cc);
 			bd.refresh();
 		}
+	}
+	
+	/**
+	 * Generate the commands to clear the properties of color, width and style of 
+	 * a specific linepen
+	 *  
+	 * @param cc the {@link CompoundCommand} where the generated command are added
+	 * @param linePenProperty property ID of the linepen to reset
+	 * @param lb linebox where the linepen is placed
+	 */
+	protected void getLinePenClearCommand(CompoundCommand cc, String linePenProperty, MLineBox lb){
+		MLinePen lp = (MLinePen) lb.getPropertyValue(linePenProperty);
+		Command c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_WIDTH, null, lp);
+		if (c != null)
+			cc.add(c);
+		c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_STYLE, null, lp);
+		if (c != null)
+			cc.add(c);
+		c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_COLOR, null, lp);
+		if (c != null)
+			cc.add(c);
 	}
 
 	/**
@@ -720,14 +753,6 @@ public class BordersSection extends AbstractSection {
 			} else {
 				// No border is selected, use the main linepen
 				refreshLinePen(lb, MLineBox.LINE_PEN);
-				/*JRBoxPen pen = getIntesectionValues(lb);
-				if (pen != null) {
-					refreshLinePen(pen);
-				} else {
-					lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
-					lineWidth.setValues(null, 0, 999);
-					lineStyle.setData(1);
-				}*/
 			}
 		}
 	}
