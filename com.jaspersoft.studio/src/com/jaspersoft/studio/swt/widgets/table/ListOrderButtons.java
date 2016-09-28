@@ -8,6 +8,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets.table;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -82,32 +84,41 @@ public class ListOrderButtons {
 			StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
 			if (!s.isEmpty()) {
 				List lst = (List) tableViewer.getInput();
-				moveDown(lst, s);
+				int[] indxs = moveDown(lst, s);
 				tableViewer.refresh();
-				tableViewer.setSelection(s);
-				tableViewer.reveal(s.getFirstElement());
+				tableViewer.getTable().setSelection(indxs);
 
 				fireChangeEvent();
 			}
 		}
 
-		private void moveDown(List lst, StructuredSelection s) {
-			Object[] selected = s.toArray();
-			int[] indxs = new int[selected.length];
-			for (int i = 0; i < selected.length; i++)
-				indxs[i] = lst.indexOf(selected[i]);
-			for (Object obj : selected)
-				lst.remove(obj);
-
+		private int[] moveDown(List lst, StructuredSelection s) {
+			int[] indxs = tableViewer.getTable().getSelectionIndices();
+			Object[] selected = new Object[indxs.length];
+			for (int i = 0; i < indxs.length; i++)
+				selected[i] = lst.get(indxs[i]);
+			List nlst = new ArrayList();
+			for (int i = 0; i < lst.size(); i++) {
+				if (Arrays.binarySearch(indxs, i) > -1)
+					continue;
+				nlst.add(lst.get(i));
+			}
+			int[] nindxs = new int[indxs.length];
 			for (int i = 0; i < indxs.length; i++) {
 				int index = up ? indxs[i] - 1 : indxs[i] + 1;
 				if (index < 0)
 					index = 0;
-				if (index >= 0 && index < lst.size())
-					lst.add(index, selected[i]);
-				else
-					lst.add(selected[i]);
+				if (index >= 0 && index < lst.size()) {
+					nlst.add(index, selected[i]);
+					nindxs[i] = index;
+				} else {
+					nlst.add(selected[i]);
+					nindxs[i] = nlst.size() - 1;
+				}
 			}
+			lst.clear();
+			lst.addAll(nlst);
+			return nindxs;
 		}
 
 	}
