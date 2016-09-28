@@ -121,6 +121,16 @@
                     "readOnly": false,
                     "type": "selectable_combo",
                     "comboOptions": [["solid","Solid"],["dotted", "Dotted"],["dashed","Dashed"]]
+                },
+               	{
+                    "name": "layer",
+                    "label": "Layer",
+                    "description": "The layer where the marker is painted",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "selectable_combo",
+                    "comboOptions": [["background","Background"],["foreground", "Foreground"]]
                 }
             ]
         }
