@@ -307,7 +307,8 @@ public class MServerProfile extends ANode {
 					tmpDir = prj.getFolder(getValue().getName().replace(" ", "") + "-" + i);
 					i++;
 				} while (tmpDir.exists());
-				getValue().setProjectPath(tmpDir.getProjectRelativePath().toString());
+				getValue().setProjectPath(tmpDir.getFullPath().toString());
+				ServerManager.saveServerProfile(this);
 			}
 			if (!tmpDir.getFullPath().toFile().exists()) {
 				if (!tmpDir.exists())
