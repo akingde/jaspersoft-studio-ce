@@ -11,6 +11,7 @@ package com.jaspersoft.studio.editor.preview.toolbar;
 import java.io.File;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
@@ -46,7 +47,9 @@ import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.data.cache.DataSnapshot;
 import net.sf.jasperreports.data.cache.PopulatedSnapshotCacheHandler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRQuery;
@@ -132,9 +135,14 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 				itemSave.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
+						boolean oldSelection = itemSave.getSelection();
 						FileDialog fd = new FileDialog(parent.getShell(), SWT.SAVE);
 						fd.setText("Select where to save the snapshot");
-						fd.setFileName("snapshot.jrds");
+						String sname = "snapshot.jrds";
+						IFile f = (IFile) container.getJrContext().get(FileUtils.KEY_FILE);
+						if (f != null)
+							sname = FilenameUtils.getBaseName(f.getName()) + ".jrds";
+						fd.setFileName(sname);
 						fd.setOverwrite(true);
 						fd.setFilterExtensions(new String[] { "*.jrds", "*.*" });
 						String fname = fd.open();
@@ -147,7 +155,8 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 								reportContext.setParameterValue(ReportControler.SAVE_SNAPSHOT, fname);
 							else
 								reportContext.getParameterValues().remove(ReportControler.SAVE_SNAPSHOT);
-						}
+						} else
+							itemSave.setSelection(oldSelection);
 					}
 				});
 

@@ -12,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -78,6 +79,7 @@ import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.ReportContext;
+import net.sf.jasperreports.engine.SimpleReportContext;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
@@ -98,6 +100,9 @@ public class ReportControler {
 	public static final String ST_COMPILATIONTIMESUBREPORT = "COMPILATIONTIMESUBREPORT"; //$NON-NLS-1$
 
 	public static final String ST_REPORTEXECUTIONTIME = "REPORTEXECUTIONTIME"; //$NON-NLS-1$
+
+	public static final String ST_RUNTIMESTAMP = "RUNTIMESTAMP"; //$NON-NLS-1$
+	public static final String ST_SNAPSHOT = "SNAPSHOT"; //$NON-NLS-1$
 
 	public static final String FORM_SORTING = "report_configuration_sorting"; //$NON-NLS-1$
 	public static final String FORM_BOOKMARKS = "report_configuration_bookmarks"; //$NON-NLS-1$
@@ -284,6 +289,7 @@ public class ReportControler {
 	}
 
 	public void finishReport(final PreviewContainer pcontainer) {
+		stats.setValue(ST_RUNTIMESTAMP, new Date().toString());
 		if (compiler != null && ((JRErrorHandler) compiler.getErrorHandler()).hasErrors())
 			finishNotCompiledReport();
 		else
@@ -414,6 +420,18 @@ public class ReportControler {
 
 							setupRecordCounters();
 							JaspersoftStudioPlugin.getExtensionManager().onRun(jrContext, jasperReport, jasperParameters);
+
+							ReportContext rc = (ReportContext) jasperParameters.get(JRParameter.REPORT_CONTEXT);
+							if (rc != null && rc instanceof SimpleReportContext) {
+								ColumnDataCacheHandler dch = (ColumnDataCacheHandler) rc
+										.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
+								String msg = "No";
+								if (dch != null && dch.getDataSnapshot() != null)
+									msg = "Yes";
+								if (rc.containsParameter(SAVE_SNAPSHOT))
+									msg += " → " + rc.getParameterValue(SAVE_SNAPSHOT);
+								stats.setValue(ST_SNAPSHOT, msg);
+							}
 
 							// We create the fillHandle to run the report based on the type of data adapter....
 							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jrContext, jasperReport,

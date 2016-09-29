@@ -320,7 +320,7 @@ public class VErrorPreview extends APreview {
 		JRExpressionCollector datasetCollector = reportCollector.getCollector(dataset);
 		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
 		for (JRExpression expr : datasetExpressions) {
-			if (/*datasetCollector.getExpressionId(expr)*/ expr.getId() == exp.getId()) {
+			if (/* datasetCollector.getExpressionId(expr) */ expr.getId() == exp.getId()) {
 				if (!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
 					JRExpressionEditor wizard = new JRExpressionEditor();
 					wizard.setExpressionContext(new ExpressionContext(dataset, jContext));
@@ -414,6 +414,22 @@ public class VErrorPreview extends APreview {
 		com.jaspersoft.studio.utils.UIUtil.setBold(fillSize);
 		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_bytesLabel);
 
+		new Label(statComposite, SWT.NONE).setText("Report Finished At");
+
+		runTime = new Label(statComposite, SWT.BOLD);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		runTime.setLayoutData(gd);
+		com.jaspersoft.studio.utils.UIUtil.setBold(runTime);
+
+		new Label(statComposite, SWT.NONE).setText("Used Data Snapshot");
+
+		snapshot = new Label(statComposite, SWT.BOLD);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		snapshot.setLayoutData(gd);
+		com.jaspersoft.studio.utils.UIUtil.setBold(snapshot);
+
 		setStats(null);
 	}
 
@@ -430,6 +446,8 @@ public class VErrorPreview extends APreview {
 			totalPages.setText(Misc.nvl(stats.getValue(ReportControler.ST_PAGECOUNT), "0")); //$NON-NLS-1$
 			recordCount.setText(Misc.nvl(stats.getValue(ReportControler.ST_RECORDCOUNTER), "-")); //$NON-NLS-1$
 			fillSize.setText(Misc.nvl(stats.getValue(ReportControler.ST_REPORTSIZE), "0")); //$NON-NLS-1$
+			runTime.setText(Misc.nvl(stats.getValue(ReportControler.ST_RUNTIMESTAMP), ""));
+			snapshot.setText(Misc.nvl(stats.getValue(ReportControler.ST_SNAPSHOT), "No"));
 			statAction.run();
 		} else {
 			// compilSubTime.setText("-"); //$NON-NLS-1$
@@ -440,6 +458,8 @@ public class VErrorPreview extends APreview {
 			totalPages.setText("-"); //$NON-NLS-1$
 			recordCount.setText("-"); //$NON-NLS-1$
 			fillSize.setText("-"); //$NON-NLS-1$
+			runTime.setText("");
+			snapshot.setText("");
 		}
 		statComposite.layout();
 	}
@@ -547,6 +567,8 @@ public class VErrorPreview extends APreview {
 
 	private List<Object> errors = new ArrayList<Object>();
 	private List<Object> auxil = new ArrayList<Object>();
+	private Label runTime;
+	private Label snapshot;
 
 	private void addError2List(Object err, String message, Object aux) {
 		errors.add(err);
