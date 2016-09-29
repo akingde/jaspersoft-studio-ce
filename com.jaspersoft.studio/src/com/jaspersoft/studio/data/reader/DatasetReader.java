@@ -274,6 +274,8 @@ public class DatasetReader {
 		// containing the report.
 		ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(jConfig.getClassLoader());
+		ReportContext rc = null;
+		Map<String, Object> hm = null;
 		try {
 			running = true;
 			// 1. Load JD from custom data preview report
@@ -296,9 +298,12 @@ public class DatasetReader {
 				return;
 
 			// 7. Prepare parameters
-			Map<String, Object> hm = prepareParameters(jConfig, maxRecords);
+			hm = prepareParameters(jConfig, maxRecords);
 			hm.put(DataPreviewScriptlet.PARAM_COLUMNS, columns);
 			hm.put(DataPreviewScriptlet.PARAM_LISTENERS, listeners);
+			rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
+			if (rc != null)
+				hm.remove(JRParameter.REPORT_CONTEXT);
 
 			// 8. Contribute parameters from the data adapter
 			fillReport(jConfig, designDataset, dataAdapterDesc, jrobj, hm);
@@ -311,6 +316,8 @@ public class DatasetReader {
 			UIUtils.showError(e);
 			// UIUtils.showError(Messages.DatasetReader_GenericErrorMsg, e);
 		} finally {
+			if (hm != null && rc != null)
+				hm.put(JRParameter.REPORT_CONTEXT, rc);
 			running = false;
 			for (DatasetReaderListener l : listeners) {
 				l.finished();
