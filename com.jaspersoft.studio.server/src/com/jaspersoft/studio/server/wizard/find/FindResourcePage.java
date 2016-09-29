@@ -257,7 +257,7 @@ public class FindResourcePage extends WizardPage {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText("Tree");
 
-		RepositoryComposite rcom = new RepositoryComposite(tabFolder, SWT.NONE, finderUI.getServerProfile()) {
+		RepositoryComposite rcom = new RepositoryComposite(tabFolder, SWT.NONE, finderUI.getServerProfile(), false) {
 
 			@Override
 			protected void okPressed() {

@@ -51,7 +51,7 @@ public abstract class RepositoryDialog extends ATitledDialog {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		composite.setLayout(new GridLayout(2, false));
 
-		RepositoryComposite rcom = new RepositoryComposite(composite, SWT.NONE, root) {
+		RepositoryComposite rcom = new RepositoryComposite(composite, SWT.NONE, root, true) {
 			/*
 			 * (non-Javadoc)
 			 * 
