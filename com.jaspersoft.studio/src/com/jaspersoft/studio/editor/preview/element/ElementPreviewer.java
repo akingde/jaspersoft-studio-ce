@@ -22,24 +22,20 @@ import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
 import com.jaspersoft.studio.data.reader.DataPreviewScriptlet;
 import com.jaspersoft.studio.data.reader.DatasetReader;
 import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
+import com.jaspersoft.studio.editor.preview.datasnapshot.DataSnapshotManager;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-import net.sf.jasperreports.data.cache.ColumnDataCacheHandler;
-import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.ReportContext;
-import net.sf.jasperreports.engine.SimpleReportContext;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -88,8 +84,7 @@ public class ElementPreviewer {
 			hm = DatasetReader.prepareParameters(jConf, 100);
 
 			DataAdapterDescriptor da = prepareDataAdapter(jConf, jDesign);
-
-			setupCache(hm, fromCache);
+			DataSnapshotManager.setDataSnapshot(hm, fromCache);
 
 			JasperPrint jrPrint = DatasetReader.fillReport(jConf, jDesign.getMainDesignDataset(), da, jrobj, hm);
 
@@ -113,31 +108,6 @@ public class ElementPreviewer {
 		}
 
 		return null;
-	}
-
-	public void resetCache(Map<String, Object> hm) {
-		ReportContext rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
-		if (rc != null && rc.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER))
-			rc.setParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER, new ColumnDataCacheHandler());
-	}
-
-	private void setupCache(Map<String, Object> hm, boolean fromCache) {
-		ReportContext rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
-		if (fromCache) {
-			if (rc == null) {
-				rc = new SimpleReportContext();
-				hm.put(JRParameter.REPORT_CONTEXT, rc);
-			}
-			ColumnDataCacheHandler cacheHandler = (ColumnDataCacheHandler) rc
-					.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
-			if (cacheHandler == null) {
-				cacheHandler = new ColumnDataCacheHandler();
-				rc.setParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER, cacheHandler);
-			}
-		} else {
-			if (rc != null && rc.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER))
-				rc.getParameterValues().remove(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
-		}
 	}
 
 	protected void setupDatasets(JasperReportsConfiguration jConf, JasperDesign jDesign) throws JRException {

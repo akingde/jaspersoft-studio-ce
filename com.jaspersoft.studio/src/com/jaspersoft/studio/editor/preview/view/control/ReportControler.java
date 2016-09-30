@@ -10,7 +10,6 @@ package com.jaspersoft.studio.editor.preview.view.control;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,6 +43,8 @@ import com.jaspersoft.studio.editor.preview.IParametrable;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
+import com.jaspersoft.studio.editor.preview.datasnapshot.DataSnapshotManager;
+import com.jaspersoft.studio.editor.preview.datasnapshot.JSSColumnDataCacheHandler;
 import com.jaspersoft.studio.editor.preview.input.BigNumericInput;
 import com.jaspersoft.studio.editor.preview.input.BooleanInput;
 import com.jaspersoft.studio.editor.preview.input.DateInput;
@@ -68,7 +69,6 @@ import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-import net.sf.jasperreports.data.cache.ColumnDataCacheHandler;
 import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -86,7 +86,6 @@ import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
 import net.sf.jasperreports.engine.fill.FillListener;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
-import net.sf.jasperreports.engine.util.JRSaver;
 
 public class ReportControler {
 
@@ -289,7 +288,6 @@ public class ReportControler {
 	}
 
 	public void finishReport(final PreviewContainer pcontainer) {
-		stats.setValue(ST_RUNTIMESTAMP, new Date().toString());
 		if (compiler != null && ((JRErrorHandler) compiler.getErrorHandler()).hasErrors())
 			finishNotCompiledReport();
 		else
@@ -335,32 +333,9 @@ public class ReportControler {
 					((IParametrable) pcontainer).showParameters(notprmfiled);
 			}
 		});
-		ReportContext context = (ReportContext) pcontainer.getJrContext().getJRParameters().get(JRParameter.REPORT_CONTEXT);
-		if (context != null && context.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)
-				&& context.containsParameter(SAVE_SNAPSHOT)) {
-			final ColumnDataCacheHandler ch = (ColumnDataCacheHandler) context
-					.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
-			if (ch.isSnapshotPopulated()) {
-				final String path = (String) context.getParameterValue(SAVE_SNAPSHOT);
-				Job job = new Job("Saving snapshot to: " + path) {
-
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						monitor.beginTask("Saving data snapshot to: " + path, IProgressMonitor.UNKNOWN);
-						try {
-							JRSaver.saveObject(ch.getDataSnapshot(), new File(path));
-						} catch (JRException e) {
-							UIUtils.showError(e);
-						}
-						return Status.OK_STATUS;
-					}
-				};
-				job.schedule();
-			}
-		}
+		DataSnapshotManager.saveSnapshotIfExists(pcontainer.getJrContext().getJRParameters());
 	}
 
-	public static final String SAVE_SNAPSHOT = "SAVESNAPSHOT";
 	private JasperReport jasperReport;
 	private RecordCountScriptletFactory scfactory;
 
@@ -421,18 +396,7 @@ public class ReportControler {
 							setupRecordCounters();
 							JaspersoftStudioPlugin.getExtensionManager().onRun(jrContext, jasperReport, jasperParameters);
 
-							ReportContext rc = (ReportContext) jasperParameters.get(JRParameter.REPORT_CONTEXT);
-							if (rc != null && rc instanceof SimpleReportContext) {
-								ColumnDataCacheHandler dch = (ColumnDataCacheHandler) rc
-										.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
-								String msg = "No";
-								if (dch != null && dch.getDataSnapshot() != null)
-									msg = "Yes";
-								if (rc.containsParameter(SAVE_SNAPSHOT))
-									msg += " → " + rc.getParameterValue(SAVE_SNAPSHOT);
-								stats.setValue(ST_SNAPSHOT, msg);
-							}
-
+							setupDataSnapshot();
 							// We create the fillHandle to run the report based on the type of data adapter....
 							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jrContext, jasperReport,
 									new HashMap<String, Object>(jasperParameters));
@@ -711,6 +675,24 @@ public class ReportControler {
 	protected APreview getDefaultViewer() {
 		APreview pv = pcontainer.getDefaultViewer();
 		return pv;
+	}
+
+	protected void setupDataSnapshot() {
+		Date creationTimestamp = new Date();
+		ReportContext rc = (ReportContext) jasperParameters.get(JRParameter.REPORT_CONTEXT);
+		if (rc != null && rc instanceof SimpleReportContext) {
+			DataCacheHandler dch = (DataCacheHandler) rc.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
+			String msg = "No";
+			if (dch != null && dch.getDataSnapshot() != null) {
+				msg = "Yes";
+				if (dch instanceof JSSColumnDataCacheHandler)
+					creationTimestamp = ((JSSColumnDataCacheHandler) dch).getCreationTimestamp();
+			}
+			if (rc.containsParameter(DataSnapshotManager.SAVE_SNAPSHOT))
+				msg += " - " + rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT);
+			stats.setValue(ST_SNAPSHOT, msg);
+		}
+		stats.setValue(ST_RUNTIMESTAMP, creationTimestamp.toString());
 	}
 
 	public static void showRunReport(Console c, final PreviewJRPrint pcontainer, final Throwable e) {

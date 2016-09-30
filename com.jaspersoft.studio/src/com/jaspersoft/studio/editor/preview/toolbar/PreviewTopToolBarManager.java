@@ -9,6 +9,7 @@
 package com.jaspersoft.studio.editor.preview.toolbar;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
@@ -38,18 +39,17 @@ import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
-import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.datasnapshot.DataSnapshotManager;
+import com.jaspersoft.studio.editor.preview.datasnapshot.JSSColumnDataCacheHandler;
+import com.jaspersoft.studio.editor.preview.datasnapshot.JssDataSnapshot;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-import net.sf.jasperreports.data.cache.ColumnDataCacheHandler;
 import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.data.cache.DataSnapshot;
 import net.sf.jasperreports.data.cache.PopulatedSnapshotCacheHandler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRQuery;
@@ -123,19 +123,27 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 				menu = new Menu(parent);
 				final MenuItem itemCache = new MenuItem(menu, SWT.CHECK);
 				itemCache.setText("Cache Data In Memory");
+
+				final MenuItem itemSave = new MenuItem(menu, SWT.CHECK);
+				itemSave.setText("Save Data To File");
+
 				itemCache.addSelectionListener(new SelectionAdapter() {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						setupCacheInMemory(itemCache);
+						boolean on = itemCache.getSelection();
+						DataSnapshotManager.setCaching(container.getJrContext().getJRParameters(), on);
+						if (!on) {
+							itemSave.setEnabled(false);
+							Map<String, Object> hm = container.getJrContext().getJRParameters();
+							SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
+							reportContext.getParameterValues().remove(DataSnapshotManager.SAVE_SNAPSHOT);
+						}
 					}
 				});
-				final MenuItem itemSave = new MenuItem(menu, SWT.CHECK);
-				itemSave.setText("Save Data To File");
 				itemSave.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						boolean oldSelection = itemSave.getSelection();
 						FileDialog fd = new FileDialog(parent.getShell(), SWT.SAVE);
 						fd.setText("Select where to save the snapshot");
 						String sname = "snapshot.jrds";
@@ -145,18 +153,21 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 						fd.setFileName(sname);
 						fd.setOverwrite(true);
 						fd.setFilterExtensions(new String[] { "*.jrds", "*.*" });
-						String fname = fd.open();
+						final String fname = fd.open();
 						if (fname != null) {
 							itemCache.setSelection(true);
-							setupCacheInMemory(itemCache);
 							Map<String, Object> hm = container.getJrContext().getJRParameters();
+							DataCacheHandler cacheHandler = DataSnapshotManager.setDataSnapshot(hm, false);
+							if (cacheHandler.getDataSnapshot() != null) {
+								Date creationTimestamp = new Date();
+								if (cacheHandler instanceof JSSColumnDataCacheHandler)
+									creationTimestamp = ((JSSColumnDataCacheHandler) cacheHandler).getCreationTimestamp();
+								DataSnapshotManager.saveSnapshot(fname, creationTimestamp, cacheHandler.getDataSnapshot());
+							}
 							SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
-							if (itemSave.getSelection())
-								reportContext.setParameterValue(ReportControler.SAVE_SNAPSHOT, fname);
-							else
-								reportContext.getParameterValues().remove(ReportControler.SAVE_SNAPSHOT);
-						} else
-							itemSave.setSelection(oldSelection);
+							reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
+							itemCache.setSelection(true);
+						}
 					}
 				});
 
@@ -171,14 +182,18 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 						String fname = fd.open();
 						if (fname != null) {
 							itemCache.setSelection(true);
-							setupCacheInMemory(itemCache);
-
-							Map<String, Object> hm = container.getJrContext().getJRParameters();
-							SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
-
 							try {
-								reportContext.setParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER,
-										new PopulatedSnapshotCacheHandler((DataSnapshot) JRLoader.loadObject(new File(fname))));
+								Map<String, Object> hm = container.getJrContext().getJRParameters();
+								DataSnapshot snapshot = (DataSnapshot) JRLoader.loadObject(new File(fname));
+								if (snapshot instanceof JssDataSnapshot)
+									DataSnapshotManager.setDataSnapshot(hm,
+											new JSSColumnDataCacheHandler(((JssDataSnapshot) snapshot).getSnapshot(),
+													((JssDataSnapshot) snapshot).getCreationTimestamp()),
+											false);
+								else
+									DataSnapshotManager.setDataSnapshot(hm, new PopulatedSnapshotCacheHandler(snapshot), false);
+								SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
+								reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
 							} catch (JRException e1) {
 								UIUtils.showError(e1);
 							}
@@ -213,17 +228,6 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 		@Override
 		public Menu getMenu(Menu parent) {
 			return null;
-		}
-
-		protected void setupCacheInMemory(final MenuItem itemCache) {
-			Map<String, Object> hm = container.getJrContext().getJRParameters();
-			if (itemCache.getSelection()) {
-				SimpleReportContext reportContext = new SimpleReportContext();
-				ColumnDataCacheHandler cacheHandler = new ColumnDataCacheHandler();
-				reportContext.setParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER, cacheHandler);
-				hm.put(JRParameter.REPORT_CONTEXT, reportContext);
-			} else
-				hm.remove(JRParameter.REPORT_CONTEXT);
 		}
 
 	}
