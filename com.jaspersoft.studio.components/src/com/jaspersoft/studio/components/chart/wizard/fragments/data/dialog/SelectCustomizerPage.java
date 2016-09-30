@@ -154,6 +154,11 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 	private JasperReportsConfiguration jConfig;
 	
 	/**
+	 * The number of chart customizers currently defined in the chart
+	 */
+	private int currentChartCustmizers = 0;
+	
+	/**
 	 * Create a dialog to define a new customizer
 	 * 
 	 * @param jConfig the {@link JasperReportsConfiguration} of the current report
@@ -174,6 +179,7 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 		tableInput.add(userDefinedEntry);
 		this.definitionKey = definitionKey;
 		this.selectedChartPlot = selectedChartPlot;
+		this.currentChartCustmizers = dto.getCustomizersNumber();
 	}
 	
 	/**
@@ -224,8 +230,12 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 					getContainer().updateButtons();
 					return;
 				}
-			}
-			setMessage(Messages.SelectCustomizerPage_pageMessage);
+			} 
+			if (desc != userDefinedEntry){
+				setMessage(Messages.SelectCustomizerPage_pageMessageConfigurableCustomizer);
+			} else if (currentChartCustmizers > 0){
+				setMessage(Messages.SelectCustomizerPage_pageMessageMultiCustomizers);
+			} else setMessage(Messages.SelectCustomizerPage_pageMessage);
 		}
 		getContainer().updateButtons();
 	}
@@ -342,7 +352,7 @@ public class SelectCustomizerPage extends JSSHelpWizardPage {
 		if (isUsingCustomDefinition()){
 			CustomizerNewWizard parentWizard = (CustomizerNewWizard)getWizard();
 			EditClassPage editClassPage = parentWizard.getEditClassPage();
-			editClassPage.setRawClass("");
+			editClassPage.setRawClass(""); //$NON-NLS-1$
 			return editClassPage;
 		} else {
 			CustomizerNewWizard parentWizard = (CustomizerNewWizard)getWizard();

@@ -165,6 +165,8 @@ public class Messages extends NLS {
 	public static String DSXyz_xTooltip;
 	public static String DSXyz_yTooltip;
 	public static String DSXyz_zTooltip;
+	public static String EditClassPage_dialogMessage;
+	public static String EditClassPage_dialogMessageServer;
 	public static String EditCustomizerPage_customizerClassLabel;
 	public static String EditCustomizerPage_errorClassEmpty;
 	public static String EditCustomizerPage_pageMessage;
@@ -738,6 +740,8 @@ public class Messages extends NLS {
 	public static String SelectCustomizerPage_customzierClassEntry;
 	public static String SelectCustomizerPage_errorNoSelection;
 	public static String SelectCustomizerPage_pageMessage;
+	public static String SelectCustomizerPage_pageMessageConfigurableCustomizer;
+	public static String SelectCustomizerPage_pageMessageMultiCustomizers;
 	public static String SelectCustomizerPage_pageTitle;
 	public static String SelectCustomizerPage_warningInvalidClass;
 	public static String SeriesColorPage_description;

@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.components.chart.ContextHelpIDs;
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -64,14 +65,25 @@ public class EditClassPage extends JSSHelpWizardPage {
 	 * is a raw class
 	 */
 	private String advancedClass = ""; //$NON-NLS-1$
+	
+	/**
+	 * The number of chart customizers currently defined in the chart
+	 */
+	private int currentChartCustmizers = 0;
 
 	/**
 	 * Text area used to provide the classname
 	 */
 	private Text textArea;
 
-	public EditClassPage() {
-		super("editClassPage");
+	/**
+	 * Create the page
+	 * 
+	 * @param dto the dto of the edited chart, must be not null
+	 */
+	public EditClassPage(CustomizerPropertyExpressionsDTO dto) {
+		super("editClassPage"); //$NON-NLS-1$
+		this.currentChartCustmizers = dto.getCustomizersNumber();
 		setMessage(Messages.EditCustomizerPage_pageMessage);
 	}
 
@@ -135,13 +147,15 @@ public class EditClassPage extends JSSHelpWizardPage {
 		} else {
 			try{
 				JRClassLoader.loadClassForName(text);
+				if (currentChartCustmizers > 0){
+					setMessage(Messages.EditClassPage_dialogMessageServer);
+				} else {
+					setMessage(Messages.EditClassPage_dialogMessage);
+				}
 			}catch (Exception ex){
-				setErrorMessage(null);
 				setMessage(Messages.EditCustomizerPage_warningClassNotFound, IMessageProvider.WARNING);
-				return true;
 			}
 		}
-		setMessage(Messages.EditCustomizerPage_pageMessage);
 		setErrorMessage(null);
 		return true;
 	}

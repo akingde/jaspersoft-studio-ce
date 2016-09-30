@@ -92,7 +92,7 @@ public class CustomizerNewWizard extends Wizard {
 	public void addPages() {
 		selectionPage = new SelectCustomizerPage(jConfig, definitionKey, dto, selectedChartPlot);
 		editCustomizerPage = new EditCustomizerPage(jConfig, ec, dto);
-		editClassPage = new EditClassPage();
+		editClassPage = new EditClassPage(dto);
 		addPage(selectionPage);
 		addPage(editCustomizerPage);
 		addPage(editClassPage);
