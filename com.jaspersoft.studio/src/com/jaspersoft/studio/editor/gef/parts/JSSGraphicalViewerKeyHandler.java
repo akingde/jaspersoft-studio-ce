@@ -106,4 +106,18 @@ public class JSSGraphicalViewerKeyHandler extends GraphicalViewerKeyHandler {
 		return cmd;
 	}
 
+	/**
+	 * Override of the original method to check if the part returned by the viewer is 
+	 * a {@link GraphicalEditPart} or null
+	 * 
+	 * @return the selected {@link GraphicalEditPart} on the viewer or null if not available
+	 */
+	@Override
+	protected GraphicalEditPart getFocusEditPart() {
+		EditPart part = getViewer().getFocusEditPart();
+		if (part instanceof GraphicalEditPart){
+			return (GraphicalEditPart)part;
+		}
+		return null;
+	}
 }
