@@ -41,12 +41,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.statistics.IFirstStartupAction;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.KeyValue;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 /**

@@ -23,7 +23,8 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.AMapElement;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.util.KeyValue;
+
+import net.sf.jasperreports.eclipse.util.KeyValue;
 
 public abstract class ACommand extends Command {
 	// nodes to remove in undo

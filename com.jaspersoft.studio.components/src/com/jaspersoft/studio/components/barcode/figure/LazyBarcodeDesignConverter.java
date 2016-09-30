@@ -9,11 +9,11 @@
 package com.jaspersoft.studio.components.barcode.figure;
 
 import com.jaspersoft.studio.jasper.AComponentDesignConverter;
-import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.components.barcode4j.BarcodeDesignEvaluator;
 import net.sf.jasperreports.components.barcode4j.QRCodeComponent;
+import net.sf.jasperreports.eclipse.util.KeyValue;
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReportsContext;

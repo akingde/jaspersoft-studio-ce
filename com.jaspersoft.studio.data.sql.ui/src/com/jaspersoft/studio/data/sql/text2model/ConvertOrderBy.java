@@ -27,7 +27,8 @@ import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByExpression;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
-import com.jaspersoft.studio.model.util.KeyValue;
+
+import net.sf.jasperreports.eclipse.util.KeyValue;
 
 public class ConvertOrderBy {
 	public static void convertOrderBy(SQLQueryDesigner designer, OrOrderByColumn cols) {
