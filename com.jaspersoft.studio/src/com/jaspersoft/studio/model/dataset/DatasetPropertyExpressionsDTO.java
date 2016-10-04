@@ -16,6 +16,7 @@ import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
+import net.sf.jasperreports.engine.design.DesignDatasetPropertyExpression;
 import net.sf.jasperreports.engine.type.PropertyEvaluationTimeEnum;
 
 public class DatasetPropertyExpressionsDTO extends PropertyExpressionsDTO {
@@ -29,7 +30,7 @@ public class DatasetPropertyExpressionsDTO extends PropertyExpressionsDTO {
 		if (propExpressions != null) {
 			for (JRPropertyExpression prop : propExpressions) {
 				DatasetPropertyExpressionDTO newProp = new DatasetPropertyExpressionDTO(true, prop.getName(),
-						prop.getValueExpression().getText(), ((DatasetPropertyExpressionDTO) prop).getEvalTime());
+						prop.getValueExpression().getText(), ((DesignDatasetPropertyExpression) prop).getEvaluationTime());
 				newProp.setPnode(pnode);
 				properties.add(newProp);
 			}
