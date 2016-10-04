@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
+Bundle-ManifestVersion: 2
+Bundle-Name: JasperReport Components
+Bundle-SymbolicName: com.jaspersoft.studio.components; singleton:=true
+Bundle-Version: 6.3.1.final
+Bundle-Localization: plugin
+Bundle-Activator: com.jaspersoft.studio.components.Activator
+Bundle-Vendor: TIBCO Software Inc.
+Require-Bundle: com.jaspersoft.studio;bundle-version="6.3.1",
+ com.jaspersoft.studio.widgets.map;bundle-version="6.3.1"
+Eclipse-RegisterBuddy: com.jaspersoft.studio
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
+ JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: patch-library.jar,
+ .
+Export-Package: com.jaspersoft.studio.components.chart.property.descriptor,
+ com.jaspersoft.studio.components.chart.property.widget,
+ com.jaspersoft.studio.components.map.model.marker,
+ com.jaspersoft.studio.components.map.model.marker.dialog

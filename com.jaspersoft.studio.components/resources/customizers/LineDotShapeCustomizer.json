@@ -1,0 +1,78 @@
+{
+    "label": "Line Dot Shape",
+    "description": "Allow to define the shape and size of the dot items for the line charts",
+    "customizerClass": "net.sf.jasperreports.customizers.shape.LineDotShapeCustomizer",
+    "supportedPlot": ["13","14","15","1","2","3","7","8","11","12","20","21"],
+    "panelManagerClass": "com.jaspersoft.studio.components.widgets.framework.ui.ShapePanelManager",
+    "sections": [
+        {
+            "name": "Customizer configuration",
+            "expandable": false,
+            "properties": [
+                {
+                    "name": "selectionMode",
+                    "label": "Apply to",
+                    "description": "Apply to all the legend items",
+                    "mandatory": true,
+                    "readOnly": false,
+                    "type": "selectable_combo",
+                    "comboOptions": [["allItems","All Items"], ["itemSeries","Series by name"], ["itemIndex", "Series by index"]]
+                },
+				{
+                    "name": "itemIndex",
+                    "label": "Legend Item Index",
+                    "description": "The index of the legend item that will be changed",
+                    "mandatory": false,
+                    "defaultValue": "1",
+                    "readOnly": false,
+                    "type": "integer"
+                },
+               	{
+                    "name": "itemSeries",
+                    "label": "Series Name",
+                    "description": "The series associated to the legend item",
+                    "mandatory": false,
+                    "readOnly": false,
+                    "type": "text"
+                },
+      			{
+                    "name": "shapeType",
+                    "label": "Shape Type",
+                    "description": "The type of the shape",
+                    "mandatory": true,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "selectable_combo",
+                    "comboOptions": [["ellipse","Ellipse"], ["rectangle","Rectangle"], ["polyline", "Path"], ["polygon", "Polygon"]]
+                },
+                {
+                    "name": "shapePoints",
+                    "label": "Shape",
+                    "description": "Specify the points of the shape",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "shape"
+                },
+                {
+                    "name": "shapeWidth",
+                    "label": "Width",
+                    "description": "The width of the shape",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "integer"
+                },
+                {
+                    "name": "shapeHeight",
+                    "label": "Height",
+                    "description": "Specify the height of the shape",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "integer"
+                }  
+            ]
+        }
+    ]
+}
