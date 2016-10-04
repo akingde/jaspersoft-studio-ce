@@ -21,17 +21,19 @@ import org.eclipse.swt.dnd.Transfer;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.dnd.ImageURLTransfer;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.MRImage;
 
 /**
- * Implementation of a {@link TransferDragSourceListener} that is supposed to handle
- * the drag operation of an {@link MRImage} node from the repository view.
+ * Implementation of a {@link TransferDragSourceListener} that is supposed to
+ * handle the drag operation of an {@link MRImage} node from the repository
+ * view.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class RepositoryImageDragSourceListener implements TransferDragSourceListener{
-	
+public class RepositoryImageDragSourceListener implements TransferDragSourceListener {
+
 	private StructuredViewer viewer;
 
 	public RepositoryImageDragSourceListener(TreeViewer viewer) {
@@ -42,10 +44,13 @@ public class RepositoryImageDragSourceListener implements TransferDragSourceList
 	public Transfer getTransfer() {
 		return ImageURLTransfer.getInstance();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.swt.dnd.DragSourceListener#dragFinished(org.eclipse.swt.dnd.DragSourceEvent)
+	 * 
+	 * @see
+	 * org.eclipse.swt.dnd.DragSourceListener#dragFinished(org.eclipse.swt.dnd.
+	 * DragSourceEvent)
 	 */
 	public void dragFinished(DragSourceEvent event) {
 		// no clean-up needed
@@ -54,12 +59,14 @@ public class RepositoryImageDragSourceListener implements TransferDragSourceList
 	@Override
 	public void dragSetData(DragSourceEvent event) {
 		if (ImageURLTransfer.getInstance().isSupportedType(event.dataType)) {
-			IStructuredSelection selection = (IStructuredSelection) viewer
-					.getSelection();
+			IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 			if (selection.getFirstElement() instanceof MRImage) {
 				MRImage reportImg = (MRImage) selection.getFirstElement();
 				ResourceDescriptor imgDescriptor = reportImg.getValue();
-				event.data = "repo:" + imgDescriptor.getUriString(); //$NON-NLS-1$
+				String key = ServerManager.getKey(reportImg);
+				key += "\nrepo:" + imgDescriptor.getUriString();
+
+				event.data = key; // $NON-NLS-1$
 			}
 		}
 	}
@@ -69,9 +76,7 @@ public class RepositoryImageDragSourceListener implements TransferDragSourceList
 	 */
 	@Override
 	public void dragStart(DragSourceEvent event) {
-		IStructuredSelection selection = (IStructuredSelection) viewer
-				.getSelection();
-		event.doit = !viewer.getSelection().isEmpty()
-				&& (selection.getFirstElement() instanceof MRImage);
+		IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+		event.doit = !viewer.getSelection().isEmpty() && (selection.getFirstElement() instanceof MRImage);
 	}
 }

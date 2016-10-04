@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data;
 
@@ -16,6 +12,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDragSourceListener;
@@ -35,6 +32,7 @@ import com.jaspersoft.studio.data.actions.ImportDataAdapterAction;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.dnd.DataAdapterDragSourceListener;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.repository.actions.Separator;
 
@@ -93,20 +91,20 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 			lst.add(importDataAdapterItemAction);
 		return lst;
 	}
-	
+
 	/**
 	 * Check if the key event has the push of the delete key on mac
 	 * 
-	 * @param event a not null key event
+	 * @param event
+	 *          a not null key event
 	 * @return true if the current OS is mac and the pressed key is the delete one (BS)
 	 */
-	private boolean isMacDelete(KeyEvent event){
+	private boolean isMacDelete(KeyEvent event) {
 		return Util.isMac() && event.character == SWT.BS;
 	}
 
-
 	public void hookKeyEvent(TreeViewer treeViewer, KeyEvent event) {
-		//Triggered when delete is used or backspace on mac also
+		// Triggered when delete is used or backspace on mac also
 		if ((event.character == SWT.DEL || isMacDelete(event)) && event.stateMask == 0) {
 			if (deleteDataAdapterItemAction.isEnabled())
 				deleteDataAdapterItemAction.run();
@@ -149,6 +147,11 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 	@Override
 	public List<TransferDropTargetListener> getTransferDropTargetListeners(TreeViewer treeViewer) {
 		return new ArrayList<TransferDropTargetListener>(0);
+	}
+
+	@Override
+	public List<Command> dropResource(String key, INode root) throws InterruptedException {
+		return null;
 	}
 
 }
