@@ -54,26 +54,59 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
  */
 public class ItemPropertyDialog extends PersistentLocationTitleAreaDialog {
 
+	/**
+	 * The {@link ItemPropertyDescription} that define the widget created inside
+	 */
 	private ItemPropertyDescription<?> ipDesc;
 	
-	private String propertyName;
-	
+	/**
+	 * The current static value
+	 */
 	private String staticValue;
 	
+	/**
+	 * The current expression value
+	 */
 	private JRExpression expressionValue;
 	
+	/**
+	 * The name of the property
+	 */
+	private String propertyName;
+	
+	/**
+	 * The {@link WItemProperty} used to build the widget
+	 */
 	private WItemProperty itemProperty;
 	
+	/**
+	 * The context for the expression editor
+	 */
 	protected ExpressionContext context;
 	
+	/**
+	 * Flag updated with the value of the checkbox, to force if it is an expression or not
+	 */
 	protected boolean isExpressionMode = false;
 	
+	/**
+	 * The descriptor containing all the properties of the element
+	 */
 	private ADescriptor descriptor;
 	
+	/**
+	 * Text area to insert the property name of the property
+	 */
 	private Text propertyNameText;
 	
+	/**
+	 * Area where the controls are created
+	 */
 	private Composite dialogArea;
 	
+	/**
+	 * Editor used to store the value from the widget inside the field of this dialog
+	 */
 	private IPropertyEditor internalEditor = new PropertyEditorAdapter() {
 
 		public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
@@ -230,6 +263,12 @@ public class ItemPropertyDialog extends PersistentLocationTitleAreaDialog {
 		return dialogArea;
 	}
 	
+	/**
+	 * Rebuild the widget that will be used to as value input widget
+	 * 
+	 * @param ipDesc the {@link ItemPropertyDescription} o the widget, can be null and in this case a 
+	 * standard {@link TextPropertyDescription} will be used
+	 */
 	protected void rebuildWidget(ItemPropertyDescription<?> ipDesc){
 		itemProperty.dispose();
 		if (ipDesc == null) {

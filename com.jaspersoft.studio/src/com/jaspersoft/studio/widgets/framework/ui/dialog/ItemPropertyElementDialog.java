@@ -33,27 +33,54 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 /**
- * Dialog used to define the value of a property when the edit button is pressed
+ * Dialog used inside a {@link WItemProperty} when the button to open the advance dialog
+ * is pressed.  
+ * 
+ * @author Orlandin Marco
  */
 public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog {
 	
+	/**
+	 * The {@link ItemPropertyDescription} that define the widget created inside
+	 */
 	private ItemPropertyDescription<?> ipDesc;
 	
+	/**
+	 * The current static value
+	 */
 	private String staticValue;
 	
+	/**
+	 * The current expression value
+	 */
 	private JRExpression expressionValue;
 	
+	/**
+	 * The {@link WItemProperty} used to build the widget
+	 */
 	private WItemProperty itemProperty;
 	
+	/**
+	 * The context for the expression editor
+	 */
 	protected ExpressionContext context;
 	
+	/**
+	 * Flag updated with the value of the checkbox, to force if it is an expression or not
+	 */
 	protected boolean isExpressionMode = false;
 	
+	/**
+	 * Editor used to store the value from the widget inside the field of this dialog
+	 */
 	private IPropertyEditor dialogPropertyEditor = new PropertyEditorAdapter() {
 		
 		public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
-			expressionValue = valueExpression;
-			staticValue = value;
+			if (isExpressionMode){
+				expressionValue = valueExpression;
+			} else {
+				staticValue = value;
+			}
 		};
 		
 		@Override
@@ -67,6 +94,17 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		}
 	};
 
+	/**
+	 * Create the dialog
+	 * 
+	 * @param parentShell the shell for the dialog
+	 * @param ipDesc the {@link ItemPropertyDescription} that define the type of the edited property, 
+	 * it is cloned to be used inside this dialog, must be not null
+	 * @param itemProperty the {@link WItemProperty}, it is used to retrieve the original value of the property, 
+	 * both expression and static value and to know if it is in expression mode or not. Also the expression context 
+	 * is read from this parameter. Must be not null
+	 * 
+	 */
 	public ItemPropertyElementDialog(Shell parentShell, ItemPropertyDescription<?> ipDesc, WItemProperty itemProperty) {
 		super(parentShell);
 		this.staticValue = itemProperty.getStaticValue();
@@ -74,26 +112,51 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		this.expressionValue = expressionValue != null ? (JRExpression)expressionValue.clone() : null;
 		this.context = itemProperty.getExpressionContext();
 		this.ipDesc = ipDesc.clone();
+		//The initial status of the expression mode flag is retrieved from the WItemProperty
 		this.isExpressionMode = itemProperty.isExpressionMode();
 		setSaveSettings(false);
 	}
 	
+	/**
+	 * Create the dialog
+	 * 
+	 * @param parentShell the shell for the dialog
+	 * @param ipDesc the {@link ItemPropertyDescription} that define the type of the edited property, 
+	 * it is cloned to be used inside this dialog, must be not null
+	 * @param staticValue the initial static value of the property, can be null
+	 * @param expressionValue the initial expression value of the property, can be null
+	 * @param context the {@link ExpressionContext} for the expression editor, must be not null
+	 */
 	public ItemPropertyElementDialog(Shell parentShell, ItemPropertyDescription<?> ipDesc, String staticValue, JRExpression expressionValue, ExpressionContext context) {
 		super(parentShell);
 		this.staticValue = staticValue;
 		this.expressionValue = expressionValue != null ? (JRExpression)expressionValue.clone() : null;
 		this.context = context;
 		this.ipDesc = ipDesc.clone();
+		//The initial status of the expression mode flag is retrieved from the presence or not of the expression
 		this.isExpressionMode = expressionValue != null;
 		setSaveSettings(false);
 	}
 	
+	/**
+	 * Set the title of the dialog
+	 */
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(Messages.ItemPropertyElementDialog_shellTitle);
 	}
 	
+	/**
+	 * Create the {@link WItemProperty} used to create the editor widget. The {@link WItemProperty} build inside here
+	 * should always return the value of the field isExpressionMode (updated by the checkbox) to decide if it is in expression
+	 * mode or not, since it is decided trough that value
+	 * 
+	 * @param parent the parent of the created {@link WItemProperty} control
+	 * @param idDesc the {@link ItemPropertyDescription} used inside the created {@link WItemProperty} the build the widget
+	 * @param editor the {@link IPropertyEditor} used inside the created {@link WItemProperty}
+	 * @return a not null {@link WItemProperty}
+	 */
 	protected WItemProperty createProperty(Composite parent, ItemPropertyDescription<?> idDesc, IPropertyEditor editor){
 		return new WItemProperty(parent, SWT.NONE, ipDesc, editor){
 			@Override
@@ -142,15 +205,28 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		return dialogArea;
 	}
 	
-	
+	/**
+	 * Return the current expression value
+	 * 
+	 * @return a {@link JRExpression} can be null
+	 */
 	public JRExpression getExpressionValue(){
 		return expressionValue;
 	};
 	
+	/**
+	 * Return the current static value
+	 * 
+	 * @return a string, can be null
+	 */
 	public String getStaticValue(){
 		return staticValue;
 	}
 	
+	/**
+	 * When the dialog is closed if the flag to force the expression was enabled it erase the 
+	 * static value, otherwise it erase the expression value
+	 */
 	@Override
 	public boolean close() {
 		if (isExpressionMode){
