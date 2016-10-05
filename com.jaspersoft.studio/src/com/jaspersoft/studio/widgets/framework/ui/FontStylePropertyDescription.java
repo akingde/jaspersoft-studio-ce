@@ -38,7 +38,7 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
  * 
  * @author Orlandin Marco
  */
-public class FontStylePropertyDescription extends TextPropertyDescription<String> {
+public class FontStylePropertyDescription extends AbstractExpressionPropertyDescription<String> {
 	
 	public FontStylePropertyDescription() {
 		super();

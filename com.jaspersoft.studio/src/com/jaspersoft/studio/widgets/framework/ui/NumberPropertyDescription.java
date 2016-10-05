@@ -21,7 +21,7 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 
-public abstract class NumberPropertyDescription<T extends Number> extends TextPropertyDescription<T> {
+public abstract class NumberPropertyDescription<T extends Number> extends AbstractExpressionPropertyDescription<T> {
 	
 	protected Number min;
 	
@@ -77,7 +77,6 @@ public abstract class NumberPropertyDescription<T extends Number> extends TextPr
 			
 		});
 		setupContextMenu(simpleControl, wiProp);
-		setupContextMenu(textExpression, wiProp);
 		cmp.switchToFirstContainer();
 		return cmp;
 	}

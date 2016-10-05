@@ -31,8 +31,8 @@ import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
+import com.jaspersoft.studio.widgets.framework.ui.AbstractExpressionPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
-import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
 
 import net.sf.jasperreports.customizers.shape.Point;
 import net.sf.jasperreports.customizers.shape.ShapePoints;
@@ -45,7 +45,7 @@ import net.sf.jasperreports.customizers.shape.ShapeTypeEnum;
  * @author Orlandin Marco
  *
  */
-public class ShapePointsDescription extends TextPropertyDescription<String> {
+public class ShapePointsDescription extends AbstractExpressionPropertyDescription<String> {
 	
 	public static final String SHAPE_TYPE_PROPERTY = "shapeType";
 	
@@ -116,7 +116,6 @@ public class ShapePointsDescription extends TextPropertyDescription<String> {
 		});
 		
 		setupContextMenu(simpleControl, wiProp);
-		setupContextMenu(textExpression, wiProp);
 		cmp.switchToFirstContainer();
 		return cmp;
 	}

@@ -28,6 +28,7 @@ import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.DoublePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
 
 import net.sf.jasperreports.components.items.Item;
@@ -125,7 +126,7 @@ public class MarkersDescriptor extends ADescriptor {
 	 */
 	@Override
 	protected void initItemPropertyDescriptors() {
-		itemProperties = new TextPropertyDescription[] {
+		itemProperties = new ItemPropertyDescription<?>[] {
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_MARKER_title,
 						Messages.MarkersDescriptor_1, "", false, Messages.MarkersDescriptor_0), //$NON-NLS-1$
 

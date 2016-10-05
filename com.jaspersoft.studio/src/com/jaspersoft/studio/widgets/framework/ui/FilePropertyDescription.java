@@ -17,6 +17,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -26,6 +27,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jface.dialogs.FileSelectionDialog;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
@@ -37,7 +39,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-public class FilePropertyDescription extends TextPropertyDescription<String> {
+public class FilePropertyDescription extends AbstractExpressionPropertyDescription<String> {
 
 	public FilePropertyDescription() {
 		super();
@@ -96,7 +98,7 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 		}
 		
 		setupContextMenu(simpleControl, wiProp);
-		setupContextMenu(textExpression, wiProp);
+		setupContextMenu(expressionControl, wiProp);
 		cmp.switchToFirstContainer();
 		return cmp;
 	}
@@ -163,6 +165,18 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 	}
 	
 	@Override
+	public void handleEdit(Control txt, IWItemProperty wiProp) {
+		if (wiProp == null)
+			return;
+		if (!wiProp.isExpressionMode() && txt instanceof Text){
+			String tvalue = ((Text) txt).getText();
+			if (tvalue != null && tvalue.isEmpty())
+				tvalue = null;
+			wiProp.setValue(tvalue, null);
+		} else super.handleEdit(txt, wiProp);
+	}
+	
+	@Override
 	public void update(Control c, IWItemProperty wip) {
 		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
 		if (wip.isExpressionMode()) {
@@ -170,8 +184,26 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 			super.update(expressionControl, wip);
 			cmp.switchToFirstContainer();
 		} else {
-			Text simpleControl = (Text)cmp.getSecondContainer().getData();
-			super.update(simpleControl, wip);
+			Text txtValue = (Text)cmp.getSecondContainer().getData();
+			String txt;
+			boolean isFallback = false;
+			if (wip.getStaticValue() != null){
+				txt = wip.getStaticValue();
+			} else if (wip.getFallbackValue() != null){
+				txt = Misc.nvl(wip.getFallbackValue().toString());
+				isFallback = true;
+			} else {
+				txt = "";
+			}
+		
+			Point oldSelection = txtValue.getSelection();
+			txtValue.setText(txt);
+			changeFallbackForeground(isFallback, txtValue);
+			oldSelection.x = Math.min(txt.length(), oldSelection.x);
+			oldSelection.y = Math.min(txt.length(), oldSelection.y);
+			txtValue.setSelection(oldSelection);
+			
+			txtValue.setToolTipText(getToolTip());
 			cmp.switchToSecondContainer();
 		}
 	}

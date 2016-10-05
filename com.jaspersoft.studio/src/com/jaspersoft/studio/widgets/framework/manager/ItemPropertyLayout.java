@@ -22,7 +22,7 @@ import com.jaspersoft.studio.widgets.framework.WItemProperty;
 /**
  * Layout used inside a {@link WItemProperty}, to handle the placement of the 
  * label to open the expression editor, the widget and the dialog button. Optionally
- * it can have as first element a title label
+ * it can have as first element a title label.
  * As layout data it use an {@link ItemPropertyLayoutData}, set directly on the layouted {@link WItemProperty}
  * The layout data can be used to set the size of of fill status of both the expression control or simple control
  * If the {@link WItemProperty} layouted by this is not visible the size of everything will be 0
@@ -54,16 +54,6 @@ public class ItemPropertyLayout extends Layout {
 	 */
 	public int leftMargin = 5;
 	
-	/**
-	 * Default size of the dialog button
-	 */
-	protected Point buttonSize = new Point(24, 24);
-	
-	/**
-	 * Default size of the expression editor label button
-	 */
-	protected Point labelSize = new Point(24, 24);
-	
 	public ItemPropertyLayout(WItemProperty wItemProperty, Label titleLabel, Label expressionLabel, Control mainControl, Button dialogButton) {
 		this.wItemProperty = wItemProperty;
 		this.mainControl = mainControl;
@@ -77,6 +67,11 @@ public class ItemPropertyLayout extends Layout {
 		if(!wItemProperty.isVisible()){
 			return new Point(0, 0);
 		} else {
+			//Get informations from the layout data
+			ItemPropertyLayoutData data = wItemProperty.getContentLayoutData();
+			Point labelSize = data.labelSize;
+			Point buttonSize = getButtonSize(hHint, data);
+			
 			int width = leftMargin;
 			
 			//Start as height from the higher between button and label
@@ -95,7 +90,6 @@ public class ItemPropertyLayout extends Layout {
 			//Add the width of the button
 			width += buttonSize.x + horizontalSpacing;
 			
-			ItemPropertyLayoutData data = wItemProperty.getContentLayoutData();
 			boolean isControlFillingVertical = isExpressionMode ? data.expressionFillVertical : data.widgetFillVertical;
 			int heightHint = 0;
 			if (isControlFillingVertical){
@@ -111,6 +105,49 @@ public class ItemPropertyLayout extends Layout {
 			
 			return new Point(width, height + bottomMargin);
 		}
+	}
+	
+	/**
+	 * Return the size of the dialog button as defined in the {@link ItemPropertyLayoutData}.
+	 * If the size is bigger than the available space then it is reduced to the available 
+	 * space
+	 * 
+	 * @param availableheight the maximum available space
+	 * @param data the current {@link ItemPropertyLayoutData}, must be not null
+	 * 
+	 * @return a not null size for the dialog button
+	 */	
+	protected Point getButtonSize(int availableheight, ItemPropertyLayoutData data){
+		if (data.buttonVisible){
+			if (data.buttonSize.y <= availableheight || availableheight == -1){
+				return data.buttonSize;
+			} else {
+				return new Point(data.buttonSize.x, availableheight);
+			}
+		} else {
+			return new Point(0, 0);
+		}
+	}
+	
+	/**
+	 * Return the start Y coordinate of the dialog button
+	 * 
+	 * @param availableheight the available height
+	 * @param the current {@link ItemPropertyLayoutData}, must be not null
+	 * 
+	 * @return the Y coordinate of the dialog button
+	 */
+	protected int getButtonStart(int availableheight, ItemPropertyLayoutData data){
+		if (data.buttonVisible){
+			if (data.buttonAlignment == SWT.END){
+				return availableheight - getButtonSize(availableheight, data).y;
+			} else if (data.buttonAlignment == SWT.CENTER){
+				int buttonHeight = getButtonSize(availableheight, data).y;
+				return Math.round((availableheight - buttonHeight)/2f);
+			} 
+			//else reuturn the height 0
+		}
+		return 0;
 	}
 
 	@Override
@@ -128,11 +165,15 @@ public class ItemPropertyLayout extends Layout {
 			//Subtract from the available height the bottom margin
 			compositeSize.height -= bottomMargin;
 			
+			//Get informations from the layout data
+			ItemPropertyLayoutData data = wItemProperty.getContentLayoutData();
+			Point labelSize = data.labelSize;
+			Point buttonSize = getButtonSize(compositeSize.height, data);
+			
 			//Check if the widget is in expression mode
 			boolean isExpressionMode = wItemProperty.isExpressionMode();
 			//Check if the main control has to fill the area vertically
 			boolean isControlFillingVertical = false;
-			ItemPropertyLayoutData data = wItemProperty.getContentLayoutData();
 			isControlFillingVertical = isExpressionMode ? data.expressionFillVertical : data.widgetFillVertical;
 			
 			int heightHint = 0;
@@ -169,7 +210,9 @@ public class ItemPropertyLayout extends Layout {
 			}
 			
 			//Place the button to the end
-			dialogButton.setBounds(new Rectangle(compositeSize.width - buttonSize.x, 0, buttonSize.x, buttonSize.y));
+			int buttonStart = getButtonStart(compositeSize.height, data);
+			dialogButton.setBounds(new Rectangle(compositeSize.width - buttonSize.x, buttonStart, buttonSize.x, buttonSize.y));
+			dialogButton.setVisible(data.buttonVisible);
 			availableWidth -= buttonSize.x + horizontalSpacing;
 			
 			//Now we have the available width for the control
@@ -187,13 +230,5 @@ public class ItemPropertyLayout extends Layout {
 				mainControl.setBounds(startEditorX, 0, availableWidth, controlSize.y);
 			}
 		}
-	}
-	
-	public void setButtonSize(Point size){
-		this.buttonSize = size;
-	}
-	
-	public void setLabelSize(Point size){
-		this.labelSize = size;
 	}
 }

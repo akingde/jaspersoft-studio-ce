@@ -102,6 +102,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 		return text;
 	}
 	
+	@Override
 	public void handleEdit(Control txt, IWItemProperty wiProp) {
 		if (wiProp == null)
 			return;

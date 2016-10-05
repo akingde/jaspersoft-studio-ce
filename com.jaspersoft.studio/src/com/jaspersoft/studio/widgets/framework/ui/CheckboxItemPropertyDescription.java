@@ -25,7 +25,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
  * Property Description to show a checkbox and store the true and false value for the 
  * property
  */
-public class CheckboxItemPropertyDescription extends TextPropertyDescription<Boolean> {
+public class CheckboxItemPropertyDescription extends AbstractExpressionPropertyDescription<Boolean> {
 
 	// Constants for true / false values
 	// Note: HC understands only these string values

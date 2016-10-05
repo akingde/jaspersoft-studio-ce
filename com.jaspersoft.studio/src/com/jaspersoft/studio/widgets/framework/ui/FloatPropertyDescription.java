@@ -94,6 +94,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 		return text;
 	}
 	
+	@Override
 	public void handleEdit(Control txt, IWItemProperty wiProp) {
 		if (wiProp == null)
 			return;

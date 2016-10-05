@@ -31,7 +31,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
  * 
  * @author Orlandin Marco
  */
-public class ColorPropertyDescription<T> extends TextPropertyDescription<T> {
+public class ColorPropertyDescription<T> extends AbstractExpressionPropertyDescription<T> {
 
 	public ColorPropertyDescription() {
 		super();
@@ -81,8 +81,6 @@ public class ColorPropertyDescription<T> extends TextPropertyDescription<T> {
 		for (Control c : simpleEditor.getChildren()){
 			setupContextMenu(c, wiProp);
 		}
-
-		setupContextMenu(textExpression, wiProp);
 		cmp.switchToSecondContainer();
 		return cmp;
 	}

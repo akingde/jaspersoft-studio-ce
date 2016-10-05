@@ -19,7 +19,7 @@ import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
-public class ComboItemPropertyDescription<T> extends TextPropertyDescription<T> {
+public class ComboItemPropertyDescription<T> extends AbstractExpressionPropertyDescription<T> {
 
 	protected String[][] keyValues;
 

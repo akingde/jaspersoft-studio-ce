@@ -76,6 +76,9 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 	private IPropertyEditor dialogPropertyEditor = new PropertyEditorAdapter() {
 		
 		public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
+			//Avoid to set both the fields so switching back from expression to value will keep 
+			//the value of the other one; this happen only inside the dialog, when it is closed
+			//only one of the two value is keep (the selected one)
 			if (isExpressionMode){
 				expressionValue = valueExpression;
 			} else {
@@ -190,6 +193,7 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		itemProperty.setLayoutData(new GridData(GridData.FILL_BOTH));
 		ItemPropertyLayoutData contentLayout = new ItemPropertyLayoutData();
 		contentLayout.expressionFillVertical = true;
+		contentLayout.buttonVisible = false;
 		itemProperty.setContentLayoutData(contentLayout);
 		itemProperty.setExpressionContext(context);
 		
