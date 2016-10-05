@@ -50,7 +50,6 @@ import net.sf.jasperreports.data.cache.DataSnapshot;
 import net.sf.jasperreports.data.cache.PopulatedSnapshotCacheHandler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.SimpleReportContext;
@@ -184,17 +183,18 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 							itemCache.setSelection(true);
 							try {
 								Map<String, Object> hm = container.getJrContext().getJRParameters();
-								DataSnapshot snapshot = (DataSnapshot) JRLoader.loadObject(new File(fname));
-								if (snapshot instanceof JssDataSnapshot)
+								Object obj = JRLoader.loadObject(new File(fname));
+								if (obj instanceof JssDataSnapshot) {
+									JssDataSnapshot snapshot = (JssDataSnapshot) obj;
 									DataSnapshotManager.setDataSnapshot(hm,
 											new JSSColumnDataCacheHandler(((JssDataSnapshot) snapshot).getSnapshot(),
 													((JssDataSnapshot) snapshot).getCreationTimestamp()),
 											false);
-								else
-									DataSnapshotManager.setDataSnapshot(hm, new PopulatedSnapshotCacheHandler(snapshot), false);
+								} else if (obj instanceof DataSnapshot)
+									DataSnapshotManager.setDataSnapshot(hm, new PopulatedSnapshotCacheHandler((DataSnapshot) obj), false);
 								SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
 								reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
-							} catch (JRException e1) {
+							} catch (Exception e1) {
 								UIUtils.showError(e1);
 							}
 						}

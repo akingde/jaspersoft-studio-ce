@@ -84,7 +84,7 @@ public class ElementPreviewer {
 			hm = DatasetReader.prepareParameters(jConf, 100);
 
 			DataAdapterDescriptor da = prepareDataAdapter(jConf, jDesign);
-			DataSnapshotManager.setDataSnapshot(hm, fromCache);
+			DataSnapshotManager.setDataSnapshot(hm, !fromCache);
 
 			JasperPrint jrPrint = DatasetReader.fillReport(jConf, jDesign.getMainDesignDataset(), da, jrobj, hm);
 
