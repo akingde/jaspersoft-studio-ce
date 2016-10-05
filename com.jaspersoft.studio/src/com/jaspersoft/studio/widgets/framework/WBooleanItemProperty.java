@@ -79,6 +79,9 @@ public class WBooleanItemProperty extends WItemProperty {
 				expressionValue=new JRDesignExpression(staticValue);
 				staticValue=null;
 			}
+			else {
+				getPropertyEditor().removeProperty(getPropertyName() + ".customSimpleMode");
+			}
 			getPropertyEditor().createUpdateProperty(getPropertyName(), staticValue, expressionValue);
 			updateWidget();
 			// Notifies the listeners of the new expression

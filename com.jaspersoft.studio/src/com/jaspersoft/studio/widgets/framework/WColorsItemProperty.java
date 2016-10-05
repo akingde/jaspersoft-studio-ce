@@ -92,6 +92,9 @@ public class WColorsItemProperty extends WItemProperty {
 				staticValue=null;
 				expressionValue=new JRDesignExpression(colorsSB.toString());
 			}
+			else {
+				getPropertyEditor().removeProperty(getPropertyName() + ".customSimpleMode");
+			}
 			getPropertyEditor().createUpdateProperty(getPropertyName(), staticValue, expressionValue);
 			updateWidget();
 			// Notifies the listeners of the new expression
