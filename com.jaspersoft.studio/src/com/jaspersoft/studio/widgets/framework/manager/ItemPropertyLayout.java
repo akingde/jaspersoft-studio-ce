@@ -11,7 +11,6 @@ package com.jaspersoft.studio.widgets.framework.manager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -24,10 +23,8 @@ import com.jaspersoft.studio.widgets.framework.WItemProperty;
  * Layout used inside a {@link WItemProperty}, to handle the placement of the 
  * label to open the expression editor, the widget and the dialog button. Optionally
  * it can have as first element a title label
- * As layout data it can use a standard grid data, but from that only the 
- * vertical alignment with value SWT.Fill is used, if the value is not SWT.Fill
- * will be used also the height hint to know which should be the height of the widget.
- * The layout data is read only from the control widget.
+ * As layout data it use an {@link ItemPropertyLayoutData}, set directly on the layouted {@link WItemProperty}
+ * The layout data can be used to set the size of of fill status of both the expression control or simple control
  * If the {@link WItemProperty} layouted by this is not visible the size of everything will be 0
  */
 public class ItemPropertyLayout extends Layout {
@@ -90,20 +87,21 @@ public class ItemPropertyLayout extends Layout {
 				width += titleLabel.computeSize(wHint, height).x + horizontalSpacing;
 			}
 			
-			if (wItemProperty.isExpressionMode()){
+			boolean isExpressionMode = wItemProperty.isExpressionMode();
+			if (isExpressionMode){
 				width += labelSize.x + horizontalSpacing;
 			} 
 			
 			//Add the width of the button
 			width += buttonSize.x + horizontalSpacing;
 			
-			GridData data = (GridData)mainControl.getLayoutData();
-			if (data == null) data = new GridData();
+			ItemPropertyLayoutData data = wItemProperty.getContentLayoutData();
+			boolean isControlFillingVertical = isExpressionMode ? data.expressionFillVertical : data.widgetFillVertical;
 			int heightHint = 0;
-			if (data.verticalAlignment == SWT.FILL){
+			if (isControlFillingVertical){
 				heightHint = hHint;
 			} else {
-				heightHint = data.heightHint;
+				heightHint = isExpressionMode ? data.expressionHeightHint : data.widgetHeightHint;
 			}
 			Point controlSize = mainControl.computeSize (wHint, heightHint, flushCache);
 			width += controlSize.x;
@@ -130,18 +128,18 @@ public class ItemPropertyLayout extends Layout {
 			//Subtract from the available height the bottom margin
 			compositeSize.height -= bottomMargin;
 			
+			//Check if the widget is in expression mode
+			boolean isExpressionMode = wItemProperty.isExpressionMode();
 			//Check if the main control has to fill the area vertically
 			boolean isControlFillingVertical = false;
-			GridData data = (GridData)mainControl.getLayoutData();
-			if (data == null) data = new GridData();
-			if (data.verticalAlignment == SWT.FILL){
-				isControlFillingVertical = true;
-			}
+			ItemPropertyLayoutData data = wItemProperty.getContentLayoutData();
+			isControlFillingVertical = isExpressionMode ? data.expressionFillVertical : data.widgetFillVertical;
+			
 			int heightHint = 0;
 			if (isControlFillingVertical){
 				heightHint = compositeSize.height;
 			} else {
-				heightHint = data.heightHint;
+				heightHint = isExpressionMode ? data.expressionHeightHint : data.widgetHeightHint;
 			}
 			
 			int availableWidth = compositeSize.width - leftMargin;
@@ -158,10 +156,9 @@ public class ItemPropertyLayout extends Layout {
 				availableWidth -= titleSize.x + horizontalSpacing;
 			}
 			
-			if (wItemProperty.isExpressionMode()){
+			if (isExpressionMode){
 				expressionLabel.setVisible(true);
-				int labelStartY =  0;
-				expressionLabel.setBounds(new Rectangle(startEditorX, labelStartY, labelSize.x, labelSize.y));
+				expressionLabel.setBounds(new Rectangle(startEditorX, 0, labelSize.x, labelSize.y));
 				
 				//Created the label, update the available space and start of the editor
 				availableWidth -= labelSize.x + horizontalSpacing;
@@ -172,24 +169,26 @@ public class ItemPropertyLayout extends Layout {
 			}
 			
 			//Place the button to the end
-			int dialogButtonStartY = 0;
-			dialogButton.setBounds(new Rectangle(compositeSize.width - buttonSize.x, dialogButtonStartY, buttonSize.x, buttonSize.y));
+			dialogButton.setBounds(new Rectangle(compositeSize.width - buttonSize.x, 0, buttonSize.x, buttonSize.y));
 			availableWidth -= buttonSize.x + horizontalSpacing;
 			
 			//Now we have the available width for the control
 			Point controlSize = mainControl.computeSize (availableWidth, heightHint, flushCache);
-			int startEditorY = 0;
 			//If the height of the control is lower then the available height and the control should fill it start from 0
-			//otherwise it is aligned into the center
-			if (controlSize.y < compositeSize.height){
-				startEditorY = Math.abs((compositeSize.height / 2) - controlSize.y/2);	
-			} else if (controlSize.y > compositeSize.height){
+			if (controlSize.y > compositeSize.height){
 				controlSize.y = compositeSize.height;
 			}
-			mainControl.setBounds(startEditorX, startEditorY, availableWidth, controlSize.y);
+			
+			//center the control on the button if it is smaller than that
+			if (controlSize.y < buttonSize.y){
+				int startY = Math.round((buttonSize.y - controlSize.y) / 2f);
+				mainControl.setBounds(startEditorX, startY, availableWidth, controlSize.y);
+			} else {
+				mainControl.setBounds(startEditorX, 0, availableWidth, controlSize.y);
+			}
 		}
 	}
-
+	
 	public void setButtonSize(Point size){
 		this.buttonSize = size;
 	}

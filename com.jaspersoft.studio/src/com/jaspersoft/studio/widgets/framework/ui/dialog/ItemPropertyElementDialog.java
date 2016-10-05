@@ -10,7 +10,6 @@ package com.jaspersoft.studio.widgets.framework.ui.dialog;
 
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
@@ -22,48 +21,40 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
-import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
-import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
-import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
-import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
+import com.jaspersoft.studio.widgets.framework.WItemProperty;
+import com.jaspersoft.studio.widgets.framework.manager.ItemPropertyLayoutData;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
-import com.jaspersoft.studio.widgets.framework.ui.menu.IMenuProvider;
-import com.jaspersoft.studio.widgets.framework.ui.menu.StandardContextualMenu;
 
 import net.sf.jasperreports.eclipse.ui.util.PersistentLocationTitleAreaDialog;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 /**
- * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- * 
+ * Dialog used to define the value of a property when the edit button is pressed
  */
-public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog implements IExpressionContextSetter, IWItemProperty {
-
-	private Button useExpressionCheckbox;
-	private Control propertyValue;
-	private WTextExpression propertyValueExpression;
-	private ExpressionContext expContext;
-	private Composite dialogArea;
+public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog {
+	
 	private ItemPropertyDescription<?> ipDesc;
-	private StackLayout layout;
-	private Composite stackComposite;
-	private Composite editorComposite;
-	private Composite expressionComposite;
 	
 	private String staticValue;
 	
 	private JRExpression expressionValue;
 	
-	private boolean refresh = false;
+	private WItemProperty itemProperty;
+	
+	protected ExpressionContext context;
+	
+	protected boolean isExpressionMode = false;
 	
 	private IPropertyEditor dialogPropertyEditor = new PropertyEditorAdapter() {
+		
+		public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
+			expressionValue = valueExpression;
+			staticValue = value;
+		};
 		
 		@Override
 		public JRExpression getPropertyValueExpression(String propertyName) {
@@ -76,12 +67,25 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		}
 	};
 
-	public ItemPropertyElementDialog(Shell parentShell, String staticValue, JRExpression expressionValue, ItemPropertyDescription<?> ipDesc) {
+	public ItemPropertyElementDialog(Shell parentShell, ItemPropertyDescription<?> ipDesc, WItemProperty itemProperty) {
+		super(parentShell);
+		this.staticValue = itemProperty.getStaticValue();
+		JRExpression expressionValue = itemProperty.getExpressionValue();
+		this.expressionValue = expressionValue != null ? (JRExpression)expressionValue.clone() : null;
+		this.context = itemProperty.getExpressionContext();
+		this.ipDesc = ipDesc.clone();
+		this.isExpressionMode = itemProperty.isExpressionMode();
+		setSaveSettings(false);
+	}
+	
+	public ItemPropertyElementDialog(Shell parentShell, ItemPropertyDescription<?> ipDesc, String staticValue, JRExpression expressionValue, ExpressionContext context) {
 		super(parentShell);
 		this.staticValue = staticValue;
 		this.expressionValue = expressionValue != null ? (JRExpression)expressionValue.clone() : null;
-		setSaveSettings(false);
+		this.context = context;
 		this.ipDesc = ipDesc.clone();
+		this.isExpressionMode = expressionValue != null;
+		setSaveSettings(false);
 	}
 	
 	@Override
@@ -89,133 +93,55 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		super.configureShell(newShell);
 		newShell.setText(Messages.ItemPropertyElementDialog_shellTitle);
 	}
-
+	
+	protected WItemProperty createProperty(Composite parent, ItemPropertyDescription<?> idDesc, IPropertyEditor editor){
+		return new WItemProperty(parent, SWT.NONE, ipDesc, editor){
+			@Override
+			public boolean isExpressionMode() {
+				return isExpressionMode;
+			}
+		};
+	}
+	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		setTitle(NLS.bind(Messages.ItemPropertyElementDialog_0, ipDesc.getName() != null ? ipDesc.getName() : "")); // $NON-NLS-2$ //$NON-NLS-1$
 		setMessage(ipDesc.getDescription());
-		dialogArea = new Composite(parent, SWT.NONE);
+		Composite dialogArea = new Composite(parent, SWT.NONE);
 		dialogArea.setLayoutData(new GridData(GridData.FILL_BOTH));
 		dialogArea.setLayout(new GridLayout(1, false));
 
-		useExpressionCheckbox = new Button(dialogArea, SWT.CHECK);
+		Button useExpressionCheckbox = new Button(dialogArea, SWT.CHECK);
 		useExpressionCheckbox.setText(Messages.ItemPropertyElementDialog_2);
 		useExpressionCheckbox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		
-		stackComposite = new Composite(dialogArea, SWT.NONE);
-		layout = new StackLayout();
-		stackComposite.setLayout(layout);
-		stackComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		useExpressionCheckbox.setSelection(isExpressionMode);
+		useExpressionCheckbox.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				isExpressionMode = ((Button)e.widget).getSelection();
+				itemProperty.updateWidget();
+			}
+		});
 
-		editorComposite = new Composite(stackComposite, SWT.NONE);
-		editorComposite.setLayout(WidgetFactory.getNoPadLayout(1));
-		//Need a second composite to force the control to not grow on all the visible space
-		Composite editorControlComposite = new Composite(editorComposite, SWT.NONE);
-		editorControlComposite.setLayout(WidgetFactory.getNoPadLayout(1));
-		editorControlComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		propertyValue = ipDesc.createControl(this, editorControlComposite);
+		itemProperty = createProperty(dialogArea, ipDesc, dialogPropertyEditor);
+		itemProperty.setLayoutData(new GridData(GridData.FILL_BOTH));
+		ItemPropertyLayoutData contentLayout = new ItemPropertyLayoutData();
+		contentLayout.expressionFillVertical = true;
+		itemProperty.setContentLayoutData(contentLayout);
+		itemProperty.setExpressionContext(context);
 		
 		//Use as default width a static value, compute the height of the main control basing
 		//assuming as its width the same of the dialog and use the result to calculate the height
 		//to he control height is added a padding of 200 because the dialog has also the title and
 		//buttons area that require space
-		Point controlSize = editorControlComposite.computeSize(500, SWT.DEFAULT);
-		setDefaultSize(500, controlSize.y + 200);
+		Point controlSize = itemProperty.computeSize(500, SWT.DEFAULT);
+		setDefaultSize(500, Math.max(controlSize.y + 200, 300));
+	
+		itemProperty.updateWidget();
 		
-		expressionComposite = new Composite(stackComposite, SWT.NONE);
-		expressionComposite.setLayout(WidgetFactory.getNoPadLayout(1));
-		propertyValueExpression = new WTextExpression(expressionComposite, SWT.NONE);
-		propertyValueExpression.setExpressionContext(this.expContext);
-		propertyValueExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		setValue(staticValue, expressionValue);
-		addListeners();
-
 		return dialogArea;
 	}
 	
-	private void addListeners() {
-		propertyValueExpression.addModifyListener(new ExpressionModifiedListener() {
-			@Override
-			public void expressionModified(ExpressionModifiedEvent event) {
-				if (isRefresh())
-					return;
-				setRefresh(true);
-				try{
-					expressionValue = event.modifiedExpression;
-				} finally {
-					setRefresh(false);
-				}
-			}
-		});
-		
-		useExpressionCheckbox.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (isRefresh())
-					return;
-				if (useExpressionCheckbox.getSelection()){
-					layout.topControl = expressionComposite;
-					useExpressionCheckbox.setSelection(true);
-					propertyValueExpression.setFocus();
-				} else {
-					useExpressionCheckbox.setSelection(false);
-					updateWidget();
-					layout.topControl = editorComposite;
-					propertyValue.setFocus();
-				}
-				stackComposite.layout(true);
-			}
-		});
-	}
-
-	@Override
-	public void setExpressionContext(ExpressionContext expContext) {
-		this.expContext = expContext;
-	}
-
-	@Override
-	public void setRefresh(boolean refreshing) {
-		this.refresh = refreshing;
-	}
-
-	@Override
-	public boolean isRefresh() {
-		return refresh;
-	}
-
-	public void setValue(String staticValue, JRExpression expressionValue) {
-		if (isRefresh())
-			return;
-		setRefresh(true);
-		try {
-			if (expressionValue != null){
-				this.expressionValue = expressionValue;
-			}
-			if (staticValue != null){
-				this.staticValue = staticValue;
-			}
-			if (expressionValue != null) {
-				layout.topControl = expressionComposite;
-				propertyValueExpression.setExpression((JRDesignExpression)expressionValue);
-				useExpressionCheckbox.setSelection(true);
-				propertyValueExpression.setFocus();
-			} else {
-				useExpressionCheckbox.setSelection(false);
-				ipDesc.update(propertyValue,  this);
-				layout.topControl = editorComposite;
-				propertyValue.setFocus();
-			}
-			stackComposite.layout(true);
-		} finally {
-			setRefresh(false);
-		}
-	}
-
-	@Override
-	public Control getControl() {
-		return propertyValue;
-	}
 	
 	public JRExpression getExpressionValue(){
 		return expressionValue;
@@ -224,15 +150,10 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 	public String getStaticValue(){
 		return staticValue;
 	}
-
-	@Override
-	public String getPropertyName() {
-		return ipDesc.getName();
-	}
 	
 	@Override
 	public boolean close() {
-		if (useExpressionCheckbox.getSelection()){
+		if (isExpressionMode){
 			staticValue = null;
 			//if the user deosn't set an expression create it anyway
 			if (expressionValue == null){
@@ -242,39 +163,5 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 			expressionValue = null;
 		}
 		return super.close();
-	}
-
-	/**
-	 * This dialog has is own controls for the expression, so it will force the expression mode to
-	 * false for the {@link ItemPropertyDescription}
-	 */
-	@Override
-	public boolean isExpressionMode() {
-		return false;
-	}
-	
-	@Override
-	public IMenuProvider getContextualMenuProvider() {
-		return StandardContextualMenu.INSTANCE;
-	}
-
-	@Override
-	public void updateWidget() {
-		setRefresh(true);
-		try{
-			ipDesc.update(propertyValue, this);
-		} finally {
-			setRefresh(false);
-		}
-	}
-
-	@Override
-	public IPropertyEditor getPropertyEditor() {
-		return dialogPropertyEditor;
-	}
-
-	@Override
-	public Object getFallbackValue() {
-		return ipDesc.getFallbackValue();
 	}
 }

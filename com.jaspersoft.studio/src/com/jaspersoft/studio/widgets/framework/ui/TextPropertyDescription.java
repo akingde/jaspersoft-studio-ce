@@ -163,9 +163,6 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 	// It makes sense only on E4 platform and Mac OS X operating systems.
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
 		textExpression = new Text(parent, SWT.BORDER);
-		GridData textData = new GridData(GridData.FILL_HORIZONTAL);
-		textData.verticalAlignment = SWT.CENTER;
-		textExpression.setLayoutData(textData);
 		InputHistoryCache.bindText(textExpression, name);
 		textExpression.addFocusListener(new FocusAdapter() {
 
@@ -210,9 +207,17 @@ public class TextPropertyDescription<T> implements ItemPropertyDescription<T> {
 			String txt;
 			boolean isFallback = false;
 			if (wip.isExpressionMode()){
+				//The expression control always fill the available area in both directions
+				GridData textData = new GridData(GridData.FILL_BOTH); 
+				textExpression.setLayoutData(textData);
 				JRExpression expression = wip.getExpressionValue();
-				txt = Misc.nvl(expression.getText());
+				txt = Misc.nvl(expression != null ? expression.getText() : null);
 			} else {
+				
+				GridData textData = new GridData(GridData.FILL_HORIZONTAL);
+				textData.verticalAlignment = SWT.CENTER;
+				textExpression.setLayoutData(textData);
+				
 				if (wip.getStaticValue() != null){
 					txt = wip.getStaticValue();
 				} else if (wip.getFallbackValue() != null){

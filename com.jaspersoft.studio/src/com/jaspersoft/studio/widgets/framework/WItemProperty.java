@@ -38,6 +38,7 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.widgets.framework.manager.ItemPropertyLayout;
+import com.jaspersoft.studio.widgets.framework.manager.ItemPropertyLayoutData;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.dialog.ItemPropertyElementDialog;
@@ -119,6 +120,11 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * Optional label that can be show before the control
 	 */
 	private Label titleLabel = null;
+	
+	/**
+	 * The layout data used to dispose the content
+	 */
+	private ItemPropertyLayoutData contentLayoutData = new ItemPropertyLayoutData();
 	
 	/**
 	 * Expression modify listeners
@@ -348,10 +354,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * Open the dialog to switch between expression and static value
 	 */
 	private void handleEditButton() {
-		String staticValue = getPropertyEditor().getPropertyValue(ipDesc.getName());
-		JRExpression expressionValue = getPropertyEditor().getPropertyValueExpression(ipDesc.getName());
-		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), staticValue, expressionValue, ipDesc);
-		dialog.setExpressionContext(expContext);
+		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), ipDesc, this);
 		if (dialog.open() == Dialog.OK) {
 			setValue(dialog.getStaticValue(), dialog.getExpressionValue());
 		}
@@ -477,5 +480,26 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	public boolean isVisible() {
 		if (!isDisposed()) return getVisible();
 		return false;
+	}
+	
+	/**
+	 * Set the layout for the content of this {@link WItemProperty}, after
+	 * the set operation a layot of this container is triggered
+	 * 
+	 * @param data a not null {@link ItemPropertyLayoutData}
+	 */
+	public void setContentLayoutData(ItemPropertyLayoutData data){
+		Assert.isNotNull(data);
+		this.contentLayoutData = data;
+		layout();
+	}
+	
+	/**
+	 * Return the current layout data for this container
+	 * 
+	 * @return a not null {@link ItemPropertyLayoutData}
+	 */
+	public ItemPropertyLayoutData getContentLayoutData(){
+		return contentLayoutData;
 	}
 }

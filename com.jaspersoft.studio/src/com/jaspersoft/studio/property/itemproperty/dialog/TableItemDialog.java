@@ -134,11 +134,9 @@ public class TableItemDialog extends AItemDialog {
 		}.createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				StandardItemProperty prop = new StandardItemProperty("newname", //$NON-NLS-1$
-						"value", null); //$NON-NLS-1$
+				StandardItemProperty prop = new StandardItemProperty("newname", "value", null); //$NON-NLS-1$
 				descriptor.setOldItemProperty(null);
-				ItemPropertyDialog dialog = new ItemPropertyDialog(getShell(), prop, descriptor);
-				dialog.setExpressionContext(currentExpContext);
+				ItemPropertyDialog dialog = new ItemPropertyDialog(getShell(), prop, descriptor, currentExpContext);
 				if (openChildDialog(dialog) == Window.OK)
 					return dialog.getValue();
 				return null;
@@ -159,8 +157,7 @@ public class TableItemDialog extends AItemDialog {
 				StandardItemProperty old = input.get(pos);
 				descriptor.setOldItemProperty(old);
 				StandardItemProperty prop = (StandardItemProperty) old.clone();
-				ItemPropertyDialog dialog = new ItemPropertyDialog(getShell(), prop, descriptor);
-				dialog.setExpressionContext(currentExpContext);
+				ItemPropertyDialog dialog = new ItemPropertyDialog(getShell(), prop, descriptor, currentExpContext);
 				if (openChildDialog(dialog) == Window.OK)
 					input.set(pos, dialog.getValue());
 			}
