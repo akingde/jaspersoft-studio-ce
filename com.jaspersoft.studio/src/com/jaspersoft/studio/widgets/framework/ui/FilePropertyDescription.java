@@ -10,6 +10,8 @@ package com.jaspersoft.studio.widgets.framework.ui;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -24,6 +26,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jface.dialogs.FileSelectionDialog;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
@@ -69,6 +72,22 @@ public class FilePropertyDescription extends TextPropertyDescription<String> {
 					return;
 				handleEdit(simpleControl, wiProp);
 			}
+		});
+		// Flag used to overcome the problem of focus events in Mac OS X
+		// - JSS Bugzilla 42999
+		// - Eclipse Bug 383750
+		// It makes sense only on E4 platform and Mac OS X operating systems.
+		simpleControl.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (UIUtil.isMacAndEclipse4()) {
+					if (((Text) e.getSource()).isDisposed())
+						return;
+					wiProp.updateWidget();
+				}
+			}
+
 		});
 		createToolbarButton(cmp.getSecondContainer(), wiProp);
 
