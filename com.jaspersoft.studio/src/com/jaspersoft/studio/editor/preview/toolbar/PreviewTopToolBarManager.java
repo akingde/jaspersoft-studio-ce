@@ -194,6 +194,7 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 									DataSnapshotManager.setDataSnapshot(hm, new PopulatedSnapshotCacheHandler((DataSnapshot) obj), false);
 								SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
 								reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
+								vexecAction.run();
 							} catch (Exception e1) {
 								UIUtils.showError(e1);
 							}

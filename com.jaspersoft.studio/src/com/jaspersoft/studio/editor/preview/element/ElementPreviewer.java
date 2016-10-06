@@ -26,6 +26,7 @@ import com.jaspersoft.studio.editor.preview.datasnapshot.DataSnapshotManager;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.data.cache.DataSnapshotException;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 import net.sf.jasperreports.engine.JRDataset;
@@ -70,44 +71,63 @@ public class ElementPreviewer {
 		ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(jConf.getClassLoader());
 		Map<String, Object> hm = null;
+		JasperDesign jDesign = jConf.getJasperDesign();
+		JasperReport jrobj = null;
+		DataAdapterDescriptor da = null;
 		try {
-			JasperDesign jDesign = jConf.getJasperDesign();
 			// initialise the report
 			if (jd == null)
 				jd = getJasperDesign(jConf);
+			jd.setUUID(jDesign.getUUID());
 			setupDatasets(jConf, jDesign);
 			replaceElement((JRDesignElement) element.clone(), jd);
 
-			JasperReport jrobj = DatasetReader.compile(jConf, jd);
+			jrobj = DatasetReader.compile(jConf, jd);
 			if (jrobj == null)
 				return null;
 			hm = DatasetReader.prepareParameters(jConf, 100);
 
-			DataAdapterDescriptor da = prepareDataAdapter(jConf, jDesign);
+			da = prepareDataAdapter(jConf, jDesign);
 			DataSnapshotManager.setDataSnapshot(hm, !fromCache);
 
-			JasperPrint jrPrint = DatasetReader.fillReport(jConf, jDesign.getMainDesignDataset(), da, jrobj, hm);
-
-			// create a temp dir and a temp file for html
-			File destDir = FileUtils.createTempDir();
-			String dest = new File(destDir, "index.html").getAbsolutePath();
-			JasperExportManager.getInstance(jConf).exportToHtmlFile(jrPrint, dest);
-			System.out.println(dest);
-			browser.setToolTipText(dest);
-			browser.setUrl(dest);
-			return dest;
+			return doRunReport(jConf, hm, jDesign, jrobj, da);
+		} catch (DataSnapshotException e) {
+			DataSnapshotManager.setDataSnapshot(hm, true);
+			try {
+				return doRunReport(jConf, hm, jDesign, jrobj, da);
+			} catch (Exception e1) {
+				handleException(e);
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-
-			String message = sw.getBuffer().toString();
-			browser.setText("<HTML><BODY><pre>" + message + "</pre></body></html>");
+			handleException(e);
 		} finally {
 			Thread.currentThread().setContextClassLoader(originalClassLoader);
 		}
 
 		return null;
+	}
+
+	protected void handleException(Exception e) {
+		e.printStackTrace();
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+
+		String message = sw.getBuffer().toString();
+		browser.setText("<HTML><BODY><pre>" + message + "</pre></body></html>");
+	}
+
+	protected String doRunReport(JasperReportsConfiguration jConf, Map<String, Object> hm, JasperDesign jDesign,
+			JasperReport jrobj, DataAdapterDescriptor da) throws JRException, IOException {
+		JasperPrint jrPrint = DatasetReader.fillReport(jConf, jDesign.getMainDesignDataset(), da, jrobj, hm);
+
+		// create a temp dir and a temp file for html
+		File destDir = FileUtils.createTempDir();
+		String dest = new File(destDir, "index.html").getAbsolutePath();
+		JasperExportManager.getInstance(jConf).exportToHtmlFile(jrPrint, dest);
+		System.out.println(dest);
+		browser.setToolTipText(dest);
+		browser.setUrl(dest);
+		return dest;
 	}
 
 	protected void setupDatasets(JasperReportsConfiguration jConf, JasperDesign jDesign) throws JRException {
