@@ -8,6 +8,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.ui.dialog;
 
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -21,7 +23,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
@@ -166,6 +170,23 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 			public boolean isExpressionMode() {
 				return isExpressionMode;
 			}
+			
+			/**
+			 * The edit button in the dialog open the expression editor
+			 */
+			@Override
+			protected void handleEditButton() {
+				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					wizard.setValue((JRDesignExpression)getExpressionValue());
+					wizard.setExpressionContext(getExpressionContext());
+					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(getShell(), wizard);
+					if (dialog.open() == Dialog.OK) {
+						JRDesignExpression value = wizard.getValue();
+						setValue(null, value);
+					}
+				}
+			}
 		};
 	}
 	
@@ -193,7 +214,7 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		itemProperty.setLayoutData(new GridData(GridData.FILL_BOTH));
 		ItemPropertyLayoutData contentLayout = new ItemPropertyLayoutData();
 		contentLayout.expressionFillVertical = true;
-		contentLayout.buttonVisible = false;
+		contentLayout.buttonVisibleSimpleMode = false;
 		itemProperty.setContentLayoutData(contentLayout);
 		itemProperty.setExpressionContext(context);
 		

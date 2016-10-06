@@ -353,7 +353,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	/**
 	 * Open the dialog to switch between expression and static value
 	 */
-	private void handleEditButton() {
+	protected void handleEditButton() {
 		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), ipDesc, this);
 		if (dialog.open() == Dialog.OK) {
 			setValue(dialog.getStaticValue(), dialog.getExpressionValue());

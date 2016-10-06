@@ -28,9 +28,14 @@ public class ItemPropertyLayoutData {
 	public int buttonAlignment = SWT.TOP;
 	
 	/**
-	 * Flag used to make the dialog button visible or not
+	 * Flag used to make the dialog button visible or not in the simple mode
 	 */
-	public boolean buttonVisible = true;
+	public boolean buttonVisibleSimpleMode = true;
+	
+	/**
+	 * Flag used to make the dialog button visible or not in the expression mode
+	 */
+	public boolean buttonVisibleExpressionMode = true;
 	
 	/**
 	 * Used to know if the simple control should fill vertically the size of the {@link WItemProperty} in which is created

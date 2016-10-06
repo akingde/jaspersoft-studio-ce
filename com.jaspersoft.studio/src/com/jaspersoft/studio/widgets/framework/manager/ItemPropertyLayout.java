@@ -67,10 +67,11 @@ public class ItemPropertyLayout extends Layout {
 		if(!wItemProperty.isVisible()){
 			return new Point(0, 0);
 		} else {
+			boolean isExpressionMode = wItemProperty.isExpressionMode();
 			//Get informations from the layout data
 			ItemPropertyLayoutData data = wItemProperty.getContentLayoutData();
 			Point labelSize = data.labelSize;
-			Point buttonSize = getButtonSize(hHint, data);
+			Point buttonSize = getButtonSize(hHint, data, isExpressionMode);
 			
 			int width = leftMargin;
 			
@@ -82,7 +83,6 @@ public class ItemPropertyLayout extends Layout {
 				width += titleLabel.computeSize(wHint, height).x + horizontalSpacing;
 			}
 			
-			boolean isExpressionMode = wItemProperty.isExpressionMode();
 			if (isExpressionMode){
 				width += labelSize.x + horizontalSpacing;
 			} 
@@ -114,11 +114,13 @@ public class ItemPropertyLayout extends Layout {
 	 * 
 	 * @param availableheight the maximum available space
 	 * @param data the current {@link ItemPropertyLayoutData}, must be not null
+	 * @param isExpressionMode true if the {@link WItemProperty} is in expression mode, false otherwise
 	 * 
 	 * @return a not null size for the dialog button
 	 */	
-	protected Point getButtonSize(int availableheight, ItemPropertyLayoutData data){
-		if (data.buttonVisible){
+	protected Point getButtonSize(int availableheight, ItemPropertyLayoutData data, boolean isExpressionMode){
+		boolean isVisible = isExpressionMode ? data.buttonVisibleExpressionMode : data.buttonVisibleSimpleMode;
+		if (isVisible){
 			if (data.buttonSize.y <= availableheight || availableheight == -1){
 				return data.buttonSize;
 			} else {
@@ -134,15 +136,17 @@ public class ItemPropertyLayout extends Layout {
 	 * 
 	 * @param availableheight the available height
 	 * @param the current {@link ItemPropertyLayoutData}, must be not null
+	 * @param isExpressionMode true if the {@link WItemProperty} is in expression mode, false otherwise
 	 * 
 	 * @return the Y coordinate of the dialog button
 	 */
-	protected int getButtonStart(int availableheight, ItemPropertyLayoutData data){
-		if (data.buttonVisible){
+	protected int getButtonStart(int availableheight, ItemPropertyLayoutData data, boolean isExpressionMode){
+		boolean isVisible = isExpressionMode ? data.buttonVisibleExpressionMode : data.buttonVisibleSimpleMode;
+		if (isVisible){
 			if (data.buttonAlignment == SWT.END){
-				return availableheight - getButtonSize(availableheight, data).y;
+				return availableheight - getButtonSize(availableheight, data, isExpressionMode).y;
 			} else if (data.buttonAlignment == SWT.CENTER){
-				int buttonHeight = getButtonSize(availableheight, data).y;
+				int buttonHeight = getButtonSize(availableheight, data, isExpressionMode).y;
 				return Math.round((availableheight - buttonHeight)/2f);
 			} 
 			//else reuturn the height 0
@@ -165,13 +169,14 @@ public class ItemPropertyLayout extends Layout {
 			//Subtract from the available height the bottom margin
 			compositeSize.height -= bottomMargin;
 			
+			//Check if the widget is in expression mode
+			boolean isExpressionMode = wItemProperty.isExpressionMode();
+			
 			//Get informations from the layout data
 			ItemPropertyLayoutData data = wItemProperty.getContentLayoutData();
 			Point labelSize = data.labelSize;
-			Point buttonSize = getButtonSize(compositeSize.height, data);
+			Point buttonSize = getButtonSize(compositeSize.height, data, isExpressionMode);
 			
-			//Check if the widget is in expression mode
-			boolean isExpressionMode = wItemProperty.isExpressionMode();
 			//Check if the main control has to fill the area vertically
 			boolean isControlFillingVertical = false;
 			isControlFillingVertical = isExpressionMode ? data.expressionFillVertical : data.widgetFillVertical;
@@ -210,9 +215,9 @@ public class ItemPropertyLayout extends Layout {
 			}
 			
 			//Place the button to the end
-			int buttonStart = getButtonStart(compositeSize.height, data);
+			int buttonStart = getButtonStart(compositeSize.height, data, isExpressionMode);
 			dialogButton.setBounds(new Rectangle(compositeSize.width - buttonSize.x, buttonStart, buttonSize.x, buttonSize.y));
-			dialogButton.setVisible(data.buttonVisible);
+			dialogButton.setVisible(isExpressionMode ? data.buttonVisibleExpressionMode : data.buttonVisibleSimpleMode);
 			availableWidth -= buttonSize.x + horizontalSpacing;
 			
 			//Now we have the available width for the control

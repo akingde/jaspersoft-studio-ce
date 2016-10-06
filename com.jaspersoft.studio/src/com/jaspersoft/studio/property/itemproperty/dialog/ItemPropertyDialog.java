@@ -11,7 +11,9 @@ package com.jaspersoft.studio.property.itemproperty.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -28,7 +30,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.infoList.SelectableComposite;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
@@ -167,6 +171,23 @@ public class ItemPropertyDialog extends PersistentLocationTitleAreaDialog {
 			public boolean isExpressionMode() {
 				return isExpressionMode;
 			}
+			
+			/**
+			 * The edit button in the dialog open the expression editor
+			 */
+			@Override
+			protected void handleEditButton() {
+				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					wizard.setValue((JRDesignExpression)getExpressionValue());
+					wizard.setExpressionContext(getExpressionContext());
+					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(getShell(), wizard);
+					if (dialog.open() == Dialog.OK) {
+						JRDesignExpression value = wizard.getValue();
+						setValue(null, value);
+					}
+				}
+			}
 		};
 	}
 	
@@ -237,7 +258,7 @@ public class ItemPropertyDialog extends PersistentLocationTitleAreaDialog {
 		itemProperty.setLayoutData(new GridData(GridData.FILL_BOTH));
 		ItemPropertyLayoutData contentLayout = new ItemPropertyLayoutData();
 		contentLayout.expressionFillVertical = true;
-		contentLayout.buttonVisible = false;
+		contentLayout.buttonVisibleSimpleMode = false;
 		itemProperty.setContentLayoutData(contentLayout);
 		itemProperty.setExpressionContext(context);
 
@@ -287,7 +308,7 @@ public class ItemPropertyDialog extends PersistentLocationTitleAreaDialog {
 		itemProperty.setLayoutData(new GridData(GridData.FILL_BOTH));
 		ItemPropertyLayoutData contentLayout = new ItemPropertyLayoutData();
 		contentLayout.expressionFillVertical = true;
-		contentLayout.buttonVisible = false;
+		contentLayout.buttonVisibleSimpleMode = false;
 		itemProperty.setContentLayoutData(contentLayout);
 		itemProperty.setExpressionContext(context);
 		dialogArea.layout();
