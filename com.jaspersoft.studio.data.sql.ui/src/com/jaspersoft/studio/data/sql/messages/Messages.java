@@ -105,6 +105,7 @@ public class Messages extends NLS {
 	public static String Factory_7;
 	public static String Factory_8;
 	public static String Factory_9;
+	public static String FieldWidget_0;
 	public static String FromTableColumnsDialog_0;
 	public static String JoinFromTableDialog_0;
 	public static String JoinFromTableDialog_1;

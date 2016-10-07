@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.ATitledDialog;
-
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -45,15 +43,16 @@ import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
 
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+
 public class EditExpressionDialog extends ATitledDialog {
 	private MExpression value;
 
 	public EditExpressionDialog(Shell parentShell) {
 		super(parentShell);
 		setTitle(Messages.EditExpressionDialog_0);
-		setDescription(Messages.EditExpressionDialog_1
-				+ Messages.EditExpressionDialog_2
-				+ Messages.EditExpressionDialog_3);
+		setDescription(
+				Messages.EditExpressionDialog_1 + Messages.EditExpressionDialog_2 + Messages.EditExpressionDialog_3);
 	}
 
 	public void setValue(MExpression value) {
@@ -110,8 +109,7 @@ public class EditExpressionDialog extends ATitledDialog {
 
 			new Label(c, SWT.NONE).setText(Messages.EditExpressionDialog_5);
 
-			bindingContext.bindValue(
-					SWTObservables.observeSelection(prevoperator),
+			bindingContext.bindValue(SWTObservables.observeSelection(prevoperator),
 					PojoObservables.observeValue(this, "prevcond")); //$NON-NLS-1$
 		} else {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -120,9 +118,8 @@ public class EditExpressionDialog extends ATitledDialog {
 		}
 
 		Control w = Factory.createWidget(cmp, operands, 0, value);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_BEGINNING
-				| GridData.HORIZONTAL_ALIGN_END);
+		GridData gd = new GridData(
+				GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING | GridData.HORIZONTAL_ALIGN_END);
 		gd.widthHint = 250;
 		w.setLayoutData(gd);
 
@@ -157,6 +154,9 @@ public class EditExpressionDialog extends ATitledDialog {
 	private Map<String, Composite> map = new HashMap<String, Composite>();
 	private Composite rcmp;
 	private StackLayout stackLayout;
+	private Button opDel;
+	private Button opEdit;
+	private List inlist;
 
 	private void showRight() {
 		Composite cmp = map.get(getOperator());
@@ -173,12 +173,10 @@ public class EditExpressionDialog extends ATitledDialog {
 				cmp.setLayout(layout);
 
 				Control w = Factory.createWidget(cmp, operands, 1, value);
-				GridData gd = new GridData(GridData.FILL_HORIZONTAL
-						| GridData.HORIZONTAL_ALIGN_CENTER);
+				GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_CENTER);
 				gd.widthHint = 250;
 				w.setLayoutData(gd);
-			} else if (op.getNrOperands() == 3
-					&& (op == Operator.BETWEEN || op == Operator.NOTBETWEEN)) {
+			} else if (op.getNrOperands() == 3 && (op == Operator.BETWEEN || op == Operator.NOTBETWEEN)) {
 				cmp = new Composite(rcmp, SWT.NONE);
 				GridLayout layout = new GridLayout(3, false);
 				layout.marginHeight = 0;
@@ -186,17 +184,14 @@ public class EditExpressionDialog extends ATitledDialog {
 				cmp.setLayout(layout);
 
 				Control w = Factory.createWidget(cmp, operands, 1, value);
-				GridData gd = new GridData(GridData.FILL_HORIZONTAL
-						| GridData.HORIZONTAL_ALIGN_CENTER);
+				GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_CENTER);
 				gd.widthHint = 250;
 				w.setLayoutData(gd);
 
-				new Label(cmp, SWT.NONE)
-						.setText(Messages.EditExpressionDialog_6);
+				new Label(cmp, SWT.NONE).setText(Messages.EditExpressionDialog_6);
 
 				w = Factory.createWidget(cmp, operands, 2, value);
-				gd = new GridData(GridData.FILL_HORIZONTAL
-						| GridData.HORIZONTAL_ALIGN_CENTER);
+				gd = new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_CENTER);
 				gd.widthHint = 250;
 				w.setLayoutData(gd);
 			} else {
@@ -214,8 +209,7 @@ public class EditExpressionDialog extends ATitledDialog {
 	}
 
 	protected void createInList(Composite cmp) {
-		final List inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY
-				| SWT.BORDER);
+		inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 3;
 		gd.widthHint = 250;
@@ -232,23 +226,22 @@ public class EditExpressionDialog extends ATitledDialog {
 			}
 		});
 
-		op3 = new Button(cmp, SWT.PUSH);
-		op3.setText(Messages.EditExpressionDialog_8);
+		opEdit = new Button(cmp, SWT.PUSH);
+		opEdit.setText(Messages.EditExpressionDialog_8);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		op3.setLayoutData(gd);
-		op3.addSelectionListener(new SelectionAdapter() {
+		opEdit.setLayoutData(gd);
+		opEdit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleEditInList(inlist);
 			}
 		});
 
-		op3 = new Button(cmp, SWT.PUSH);
-		op3.setText(Messages.EditExpressionDialog_9);
-		gd = new GridData(GridData.FILL_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_BEGINNING);
-		op3.setLayoutData(gd);
-		op3.addSelectionListener(new SelectionAdapter() {
+		opDel = new Button(cmp, SWT.PUSH);
+		opDel.setText(Messages.EditExpressionDialog_9);
+		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		opDel.setLayoutData(gd);
+		opDel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int index = inlist.getSelectionIndex() + 1;
@@ -256,6 +249,12 @@ public class EditExpressionDialog extends ATitledDialog {
 					operands.remove(index);
 					showInList(inlist);
 				}
+			}
+		});
+		inlist.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setupListButtons();
 			}
 		});
 		inlist.addMouseListener(new MouseListener() {
@@ -277,6 +276,13 @@ public class EditExpressionDialog extends ATitledDialog {
 		});
 
 		showInList(inlist);
+		setupListButtons();
+	}
+
+	private void setupListButtons() {
+		boolean canEdit = inlist.getSelectionCount() > 0;
+		opEdit.setEnabled(canEdit);
+		opDel.setEnabled(canEdit);
 	}
 
 	private void handleAddInList(List inlist) {
