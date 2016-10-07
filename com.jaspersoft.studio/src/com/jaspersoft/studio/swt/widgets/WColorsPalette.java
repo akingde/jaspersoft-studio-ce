@@ -427,6 +427,10 @@ public class WColorsPalette extends Composite implements IRefreshableList{
 		paletteListeners.remove(listener);
 	}
 	
+	public TableViewer getPaletteViewer() {
+		return tableViewerElements;
+	}
+	
 	@Override
 	public void dispose() {
 		super.dispose();
