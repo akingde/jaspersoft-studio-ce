@@ -66,7 +66,16 @@ public class WColorsItemProperty extends WItemProperty {
 		}
 	}
 	
-	private boolean isCustomSimpleMode(){
+	public void setCustomSimpleModeUsage() {
+		String simpleMode = getPropertyName() + ".customSimpleMode";
+		getPropertyEditor().createUpdateProperty(simpleMode, "true", null);
+	}
+	
+	public void removeCustomSimpleModeUsage() {
+		getPropertyEditor().removeProperty(getPropertyName() + ".customSimpleMode");
+	}
+	
+	public boolean isCustomSimpleMode(){
 		String customSimpleMode = getPropertyEditor().getPropertyValue(getPropertyName()+".customSimpleMode");
 		return "true".equals(customSimpleMode);
 	}
@@ -76,8 +85,7 @@ public class WColorsItemProperty extends WItemProperty {
 		setRefresh(true);
 		try {
 			if(staticValue!=null){
-				String simpleMode = getPropertyName() + ".customSimpleMode";
-				getPropertyEditor().createUpdateProperty(simpleMode, "true", null);
+				setCustomSimpleModeUsage();
 				String[] colors = Colors.decodeHexColorsArray(staticValue);
 				StringBuffer colorsSB = new StringBuffer("Arrays.asList(");
 				for(int i=0;i<colors.length;i++){
@@ -93,7 +101,7 @@ public class WColorsItemProperty extends WItemProperty {
 				expressionValue=new JRDesignExpression(colorsSB.toString());
 			}
 			else {
-				getPropertyEditor().removeProperty(getPropertyName() + ".customSimpleMode");
+				removeCustomSimpleModeUsage();
 			}
 			getPropertyEditor().createUpdateProperty(getPropertyName(), staticValue, expressionValue);
 			updateWidget();
