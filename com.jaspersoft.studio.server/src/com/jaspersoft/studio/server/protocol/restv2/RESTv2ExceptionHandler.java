@@ -60,8 +60,12 @@ public class RESTv2ExceptionHandler {
 					handleErrorDescriptor(res, monitor, status);
 				else if (ct.equals("application/json"))
 					handleErrorDescriptor(res, monitor, status);
-				else if (ct.equals("application/collection.errorDescriptor+xml"))
+				else if (ct.contains("application/collection.errorDescriptor+xml")
+						|| ct.contains("application/collection.errorDescriptor+json"))
 					handleErrorDescriptorList(res, monitor, status);
+				else if (ct.contains("application/errorDescriptor+json")
+						|| ct.contains("application/errorDescriptor+xml"))
+					handleErrorDescriptor(res, monitor, status);
 				else
 					handleErrorDescriptor(res, monitor, status);
 			}
@@ -72,7 +76,8 @@ public class RESTv2ExceptionHandler {
 		case 404:
 		case 500:
 			if (ct != null) {
-				if (ct.contains("application/collection.errorDescriptor+xml"))
+				if (ct.contains("application/collection.errorDescriptor+xml")
+						|| ct.contains("application/collection.errorDescriptor+json"))
 					handleErrorDescriptorList(res, monitor, status);
 				else if (ct.contains("xml"))
 					handleErrorDescriptor(res, monitor, status);
@@ -80,9 +85,9 @@ public class RESTv2ExceptionHandler {
 					System.out.println(res.readEntity(String.class));
 					msg = res.getStatusInfo().getReasonPhrase() + "\n";
 					throw new HttpResponseException(status, msg);
-				} else if (ct.contains("application/errorDescriptor+json")) {
+				} else if (ct.contains("application/errorDescriptor+json")
+						|| ct.contains("application/errorDescriptor+xml"))
 					handleErrorDescriptor(res, monitor, status);
-				}
 			} else {
 				System.out.println(res.readEntity(String.class));
 				msg = res.getStatusInfo().getReasonPhrase() + "\n";
@@ -115,8 +120,9 @@ public class RESTv2ExceptionHandler {
 		res.bufferEntity();
 		try {
 			ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
-			String msg = ed.getErrorCode() + "\n" + buildMessage(monitor, "", ed);
-			if (!ed.getErrorCode().contains("{0}") && ed.getParameters() != null)
+			String msg = ed.getErrorCode() != null ? ed.getErrorCode() + "\n" : "";
+			msg += buildMessage(monitor, "", ed);
+			if (ed.getErrorCode() != null && !ed.getErrorCode().contains("{0}") && ed.getParameters() != null)
 				for (String str : ed.getParameters())
 					msg += "\n" + str;
 			throw new HttpResponseException(status, msg);
