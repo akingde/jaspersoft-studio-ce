@@ -24,6 +24,7 @@ import net.sf.jasperreports.data.DataFileUtils;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.apache.commons.io.IOUtils;
@@ -59,8 +60,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class XMLWizardDataEditorComposite extends
-		ATreeWizardDataEditorComposite {
+public class XMLWizardDataEditorComposite extends ATreeWizardDataEditorComposite {
 
 	private static final int JOB_DELAY = 300;
 	private XMLDocumentManager documentManager;
@@ -103,15 +103,13 @@ public class XMLWizardDataEditorComposite extends
 					try {
 						documentManager.setDocument(getXMLDocument(da));
 						documentManager.setJasperConfiguration(jConfig);
-						treeViewer.setInput(documentManager
-								.getXMLDocumentModel());
+						treeViewer.setInput(documentManager.getXMLDocumentModel());
 						treeViewer.expandToLevel(2);
 						decorateTreeUsingQueryText();
 					} catch (Exception e) {
 						getStatusBar().showError(e);
 						treeViewer.getTree().removeAll();
-						treeViewer
-								.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+						treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
 					}
 				}
 			});
@@ -138,11 +136,8 @@ public class XMLWizardDataEditorComposite extends
 				TreeSelection s = (TreeSelection) treeViewer.getSelection();
 				if (s.getFirstElement() instanceof XMLNode) {
 					XMLNode xmlNode = (XMLNode) s.getFirstElement();
-					String xPathExpression = documentManager
-							.getXPathExpression(null, xmlNode);
-					queryTextArea
-							.setText((xPathExpression != null) ? xPathExpression
-									: ""); //$NON-NLS-1$
+					String xPathExpression = documentManager.getXPathExpression(null, xmlNode);
+					queryTextArea.setText((xPathExpression != null) ? xPathExpression : ""); //$NON-NLS-1$
 				}
 			}
 		});
@@ -170,12 +165,9 @@ public class XMLWizardDataEditorComposite extends
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			if (!isDisposed()) {
-				monitor.beginTask(
-						Messages.XPathWizardDataEditorComposite_TaskName,
-						IProgressMonitor.UNKNOWN);
+				monitor.beginTask(Messages.XPathWizardDataEditorComposite_TaskName, IProgressMonitor.UNKNOWN);
 				String query = queryTextArea.getText();
-				treeLabelProvider.setSelectedNodes(documentManager
-						.getSelectableNodes(query));
+				treeLabelProvider.setSelectedNodes(documentManager.getSelectableNodes(query));
 				treeViewer.refresh();
 				monitor.done();
 				return Status.OK_STATUS;
@@ -209,23 +201,21 @@ public class XMLWizardDataEditorComposite extends
 	 * @throws SAXException
 	 * @throws IOException
 	 * @throws ParserConfigurationException
-	 * @throws JRException 
+	 * @throws JRException
 	 */
 	protected Document getXMLDocument(final DataAdapterDescriptor da)
 			throws SAXException, IOException, ParserConfigurationException, JRException {
 		Document doc = null;
 		DataFileStream ins = null;
 		try {
-			DataFile df = ((XmlDataAdapter)da.getDataAdapter()).getDataFile();
+			DataFile df = ((XmlDataAdapter) da.getDataAdapter()).getDataFile();
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			// FIXME - We need to proper populate the map!!!
-			ins = DataFileUtils.instance(
-					getJasperReportsConfiguration()).getDataStream(df, parameters);
-			doc = JRXmlUtils.parse(ins,	XMLUtils.isNamespaceAware(
-					(XmlDataAdapter) da.getDataAdapter(), 
+			ins = DataFileUtils.instance(new ParameterContributorContext(getJasperReportsConfiguration(), null, null))
+					.getDataStream(df, parameters);
+			doc = JRXmlUtils.parse(ins, XMLUtils.isNamespaceAware((XmlDataAdapter) da.getDataAdapter(),
 					getJasperReportsConfiguration().getJasperDesign()));
-		}
-		finally {
+		} finally {
 			IOUtils.closeQuietly(ins);
 		}
 		return doc;

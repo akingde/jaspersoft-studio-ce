@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard;
 
@@ -20,6 +16,7 @@ import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
+import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 
 import org.eclipse.core.resources.IProject;
@@ -64,7 +61,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 		super();
 		setNeedsProgressMonitor(true);
 	}
-	
+
 	/**
 	 * Sets the wizard dialog that is used to display the wizard.
 	 * 
@@ -133,9 +130,9 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 			getWizardDialog().setTestButtonEnabled(false);
 			try {
 				getContainer().run(true, true, new CheckedRunnableWithProgress() {
-					
+
 					private DataAdapterService daService = null;
-					
+
 					@Override
 					protected void runOperations(IProgressMonitor monitor) {
 						monitor.beginTask("Testing Data Adapter", SWT.INDETERMINATE);
@@ -158,7 +155,8 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 
 							getConfig().setClassLoader(cl);
 
-							daService = DataAdapterServiceUtil.getInstance(getConfig()).getService(da);
+							daService = DataAdapterServiceUtil.getInstance(new ParameterContributorContext(getConfig(), null, null))
+									.getService(da);
 							daService.test();
 							UIUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -175,10 +173,10 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 							Thread.currentThread().setContextClassLoader(oldCL);
 						}
 					}
-					
+
 					@Override
 					protected void abortOperationInvoked() throws InterruptedException {
-						if(daService!=null) {
+						if (daService != null) {
 							daService.dispose();
 							daService = null;
 						}

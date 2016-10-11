@@ -68,6 +68,7 @@ import net.sf.jasperreports.data.DataFileStream;
 import net.sf.jasperreports.data.DataFileUtils;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 /**
@@ -431,8 +432,9 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 					Document doc = null;
 					Map<String, Object> parameters = jConfig.getJRParameters();
 					if (parameters == null)
-						parameters = new HashMap<String, Object>(); 
-					ins = DataFileUtils.instance(jConfig).getDataStream(dataFile, parameters);
+						parameters = new HashMap<String, Object>();
+					ins = DataFileUtils.instance(new ParameterContributorContext(jConfig, null, null))
+							.getDataStream(dataFile, parameters);
 					doc = JRXmlUtils.parse(ins, namespaceAware);
 					documentManager.setDocument(doc);
 					documentManager.setJasperConfiguration(XPathQueryDesigner.this.container.getjConfig());

@@ -55,6 +55,7 @@ import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.data.xlsx.XlsxDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -520,7 +521,8 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 			DataAdapterDescriptor da = getDataAdapter();
 			if (jConfig == null)
 				jConfig = JasperReportsConfiguration.getDefaultJRConfig();
-			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
+			DataAdapterService das = DataAdapterServiceUtil
+					.getInstance(new ParameterContributorContext(jConfig, null, null)).getService(da.getDataAdapter());
 			JasperDesign jd = new JasperDesign();
 			jd.setJasperReportsContext(jConfig);
 			jConfig.setJasperDesign(jd);

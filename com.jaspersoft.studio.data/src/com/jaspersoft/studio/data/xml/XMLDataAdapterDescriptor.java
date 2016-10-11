@@ -48,6 +48,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuter;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
@@ -104,7 +105,8 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor
 		try {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			// FIXME - We need to proper populate the map!!!
-			ins = DataFileUtils.instance(jConfig).getDataStream(df, parameters);
+			ins = DataFileUtils.instance(new ParameterContributorContext(jConfig, null, null)).getDataStream(df,
+					parameters);
 			doc = JRXmlUtils.parse(ins, XMLUtils.isNamespaceAware(d, jConfig.getJasperDesign()));
 		} catch (Exception e) {
 			UIUtils.showError(e);
