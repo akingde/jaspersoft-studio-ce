@@ -233,7 +233,7 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 		return ICopyable.RESULT.NOT_COPYABLE;
 	}
 
-	private PublishOptions publishOptions;
+	private transient PublishOptions publishOptions;
 
 	public PublishOptions getPublishOptions() {
 		if (publishOptions == null)
