@@ -18,6 +18,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRParagraph;
+import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
@@ -216,6 +217,15 @@ public class ConvertTextIntoStatic extends ACachedSelectionAction {
 		labelObject.setPrintWhenGroupChanges(originGroup != null ? (JRGroup)originGroup.clone() : null);
 		
 		labelObject.setRemoveLineWhenBlank(textObject.isRemoveLineWhenBlank());
+		
+		//Transfer the properties map and expression from an element to the other
+		for(String propertyName : textObject.getPropertiesMap().getPropertyNames()){
+			String propertyValue = textObject.getPropertiesMap().getProperty(propertyName);
+			labelObject.getPropertiesMap().setProperty(propertyName, propertyValue);
+		}
+		for(JRPropertyExpression propertyExpression : textObject.getPropertyExpressionsList()){
+			labelObject.addPropertyExpression((JRPropertyExpression)propertyExpression.clone());
+		}
 	}
 	
 	/**
