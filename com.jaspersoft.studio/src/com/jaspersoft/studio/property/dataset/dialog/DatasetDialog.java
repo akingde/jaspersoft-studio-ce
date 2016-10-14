@@ -334,7 +334,7 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 		CTabItem dataPreviewtab = new CTabItem(tabFolder, SWT.NONE);
 		dataPreviewtab.setText(Messages.DatasetDialog_DataPreviewTab);
 
-		dataPreviewTable = new DataPreviewTable(tabFolder, this, background);
+		dataPreviewTable = new DataPreviewTable(dataquery, tabFolder, this, background);
 
 		dataPreviewtab.setControl(dataPreviewTable.getControl());
 	}

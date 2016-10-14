@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -19,10 +15,14 @@ import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.operation.ModalContext;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
@@ -43,20 +43,23 @@ public class RunWithProgressBar implements IRunnableContext {
 		pb.setVisible(false);
 	}
 
-	public void run(boolean fork, boolean cancelable, IRunnableWithProgress runnable) throws InvocationTargetException,
-			InterruptedException {
-		IProgressMonitor monitor = getProgressMonitor();
+	public void run(boolean fork, boolean cancelable, IRunnableWithProgress runnable)
+			throws InvocationTargetException, InterruptedException {
+		IProgressMonitor monitor = getProgressMonitor(cancelable);
 
 		ModalContext.run(runnable, true, monitor, UIUtils.getDisplay());
+
 	}
 
-	public IProgressMonitor getProgressMonitor() {
-		return new ProgressBarMonitor(pb);
+	public IProgressMonitor getProgressMonitor(boolean cancelable) {
+		return new ProgressBarMonitor(pb, cancelable);
 	}
 
 	class ProgressBarMonitor implements IProgressMonitor {
 		private ProgressBar progressBar;
 		private boolean cancelled;
+		private boolean cancelable;
+		private Button bCancel;
 
 		/**
 		 * Create a new ProgressBarMonitor.
@@ -64,8 +67,9 @@ public class RunWithProgressBar implements IRunnableContext {
 		 * @param progressBar
 		 *          the ProgressBar control
 		 */
-		public ProgressBarMonitor(ProgressBar progressBar) {
+		public ProgressBarMonitor(ProgressBar progressBar, boolean cancelable) {
 			this.progressBar = progressBar;
+			this.cancelable = cancelable;
 		}
 
 		public void beginTask(String name, int totalWork) {
@@ -75,6 +79,18 @@ public class RunWithProgressBar implements IRunnableContext {
 				progressBar.setMinimum(0);
 				progressBar.setMaximum(totalWork);
 				progressBar.setVisible(true);
+			}
+
+			if (cancelable && (bCancel == null || bCancel.isDisposed())) {
+				bCancel = new Button(progressBar.getParent(), SWT.FLAT | SWT.PUSH);
+				bCancel.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/delete_style.gif"));
+				bCancel.addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						setCanceled(true);
+					}
+				});
 			}
 		}
 
@@ -104,6 +120,10 @@ public class RunWithProgressBar implements IRunnableContext {
 		}
 
 		public void done() {
+			if (bCancel != null && !bCancel.isDisposed()) {
+				bCancel.dispose();
+				bCancel = null;
+			}
 			if (!progressBar.isDisposed()) {
 				progressBar.setVisible(false);
 			}

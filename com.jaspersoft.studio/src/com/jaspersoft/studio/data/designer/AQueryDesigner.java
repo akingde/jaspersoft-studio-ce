@@ -62,6 +62,10 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 		container.run(fork, cancelable, runnable);
 	}
 
+	public AQueryDesignerContainer getContainer() {
+		return container;
+	}
+
 	public JasperDesign getjDesign() {
 		return jDesign;
 	}

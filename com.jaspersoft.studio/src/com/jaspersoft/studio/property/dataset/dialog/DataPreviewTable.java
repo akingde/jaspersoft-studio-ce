@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.data.IDataPreviewInfoProvider;
+import com.jaspersoft.studio.data.designer.AQueryDesignerContainer;
 import com.jaspersoft.studio.data.reader.DatasetReader;
 import com.jaspersoft.studio.data.reader.DatasetReaderListener;
 import com.jaspersoft.studio.messages.Messages;
@@ -92,9 +93,12 @@ public class DataPreviewTable implements DatasetReaderListener {
 	private List<DataPreviewBean> previewItems;
 	private TableFillerThread tableFiller;
 	private int readItems = 0;
+	private AQueryDesignerContainer designer;
 
-	public DataPreviewTable(Composite parent, IDataPreviewInfoProvider previewInfoProvider, Color background) {
+	public DataPreviewTable(AQueryDesignerContainer designer, Composite parent,
+			IDataPreviewInfoProvider previewInfoProvider, Color background) {
 		this.previewInfoProvider = previewInfoProvider;
+		this.designer = designer;
 		this.previewItems = new ArrayList<DataPreviewTable.DataPreviewBean>(RECORDS_NUM_100);
 		this.background = background;
 		createControl(parent);

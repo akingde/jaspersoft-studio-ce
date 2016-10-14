@@ -11,6 +11,7 @@ package com.jaspersoft.studio.editor.preview.view.control;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -632,16 +633,7 @@ public class ReportControler {
 	}
 
 	protected void setupRecordCounters() {
-		List<ScriptletFactory> sexts = jrContext.getExtensions(ScriptletFactory.class);
-		if (sexts == null)
-			sexts = new ArrayList<ScriptletFactory>();
-		scfactory = new RecordCountScriptletFactory();
-		int ind = sexts.indexOf(scfactory);
-		if (ind < 0) {
-			sexts.add(scfactory);
-			jrContext.setExtensions(ScriptletFactory.class, sexts);
-		} else
-			sexts.set(ind, scfactory);
+		jrContext.setExtensions(ScriptletFactory.class, Collections.singletonList(new RecordCountScriptletFactory()));
 	}
 
 	private void finishUpdateViewer(final PreviewContainer pcontainer, final JasperPrint jPrint) {
