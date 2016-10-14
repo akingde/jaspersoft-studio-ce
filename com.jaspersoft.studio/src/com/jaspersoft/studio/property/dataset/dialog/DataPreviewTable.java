@@ -32,6 +32,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -44,6 +45,8 @@ import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.data.IDataPreviewInfoProvider;
 import com.jaspersoft.studio.data.designer.AQueryDesignerContainer;
@@ -78,7 +81,7 @@ public class DataPreviewTable implements DatasetReaderListener {
 	private Composite composite;
 	private Composite tableContainer;
 	private Combo recordsNumCombo;
-	private Button refreshPreviewBtn;
+	// private Button refreshPreviewBtn;
 	private Button cancelPreviewBtn;
 	private ProgressBar progressBar;
 	private Label infoMsg;
@@ -120,16 +123,60 @@ public class DataPreviewTable implements DatasetReaderListener {
 			}
 		});
 
-		refreshPreviewBtn = new Button(composite, SWT.PUSH);
-		refreshPreviewBtn.setText(Messages.DataPreviewTable_PreviewButton);
-		refreshPreviewBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-		refreshPreviewBtn.addSelectionListener(new SelectionAdapter() {
+		toolbar = new ToolBar(composite, SWT.FLAT);
+		final ToolItem itemDrop = new ToolItem(toolbar, SWT.DROP_DOWN);
+		itemDrop.setText(Messages.DataPreviewTable_PreviewButton);
+
+		itemDrop.addSelectionListener(new SelectionAdapter() {
+
+			private Menu dropMenu = null;
+			private boolean getFields = false;
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (canRefreshDataPreview()) {
-					refreshDataPreview();
-					refreshPreviewBtn.setEnabled(false);
-					cancelPreviewBtn.setEnabled(true);
+				if (dropMenu == null) {
+					dropMenu = new Menu(composite);
+					composite.setMenu(dropMenu);
+
+					MenuItem itemRadio = new MenuItem(dropMenu, SWT.RADIO);
+					itemRadio.setText(Messages.DataPreviewTable_PreviewButton);
+					itemRadio.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							itemDrop.setText(Messages.DataPreviewTable_PreviewButton);
+							composite.update();
+							composite.layout(true);
+							getFields = false;
+							refresh();
+
+						}
+
+					});
+					MenuItem itemRadio2 = new MenuItem(dropMenu, SWT.RADIO);
+					itemRadio2.setText("Get Fields And Refresh Data");
+					itemRadio2.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							itemDrop.setText("Get Fields And Refresh Data");
+							composite.update();
+							composite.layout(true);
+							getFields = true;
+							designer.doGetFields();
+							refresh();
+						}
+
+					});
+				}
+				if (e.detail == SWT.ARROW) {
+					// Position the menu below and vertically aligned with the the drop down tool button.
+					final ToolItem toolItem = (ToolItem) e.widget;
+					final ToolBar toolBar = toolItem.getParent();
+
+					Point point = toolBar.toDisplay(new Point(e.x, e.y));
+					dropMenu.setLocation(point.x, point.y);
+					dropMenu.setVisible(true);
+				} else {
+					if (getFields)
+						designer.doGetFields();
+					refresh();
 				}
 			}
 
@@ -148,6 +195,15 @@ public class DataPreviewTable implements DatasetReaderListener {
 				}
 				return true;
 			}
+
+			protected void refresh() {
+				if (canRefreshDataPreview()) {
+					refreshDataPreview();
+					toolbar.setEnabled(false);
+					cancelPreviewBtn.setEnabled(true);
+				}
+			}
+
 		});
 
 		cancelPreviewBtn = new Button(composite, SWT.PUSH);
@@ -158,7 +214,7 @@ public class DataPreviewTable implements DatasetReaderListener {
 			public void widgetSelected(SelectionEvent e) {
 				cancelDataPreview();
 				cancelPreviewBtn.setEnabled(false);
-				refreshPreviewBtn.setEnabled(true);
+				toolbar.setEnabled(true);
 			}
 		});
 		cancelPreviewBtn.setEnabled(false);
@@ -331,6 +387,7 @@ public class DataPreviewTable implements DatasetReaderListener {
 
 	private static SimpleDateFormat TIMESTAMP = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss.SSSS"); //$NON-NLS-1$
 	private static SimpleDateFormat TIME = new SimpleDateFormat("hh:mm:ss.SSSS"); //$NON-NLS-1$
+	private ToolBar toolbar;
 
 	/*
 	 * Update the table layout.
@@ -399,6 +456,8 @@ public class DataPreviewTable implements DatasetReaderListener {
 	public void finished() {
 		UIUtils.getDisplay().syncExec(new Runnable() {
 			public void run() {
+				if (progressBar.isDisposed())
+					return;
 				if (tableFiller != null) {
 					tableFiller.done();
 					tableFiller = null;
@@ -410,7 +469,7 @@ public class DataPreviewTable implements DatasetReaderListener {
 				if (isValidStatus()) {
 					infoMsg.setText(MessageFormat.format(Messages.DataPreviewTable_ReadyReadData, new Object[] { readItems }));
 				}
-				refreshPreviewBtn.setEnabled(true);
+				toolbar.setEnabled(true);
 				infoComposite.layout();
 				readItems = 0;
 			}
