@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.SetPropertyValueCommand;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
@@ -469,7 +470,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 	@Override
 	public List<Command> dropResource(String key, INode root) throws InterruptedException {
-		if (root instanceof MReport) {
+		if (root instanceof MReport || root instanceof MPage) {
 			MServerProfile sp = ServerManager.getServerProfile(key);
 			if (sp == null)
 				return null;
