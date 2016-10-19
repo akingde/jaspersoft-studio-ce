@@ -542,7 +542,7 @@ public class PasteResourceAction extends Action {
 		ws.addOrModifyResource(monitor, prd, null);
 	}
 
-	private boolean isSameServer(ANode parent, AMResource m) {
+	public static boolean isSameServer(ANode parent, AMResource m) {
 		IConnection mc = m.getWsClient();
 		IConnection pc = null;
 		if (parent instanceof AMResource)
@@ -624,7 +624,7 @@ public class PasteResourceAction extends Action {
 		}
 	}
 
-	private void refreshNode(INode p, IProgressMonitor monitor) throws Exception {
+	public static void refreshNode(INode p, IProgressMonitor monitor) throws Exception {
 		if (p instanceof AMResource)
 			WSClientHelper.refreshResource((AMResource) p, monitor);
 		else if (p instanceof MServerProfile) {

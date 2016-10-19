@@ -66,6 +66,8 @@ import com.jaspersoft.studio.server.dnd.InputControlDragSourceListener;
 import com.jaspersoft.studio.server.dnd.InputControlDropTargetListener;
 import com.jaspersoft.studio.server.dnd.RepositoryFileResourceDropTargetListener;
 import com.jaspersoft.studio.server.dnd.RepositoryImageDragSourceListener;
+import com.jaspersoft.studio.server.dnd.ResourceDragSourceListener;
+import com.jaspersoft.studio.server.dnd.ResourceDropTargetListener;
 import com.jaspersoft.studio.server.dnd.UnitDragSourceListener;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.AFileResource;
@@ -451,6 +453,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 		dragListeners.add(new RepositoryImageDragSourceListener(treeViewer));
 		dragListeners.add(new UnitDragSourceListener(treeViewer));
 		dragListeners.add(new InputControlDragSourceListener(treeViewer));
+		dragListeners.add(new ResourceDragSourceListener(treeViewer));
 		return dragListeners;
 	}
 
@@ -459,6 +462,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 		List<TransferDropTargetListener> dropListeners = new ArrayList<TransferDropTargetListener>(1);
 		dropListeners.add(new RepositoryFileResourceDropTargetListener(FileTransfer.getInstance()));
 		dropListeners.add(new InputControlDropTargetListener(treeViewer));
+		dropListeners.add(new ResourceDropTargetListener(treeViewer));
 		return dropListeners;
 	}
 
