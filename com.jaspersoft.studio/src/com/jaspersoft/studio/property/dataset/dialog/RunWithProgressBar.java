@@ -20,6 +20,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ProgressBar;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -82,7 +83,12 @@ public class RunWithProgressBar implements IRunnableContext {
 			}
 
 			if (cancelable && (bCancel == null || bCancel.isDisposed())) {
-				bCancel = new Button(progressBar.getParent(), SWT.FLAT | SWT.PUSH);
+				Composite cmp = progressBar.getParent();
+				for (Control c : cmp.getChildren())
+					if (c instanceof Button)
+						c.dispose();
+
+				bCancel = new Button(cmp, SWT.FLAT | SWT.PUSH);
 				bCancel.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/delete_style.gif"));
 				bCancel.addSelectionListener(new SelectionAdapter() {
 

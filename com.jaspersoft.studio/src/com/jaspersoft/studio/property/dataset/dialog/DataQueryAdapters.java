@@ -267,7 +267,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 	public Composite createToolbar(Composite parent) {
 		final Composite comp = new Composite(parent, SWT.NONE);
-		comp.setLayout(new GridLayout(4, false));
+		comp.setLayout(new GridLayout(6, false));
 		comp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		comp.setBackgroundMode(SWT.INHERIT_FORCE);
 
