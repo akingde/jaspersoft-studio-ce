@@ -139,7 +139,9 @@ public class JRPropertyDialog extends Dialog {
 		label.setText(Messages.JRPropertyDialog_propName);
 
 		cprop = new Combo(composite, SWT.BORDER);
-		cprop.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+		GridData gd = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
+		gd.widthHint = 300;
+		cprop.setLayoutData(gd);
 
 		List<String> comboItems = new ArrayList<String>();
 		for (ElementDescription hint : getHints()) {
@@ -153,7 +155,7 @@ public class JRPropertyDialog extends Dialog {
 		stackComposite = new Composite(composite, SWT.NONE);
 		stackLayout = new StackLayout();
 		stackComposite.setLayout(stackLayout);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		stackComposite.setLayoutData(gd);
 
@@ -249,8 +251,8 @@ public class JRPropertyDialog extends Dialog {
 		Composite composite = new Composite(cmp, SWT.NONE);
 		composite.setLayout(new GridLayout());
 
-		Label label = new Label(composite, SWT.NONE);
-		label.setText(Messages.JRPropertyDialog_propValue);
+		// Label label = new Label(composite, SWT.NONE);
+		// label.setText(Messages.JRPropertyDialog_propValue);
 
 		tvalue = new Text(composite, SWT.BORDER);
 		tvalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));

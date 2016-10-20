@@ -168,11 +168,11 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 			});
 		}
 
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("Value Expression");
-		GridData gd = new GridData();
-		gd.horizontalSpan = 2;
-		label.setLayoutData(gd);
+		// Label label = new Label(composite, SWT.NONE);
+		// label.setText("Value Expression");
+		// GridData gd = new GridData();
+		// gd.horizontalSpan = 2;
+		// label.setLayoutData(gd);
 
 		evalue = new WTextExpression(composite, SWT.NONE, 1);
 		evalue.addModifyListener(new ExpressionModifiedListener() {
@@ -181,8 +181,9 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 				synchText();
 			}
 		});
-		gd = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
+		GridData gd = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
 		gd.horizontalSpan = 2;
+		gd.heightHint = 80;
 		evalue.setLayoutData(gd);
 		evalue.addModifyListener(new ExpressionModifiedListener() {
 			@Override
