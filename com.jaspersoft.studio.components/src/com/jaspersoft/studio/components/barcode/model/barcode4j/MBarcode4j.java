@@ -28,7 +28,6 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -167,8 +166,9 @@ public class MBarcode4j extends MBarcode {
 		quiteZoneD.setDescription(Messages.MBarcode4j_quiet_zone_description);
 		desc.add(quiteZoneD);
 
-		PixelPropertyDescriptor moduleWidthD = new PixelPropertyDescriptor(Barcode4jComponent.PROPERTY_MODULE_WIDTH,
+		DoublePropertyDescriptor moduleWidthD = new DoublePropertyDescriptor(Barcode4jComponent.PROPERTY_MODULE_WIDTH,
 				Messages.MBarcode4j_module_width);
+		moduleWidthD.setBounds(0, Double.MAX_VALUE);
 		moduleWidthD.setDescription(Messages.MBarcode4j_module_width_description);
 		desc.add(moduleWidthD);
 
@@ -190,7 +190,7 @@ public class MBarcode4j extends MBarcode {
 			return jrBarcodeComponent.getEvaluationGroup();
 
 		if (id.equals(Barcode4jComponent.PROPERTY_MODULE_WIDTH))
-			return jrBarcodeComponent.getModuleWidth() != null ? jrBarcodeComponent.getModuleWidth().intValue() : null;
+			return jrBarcodeComponent.getModuleWidth();
 		if (id.equals(Barcode4jComponent.PROPERTY_QUIET_ZONE))
 			return jrBarcodeComponent.getQuietZone();
 		if (id.equals(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE))
@@ -226,10 +226,7 @@ public class MBarcode4j extends MBarcode {
 		}
 
 		else if (id.equals(Barcode4jComponent.PROPERTY_MODULE_WIDTH))
-			if (value instanceof Integer)
-				barcodeComponent.setModuleWidth(((Integer) value).doubleValue());
-			else
-				barcodeComponent.setModuleWidth((Double) value);
+			barcodeComponent.setModuleWidth((Double) value);
 		else if (id.equals(Barcode4jComponent.PROPERTY_QUIET_ZONE))
 			barcodeComponent.setQuietZone((Double) value);
 		else if (id.equals(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE))
