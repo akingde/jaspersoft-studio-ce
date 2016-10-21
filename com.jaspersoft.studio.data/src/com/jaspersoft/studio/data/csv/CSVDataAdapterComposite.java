@@ -950,6 +950,8 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	 *             , Exception
 	 */
 	private void getCSVColumns() throws IOException, Exception {
+		if (Misc.isNullOrEmpty(textFileName.getText()))
+			return;
 		JRCsvDataSource ds = new JRCsvDataSource(getJrContext(), textFileName.getText());
 		ds.setUseFirstRowAsHeader(true);
 
