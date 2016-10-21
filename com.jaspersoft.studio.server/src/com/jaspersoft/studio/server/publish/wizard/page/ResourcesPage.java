@@ -392,12 +392,12 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 	public void fillData(boolean isNew) {
 		List<AMResource> res = PublishUtil.getResources(pres, new NullProgressMonitor(), jConfig);
+		String b = jConfig.getProperty(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, "true");
 		if (isNew)
 			for (AMResource r : res) {
 				if (r instanceof AFileResource)
 					continue;
-				String b = jConfig.getProperty(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, "true");
-				if (b.equals("overwrite"))
+				if (b.equals("overwrite") || b.equals("true"))
 					r.getPublishOptions().setOverwrite(OverwriteEnum.OVERWRITE);
 				else
 					r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
@@ -405,7 +405,9 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		else {
 			if (pres instanceof MReportUnit && !pres.getValue().getIsNew()) {
 				for (ResourceDescriptor n : pres.getValue().getChildren()) {
-					if (n.getWsType() != null && n.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
+					if (n.getWsType() == null)
+						continue;
+					if (n.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
 						String icname = n.getName();
 						for (AMResource r : res) {
 							if (r instanceof MInputControl && r.getValue().getName().equals(icname)) {
@@ -414,6 +416,12 @@ public class ResourcesPage extends JSSHelpWizardPage {
 							}
 						}
 					}
+				}
+				for (AMResource r : res) {
+					if (b.equals("overwrite"))
+						r.getPublishOptions().setOverwrite(OverwriteEnum.OVERWRITE);
+					else if (b.equals("ignore"))
+						r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
 				}
 				// let's look and make a diff
 			}
