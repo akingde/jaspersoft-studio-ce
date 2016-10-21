@@ -122,12 +122,6 @@ public class GMapsPathsPanel extends GMapsMarkersPanel {
 	}
 
 	@Override
-	protected void handleRemoveMarker(int markerIndex) {
-		super.handleRemoveMarker(markerIndex);
-		drawPolyline();
-		fillPaths();
-	}
-	@Override
 	protected void handleRemoveMarker(int[] markerIndex) {
 		super.handleRemoveMarker(markerIndex);
 		drawPolyline();
