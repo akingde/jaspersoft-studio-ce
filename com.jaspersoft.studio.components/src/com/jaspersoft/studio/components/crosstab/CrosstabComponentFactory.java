@@ -427,6 +427,12 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				}
 			}
 		}
+		
+		//Avoid to generate create command in the main editor
+		if (parent instanceof MCrosstab && !(parent.getParent() instanceof MPage)){
+			return UnexecutableCommand.INSTANCE;
+		}
+		
 		if (child instanceof MStyle && (child.getValue() != null && parent instanceof MCell)) {
 			SetValueCommand cmd = new SetValueCommand();
 			cmd.setTarget((MCell) parent);

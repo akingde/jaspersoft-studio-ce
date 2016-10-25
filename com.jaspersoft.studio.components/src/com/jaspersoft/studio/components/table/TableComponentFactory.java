@@ -457,6 +457,12 @@ public class TableComponentFactory implements IComponentFactory {
 				}
 			}
 		}
+		
+		//Avoid to generate create command in the main editor
+		if (parent instanceof MTable && !(parent.getParent() instanceof MPage)){
+			return UnexecutableCommand.INSTANCE;
+		}
+		
 		if (child instanceof MField && (child.getValue() != null && parent instanceof MCell))
 			return new CreateE4ObjectCommand(child, (MCell) parent, location,newIndex);
 		if (child instanceof MParameterSystem && (child.getValue() != null && parent instanceof MCell))
