@@ -327,13 +327,16 @@ public class GridBagConstraints implements Cloneable{
     /**
      * The minimum width of the component.  It is used to calculate
      * <code>ipady</code>, where the default will be 0.
+     * Should be different from zero only when an element as has a preferred fixed size
      */
-    int minWidth;
+    protected int minWidth;
+    
     /**
      * The minimum height of the component. It is used to calculate
      * <code>ipadx</code>, where the default will be 0.
+     * Should be different from zero only when an element as has a preferred fixed size
      */
-    int minHeight;
+    protected int minHeight;
     
     /**
      * Flag used to know if the size of the element should be keep fixed

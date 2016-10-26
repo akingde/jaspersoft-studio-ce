@@ -17,6 +17,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -971,18 +972,25 @@ public class GridBagLayoutUtil {
 
         int diffw = parentSize.width - r.width;
         if (diffw != 0) {
-            weight = 0.0;
-            for (int i = 0; i < info.width; i++)
-                weight += info.weightX[i];
+    		//compute the weight only on not fixed columns and distribute the excessing space
+    		//only among them
+          	weight = 0.0;
+      		HashSet<Integer> notFixedSizeCols = new HashSet<Integer>();
+      		for (int i = 0; i < info.width; i++) {
+      			if (info.minWidth[i] == 0d){
+      				notFixedSizeCols.add(i);
+      				weight += info.weightX[i];
+      			}
+      		}  
             if (weight > 0.0) {
-                for (int i = 0; i < info.width; i++) {
-                    int dx = (int)(( ((double)diffw) * info.weightX[i]) / weight);
-                    info.minWidth[i] += dx;
-                    r.width += dx;
-                    if (info.minWidth[i] < 0) {
-                        r.width -= info.minWidth[i];
-                        info.minWidth[i] = 0;
-                    }
+                for (int i: notFixedSizeCols) {
+                  int dx = (int)(( ((double)diffw) * info.weightX[i]) / weight);
+                  info.minWidth[i] += dx;
+                  r.width += dx;
+                  if (info.minWidth[i] < 0) {
+                      r.width -= info.minWidth[i];
+                      info.minWidth[i] = 0;
+                  }
                 }
             }
             diffw = parentSize.width - r.width;
@@ -994,11 +1002,18 @@ public class GridBagLayoutUtil {
 
         int diffh = parentSize.height - r.height;
         if (diffh != 0) {
-            weight = 0.0;
-            for (int i = 0; i < info.height; i++)
-                weight += info.weightY[i];
+    		//compute the weight only on not fixed columns and distribute the excessing space
+    		//only among them
+        	weight = 0.0;
+      		HashSet<Integer> notFixedSizeCols = new HashSet<Integer>();
+      		for (int i = 0; i < info.height; i++) {
+      			if (info.minHeight[i] == 0d){
+      				notFixedSizeCols.add(i);
+      				weight += info.weightY[i];
+      			}
+      		}
             if (weight > 0.0) {
-                for (int i = 0; i < info.height; i++) {
+            	 for (int i: notFixedSizeCols) {
                     int dy = (int)(( ((double)diffh) * info.weightY[i]) / weight);
                     info.minHeight[i] += dy;
                     r.height += dy;
