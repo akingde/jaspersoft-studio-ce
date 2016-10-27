@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.layout.GridData;
@@ -21,6 +22,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
 import com.jaspersoft.studio.data.reader.DataPreviewScriptlet;
 import com.jaspersoft.studio.data.reader.DatasetReader;
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
 import com.jaspersoft.studio.editor.preview.datasnapshot.DataSnapshotManager;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
@@ -33,7 +35,9 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRScriptlet;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -76,9 +80,14 @@ public class ElementPreviewer {
 		DataAdapterDescriptor da = null;
 		try {
 			// initialise the report
-			if (jd == null)
+			if (jd == null) {
 				jd = getJasperDesign(jConf);
-			jd.setUUID(jDesign.getUUID());
+				jd.setUUID(jDesign.getUUID());
+				for (JRStyle s : jDesign.getStyles())
+					jd.addStyle(s);
+				for (JRReportTemplate s : jDesign.getTemplates())
+					jd.addTemplate(s);
+			}
 			setupDatasets(jConf, jDesign);
 			replaceElement((JRDesignElement) element.clone(), jd);
 
@@ -185,6 +194,14 @@ public class ElementPreviewer {
 			da = defaultStorage.getDefaultJRDataAdapter(defAdapter);
 			if (da == null)
 				da = DataAdapterManager.getPreferencesStorage().findDataAdapter(defAdapter);
+			if (da == null) {
+				IFile f = (IFile) jConf.get(FileUtils.KEY_FILE);
+				if (f != null) {
+					ADataAdapterStorage st = DataAdapterManager.getProjectStorage(f.getProject());
+					if (st != null)
+						da = st.findDataAdapter(defAdapter);
+				}
+			}
 		}
 		if (da == null)
 			da = defaultStorage.getDefaultJRDataAdapter(jDataset);
