@@ -29,6 +29,7 @@ import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.cache.DataSnapshotException;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 import net.sf.jasperreports.engine.JRDataset;
@@ -72,6 +73,12 @@ public class ElementPreviewer {
 	private JasperDesign jd;
 
 	public String runReport(JasperReportsConfiguration jConf, JRElement element, boolean fromCache) {
+		if (jd == null)
+			UIUtils.getDisplay().asyncExec(new Runnable() {
+				public void run() {
+					browser.setText("Generating Preview");
+				}
+			});
 		ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(jConf.getClassLoader());
 		Map<String, Object> hm = null;
@@ -121,8 +128,12 @@ public class ElementPreviewer {
 		StringWriter sw = new StringWriter();
 		e.printStackTrace(new PrintWriter(sw));
 
-		String message = sw.getBuffer().toString();
-		browser.setText("<HTML><BODY><pre>" + message + "</pre></body></html>");
+		final String message = sw.getBuffer().toString();
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				browser.setText("<HTML><BODY><pre>" + message + "</pre></body></html>");
+			}
+		});
 	}
 
 	protected String doRunReport(JasperReportsConfiguration jConf, Map<String, Object> hm, JasperDesign jDesign,
@@ -131,11 +142,15 @@ public class ElementPreviewer {
 
 		// create a temp dir and a temp file for html
 		File destDir = FileUtils.createTempDir();
-		String dest = new File(destDir, "index.html").getAbsolutePath();
+		final String dest = new File(destDir, "index.html").getAbsolutePath();
 		JasperExportManager.getInstance(jConf).exportToHtmlFile(jrPrint, dest);
 		System.out.println(dest);
-		browser.setToolTipText(dest);
-		browser.setUrl(dest);
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				browser.setToolTipText(dest);
+				browser.setUrl(dest);
+			}
+		});
 		return dest;
 	}
 
@@ -212,15 +227,20 @@ public class ElementPreviewer {
 		return da;
 	}
 
-	protected void replaceElement(JRDesignElement element, JasperDesign jd) {
+	protected void replaceElement(final JRDesignElement element, JasperDesign jd) {
 		JRDesignBand bs = (JRDesignBand) jd.getSummary();
 		for (JRElement jrel : bs.getElements())
 			bs.removeElement((JRDesignElement) jrel);
 		bs.addElement(element);
 		element.setX(0);
 		element.setY(0);
-		element.setWidth(browser.getBounds().width - 20);
-		element.setHeight(browser.getBounds().height - 20);
+		UIUtils.getDisplay().syncExec(new Runnable() {
+			public void run() {
+				element.setWidth(browser.getBounds().width - 20);
+				element.setHeight(browser.getBounds().height - 20);
+			}
+		});
+
 		jd.setPageHeight(element.getHeight());
 		jd.setPageWidth(element.getWidth());
 		jd.setColumnWidth(jd.getPageWidth());
