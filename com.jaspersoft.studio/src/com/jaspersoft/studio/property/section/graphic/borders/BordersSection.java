@@ -861,7 +861,7 @@ public class BordersSection extends AbstractSection {
 	 * @param control the padding control to which the menu will be assigned
 	 * @param propertyID the ID of the property that the selection on the menu will change
 	 */
-	protected void createPaddingContextualMenu(Control control, final String propertyID){
+	protected void createPaddingContextualMenu(final Control control, final String propertyID){
 		if (control != null && !control.isDisposed() && control.getMenu() == null){
 			Menu controlMenu = new Menu(control);
 			MenuItem nullItem = new MenuItem(controlMenu, SWT.NONE);
@@ -870,6 +870,7 @@ public class BordersSection extends AbstractSection {
 				public void widgetSelected(SelectionEvent e) {
 					changePropertyPadding(propertyID, null);
 					refresh();
+					control.setFocus();
 				}
 			});
 	    nullItem.setText(Messages.ASPropertyWidget_1);
@@ -884,7 +885,7 @@ public class BordersSection extends AbstractSection {
 	 * @param control the border control to which the menu will be assigned
 	 * @param propertyID the ID of the property that the selection on the menu will change
 	 */
-	protected void createLineContextualMenu(Control control, final String propertyID){
+	protected void createLineContextualMenu(final Control control, final String propertyID){
 		if (control != null && !control.isDisposed() && control.getMenu() == null){
 			Menu controlMenu = new Menu(control);
 			MenuItem nullItem = new MenuItem(controlMenu, SWT.NONE);
@@ -893,6 +894,7 @@ public class BordersSection extends AbstractSection {
 				public void widgetSelected(SelectionEvent e) {
 					changeProperty(propertyID, null);
 					refresh();
+					control.setFocus();
 				}
 			});
 	    nullItem.setText(Messages.ASPropertyWidget_1);

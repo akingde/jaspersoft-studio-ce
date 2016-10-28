@@ -143,7 +143,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	 * @param control control where the contextual menu will be set
 	 * @param propertyID id of the property to set
 	 */
-	protected void createContextualMenu(final APropertyNode node, Control control, final String propertyID){
+	protected void createContextualMenu(final APropertyNode node, final Control control, final String propertyID){
 		if (node != null && control != null && !control.isDisposed()){
 		
 			//MacOS fix, the combo on MacOS doesn't have a contextual menu, so we need to handle this listener manually
@@ -170,6 +170,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 								cmd.setPropertyId(propertyID);
 								cmd.setTarget(node);
 								section.getEditDomain().getCommandStack().execute(cmd);
+								control.setFocus();
 							}
 						});
 				    resetItem.setText(Messages.ASPropertyWidget_0);
@@ -187,6 +188,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 								cmd.setTarget(node);
 								cmd.setPropertyValue(null);
 								section.getEditDomain().getCommandStack().execute(cmd);
+								control.setFocus();
 							}
 						});
 				    nullItem.setText(Messages.ASPropertyWidget_1);
