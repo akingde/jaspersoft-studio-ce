@@ -1070,6 +1070,7 @@ public class ModelUtils {
 	static {
 		deprecatedLanguages.add("xlsx");
 		deprecatedLanguages.add("xpath2");
+		deprecatedLanguages.add("Adhoc MultiLevel".toLowerCase());
 	}
 
 	@SuppressWarnings("deprecation")
