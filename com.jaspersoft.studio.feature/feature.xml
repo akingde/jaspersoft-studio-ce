@@ -229,13 +229,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.jaspersoft.studio.data.hbase"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.jaspersoft.studio.server.soap"
          download-size="0"
          install-size="0"
