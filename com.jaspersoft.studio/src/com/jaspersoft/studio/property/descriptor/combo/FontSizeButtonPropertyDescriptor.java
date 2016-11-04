@@ -22,7 +22,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
-import com.jaspersoft.studio.property.section.widgets.SPButton;
+import com.jaspersoft.studio.property.section.widgets.SPFontSize;
 
 /**
  * This class describe a toolbar with two buttons to increment and decrement the font size
@@ -57,7 +57,7 @@ public class FontSizeButtonPropertyDescriptor extends PropertyDescriptor impleme
 	 */
 	@Override
 	public ASPropertyWidget<FontSizeButtonPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-		return new SPButton<FontSizeButtonPropertyDescriptor>(parent, section, this, elementFont);
+		return new SPFontSize<FontSizeButtonPropertyDescriptor>(parent, section, this, elementFont);
 	}
 
 	private IHelpRefBuilder refBuilder;

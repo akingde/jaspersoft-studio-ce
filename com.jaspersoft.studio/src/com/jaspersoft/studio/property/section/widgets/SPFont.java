@@ -174,7 +174,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	 * @author Orlandin Marco
 	 * 
 	 */
-	private class SPChartButtom<T extends IPropertyDescriptor> extends SPButton<T> {
+	private class SPChartButtom<T extends IPropertyDescriptor> extends SPFontSize<T> {
 
 
 		public SPChartButtom(Composite parent, AbstractSection section, T pDescriptor, APropertyNode fontValue,
@@ -194,9 +194,9 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 				newValue = currentFont;
 				Float plus = null;
 				if (increment) {
-					plus = (float) (Math.round((new Float(newValue) / 100) * SPButton.factor) + 1);
+					plus = (float) (Math.round((new Float(newValue) / 100) * SPFontSize.factor) + 1);
 				} else {
-					plus = (float) (Math.round((new Float(newValue) / 100) * -SPButton.factor) - 1);
+					plus = (float) (Math.round((new Float(newValue) / 100) * -SPFontSize.factor) - 1);
 				}
 				if ((newValue + plus) > 99) {
 					newValue = 99f;

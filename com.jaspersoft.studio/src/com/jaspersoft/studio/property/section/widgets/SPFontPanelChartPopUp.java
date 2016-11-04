@@ -172,7 +172,7 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 	 * @author Orlandin Marco
 	 *
 	 */
-	private class SPChartButtom<T extends IPropertyDescriptor> extends SPButton<T> {
+	private class SPChartButtom<T extends IPropertyDescriptor> extends SPFontSize<T> {
 
 		/**
 		 * The type of font represented (title, legend, subtitle)
@@ -197,9 +197,9 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 				newValue = fontSizeValue;
 				Integer plus = null;
 				if (increment)
-					plus = Math.round((new Float(newValue) / 100) * SPButton.factor) + 1;
+					plus = Math.round((new Float(newValue) / 100) * SPFontSize.factor) + 1;
 				else
-					plus = Math.round((new Float(newValue) / 100) * -SPButton.factor) - 1;
+					plus = Math.round((new Float(newValue) / 100) * -SPFontSize.factor) - 1;
 				if ((newValue + plus) > 99f)
 					newValue = 99f;
 				else if ((newValue + plus) > 0f)

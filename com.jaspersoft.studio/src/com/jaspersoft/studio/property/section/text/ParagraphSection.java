@@ -1,20 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.text;
 
-import net.sf.jasperreports.engine.base.JRBaseParagraph;
-
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -25,13 +21,15 @@ import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
+import net.sf.jasperreports.engine.base.JRBaseParagraph;
+
 /*
  * The location section on the location tab.
  * 
  * @author Chicu Veaceslav
  */
 public class ParagraphSection extends AbstractRealValueSection {
-	
+
 	private ExpandableComposite section;
 
 	/**
@@ -42,8 +40,8 @@ public class ParagraphSection extends AbstractRealValueSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent = getWidgetFactory().createSection(parent, "Paragraph", true, 2);
-		section = (ExpandableComposite)parent.getParent();
-		
+		section = (ExpandableComposite) parent.getParent();
+
 		createWidget4Property(parent, JRBaseParagraph.PROPERTY_LINE_SPACING);
 		createWidget4Property(parent, JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE);
 		createWidget4Property(parent, JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT);
@@ -52,8 +50,10 @@ public class ParagraphSection extends AbstractRealValueSection {
 		createWidget4Property(parent, JRBaseParagraph.PROPERTY_SPACING_BEFORE);
 		createWidget4Property(parent, JRBaseParagraph.PROPERTY_SPACING_AFTER);
 		createWidget4Property(parent, JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH);
+		new Label(parent, SWT.NONE);
+		createWidget4Property(parent, JRBaseParagraph.PROPERTY_TAB_STOPS, false);
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
@@ -65,20 +65,22 @@ public class ParagraphSection extends AbstractRealValueSection {
 		addProvidedProperties(JRBaseParagraph.PROPERTY_SPACING_AFTER, Messages.MParagraph_spacingAfterTitle);
 		addProvidedProperties(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH, Messages.MParagraph_tabStopWidthTitle);
 		addProvidedProperties(JRBaseParagraph.PROPERTY_RIGHT_INDENT, Messages.MParagraph_rightIdentTitle);
+		addProvidedProperties(JRBaseParagraph.PROPERTY_TAB_STOPS, Messages.MParagraph_tabStopsTitle);
 	}
 
 	@Override
 	public void expandForProperty(Object propertyId) {
-		if (section != null && !section.isExpanded()) section.setExpanded(true);
+		if (section != null && !section.isExpanded())
+			section.setExpanded(true);
 	}
-	
+
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode md = super.getModelFromEditPart(item);
 		if (md instanceof MTextElement) {
 			MParagraph paragraph = (MParagraph) md.getPropertyValue(MTextElement.PARAGRAPH);
 			return paragraph;
-		} else if (md instanceof MStyle){
+		} else if (md instanceof MStyle) {
 			MParagraph paragraph = (MParagraph) md.getPropertyValue(MStyle.PARAGRAPH);
 			return paragraph;
 		}

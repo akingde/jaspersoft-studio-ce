@@ -34,11 +34,11 @@ import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.type.LineSpacingEnum;
 
 public class MParagraph extends APropertyNode {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private static IPropertyDescriptor[] descriptors;
-	
+
 	private static NamedEnumPropertyDescriptor<LineSpacingEnum> lineSpacingD;
 
 	public MParagraph(ANode parent, JRBaseParagraph bParagraph) {
@@ -134,7 +134,7 @@ public class MParagraph extends APropertyNode {
 		JSSStyleResolver resolver = getStyleResolver();
 		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
 		if (jrElement != null) {
-			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING)){ 
+			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING)) {
 				LineSpacingEnum spacingEnum = resolver.getLineSpacing(jrElement);
 				return lineSpacingD.getIntValue(spacingEnum);
 			}
@@ -189,7 +189,7 @@ public class MParagraph extends APropertyNode {
 			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOPS)) {
 				TabStop[] tabStops = jrElement.getTabStops();
 				if (tabStops != null)
-					return Arrays.asList(tabStops);
+					return new ArrayList<TabStop>(Arrays.asList(tabStops));
 				return new ArrayList<TabStop>();
 			}
 		}
@@ -223,11 +223,16 @@ public class MParagraph extends APropertyNode {
 			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH))
 				jrElement.setTabStopWidth((Integer) value);
 			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOPS)) {
-				jrElement.addTabStop(null);
+				if (jrElement.getTabStops() != null)
+					for (TabStop ts : jrElement.getTabStops())
+						jrElement.removeTabStop(ts);
+				if (value instanceof List)
+					for (TabStop ts : (List<TabStop>) value)
+						jrElement.addTabStop(ts);
 			}
 		}
 	}
-	
+
 	@Override
 	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
@@ -257,7 +262,7 @@ public class MParagraph extends APropertyNode {
 		defaults.put(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH, new DefaultValue(true));
 		return defaults;
 	}
-	
+
 	public String getDisplayText() {
 		return null;
 	}

@@ -1,159 +1,83 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
-import java.text.MessageFormat;
-
-import net.sf.jasperreports.engine.base.JRBaseFont;
-
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.subreport.MSubreport;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
+import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportParameterEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRSubreportParameter;
+
 /**
- * Class that implement a toolbar with two buttons to change the font size
- * @author Orlandin Marco
- *
+ * A button that when clicked open the edit query dialog
+ * 
+ * @author veaceslav chicu
+ * 
  */
-public class SPButton<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
+public abstract class SPButton<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
+
+	protected Button button;
 
 	/**
-	 * The buttons toolbar
+	 * 
+	 * @param parent
+	 * @param section
+	 * @param pDescriptor
+	 * @param buttonText
+	 *          text on the button
 	 */
-	private ToolBar buttons;
-	
-	/**
-	 * The element with the font attribute
-	 */
-	private APropertyNode fontValue;
-	
-	/**
-	 * The image for the button of increment
-	 */
-	private Image imageValueIncrement;
-	
-	/**
-	 * The image for the button of decrement
-	 */
-	private Image imageValueDecrement;
-	
-	/**
-	 * % factor for the increment\decrement
-	 */
-	public static Integer factor = 10;
-	
-	/**
-	 * Tooltip message for the increment button
-	 */
-	private String messageIncrement;
-	
-	/**
-	 * Tooltip message for the decrement button
-	 */
-	private String messageDecrement;
-
-	/**
-	 * Crate a new button for increment or decrement of the font size
-	 * @param parent parent where the button will be painted
-	 * @param section section of the element
-	 * @param pDescriptor descriptor of the attribute
-	 * @param fontValue The element with the font attribute
-	 */
-	public SPButton(Composite parent, AbstractSection section, T pDescriptor, APropertyNode fontValue){
+	public SPButton(Composite parent, AbstractSection section, T pDescriptor, String buttonText) {
 		super(parent, section, pDescriptor);
-		messageIncrement = MessageFormat.format(Messages.SPButon_Size_Increment, new Object[]{factor.toString()});
-		imageValueIncrement = JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/edit-size-up.png"); 
-		messageDecrement = MessageFormat.format(Messages.SPButon_Size_Decrement, new Object[]{factor.toString()}); 
-		imageValueDecrement = JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/edit-size-down.png"); 
-		this.fontValue = fontValue;
-		createComponent(parent);
+		createButton(parent, buttonText);
 	}
-	
-	
-	protected void createCommand(boolean increment){
-		//Object fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
-		Object fontSize = section.getElement().getPropertyValue(JRBaseFont.PROPERTY_FONT_SIZE);
-		if (fontSize == null){
-			fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
-		}
-		Float newValue = 2.0f;
-		if (fontSize != null){
-			newValue = (Float)fontSize;
-			Integer plus = null;
-			if (increment) plus = Math.round((new Float(newValue) / 100)*factor)+1;
-			else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;
-			if ((newValue+plus)>99) newValue = 99.0f;
-			else if ((newValue+plus)>0) newValue += plus;
-			section.changeProperty(JRBaseFont.PROPERTY_FONT_SIZE, newValue);
-		}
-	}
-	
-	/**
-	 * Create a single button into the toolbar
-	 * @param increment true if the button should be used for increment, false otherwise
-	 */
-	private void createButton(final boolean increment){
-		Image imageValue;
-		String message;
-		if (increment){
-			imageValue = imageValueIncrement;
-			message = messageIncrement;
-		} else {
-			imageValue = imageValueDecrement;
-			message = messageDecrement;
-		}
-		ToolItem button = new ToolItem(buttons, SWT.PUSH);
-		button.setImage(imageValue);
-		button.addListener(SWT.Selection, new Listener() {
 
-			@Override
-			public void handleEvent(Event event) {
-				createCommand(increment);
-			}
-
-		});
-		button.setToolTipText(message);		
-	}
-	
-	
 	@Override
 	protected void createComponent(Composite parent) {
-		if (fontValue != null){
-			buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
-			createButton(true);
-			createButton(false);
-		}
 	}
 
-	@Override
-	public void setData(APropertyNode pnode, Object value) {
-		buttons.setEnabled(pnode.isEditable());
+	/**
+	 * Build the button
+	 * 
+	 * @param parent
+	 *          composite where is placed
+	 * @param buttonText
+	 *          text on the button
+	 */
+	protected void createButton(Composite parent, String buttonText) {
+		button = section.getWidgetFactory().createButton(parent, buttonText, SWT.PUSH);
+		button.setToolTipText(pDescriptor.getDescription());
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleButtonPressed();
+			}
+		});
 	}
+
+	abstract protected void handleButtonPressed();
 
 	@Override
 	public Control getControl() {
-		return buttons;
+		return button;
 	}
 
 }
