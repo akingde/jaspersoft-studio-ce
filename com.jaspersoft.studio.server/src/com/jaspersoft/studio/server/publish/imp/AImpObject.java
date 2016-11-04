@@ -49,7 +49,11 @@ public abstract class AImpObject {
 			JRDesignExpression exp, IFile file) {
 		String str = getPath(fileset, exp);
 		if (fileset.contains(str)) {
-			setupSameExpression(mrunit, exp, doPath(str));
+			File f = findFile(file, str);
+			if (f != null && f.exists())
+				setupSameExpression(mrunit, exp, doPath(f.getName()));
+			else
+				setupSameExpression(mrunit, exp, doPath(str));
 			return null;
 		}
 		if (str == null)
