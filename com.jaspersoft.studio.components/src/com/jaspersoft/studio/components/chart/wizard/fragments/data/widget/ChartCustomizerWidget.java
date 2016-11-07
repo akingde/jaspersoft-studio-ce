@@ -211,7 +211,7 @@ public abstract class ChartCustomizerWidget {
 		GridData buttonsData = new GridData(GridData.FILL_HORIZONTAL);
 		Button newButton = new Button(parent, SWT.PUSH);
 		newButton.setLayoutData(buttonsData);
-		newButton.setText(Messages.common_new);
+		newButton.setText(Messages.common_add);
 		newButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -269,7 +269,7 @@ public abstract class ChartCustomizerWidget {
 		GridData buttonsData = new GridData(GridData.FILL_HORIZONTAL);
 		Button deleteButton = new Button(parent, SWT.PUSH);
 		deleteButton.setLayoutData(buttonsData);
-		deleteButton.setText(Messages.common_delete);
+		deleteButton.setText(Messages.common_remove);
 		deleteButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {

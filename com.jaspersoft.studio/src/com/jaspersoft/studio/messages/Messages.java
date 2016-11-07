@@ -127,6 +127,7 @@ public class Messages extends NLS {
 	public static String common_radius;
 	public static String common_record_delimiter;
 	public static String common_rectangle;
+	public static String common_remove;
 	public static String common_reorder_elements;
 	public static String common_report_objects;
 	public static String common_report;
