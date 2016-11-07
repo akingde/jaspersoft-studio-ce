@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.ResourceManager;
@@ -525,5 +526,29 @@ public class UIUtil {
 	 */
 	public static boolean shouldTrickToolbar() {
 		return isEclipse4();
+	}
+	
+	/**
+	 * Force a control to loose the focus and another one to gain it (if it can).
+	 * If the control is already focused it does nothing. Toolbar controls are not 
+	 * focused because SWT widgets handle really bad it and for the user is then impossible
+	 * to remove the focus
+	 * 
+	 * @param toFocus the control to focus, must be not null
+	 */
+	public static void updateFocus(Control toFocus) {
+		Control focusedControl = toFocus.getDisplay().getFocusControl();
+		if (focusedControl != toFocus){
+			//if it is not a toolbar give the focus to the new control
+			if (!(toFocus instanceof ToolBar)){
+				boolean isFocusedEnabled = focusedControl != null && focusedControl.isEnabled();
+				if (isFocusedEnabled){
+					//force the lost of focus by disabling and enabling the control
+					focusedControl.setEnabled(false);
+					focusedControl.setEnabled(true);
+				}
+			 toFocus.setFocus();
+			}
+		}
 	}
 }
