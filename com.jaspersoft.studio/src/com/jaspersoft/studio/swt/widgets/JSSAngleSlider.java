@@ -159,10 +159,10 @@ public class JSSAngleSlider extends Canvas {
 					return;
 				}
 
-				if (event.type == SWT.MouseDown) {
+				if (event.type == SWT.MouseDown && event.button == 1) {
 					mousePressed = true;
 				}
-				if (event.type == SWT.MouseDown || event.type == SWT.MouseMove && mousePressed) {
+				if ((event.type == SWT.MouseDown && event.button == 1) || (event.type == SWT.MouseMove && mousePressed)) {
 					final float deltaX = event.x - WHOLE_RADIUS / 2f;
 					final float deltaY = event.y - WHOLE_RADIUS / 2f;
 					final double angle = Math.atan2(deltaX, deltaY);
