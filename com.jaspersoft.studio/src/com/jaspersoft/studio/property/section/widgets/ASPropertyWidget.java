@@ -61,6 +61,8 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	
 	protected AbstractSection section;
 	
+	private CLabel label;
+	
 	/**
 	 * On MacOS seems the contextual menu is not opened on combo, this
 	 * lister will force it to open when a right click is found
@@ -170,7 +172,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 								cmd.setPropertyId(propertyID);
 								cmd.setTarget(node);
 								section.getEditDomain().getCommandStack().execute(cmd);
-								control.setFocus();
+								focusControl(control);
 							}
 						});
 				    resetItem.setText(Messages.ASPropertyWidget_0);
@@ -188,7 +190,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 								cmd.setTarget(node);
 								cmd.setPropertyValue(null);
 								section.getEditDomain().getCommandStack().execute(cmd);
-								control.setFocus();
+								focusControl(control);
 							}
 						});
 				    nullItem.setText(Messages.ASPropertyWidget_1);
@@ -216,7 +218,19 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 				control.setMenu(null);
 			}
 		}
-		
+	}
+	
+	/**
+	 * Focus the passed control, this is typically called when a contextual reset
+	 * is used, can be overridden by the widget that doesn't handle very well the 
+	 * set focus
+	 * 
+	 * @param control the control to focus
+	 */
+	protected void focusControl(Control control){
+		if (control != null) {
+			UIUtil.updateFocus(control);
+		}
 	}
 
 	public String getId() {
@@ -226,8 +240,6 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	public String getName() {
 		return pDescriptor.getDisplayName();
 	}
-
-	private CLabel label;
 
 	public CLabel getLabel() {
 		return label;

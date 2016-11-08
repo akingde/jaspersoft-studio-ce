@@ -72,6 +72,14 @@ public class SPDegree extends SPNumber {
 		createContextualMenu(node, angleSlider, pDescriptor.getId().toString());
 		createContextualMenu(node, ftext, pDescriptor.getId().toString());
 	}
+	
+	/**
+	 * Avoid to give the focus on the degree control
+	 */
+	@Override
+	protected void focusControl(Control control) {
+		super.focusControl(ftext);
+	}
 
 	@Override
 	public void setDataNumber(Number resolvedNumber, Number ownNumber) {

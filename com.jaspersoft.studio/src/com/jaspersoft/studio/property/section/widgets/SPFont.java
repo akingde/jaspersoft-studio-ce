@@ -43,6 +43,7 @@ import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescripto
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.swt.widgets.NumericCombo;
+import com.jaspersoft.studio.utils.UIUtil;
 
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
@@ -419,7 +420,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	 * from a chart
 	 */
 	@Override
-	protected void createContextualMenu(final APropertyNode node, Control control, final String propertyID){
+	protected void createContextualMenu(final APropertyNode node, final Control control, final String propertyID){
 		if (node != null && control != null && !control.isDisposed()){
 		
 			//MacOS fix, the combo on MacOS doesn't have a contextual menu, so we need to handle this listener manually
@@ -443,6 +444,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 							@Override
 							public void widgetSelected(SelectionEvent e) {
 								changeProperty(section, pDescriptor.getId(), propertyID, defaultEntry.getValue());
+								if (!(control instanceof ToolBar)) UIUtil.updateFocus(control);
 							}
 						});
 				    resetItem.setText(Messages.ASPropertyWidget_0);
@@ -456,6 +458,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 							@Override
 							public void widgetSelected(SelectionEvent e) {
 								changeProperty(section, pDescriptor.getId(), propertyID, null);
+								if (!(control instanceof ToolBar)) UIUtil.updateFocus(control);
 							}
 						});
 				    nullItem.setText(Messages.ASPropertyWidget_1);

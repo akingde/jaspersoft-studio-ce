@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
@@ -31,7 +32,7 @@ public class StandardContextualMenu implements IMenuProvider {
 	public static StandardContextualMenu INSTANCE = new StandardContextualMenu();
 
 	@Override
-	public void setupMenu(final IWItemProperty wiProp, final ItemPropertyDescription<?> item, Control c){
+	public void setupMenu(final IWItemProperty wiProp, final ItemPropertyDescription<?> item, final Control c){
 		if (item.getDefaultValue() != null && !item.isMandatory()) {
 			Menu controlMenu = c.getMenu();
 			if (controlMenu == null) {
@@ -47,6 +48,7 @@ public class StandardContextualMenu implements IMenuProvider {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					wiProp.setValue(item.getDefaultValueString(), null);
+					UIUtil.updateFocus(c);
 				}
 			});
 			refreshItem.setText(Messages.ASPropertyWidget_0);
@@ -70,6 +72,7 @@ public class StandardContextualMenu implements IMenuProvider {
 				public void widgetSelected(SelectionEvent e) {
 					wiProp.getPropertyEditor().removeProperty(item.getName());
 					wiProp.updateWidget();
+					UIUtil.updateFocus(c);
 				}
 			});
 			refreshItem.setText(actionName);
