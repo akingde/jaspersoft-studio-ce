@@ -414,6 +414,10 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	protected String[] getFileExtensions() {
 		return new String[] { "*.*" }; //$NON-NLS-1$
 	}
+	
+	protected String[] getFileExtensionsNames() {
+		return new String[] { "All Files" }; //$NON-NLS-1$
+	}
 
 	/*
 	 * Popup the dialog to select the image from the filesystem.
@@ -422,7 +426,12 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 		FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		fd.setFilterPath(root.getLocation().toOSString());
-		fd.setFilterExtensions(getFileExtensions()); // $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		String[] extensions = getFileExtensions();
+		String[] extensionNames = getFileExtensionsNames();
+		fd.setFilterExtensions(extensions); 
+		if (extensions.length == extensionNames.length){
+			fd.setFilterNames(extensionNames);
+		}
 		String selection = fd.open();
 		if (selection != null) {
 			// After the text modification the image preview job will be invoked...
