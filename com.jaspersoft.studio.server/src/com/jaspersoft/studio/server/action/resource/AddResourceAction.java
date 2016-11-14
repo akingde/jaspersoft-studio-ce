@@ -61,8 +61,8 @@ public class AddResourceAction extends Action {
 	public static boolean isSpecialFolder(AMResource mres) {
 		if (isOrganizations(mres))
 			return true;
-		if (mres.getParent() instanceof AMResource && isOrganizations((AMResource) mres.getParent()))
-			return true;
+//		if (mres.getParent() instanceof AMResource && isOrganizations((AMResource) mres.getParent()))
+//			return true;
 		return false;
 	}
 
