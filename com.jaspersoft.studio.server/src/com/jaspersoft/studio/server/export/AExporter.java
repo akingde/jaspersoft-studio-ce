@@ -81,8 +81,8 @@ public class AExporter {
 	}
 
 	protected String getExtension(AMResource res) {
-		if (res instanceof AFileResource)
-			return "." + ((AFileResource) res).getDefaultFileExtension();
+//		if (res instanceof AFileResource)
+//			return "." + ((AFileResource) res).getDefaultFileExtension();
 		return "";
 	}
 
