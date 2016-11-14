@@ -99,6 +99,8 @@ public abstract class AImpObject {
 		String b = jrConfig.getProperty(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, "true");
 		if (b.equals("ignore"))
 			popt.setOverwrite(OverwriteEnum.IGNORE);
+		else if (b.equals("overwrite"))
+			popt.setOverwrite(OverwriteEnum.OVERWRITE);
 		else if (!b.equals("true") || (path != null && isRemoteResource(path)))
 			popt.setOverwrite(OverwriteEnum.IGNORE);
 		else
