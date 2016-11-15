@@ -100,8 +100,10 @@ public class DatasetReader {
 			JasperReportsConfiguration jConfig, List<String> columns) throws JRException {
 		// 2. Set query information
 		JRDesignQuery query = new JRDesignQuery();
-		query.setLanguage(designDataset.getQuery().getLanguage());
-		query.setText(designDataset.getQuery().getText());
+		if(designDataset.getQuery()!=null){
+			query.setLanguage(designDataset.getQuery().getLanguage());
+			query.setText(designDataset.getQuery().getText());
+		}
 		dataJD.setQuery(query);
 		// and the report language to the actual report one
 		dataJD.setLanguage(jConfig.getJasperDesign().getLanguage());
