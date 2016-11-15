@@ -10,11 +10,6 @@ package com.jaspersoft.studio.editor.preview;
 
 import java.io.InputStream;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.xml.JRPrintXmlLoader;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.action.IAction;
@@ -43,6 +38,11 @@ import com.jaspersoft.studio.editor.preview.view.control.VSimpleErrorPreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Console;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRPrintXmlLoader;
 
 public class PreviewJRPrint extends ABasicEditor {
 	private boolean hideParameters = true;
@@ -273,18 +273,18 @@ public class PreviewJRPrint extends ABasicEditor {
 
 							@Override
 							public void run() {
-								if (topToolBarManager != null)
-									topToolBarManager.contributeItems(view);
+								if (actionToolBarManager != null)
+									actionToolBarManager.contributeItems(view);
 							}
 						});
 					else
-						topToolBarManager.refreshToolbar();
+						actionToolBarManager.refreshToolbar();
 				}
 
 				@Override
 				public void dispose() {
 					super.dispose();
-					topToolBarManager.removeAll();
+					actionToolBarManager.removeAll();
 				}
 			};
 		}
@@ -313,17 +313,17 @@ public class PreviewJRPrint extends ABasicEditor {
 		getRightContainer().dispose();
 	}
 
-	protected TopToolBarManagerJRPrint topToolBarManager;
+	protected TopToolBarManagerJRPrint actionToolBarManager;
 
-	protected TopToolBarManagerJRPrint getTopToolBarManager(Composite container) {
-		if (topToolBarManager == null)
-			topToolBarManager = new TopToolBarManagerJRPrint(this, container);
-		return topToolBarManager;
+	protected TopToolBarManagerJRPrint getActionToolBarManager(Composite container) {
+		if (actionToolBarManager == null)
+			actionToolBarManager = new TopToolBarManagerJRPrint(this, container);
+		return actionToolBarManager;
 	}
 
 	protected ATopToolBarManager topToolBarManager1;
 
-	protected ATopToolBarManager getTopToolBarManager1(Composite container) {
+	protected ATopToolBarManager getDataAdapterToolBarManager(Composite container) {
 		if (topToolBarManager1 == null)
 			topToolBarManager1 = new ATopToolBarManager(this, container) {
 
@@ -348,8 +348,8 @@ public class PreviewJRPrint extends ABasicEditor {
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.editor_jrprint"); //$NON-NLS-1$
 
-		getTopToolBarManager1(container);
-		getTopToolBarManager(container);
+		getDataAdapterToolBarManager(container);
+		getActionToolBarManager(container);
 
 		Composite rcmp = createRight(container);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -397,10 +397,10 @@ public class PreviewJRPrint extends ABasicEditor {
 				topToolBarManager1.setEnabled(true);
 		}
 
-		if (topToolBarManager != null) {
-			topToolBarManager.refreshToolbar();
+		if (actionToolBarManager != null) {
+			actionToolBarManager.refreshToolbar();
 			if (norun)
-				topToolBarManager.setEnabled(true);
+				actionToolBarManager.setEnabled(true);
 		}
 	}
 

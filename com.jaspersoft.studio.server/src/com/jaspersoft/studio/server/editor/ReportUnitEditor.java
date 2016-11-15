@@ -80,7 +80,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 	public void setCurrentViewer(String viewerKey, boolean refresh) {
 		super.setCurrentViewer(viewerKey, refresh);
 
-		getTopToolBarManager(null).contributeItems(getRightContainer().getViewer(viewerKey));
+		getActionToolBarManager(null).contributeItems(getRightContainer().getViewer(viewerKey));
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 	public void runReport() {
 		if (isNotRunning()) {
 			// check if we can run the report
-			topToolBarManager.setEnabled(false);
+			actionToolBarManager.setEnabled(false);
 			topToolBarManager1.setEnabled(false);
 			leftToolbar.setEnabled(false);
 			getLeftContainer().setEnabled(false);
@@ -102,7 +102,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 	}
 
 	@Override
-	protected PreviewTopToolBarManager getTopToolBarManager1(Composite container) {
+	protected PreviewTopToolBarManager getDataAdapterToolBarManager(Composite container) {
 		if (topToolBarManager1 == null)
 			topToolBarManager1 = new PreviewTopToolBarManager(this, container);
 		return (PreviewTopToolBarManager) topToolBarManager1;
@@ -116,8 +116,8 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(3, false));
 
-		getTopToolBarManager1(container);
-		getTopToolBarManager(container);
+		getDataAdapterToolBarManager(container);
+		getActionToolBarManager(container);
 
 		Button lbutton = new Button(container, SWT.PUSH);
 		lbutton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));

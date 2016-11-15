@@ -124,7 +124,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	 * Retrieve the action from the contribution items. If the action were already retrieved it dosen't do nothing
 	 */
 	private void setActions() {
-		for (IContributionItem item : topToolBarManager.getContributions()) {
+		for (IContributionItem item : actionToolBarManager.getContributions()) {
 			if (zoomInAction != null && zoomOutAction != null && zoomActualAction != null)
 				return;
 			if (ZoomInAction.ID.equals(item.getId()) && item instanceof ActionContributionItem) {
@@ -220,8 +220,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		container.setLayout(new GridLayout(3, false));
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.editor_preview"); //$NON-NLS-1$
 
-		getTopToolBarManager1(container);
-		getTopToolBarManager(container);
+		getDataAdapterToolBarManager(container);
+		getActionToolBarManager(container);
 
 		Button lbutton = new Button(container, SWT.PUSH);
 		lbutton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
@@ -247,7 +247,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	}
 
 	@Override
-	protected PreviewTopToolBarManager getTopToolBarManager1(Composite container) {
+	protected PreviewTopToolBarManager getDataAdapterToolBarManager(Composite container) {
 		if (topToolBarManager1 == null) {
 			IFile file = null;
 			IProject project = null;
@@ -258,15 +258,17 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			if (jrContext != null) {
 				project = (IProject) jrContext.get(FileUtils.KEY_IPROJECT);
 			}
-			topToolBarManager1 = new PreviewTopToolBarManager(this, container,
-					DataAdapterManager.getDataAdapter(file, project, jrContext));
+			topToolBarManager1 = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file, project, jrContext));
+			GridData additionalToolbarGD = new GridData(SWT.LEFT, SWT.CENTER, true, false);
+			additionalToolbarGD.minimumWidth = 30;
+			topToolBarManager1.getTopToolBar().setLayoutData(additionalToolbarGD);
 		}
 		return (PreviewTopToolBarManager) topToolBarManager1;
 	}
 
-	protected TopToolBarManagerJRPrint getTopToolBarManager(Composite container) {
-		if (topToolBarManager == null)
-			topToolBarManager = new TopToolBarManagerJRPrint(this, container) {
+	protected TopToolBarManagerJRPrint getActionToolBarManager(Composite container) {
+		if (actionToolBarManager == null){
+			actionToolBarManager = new TopToolBarManagerJRPrint(this, container) {
 				protected void fillToolbar(IToolBarManager tbManager) {
 					if (runMode.equals(RunStopAction.MODERUN_LOCAL)) {
 						if (pvModeAction == null)
@@ -277,7 +279,11 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					tbManager.add(new Separator());
 				}
 			};
-		return topToolBarManager;
+			GridData additionalToolbarGD = new GridData(SWT.LEFT, SWT.CENTER, true, false);
+			additionalToolbarGD.minimumWidth = 100;
+			actionToolBarManager.getTopToolBar().setLayoutData(additionalToolbarGD);
+		}
+		return actionToolBarManager;
 	}
 
 	/**
@@ -292,7 +298,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public void setCurrentViewer(String viewerKey, boolean refresh) {
 		super.setCurrentViewer(viewerKey, refresh);
 		// Set the name of the action to align the showed name with the actual type
-		topToolBarManager.setActionText(viewerKey);
+		actionToolBarManager.setActionText(viewerKey);
 	}
 
 	protected void createLeft(Composite parent, SashForm sf) {
@@ -380,7 +386,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public void runReport(final DataAdapterDescriptor myDataAdapter, boolean prmDirty) {
 		if (isNotRunning()) {
 			// check if we can run the report
-			topToolBarManager.setEnabled(false);
+			actionToolBarManager.setEnabled(false);
 			topToolBarManager1.setEnabled(false);
 			leftToolbar.setEnabled(false);
 			getLeftContainer().setEnabled(false);
@@ -429,8 +435,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 			@Override
 			public void run() {
-				if (topToolBarManager != null)
-					topToolBarManager.contributeItems(view);
+				if (actionToolBarManager != null)
+					actionToolBarManager.contributeItems(view);
 			}
 		});
 	}
