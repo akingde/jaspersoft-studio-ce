@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (C) 2010 - 2016. TIBCO Software Inc. 
+  All Rights Reserved. Confidential & Proprietary.
+-->
 <associateSites>
 	<associateSite url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/" label="Xtext Releases Update Site"/>
 	<associateSite url="http://download.eclipse.org/tools/orbit/downloads/drops/R20160221192158/repository/" label="Orbit Update site Build R20160221192158"/>
