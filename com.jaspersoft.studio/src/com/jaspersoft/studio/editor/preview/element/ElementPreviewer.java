@@ -78,7 +78,8 @@ public class ElementPreviewer {
 				public void run() {
 					StringBuffer sb = new StringBuffer();
 					sb.append("<html><head><style>");
-					sb.append(".loader {border: 16px solid darkgrey; position: absolute; top: 50%;left: 50%;margin-top: -60px;margin-left: -60px;");
+					sb.append(
+							".loader {border: 16px solid darkgrey; position: absolute; top: 50%;left: 50%;margin-top: -60px;margin-left: -60px;");
 					sb.append("border-top: 16px solid lightgrey;");
 					sb.append("border-radius: 50%;");
 					sb.append("width: 120px;");
@@ -251,8 +252,8 @@ public class ElementPreviewer {
 		element.setY(0);
 		UIUtils.getDisplay().syncExec(new Runnable() {
 			public void run() {
-				element.setWidth(browser.getBounds().width - 20);
-				element.setHeight(browser.getBounds().height - 20);
+				element.setWidth(Math.max(20, browser.getBounds().width - 20));
+				element.setHeight(Math.max(20, browser.getBounds().height - 20));
 			}
 		});
 
