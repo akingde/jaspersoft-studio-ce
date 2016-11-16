@@ -1,3 +1,7 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
+ * All Rights Reserved. Confidential & Proprietary.
+ ******************************************************************************/
 package com.jaspersoft.studio.book.model.commands;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;

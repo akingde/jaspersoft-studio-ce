@@ -1,37 +1,7 @@
-
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
- * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
- * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- ******************************************************************************/package com.jaspersoft.studio.book.gallery.implementations;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.FileDialog;
-
-import com.jaspersoft.studio.book.gallery.interfaces.IElementOpener;
-import com.jaspersoft.studio.book.gallery.interfaces.IGalleryElement;
-import com.jaspersoft.studio.book.messages.Messages;
-
-/**
- * Opener to allow to add elements to a gallery by choosing them
- * from a file dialog
- * 
- * @author Orlandin Marco
- *
- */
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
+ * All Rights Reserved. Confidential & Proprietary.
+ ******************************************************************************/
 public class PageOpener implements IElementOpener {
 
 	/**
