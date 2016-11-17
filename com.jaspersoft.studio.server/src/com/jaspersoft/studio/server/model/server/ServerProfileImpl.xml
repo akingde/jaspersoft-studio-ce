@@ -1,8 +1,4 @@
 <?xml version="1.0"?>
-<!--
-  Copyright (C) 2010 - 2016. TIBCO Software Inc. 
-  All Rights Reserved. Confidential & Proprietary.
--->
 <mapping>
 	<class name="com.jaspersoft.studio.server.model.server.ServerProfile">
 		<map-to xml="serverProfile" />
