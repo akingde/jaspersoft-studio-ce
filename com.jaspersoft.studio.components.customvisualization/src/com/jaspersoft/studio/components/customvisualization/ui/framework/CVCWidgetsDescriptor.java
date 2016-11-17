@@ -22,11 +22,11 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 public class CVCWidgetsDescriptor extends WidgetsDescriptor {
 
 	private String module;
-	
+
 	private String thumbnail;
-	
+
 	private List<DatasetPropertyDescriptor> datasets;
-	
+
 	public String getModule() {
 		return module;
 	}
@@ -44,7 +44,7 @@ public class CVCWidgetsDescriptor extends WidgetsDescriptor {
 	}
 
 	public List<DatasetPropertyDescriptor> getDatasets() {
-		if (datasets == null){
+		if (datasets == null) {
 			datasets = new ArrayList<DatasetPropertyDescriptor>();
 		}
 		return datasets;
@@ -58,6 +58,8 @@ public class CVCWidgetsDescriptor extends WidgetsDescriptor {
 	public boolean equals(Object obj) {
 		if (obj instanceof ComponentDescriptor)
 			return getModule().equals(((ComponentDescriptor) obj).getModule());
+		else if (obj instanceof CVCWidgetsDescriptor)
+			return getModule().equals(((CVCWidgetsDescriptor) obj).getModule());
 		return false;
 	}
 
@@ -72,5 +74,5 @@ public class CVCWidgetsDescriptor extends WidgetsDescriptor {
 	public String getLocalizedString(String key) {
 		return UIManager.getProperty(this, key);
 	}
-	
+
 }
