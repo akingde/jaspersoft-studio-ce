@@ -2,6 +2,21 @@
  * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
  * All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
+package com.jaspersoft.studio.book.gallery.implementations;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.FileDialog;
+
+import com.jaspersoft.studio.book.gallery.interfaces.IElementOpener;
+import com.jaspersoft.studio.book.gallery.interfaces.IGalleryElement;
+import com.jaspersoft.studio.book.messages.Messages;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 public class PageOpener implements IElementOpener {
 
 	/**
