@@ -63,7 +63,14 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 	public void contribute2ToolBar(IToolBarManager tmanager) {
 		super.contribute2ToolBar(tmanager);
 		if(!useExternalBrowser()) {
-			urlBar = new URLContributionItem(Misc.nvl(url, "")); //$NON-NLS-1$
+			//Add the calculation of the toolbar width depending on the available size on the parent
+			//minus 40 to leave space to the refresh action
+			urlBar = new URLContributionItem(Misc.nvl(url, "")){ //$NON-NLS-1$
+				@Override
+				protected int computeWidth(Control control) {
+					return Math.max(0, control.getParent().getSize().x - 40);
+				}
+			};
 			tmanager.add(urlBar);
 			tmanager.add(getRefreshAction());
 		}

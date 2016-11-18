@@ -24,11 +24,15 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
@@ -102,6 +106,18 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	 */
 	private boolean runWhenInitilizing = true;
 
+	private ReportControler reportControler;
+	
+	protected boolean isParameterDirty = true;
+	
+	protected boolean isRunDirty = true;
+	
+	private MultiPageContainer leftContainer;
+	
+	private CSashForm sashform;
+
+	private LeftToolBarManager leftToolbar;
+	
 	public PreviewContainer() {
 		super(true);
 	}
@@ -178,8 +194,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		}
 	}
 
-	private MultiPageContainer leftContainer;
-
 	public MultiPageContainer getLeftContainer() {
 		if (leftContainer == null)
 			leftContainer = new MultiPageContainer() {
@@ -197,10 +211,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return leftContainer;
 	}
 
-	private CSashForm sashform;
-
-	private LeftToolBarManager leftToolbar;
-
 	/**
 	 * When disposed the mouse wheel filter is removed
 	 */
@@ -213,14 +223,16 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public void createPartControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 
-		container.setLayout(new GridLayout(3, false));
+		container.setLayout(new GridLayout(1, false));
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.editor_preview"); //$NON-NLS-1$
 
-		getDataAdapterToolBarManager(container);
-		getActionToolBarManager(container);
+		Composite toolbarContainer = new Composite(container, SWT.NONE);
+		GridData additionalToolbarGD = new GridData(SWT.FILL, SWT.TOP, true, false);
+		toolbarContainer.setLayoutData(additionalToolbarGD);
+		getDataAdapterToolBarManager(toolbarContainer);
+		getActionToolBarManager(toolbarContainer);
 
-		Button lbutton = new Button(container, SWT.PUSH);
-		lbutton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		final Button lbutton = new Button(toolbarContainer, SWT.PUSH);
 		lbutton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/application-sidebar-expand.png")); //$NON-NLS-1$
 		lbutton.setToolTipText(Messages.PreviewContainer_buttonText);
 		lbutton.addSelectionListener(new SelectionAdapter() {
@@ -229,10 +241,48 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				sashform.upRestore();
 			}
 		});
+		
+		//The toolbar container uses a custom layout to have always the data adapter toolbar at full size on 
+		//the start, the parameter button on the end and to give the remaining space to the action toolbar, 
+		//that eventually will be able to resize and go down. The action toolbar will be always 100 at least
+		toolbarContainer.setLayout(new Layout() {
+			
+			@Override
+			protected void layout(Composite composite, boolean flushCache) {
+				Control children[] = composite.getChildren();
+				int spacing = 5;
+				Point daToolbarSize = children[0].computeSize(SWT.DEFAULT, SWT.DEFAULT, flushCache);
+				Point buttonSize = children[2].computeSize(SWT.DEFAULT, SWT.DEFAULT, flushCache);
+				Rectangle parentSize = composite.getClientArea();
+				int actionToolbarWidth = Math.max(100, parentSize.width - daToolbarSize.x - buttonSize.x - spacing);
+				Point actionToolbarSize = children[1].computeSize(actionToolbarWidth, SWT.DEFAULT, flushCache);
+				int offestX = 0;
+				children[0].setBounds(0, 0, daToolbarSize.x, daToolbarSize.y);
+				offestX += daToolbarSize.x + spacing;
+				children[1].setBounds(offestX, 0, actionToolbarWidth, actionToolbarSize.y);
+				int buttonStart = parentSize.width - buttonSize.x;
+				int remainingSpace = parentSize.width - (actionToolbarWidth + offestX);
+				if (remainingSpace < buttonSize.x){
+					buttonStart = actionToolbarWidth + offestX + spacing;
+				}
+				children[2].setBounds(buttonStart, 0, buttonSize.x, buttonSize.y);
+			}
+			
+			@Override
+			protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
+				Control children[] = composite.getChildren();
+				Point daToolbarSize = children[0].computeSize(SWT.DEFAULT, SWT.DEFAULT, flushCache);
+				Point buttonSize = children[2].computeSize(SWT.DEFAULT, SWT.DEFAULT, flushCache);
+				Rectangle parentSize = composite.getClientArea();
+				int width = Math.max(100, parentSize.width - daToolbarSize.x - buttonSize.x);
+				Point actionToolbarSize = children[1].computeSize(width, SWT.DEFAULT, flushCache);
+				int height = Math.max(daToolbarSize.y, Math.max(buttonSize.y, actionToolbarSize.y));
+				return new Point(width + daToolbarSize.x + buttonSize.x, height);
+			}
+		});
 
 		sashform = new CSashForm(container, SWT.HORIZONTAL);
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 3;
 		sashform.setLayoutData(gd);
 
 		createLeft(parent, sashform);
@@ -244,7 +294,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	@Override
 	protected PreviewTopToolBarManager getDataAdapterToolBarManager(Composite container) {
-		if (topToolBarManager1 == null) {
+		if (dataDapterToolBarManager == null) {
 			IFile file = null;
 			IProject project = null;
 			IEditorInput editorInput = getEditorInput();
@@ -254,12 +304,9 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			if (jrContext != null) {
 				project = (IProject) jrContext.get(FileUtils.KEY_IPROJECT);
 			}
-			topToolBarManager1 = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file, project, jrContext));
-			GridData additionalToolbarGD = new GridData(SWT.LEFT, SWT.CENTER, true, false);
-			additionalToolbarGD.minimumWidth = 30;
-			topToolBarManager1.getTopToolBar().setLayoutData(additionalToolbarGD);
+			dataDapterToolBarManager = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file, project, jrContext));
 		}
-		return (PreviewTopToolBarManager) topToolBarManager1;
+		return (PreviewTopToolBarManager) dataDapterToolBarManager;
 	}
 
 	protected TopToolBarManagerJRPrint getActionToolBarManager(Composite container) {
@@ -275,9 +322,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					tbManager.add(new Separator());
 				}
 			};
-			GridData additionalToolbarGD = new GridData(SWT.LEFT, SWT.CENTER, true, false);
-			additionalToolbarGD.minimumWidth = 100;
-			actionToolBarManager.getTopToolBar().setLayoutData(additionalToolbarGD);
 		}
 		return actionToolBarManager;
 	}
@@ -383,7 +427,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		if (isNotRunning()) {
 			// check if we can run the report
 			actionToolBarManager.setEnabled(false);
-			topToolBarManager1.setEnabled(false);
+			dataDapterToolBarManager.setEnabled(false);
 			leftToolbar.setEnabled(false);
 			getLeftContainer().setEnabled(false);
 			getLeftContainer().switchView(null, ReportControler.FORM_PARAMETERS);
@@ -394,7 +438,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				dataAdapterDesc = myDataAdapter;
 				setParameterDirty(prmDirty);
 			} else {
-				DataAdapterAction daWidget = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget();
+				DataAdapterAction daWidget = ((PreviewTopToolBarManager) dataDapterToolBarManager).getDataSourceWidget();
 				dataAdapterDesc = daWidget.isDefaultDASelected() ? null : daWidget.getSelected();
 			}
 
@@ -433,7 +477,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			public void run() {
 				if (actionToolBarManager != null)
 					actionToolBarManager.contributeItems(view);
-			}
+					actionToolBarManager.getTopToolBar().getParent().layout(true, true);
+				}
 		});
 	}
 
@@ -453,16 +498,11 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			sashform.upHide();
 	}
 
-	private ReportControler reportControler;
-
 	public ReportControler getReportControler() {
 		if (reportControler == null)
 			reportControler = new ReportControler(this, jrContext);
 		return reportControler;
 	}
-
-	protected boolean isParameterDirty = true;
-	protected boolean isRunDirty = true;
 
 	public boolean isRunDirty() {
 		return isParameterDirty;
@@ -527,10 +567,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	private void setupDataAdapter() {
 		JasperDesign jd = getReportControler().getJrContext().getJasperDesign();
-		PreviewTopToolBarManager pt = (PreviewTopToolBarManager) topToolBarManager1;
+		PreviewTopToolBarManager pt = (PreviewTopToolBarManager) dataDapterToolBarManager;
 		if (pt != null && jd != null) {
 			String strda = jd.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-			DataAdapterAction daWidget = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget();
+			DataAdapterAction daWidget = ((PreviewTopToolBarManager) dataDapterToolBarManager).getDataSourceWidget();
 			pt.refreshDataAdapters();
 
 			if (strda != null) {
@@ -578,7 +618,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	@Override
 	public void runReport() {
-		DataAdapterAction daWidget = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget();
+		DataAdapterAction daWidget = ((PreviewTopToolBarManager) dataDapterToolBarManager).getDataSourceWidget();
 		dataAdapterDesc = daWidget.isDefaultDASelected() ? null : daWidget.getSelected();
 		runReport(dataAdapterDesc, false);
 	}

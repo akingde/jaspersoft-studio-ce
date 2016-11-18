@@ -317,18 +317,18 @@ public class PreviewJRPrint extends ABasicEditor {
 		return actionToolBarManager;
 	}
 
-	protected ATopToolBarManager topToolBarManager1;
+	protected ATopToolBarManager dataDapterToolBarManager;
 
 	protected ATopToolBarManager getDataAdapterToolBarManager(Composite container) {
-		if (topToolBarManager1 == null)
-			topToolBarManager1 = new ATopToolBarManager(this, container) {
+		if (dataDapterToolBarManager == null)
+			dataDapterToolBarManager = new ATopToolBarManager(this, container) {
 
 				@Override
 				protected void fillToolbar(IToolBarManager tbManager) {
 
 				}
 			};
-		return topToolBarManager1;
+		return dataDapterToolBarManager;
 	}
 
 	protected VSimpleErrorPreview errorPreview;
@@ -378,8 +378,8 @@ public class PreviewJRPrint extends ABasicEditor {
 
 	@Override
 	public void setFocus() {
-		if (topToolBarManager1 != null)
-			topToolBarManager1.setFocus();
+		if (dataDapterToolBarManager != null)
+			dataDapterToolBarManager.setFocus();
 	}
 
 	private boolean notRunning = true;
@@ -387,10 +387,10 @@ public class PreviewJRPrint extends ABasicEditor {
 	public void setNotRunning(boolean norun) {
 		this.notRunning = norun;
 
-		if (topToolBarManager1 != null) {
-			topToolBarManager1.refreshToolbar();
+		if (dataDapterToolBarManager != null) {
+			dataDapterToolBarManager.refreshToolbar();
 			if (norun)
-				topToolBarManager1.setEnabled(true);
+				dataDapterToolBarManager.setEnabled(true);
 		}
 
 		if (actionToolBarManager != null) {

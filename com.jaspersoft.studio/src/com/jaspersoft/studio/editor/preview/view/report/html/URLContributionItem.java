@@ -11,6 +11,10 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -62,7 +66,7 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 	 *          the parent composite
 	 * @return the new control
 	 */
-	protected Control createControl(Composite parent) {
+	protected Control createControl(final Composite parent) {
 		txt = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
 		txt.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
@@ -82,6 +86,35 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 				refresh();
 			}
 		});
+		
+		//This listener dynamically set the size of the text item when 
+		//the toolbar is resized
+		final ControlAdapter resizeListener = new ControlAdapter() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				if (!parent.isDisposed() && !txt.isDisposed()) {
+					refresh();
+					toolitem.setWidth(computeWidth(txt));
+					txt.pack();
+				}
+			}
+			
+		};
+		
+		//This will remove the resize listener from the toolbar
+		//when it is disposed
+		DisposeListener disposeListener = new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				parent.removeControlListener(resizeListener);
+			}
+		};
+		parent.addDisposeListener(disposeListener);
+		txt.addDisposeListener(disposeListener);
+		parent.addControlListener(resizeListener);
+		
 		refresh();
 		toolitem.setWidth(computeWidth(txt));
 		txt.pack();

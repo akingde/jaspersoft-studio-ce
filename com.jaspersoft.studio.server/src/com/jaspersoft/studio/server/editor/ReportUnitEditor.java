@@ -84,7 +84,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 		if (isNotRunning()) {
 			// check if we can run the report
 			actionToolBarManager.setEnabled(false);
-			topToolBarManager1.setEnabled(false);
+			dataDapterToolBarManager.setEnabled(false);
 			leftToolbar.setEnabled(false);
 			getLeftContainer().setEnabled(false);
 			getLeftContainer().switchView(null, ReportRunControler.FORM_PARAMETERS);
@@ -95,9 +95,9 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 
 	@Override
 	protected PreviewTopToolBarManager getDataAdapterToolBarManager(Composite container) {
-		if (topToolBarManager1 == null)
-			topToolBarManager1 = new PreviewTopToolBarManager(this, container);
-		return (PreviewTopToolBarManager) topToolBarManager1;
+		if (dataDapterToolBarManager == null)
+			dataDapterToolBarManager = new PreviewTopToolBarManager(this, container);
+		return (PreviewTopToolBarManager) dataDapterToolBarManager;
 	}
 
 	private CSashForm sashform;
