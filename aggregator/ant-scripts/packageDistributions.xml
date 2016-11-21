@@ -45,6 +45,10 @@
 		<copy file="${jssRcpProductFolderPath}/resources/jaspersoftstudio.ico" tofile="${dirlocation.win32.x86}/jaspersoftstudio/jaspersoftstudio.ico" overwrite="true" />
 		<!-- copy additional licensing files -->
 		<copy file="${basedir}/rootfiles/license/license.txt" todir="${dirlocation.win32.x86}/${productRootFolder}" />
+		<!-- create zip file -->
+		<zip destfile="${dist}/${jss.win32.x86.zipfile}">
+			<fileset dir="${dirlocation.win32.x86}" excludes="**/_MACOSX, **/.DS_Store"/>
+		</zip>		
 
 		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${jssRcpProductFolderPath}/lib/nsisant-1.1.jar" />
 		<nsisant script="${jssRcpProductFolderPath}/resources/JaspersoftStudioInstaller.nsi">
@@ -69,6 +73,10 @@
 		<copy file="${jssRcpProductFolderPath}/resources/jaspersoftstudio.ico" tofile="${dirlocation.win32.x86_64}/jaspersoftstudio/jaspersoftstudio.ico" overwrite="true" />
 		<!-- copy additional licensing files -->
 		<copy file="${basedir}/rootfiles/license/license.txt" todir="${dirlocation.win32.x86_64}/${productRootFolder}" />
+		<!-- create zip file -->
+		<zip destfile="${dist}/${jss.win32.x86_64.zipfile}">
+			<fileset dir="${dirlocation.win32.x86_64}" excludes="**/_MACOSX, **/.DS_Store"/>
+		</zip>		
 
 		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${jssRcpProductFolderPath}/lib/nsisant-1.1.jar" />
 		<nsisant script="${jssRcpProductFolderPath}/resources/JaspersoftStudioInstaller64.nsi">
