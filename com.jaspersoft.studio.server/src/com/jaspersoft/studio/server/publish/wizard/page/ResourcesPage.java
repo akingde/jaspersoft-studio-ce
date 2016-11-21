@@ -414,6 +414,8 @@ public class ResourcesPage extends JSSHelpWizardPage {
 						r.getPublishOptions().setOverwrite(OverwriteEnum.OVERWRITE);
 					else if (b.equals("ignore"))
 						r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
+					else
+						r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
 				}
 				// let's look and make a diff
 			}
