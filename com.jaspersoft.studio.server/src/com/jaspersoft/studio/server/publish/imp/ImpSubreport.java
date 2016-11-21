@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IFile;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpSubreport extends AImpObject {
@@ -71,6 +72,11 @@ public class ImpSubreport extends AImpObject {
 	}
 
 	protected JRDesignExpression getExpression(JRDesignElement img) {
+		JRDesignExpression exp = (JRDesignExpression) ((JRDesignSubreport) img).getExpression();
+		if (exp != null && !Misc.isNullOrEmpty(exp.getText())) {
+			exp.setText(exp.getText().replaceAll(FileExtension.PointJASPER, FileExtension.PointJRXML));
+			return exp;
+		}
 		return (JRDesignExpression) ((JRDesignSubreport) img).getExpression();
 	}
 }
