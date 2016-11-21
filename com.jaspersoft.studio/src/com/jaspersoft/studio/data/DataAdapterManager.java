@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.data;
 
@@ -36,7 +35,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class DataAdapterManager {
 
 	private static Map<String, DataAdapterFactory> dataAdapterFactories = new HashMap<String, DataAdapterFactory>();
-	
+
 	private static Map<Object, ADataAdapterStorage> storages = new HashMap<Object, ADataAdapterStorage>();
 
 	/*******************************
@@ -74,8 +73,8 @@ public class DataAdapterManager {
 		// Let's sort the list based on the description. Please note that the description may be localized,
 		// so not all the languages have the same order if assumptions are done.
 
-		DataAdapterFactory[] factories = dataAdapterFactories.values().toArray(
-				new DataAdapterFactory[dataAdapterFactories.size()]);
+		DataAdapterFactory[] factories = dataAdapterFactories.values()
+				.toArray(new DataAdapterFactory[dataAdapterFactories.size()]);
 
 		Arrays.sort(factories, new Comparator<DataAdapterFactory>() {
 
@@ -105,22 +104,21 @@ public class DataAdapterManager {
 		return dataAdapterFactories.get(adapterClassName);
 	}
 
-	
 	public static ADataAdapterStorage[] getDataAdapter(IFile file, IProject project, JasperReportsConfiguration jConfig) {
 		List<ADataAdapterStorage> st = new ArrayList<ADataAdapterStorage>();
 		st.add(getPreferencesStorage());
 		if (file != null) {
 			project = file.getProject();
 		}
-		if (project!=null) {
+		if (project != null) {
 			st.add(getProjectStorage(project));
 		}
-		if (jConfig != null && jConfig.getJasperDesign() != null){
+		if (jConfig != null && jConfig.getJasperDesign() != null) {
 			st.add(getJRDefaultStorage(jConfig));
 		}
 		return st.toArray(new ADataAdapterStorage[st.size()]);
 	}
-	
+
 	public static ADataAdapterStorage[] getDataAdapter(IFile file, JasperReportsConfiguration jConfig) {
 		return getDataAdapter(file, null, jConfig);
 	}
@@ -129,12 +127,13 @@ public class DataAdapterManager {
 		ADataAdapterStorage s = storages.get(key);
 		if (s == null) {
 			s = new FileDataAdapterStorage(key);
+			s.findAll();
 			s.getDataAdapterDescriptors();
 			storages.put(key, s);
 		}
 		return s;
 	}
-	
+
 	/**
 	 * Get the storage for the handling of the default data adapters
 	 * 
@@ -147,7 +146,7 @@ public class DataAdapterManager {
 			s.getDataAdapterDescriptors();
 			storages.put(key, s);
 		}
-		return (JRDefaultDataAdapterStorage)s;
+		return (JRDefaultDataAdapterStorage) s;
 	}
 
 	public static ADataAdapterStorage getPreferencesStorage() {
@@ -202,8 +201,8 @@ public class DataAdapterManager {
 		DataAdapterFactory factory = findFactoryByDataAdapterClass(srcDataAdapter.getClass().getName());
 		DataAdapterDescriptor copy = factory.createDataAdapter();
 		copy.setName(src.name);
-		srcDataAdapter = (DataAdapter) CastorUtil.getInstance(jrContext).read(
-				new ByteArrayInputStream(src.toXml(jrContext).getBytes()));
+		srcDataAdapter = (DataAdapter) CastorUtil.getInstance(jrContext)
+				.read(new ByteArrayInputStream(src.toXml(jrContext).getBytes()));
 		copy.setDataAdapter(srcDataAdapter);
 		return copy;
 	}
