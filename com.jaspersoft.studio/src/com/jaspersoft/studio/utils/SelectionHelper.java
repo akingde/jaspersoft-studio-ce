@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
@@ -75,10 +74,10 @@ public class SelectionHelper {
 
 	public static EditPart getEditPart(JRDesignElement jrElement) {
 		ANode node = getNode(jrElement);
-		
+
 		if (node != null) {
 			EditPart figure = node.getFigureEditPart();
-			if (figure != null){
+			if (figure != null) {
 				return figure;
 			}
 		}
@@ -88,24 +87,24 @@ public class SelectionHelper {
 	/**
 	 * Get the node of the passed element, searching it in the current editor
 	 * 
-	 * @param jrElement the element to search
-	 * @return the node of the passed element in the current editor, or null if it 
-	 * can't be found
+	 * @param jrElement
+	 *          the element to search
+	 * @return the node of the passed element in the current editor, or null if it can't be found
 	 */
 	public static ANode getNode(JRDesignElement jrElement) {
 		AbstractJRXMLEditor editor = (AbstractJRXMLEditor) getActiveJRXMLEditor();
-		if (editor != null){
+		if (editor != null) {
 			IEditorPart designEditor = editor.getActiveInnerEditor();
-			if (designEditor instanceof AbstractVisualEditor){
-				AbstractVisualEditor visualEditor = (AbstractVisualEditor)designEditor;
+			if (designEditor instanceof AbstractVisualEditor) {
+				AbstractVisualEditor visualEditor = (AbstractVisualEditor) designEditor;
 				INode model = visualEditor.getModel();
-				if (model instanceof MRoot){
+				if (model instanceof MRoot) {
 					model = model.getChildren().get(0);
 				}
-				if (model instanceof MReport){
-					return ((MReport)model).getNode(jrElement);
-				} else if (model instanceof MPage){
-					return ((MPage)model).getNode(jrElement);
+				if (model instanceof MReport) {
+					return ((MReport) model).getNode(jrElement);
+				} else if (model instanceof MPage) {
+					return ((MPage) model).getNode(jrElement);
 				}
 			}
 		}
@@ -199,23 +198,25 @@ public class SelectionHelper {
 			}
 		}
 	}
-	
+
 	/**
 	 * Set the selection of the current editor.
 	 * 
-	 * @param jrElements list of the jrElements to select, must be not null
-	 * @param add true if the selection should be added to the existing onem false otherwise
-	 * @return the previous selection, in a pair where the key is the selection and the value is 
-	 * the viewer where it was set
+	 * @param jrElements
+	 *          list of the jrElements to select, must be not null
+	 * @param add
+	 *          true if the selection should be added to the existing onem false otherwise
+	 * @return the previous selection, in a pair where the key is the selection and the value is the viewer where it was
+	 *         set
 	 */
 	public static Pair<ISelection, EditPartViewer> setSelection(List<JRDesignElement> jrElements, boolean add) {
 		ArrayList<EditPart> editParts = new ArrayList<EditPart>();
-		for (JRDesignElement jrElement : jrElements){
+		for (JRDesignElement jrElement : jrElements) {
 			EditPart ep = getEditPart(jrElement);
-			if (ep != null){
+			if (ep != null) {
 				editParts.add(ep);
 			}
-		} 
+		}
 		if (!editParts.isEmpty()) {
 			EditPart firstPart = editParts.get(0);
 			// The selection is set only if the refresh is enabled
@@ -238,20 +239,20 @@ public class SelectionHelper {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Deselect every element in the current editor
 	 */
-	public static void deselectAll(){
-		AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor)SelectionHelper.getActiveJRXMLEditor();
-		if (jrxmlEditor != null){
+	public static void deselectAll() {
+		AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor) SelectionHelper.getActiveJRXMLEditor();
+		if (jrxmlEditor != null) {
 			IEditorPart editor = jrxmlEditor.getActiveEditor();
-			if (editor instanceof ReportContainer){
-				ReportContainer reportEditor = (ReportContainer)editor;
+			if (editor instanceof ReportContainer) {
+				ReportContainer reportEditor = (ReportContainer) editor;
 				IEditorPart activeReportEditor = reportEditor.getActiveEditor();
-				if (activeReportEditor instanceof AbstractVisualEditor){
-						GraphicalViewer viewer = ((AbstractVisualEditor)activeReportEditor).getGraphicalViewer();
-					 	viewer.deselectAll();
+				if (activeReportEditor instanceof AbstractVisualEditor) {
+					GraphicalViewer viewer = ((AbstractVisualEditor) activeReportEditor).getGraphicalViewer();
+					viewer.deselectAll();
 				}
 			}
 		}
@@ -349,6 +350,16 @@ public class SelectionHelper {
 		return true;
 	}
 
+	public static final boolean openEditorType(IFile file, String editorID) {
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			IDE.openEditor(page, file, editorID);
+		} catch (PartInitException e) {
+			UIUtils.showError(e);
+		}
+		return true;
+	}
+
 	public static final void openEditorFile(final IFile file) {
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -399,8 +410,8 @@ public class SelectionHelper {
 			fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
 			}));
 		else
-			fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()),
-					new File(file.getProject().getLocationURI()) }));
+			fileResolver = new URLFileResolver(Arrays.asList(
+					new File[] { new File(file.getParent().getLocationURI()), new File(file.getProject().getLocationURI()) }));
 		fileResolver.setResolveAbsolutePath(true);
 		return fileResolver;
 	}
@@ -497,37 +508,36 @@ public class SelectionHelper {
 	}
 
 	/**
-	 * Return the main part of the current editor. Typically this is a PageEditPart. This
-	 * is the part that has every other element as child
+	 * Return the main part of the current editor. Typically this is a PageEditPart. This is the part that has every other
+	 * element as child
 	 * 
 	 * @return a PageEditPart or null if it can't be found
 	 */
-	private static EditPart getMainEditPart(){
-		AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor)SelectionHelper.getActiveJRXMLEditor();
-		if (jrxmlEditor != null){
+	private static EditPart getMainEditPart() {
+		AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor) SelectionHelper.getActiveJRXMLEditor();
+		if (jrxmlEditor != null) {
 			IEditorPart editor = jrxmlEditor.getActiveEditor();
-			if (editor instanceof ReportContainer){
-				ReportContainer reportEditor = (ReportContainer)editor;
+			if (editor instanceof ReportContainer) {
+				ReportContainer reportEditor = (ReportContainer) editor;
 				IEditorPart activeReportEditor = reportEditor.getActiveEditor();
-				if (activeReportEditor instanceof AbstractVisualEditor){
-						GraphicalViewer viewer = ((AbstractVisualEditor)activeReportEditor).getGraphicalViewer();
-					 	return (EditPart)viewer.getRootEditPart().getChildren().get(0);
+				if (activeReportEditor instanceof AbstractVisualEditor) {
+					GraphicalViewer viewer = ((AbstractVisualEditor) activeReportEditor).getGraphicalViewer();
+					return (EditPart) viewer.getRootEditPart().getChildren().get(0);
 				}
 			}
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Return the mouse position in the current editor, the position is 
-	 * relative to the current ReportPageEditPart or a PageEditPart of a subeditor
-	 * if it is opened
+	 * Return the mouse position in the current editor, the position is relative to the current ReportPageEditPart or a
+	 * PageEditPart of a subeditor if it is opened
 	 * 
 	 * @return the position of the pointer in the current page or null if it can't be found
 	 */
 	public static Point getCursorCurrentRelativePosition() {
-		GraphicalEditPart part = (GraphicalEditPart)getMainEditPart();
-		if (part != null){
+		GraphicalEditPart part = (GraphicalEditPart) getMainEditPart();
+		if (part != null) {
 			Display display = Display.getDefault();
 			Point point = part.getViewer().getControl().toControl(display.getCursorLocation());
 			IFigure figure = part.getFigure();
@@ -541,19 +551,18 @@ public class SelectionHelper {
 	}
 
 	/**
-	 * Return the mouse position in the current editor the last time a specific mouse button 
-	 * was pressed. The position is relative to the current ReportPageEditPart or a 
-	 * PageEditPart of a subeditor if it is opened
+	 * Return the mouse position in the current editor the last time a specific mouse button was pressed. The position is
+	 * relative to the current ReportPageEditPart or a PageEditPart of a subeditor if it is opened
 	 * 
-	 * @param mouseButton the index of the mouse button
-	 * @return the position of the pointer in the current page when the button was pressed 
-	 * or null if it can't be found
+	 * @param mouseButton
+	 *          the index of the mouse button
+	 * @return the position of the pointer in the current page when the button was pressed or null if it can't be found
 	 */
 	public static Point getCursorRelativePositionOnClick(int mouseButton) {
 		Point cursorPosition = JasperReportsPlugin.getLastClickLocation(mouseButton);
-		if (cursorPosition != null){
-			GraphicalEditPart part = (GraphicalEditPart)getMainEditPart();
-			if (part != null){
+		if (cursorPosition != null) {
+			GraphicalEditPart part = (GraphicalEditPart) getMainEditPart();
+			if (part != null) {
 				Point point = part.getViewer().getControl().toControl(cursorPosition);
 				IFigure figure = part.getFigure();
 				PrecisionRectangle t = new PrecisionRectangle(point.x, point.y, 0, 0);
@@ -562,7 +571,7 @@ public class SelectionHelper {
 				Rectangle result = t.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
 				return new Point(result.x, result.y);
 			}
- 		}
+		}
 		return null;
-	}	
+	}
 }
