@@ -64,7 +64,7 @@ public class ImpDataAdapter extends AImpObject {
 			return null;
 		File f = findFile(file, dpath);
 		if (f != null && f.exists()) {
-			fileset.add(f.getAbsolutePath());
+			fileset.add(dpath);
 			PublishOptions popt = createOptions(jrConfig, dpath);
 			// popt.setDataset(jd);
 			AFileResource fr = addResource(monitor, mrunit, fileset, f, popt);
