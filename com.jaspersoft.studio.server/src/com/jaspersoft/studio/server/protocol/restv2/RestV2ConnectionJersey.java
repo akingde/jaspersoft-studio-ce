@@ -151,7 +151,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			}
 		};
 
-		Registry<ConnectionSocketFactory> ssr = RegistryBuilder.<ConnectionSocketFactory> create()
+		Registry<ConnectionSocketFactory> ssr = RegistryBuilder.<ConnectionSocketFactory>create()
 				.register("https", sslsf).register("http", new PlainConnectionSocketFactory()).build();
 
 		PoolingHttpClientConnectionManager cxMgr = new PoolingHttpClientConnectionManager(ssr);
@@ -233,7 +233,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			getServerProfile().setClientUser(null);
 			getServerProfile().setClientUser(getUser(monitor));
 		} catch (HttpResponseException e) {
-			if (!(e.getMessage().contains("Access") || e.getMessage().contains("Forbidden")))
+			if (!(e.getMessage().contains("Access") || e.getMessage().contains("Forbidden")
+					|| e.getMessage().contains("resource.not.found")))
 				throw e;
 		} catch (Exception e) {
 			Activator.getDefault().logError(e);
@@ -1211,7 +1212,10 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		String path = ""; //$NON-NLS-1$
 		if (!Misc.isNullOrEmpty(sp.getOrganisation()))
 			path += "organizations/" + sp.getOrganisation() + "/"; //$NON-NLS-1$ //$NON-NLS-2$
-		path += "users/" + sp.getUser(); //$NON-NLS-1$
+		String usr = sp.getUser();
+		if (sp.isUseSSO())
+			usr = CASUtil.getSSO(sp, monitor).getUser();
+		path += "users/" + usr; //$NON-NLS-1$
 		WebTarget tgt = target.path(path);
 
 		Builder req = tgt.request();
