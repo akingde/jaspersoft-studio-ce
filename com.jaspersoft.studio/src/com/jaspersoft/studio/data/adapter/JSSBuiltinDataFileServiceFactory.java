@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -53,9 +52,9 @@ public class JSSBuiltinDataFileServiceFactory extends BuiltinDataFileServiceFact
 					RequestConfig requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build();
 					clientBuilder.setDefaultRequestConfig(requestConfig);
 
-					HttpClientContext clientContext = HttpClientContext.create();
+//					HttpClientContext clientContext = HttpClientContext.create();
 
-					setAuthentication(parameters, clientContext);
+					setAuthentication(parameters, clientBuilder);
 
 					CloseableHttpClient client = clientBuilder.build();
 					return client;
