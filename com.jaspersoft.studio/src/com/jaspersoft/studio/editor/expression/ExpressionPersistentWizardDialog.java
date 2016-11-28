@@ -37,21 +37,25 @@ public class ExpressionPersistentWizardDialog extends PersistentLocationWizardDi
 	@Override
 	protected Point getInitialLocation(Point initialSize) {
 		if (ExpressionEditorSupportUtil.shouldRememberExpEditorDialogLocation()){
-			return super.getInitialLocation(initialSize);
-		} else {
-			return getCenteredMonitorLocation(initialSize);
+			Point storedLocation = ExpressionEditorSupportUtil.getExpEditorDialogLocation();
+			if (storedLocation != null && isInsideMonitor(storedLocation)){
+				return storedLocation;
+			}
 		}
+		return getCenteredMonitorLocation(initialSize);
 	}
 	
 	@Override
 	protected Point getInitialSize() {
 		if (ExpressionEditorSupportUtil.shouldRememberExpEditorDialogSize()){
-			return super.getInitialSize();
-		} else {
-			return new Point(
-					ExpressionEditorSupportUtil.EXPEDITOR_INITIAL_WIDTH, 
-					ExpressionEditorSupportUtil.EXPEDITOR_INITIAL_HEIGHT);
-		}
+			Point storedSize = ExpressionEditorSupportUtil.getExpEditorDialogSize();
+			if (storedSize != null){
+				return storedSize;
+			}
+		} 
+		return new Point(
+				ExpressionEditorSupportUtil.EXPEDITOR_INITIAL_WIDTH, 
+				ExpressionEditorSupportUtil.EXPEDITOR_INITIAL_HEIGHT);
 	}
 	
 	/*

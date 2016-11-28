@@ -13,8 +13,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 
@@ -504,4 +506,23 @@ public class ExpressionEditorSupportUtil {
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_X, x);
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_Y, y);
 	}
+	
+	public static Point getExpEditorDialogLocation(){
+		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+		if (store.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_X) &&
+					(store.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_Y))){
+			return new Point(store.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_X),
+												store.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_Y));
+		} return null;
+	}
+	
+	public static Point getExpEditorDialogSize(){
+		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+		if (store.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_WIDTH) &&
+					(store.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_HEIGHT))){
+			return new Point(store.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_WIDTH),
+												store.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_HEIGHT));
+		} else return null;
+	}
+	
 }
