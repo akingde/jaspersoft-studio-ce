@@ -263,10 +263,11 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyIFolderValidator()), null);
 			dbc.bindValue(SWTObservables.observeText(torg, SWT.Modify),
 					PojoObservables.observeValue(value, "organisation")); //$NON-NLS-1$
+			userValidator = new UsernameValidator(!(value.isUseSSO() || value.isAskPass()));
 			dbc.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
-					new UpdateValueStrategy().setAfterConvertValidator(new UsernameValidator()), null);
+					new UpdateValueStrategy().setAfterConvertValidator(userValidator), null);
 			dbc.bindValue(SWTObservables.observeText(tuserA, SWT.Modify), PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
-					new UpdateValueStrategy().setAfterConvertValidator(new UsernameValidator()), null);
+					new UpdateValueStrategy().setAfterConvertValidator(userValidator), null);
 			dbc.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(value, "pass")); //$NON-NLS-1$
 
 			dbc.bindValue(SWTObservables.observeText(ttimeout, SWT.Modify),
@@ -385,12 +386,13 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			}
 		});
 
-		if (value.isUseSSO())
+		if (value.isUseSSO()) {
 			stackLayout.topControl = cmpCAS;
-		else if (value.isAskPass())
+		} else if (value.isAskPass()) {
 			stackLayout.topControl = cmpAsk;
-		else
+		} else {
 			stackLayout.topControl = cmpUP;
+		}
 	}
 
 	private List<SSOServer> ssoservers = new ArrayList<SSOServer>();
@@ -420,15 +422,18 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			public void widgetSelected(SelectionEvent e) {
 				switch (bSSO.getSelectionIndex()) {
 				case 0:
+					userValidator.setAllowNull(false);
 					stackLayout.topControl = cmpUP;
 					bUseSoap.setEnabled(true);
 					break;
 				case 1:
+					userValidator.setAllowNull(true);
 					stackLayout.topControl = cmpAsk;
 					bUseSoap.setEnabled(true);
 
 					break;
 				case 2:
+					userValidator.setAllowNull(true);
 					stackLayout.topControl = cmpCAS;
 					bUseSoap.setSelection(false);
 					bUseSoap.setEnabled(false);
@@ -436,6 +441,11 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				}
 				cmpCredential.layout();
 				closeConnection();
+				UIUtils.getDisplay().asyncExec(new Runnable() {
+					public void run() {
+						dbc.updateTargets();
+					}
+				});
 			}
 		});
 		GridData gd = new GridData();
@@ -931,6 +941,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	private Text tuserA;
 	private Label ssLabel;
 	private Proxy proxy;
+	private UsernameValidator userValidator;
 
 	private void createJdbcDrivers(CTabFolder tabFolder) {
 		if (sprofile.getWsClient() == null || !sprofile.getWsClient().isSupported(Feature.EXPORTMETADATA)
