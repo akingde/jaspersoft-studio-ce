@@ -4,6 +4,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.expression;
 
+import org.eclipse.core.runtime.Assert;
+
+import com.jaspersoft.studio.utils.ModelUtils;
+
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVariable;
@@ -95,5 +99,24 @@ public class ExpObject implements Comparable<ExpObject>{
 		return getExpression().compareTo(arg0.getExpression());
 	}
 
+	public static boolean isValidExpressionObj(String expressionTxt, JRField field) {
+		Assert.isNotNull(expressionTxt);
+		Assert.isNotNull(field);
+		return expressionTxt.equals(ModelUtils.getNameAsField(field.getName()));
+		
+	}
+	
+	public static boolean isValidExpressionObj(String expressionTxt, JRVariable variable) {
+		Assert.isNotNull(expressionTxt);
+		Assert.isNotNull(variable);
+		return expressionTxt.equals(ModelUtils.getNameAsVariable(variable.getName()));
+	}
+	
+	public static boolean isValidExpressionObj(String expressionTxt, JRParameter parameter) {
+		Assert.isNotNull(expressionTxt);
+		Assert.isNotNull(parameter);
+		return expressionTxt.equals(ModelUtils.getNameAsParameter(parameter.getName()));
+	}
+	
 }
 

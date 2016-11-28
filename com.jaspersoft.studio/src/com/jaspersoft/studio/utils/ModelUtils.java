@@ -2063,4 +2063,65 @@ public class ModelUtils {
 			return null;
 		}
 	}
+	
+	/**
+	 * Returns a field text expression that uses the specified name.
+	 * 
+	 * @param name field name
+	 * @return field expression
+	 */
+	public static String getNameAsField(String name){
+		Assert.isNotNull(name);
+		return "$F{" + name + "}";
+	}
+
+	/**
+	 * Returns a parameter text expression that uses the specified name.
+	 * 
+	 * @param name parameter name
+	 * @return parameter expression
+	 */
+	public static String getNameAsParameter(String name){
+		Assert.isNotNull(name);
+		return "$P{" + name + "}";
+	}
+	
+	/**
+	 * Returns a variable text expression that uses the specified name.
+	 * 
+	 * @param name variable name
+	 * @return variable expression
+	 */
+	public static String getNameAsVariable(String name){
+		Assert.isNotNull(name);
+		return "$V{" + name + "}";
+	}
+	
+	/**
+	 * Returns a resource key text expression that uses the specified name.
+	 * 
+	 * @param name resource key name
+	 * @return resource key expression
+	 */
+	public static String getNameAsResourceKey(String name){
+		Assert.isNotNull(name);
+		return "$R{" + name + "}";
+	}
+	
+	/**
+	 * Checks if a class is assignable to another type one.
+	 * 
+	 * @param clazz the class object
+	 * @param className the name of the class to check
+	 * @return <code>true</code> if class is assignable, <code>false</code> otherwise
+	 */
+	public static boolean isClassAssignableFrom(Class<?> clazz, String className) {
+		try{
+			Class<?> forName = Class.forName(className);
+			return clazz.isAssignableFrom(forName);
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
 }
