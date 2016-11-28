@@ -964,61 +964,85 @@ public class GridBagLayoutUtil {
 
         int diffw = parentSize.width - r.width;
         if (diffw != 0) {
-    		//compute the weight only on not fixed columns and distribute the excessing space
-    		//only among them
-          	weight = 0.0;
-      		HashSet<Integer> notFixedSizeCols = new HashSet<Integer>();
-      		for (int i = 0; i < info.width; i++) {
-      			if (info.minWidth[i] == 0d){
-      				notFixedSizeCols.add(i);
-      				weight += info.weightX[i];
-      			}
-      		}  
-            if (weight > 0.0) {
-                for (int i: notFixedSizeCols) {
-                  int dx = (int)(( ((double)diffw) * info.weightX[i]) / weight);
-                  info.minWidth[i] += dx;
-                  r.width += dx;
-                  if (info.minWidth[i] < 0) {
-                      r.width -= info.minWidth[i];
-                      info.minWidth[i] = 0;
-                  }
-                }
+	    		//compute the weight only on not fixed columns and distribute the excising space
+	    		//only among them
+	        weight = 0.0;
+	    		HashSet<Integer> notFixedSizeCols = new HashSet<Integer>();
+	    		for (int i = 0; i < info.width; i++) {
+	    			if (info.minWidth[i] == 0d){
+	    				notFixedSizeCols.add(i);
+	    				weight += info.weightX[i];
+	    			}
+	    		}  
+	        if (weight > 0.0) {
+            for (int i: notFixedSizeCols) {
+              int dx = (int)(( ((double)diffw) * info.weightX[i]) / weight);
+              info.minWidth[i] += dx;
+              r.width += dx;
+              if (info.minWidth[i] < 0) {
+                  r.width -= info.minWidth[i];
+                  info.minWidth[i] = 0;
+              }
             }
-            diffw = parentSize.width - r.width;
-        }
-
-        else {
-            diffw = 0;
+	        }
+	        diffw = parentSize.width - r.width;
+	        
+	        //Distribute the excising space between the not fixed elements
+	        if (diffw > 0 && !notFixedSizeCols.isEmpty()){
+	        	while(diffw != 0){
+	        		for (int i: notFixedSizeCols) {
+	              info.minWidth[i]++;
+	              r.width++;
+	              diffw--;
+	              if (diffw == 0){
+	              	break;
+	              }
+	            }
+	        	}
+	        }
+        }	else {
+        	diffw = 0;
         }
 
         int diffh = parentSize.height - r.height;
         if (diffh != 0) {
-    		//compute the weight only on not fixed columns and distribute the excessing space
-    		//only among them
-        	weight = 0.0;
-      		HashSet<Integer> notFixedSizeCols = new HashSet<Integer>();
-      		for (int i = 0; i < info.height; i++) {
-      			if (info.minHeight[i] == 0d){
-      				notFixedSizeCols.add(i);
-      				weight += info.weightY[i];
-      			}
-      		}
-            if (weight > 0.0) {
-            	 for (int i: notFixedSizeCols) {
-                    int dy = (int)(( ((double)diffh) * info.weightY[i]) / weight);
-                    info.minHeight[i] += dy;
-                    r.height += dy;
-                    if (info.minHeight[i] < 0) {
-                        r.height -= info.minHeight[i];
-                        info.minHeight[i] = 0;
-                    }
-                }
-            }
-            diffh = parentSize.height - r.height;
-        }
-
-        else {
+	    		//compute the weight only on not fixed columns and distribute the excising space
+	    		//only among them
+	      	weight = 0.0;
+	    		HashSet<Integer> notFixedSizeCols = new HashSet<Integer>();
+	    		for (int i = 0; i < info.height; i++) {
+	    			if (info.minHeight[i] == 0d){
+	    				notFixedSizeCols.add(i);
+	    				weight += info.weightY[i];
+	    			}
+	    		}
+	        if (weight > 0.0) {
+	        	 for (int i: notFixedSizeCols) {
+	                int dy = (int)(( ((double)diffh) * info.weightY[i]) / weight);
+	                info.minHeight[i] += dy;
+	                r.height += dy;
+	                if (info.minHeight[i] < 0) {
+	                    r.height -= info.minHeight[i];
+	                    info.minHeight[i] = 0;
+	                }
+	            }
+	        }
+	      	diffh = parentSize.height - r.height;
+	      	
+	        //Distribute the excising space between the not fixed elements
+	        if (diffh > 0 && !notFixedSizeCols.isEmpty()){
+	        	while(diffh != 0){
+	        		for (int i: notFixedSizeCols) {
+	              info.minHeight[i]++;
+	              r.height++;
+	              diffh--;
+	              if (diffh == 0){
+	              	break;
+	              }
+	            }
+	        	}
+	        }
+        } else {
             diffh = 0;
         }
 
