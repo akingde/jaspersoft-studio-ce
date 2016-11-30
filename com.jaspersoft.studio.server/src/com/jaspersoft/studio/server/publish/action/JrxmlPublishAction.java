@@ -125,29 +125,27 @@ public class JrxmlPublishAction extends AContributorAction {
 									if (obj instanceof AMResource) {
 										AMResource mres = (AMResource) obj;
 										PublishOptions po = mres.getPublishOptions();
-										if (!PublishUtil.loadPreferences(monitor, file, mres) && po != null
-												&& po.getOverwrite() != null
-												&& po.getOverwrite().equals(OverwriteEnum.OVERWRITE)) {
+										if (po == null || po.getOverwrite() == null)
+											continue;
+										if (mres instanceof AFileResource
+												&& PublishUtil.loadPreferences(monitor, file, mres)) {
+											po.setOverwrite(OverwriteEnum.ONLY_EXPRESSION);
+											continue;
+										}
+										if (po.getOverwrite().equals(OverwriteEnum.OVERWRITE)) {
 											if (n instanceof MReportUnit) {
-												// let's see if resource already
-												// exists
-												// (a reference for example) set
-												// to ignore
 												for (ResourceDescriptor r : ((MReportUnit) n).getValue()
 														.getChildren()) {
 													if (r.getWsType().equals(mres.getValue().getWsType())
-															&& r.getName().equals(mres)) {
+															&& r.getName().equals(mres.getValue().getName())) {
 														po.setOverwrite(OverwriteEnum.IGNORE);
 														break;
 													}
 												}
 											}
-											if (po.getOverwrite().equals(OverwriteEnum.OVERWRITE)) {
-												showdialog = true;
-												break;
-											}
-										} else if (obj instanceof AFileResource)
-											po.setOverwrite(OverwriteEnum.ONLY_EXPRESSION);
+											showdialog = true;
+											break;
+										}
 									}
 								}
 							}

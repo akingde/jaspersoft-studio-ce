@@ -10,10 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,22 +22,27 @@ import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.utils.RDUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 public class PublishUtil {
 	public static final String KEY_PUBLISH2JSS_DATA = "PUBLISH2JSS_DATA"; //$NON-NLS-1$
 
 	public static List<AMResource> getResources(AMResource parent, IProgressMonitor monitor,
 			JasperReportsConfiguration jrConfig) {
-		List<AMResource> resources = jrConfig.get(KEY_PUBLISH2JSS_DATA, new ArrayList<AMResource>());
-		jrConfig.put(KEY_PUBLISH2JSS_DATA, resources);
+		List<AMResource> resources = (List<AMResource>) jrConfig.get(KEY_PUBLISH2JSS_DATA);
+		if (resources == null)
+			jrConfig.put(KEY_PUBLISH2JSS_DATA, new ArrayList<AMResource>());
 		loadPreferences(parent, monitor, (IFile) jrConfig.get(FileUtils.KEY_FILE), resources);
 		return resources;
 	}
@@ -179,9 +180,8 @@ public class PublishUtil {
 			List<AMResource> files) {
 		if (parent == null || parent.getValue() == null || parent.getValue().getIsNew())
 			return;
-		for (AMResource f : files) {
+		for (AMResource f : files)
 			loadPreferences(monitor, ifile, f);
-		}
 	}
 
 	public static boolean loadPreferences(IProgressMonitor monitor, IFile ifile, AMResource f) {

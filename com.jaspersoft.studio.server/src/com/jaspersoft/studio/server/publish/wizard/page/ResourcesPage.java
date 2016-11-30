@@ -402,7 +402,8 @@ public class ResourcesPage extends JSSHelpWizardPage {
 					if (n.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
 						String icname = n.getName();
 						for (AMResource r : res) {
-							if (r instanceof MInputControl && r.getValue().getName().equals(icname)) {
+							if (r instanceof MInputControl && r.getValue().getName().equals(icname)
+									&& !r.getValue().getIsNew()) {
 								r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
 								break;
 							}
@@ -414,8 +415,9 @@ public class ResourcesPage extends JSSHelpWizardPage {
 						r.getPublishOptions().setOverwrite(OverwriteEnum.OVERWRITE);
 					else if (b.equals("ignore"))
 						r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
-					else
+					else if (!r.getValue().getIsNew())
 						r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
+					
 				}
 				// let's look and make a diff
 			}

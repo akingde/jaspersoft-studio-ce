@@ -144,10 +144,13 @@ public abstract class AImpObject {
 		}
 
 		AMResource res = ResourceFactory.getResource(mrunit, rd, -1);
+		String b = jrConfig.getProperty(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, "true");
+		if (b.equals("true") && rd.getIsNew())
+			popt.setOverwrite(OverwriteEnum.OVERWRITE);
+		res.setPublishOptions(popt);
 		if (res instanceof AFileResource) {
 			AFileResource mres = (AFileResource) res;
 			mres.setFile(f);
-			mres.setPublishOptions(popt);
 
 			PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
 			return mres;
