@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.data.reader;
 
@@ -8,8 +7,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -31,6 +32,7 @@ import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRGroup;
@@ -96,7 +98,7 @@ public class DatasetReader {
 			JasperReportsConfiguration jConfig, List<String> columns) throws JRException {
 		// 2. Set query information
 		JRDesignQuery query = new JRDesignQuery();
-		if(designDataset.getQuery()!=null){
+		if (designDataset.getQuery() != null) {
 			query.setLanguage(designDataset.getQuery().getLanguage());
 			query.setText(designDataset.getQuery().getText());
 		}
@@ -198,8 +200,15 @@ public class DatasetReader {
 			jrobj = compiler.compileReport(jConfig, dataJD);
 			if (jrobj == null) {
 				IMarker[] markers = f.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-				for (IMarker m : markers)
-					UIUtils.showError(new Exception(m.getAttribute(IMarker.MESSAGE).toString()));
+				if (!Misc.isNullOrEmpty(markers)) {
+					Set<String> set = new LinkedHashSet<String>();
+					for (IMarker m : markers)
+						set.add(m.getAttribute(IMarker.MESSAGE).toString());
+					String str = "";
+					for (String s : set)
+						str += s + "\n";
+					UIUtils.showError(new Exception(str));
+				}
 				return null;
 			}
 		} else
