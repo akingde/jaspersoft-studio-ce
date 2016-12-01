@@ -101,8 +101,8 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 		JasperReportsConfiguration jConfig = getPnode().getJasperConfiguration();
 		for (PropertyExpressionDTO prop : getProperties()) {
 			if (!prop.isExpression()){
-				String propName = prop.getName().trim().toLowerCase();
-				if (propName.startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
+				String propName = prop.getName().trim();
+				if (propName.toLowerCase().startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
 					// We have found a chart customizer, build the key prefix
 					String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX.length());
 					String customizerClass = prop.getValue();
@@ -148,8 +148,8 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 		HashSet<String> result = new HashSet<String>();
 		for (PropertyExpressionDTO prop : new ArrayList<PropertyExpressionDTO>(getProperties())) {
 			if (!prop.isExpression()){
-				String propName = prop.getName().trim().toLowerCase();
-				if (propName.startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
+				String propName = prop.getName().trim();
+				if (propName.toLowerCase().startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
 					// We have found a chart customizer, get the key
 					String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX.length());
 					result.add(key);
@@ -173,10 +173,10 @@ public class CustomizerPropertyExpressionsDTO extends PropertyExpressionsDTO {
 			String customizerKey = definition.getKey();
 			for (PropertyExpressionDTO prop : new ArrayList<PropertyExpressionDTO>(getProperties())) {
 				if (!prop.isExpression()){
-					String propName = prop.getName().trim().toLowerCase();
-					if (propName.startsWith(NamedChartCustomizer.CUSTOMIZER_PROPERTY_PREFIX)){
+					String propName = prop.getName().trim();
+					if (propName.toLowerCase().startsWith(NamedChartCustomizer.CUSTOMIZER_PROPERTY_PREFIX)){
 						//it is customizer property and a class property
-						if(propName.startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
+						if(propName.toLowerCase().startsWith(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX)){
 							String key = propName.substring(NamedChartCustomizer.CUSTOMIZER_CLASS_PROPERTY_PREFIX.length());
 							if (customizerKey.equalsIgnoreCase(key)){
 								removeProperty(prop.getName(), prop.isExpression());
