@@ -30,6 +30,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -466,15 +467,13 @@ public class CompositeElementManager {
 					} catch (URISyntaxException e) {
 					}
 				}
-	
-				if (resourceURI != null && new File(resourceURI).exists()) {
-					File source = new File(resourceURI);
+				if (resourceURI != null) {
 					resourcesDir.mkdir();
-					File dest = new File(resourcesDir, source.getName());
+					File dest = new File(resourcesDir, FilenameUtils.getName(resourceURI.getPath()));
 					JRDesignImage newImage = (JRDesignImage) newElement;
 					try {
 						if (!dest.exists()) {
-							FileUtils.copyFile(source, dest);
+							FileUtils.copyURLToFile(resourceURI.toURL(), dest);
 						}
 						newImage.setExpression(new JRDesignExpression("\"" + dest.getAbsolutePath() + "\"")); //$NON-NLS-1$ //$NON-NLS-2$
 						String requiredResources = band.getPropertiesMap().getProperty(REQUIRED_RESOURCES);
