@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.toolbar;
 
@@ -210,7 +209,7 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 						JasperReportsConfiguration jrContext = container.getJrContext();
 						IFile f = (IFile) jrContext.get(FileUtils.KEY_FILE);
 						if (f != null) {
-							PreferenceDialog pref = PreferencesUtil.createPropertyDialogOn(UIUtils.getShell(), f.getProject(),
+							PreferenceDialog pref = PreferencesUtil.createPropertyDialogOn(UIUtils.getShell(), f,
 									DesignerPreferencePage.PAGE_ID, null, null);
 							if (pref != null && pref.open() == Dialog.OK) {
 								refreshDataAdapters();
