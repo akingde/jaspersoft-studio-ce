@@ -1820,6 +1820,12 @@ public class Messages extends NLS {
 	public static String PreviewEditor_starting;
 	public static String PreviewJRPrint_1;
 	public static String PreviewJRPrint_2;
+	public static String PreviewTopToolBarManager_1;
+	public static String PreviewTopToolBarManager_12;
+	public static String PreviewTopToolBarManager_2;
+	public static String PreviewTopToolBarManager_3;
+	public static String PreviewTopToolBarManager_8;
+	public static String PreviewTopToolBarManager_9;
 	public static String PreviousPageAction_actionName;
 	public static String PreviousPageAction_actionTolltip;
 	public static String PropertiesComponent_0;

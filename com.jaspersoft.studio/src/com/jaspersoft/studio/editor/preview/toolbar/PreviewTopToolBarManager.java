@@ -38,6 +38,7 @@ import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 import com.jaspersoft.studio.editor.preview.datasnapshot.DataSnapshotManager;
 import com.jaspersoft.studio.editor.preview.datasnapshot.JSSColumnDataCacheHandler;
 import com.jaspersoft.studio.editor.preview.datasnapshot.JssDataSnapshot;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -85,7 +86,7 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 	class IconAction extends Action implements IMenuCreator {
 		public IconAction() {
 			super();
-			setId("iconAction");
+			setId("iconAction"); //$NON-NLS-1$
 			setEnabled(true);
 			setImageDescriptor(MDataAdapters.getIconDescriptor().getIcon16());
 			setDisabledImageDescriptor(MDataAdapters.getIconDescriptor().getIcon16());
@@ -117,10 +118,10 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 			if (menu == null) {
 				menu = new Menu(parent);
 				final MenuItem itemCache = new MenuItem(menu, SWT.CHECK);
-				itemCache.setText("Cache Data In Memory");
+				itemCache.setText(Messages.PreviewTopToolBarManager_1);
 
 				final MenuItem itemSave = new MenuItem(menu, SWT.CHECK);
-				itemSave.setText("Save Data To File");
+				itemSave.setText(Messages.PreviewTopToolBarManager_2);
 
 				itemCache.addSelectionListener(new SelectionAdapter() {
 
@@ -140,14 +141,14 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						FileDialog fd = new FileDialog(parent.getShell(), SWT.SAVE);
-						fd.setText("Select where to save the snapshot");
-						String sname = "snapshot.jrds";
+						fd.setText(Messages.PreviewTopToolBarManager_3);
+						String sname = "snapshot.jrds"; //$NON-NLS-1$
 						IFile f = (IFile) container.getJrContext().get(FileUtils.KEY_FILE);
 						if (f != null)
-							sname = FilenameUtils.getBaseName(f.getName()) + ".jrds";
+							sname = FilenameUtils.getBaseName(f.getName()) + ".jrds"; //$NON-NLS-1$
 						fd.setFileName(sname);
 						fd.setOverwrite(true);
-						fd.setFilterExtensions(new String[] { "*.jrds", "*.*" });
+						fd.setFilterExtensions(new String[] { "*.jrds", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 						final String fname = fd.open();
 						if (fname != null) {
 							itemCache.setSelection(true);
@@ -167,13 +168,13 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 				});
 
 				final MenuItem itemLoad = new MenuItem(menu, SWT.PUSH);
-				itemLoad.setText("Load Data From File");
+				itemLoad.setText(Messages.PreviewTopToolBarManager_8);
 				itemLoad.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						FileDialog fd = new FileDialog(parent.getShell(), SWT.OPEN);
-						fd.setText("Select data snapshot to use when running report");
-						fd.setFilterExtensions(new String[] { "*.jrds", "*.*" });
+						fd.setText(Messages.PreviewTopToolBarManager_9);
+						fd.setFilterExtensions(new String[] { "*.jrds", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 						String fname = fd.open();
 						if (fname != null) {
 							itemCache.setSelection(true);
@@ -201,7 +202,7 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 				new MenuItem(menu, SWT.SEPARATOR);
 
 				MenuItem item = new MenuItem(menu, SWT.PUSH);
-				item.setText("Preferences");
+				item.setText(Messages.PreviewTopToolBarManager_12);
 				item.addSelectionListener(new SelectionAdapter() {
 
 					@Override
@@ -232,7 +233,7 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 	public void refreshDataAdapters() {
 		JasperReportsConfiguration jrContext = container.getJrContext();
 		String filter = jrContext.getProperty(DesignerPreferencePage.P_DAFILTER);
-		if (filter != null && filter.equals("da")) {
+		if (filter != null && filter.equals("da")) { //$NON-NLS-1$
 			JRQuery q = jrContext.getJasperDesign().getQuery();
 			dataSourceWidget.setLanguage(q != null ? q.getLanguage() : null);
 		} else
