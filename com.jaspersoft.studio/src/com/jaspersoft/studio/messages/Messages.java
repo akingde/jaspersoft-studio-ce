@@ -434,6 +434,7 @@ public class Messages extends NLS {
 	public static String DataAdapterEditorPage_5;
 	public static String DataAdapterEditorPage_7;
 	public static String DataAdapterEditorPage_8;
+	public static String DataAdapterEditorPart_0;
 	public static String DataAdapterEditorPart_testButton;
 	public static String DataAdapterInformationPage_adapterDescriptionLabel;
 	public static String DataAdapterInformationPage_adapterDescriptionTooltip;
