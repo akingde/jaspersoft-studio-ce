@@ -239,15 +239,15 @@ public class HttpParametersDialog extends ATitledDialog {
 		Composite cmp = new Composite(tFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout());
 
-		Button bBody = new Button(cmp, SWT.CHECK);
+		final Button bBody = new Button(cmp, SWT.CHECK);
 		bBody.setText(Messages.HttpParametersDialog_10);
 		bBody.setSelection(dataFile.getBody() != null);
 
-		Composite cmpStack = new Composite(cmp, SWT.NONE);
-		StackLayout slayout = new StackLayout();
+		final Composite cmpStack = new Composite(cmp, SWT.NONE);
+		final StackLayout slayout = new StackLayout();
 		cmpStack.setLayout(slayout);
 
-		Text tBody = new Text(cmpStack, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.WRAP);
+		final Text tBody = new Text(cmpStack, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.WRAP);
 		tBody.setText(Misc.nvl(dataFile.getBody()));
 		tBody.addModifyListener(new ModifyListener() {
 
@@ -257,7 +257,7 @@ public class HttpParametersDialog extends ATitledDialog {
 			}
 		});
 
-		Composite cmpTbl = new Composite(cmpStack, SWT.NONE);
+		final Composite cmpTbl = new Composite(cmpStack, SWT.NONE);
 		cmpTbl.setLayout(new GridLayout(2, false));
 
 		TableViewer tviewer = createParametersTable(cmpTbl);
