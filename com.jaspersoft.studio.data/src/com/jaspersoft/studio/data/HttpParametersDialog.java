@@ -18,12 +18,14 @@ import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -106,9 +108,11 @@ public class HttpParametersDialog extends ATitledDialog {
 		new Label(cmp, SWT.NONE).setText(Messages.HttpParametersDialog_4);
 
 		final Combo cmb = new Combo(cmp, SWT.READ_ONLY);
-		cmb.setItems(new String[] { RequestMethod.GET.name(), RequestMethod.POST.name() });
+		cmb.setItems(new String[] { RequestMethod.GET.name(), RequestMethod.POST.name(), RequestMethod.PUT.name() });
 		if (dataFile.getMethod() == RequestMethod.POST)
 			cmb.select(1);
+		else if (dataFile.getMethod() == RequestMethod.PUT)
+			cmb.select(2);
 		else
 			cmb.select(0);
 
@@ -216,16 +220,66 @@ public class HttpParametersDialog extends ATitledDialog {
 	}
 
 	private TableViewer createParameters(CTabFolder tFolder, String title) {
-		return createParameters(tFolder, title, tFolder.getItemCount());
-	}
-
-	private TableViewer createParameters(CTabFolder tFolder, String title, int pos) {
-		CTabItem bptab = new CTabItem(tFolder, SWT.NONE, pos);
+		CTabItem bptab = new CTabItem(tFolder, SWT.NONE);
 		bptab.setText(title);
 
 		Composite cmp = new Composite(tFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
 
+		TableViewer tviewer = createParametersTable(cmp);
+
+		bptab.setControl(cmp);
+		return tviewer;
+	}
+
+	private TableViewer createParametersBody(CTabFolder tFolder, String title) {
+		CTabItem bptab = new CTabItem(tFolder, SWT.NONE, 1);
+		bptab.setText(title);
+
+		Composite cmp = new Composite(tFolder, SWT.NONE);
+		cmp.setLayout(new GridLayout());
+
+		Button bBody = new Button(cmp, SWT.CHECK);
+		bBody.setText("Free text in BODY");
+		bBody.setSelection(dataFile.getBody() != null);
+
+		Composite cmpStack = new Composite(cmp, SWT.NONE);
+		StackLayout slayout = new StackLayout();
+		cmpStack.setLayout(slayout);
+
+		Text tBody = new Text(cmpStack, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.WRAP);
+		tBody.setText(Misc.nvl(dataFile.getBody()));
+		tBody.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				dataFile.setBody(tBody.getText());
+			}
+		});
+
+		Composite cmpTbl = new Composite(cmpStack, SWT.NONE);
+		cmpTbl.setLayout(new GridLayout(2, false));
+
+		TableViewer tviewer = createParametersTable(cmpTbl);
+
+		bBody.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				slayout.topControl = bBody.getSelection() ? tBody : cmpTbl;
+				cmpStack.layout();
+				if (!bBody.getSelection())
+					dataFile.setBody(null);
+				else
+					dataFile.setBody(tBody.getText());
+			}
+		});
+		slayout.topControl = bBody.getSelection() ? tBody : cmpTbl;
+
+		bptab.setControl(cmp);
+		return tviewer;
+	}
+
+	private TableViewer createParametersTable(Composite cmp) {
 		TableViewer tviewer = new TableViewer(cmp, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.widthHint = 500;
@@ -308,8 +362,6 @@ public class HttpParametersDialog extends ATitledDialog {
 		});
 		final DeleteButton delb = new DeleteButton();
 		delb.createDeleteButton(bGroup, tviewer);
-
-		bptab.setControl(cmp);
 		return tviewer;
 	}
 
@@ -325,12 +377,23 @@ public class HttpParametersDialog extends ATitledDialog {
 			break;
 		case 1:
 			dataFile.setMethod(RequestMethod.POST);
-			final TableViewer tvp = createParameters(tabFolder, Messages.HttpParametersDialog_14, 1);
+			final TableViewer tvp = createParametersBody(tabFolder, Messages.HttpParametersDialog_14);
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
 					tvp.setInput(dataFile.getPostParameters());
+				}
+			});
+			break;
+		case 2:
+			dataFile.setMethod(RequestMethod.PUT);
+			final TableViewer tvput = createParametersBody(tabFolder, Messages.HttpParametersDialog_14);
+			UIUtils.getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					tvput.setInput(dataFile.getPostParameters());
 				}
 			});
 			break;
