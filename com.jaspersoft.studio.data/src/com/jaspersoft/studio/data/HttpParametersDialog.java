@@ -148,7 +148,7 @@ public class HttpParametersDialog extends ATitledDialog {
 			}
 		});
 
-		final TableViewer tvh = createParameters(tabFolder, "Http Headers");
+		final TableViewer tvh = createParameters(tabFolder, Messages.HttpParametersDialog_8);
 
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -240,7 +240,7 @@ public class HttpParametersDialog extends ATitledDialog {
 		cmp.setLayout(new GridLayout());
 
 		Button bBody = new Button(cmp, SWT.CHECK);
-		bBody.setText("Free text in BODY");
+		bBody.setText(Messages.HttpParametersDialog_10);
 		bBody.setSelection(dataFile.getBody() != null);
 
 		Composite cmpStack = new Composite(cmp, SWT.NONE);

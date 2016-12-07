@@ -89,6 +89,7 @@ public class Messages extends NLS {
 	public static String HibernateDataAdapterFactory_label;
 	public static String HttpParametersDialog_0;
 	public static String HttpParametersDialog_1;
+	public static String HttpParametersDialog_10;
 	public static String HttpParametersDialog_12;
 	public static String HttpParametersDialog_13;
 	public static String HttpParametersDialog_14;
@@ -98,6 +99,7 @@ public class Messages extends NLS {
 	public static String HttpParametersDialog_5;
 	public static String HttpParametersDialog_6;
 	public static String HttpParametersDialog_7;
+	public static String HttpParametersDialog_8;
 	public static String HttpParametersDialog_9;
 	public static String JDBCCreator_ErrSecurPrefStorage;
 	public static String JDBCDataAdapterComposite_attention;
