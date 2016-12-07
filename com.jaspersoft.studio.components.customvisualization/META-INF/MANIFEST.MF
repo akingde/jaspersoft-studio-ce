@@ -3,12 +3,12 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: com.jaspersoft.studio.components.customvisualization;singleton:=true
-Bundle-Version: 6.4.0.qualifier
+Bundle-Version: 6.4.1.qualifier
 Bundle-Activator: com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
-Require-Bundle: com.jaspersoft.studio;bundle-version="6.4.0",
- com.jaspersoft.studio.server;bundle-version="6.4.0"
+Require-Bundle: com.jaspersoft.studio;bundle-version="6.4.1",
+ com.jaspersoft.studio.server;bundle-version="6.4.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
