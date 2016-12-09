@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.plugin;
 
@@ -626,6 +625,11 @@ public class ExtensionManager {
 				return n;
 		}
 		return null;
+	}
+
+	public void onInitContext(JasperReportsConfiguration jConfig) {
+		for (IEditorContributor f : eContributor)
+			f.onInitContext(jConfig);
 	}
 
 	public void onLoad(JasperDesign jd, EditorPart editor) {

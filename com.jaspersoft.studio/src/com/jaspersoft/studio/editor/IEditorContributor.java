@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -19,12 +18,14 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 public interface IEditorContributor {
 
+	public void onInitContext(JasperReportsConfiguration jConfig);
+
 	public void onLoad(JasperDesign jd, EditorPart editor);
 
 	public void onSave(JasperReportsContext jrConfig, IProgressMonitor monitor);
 
 	public void onSaveAs(IFile oldName, IFile newName, JasperReportsContext jrConfig, IProgressMonitor monitor);
-	
+
 	public void onRename(IFile oldName, IFile newName, JasperReportsContext jrConfig, IProgressMonitor monitor);
 
 	public void onRun(JasperReportsConfiguration jrConfig, JasperReport jr, Map<String, Object> params);
