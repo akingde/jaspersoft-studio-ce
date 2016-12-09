@@ -41,14 +41,7 @@ public class JRSEditorContributor implements IEditorContributor {
 
 	private static final String IS_FROM_SAVE_AS = "isFromSaveAs";
 
-	public void onLoad(final JasperDesign jd, final EditorPart editor) {
-		if (!(editor instanceof AbstractJRXMLEditor))
-			return;
-		// String prop = jd.getProperty(AExporter.PROP_SERVERURL);
-		// if (prop == null)
-		// return;
-		AbstractJRXMLEditor jEditor = (AbstractJRXMLEditor) editor;
-		JasperReportsConfiguration jConfig = jEditor.getJrContext(null);
+	public void onInitContext(final JasperReportsConfiguration jConfig) {
 		JSSFileRepositoryService repService = jConfig.getFileRepositoryService();
 		List<RepositoryService> rservices = repService.getRepositoryServices();
 		List<RepositoryService> toDel = new ArrayList<RepositoryService>();
@@ -61,6 +54,16 @@ public class JRSEditorContributor implements IEditorContributor {
 			}
 		rservices.removeAll(toDel);
 		rservices.add(new JRSRepositoryService(repService, jConfig));
+	}
+
+	public void onLoad(final JasperDesign jd, final EditorPart editor) {
+		if (!(editor instanceof AbstractJRXMLEditor))
+			return;
+		// String prop = jd.getProperty(AExporter.PROP_SERVERURL);
+		// if (prop == null)
+		// return;
+		AbstractJRXMLEditor jEditor = (AbstractJRXMLEditor) editor;
+		onInitContext(jEditor.getJrContext(null));
 	}
 
 	public static final String KEY_PUBLISH2JSS = "PUBLISH2JSS";

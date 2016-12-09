@@ -21,18 +21,21 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.utils.ReferenceResolver;
 import com.jaspersoft.studio.utils.CacheMap;
 import com.jaspersoft.studio.utils.Callback;
@@ -80,15 +83,38 @@ public class JRSRepositoryService implements RepositoryService {
 			serverUser = jDesign.getProperty(AExporter.PROP_USER);
 			runitUri = jDesign.getProperty(AExporter.PROP_REPORTUNIT);
 		} else {
-			uri = jConfig.getProperty(AExporter.PROP_SERVERURL);
-			serverUser = jConfig.getProperty(AExporter.PROP_USER);
-			String[] usrs = serverUser.split("\\|");
-			if (usrs.length == 1)
-				serverUser = usrs[0];
-			else if (usrs.length > 1 && Misc.isNullOrEmpty(usrs[1]))
-				serverUser = usrs[0];
+			// let's look into the file props
+			IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
+			if (f != null) {
+				try {
+					List<String[]> paths = PublishUtil.loadPath(new NullProgressMonitor(), f);
+					if (Misc.isNullOrEmpty(paths)) {
+						uri = paths.get(0)[1];
+						if (paths.size() > 1)
+							serverUser = paths.get(1)[1];
+					}
+
+					uri = f.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_SERVERURL));
+					serverUser = f.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_USER));
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+			if (uri == null) {
+				uri = jConfig.getProperty(AExporter.PROP_SERVERURL);
+				serverUser = jConfig.getProperty(AExporter.PROP_USER);
+			}
+			if (uri != null && serverUser != null) {
+				String[] usrs = serverUser.split("\\|");
+				if (usrs.length == 1)
+					serverUser = usrs[0];
+				else if (usrs.length > 1 && Misc.isNullOrEmpty(usrs[1]))
+					serverUser = usrs[0];
+			}
 		}
-		if (uri != null && !uri.equals(serverUri)) {
+		if (uri != null && !uri.equals(serverUri))
+
+		{
 			serverUri = uri;
 			c = null;
 		}
@@ -159,7 +185,7 @@ public class JRSRepositoryService implements RepositoryService {
 
 	@Override
 	public synchronized <K extends Resource> K getResource(String uri, Class<K> resourceType) {
-		//System.out.println("getResource: " + uri);
+		// System.out.println("getResource: " + uri);
 		if (hasServerUrl(uri, resourceType) && c != null) {
 			if (uri.startsWith("repo:")) {
 				// it's possible to have a resource with id=repo:something (from
@@ -179,16 +205,17 @@ public class JRSRepositoryService implements RepositoryService {
 	}
 
 	private <K extends Resource> K addToCache(K res, String uri) {
-		// System.out.println("Add to " + (res == null ? "neg" : "pos") + " cache: " + uri);
+		// System.out.println("Add to " + (res == null ? "neg" : "pos") + "
+		// cache: " + uri);
 		if (res == null)
 			negCache.put(uri, null);
 		return res;
 	}
 
 	protected <K extends Resource> K doGetResource(String uri, Class<K> resourceType) {
-		//System.out.println("doGetResource: " + uri);
+		// System.out.println("doGetResource: " + uri);
 		if (negCache.containsKey(uri)) {
-			//System.out.println("in negative cache " + uri);
+			// System.out.println("in negative cache " + uri);
 			return null;
 		}
 		String objectUri = uri;
@@ -201,7 +228,7 @@ public class JRSRepositoryService implements RepositoryService {
 		if (c != null)
 			try {
 				IProgressMonitor monitor = new NullProgressMonitor();
-				//System.out.println("get from server " + uri);
+				// System.out.println("get from server " + uri);
 				if (objectUri.contains("/")) { //$NON-NLS-1$
 					// Locate the resource inside the repository...
 					ResourceDescriptor r = new ResourceDescriptor();
@@ -275,7 +302,7 @@ public class JRSRepositoryService implements RepositoryService {
 	}
 
 	protected <K extends Resource> K getFromParent(String uri, Class<K> resourceType) {
-		//System.out.println("get from parent " + uri);
+		// System.out.println("get from parent " + uri);
 		for (RepositoryService rs : parent.getRepositoryServices()) {
 			if (rs == this)
 				continue;
@@ -286,7 +313,7 @@ public class JRSRepositoryService implements RepositoryService {
 			} catch (JRRuntimeException e) {
 			}
 		}
-		//System.out.println("get from server not found " + uri);
+		// System.out.println("get from server not found " + uri);
 		return null;
 	}
 
