@@ -18,6 +18,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
@@ -41,6 +42,7 @@ import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRGroup;
@@ -861,20 +863,24 @@ public class TableManager {
 	 */
 	protected HashMap<Cell, Integer> verifyColumnHeights(List<BaseColumn> columns, final ColumnCellSelector.TYPE type, final String groupName)
 	{
-		final List<List<Cell>> tableCellRows = new ArrayList<List<Cell>>();
+		//the boolean flag means that the cell is a group header cell
+		final List<List<Pair<Cell,Boolean>>> tableCellRows = new ArrayList<List<Pair<Cell, Boolean>>>();
 		HashMap<Cell, Integer> result = new HashMap<Cell, Integer>();
+		//This collector will split all the cells of a section in an array. The first position of 
+		//the array will contains all the cell in the first row of the section, the second position
+		//the cells of the second row and so on.
 		ColumnVisitor<Void> cellCollector = new ColumnVisitor<Void>()
 		{
 			int rowIdx = 0;
 			
-			protected List<Cell> getRow()
+			protected List<Pair<Cell, Boolean>> getRow()
 			{
 				int currentRowCount = tableCellRows.size();
 				if (rowIdx >= currentRowCount)
 				{
 					for (int i = currentRowCount; i <= rowIdx; i++)
 					{
-						tableCellRows.add(new ArrayList<Cell>());
+						tableCellRows.add(new ArrayList<Pair<Cell, Boolean>>());
 					}
 				}
 				return tableCellRows.get(rowIdx);
@@ -885,7 +891,8 @@ public class TableManager {
 				Cell cell = cellSelector.getCell(column, type, groupName);
 				if (cell != null)
 				{
-					getRow().add(cell);
+					//it is not a group header cell
+					getRow().add(new Pair<Cell, Boolean>(cell,false));
 				}
 				return null;
 			}
@@ -895,114 +902,49 @@ public class TableManager {
 				Cell cell = cellSelector.getCell(columnGroup, type, groupName);
 				if (cell != null)
 				{
-					getRow().add(cell);
+					//it is a group header cell
+					getRow().add(new Pair<Cell, Boolean>(cell, true));
+					rowIdx ++;
+					for (BaseColumn subcolumn : columnGroup.getColumns())
+					{
+						subcolumn.visitColumn(this);
+					}
+					rowIdx --;
+				} else {
+					//without an group header cell the subcells are on the same row
+					for (BaseColumn subcolumn : columnGroup.getColumns())
+					{
+						subcolumn.visitColumn(this);
+					}		
 				}
-				
-				int span = cell == null ? 0 : 1;
-				if (cell != null && cell.getRowSpan() != null && cell.getRowSpan() > 1)
-				{
-					span = cell.getRowSpan();
-				}
-				
-				rowIdx += span;
-				for (BaseColumn subcolumn : columnGroup.getColumns())
-				{
-					subcolumn.visitColumn(this);
-				}
-				rowIdx -= span;
 				
 				return null;
 			}
 		};
 		
-		for (BaseColumn column : columns)
-		{
-			column.visitColumn(cellCollector);
-		}
-
-		List<Integer> rowHeights = new ArrayList<Integer>(tableCellRows.size());
-		for (int rowIdx = 0; rowIdx < tableCellRows.size(); ++rowIdx)
-		{
-			Integer rowHeight = null;
-			// going back on rows in order to determine row height
-			int spanHeight = 0;
-			prevRowLoop:
-			for (int idx = rowIdx; idx >= 0; --idx)
+		try {
+			for (BaseColumn column : columns)
 			{
-				for (Cell cell : tableCellRows.get(idx))
-				{
-					int rowSpan = cell.getRowSpan() == null ? 1 : cell.getRowSpan();
-					if (idx + rowSpan - 1 == rowIdx && cell.getHeight() != null)
-					{
-						rowHeight = cell.getHeight() - spanHeight;
-						break prevRowLoop;
+				column.visitColumn(cellCollector);
+			}
+			for (int rowIdx = 0; rowIdx < tableCellRows.size(); rowIdx++)
+			{
+				List<Pair<Cell, Boolean>> rowCells = tableCellRows.get(rowIdx);
+				for(Pair<Cell, Boolean> rowCell : rowCells){
+					int span;
+					if (rowCell.getValue()){
+						//the group header cells have always span 1
+						span = 1;
+					} else {
+						span = Math.max(0, tableCellRows.size() - rowIdx);
 					}
-				}
-				
-				if (rowIdx > 0)
-				{
-					spanHeight += rowHeights.get(rowIdx - 1);
+					result.put(rowCell.getKey(), span);
 				}
 			}
-			
-			if (rowHeight == null)
-			{
-				return result;
-			}
-			else
-			{
-				rowHeights.add(rowHeight);
-			}
-		}
-
-		for (ListIterator<List<Cell>> rowIt = tableCellRows.listIterator(); rowIt.hasNext();)
-		{
-			List<Cell> row = rowIt.next();
-			int rowIdx = rowIt.previousIndex();
-			int rowHeight = rowHeights.get(rowIdx);
-			
-			for (Cell cell : row)
-			{	
-				Integer height = cell.getHeight();
-				
-				/*if (height != null)
-				{
-					int spanHeight = rowHeight;
-					int maxSpan = tableCellRows.size() - rowIdx;
-					for (int idx = 1; idx < maxSpan; ++idx){
-						spanHeight += rowHeights.get(rowIdx + idx);
-						if (cell.getHeight() == spanHeight)
-						{
-							result.put(cell, idx);
-							break;
-						} 
-					}
-					if (cell.getHeight() == spanHeight)
-					{
-						result.put(cell, maxSpan);
-						break;
-					} 
-				}*/ 
-				
-				if (height != null)
-				{
-					int span = 1;
-					while( rowIdx + span <= tableCellRows.size()){
-						int spanHeight = rowHeight;
-						for (int idx = 1; idx < span; ++idx){
-							spanHeight += rowHeights.get(rowIdx + idx);
-						}
-						
-						if (cell.getHeight() != spanHeight)
-						{
-							span++;
-						} else {
-							result.put(cell, span);
-							break;
-						}
-					}
-				}
-			}
+		} catch (Exception ex){
+			ex.printStackTrace();
+			JaspersoftStudioPlugin.getInstance().logError("Error while computing table spans", ex);
+			result.clear();
 		}
 		return result;
 	}
