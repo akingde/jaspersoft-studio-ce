@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.foundation.bundles"
       label="Jaspersoft Studio Required Additional Bundles"
-      version="1.0.6"
+      version="1.0.7"
       provider-name="TIBCO Software Inc.">
 
    <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
@@ -53,14 +53,14 @@
          id="com.jaspersoft.studio.bundles.beanshell"
          download-size="0"
          install-size="0"
-         version="2.0.0.b4"
+         version="2.0.0.b6"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.bundles.commons-beanutils"
          download-size="0"
          install-size="0"
-         version="1.9.0.201503161008"
+         version="1.9.3.201612121041"
          unpack="false"/>
 
    <plugin
