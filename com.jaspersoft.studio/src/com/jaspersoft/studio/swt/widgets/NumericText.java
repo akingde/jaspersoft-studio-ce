@@ -429,6 +429,42 @@ public class NumericText extends Text {
 	}
 	
 	/**
+	 * Handle the input of the user and output the final string 
+	 * 
+	 * @param entry the key pressed by the user
+	 * @param keyCode the code of the key pressed by the user
+	 * @param text the current text on the widget
+	 * @param cursorSelection the current cursor selection on the widget
+	 * @return the text that should be on the widget after the key is pressed
+	 */
+	protected String updateString(final String entry, int keyCode, String text, Point cursorSelection){
+		String work = "";
+		if (keyCode == SWT.DEL) {
+			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != text.length()){
+				work = StringUtil.removeCharAt(getText(), getCaretPosition());
+			} else {
+				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
+			}
+		} else if (keyCode == SWT.BS) {
+			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != 0){
+				work = StringUtil.removeCharAt(getText(), getCaretPosition() - 1);
+			} else if (cursorSelection.x != cursorSelection.y) {
+				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
+			}
+		} else if (keyCode == 0) {
+			work = entry;
+		} else {
+			if (cursorSelection.x == cursorSelection.y){
+				work = StringUtil.insertString(getText(), entry, getCaretPosition());
+			} else if (cursorSelection.x != cursorSelection.y) {
+				work = text.substring(0, cursorSelection.x) + entry + text.substring(cursorSelection.y, text.length());
+			}
+		}
+		work = work.trim();
+		return work;
+	}
+	
+	/**
 	 * Verify the entry and store the value in the field storedValue
 	 * 
 	 * @param entry entry to check
@@ -436,37 +472,10 @@ public class NumericText extends Text {
 	 * @return <code>true</code> if the entry if correct, <code>false</code>
 	 *         otherwise
 	 */
-	private VALIDATION_RESULT verifyEntryAndStoreValue(final String entry, final int keyCode) {
-		String work = "";
-		if (keyCode == SWT.DEL) {
-			Point cursorSelection = getSelection();
-			String text = getText();
-			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != text.length()){
-				work = StringUtil.removeCharAt(getText(), getCaretPosition());
-			} else {
-				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
-			}
-		} else if (keyCode == SWT.BS) {
-			Point cursorSelection = getSelection();
-			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != 0){
-				work = StringUtil.removeCharAt(getText(), getCaretPosition() - 1);
-			} else if (cursorSelection.x != cursorSelection.y) {
-				String text = getText();
-				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
-			}
-		} else if (keyCode == 0) {
-			work = entry;
-		} else {
-			Point cursorSelection = getSelection();
-			if (cursorSelection.x == cursorSelection.y){
-				work = StringUtil.insertString(getText(), entry, getCaretPosition());
-			} else if (cursorSelection.x != cursorSelection.y) {
-				String text = getText();
-				work = text.substring(0, cursorSelection.x) + entry + text.substring(cursorSelection.y, text.length());
-			}
-		}
-		work = work.trim();
-		
+	private VALIDATION_RESULT verifyEntryAndStoreValue(String entry, int keyCode) {
+		Point cursorSelection = getSelection();
+		String text = getText();
+		String work = updateString(entry, keyCode, text, cursorSelection);
 		if (work.isEmpty()){
 			if (isNullable){
 				storedValue = null;

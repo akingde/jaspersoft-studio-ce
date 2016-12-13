@@ -16,6 +16,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
+import com.jaspersoft.studio.widgets.framework.ui.widget.FallbackNumericText;
 
 public class IntegerPropertyDescription extends NumberPropertyDescription<Integer> {
 	
@@ -90,8 +91,8 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 	}
 	
 	@Override
-	protected NumericText createSimpleEditor(Composite parent) {
-		NumericText text = new NumericText(parent, SWT.BORDER, 0, 0);
+	protected FallbackNumericText createSimpleEditor(Composite parent) {
+		FallbackNumericText text = new FallbackNumericText(parent, SWT.BORDER, 0, 0);
 		text.setRemoveTrailZeroes(true);
 		Number max = getMax() != null ? getMax() : Integer.MAX_VALUE;
 		Number min = getMin() != null ? getMin() : Integer.MIN_VALUE;

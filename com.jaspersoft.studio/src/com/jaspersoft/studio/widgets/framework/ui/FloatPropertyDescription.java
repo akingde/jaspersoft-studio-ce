@@ -14,6 +14,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
+import com.jaspersoft.studio.widgets.framework.ui.widget.FallbackNumericText;
 
 public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	
@@ -88,8 +89,8 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	}
 	
 	@Override
-	protected NumericText createSimpleEditor(Composite parent) {
-		NumericText text = new NumericText(parent, SWT.BORDER, 4, 6);
+	protected FallbackNumericText createSimpleEditor(Composite parent) {
+		FallbackNumericText text = new FallbackNumericText(parent, SWT.BORDER, 4, 6);
 		text.setRemoveTrailZeroes(true);
 		Number max = getMax() != null ? getMax() : Float.MAX_VALUE;
 		Number min = getMin() != null ? getMin() : Float.MIN_VALUE;

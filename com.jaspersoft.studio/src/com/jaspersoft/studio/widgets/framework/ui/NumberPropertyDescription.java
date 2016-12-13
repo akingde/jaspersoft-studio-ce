@@ -16,6 +16,7 @@ import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
+import com.jaspersoft.studio.widgets.framework.ui.widget.FallbackNumericText;
 
 public abstract class NumberPropertyDescription<T extends Number> extends AbstractExpressionPropertyDescription<T> {
 	
@@ -83,7 +84,7 @@ public abstract class NumberPropertyDescription<T extends Number> extends Abstra
 	 * @param parent the parent of the element
 	 * @return a not null NumericText to handle the numeric field
 	 */
-	protected abstract NumericText createSimpleEditor(Composite parent);
+	protected abstract FallbackNumericText createSimpleEditor(Composite parent);
 	
 	/**
 	 * Convert the string into a number for the simple control when necessary
@@ -103,12 +104,13 @@ public abstract class NumberPropertyDescription<T extends Number> extends Abstra
 			cmp.switchToFirstContainer();
 		} else {
 			boolean isFallback = false;
-			NumericText simpleControl = (NumericText)cmp.getSecondContainer().getData();
+			FallbackNumericText simpleControl = (FallbackNumericText)cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
 			if (v == null && wip.getFallbackValue() != null){
 				v = wip.getFallbackValue().toString();
 				isFallback = true;
 			}
+			simpleControl.setFallback(isFallback);
 			simpleControl.setValue(convertValue(Misc.nvl(v)));
 			simpleControl.setToolTipText(getToolTip());
 			changeFallbackForeground(isFallback, simpleControl);
