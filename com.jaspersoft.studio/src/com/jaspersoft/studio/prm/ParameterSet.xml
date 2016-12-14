@@ -39,7 +39,7 @@
 		</field>
 	</class>
 	<class name="net.sf.jasperreports.engine.design.JRDesignExpression">
-		<map-to xml="JRDesignParameter" />
+		<map-to xml="JRDesignExpression" />
 		<field name="text" type="java.lang.String">
 			<bind-xml name="text" node="element" />
 		</field>

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.prm;
 
@@ -32,10 +31,11 @@ public class ParameterSetProvider {
 		init();
 	}
 
-	public static Mapping mapping = new Mapping();
-	static {
+	public static Mapping getMapping() {
+		Mapping mapping = new Mapping();
 		mapping.loadMapping(
 				new InputSource(ParameterSetProvider.class.getResourceAsStream("/com/jaspersoft/studio/prm/ParameterSet.xml")));
+		return mapping;
 	}
 
 	private void init() {
@@ -55,7 +55,8 @@ public class ParameterSetProvider {
 					return null;
 				}
 				try {
-					return (ParameterSet) CastorHelper.read(new ByteArrayInputStream(tmp.getBytes()), mapping);
+					tmp = "<?xml version=\"1.0\"?>\n" + tmp;
+					return (ParameterSet) CastorHelper.read(new ByteArrayInputStream(tmp.getBytes()), getMapping());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -66,7 +67,7 @@ public class ParameterSetProvider {
 
 	public static void storeParameterSet(ParameterSet pset, IPreferenceStore pstore) {
 		if (pset != null) {
-			String prmset = new Base64Encoder(CastorHelper.write(pset, ParameterSetProvider.mapping)).processString();
+			String prmset = new Base64Encoder(CastorHelper.write(pset, getMapping())).processString();
 			pstore.setValue(ParameterSet.PARAMETER_SET + "." + pset.getName(), prmset);
 		}
 	}
