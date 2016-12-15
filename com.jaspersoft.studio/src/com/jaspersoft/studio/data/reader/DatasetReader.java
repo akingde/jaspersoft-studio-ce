@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
@@ -235,14 +236,16 @@ public class DatasetReader {
 
 	public static JasperPrint fillReport(JasperReportsConfiguration jConfig, JRDesignDataset designDataset,
 			DataAdapterDescriptor dataAdapterDesc, JasperReport jrobj, Map<String, Object> hm) throws JRException {
-		if (dataAdapterDesc != null)
-			hm.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
 		DataAdapterService das = null;
 		try {
-			ReportContext rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
-			if (rc == null || !rc.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)) {
-				das = DataAdapterServiceUtil.getInstance(jConfig).getService(dataAdapterDesc.getDataAdapter());
-				das.contributeParameters(hm);
+			if (dataAdapterDesc != null) {
+				hm.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
+				ReportContext rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
+				if (rc == null || !rc.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)) {
+					das = DataAdapterServiceUtil.getInstance(new ParameterContributorContext(jConfig, designDataset, hm))
+							.getService(dataAdapterDesc.getDataAdapter());
+					das.contributeParameters(hm);
+				}
 			}
 			ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(), jrobj.getMainDataset().getPropertiesMap());
 

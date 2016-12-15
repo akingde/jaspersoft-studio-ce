@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.element;
 
@@ -123,7 +122,7 @@ public class ElementPreviewer {
 				return null;
 			hm = DatasetReader.prepareParameters(jConf, 100);
 
-			da = prepareDataAdapter(jConf, jDesign);
+			da = prepareDataAdapter(jConf, jDesign, hm);
 			DataSnapshotManager.setDataSnapshot(hm, !fromCache);
 
 			return doRunReport(jConf, hm, jDesign, jrobj, da);
@@ -182,9 +181,8 @@ public class ElementPreviewer {
 			columns.add(f.getName());
 		DatasetReader.setupDataset(jd, (JRDesignDataset) jDesign.getMainDesignDataset(), jConf, columns);
 
-		for (JRDataset ds : jDesign.getDatasets()) {
+		for (JRDataset ds : jDesign.getDatasets())
 			jd.addDataset((JRDesignDataset) ds.clone());
-		}
 	}
 
 	protected JasperDesign getJasperDesign(JasperReportsConfiguration jConfig) throws IOException, JRException {
@@ -217,11 +215,13 @@ public class ElementPreviewer {
 		}
 	}
 
-	public DataAdapterDescriptor prepareDataAdapter(JasperReportsConfiguration jConf, JasperDesign jDesign) {
-		return prepareDataAdapter(jConf, jDesign.getMainDesignDataset());
+	public DataAdapterDescriptor prepareDataAdapter(JasperReportsConfiguration jConf, JasperDesign jDesign,
+			Map<String, Object> hm) {
+		return prepareDataAdapter(jConf, jDesign.getMainDesignDataset(), hm);
 	}
 
-	public DataAdapterDescriptor prepareDataAdapter(JasperReportsConfiguration jConf, JRDesignDataset jDataset) {
+	public DataAdapterDescriptor prepareDataAdapter(JasperReportsConfiguration jConf, JRDesignDataset jDataset,
+			Map<String, Object> hm) {
 		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(jConf);
 		DataAdapterDescriptor da = null;
 		String defAdapter = jDataset.getPropertiesMap().getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
