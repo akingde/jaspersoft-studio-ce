@@ -7,8 +7,6 @@ package com.jaspersoft.studio.widgets.framework.ui;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
@@ -94,14 +92,6 @@ public class ComboItemPropertyDescription<T> extends AbstractExpressionPropertyD
 		simpleControl.setLayoutData(comboData);
 		
 		simpleControl.setItems(convert2Value(keyValues));
-		simpleControl.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (wiProp.isRefresh())
-					return;
-				handleEdit(simpleControl, wiProp);
-			}
-		});
 		simpleControl.addModifyListener(new ModifyListener() {
 
 			@Override
