@@ -4,6 +4,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.ui.dialog;
 
+import java.util.HashMap;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.osgi.util.NLS;
@@ -71,6 +73,13 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 	protected boolean isExpressionMode = false;
 	
 	/**
+	 * Hashmap used to store properties temporary properties that are not related to the edited property
+	 * This is used since widgets can access directly to the {@link IPropertyEditor} and so the single
+	 * widget inside this dialog can change many properties, but in the end only one is returned
+	 */
+	protected HashMap<String, String> customPropertiesMap = new HashMap<String, String>();
+	
+	/**
 	 * Editor used to store the value from the widget inside the field of this dialog
 	 */
 	private IPropertyEditor dialogPropertyEditor = new PropertyEditorAdapter() {
@@ -79,10 +88,14 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 			//Avoid to set both the fields so switching back from expression to value will keep 
 			//the value of the other one; this happen only inside the dialog, when it is closed
 			//only one of the two value is keep (the selected one)
-			if (isExpressionMode){
-				expressionValue = valueExpression;
+			if (propertyName.equals(itemProperty.getPropertyName())){
+				if (isExpressionMode){
+					expressionValue = valueExpression;
+				} else {
+					staticValue = value;
+				}
 			} else {
-				staticValue = value;
+				customPropertiesMap.put(propertyName, value);
 			}
 		};
 		
@@ -93,6 +106,9 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 		
 		@Override
 		public String getPropertyValue(String propertyName) {
+			if (!propertyName.equals(itemProperty.getPropertyName())){
+				return customPropertiesMap.get(propertyName);
+			}
 			return getStaticValue();
 		}
 	};
