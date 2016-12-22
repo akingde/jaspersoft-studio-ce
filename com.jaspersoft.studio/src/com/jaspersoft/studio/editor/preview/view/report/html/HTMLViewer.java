@@ -31,6 +31,10 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPreferencePage {
 
+	private JasperPrint jrprint;
+	
+	private ReportViewer rptviewer;
+	
 	public HTMLViewer(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 	}
@@ -51,9 +55,13 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 			tmanager.add(exportMenu);
 		}
 	}
-
-	private JasperPrint jrprint;
-	private ReportViewer rptviewer;
+	
+	@Override
+	protected int getUrlWidth(Control control){
+		//Add the calculation of the toolbar width depending on the available size on the parent
+		//minus 130 to leave space to the refresh action and export action
+		return control.getParent().getSize().x - 130;
+	}
 
 	public void setJRPRint(Statistics stats, JasperPrint jrprint) throws Exception {
 		setJRPRint(stats, jrprint, false);
