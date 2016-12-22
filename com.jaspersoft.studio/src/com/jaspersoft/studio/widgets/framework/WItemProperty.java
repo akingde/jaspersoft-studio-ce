@@ -36,6 +36,7 @@ import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedListen
 import com.jaspersoft.studio.widgets.framework.manager.ItemPropertyLayout;
 import com.jaspersoft.studio.widgets.framework.manager.ItemPropertyLayoutData;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
+import com.jaspersoft.studio.widgets.framework.ui.IDialogProvider;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.dialog.ItemPropertyElementDialog;
 import com.jaspersoft.studio.widgets.framework.ui.menu.IMenuProvider;
@@ -350,7 +351,13 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * Open the dialog to switch between expression and static value
 	 */
 	protected void handleEditButton() {
-		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), ipDesc, this);
+		ItemPropertyElementDialog dialog = null; 
+		//if the property description is a dialog provider use the dialog provided by it
+		if (ipDesc instanceof IDialogProvider){
+			dialog = ((IDialogProvider)ipDesc).getDialog(this);
+		} else {
+			dialog = new ItemPropertyElementDialog(UIUtils.getShell(), ipDesc, this);
+		}
 		if (dialog.open() == Dialog.OK) {
 			setValue(dialog.getStaticValue(), dialog.getExpressionValue());
 		}

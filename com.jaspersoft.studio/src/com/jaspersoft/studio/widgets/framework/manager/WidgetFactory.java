@@ -41,6 +41,7 @@ import com.jaspersoft.studio.widgets.framework.ui.FontFamilyComboPropertyDescrip
 import com.jaspersoft.studio.widgets.framework.ui.FontStylePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.MeasureUnitPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.SelectableComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TransparentColorPropertyDescription;
@@ -118,6 +119,7 @@ public class WidgetFactory {
 			hardcodedWidgets.put("fontfamily_combo", new FontFamilyComboPropertyDescription());
 			hardcodedWidgets.put("fontstyle_selector", new FontStylePropertyDescription());
 			hardcodedWidgets.put("checkbox_selector", new CheckboxItemPropertyDescription());
+			hardcodedWidgets.put("measureunit", new MeasureUnitPropertyDescription());
 		}
 		return hardcodedWidgets;
 	}
