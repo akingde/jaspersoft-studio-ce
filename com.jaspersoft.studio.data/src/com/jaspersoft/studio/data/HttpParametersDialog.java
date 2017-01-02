@@ -232,8 +232,10 @@ public class HttpParametersDialog extends ATitledDialog {
 		return tviewer;
 	}
 
+	private CTabItem bptab;
+
 	private TableViewer createParametersBody(CTabFolder tFolder, String title) {
-		CTabItem bptab = new CTabItem(tFolder, SWT.NONE, 1);
+		bptab = new CTabItem(tFolder, SWT.NONE, 1);
 		bptab.setText(title);
 
 		Composite cmp = new Composite(tFolder, SWT.NONE);
@@ -366,6 +368,10 @@ public class HttpParametersDialog extends ATitledDialog {
 	}
 
 	private void setupMethod(final Combo cmb) {
+		if (bptab != null) {
+			bptab.dispose();
+			bptab = null;
+		}
 		switch (cmb.getSelectionIndex()) {
 		case 0:
 			dataFile.setMethod(RequestMethod.GET);
@@ -388,7 +394,7 @@ public class HttpParametersDialog extends ATitledDialog {
 			break;
 		case 2:
 			dataFile.setMethod(RequestMethod.PUT);
-			final TableViewer tvput = createParametersBody(tabFolder, Messages.HttpParametersDialog_14);
+			final TableViewer tvput = createParametersBody(tabFolder, Messages.HttpParametersDialog_11);
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 
 				@Override

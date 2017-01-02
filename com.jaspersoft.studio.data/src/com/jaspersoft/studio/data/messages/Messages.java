@@ -90,6 +90,7 @@ public class Messages extends NLS {
 	public static String HttpParametersDialog_0;
 	public static String HttpParametersDialog_1;
 	public static String HttpParametersDialog_10;
+	public static String HttpParametersDialog_11;
 	public static String HttpParametersDialog_12;
 	public static String HttpParametersDialog_13;
 	public static String HttpParametersDialog_14;
