@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.datasnapshot;
 
@@ -60,7 +59,7 @@ public class DataSnapshotManager {
 		if (context != null && context.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)
 				&& context.containsParameter(DataSnapshotManager.SAVE_SNAPSHOT)) {
 			DataCacheHandler ch = (DataCacheHandler) context.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
-			if (ch.isSnapshotPopulated()) {
+			if (ch != null && ch.isSnapshotPopulated()) {
 				String path = (String) context.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT);
 				Date creationTimestamp = new Date();
 				if (ch instanceof JSSColumnDataCacheHandler)
