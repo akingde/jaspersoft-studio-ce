@@ -93,7 +93,7 @@ public class SelectorJrxml {
 				// due to tree viewer node expansion...
 				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot());
 				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
-					boolean sv = msp.getWsClient().getServerInfo().getVersion().compareTo("6.3.1") >= 0;
+					boolean sv = msp.getWsClient().getServerInfo().getVersion().compareTo("5.5") >= 0;
 					ResourceDescriptor rd = FindResourceJob.doFindResource(msp,
 							new String[] { sv ? FileType.jrxml.name() : ResourceMediaType.FILE_CLIENT_TYPE }, null);
 					if (rd != null)

@@ -15,7 +15,7 @@ public class ResourceBundleSelector extends ASelector {
 
 	@Override
 	protected String[] getIncludeTypes() {
-		boolean sv = res.getWsClient().getServerInfo().getVersion().compareTo("6.3.1") >= 0;
+		boolean sv = res.getWsClient().getServerInfo().getVersion().compareTo("5.5") >= 0;
 		return new String[] { sv ? FileType.prop.name() : ResourceMediaType.FILE_CLIENT_TYPE };
 	}
 

@@ -123,7 +123,7 @@ public class FileSelector implements IFileSelection {
 
 			protected void showFindDialog(MServerProfile msp) {
 				if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
-					boolean t = msp.getWsClient().getServerInfo().getVersion().compareTo("6.3.1") >= 0;
+					boolean t = msp.getWsClient().getServerInfo().getVersion().compareTo("5.5") >= 0;
 					String[] incl = null;
 					if (dialog instanceof SubreportSelectionDialog)
 						incl = new String[] { t ? FileType.jrxml.name() : ResourceMediaType.FILE_CLIENT_TYPE };

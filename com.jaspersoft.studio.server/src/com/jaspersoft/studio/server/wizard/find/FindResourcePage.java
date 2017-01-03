@@ -217,7 +217,7 @@ public class FindResourcePage extends WizardPage {
 	}
 
 	private Map<String, String> createFileTypeFilters(Composite scmp, Map<String, String> typeNames) {
-		if (sp.getWsClient().getServerInfo().getVersion().compareTo("6.3.1") >= 0) {
+		if (sp.getWsClient().getServerInfo().getVersion().compareTo("5.5") >= 0) {
 			Composite dsCmp = new Composite(scmp, SWT.NONE);
 			dsCmp.setLayout(new GridLayout(3, false));
 			GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
