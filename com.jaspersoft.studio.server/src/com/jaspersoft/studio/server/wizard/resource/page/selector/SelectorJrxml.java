@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.resources.ClientFile.FileType;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ServerManager;
@@ -92,7 +93,9 @@ public class SelectorJrxml {
 				// due to tree viewer node expansion...
 				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot());
 				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
-					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, new String[] { ResourceMediaType.FILE_CLIENT_TYPE }, null);
+					boolean sv = msp.getWsClient().getServerInfo().getVersion().compareTo("6.3.1") >= 0;
+					ResourceDescriptor rd = FindResourceJob.doFindResource(msp,
+							new String[] { sv ? FileType.jrxml.name() : ResourceMediaType.FILE_CLIENT_TYPE }, null);
 					if (rd != null)
 						setRemoteResource(res, rd, parent);
 				} else {
@@ -138,7 +141,8 @@ public class SelectorJrxml {
 		bLoc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FilteredResourcesSelectionDialog wizard = new FilteredResourcesSelectionDialog(UIUtils.getShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+				FilteredResourcesSelectionDialog wizard = new FilteredResourcesSelectionDialog(UIUtils.getShell(),
+						false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
 				wizard.setInitialPattern("*.jrxml");//$NON-NLS-1$
 				if (wizard.open() == Dialog.OK) {
 					ResourceDescriptor jrxmlDescriptor = new ResourceDescriptor();

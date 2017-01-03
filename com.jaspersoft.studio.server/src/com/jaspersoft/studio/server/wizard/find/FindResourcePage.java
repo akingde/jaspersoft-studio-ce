@@ -49,6 +49,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.resources.ClientFile.FileType;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.ResourceFactory;
@@ -91,12 +92,15 @@ public class FindResourcePage extends WizardPage {
 					tps.remove(t);
 	}
 
+	private MServerProfile sp;
+
 	protected FindResourcePage(MServerProfile sp, boolean containedResource) {
 		super("findresource"); //$NON-NLS-1$
 		this.containedResource = containedResource;
 		setTitle(Messages.FindResourcePage_1);
 		setDescription(Messages.FindResourcePage_2);
 		finderUI = new FinderUI(ServerManager.getMServerProfileCopy(sp));
+		this.sp = sp;
 	}
 
 	@Override
@@ -137,83 +141,12 @@ public class FindResourcePage extends WizardPage {
 			expcmp.setExpanded(false);
 
 			Composite scmp = new Composite(expcmp, SWT.NONE);
-			scmp.setLayout(new GridLayout(2, false));
+			scmp.setLayout(new GridLayout(3, false));
 
-			Composite dsCmp = new Composite(scmp, SWT.NONE);
-			dsCmp.setLayout(new GridLayout(2, false));
-			dsCmp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+			Map<String, String> typeNames = createAllFilters(scmp);
 
-			ball = new Button(dsCmp, SWT.CHECK);
-			ball.setText(Messages.FindResourcePage_6);
-			ball.setSelection(true);
-			ball.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					boolean sel = ball.getSelection();
-					for (Button b : typesMap.values())
-						b.setSelection(sel);
-					bds.setSelection(sel);
-					finderUI.getTypes().clear();
-				}
-			});
-			Label lbl = new Label(dsCmp, SWT.SEPARATOR | SWT.HORIZONTAL);
-			gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalSpan = 2;
-			lbl.setLayoutData(gd);
-
-			Map<String, String> typeNames = ResourceFactory.getTypeNames();
-			for (String rtype : typeNames.keySet()) {
-				if (dsTypes.contains(rtype))
-					continue;
-				final Button bhiden = new Button(dsCmp, SWT.CHECK);
-				bhiden.setText(typeNames.get(rtype));
-				bhiden.setSelection(true);
-				bhiden.setToolTipText(rtype);
-				typesMap.put(rtype, bhiden);
-				bhiden.addSelectionListener(typeListener);
-			}
-
-			dsCmp = new Composite(scmp, SWT.NONE);
-			dsCmp.setLayout(new GridLayout(2, false));
-			dsCmp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-
-			bds = new Button(dsCmp, SWT.CHECK);
-			bds.setText(Messages.FindResourcePage_7);
-			bds.setSelection(true);
-			gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
-			gd.horizontalSpan = 2;
-			bds.setLayoutData(gd);
-			bds.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-
-					boolean sel = bds.getSelection();
-					for (Button b : typesMap.values()) {
-						String v = typesMap.inverse().get(b);
-						if (v != null && dsTypes.contains(v))
-							b.setSelection(sel);
-					}
-					if (!sel)
-						ball.setSelection(false);
-					setTypes();
-				}
-			});
-
-			lbl = new Label(dsCmp, SWT.SEPARATOR | SWT.HORIZONTAL);
-			gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalSpan = 2;
-			lbl.setLayoutData(gd);
-
-			for (String rtype : dsTypes) {
-				if (!typeNames.containsKey(rtype))
-					continue;
-				final Button bhiden = new Button(dsCmp, SWT.CHECK);
-				bhiden.setText(Misc.nvl(typeNames.get(rtype), rtype));
-				bhiden.setSelection(true);
-				bhiden.setToolTipText(rtype);
-				typesMap.put(rtype, bhiden);
-				bhiden.addSelectionListener(typeListener);
-			}
+			createDatasourceFilters(scmp, typeNames);
+			createFileTypeFilters(scmp, typeNames);
 
 			expcmp.setClient(scmp);
 			expcmp.addExpansionListener(new ExpansionAdapter() {
@@ -243,6 +176,132 @@ public class FindResourcePage extends WizardPage {
 
 		txt.setFocus();
 		setPageComplete(false);
+	}
+
+	private Map<String, String> createAllFilters(Composite scmp) {
+		Composite dsCmp = new Composite(scmp, SWT.NONE);
+		dsCmp.setLayout(new GridLayout(2, false));
+		dsCmp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+
+		ball = new Button(dsCmp, SWT.CHECK);
+		ball.setText(Messages.FindResourcePage_6);
+		ball.setSelection(true);
+		ball.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				boolean sel = ball.getSelection();
+				for (Button b : typesMap.values())
+					b.setSelection(sel);
+				bds.setSelection(sel);
+				bft.setSelection(sel);
+				finderUI.getTypes().clear();
+			}
+		});
+		Label lbl = new Label(dsCmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		lbl.setLayoutData(gd);
+
+		Map<String, String> typeNames = ResourceFactory.getTypeNames();
+		for (String rtype : typeNames.keySet()) {
+			if (dsTypes.contains(rtype))
+				continue;
+			final Button bhiden = new Button(dsCmp, SWT.CHECK);
+			bhiden.setText(typeNames.get(rtype));
+			bhiden.setSelection(true);
+			bhiden.setToolTipText(rtype);
+			typesMap.put(rtype, bhiden);
+			bhiden.addSelectionListener(typeListener);
+		}
+		return typeNames;
+	}
+
+	private Map<String, String> createFileTypeFilters(Composite scmp, Map<String, String> typeNames) {
+		if (sp.getWsClient().getServerInfo().getVersion().compareTo("6.3.1") >= 0) {
+			Composite dsCmp = new Composite(scmp, SWT.NONE);
+			dsCmp.setLayout(new GridLayout(3, false));
+			GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+			// gd.horizontalSpan = 2;
+			dsCmp.setLayoutData(gd);
+
+			bft = new Button(dsCmp, SWT.CHECK);
+			bft.setText("Files By Type");
+			bft.setSelection(true);
+			bft.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					boolean sel = bft.getSelection();
+					for (Button b : typesMap.values()) {
+						for (FileType ft : FileType.values())
+							if (ft.name().equalsIgnoreCase(b.getText())) {
+								b.setSelection(sel);
+								break;
+							}
+					}
+					if (!sel)
+						ball.setSelection(false);
+					finderUI.getTypes().clear();
+				}
+			});
+			Label lbl = new Label(dsCmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 3;
+			lbl.setLayoutData(gd);
+
+			for (FileType type : FileType.values()) {
+				final Button bhiden = new Button(dsCmp, SWT.CHECK);
+				bhiden.setText(type.name());
+				bhiden.setSelection(true);
+				bhiden.setToolTipText(type.name());
+				typesMap.put(type.name(), bhiden);
+				bhiden.addSelectionListener(typeListener);
+			}
+		}
+		return typeNames;
+	}
+
+	private void createDatasourceFilters(Composite scmp, Map<String, String> typeNames) {
+		Composite dsCmp = new Composite(scmp, SWT.NONE);
+		dsCmp.setLayout(new GridLayout(1, false));
+		dsCmp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+
+		bds = new Button(dsCmp, SWT.CHECK);
+		bds.setText(Messages.FindResourcePage_7);
+		bds.setSelection(true);
+		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
+		gd.horizontalSpan = 1;
+		bds.setLayoutData(gd);
+		bds.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean sel = bds.getSelection();
+				for (Button b : typesMap.values()) {
+					String v = typesMap.inverse().get(b);
+					if (v != null && dsTypes.contains(v))
+						b.setSelection(sel);
+				}
+				if (!sel)
+					ball.setSelection(false);
+				setTypes();
+			}
+		});
+
+		Label lbl = new Label(dsCmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		lbl.setLayoutData(gd);
+
+		for (String rtype : dsTypes) {
+			if (!typeNames.containsKey(rtype))
+				continue;
+			final Button bhiden = new Button(dsCmp, SWT.CHECK);
+			bhiden.setText(Misc.nvl(typeNames.get(rtype), rtype));
+			bhiden.setSelection(true);
+			bhiden.setToolTipText(rtype);
+			typesMap.put(rtype, bhiden);
+			bhiden.addSelectionListener(typeListener);
+		}
 	}
 
 	private void createTreeView(CTabFolder tabFolder) {
@@ -424,6 +483,7 @@ public class FindResourcePage extends WizardPage {
 	private int started = 0;
 	private boolean ended = true;
 	private CTabFolder tabFolder;
+	private Button bft;
 
 	class FinderUI extends AFinderUI {
 		public FinderUI(MServerProfile sp) {

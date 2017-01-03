@@ -18,6 +18,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MDummy;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MAdHocDataView;
 import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.MDataType;
@@ -36,7 +37,6 @@ import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
 import com.jaspersoft.studio.server.model.MXmlFile;
@@ -108,74 +108,53 @@ public class ResourceFactory {
 			page = Activator.getExtManager().getResourcePage(parent, resource);
 			if (page == null) {
 				if (resource instanceof MRImage)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new ImagePageContent(parent, resource));
 				else if (resource instanceof MRCSS)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new CSSPageContent(parent, resource));
 
 				else if (resource instanceof MRFont)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new FontPageContent(parent, resource));
 				else if (resource instanceof MJar)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new JarPageContent(parent, resource));
 				else if (resource instanceof MResourceBundle)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new ResourceBundlePageContent(parent, resource));
 				else if (resource instanceof MJrxml)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new JrxmlPageContent(parent, resource));
 				else if (resource instanceof MReference)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new ReferencePageContent(parent, resource));
 				else if (resource instanceof MRDatasourceVDS)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new DatasourceVDSPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceJNDI)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new DatasourceJndiPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceAWS)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new DatasourceAWSPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceJDBC)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new DatasourceJDBCPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceBean)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new DatasourceBeanPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceCustom)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new DatasourceCustomPageContent(parent, resource));
-				else if (resource instanceof MRDatasource
-						|| resource instanceof MFolder)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource));
+				else if (resource instanceof MRDatasource || resource instanceof MFolder)
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
 				else if (resource instanceof MReportUnit)
 					// if (ReportUnitQueryContent.hasTypeQuery(resource))
-					page = APageContent
-							.getPages(
-									resource,
-									new ResourcePageContent(parent, resource),
-									new ReportUnitContent(parent, resource),
-									new ReportUnitDatasourceContent(parent,
-											resource),
-									new ReportUnitQueryContent(parent, resource),
-									new ReportUnitInputControlContent(parent,
-											resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
+							new ReportUnitContent(parent, resource), new ReportUnitDatasourceContent(parent, resource),
+							new ReportUnitQueryContent(parent, resource),
+							new ReportUnitInputControlContent(parent, resource));
 				// else
 				// page = APageContent.getPages(resource,
 				// new ResourcePageContent(parent, resource),
@@ -185,86 +164,62 @@ public class ResourceFactory {
 				// new ReportUnitInputControlContent(parent,
 				// resource));
 				else if (resource instanceof MInputControl)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new InputControlPageContent(parent, resource));
 				else if (resource instanceof MDataType)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new DataTypePageContent(parent, resource));
 				else if (resource instanceof MRQuery)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
-							new ReportUnitDatasourceContent(parent, resource),
-							new QueryPageContent(parent, resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
+							new ReportUnitDatasourceContent(parent, resource), new QueryPageContent(parent, resource));
 				else if (resource instanceof MListOfValues)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new LovPageContent(parent, resource));
 
 				else if (resource instanceof MXmlFile)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new XmlPageContent(parent, resource));
 				else if (resource instanceof MUnknown)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
 				else if (resource instanceof MContentResource)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new FilePageContent(parent, resource));
 				else if (resource instanceof MRStyleTemplate)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new StyleTemplatePageContent(parent, resource));
 				else if (resource instanceof MRDataAdapter)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new DataAdapterPageContent(parent, resource));
 
 				else if (resource instanceof MAdHocDataView)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new ReportUnitDatasourceContent(parent, resource));
 				else if (resource instanceof MROlapMondrianConnection)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
-							new ReportUnitDatasourceContent(parent, resource,
-									true), new OLAPMondrianSchemaContent(
-									parent, resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
+							new ReportUnitDatasourceContent(parent, resource, true),
+							new OLAPMondrianSchemaContent(parent, resource));
 				else if (resource instanceof MRSecureMondrianConnection)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
-							new ReportUnitDatasourceContent(parent, resource,
-									true), new OLAPMondrianSchemaContent(
-									parent, resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
+							new ReportUnitDatasourceContent(parent, resource, true),
+							new OLAPMondrianSchemaContent(parent, resource));
 				else if (resource instanceof MRMondrianSchema)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new XmlPageContent(parent, resource));
 				else if (resource instanceof MRMondrianXmlaDefinitionClientType)
-					page = APageContent
-							.getPages(resource, new ResourcePageContent(parent,
-									resource),
-									new MondrianXMLADefinitionContent(parent,
-											resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
+							new MondrianXMLADefinitionContent(parent, resource));
 				else if (resource instanceof MRAccessGrantSchema)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new XmlPageContent(parent, resource));
 
 				else if (resource instanceof MROlapUnit)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
-							new QueryPageContent(parent, resource, false),
-							new OlapConnectionContent(parent, resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
+							new QueryPageContent(parent, resource, false), new OlapConnectionContent(parent, resource));
 				else if (resource instanceof MROlapXmlaConnection)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource),
 							new OLAPXmlaPageContent(parent, resource));
 				else
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
 			}
 			if (page != null)
 				pagemap.put(resource.getClass(), page);
@@ -272,8 +227,7 @@ public class ResourceFactory {
 		return page;
 	}
 
-	public static AMResource getResource(ANode parent,
-			ResourceDescriptor resource, int index) {
+	public static AMResource getResource(ANode parent, ResourceDescriptor resource, int index) {
 		ExtensionManager extManager = Activator.getExtManager();
 		AMResource m = extManager.getResource(parent, resource, index);
 		if (m != null)
@@ -336,9 +290,8 @@ public class ResourceFactory {
 			return new MRDatasourceBean(parent, resource, index);
 
 		if (wstype.equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
-			ResourceProperty rp = ResourceDescriptorUtil.getProperty(
-					ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS,
-					resource.getProperties());
+			ResourceProperty rp = ResourceDescriptorUtil
+					.getProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, resource.getProperties());
 			if (rp != null) {
 				if (rp.getValue().equals(MRDatasourceDiagnostic.CUSTOM_CLASS))
 					return new MRDatasourceDiagnostic(parent, resource, index);
@@ -366,10 +319,8 @@ public class ResourceFactory {
 		}
 		if (wstype.equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
 			return new MRMondrianSchema(parent, resource, index);
-		if (wstype
-				.equals(ResourceDescriptor.TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE))
-			return new MRMondrianXmlaDefinitionClientType(parent, resource,
-					index);
+		if (wstype.equals(ResourceDescriptor.TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE))
+			return new MRMondrianXmlaDefinitionClientType(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION))
 			return new MROlapMondrianConnection(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION))

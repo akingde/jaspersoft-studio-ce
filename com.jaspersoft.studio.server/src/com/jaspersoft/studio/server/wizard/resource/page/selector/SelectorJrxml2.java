@@ -6,6 +6,7 @@ package com.jaspersoft.studio.server.wizard.resource.page.selector;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
+import com.jaspersoft.jasperserver.dto.resources.ClientFile.FileType;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MJrxml;
 
@@ -41,7 +42,8 @@ public class SelectorJrxml2 extends ASelector {
 
 	@Override
 	protected String[] getIncludeTypes() {
-		return new String[] { ResourceMediaType.FILE_CLIENT_TYPE };
+		boolean sv = res.getWsClient().getServerInfo().getVersion().compareTo("6.3.1") >= 0;
+		return new String[] { sv ? FileType.jrxml.name() : ResourceMediaType.FILE_CLIENT_TYPE };
 	}
 
 	@Override
