@@ -28,7 +28,9 @@ import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MRJson;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MXmlFile;
+import com.jaspersoft.studio.server.preferences.JRSPreferencesPage;
 import com.jaspersoft.studio.server.protocol.Version;
+import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -111,6 +113,9 @@ public class ImpDataAdapter extends AImpObject {
 
 		final AFileResource mres = new MRDataAdapter(mrunit, rd, -1);
 		mres.setFile(f);
+		String b = jrConfig.getProperty(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, "true");
+		if (b.equals("true") && rd.getIsNew())
+			popt.setOverwrite(OverwriteEnum.OVERWRITE);
 		mres.setPublishOptions(popt);
 
 		PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
@@ -156,6 +161,8 @@ public class ImpDataAdapter extends AImpObject {
 								if (mdaf != null) {
 									mdaf.setFile(file);
 									PublishOptions fpopt = createOptions(jrConfig, fname);
+									if (b.equals("true") && rd.getIsNew())
+										fpopt.setOverwrite(OverwriteEnum.OVERWRITE);
 									mdaf.setPublishOptions(fpopt);
 									fpopt.setValueSetter(popt.new ValueSetter<DataAdapter>(da) {
 
