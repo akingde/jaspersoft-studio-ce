@@ -19,6 +19,9 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.preferences.JRSPreferencesPage;
+import com.jaspersoft.studio.server.publish.OverwriteEnum;
+import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -90,8 +93,11 @@ public class ImpInputControls {
 				mrunit.removeChild(mres);
 				continue;
 			}
-
-			mres.setPublishOptions(AImpObject.createOptions(jrConfig, null));
+			PublishOptions popt = AImpObject.createOptions(jrConfig, null);
+			String b = jrConfig.getProperty(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, "true");
+			if (b.equals("true") && rd.getIsNew())
+				popt.setOverwrite(OverwriteEnum.OVERWRITE);
+			mres.setPublishOptions(popt);
 
 			PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
 		}
