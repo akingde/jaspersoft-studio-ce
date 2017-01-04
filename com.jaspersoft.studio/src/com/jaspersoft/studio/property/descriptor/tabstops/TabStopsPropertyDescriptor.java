@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.tabstops;
 
@@ -24,6 +23,7 @@ import com.jaspersoft.studio.property.section.widgets.SPButton;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.TabStop;
+import net.sf.jasperreports.engine.util.JRCloneUtils;
 
 public class TabStopsPropertyDescriptor extends NTextPropertyDescriptor {
 
@@ -52,7 +52,7 @@ public class TabStopsPropertyDescriptor extends NTextPropertyDescriptor {
 			@Override
 			protected void handleButtonPressed() {
 				TabStopsEditor wizard = new TabStopsEditor();
-				wizard.setValue(value);
+				wizard.setValue(JRCloneUtils.cloneList(value));
 				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK)
