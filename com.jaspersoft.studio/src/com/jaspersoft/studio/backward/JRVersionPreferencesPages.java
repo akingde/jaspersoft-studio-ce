@@ -314,6 +314,7 @@ public class JRVersionPreferencesPages extends FieldEditorOverlayPage {
 		store.setDefault(JSS_COMPATIBILITY_SHOW_DIALOG, "false"); //$NON-NLS-1$
 		store.setDefault(JSS_COMPATIBILITY_VERSION, "last"); //$NON-NLS-1$
 		store.setDefault(JasperReportCompiler.JSS_COMPATIBILITY_COMPILER_VERSION, "jrxml"); //$NON-NLS-1$
+		store.setDefault(JSS_TIMESTAMP_ONSAVE, "false");
 	}
 
 	@Override

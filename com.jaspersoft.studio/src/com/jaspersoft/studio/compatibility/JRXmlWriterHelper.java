@@ -114,7 +114,7 @@ public class JRXmlWriterHelper {
 			String timestamp = ""; //$NON-NLS-1$
 			if (jrContext instanceof JasperReportsConfiguration) {
 				if (((JasperReportsConfiguration) jrContext)
-						.getPropertyBoolean(JRVersionPreferencesPages.JSS_TIMESTAMP_ONSAVE, true)) {
+						.getPropertyBoolean(JRVersionPreferencesPages.JSS_TIMESTAMP_ONSAVE, false)) {
 					timestamp = "<!-- " + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + " -->\n"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
