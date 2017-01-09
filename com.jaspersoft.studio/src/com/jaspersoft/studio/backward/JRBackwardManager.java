@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.backward;
 
@@ -16,6 +15,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -111,7 +112,7 @@ public class JRBackwardManager {
 	 */
 	public static void fetchJR(JRDefinition def, final File toDir, final IProgressMonitor monitor) throws Exception {
 		Executor exec = Executor.newInstance();
-		URI fullURI = new URI(def.getResourceURL());
+		final URI fullURI = new URI(def.getResourceURL());
 		HttpUtils.setupProxy(exec, fullURI);
 		HttpHost proxy = HttpUtils.getUnauthProxy(exec, fullURI);
 		Request req = Request.Get(def.getResourceURL());
@@ -128,6 +129,14 @@ public class JRBackwardManager {
 					throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
 				if (entity == null)
 					throw new ClientProtocolException("Response contains no content");
+
+				Header[] headers = response.getHeaders("Content-Type");
+				for (Header h : headers) {
+					if (h.getValue().equals("application/java-archive")) {
+						org.apache.commons.io.FileUtils.copyInputStreamToFile(entity.getContent(), new File(toDir, FilenameUtils.getName(fullURI.getPath())));
+						return null;
+					}
+				}
 
 				FileUtils.unZip(entity.getContent(), toDir, monitor, new ZipFilter() {
 
@@ -222,7 +231,7 @@ public class JRBackwardManager {
 			throw new Exception("Path does not exists.");
 		if (!f.isDirectory())
 			throw new Exception("Path is not a directory.");
-		Collection<File> lf = org.apache.commons.io.FileUtils.listFiles(f, new String[] { "zip", "jar" }, true);
+		Collection<File> lf = org.apache.commons.io.FileUtils.listFiles(f, new String[] {"jar", "zip", "jar" }, true);
 		List<File> files = new ArrayList<File>();
 		if (lf != null)
 			files.addAll(lf);

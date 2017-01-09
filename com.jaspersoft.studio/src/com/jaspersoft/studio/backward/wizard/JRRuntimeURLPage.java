@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.backward.wizard;
 
@@ -66,34 +65,51 @@ public class JRRuntimeURLPage extends WizardPage {
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				curl.setItems(new String[] {
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.2.1/jasperreports-6.2.1-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.2.0/jasperreports-6.2.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.1.1/jasperreports-6.1.1-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.1.0/jasperreports-6.1.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.0.4/jasperreports-6.0.4-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.0.3/jasperreports-6.0.3-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.0.2/jasperreports-6.0.2-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.0.0/jasperreports-6.0.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%205.6.1/jasperreports-5.6.1-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%205.6.0/jasperreports-5.6.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%205.5.2/jasperreports-5.5.2-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%205.5.1/jasperreports-5.5.1-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%205.5.0/jasperreports-5.5.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%205.2.0/jasperreports-5.2.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%205.1.2/jasperreports-5.1.2-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%205.0.4/jasperreports-5.0.4-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%205.0.1/jasperreports-5.0.1-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%204.8.0/jasperreports-4.8.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%204.7.0/jasperreports-4.7.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%204.6.0/jasperreports-4.6.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%204.5.0/jasperreports-4.5.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%204.1.3/jasperreports-4.1.3-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%204.1.1/jasperreports-4.1.1-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%204.0.2/jasperreports-4.0.2-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%204.0.0/jasperreports-4.0.0-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%203.7.5/jasperreports-3.7.5-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%203.7.4/jasperreports-3.7.4-project.zip/download", //$NON-NLS-1$
-						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%203.7.2/jasperreports-3.7.2-project.zip/download" }); //$NON-NLS-1$
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/3.6.0/jasperreports-3.6.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/3.6.1/jasperreports-3.6.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/3.6.2/jasperreports-3.6.2.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/3.7.0/jasperreports-3.7.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/3.7.1/jasperreports-3.7.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/3.7.2/jasperreports-3.7.2.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/3.7.3/jasperreports-3.7.3.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/3.7.4/jasperreports-3.7.4.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/3.7.5/jasperreports-3.7.5.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/3.7.6/jasperreports-3.7.6.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.0.0/jasperreports-4.0.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.0.1/jasperreports-4.0.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.0.2/jasperreports-4.0.2.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.1.1/jasperreports-4.1.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.1.2/jasperreports-4.1.2.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.1.3/jasperreports-4.1.3.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.5.0/jasperreports-4.5.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.5.1/jasperreports-4.5.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.6.0/jasperreports-4.6.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.7.0/jasperreports-4.7.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.7.1/jasperreports-4.7.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/4.8.0/jasperreports-4.8.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.0.0/jasperreports-5.0.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.0.1/jasperreports-5.0.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.0.4/jasperreports-5.0.4.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.1.0/jasperreports-5.1.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.1.2/jasperreports-5.1.2.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.2.0/jasperreports-5.2.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.5.0/jasperreports-5.5.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.5.1/jasperreports-5.5.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.5.2/jasperreports-5.5.2.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.6.0/jasperreports-5.6.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/5.6.1/jasperreports-5.6.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.0.0/jasperreports-6.0.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.0.2/jasperreports-6.0.2.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.0.3/jasperreports-6.0.3.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.0.4/jasperreports-6.0.4.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.1.0/jasperreports-6.1.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.1.1/jasperreports-6.1.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.2.0/jasperreports-6.2.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.2.1/jasperreports-6.2.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.2.2/jasperreports-6.2.2.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.3.0/jasperreports-6.3.0.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.3.1/jasperreports-6.3.1.jar",
+						"http://repo1.maven.org/maven2/net/sf/jasperreports/jasperreports/6.4.0/jasperreports-6.4.0.jar" }); //$NON-NLS-1$
 				curl.setText(d.getResourceURL());
 			}
 
