@@ -49,18 +49,6 @@
          search-location="both"/>
 
    <includes
-         id="org.tigris.subversion.clientadapter.feature"
-         version="0.0.0"
-         optional="true"
-         search-location="both"/>
-
-   <includes
-         id="org.tigris.subversion.clientadapter.svnkit.feature"
-         version="0.0.0"
-         optional="true"
-         search-location="both"/>
-
-   <includes
          id="org.tigris.subversion.subclipse"
          version="0.0.0"
          optional="true"
