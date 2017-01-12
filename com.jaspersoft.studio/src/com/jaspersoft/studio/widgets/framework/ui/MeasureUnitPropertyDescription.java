@@ -10,18 +10,20 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -34,6 +36,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.section.report.util.Unit;
 import com.jaspersoft.studio.property.section.report.util.Unit.PixelConversionException;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
@@ -62,6 +65,12 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 	 * Ordered list of measure units supported
 	 */
 	private static MeasureUnit[] units;
+	
+	/**
+	 * The color used as background when the control is not in error status. 
+	 * This is initialized when the control is created
+	 */
+	protected Color defaultBackgroundColor = null;
 
 	/**
 	 * String added to the autocomplete
@@ -78,6 +87,11 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 	 * property
 	 */
 	private static final String CURRENT_MEASURE_KEY = ".measureUnit";
+	
+	/**
+	 * The key used to store inside the widget the focus listener
+	 */
+	protected static final String FOCUS_KEY = "focusListener";
 	
 	protected Number min;
 	
@@ -123,7 +137,7 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 		// - JSS Bugzilla 42999
 		// - Eclipse Bug 383750
 		// It makes sense only on E4 platform and Mac OS X operating systems.
-		simpleControl.addFocusListener(new FocusAdapter() {
+		FocusListener focusListener = new FocusAdapter() {
 
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -138,8 +152,10 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 			public void focusLost(FocusEvent e) {
 				handleEdit(simpleControl, wiProp);
 			}
-		});
-		
+		};
+		simpleControl.addFocusListener(focusListener);
+		//Store inside the control the focus listener, so it can be removed and added another time in some case
+		simpleControl.setData(FOCUS_KEY, focusListener);
 		
 		simpleControl.addKeyListener(new KeyAdapter() {
 			@Override
@@ -149,23 +165,18 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 			}
 		});
 		simpleControl.addMouseListener(new MouseClickListener(simpleControl, wiProp));
-		new AutoCompleteField(simpleControl, new AutoCompleteMeasure(simpleControl), autocompleteValues);
-
+		
+		//add the autocomplete only if there are more then one entry
+		if (autocompleteValues.length > 1){
+			new AutoCompleteField(simpleControl, new AutoCompleteMeasure(simpleControl), autocompleteValues);
+		}
+		
+		defaultBackgroundColor = simpleControl.getBackground();
 		cmp.getSecondContainer().setData(simpleControl);
 		GridData textData = new GridData(GridData.FILL_HORIZONTAL);
 		textData.verticalAlignment = SWT.CENTER;
 		textData.grabExcessVerticalSpace = true;
 		simpleControl.setLayoutData(textData);
-		simpleControl.addSelectionListener(new SelectionAdapter() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (wiProp.isRefresh())
-					return;
-				handleEdit(simpleControl, wiProp);
-			}
-			
-		});
 		setupContextMenu(simpleControl, wiProp);
 		cmp.switchToFirstContainer();
 		return cmp;
@@ -449,11 +460,36 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 	 */
 	protected void setErrorStatus(String message, Text insertField){
 		if (message != null){
-			insertField.setBackground(ColorConstants.red);
+			updateBackground(ColorConstants.red, insertField);
 			insertField.setToolTipText(message);
 		} else {
-			insertField.setBackground(null);
+			updateBackground(defaultBackgroundColor, insertField);
 			insertField.setToolTipText(getToolTip());
+		}
+	}
+	
+	/**
+	 * On macos the update of the color need some additional operation because of an SWT bug
+	 * (https://bugs.eclipse.org/bugs/show_bug.cgi?id=346361). If the widget is focused it need
+	 * to lose the focus to be updated correctly. For this reason the widget is forced to loose
+	 * the focus and the it will regain it
+	 * 
+	 * @param color the color to set
+	 */
+	protected void updateBackground(Color color, Text control){
+		if (Util.isMac() && control.isFocusControl() && !ModelUtils.safeEquals(color, control.getBackground())){
+			FocusListener focusListner = (FocusListener)control.getData(FOCUS_KEY);
+			control.removeFocusListener(focusListner);
+			Point caretPosition = control.getSelection();
+			boolean oldEnabled = control.getEnabled();
+			control.setEnabled(false);//Force the focus lost
+			control.setBackground(color);
+			control.setEnabled(oldEnabled);
+			control.setFocus();
+			control.setSelection(caretPosition.x);
+			control.addFocusListener(focusListner);
+		} else {
+			control.setBackground(color);
 		}
 	}
 	

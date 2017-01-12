@@ -37,6 +37,7 @@ import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.DoublePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FilePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FixedMeasurePropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.FixedNumberMesurePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FloatPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FontFamilyComboPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FontStylePropertyDescription;
@@ -122,6 +123,7 @@ public class WidgetFactory {
 			hardcodedWidgets.put("checkbox_selector", new CheckboxItemPropertyDescription());
 			hardcodedWidgets.put("measureunit", new MeasureUnitPropertyDescription());
 			hardcodedWidgets.put("fixedmeasureunit", new FixedMeasurePropertyDescription());
+			hardcodedWidgets.put("fixednumbermeasureunit", new FixedNumberMesurePropertyDescription());
 		}
 		return hardcodedWidgets;
 	}

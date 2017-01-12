@@ -7,7 +7,7 @@ package com.jaspersoft.studio.widgets.framework.ui;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Map;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.dialogs.Dialog;
@@ -53,7 +53,8 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 /**
  * Widget used to insert values in different measure units. The measure units list are built using the 
  * combo entry of the widget definitions. If they are not provided it will use a default set. This widget
- * doesn't do any conversion on the inserted value, simply append the numeric inserted value to the measure unit
+ * doesn't do any conversion on the inserted value, simply append the numeric inserted value to the measure unit.
+ * The measure unit is stored into the model with a separate properties.
  * 
  * @author Orlandin Marco
  *
@@ -63,27 +64,39 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	/**
 	 * Hash map the bind a measure unit, by its key, to a series of method to convert and handle that measure
 	 */
-	private HashMap<String, String> unitsMap = null;
+	protected Map<String, String> unitsMap = null;
 	
 	/**
 	 * String added to the autocomplete
 	 */
-	private String[] autocompleteValues;
+	protected String[] autocompleteValues;
+	
+	/**
+	 * The color used as background when the control is not in error status. 
+	 * This is initialized when the control is created
+	 */
+	protected Color defaultBackgroundColor = null;
 	
 	/**
 	 * The key used to store inside the widget the measure units popup menu
 	 */
-	private static final String POPUP_KEY = "measureUnitMenu";
+	protected static final String POPUP_KEY = "measureUnitMenu";
 
 	/**
 	 * The key used to store inside the widget the focus listener
 	 */
-	private static final String FOCUS_KEY = "focusListener";
+	protected static final String FOCUS_KEY = "focusListener";
 	
 	/**
 	 * Formatter used to format the number 
 	 */
-	protected static DecimalFormat format = new DecimalFormat("0.################");
+	protected static final DecimalFormat format = new DecimalFormat("0.################");
+	
+	/**
+	 * Name of the properties used to store in the model the last selected measure unit for this
+	 * property
+	 */
+	protected static final String CURRENT_MEASURE_KEY = ".measureUnit";
 	
 	protected Number min;
 	
@@ -92,7 +105,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	public FixedMeasurePropertyDescription() {
 	}
 	
-	public FixedMeasurePropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue, long min, long max, HashMap<String, String> unitsMap) {
+	public FixedMeasurePropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue, long min, long max, Map<String, String> unitsMap) {
 		super(name, label, description, mandatory, defaultValue);
 		this.min = min;
 		this.max = max;
@@ -100,7 +113,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 		autocompleteValues = buildAtuocompleteValues();
 	}
 
-	public FixedMeasurePropertyDescription(String name, String label, String description, boolean mandatory, long min, long max, HashMap<String, String> unitsMap) {
+	public FixedMeasurePropertyDescription(String name, String label, String description, boolean mandatory, long min, long max, Map<String, String> unitsMap) {
 		super(name, label, description, mandatory);
 		this.min = min;
 		this.max = max;
@@ -146,6 +159,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 			}
 		};
 		simpleControl.addFocusListener(focusListener);
+		//Store inside the control the focus listener, so it can be removed and added another time in some case
 		simpleControl.setData(FOCUS_KEY, focusListener);
 		
 		
@@ -157,6 +171,8 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 			}
 		});
 		simpleControl.addMouseListener(new MouseClickListener(simpleControl, wiProp));
+		
+		//add the autocomplete only if there are more then one entry
 		if (autocompleteValues.length > 1){
 			new AutoCompleteField(simpleControl, new AutoCompleteMeasure(simpleControl), autocompleteValues);
 		}
@@ -166,6 +182,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 		textData.verticalAlignment = SWT.CENTER;
 		textData.grabExcessVerticalSpace = true;
 		simpleControl.setLayoutData(textData);
+		defaultBackgroundColor = simpleControl.getBackground();
 		simpleControl.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
@@ -195,15 +212,19 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 		} else {
 			boolean isFallback = false;
 			Text simpleControl = (Text)cmp.getSecondContainer().getData();
-			String v = wip.getStaticValue();
-			if (v == null && wip.getFallbackValue() != null){
-				v = wip.getFallbackValue().toString();
-				isFallback = true;
+			if (!hasError(simpleControl)){
+				//avoid to update the content if it is in error status to allow the user
+				//to fix it
+				String v = wip.getStaticValue();
+				if (v == null && wip.getFallbackValue() != null){
+					v = wip.getFallbackValue().toString();
+					isFallback = true;
+				}
+				setDataNumber(v, simpleControl, wip);
+				
+				changeFallbackForeground(isFallback, simpleControl);
+				cmp.switchToSecondContainer();
 			}
-			setDataNumber(v, simpleControl);
-			
-			changeFallbackForeground(isFallback, simpleControl);
-			cmp.switchToSecondContainer();
 		}
 	}
 	
@@ -214,13 +235,9 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	 * @return a not null array of string
 	 */
 	private String[] buildAtuocompleteValues(){
-		HashSet<String> measureSet = new HashSet<String>();
-		for(String measure: unitsMap.values()){
-			measureSet.add(measure);
-		}
-		String[] result = new String[measureSet.size()];
+		String[] result = new String[unitsMap.keySet().size()];
 		int index = 0;
-		for(String measure : measureSet){
+		for(String measure : unitsMap.keySet()){
 			result[index] = measure;
 			index++;
 		}
@@ -232,11 +249,12 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	 * 
 	 * @param f the number
 	 * @param insertField the text widget, must be not null
+	 * @param wiProp the WItemProperty used to read the measure unit from the model
 	 */
-	public void setDataNumber(String value, Text insertField) {
+	public void setDataNumber(String value, Text insertField, IWItemProperty wiProp) {
 		if (value != null) {
 			Point oldpos = insertField.getSelection();
-			String measureUnitText = getMeasureUnit(value);
+			String measureUnitText = getMeasureUnit(wiProp);
 			Double number = null;
 			String roundedNumber = null;
 			boolean error = false;
@@ -248,7 +266,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 				String numberText = getNumericValue(value);
 				try{
 					 number = Double.valueOf(numberText);
-					 roundedNumber = roundValue(measureUnit, number);
+					 roundedNumber = getRoundedValue(measureUnit, number);
 				} catch (Exception ex){
 					setErrorStatus("The number is not valid", insertField);
 					error = true;
@@ -282,12 +300,11 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	/**
 	 * Return the measure unit typed in the textfield
 	 * 
-	 * @param value
-	 *          content of the text field
+	 * @param value content of the text field
 	 * @return measure unit, it's the last alphabetical string in the textfield or null
 	 * if there is no alphabetical value
 	 */
-	private String getMeasureUnit(String value) {
+	private String getMeasureUnitFromText(String value) {
 		String[] results = value.split("[^a-z]"); //$NON-NLS-1$
 		// If the array is void then no measure unit are specified
 		if (results.length == 0)
@@ -300,6 +317,32 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	}
 
 	/**
+	 * Update the current local measure unit for the element
+	 * Set the measure value into the properties of the model
+	 * 
+	 * @param measureUnitKey the key of the measure unit to store
+	 * @param wItemProperty the WItemProperty to write the property on the element
+	 */
+	private void setMeasureUnit(String measureUnitKey, IWItemProperty wItemProperty) {
+		String propertyName = wItemProperty.getPropertyName();
+		String measureUnitProperty = propertyName + CURRENT_MEASURE_KEY;
+		wItemProperty.getPropertyEditor().createUpdateProperty(measureUnitProperty, measureUnitKey != null ? measureUnitKey.toLowerCase() :  null, null);
+	}
+	
+	/**
+	 * Return the current measure unit reading it from the element model
+	 * 
+	 * @param wItemProperty the WItemProperty to read the property from the element
+	 * @return  the key of the measure, can be null
+	 */
+	private String getMeasureUnit(IWItemProperty wItemProperty) {
+		String propertyName = wItemProperty.getPropertyName();
+		String measureUnitProperty = propertyName + CURRENT_MEASURE_KEY;
+		String result = wItemProperty.getPropertyEditor().getPropertyValue(measureUnitProperty);
+		return result != null ? result.toLowerCase() : null;
+	}
+	
+	/**
 	 * Return the value in the text widget, it's returned as pixel
 	 * 
 	 * @param insertField the text widget, must be not null
@@ -307,7 +350,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	 */
 	protected String getNumericValue(String textualValue) {
 		String text = textualValue.trim().toLowerCase();
-		String key = getMeasureUnit(text);
+		String key = getMeasureUnitFromText(text);
 		if (key != null) {
 			String value = text.substring(0, text.indexOf(key));
 			if (value != null) return value;
@@ -320,17 +363,33 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	 * will remove decimal digits when using pixels or remove unnecessary zeores
 	 * from the decimal digits in the other cases
 	 *  
-	 * @param measureUnitKey the key of the measure unitc
+	 * @param measureUnitKey the key of the measure unit
 	 * @param value the value to format
 	 * @return the formatted value
 	 */
-	protected String roundValue(String measureUnitKey, Double value){
+	protected String getRoundedValue(String measureUnitKey, Double value){
 		if (value == null) return null;
 		if (measureUnitKey.trim().toLowerCase().equals("px")){
 			return String.valueOf(value.intValue());
 		} else {
 			return format.format(value); 
 		}
+	}
+	
+	/**
+	 * This is the values that will be written in the model and it is generated by rounding the numeric
+	 * value removing unecessary zeroes or decimal digit when using an integer unit (px). then at the
+	 * number is appended the measure unit key.
+	 * 
+	 * @param measureUnitKey the key of the measure unit that should be written in the model
+	 * @param measureUnitName the label of the measure, typed by the user
+	 * @param value the numeric value
+	 * @return the value that will be written on the model
+	 */
+	protected String getWrittenValue(String measureUnitKey, String measureUnitName, Double value){
+		if (value == null) return null;
+		String roundedValue = getRoundedValue(measureUnitKey, value);
+		return roundedValue + measureUnitKey;
 	}
 	
 	/**
@@ -394,7 +453,6 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 		return popUpMenu;
 	}
 	
-	
 	@Override
 	public void handleEdit(Control txt, IWItemProperty wiProp) {
 		if (wiProp == null)
@@ -403,13 +461,15 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 			Text insertField = (Text)txt;
 			String text = insertField.getText().trim().toLowerCase();
 			if (!text.isEmpty()){
-				String measureUnitKey = getMeasureUnit(text);
-				String measureUnit = unitsMap.get(measureUnitKey);
-				if (measureUnit != null) {
+				String measureUnitName = getMeasureUnitFromText(text);
+				String measureUnitKey = unitsMap.get(measureUnitName);
+				if (measureUnitKey != null) {
 					try{ 
+						setMeasureUnit(measureUnitName, wiProp);
 						Double value = Double.valueOf(getNumericValue(text));
-						String roundedValue = roundValue(measureUnit, value);
-						wiProp.setValue(roundedValue + measureUnitKey, null);
+						String writtenValue = getWrittenValue(measureUnitKey, measureUnitName, value);
+						wiProp.setValue(writtenValue, null);
+						setErrorStatus(null, insertField);
 					} catch (NumberFormatException ex) {
 						//The value can not be converted into a number
 						setErrorStatus("The number is not valid", insertField);
@@ -440,9 +500,20 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 			updateBackground(ColorConstants.red, insertField);
 			insertField.setToolTipText(message);
 		} else {
-			updateBackground(null, insertField);
+			updateBackground(defaultBackgroundColor, insertField);
 			insertField.setToolTipText(getToolTip());
 		}
+	}
+	
+	/**
+	 * Check if the control is in an error status. The background is used to do this
+	 * check
+	 * 
+	 * @param insertField the text control
+	 * @return true if it is in error status, false otherwise
+	 */
+	protected boolean hasError(Text insertField){
+		return ColorConstants.red.equals(insertField.getBackground());
 	}
 	
 	/**
@@ -487,62 +558,88 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 						//disabling a control force the focus lost on SWT
 						focusedControl.setEnabled(false);
 					}
+					
+					//Write the current measure unit in the model
+					String propertyName = wItemProp.getPropertyName();
+					String measureUnit = customPropertiesMap.get(propertyName + CURRENT_MEASURE_KEY);
+					if (measureUnit != null){
+						setMeasureUnit(measureUnit, wItemProp);
+					}
 				}
 				return super.close();
+			}
+			
+			@Override
+			protected Control createDialogArea(Composite parent) {
+				//On create write the measure unit property in the additional properties map
+				String currentMeasureUnit = getMeasureUnit(wItemProp);
+				String propertyName = wItemProp.getPropertyName();
+				customPropertiesMap.put(propertyName + CURRENT_MEASURE_KEY, currentMeasureUnit);
+				return super.createDialogArea(parent);
 			}
 		};
 		return result;
 	}
-
-	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
+	
+	protected Long createMin(WidgetPropertyDescriptor cpd){
 		Long min = null;
-		Long max = null;
-		
 		//Setup the minimum
 		if (cpd.getMin() != null){
 			min = new Long(cpd.getMin());
 		} else {
 			min = Long.MIN_VALUE;
 		}
-	 	
+	 	return min;
+	}
+	
+	protected Long createMax(WidgetPropertyDescriptor cpd){
+		Long max = null;
 		//Setup the maximum
 		if (cpd.getMax() != null){
 			max = new Long(cpd.getMax());
 		} else {
 			max = Long.MAX_VALUE;
 		}
-		
+		return max;
+	}
+	
+	protected Map<String, String> createMesureUnitsMap(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd){
 		//setup the measures
 		HashMap<String, String> i18nOpts = new HashMap<String, String>();
 		if (cpd.getComboOptions() != null) {
 			String[][] opts = cpd.getComboOptions();
 			for (int i = 0; i < opts.length; i++) {
-				i18nOpts.put(cd.getLocalizedString(opts[i][1]), opts[i][0]);
+				i18nOpts.put(cd.getLocalizedString(opts[i][1]).toLowerCase().trim(), opts[i][0].trim());
 			}
 			for(String key : new ArrayList<String>(i18nOpts.values())){
 				i18nOpts.put(key, key);
 			}
 		} else {
 			//use default values
-			unitsMap = new HashMap<String, String>();
-			unitsMap.put("pixel", "px");
-			unitsMap.put("pixels", "px");
-			unitsMap.put("px", "px");
-			unitsMap.put("inches", "inch");
-			unitsMap.put("inch", "inch");
-			unitsMap.put("em", "em");
-			unitsMap.put("centimeter", "cm");
-			unitsMap.put("centimeters", "cm");
-			unitsMap.put("cm", "cm");
-			unitsMap.put("millimeter", "mm");
-			unitsMap.put("millimeters", "mm");
-			unitsMap.put("mm", "mm");
-			unitsMap.put("meter", "m");
-			unitsMap.put("meters", "m");
-			unitsMap.put("m", "m");
+			i18nOpts.put("pixel", "px");
+			i18nOpts.put("pixels", "px");
+			i18nOpts.put("px", "px");
+			i18nOpts.put("inches", "inch");
+			i18nOpts.put("inch", "inch");
+			i18nOpts.put("em", "em");
+			i18nOpts.put("centimeter", "cm");
+			i18nOpts.put("centimeters", "cm");
+			i18nOpts.put("cm", "cm");
+			i18nOpts.put("millimeter", "mm");
+			i18nOpts.put("millimeters", "mm");
+			i18nOpts.put("mm", "mm");
+			i18nOpts.put("meter", "m");
+			i18nOpts.put("meters", "m");
+			i18nOpts.put("m", "m");
 		}
-			
+		return i18nOpts;
+	}
+
+	@Override
+	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
+		Long min = createMin(cpd);
+		Long max = createMax(cpd);
+		Map<String, String> i18nOpts = createMesureUnitsMap(cd, cpd);
 		FixedMeasurePropertyDescription intDesc = new FixedMeasurePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), 
 																									cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), min, max, i18nOpts);
 		intDesc.setReadOnly(cpd.isReadOnly());
@@ -587,7 +684,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 		
 		public String getControlContents(Control control) {
 			String text = insertField.getText().trim().toLowerCase();
-			String measureUnit = getMeasureUnit(text);
+			String measureUnit = getMeasureUnitFromText(text);
 			if (insertField.getCaretPosition() == text.length() && measureUnit != null)
 				return measureUnit;
 			else
@@ -596,7 +693,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 
 		public void setControlContents(Control control, String text, int cursorPosition) {
 			String textField = insertField.getText().trim().toLowerCase();
-			String key = getMeasureUnit(textField);
+			String key = getMeasureUnitFromText(textField);
 			String value = textField.substring(0, textField.indexOf(key));
 			((Text) control).setText(value.concat(text));
 			((Text) control).setSelection(cursorPosition, cursorPosition);
