@@ -4,11 +4,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.ui;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
@@ -37,6 +39,13 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.property.section.report.util.Unit.PixelConversionException;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -49,6 +58,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.dialog.ItemPropertyElementDialog;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRRuntimeException;
 
 /**
  * Widget used to insert values in different measure units. The measure units list are built using the 
@@ -62,7 +72,8 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyDescription<String> implements IDialogProvider {
 	
 	/**
-	 * Hash map the bind a measure unit, by its key, to a series of method to convert and handle that measure
+	 * Hash map the bind a measure unit, the key is a name of the measure unit, the value is the measure unit 
+	 * Representation. An example could be a measure with key pixels and value px
 	 */
 	protected Map<String, String> unitsMap = null;
 	
@@ -245,6 +256,28 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	}
 	
 	/**
+	 * Resolve a measure definition comparing it with the current measure map, this is
+	 * used to check that a loaded definition is correct with the current available values
+	 * 
+	 * @param loadedDefinition the loaded definition
+	 * @return a definition that can match the current allowed value or null if the passed definition
+	 * is not valid
+	 */
+	protected MeasureDefinition resolveMeasureUnit(MeasureDefinition loadedDefinition){
+		if (loadedDefinition != null && !unitsMap.containsKey(loadedDefinition.getName())){
+			//try to resolve the measure by its key
+			if (unitsMap.containsKey(loadedDefinition.getKey())){
+				//the key is present but not the name (maybe because of localization), use the key as name
+				loadedDefinition.setName(loadedDefinition.getKey());
+			} else {
+				//the passed definition doesn't match anything in the map, so it is not valid
+				return null;
+			}
+		}
+		return loadedDefinition;
+	}
+	
+	/**
 	 * Receive a number and set it in the text widget
 	 * 
 	 * @param f the number
@@ -254,19 +287,18 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	public void setDataNumber(String value, Text insertField, IWItemProperty wiProp) {
 		if (value != null) {
 			Point oldpos = insertField.getSelection();
-			String measureUnitText = getMeasureUnit(wiProp);
+			MeasureDefinition measureUnit = resolveMeasureUnit(getMeasureUnit(wiProp)); 
 			Double number = null;
 			String roundedNumber = null;
 			boolean error = false;
-			String measureUnit = unitsMap.get(measureUnitText);
-			if (measureUnitText == null || measureUnit == null){
+			if (measureUnit == null){
 				setErrorStatus("Measure Unit not recognized", insertField);
 				error = true;
 			} else {
 				String numberText = getNumericValue(value);
 				try{
 					 number = Double.valueOf(numberText);
-					 roundedNumber = getRoundedValue(measureUnit, number);
+					 roundedNumber = getRoundedValue(measureUnit.getKey(), number);
 				} catch (Exception ex){
 					setErrorStatus("The number is not valid", insertField);
 					error = true;
@@ -276,7 +308,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 				insertField.setText(value);
 			} else {
 				setErrorStatus(null, insertField);
-				insertField.setText(roundedNumber + measureUnitText);
+				insertField.setText(roundedNumber + measureUnit.getName());
 			}
 			
 			if (insertField.getText().length() >= oldpos.y){
@@ -321,25 +353,29 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	 * Set the measure value into the properties of the model
 	 * 
 	 * @param measureUnitKey the key of the measure unit to store
+	 * @param measureUnitName the textual name of the measure unit
 	 * @param wItemProperty the WItemProperty to write the property on the element
 	 */
-	private void setMeasureUnit(String measureUnitKey, IWItemProperty wItemProperty) {
+	private void setMeasureUnit(String measureUnitKey, String measureUnitName, IWItemProperty wItemProperty) {
 		String propertyName = wItemProperty.getPropertyName();
 		String measureUnitProperty = propertyName + CURRENT_MEASURE_KEY;
-		wItemProperty.getPropertyEditor().createUpdateProperty(measureUnitProperty, measureUnitKey != null ? measureUnitKey.toLowerCase() :  null, null);
+		MeasureDefinition definition = new MeasureDefinition(measureUnitKey, measureUnitName);
+		String encodedDefinition = encode(definition);
+		wItemProperty.getPropertyEditor().createUpdateProperty(measureUnitProperty, encodedDefinition != null ? encodedDefinition.toLowerCase() :  null, null);
 	}
 	
 	/**
 	 * Return the current measure unit reading it from the element model
 	 * 
 	 * @param wItemProperty the WItemProperty to read the property from the element
-	 * @return  the key of the measure, can be null
+	 * @return The {@link MeasureDefinition} that define the measure pair of key and textual name
 	 */
-	private String getMeasureUnit(IWItemProperty wItemProperty) {
+	private MeasureDefinition getMeasureUnit(IWItemProperty wItemProperty) {
 		String propertyName = wItemProperty.getPropertyName();
 		String measureUnitProperty = propertyName + CURRENT_MEASURE_KEY;
 		String result = wItemProperty.getPropertyEditor().getPropertyValue(measureUnitProperty);
-		return result != null ? result.toLowerCase() : null;
+		MeasureDefinition value = decode(result);
+		return value;
 	}
 	
 	/**
@@ -378,7 +414,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	
 	/**
 	 * This is the values that will be written in the model and it is generated by rounding the numeric
-	 * value removing unecessary zeroes or decimal digit when using an integer unit (px). then at the
+	 * value removing unnecessary zeroes or decimal digit when using an integer unit (px). then at the
 	 * number is appended the measure unit key.
 	 * 
 	 * @param measureUnitKey the key of the measure unit that should be written in the model
@@ -465,7 +501,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 				String measureUnitKey = unitsMap.get(measureUnitName);
 				if (measureUnitKey != null) {
 					try{ 
-						setMeasureUnit(measureUnitName, wiProp);
+						setMeasureUnit(measureUnitKey, measureUnitName, wiProp);
 						Double value = Double.valueOf(getNumericValue(text));
 						String writtenValue = getWrittenValue(measureUnitKey, measureUnitName, value);
 						wiProp.setValue(writtenValue, null);
@@ -563,7 +599,8 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 					String propertyName = wItemProp.getPropertyName();
 					String measureUnit = customPropertiesMap.get(propertyName + CURRENT_MEASURE_KEY);
 					if (measureUnit != null){
-						setMeasureUnit(measureUnit, wItemProp);
+						MeasureDefinition currentDef = decode(measureUnit);
+						setMeasureUnit(currentDef.getKey(), currentDef.getName(), wItemProp);
 					}
 				}
 				return super.close();
@@ -572,12 +609,65 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 			@Override
 			protected Control createDialogArea(Composite parent) {
 				//On create write the measure unit property in the additional properties map
-				String currentMeasureUnit = getMeasureUnit(wItemProp);
+				MeasureDefinition currentMeasureDef = getMeasureUnit(wItemProp);
 				String propertyName = wItemProp.getPropertyName();
-				customPropertiesMap.put(propertyName + CURRENT_MEASURE_KEY, currentMeasureUnit);
+				customPropertiesMap.put(propertyName + CURRENT_MEASURE_KEY, encode(currentMeasureDef));
 				return super.createDialogArea(parent);
 			}
 		};
+		return result;
+	}
+	
+	/**
+	 * Build a {@link MeasureDefinition} from its JSON string.
+	 * 
+	 * @param encodedMeasure the JSON string of the class
+	 * @return a {@link MeasureDefinition} or null if the JSON is invalid
+	 */
+	private MeasureDefinition decode(String encodedMeasure)
+	{
+		MeasureDefinition result = null;
+		if (encodedMeasure != null)
+		{
+			try 
+			{
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
+				result = mapper.readValue(encodedMeasure, MeasureDefinition.class);  
+			}
+			catch (JsonMappingException e)
+			{
+				throw new JRRuntimeException(e);
+			} 
+			catch (JsonParseException e)
+			{
+				throw new JRRuntimeException(e);
+			} 
+			catch (IOException e)
+			{
+				throw new JRRuntimeException(e);
+			} 
+		}
+		return result;
+	}
+
+	/**
+	 * Create a JSON string from a {@link MeasureDefinition}.
+	 * 
+	 * @return its JSON string or null if the parameter is null
+	 */
+	private String encode(MeasureDefinition value)
+	{
+		String result = null;
+		ObjectMapper mapper = new ObjectMapper();
+		try 
+		{
+			result = mapper.writeValueAsString(value);
+		}
+		catch (JsonProcessingException e) 
+		{
+			throw new JRRuntimeException(e);
+		}
 		return result;
 	}
 	
@@ -789,6 +879,47 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 
 		@Override
 		public void widgetDefaultSelected(SelectionEvent e) {
+		}
+	}
+	
+	/**
+	 * Class used to serialize and deserialize a measure definition
+	 *
+	 */
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	public static class MeasureDefinition{
+		
+		private String key;
+
+		private String name;
+		
+		public MeasureDefinition(){
+			this.key = "";
+			this.name = "";
+		}
+		
+		@JsonIgnore
+		public MeasureDefinition(String measureKey, String measureName){
+			Assert.isNotNull(measureName);
+			Assert.isNotNull(measureKey);
+			this.key = measureKey;
+			this.name = measureName.trim().toLowerCase();
+		}
+		
+		public String getKey(){
+			return key;
+		}
+		
+		public String getName(){
+			return name;
+		}
+
+		public void setKey(String value){
+			this.key = value;
+		}
+		
+		public void setName(String value){
+			this.name = value;
 		}
 	}
 }
