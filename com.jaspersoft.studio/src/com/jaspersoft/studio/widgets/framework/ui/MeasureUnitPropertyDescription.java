@@ -6,11 +6,8 @@ package com.jaspersoft.studio.widgets.framework.ui;
 
 import java.util.HashMap;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
-import org.eclipse.jface.fieldassist.TextContentAdapter;
-import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -23,9 +20,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -36,7 +30,6 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.section.report.util.Unit;
 import com.jaspersoft.studio.property.section.report.util.Unit.PixelConversionException;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
@@ -54,7 +47,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
  * @author Orlandin Marco
  *
  */
-public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDescription<Long> implements IDialogProvider {
+public class MeasureUnitPropertyDescription extends AbstractMeasurePropertyDescription<Long> {
 	
 	/**
 	 * Hash map the bind a measure unit, by its key, to a series of method to convert and handle that measure
@@ -65,59 +58,43 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 	 * Ordered list of measure units supported
 	 */
 	private static MeasureUnit[] units;
-	
-	/**
-	 * The color used as background when the control is not in error status. 
-	 * This is initialized when the control is created
-	 */
-	protected Color defaultBackgroundColor = null;
 
 	/**
 	 * String added to the autocomplete
 	 */
 	private static String[] autocompleteValues;
 	
-	/**
-	 * The key used to store inside the widget the measure units popup menu
-	 */
-	private static final String POPUP_KEY = "measureUnitMenu";
-	
-	/**
-	 * Name of the properties used to store in the model the last selected measure unit for this
-	 * property
-	 */
-	private static final String CURRENT_MEASURE_KEY = ".measureUnit";
-	
-	/**
-	 * The key used to store inside the widget the focus listener
-	 */
-	protected static final String FOCUS_KEY = "focusListener";
-	
-	protected Number min;
-	
-	protected Number max;
+	static {
+		unitsMap = new HashMap<String, MeasureUnit>();
+		units = new MeasureUnit[5];
+		// Adding the measure unit for pixel
+		units[0] = new MeasureUnit(Unit.PX, "px", 0); //$NON-NLS-1$
+		unitsMap.put(Unit.PX, units[0]);
+		// Adding the measure unit for inch
+		units[1] = new MeasureUnit(Unit.INCH, "inch", 2); //$NON-NLS-1$
+		unitsMap.put(Unit.INCH, units[1]);
+		// Adding the meausre unit for centimeter
+		units[2] = new MeasureUnit(Unit.CM, "cm", 2); //$NON-NLS-1$
+		unitsMap.put(Unit.CM, units[2]);
+		// Adding the measure unit for millimeters
+		units[3] = new MeasureUnit(Unit.MM, "mm", 2); //$NON-NLS-1$
+		unitsMap.put(Unit.MM, units[3]);
+		// Adding the measure unit for meters
+		units[4] = new MeasureUnit(Unit.METER, "m", 2); //$NON-NLS-1$
+		unitsMap.put(Unit.METER, units[4]);
+
+		autocompleteValues = new String[] { "centimeters", "millimeters", "inches", "meters", "pixels" };// Unit.getAliasList(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	}
 
 	public MeasureUnitPropertyDescription() {
 	}
 	
 	public MeasureUnitPropertyDescription(String name, String label, String description, boolean mandatory, Long defaultValue, long min, long max) {
-		super(name, label, description, mandatory, defaultValue);
-		this.min = min;
-		this.max = max;
+		super(name, label, description, mandatory, defaultValue, min, max);
 	}
 
 	public MeasureUnitPropertyDescription(String name, String label, String description, boolean mandatory, long min, long max) {
-		super(name, label, description, mandatory);
-		this.min = min;
-		this.max = max;
-	}
-	
-	public Number getMin() {
-		return min;
-	}
-
-	public Number getMax() {
-		return max;
+		super(name, label, description, mandatory, min, max);
 	}
 
 	@Override
@@ -128,10 +105,6 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
 		cmp.getFirstContainer().setData(expressionControl);
 
-
-		if (unitsMap == null) {
-			CreateDefaultUnits();
-		}
 		final Text simpleControl = new Text(cmp.getSecondContainer(), SWT.BORDER); //$NON-NLS-1$
 		// Flag used to overcome the problem of focus events in Mac OS X
 		// - JSS Bugzilla 42999
@@ -237,87 +210,6 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 			tt += "\nmax: " + getMax();
 		return tt;
 	}
-	
-	/**
-	 * Add the default measure type to the map
-	 */
-	private void CreateDefaultUnits() {
-		unitsMap = new HashMap<String, MeasureUnit>();
-		units = new MeasureUnit[5];
-		// Adding the measure unit for pixel
-		units[0] = new MeasureUnit(Unit.PX, "px", 0); //$NON-NLS-1$
-		unitsMap.put(Unit.PX, units[0]);
-		// Adding the measure unit for inch
-		units[1] = new MeasureUnit(Unit.INCH, "inch", 2); //$NON-NLS-1$
-		unitsMap.put(Unit.INCH, units[1]);
-		// Adding the meausre unit for centimeter
-		units[2] = new MeasureUnit(Unit.CM, "cm", 2); //$NON-NLS-1$
-		unitsMap.put(Unit.CM, units[2]);
-		// Adding the measure unit for millimeters
-		units[3] = new MeasureUnit(Unit.MM, "mm", 2); //$NON-NLS-1$
-		unitsMap.put(Unit.MM, units[3]);
-		// Adding the measure unit for meters
-		units[4] = new MeasureUnit(Unit.METER, "m", 2); //$NON-NLS-1$
-		unitsMap.put(Unit.METER, units[4]);
-
-		autocompleteValues = new String[] { "centimeters", "millimeters", "inches", "meters", "pixels" };// Unit.getAliasList(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	}
-	
-	/**
-	 * Return the measure unit typed in the textfield
-	 * 
-	 * @param value
-	 *          content of the text field
-	 * @return measure unit, it's the last alphabetical string in the textfield or null
-	 * if there is no alphabetical value
-	 */
-	private String getMeasureUnit(String value) {
-		String[] results = value.split("[^a-z]"); //$NON-NLS-1$
-		// If the array is void then no measure unit are specified
-		if (results.length == 0)
-			return null;
-		String measure = results[results.length - 1].trim();
-		if (measure.isEmpty()){
-			return null;
-		}
-		return measure;
-	}
-
-	/**
-	 * Open the popoup menu inside the menumanger and place it under the text widget
-	 * 
-	 * @param insertField the text widget where the menu is set
-	 * @param wItemProp the {@link IWItemProperty} used to propagate the property change when an 
-	 * entry of the popup menu is selected
-	 */
-	protected void openPopupMenu(Text insertField, IWItemProperty wItemProp) {
-		Menu popUpMenu = (Menu)insertField.getData(POPUP_KEY);
-		if (popUpMenu == null){
-			popUpMenu = createPopupMenu(insertField, wItemProp);
-		}
-		if (!popUpMenu.isDisposed()) {
-			if (popUpMenu.isVisible()) {
-				popUpMenu.setVisible(false);
-			} else {
-				locatePopupMenu(insertField, popUpMenu);
-				popUpMenu.setVisible(true);
-			}
-		}
-	}
-
-	/**
-	 * Set the menu in the right location, under the text widget
-	 * 
-	 * @param insertField the text widget, must be not null
-	 * @param popUpMenu the menu, must be not null
-	 */
-	protected void locatePopupMenu(Text insertField, Menu popUpMenu) {
-		Rectangle r = insertField.getBounds();
-		r.x = r.y = 0;
-		Point loc = insertField.toDisplay(r.x, r.y);
-		loc.y += r.height;
-		popUpMenu.setLocation(loc);
-	}
 
 	/**
 	 * Create the popup menu
@@ -325,6 +217,7 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 	 * @param insertField the Text widget where the menu is set, must be not null
 	 * @param wItemProp the {@link IWItemProperty} used to apply the action when an entry of the menu is selected, must be not null
 	 */
+	@Override
 	protected Menu createPopupMenu(Text insertField, IWItemProperty wItemProp) {
 		final Menu popUpMenu = new Menu(insertField);
 		insertField.setData(POPUP_KEY, popUpMenu);
@@ -340,7 +233,7 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 			MeasureUnit key = units[i];
 			MenuItem item = new MenuItem(popUpMenu, SWT.PUSH);
 			item.setText(key.getUnitName());
-			item.addSelectionListener(new MenuAction(key.getKeyName(), insertField, wItemProp));
+			item.addSelectionListener(new MenuAction(key.getKeyName(), key.getUnitName(), insertField, wItemProp));
 		}
 		return popUpMenu;
 	}
@@ -353,7 +246,7 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 	 */
 	protected String getPixels(Text insertField) {
 		String text = insertField.getText().trim().toLowerCase();
-		String key = getMeasureUnit(text);
+		String key = getMeasureUnitFromText(text);
 		MeasureUnit unit = unitsMap.get(Unit.getKeyFromAlias(key));
 		if (unit != null) {
 			String value = text.substring(0, text.indexOf(key));
@@ -392,8 +285,8 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 	 */
 	protected MeasureUnit getDefaultMeasure(Text insertField, IWItemProperty wItemProp) {
 		MeasureUnit mu = null;
-		String localValue = getMeasureUnit(wItemProp);
-		if (localValue != null && unitsMap.containsKey(localValue)) {
+		MeasureDefinition localValue = getMeasureUnit(wItemProp);
+		if (localValue != null && unitsMap.containsKey(localValue.getKey())) {
 			mu = unitsMap.get(localValue);
 		} else
 			mu = unitsMap.get(Unit.PX);
@@ -410,22 +303,22 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 			Text insertField = (Text)txt;
 			String text = insertField.getText().trim().toLowerCase();
 			if (!text.isEmpty()){
-				String key = getMeasureUnit(text);
+				String unitName = getMeasureUnitFromText(text);
 				String value;
 				MeasureUnit unit;
-				if (key == null) {
+				if (unitName == null) {
 					//A unit is not specified, so use the element or default one
 					unit = getDefaultMeasure(insertField, wiProp); 
 					value = text;
 				} else {
-					unit = unitsMap.get(Unit.getKeyFromAlias(key));
-					value = text.substring(0, text.indexOf(key));
+					unit = unitsMap.get(Unit.getKeyFromAlias(unitName));
+					value = text.substring(0, text.indexOf(unitName));
 				}
 				if (unit != null) {
 					try{ 
-						setMeasureUnit(unit.getKeyName(), wiProp);
+						setMeasureUnit(unit.getKeyName(), unitName, wiProp);
 						//Convert the value into pixel, internally JR work always with pixels
-						String convertedValue = unit.doConversionFromThis(unitsMap.get(Unit.PX), value);
+						String convertedValue = unit.doConversionFromThis(unitsMap.get(Unit.PX), value, jConfig);
 						if (convertedValue != null){
 							long pixelCount = Double.valueOf(convertedValue).longValue();
 							wiProp.setValue(String.valueOf(pixelCount), null);
@@ -449,75 +342,7 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 			}
 		} else super.handleEdit(txt, wiProp);
 	}
-	
-	/**
-	 * Set the insert field into an error status, so with a red background
-	 * and a tooltip that describe the error
-	 * 
-	 * @param message the error message, it will be used as tooltip, can be null
-	 * for no error message (with null erase the old errors from the tooltip and 
-	 * restore the default ones)
-	 */
-	protected void setErrorStatus(String message, Text insertField){
-		if (message != null){
-			updateBackground(ColorConstants.red, insertField);
-			insertField.setToolTipText(message);
-		} else {
-			updateBackground(defaultBackgroundColor, insertField);
-			insertField.setToolTipText(getToolTip());
-		}
-	}
-	
-	/**
-	 * On macos the update of the color need some additional operation because of an SWT bug
-	 * (https://bugs.eclipse.org/bugs/show_bug.cgi?id=346361). If the widget is focused it need
-	 * to lose the focus to be updated correctly. For this reason the widget is forced to loose
-	 * the focus and the it will regain it
-	 * 
-	 * @param color the color to set
-	 */
-	protected void updateBackground(Color color, Text control){
-		if (Util.isMac() && control.isFocusControl() && !ModelUtils.safeEquals(color, control.getBackground())){
-			FocusListener focusListner = (FocusListener)control.getData(FOCUS_KEY);
-			control.removeFocusListener(focusListner);
-			Point caretPosition = control.getSelection();
-			boolean oldEnabled = control.getEnabled();
-			control.setEnabled(false);//Force the focus lost
-			control.setBackground(color);
-			control.setEnabled(oldEnabled);
-			control.setFocus();
-			control.setSelection(caretPosition.x);
-			control.addFocusListener(focusListner);
-		} else {
-			control.setBackground(color);
-		}
-	}
-	
-	/**
-	 * Update the current local measure unit for the element
-	 * Set the measure value into the properties of the model
-	 * 
-	 * @param measureUnitKey the key of the measure unit to store
-	 * @param wItemProperty the WItemProperty to write the property on the element
-	 */
-	private void setMeasureUnit(String measureUnitKey, IWItemProperty wItemProperty) {
-		String propertyName = wItemProperty.getPropertyName();
-		String measureUnitProperty = propertyName + CURRENT_MEASURE_KEY;
-		wItemProperty.getPropertyEditor().createUpdateProperty(measureUnitProperty, measureUnitKey, null);
-	}
-	
-	/**
-	 * Return the current measure unit reading it from the element model
-	 * 
-	 * @param wItemProperty the WItemProperty to read the property from the element
-	 * @return  the key of the measure, can be null
-	 */
-	private String getMeasureUnit(IWItemProperty wItemProperty) {
-		String propertyName = wItemProperty.getPropertyName();
-		String measureUnitProperty = propertyName + CURRENT_MEASURE_KEY;
-		return wItemProperty.getPropertyEditor().getPropertyValue(measureUnitProperty);
-	}
-	
+
 	/**
 	 * This property description provide a custom dialog to allow to use also the property to handle the measure unit
 	 */
@@ -539,7 +364,8 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 					String propertyName = wItemProp.getPropertyName();
 					String measureUnit = customPropertiesMap.get(propertyName + CURRENT_MEASURE_KEY);
 					if (measureUnit != null){
-						setMeasureUnit(measureUnit, wItemProp);
+						MeasureDefinition currentDef = decode(measureUnit);
+						setMeasureUnit(currentDef.getKey(), currentDef.getName(), wItemProp);
 					}
 				}
 				return super.close();
@@ -548,9 +374,9 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 			@Override
 			protected Control createDialogArea(Composite parent) {
 				//On create write the measure unit property in the additional properties map
-				String currentMeasureUnit = getMeasureUnit(wItemProp);
+				MeasureDefinition currentMeasureDef = getMeasureUnit(wItemProp);
 				String propertyName = wItemProp.getPropertyName();
-				customPropertiesMap.put(propertyName + CURRENT_MEASURE_KEY, currentMeasureUnit);
+				customPropertiesMap.put(propertyName + CURRENT_MEASURE_KEY, encode(currentMeasureDef));
 				return super.createDialogArea(parent);
 			}
 		};
@@ -559,24 +385,11 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 
 	@Override
 	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
-		Long min = null;
-		Long max = null;
 		Long def = null;
 		Long fallBack = null;
 		
-		//Setup the minimum
-		if (cpd.getMin() != null){
-			min = new Long(cpd.getMin());
-		} else {
-			min = Long.MIN_VALUE;
-		}
-	 	
-		//Setup the maximum
-		if (cpd.getMax() != null){
-			max = new Long(cpd.getMax());
-		} else {
-			max = Long.MAX_VALUE;
-		}
+		Long min = createMin(cpd);
+		Long max = createMax(cpd);
 		
 		//Setup the default value
 		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
@@ -618,7 +431,7 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 	 * @author Orlandin Marco
 	 * 
 	 */
-	public class MeasureUnit {
+	public static class MeasureUnit {
 		/**
 		 * Holds value of property unitName.
 		 */
@@ -692,10 +505,11 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 		 *          The MeasureUnit of the target type
 		 * @param value
 		 *          the value to convert
+		 * @param jConfig the current {@link JasperReportsConfiguration}
 		 * @return the converted value as a string, that is a textual representation
 		 * of a double
 		 */
-		public String doConversionFromThis(MeasureUnit targetUnit, String value) throws PixelConversionException{
+		public String doConversionFromThis(MeasureUnit targetUnit, String value, JasperReportsConfiguration jConfig) throws PixelConversionException{
 			if (value == null || value.isEmpty()) return null;
 			/* Even if from a logical point of view is the target measure unit the same of the source we can simply return
 			 the input technically it is better to do the conversion since the passed value as string can be too big to fit
@@ -705,38 +519,6 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 				return value;
 			}*/
 			return String.valueOf((new Unit(Double.parseDouble(value), keyName, jConfig)).getValue(targetUnit.getKeyName()));
-		}
-	}
-
-	/**
-	 * Read the measure unit and help to autocomplete
-	 * 
-	 * @author Orlandin Marco
-	 * 
-	 */
-	private class AutoCompleteMeasure extends TextContentAdapter {
-		
-		private Text insertField;
-		
-		public AutoCompleteMeasure(Text insertField){
-			this.insertField = insertField;
-		}
-		
-		public String getControlContents(Control control) {
-			String text = insertField.getText().trim().toLowerCase();
-			String measureUnit = getMeasureUnit(text);
-			if (insertField.getCaretPosition() == text.length() && measureUnit != null)
-				return measureUnit;
-			else
-				return ""; //$NON-NLS-1$
-		}
-
-		public void setControlContents(Control control, String text, int cursorPosition) {
-			String textField = insertField.getText().trim().toLowerCase();
-			String key = getMeasureUnit(textField);
-			String value = textField.substring(0, textField.indexOf(key));
-			((Text) control).setText(value.concat(text));
-			((Text) control).setSelection(cursorPosition, cursorPosition);
 		}
 	}
 	
@@ -792,7 +574,12 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 		/**
 		 * Key of the unit represented by this listener
 		 */
-		private String value;
+		private String measureKey;
+		
+		/**
+		 * Name of the unit represented by this listener
+		 */
+		private String measureName;
 		
 		/**
 		 * The text widget
@@ -804,8 +591,9 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 		 */
 		private IWItemProperty wItemProperty;
 
-		public MenuAction(String value, Text insertField, IWItemProperty wItemProperty) {
-			this.value = value;
+		public MenuAction(String measureKey, String measureName, Text insertField, IWItemProperty wItemProperty) {
+			this.measureKey = measureKey;
+			this.measureName = measureName;
 			this.insertField = insertField;
 			this.wItemProperty = wItemProperty;
 		}
@@ -816,7 +604,7 @@ public class MeasureUnitPropertyDescription extends AbstractExpressionPropertyDe
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			String pixelValue = getPixels(insertField);
-			setMeasureUnit(value, wItemProperty);
+			setMeasureUnit(measureKey, measureName, wItemProperty);
 			setPixels(pixelValue, insertField, wItemProperty);
 		}
 

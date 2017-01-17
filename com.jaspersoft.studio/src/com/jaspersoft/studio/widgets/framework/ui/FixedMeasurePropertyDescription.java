@@ -4,18 +4,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.ui;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
-import org.eclipse.jface.fieldassist.TextContentAdapter;
-import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -29,9 +25,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -39,15 +33,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.property.section.report.util.Unit.PixelConversionException;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
@@ -58,7 +44,6 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.dialog.ItemPropertyElementDialog;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRRuntimeException;
 
 /**
  * Widget used to insert values in different measure units. The measure units list are built using the 
@@ -69,7 +54,7 @@ import net.sf.jasperreports.engine.JRRuntimeException;
  * @author Orlandin Marco
  *
  */
-public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyDescription<String> implements IDialogProvider {
+public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDescription<String> {
 	
 	/**
 	 * Hash map the bind a measure unit, the key is a name of the measure unit, the value is the measure unit 
@@ -83,61 +68,23 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	protected String[] autocompleteValues;
 	
 	/**
-	 * The color used as background when the control is not in error status. 
-	 * This is initialized when the control is created
-	 */
-	protected Color defaultBackgroundColor = null;
-	
-	/**
-	 * The key used to store inside the widget the measure units popup menu
-	 */
-	protected static final String POPUP_KEY = "measureUnitMenu";
-
-	/**
-	 * The key used to store inside the widget the focus listener
-	 */
-	protected static final String FOCUS_KEY = "focusListener";
-	
-	/**
 	 * Formatter used to format the number 
 	 */
 	protected static final DecimalFormat format = new DecimalFormat("0.################");
-	
-	/**
-	 * Name of the properties used to store in the model the last selected measure unit for this
-	 * property
-	 */
-	protected static final String CURRENT_MEASURE_KEY = ".measureUnit";
-	
-	protected Number min;
-	
-	protected Number max;
 
 	public FixedMeasurePropertyDescription() {
 	}
 	
 	public FixedMeasurePropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue, long min, long max, Map<String, String> unitsMap) {
-		super(name, label, description, mandatory, defaultValue);
-		this.min = min;
-		this.max = max;
+		super(name, label, description, mandatory, defaultValue, min, max);
 		this.unitsMap = unitsMap;
 		autocompleteValues = buildAtuocompleteValues();
 	}
 
 	public FixedMeasurePropertyDescription(String name, String label, String description, boolean mandatory, long min, long max, Map<String, String> unitsMap) {
-		super(name, label, description, mandatory);
-		this.min = min;
-		this.max = max;
+		super(name, label, description, mandatory, min, max);
 		this.unitsMap = unitsMap;
 		autocompleteValues = buildAtuocompleteValues();
-	}
-	
-	public Number getMin() {
-		return min;
-	}
-
-	public Number getMax() {
-		return max;
 	}
 
 	@Override
@@ -330,55 +277,6 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	}
 	
 	/**
-	 * Return the measure unit typed in the textfield
-	 * 
-	 * @param value content of the text field
-	 * @return measure unit, it's the last alphabetical string in the textfield or null
-	 * if there is no alphabetical value
-	 */
-	private String getMeasureUnitFromText(String value) {
-		String[] results = value.split("[^a-z]"); //$NON-NLS-1$
-		// If the array is void then no measure unit are specified
-		if (results.length == 0)
-			return null;
-		String measure = results[results.length - 1].trim();
-		if (measure.isEmpty()){
-			return null;
-		}
-		return measure.toLowerCase();
-	}
-
-	/**
-	 * Update the current local measure unit for the element
-	 * Set the measure value into the properties of the model
-	 * 
-	 * @param measureUnitKey the key of the measure unit to store
-	 * @param measureUnitName the textual name of the measure unit
-	 * @param wItemProperty the WItemProperty to write the property on the element
-	 */
-	private void setMeasureUnit(String measureUnitKey, String measureUnitName, IWItemProperty wItemProperty) {
-		String propertyName = wItemProperty.getPropertyName();
-		String measureUnitProperty = propertyName + CURRENT_MEASURE_KEY;
-		MeasureDefinition definition = new MeasureDefinition(measureUnitKey, measureUnitName);
-		String encodedDefinition = encode(definition);
-		wItemProperty.getPropertyEditor().createUpdateProperty(measureUnitProperty, encodedDefinition != null ? encodedDefinition.toLowerCase() :  null, null);
-	}
-	
-	/**
-	 * Return the current measure unit reading it from the element model
-	 * 
-	 * @param wItemProperty the WItemProperty to read the property from the element
-	 * @return The {@link MeasureDefinition} that define the measure pair of key and textual name
-	 */
-	private MeasureDefinition getMeasureUnit(IWItemProperty wItemProperty) {
-		String propertyName = wItemProperty.getPropertyName();
-		String measureUnitProperty = propertyName + CURRENT_MEASURE_KEY;
-		String result = wItemProperty.getPropertyEditor().getPropertyValue(measureUnitProperty);
-		MeasureDefinition value = decode(result);
-		return value;
-	}
-	
-	/**
 	 * Return the value in the text widget, it's returned as pixel
 	 * 
 	 * @param insertField the text widget, must be not null
@@ -427,42 +325,6 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 		String roundedValue = getRoundedValue(measureUnitKey, value);
 		return roundedValue + measureUnitKey;
 	}
-	
-	/**
-	 * Open the popoup menu inside the menumanger and place it under the text widget
-	 * 
-	 * @param insertField the text widget where the menu is set
-	 * @param wItemProp the {@link IWItemProperty} used to propagate the property change when an 
-	 * entry of the popup menu is selected
-	 */
-	protected void openPopupMenu(Text insertField, IWItemProperty wItemProp) {
-		Menu popUpMenu = (Menu)insertField.getData(POPUP_KEY);
-		if (popUpMenu == null){
-			popUpMenu = createPopupMenu(insertField, wItemProp);
-		}
-		if (!popUpMenu.isDisposed()) {
-			if (popUpMenu.isVisible()) {
-				popUpMenu.setVisible(false);
-			} else {
-				locatePopupMenu(insertField, popUpMenu);
-				popUpMenu.setVisible(true);
-			}
-		}
-	}
-
-	/**
-	 * Set the menu in the right location, under the text widget
-	 * 
-	 * @param insertField the text widget, must be not null
-	 * @param popUpMenu the menu, must be not null
-	 */
-	protected void locatePopupMenu(Text insertField, Menu popUpMenu) {
-		Rectangle r = insertField.getBounds();
-		r.x = r.y = 0;
-		Point loc = insertField.toDisplay(r.x, r.y);
-		loc.y += r.height;
-		popUpMenu.setLocation(loc);
-	}
 
 	/**
 	 * Create the popup menu
@@ -470,6 +332,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	 * @param insertField the Text widget where the menu is set, must be not null
 	 * @param wItemProp the {@link IWItemProperty} used to apply the action when an entry of the menu is selected, must be not null
 	 */
+	@Override
 	protected Menu createPopupMenu(Text insertField, IWItemProperty wItemProp) {
 		final Menu popUpMenu = new Menu(insertField);
 		insertField.setData(POPUP_KEY, popUpMenu);
@@ -524,24 +387,6 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	}
 	
 	/**
-	 * Set the insert field into an error status, so with a red background
-	 * and a tooltip that describe the error
-	 * 
-	 * @param message the error message, it will be used as tooltip, can be null
-	 * for no error message (with null erase the old errors from the tooltip and 
-	 * restore the default ones)
-	 */
-	protected void setErrorStatus(String message, Text insertField){
-		if (message != null){
-			updateBackground(ColorConstants.red, insertField);
-			insertField.setToolTipText(message);
-		} else {
-			updateBackground(defaultBackgroundColor, insertField);
-			insertField.setToolTipText(getToolTip());
-		}
-	}
-	
-	/**
 	 * Check if the control is in an error status. The background is used to do this
 	 * check
 	 * 
@@ -550,31 +395,6 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	 */
 	protected boolean hasError(Text insertField){
 		return ColorConstants.red.equals(insertField.getBackground());
-	}
-	
-	/**
-	 * On macos the update of the color need some additional operation because of an SWT bug
-	 * (https://bugs.eclipse.org/bugs/show_bug.cgi?id=346361). If the widget is focused it need
-	 * to lose the focus to be updated correctly. For this reason the widget is forced to loose
-	 * the focus and the it will regain it
-	 * 
-	 * @param color the color to set
-	 */
-	protected void updateBackground(Color color, Text control){
-		if (Util.isMac() && control.isFocusControl() && !ModelUtils.safeEquals(color, control.getBackground())){
-			FocusListener focusListner = (FocusListener)control.getData(FOCUS_KEY);
-			control.removeFocusListener(focusListner);
-			Point caretPosition = control.getSelection();
-			boolean oldEnabled = control.getEnabled();
-			control.setEnabled(false);//Force the focus lost
-			control.setBackground(color);
-			control.setEnabled(oldEnabled);
-			control.setFocus();
-			control.setSelection(caretPosition.x);
-			control.addFocusListener(focusListner);
-		} else {
-			control.setBackground(color);
-		}
 	}
 	
 	/**
@@ -617,82 +437,7 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 		};
 		return result;
 	}
-	
-	/**
-	 * Build a {@link MeasureDefinition} from its JSON string.
-	 * 
-	 * @param encodedMeasure the JSON string of the class
-	 * @return a {@link MeasureDefinition} or null if the JSON is invalid
-	 */
-	private MeasureDefinition decode(String encodedMeasure)
-	{
-		MeasureDefinition result = null;
-		if (encodedMeasure != null)
-		{
-			try 
-			{
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
-				result = mapper.readValue(encodedMeasure, MeasureDefinition.class);  
-			}
-			catch (JsonMappingException e)
-			{
-				throw new JRRuntimeException(e);
-			} 
-			catch (JsonParseException e)
-			{
-				throw new JRRuntimeException(e);
-			} 
-			catch (IOException e)
-			{
-				throw new JRRuntimeException(e);
-			} 
-		}
-		return result;
-	}
 
-	/**
-	 * Create a JSON string from a {@link MeasureDefinition}.
-	 * 
-	 * @return its JSON string or null if the parameter is null
-	 */
-	private String encode(MeasureDefinition value)
-	{
-		String result = null;
-		ObjectMapper mapper = new ObjectMapper();
-		try 
-		{
-			result = mapper.writeValueAsString(value);
-		}
-		catch (JsonProcessingException e) 
-		{
-			throw new JRRuntimeException(e);
-		}
-		return result;
-	}
-	
-	protected Long createMin(WidgetPropertyDescriptor cpd){
-		Long min = null;
-		//Setup the minimum
-		if (cpd.getMin() != null){
-			min = new Long(cpd.getMin());
-		} else {
-			min = Long.MIN_VALUE;
-		}
-	 	return min;
-	}
-	
-	protected Long createMax(WidgetPropertyDescriptor cpd){
-		Long max = null;
-		//Setup the maximum
-		if (cpd.getMax() != null){
-			max = new Long(cpd.getMax());
-		} else {
-			max = Long.MAX_VALUE;
-		}
-		return max;
-	}
-	
 	protected Map<String, String> createMesureUnitsMap(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd){
 		//setup the measures
 		HashMap<String, String> i18nOpts = new HashMap<String, String>();
@@ -757,38 +502,6 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 	}
 	
 	//ADDITIONAL CLASSES
-	
-	/**
-	 * Read the measure unit and help to autocomplete
-	 * 
-	 * @author Orlandin Marco
-	 * 
-	 */
-	private class AutoCompleteMeasure extends TextContentAdapter {
-		
-		private Text insertField;
-		
-		public AutoCompleteMeasure(Text insertField){
-			this.insertField = insertField;
-		}
-		
-		public String getControlContents(Control control) {
-			String text = insertField.getText().trim().toLowerCase();
-			String measureUnit = getMeasureUnitFromText(text);
-			if (insertField.getCaretPosition() == text.length() && measureUnit != null)
-				return measureUnit;
-			else
-				return ""; //$NON-NLS-1$
-		}
-
-		public void setControlContents(Control control, String text, int cursorPosition) {
-			String textField = insertField.getText().trim().toLowerCase();
-			String key = getMeasureUnitFromText(textField);
-			String value = textField.substring(0, textField.indexOf(key));
-			((Text) control).setText(value.concat(text));
-			((Text) control).setSelection(cursorPosition, cursorPosition);
-		}
-	}
 	
 	/**
 	 * Listener that handle the double click on the Text, made the contextual menu appears
@@ -879,47 +592,6 @@ public class FixedMeasurePropertyDescription extends AbstractExpressionPropertyD
 
 		@Override
 		public void widgetDefaultSelected(SelectionEvent e) {
-		}
-	}
-	
-	/**
-	 * Class used to serialize and deserialize a measure definition
-	 *
-	 */
-	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	public static class MeasureDefinition{
-		
-		private String key;
-
-		private String name;
-		
-		public MeasureDefinition(){
-			this.key = "";
-			this.name = "";
-		}
-		
-		@JsonIgnore
-		public MeasureDefinition(String measureKey, String measureName){
-			Assert.isNotNull(measureName);
-			Assert.isNotNull(measureKey);
-			this.key = measureKey;
-			this.name = measureName.trim().toLowerCase();
-		}
-		
-		public String getKey(){
-			return key;
-		}
-		
-		public String getName(){
-			return name;
-		}
-
-		public void setKey(String value){
-			this.key = value;
-		}
-		
-		public void setName(String value){
-			this.name = value;
 		}
 	}
 }
