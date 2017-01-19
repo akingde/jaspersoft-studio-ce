@@ -129,7 +129,6 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 						boolean on = itemCache.getSelection();
 						DataSnapshotManager.setCaching(container.getJrContext().getJRParameters(), on);
 						if (!on) {
-							itemSave.setEnabled(false);
 							Map<String, Object> hm = container.getJrContext().getJRParameters();
 							SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
 							reportContext.getParameterValues().remove(DataSnapshotManager.SAVE_SNAPSHOT);
