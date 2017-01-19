@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
@@ -677,7 +676,7 @@ public class ReportControler {
 					creationTimestamp = ((JSSColumnDataCacheHandler) dch).getCreationTimestamp();
 			}
 			if (rc.containsParameter(DataSnapshotManager.SAVE_SNAPSHOT))
-				msg += " - " + rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT);
+				msg += "   Data Snapshot Path: " + rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT);
 			stats.setValue(ST_SNAPSHOT, msg);
 		}
 		stats.setValue(ST_RUNTIMESTAMP, creationTimestamp.toString());
