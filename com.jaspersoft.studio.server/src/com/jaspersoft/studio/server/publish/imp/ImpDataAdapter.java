@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
@@ -23,6 +24,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MRJson;
@@ -118,7 +120,9 @@ public class ImpDataAdapter extends AImpObject {
 			popt.setOverwrite(OverwriteEnum.OVERWRITE);
 		mres.setPublishOptions(popt);
 
-		PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
+		PublishUtil.loadPreferences(monitor, (IFile) jrConfig.get(FileUtils.KEY_FILE), mres);
+		List<AMResource> resourses = PublishUtil.getResources(mrunit, monitor, jrConfig);
+		resourses.add(mres);
 		if (true) {
 			IProject prj = ((IFile) jrConfig.get(FileUtils.KEY_FILE)).getProject();
 			FileInputStream is = null;
@@ -181,7 +185,9 @@ public class ImpDataAdapter extends AImpObject {
 									});
 									fpopt.getValueSetter().setValue("repo:" + rd.getUriString());
 
-									PublishUtil.getResources(mrunit, monitor, jrConfig).add(mdaf);
+									PublishUtil.loadPreferences(monitor, (IFile) jrConfig.get(FileUtils.KEY_FILE),
+											mdaf);
+									resourses.add(mdaf);
 								}
 
 								// setFileName(da, "repo:" + rd.getUriString());

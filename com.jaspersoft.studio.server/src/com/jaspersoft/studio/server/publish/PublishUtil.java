@@ -153,7 +153,7 @@ public class PublishUtil {
 			if (ovw == null)
 				ovw = OverwriteEnum.IGNORE;
 			else if (ovw.equals(OverwriteEnum.IGNORE))
-				ovw = OverwriteEnum.OVERWRITE;
+				;// ovw = OverwriteEnum.OVERWRITE;
 			else if (ovw.equals(OverwriteEnum.OVERWRITE))
 				ovw = OverwriteEnum.IGNORE;
 			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"), ovw.getValue());
