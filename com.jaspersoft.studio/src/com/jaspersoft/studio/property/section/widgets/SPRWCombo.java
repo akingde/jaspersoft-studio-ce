@@ -93,9 +93,10 @@ public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 				break;
 			}
 		}
-		if (selection != -1)
+		if (selection != -1){
 			combo.select(selection);
-		else
+			combo.setText(items[selection]);
+		}else
 			combo.setText(Misc.nvl(str));
 		String t = combo.getText();
 		// if (oldSel.x != oldSel.y) {
