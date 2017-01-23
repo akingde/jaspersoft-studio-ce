@@ -44,7 +44,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/jersey/jsonp-jaxrs-1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey/jsr250-api-1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey/net.java.html.json-0.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js_axis-1.4patched.jar" sourcepath="/home/slavic/Downloads/axis-1.4-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/axis-1.4-JS-4.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/html-json-2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-apache-connector-2.13.jar" sourcepath="/home/slavic/Downloads/jersey-apache-connector-2.13-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-client-2.13.jar" sourcepath="/home/slavic/Downloads/jersey-client-2.13-sources.jar"/>
