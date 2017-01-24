@@ -5,9 +5,9 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.dialogs.Dialog;
@@ -203,6 +203,59 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	}
 	
 	/**
+	 * Search a measure name in the units map by its key (since 
+	 * in the map the name is used as key this is like searching in 
+	 * the map by value)
+	 * 
+	 * @param key the key of a measure
+	 * @return a measure name whose key is the passed parameter, or null if it can't be found
+	 */
+	protected String searchMeasureNameByKey(String key){
+		for(Entry<String, String> entry : unitsMap.entrySet()){
+			if (entry.getValue().equalsIgnoreCase(key)){
+				return entry.getKey();
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Resolve the measure unit from the input text, if it can be resolved from the text
+	 * use the last measure in the model
+	 * 
+	 * @param text the text in the combo 
+	 * @param wiProp the {@link IWItemProperty} to access to the model
+	 * @return a valid measure name for the measure, or null if it can't be resolved
+	 */
+	protected String resolveMeasureUnitText(String text, IWItemProperty wiProp){
+		String measureUnitName = getMeasureUnitFromText(text);
+		if (measureUnitName != null && unitsMap.containsKey(measureUnitName)){
+			return measureUnitName;
+		} else {
+			MeasureDefinition lastModelMeasure = getMeasureUnit(wiProp);
+			if (lastModelMeasure != null && lastModelMeasure.getName() != null){
+				String measureName = lastModelMeasure.getName();
+				if (unitsMap.containsKey(measureName)){
+					//found a valid measure name inside the element
+					return measureName;
+				}
+			}
+			if (lastModelMeasure != null &&lastModelMeasure.getKey() != null) {
+				//the measure name can't be resolved, try to resolve the measure key
+				if (unitsMap.containsKey(lastModelMeasure.getKey())){
+					//if the key is also a valid name use that as value
+					return lastModelMeasure.getKey();
+				} else {
+					//fallback, search a valid name from the key
+					return searchMeasureNameByKey(lastModelMeasure.getKey());
+				}
+			}
+		}
+		return null;
+	}
+	
+	
+	/**
 	 * Resolve a measure definition comparing it with the current measure map, this is
 	 * used to check that a loaded definition is correct with the current available values
 	 * 
@@ -217,8 +270,14 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 				//the key is present but not the name (maybe because of localization), use the key as name
 				loadedDefinition.setName(loadedDefinition.getKey());
 			} else {
-				//the passed definition doesn't match anything in the map, so it is not valid
-				return null;
+				//the passed definition doesn't match anything in the map, try to resolve it by name
+				String resolvedByKey = searchMeasureNameByKey(loadedDefinition.getKey());
+				if (resolvedByKey != null){
+					loadedDefinition.setName(resolvedByKey);
+				} else {
+					//unable to resolve the measure
+					return null;
+				}
 			}
 		}
 		return loadedDefinition;
@@ -323,7 +382,7 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	protected String getWrittenValue(String measureUnitKey, String measureUnitName, Double value){
 		if (value == null) return null;
 		String roundedValue = getRoundedValue(measureUnitKey, value);
-		return roundedValue + measureUnitKey;
+		return roundedValue + " " + measureUnitKey;
 	}
 
 	/**
@@ -360,7 +419,7 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 			Text insertField = (Text)txt;
 			String text = insertField.getText().trim().toLowerCase();
 			if (!text.isEmpty()){
-				String measureUnitName = getMeasureUnitFromText(text);
+				String measureUnitName = resolveMeasureUnitText(text, wiProp);
 				String measureUnitKey = unitsMap.get(measureUnitName);
 				if (measureUnitKey != null) {
 					try{ 
@@ -445,9 +504,6 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 			String[][] opts = cpd.getComboOptions();
 			for (int i = 0; i < opts.length; i++) {
 				i18nOpts.put(cd.getLocalizedString(opts[i][1]).toLowerCase().trim(), opts[i][0].trim());
-			}
-			for(String key : new ArrayList<String>(i18nOpts.values())){
-				i18nOpts.put(key, key);
 			}
 		} else {
 			//use default values
