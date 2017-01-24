@@ -5,7 +5,9 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -60,7 +62,13 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	 * Hash map the bind a measure unit, the key is a name of the measure unit, the value is the measure unit 
 	 * Representation. An example could be a measure with key pixels and value px
 	 */
-	protected Map<String, String> unitsMap = null;
+	protected Map<String, String> nameKeyUnitsMap = null;
+	
+	/**
+	 * Used for performance improvements, it the opposite map of nameKeyUnitsMap and store the units by their
+	 * key insited of their names
+	 */
+	protected Map<String, List<String>> keyNameUnitsMap = null;
 	
 	/**
 	 * String added to the autocomplete
@@ -77,14 +85,16 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	
 	public FixedMeasurePropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue, long min, long max, Map<String, String> unitsMap) {
 		super(name, label, description, mandatory, defaultValue, min, max);
-		this.unitsMap = unitsMap;
-		autocompleteValues = buildAtuocompleteValues();
+		this.nameKeyUnitsMap = unitsMap;
+		keyNameUnitsMap = getInversedUnitsMap();
+		autocompleteValues = buildAutoocompleteValues();
 	}
 
 	public FixedMeasurePropertyDescription(String name, String label, String description, boolean mandatory, long min, long max, Map<String, String> unitsMap) {
 		super(name, label, description, mandatory, min, max);
-		this.unitsMap = unitsMap;
-		autocompleteValues = buildAtuocompleteValues();
+		this.nameKeyUnitsMap = unitsMap;
+		keyNameUnitsMap = getInversedUnitsMap();
+		autocompleteValues = buildAutoocompleteValues();
 	}
 
 	@Override
@@ -192,10 +202,10 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	 * 
 	 * @return a not null array of string
 	 */
-	private String[] buildAtuocompleteValues(){
-		String[] result = new String[unitsMap.keySet().size()];
+	private String[] buildAutoocompleteValues(){
+		String[] result = new String[nameKeyUnitsMap.keySet().size()];
 		int index = 0;
-		for(String measure : unitsMap.keySet()){
+		for(String measure : nameKeyUnitsMap.keySet()){
 			result[index] = measure;
 			index++;
 		}
@@ -211,10 +221,9 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	 * @return a measure name whose key is the passed parameter, or null if it can't be found
 	 */
 	protected String searchMeasureNameByKey(String key){
-		for(Entry<String, String> entry : unitsMap.entrySet()){
-			if (entry.getValue().equalsIgnoreCase(key)){
-				return entry.getKey();
-			}
+		List<String> namesForKey = keyNameUnitsMap.get(key);
+		if (namesForKey != null && !namesForKey.isEmpty()){
+			return namesForKey.get(0);
 		}
 		return null;
 	}
@@ -229,20 +238,20 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	 */
 	protected String resolveMeasureUnitText(String text, IWItemProperty wiProp){
 		String measureUnitName = getMeasureUnitFromText(text);
-		if (measureUnitName != null && unitsMap.containsKey(measureUnitName)){
+		if (measureUnitName != null && nameKeyUnitsMap.containsKey(measureUnitName)){
 			return measureUnitName;
 		} else {
 			MeasureDefinition lastModelMeasure = getMeasureUnit(wiProp);
 			if (lastModelMeasure != null && lastModelMeasure.getName() != null){
 				String measureName = lastModelMeasure.getName();
-				if (unitsMap.containsKey(measureName)){
+				if (nameKeyUnitsMap.containsKey(measureName)){
 					//found a valid measure name inside the element
 					return measureName;
 				}
 			}
 			if (lastModelMeasure != null &&lastModelMeasure.getKey() != null) {
 				//the measure name can't be resolved, try to resolve the measure key
-				if (unitsMap.containsKey(lastModelMeasure.getKey())){
+				if (nameKeyUnitsMap.containsKey(lastModelMeasure.getKey())){
 					//if the key is also a valid name use that as value
 					return lastModelMeasure.getKey();
 				} else {
@@ -251,7 +260,14 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 				}
 			}
 		}
-		return null;
+		//At this point if it was not possible to get a measure unit check if there is only 
+		//one defined and in this case use that, otherwise return null
+		if (keyNameUnitsMap.size() == 1){
+			Entry<String, List<String>> entry = keyNameUnitsMap.entrySet().iterator().next();
+			return entry.getValue().get(0);
+		} else {
+			return null;
+		}
 	}
 	
 	
@@ -264,9 +280,9 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	 * is not valid
 	 */
 	protected MeasureDefinition resolveMeasureUnit(MeasureDefinition loadedDefinition){
-		if (loadedDefinition != null && !unitsMap.containsKey(loadedDefinition.getName())){
+		if (loadedDefinition != null && !nameKeyUnitsMap.containsKey(loadedDefinition.getName())){
 			//try to resolve the measure by its key
-			if (unitsMap.containsKey(loadedDefinition.getKey())){
+			if (nameKeyUnitsMap.containsKey(loadedDefinition.getKey())){
 				//the key is present but not the name (maybe because of localization), use the key as name
 				loadedDefinition.setName(loadedDefinition.getKey());
 			} else {
@@ -314,7 +330,7 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 				insertField.setText(value);
 			} else {
 				setErrorStatus(null, insertField);
-				insertField.setText(roundedNumber + measureUnit.getName());
+				insertField.setText(roundedNumber + " " + measureUnit.getName());
 			}
 			
 			if (insertField.getText().length() >= oldpos.y){
@@ -382,7 +398,7 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	protected String getWrittenValue(String measureUnitKey, String measureUnitName, Double value){
 		if (value == null) return null;
 		String roundedValue = getRoundedValue(measureUnitKey, value);
-		return roundedValue + " " + measureUnitKey;
+		return roundedValue + measureUnitKey;
 	}
 
 	/**
@@ -420,7 +436,7 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 			String text = insertField.getText().trim().toLowerCase();
 			if (!text.isEmpty()){
 				String measureUnitName = resolveMeasureUnitText(text, wiProp);
-				String measureUnitKey = unitsMap.get(measureUnitName);
+				String measureUnitKey = nameKeyUnitsMap.get(measureUnitName);
 				if (measureUnitKey != null) {
 					try{ 
 						setMeasureUnit(measureUnitKey, measureUnitName, wiProp);
@@ -496,6 +512,28 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 		};
 		return result;
 	}
+	
+	/**
+	 * Starting from the units map it create the reversed map where the key is the unit value and
+	 * the value is a list of all the available names for that unit
+	 * 
+	 * @return a not null {@link Map}
+	 */
+	protected Map<String, List<String>> getInversedUnitsMap(){
+		Map<String, List<String>> result = new HashMap<String, List<String>>();
+		for(Entry<String, String> unit : nameKeyUnitsMap.entrySet()){
+			String key = unit.getValue().toLowerCase();
+			List<String> list = result.get(key);
+			if (list == null){
+				list = new ArrayList<String>();
+				list.add(unit.getKey());
+				result.put(key, list);
+			} else {
+				list.add(unit.getKey());
+			}
+		}
+		return result;
+	}
 
 	protected Map<String, String> createMesureUnitsMap(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd){
 		//setup the measures
@@ -551,7 +589,7 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 		result.readOnly = readOnly;
 		result.min = min;
 		result.max = max;
-		result.unitsMap = unitsMap;
+		result.nameKeyUnitsMap = nameKeyUnitsMap;
 		result.autocompleteValues = autocompleteValues;
 		result.fallbackValue = fallbackValue;
 		return result;

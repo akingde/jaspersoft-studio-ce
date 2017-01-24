@@ -74,7 +74,7 @@ public class FixedNumberMesurePropertyDescription extends FixedMeasurePropertyDe
 		result.readOnly = readOnly;
 		result.min = min;
 		result.max = max;
-		result.unitsMap = unitsMap;
+		result.nameKeyUnitsMap = nameKeyUnitsMap;
 		result.autocompleteValues = autocompleteValues;
 		result.fallbackValue = fallbackValue;
 		return result;
