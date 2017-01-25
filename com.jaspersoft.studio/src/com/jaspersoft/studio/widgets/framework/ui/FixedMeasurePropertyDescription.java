@@ -273,13 +273,18 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	
 	/**
 	 * Resolve a measure definition comparing it with the current measure map, this is
-	 * used to check that a loaded definition is correct with the current available values
+	 * used to check that a loaded definition is correct with the current available values.
+	 * First this check if the value is available on the model, if it is not is try
+	 * to parse the text and find a measure from it. In the end if the measure can be determinate
+	 * in an implicit way then it uses that as unit.
 	 * 
-	 * @param loadedDefinition the loaded definition
+	 * @param text the text containing both the number and the measure unit
+	 * @param wItemProp the {@link IWItemProperty} of the current property, to read the measure unit from the model
 	 * @return a definition that can match the current allowed value or null if the passed definition
 	 * is not valid
 	 */
-	protected MeasureDefinition resolveMeasureUnit(MeasureDefinition loadedDefinition){
+	protected MeasureDefinition resolveMeasureUnit(String text, IWItemProperty wItemProp){
+		MeasureDefinition loadedDefinition = getMeasureUnit(wItemProp);
 		if (loadedDefinition != null && !nameKeyUnitsMap.containsKey(loadedDefinition.getName())){
 			//try to resolve the measure by its key
 			if (nameKeyUnitsMap.containsKey(loadedDefinition.getKey())){
@@ -295,6 +300,24 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 					return null;
 				}
 			}
+		} else {
+			//Unable to find a measure on the model, search it on the text
+			String measureUnitName = getMeasureUnitFromText(text);
+			if (measureUnitName != null && nameKeyUnitsMap.containsKey(measureUnitName)){
+				MeasureDefinition newDefinition = new MeasureDefinition(nameKeyUnitsMap.get(measureUnitName), measureUnitName);
+				//store the resolved unit in the model
+				setMeasureUnit(newDefinition.getKey(), newDefinition.getName(), wItemProp);
+				return newDefinition;
+			} 
+			//At this point if it was not possible to get a measure unit check if there is only 
+			//one defined and in this case use that, otherwise return null
+			if (keyNameUnitsMap.size() == 1){
+				Entry<String, List<String>> entry = keyNameUnitsMap.entrySet().iterator().next();
+				MeasureDefinition newDefinition = new MeasureDefinition(entry.getKey(), entry.getValue().get(0));
+				//store the resolved unit in the model
+				setMeasureUnit(newDefinition.getKey(), newDefinition.getName(), wItemProp);
+				return newDefinition;
+			}
 		}
 		return loadedDefinition;
 	}
@@ -309,7 +332,7 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	public void setDataNumber(String value, Text insertField, IWItemProperty wiProp) {
 		if (value != null) {
 			Point oldpos = insertField.getSelection();
-			MeasureDefinition measureUnit = resolveMeasureUnit(getMeasureUnit(wiProp)); 
+			MeasureDefinition measureUnit = resolveMeasureUnit(value, wiProp); 
 			Double number = null;
 			String roundedNumber = null;
 			boolean error = false;
