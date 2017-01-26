@@ -100,6 +100,7 @@ import com.jaspersoft.studio.server.protocol.JdbcDriver;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.protocol.restv2.CertChainValidator;
 import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
+import com.jaspersoft.studio.server.wizard.ServerProfileWizardDialog;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.swt.widgets.WLocale;
@@ -257,7 +258,14 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 						}
 					}), null);
 			dbc.bindValue(SWTObservables.observeText(turl, SWT.Modify), PojoObservables.observeValue(proxy, "url"), //$NON-NLS-1$
-					new UpdateValueStrategy().setAfterConvertValidator(new URLValidator()), null);
+					new UpdateValueStrategy().setAfterConvertValidator(new URLValidator() {
+						@Override
+						public IStatus validate(Object value) {
+							IStatus status = super.validate(value);
+							((ServerProfileWizardDialog) getContainer()).setTestButtonEnabled(status.isOK());
+							return status;
+						}
+					}), null);
 			dbc.bindValue(SWTObservables.observeText(lpath, SWT.Modify),
 					PojoObservables.observeValue(proxy, "projectPath"), //$NON-NLS-1$
 					new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyIFolderValidator()), null);
