@@ -97,6 +97,10 @@ public class TabbedPropertySearch extends Composite {
 	 */
 	private int widgetHeight = 18;
 
+	protected static final int ARROW_WIDTH = 7;
+	
+	protected static final int ARROW_HEIGHT = 4;
+	
 	/**
 	 * Action executed when an element from the autocomplete is selected
 	 */
@@ -230,25 +234,26 @@ public class TabbedPropertySearch extends Composite {
 	 *            container where the button will be placed
 	 */
 	private void createFakeButton(Composite containerComp) {
-		Canvas openIcon = new Canvas(containerComp, SWT.NONE);
+		final Canvas openIcon = new Canvas(containerComp, SWT.NONE);
 		openIcon.setBackground(SWTResourceManager.getColor(255, 255, 255));
 		openIcon.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
 				Color oldBackground = e.gc.getBackground();
-				e.gc.fillRectangle(0, 0, e.width, e.height);
+				//doesn't use the e.width and e.height because their value 
+				//is not always updated to reflect the real size of the element
+				Rectangle bounds = openIcon.getBounds();
+				e.gc.fillRectangle(0, 0, bounds.width, bounds.height);
 				e.gc.setBackground(arrowColor);
 				e.gc.setAntialias(SWT.ON);
-				int oddX_offset = e.width % 2 == 0 ? 0 : 1;
-				int y_offset = 7;
-				int x_offset = 4;
-				int x1 = x_offset - oddX_offset;
-				int y1 = y_offset;
-				int x2 = e.width - x_offset;
-				int y2 = y_offset;
-				int x3 = (e.width - oddX_offset) / 2;
-				int y3 = e.height - y_offset;
-				e.gc.fillPolygon(new int[] { x1, y1, x2, y2, x3, y3 });
+				int y = bounds.height / 2;
+				int x = bounds.width / 2;
+				int y1 = y - ARROW_HEIGHT / 2;
+				int y2 = y + ARROW_HEIGHT / 2;
+				int x3 = x;
+				int x1 = x - ARROW_WIDTH / 2; 
+				int x2 = x + ARROW_WIDTH / 2;
+				e.gc.fillPolygon(new int[] { x1, y1, x2, y1, x3, y2 });
 				e.gc.setAntialias(SWT.DEFAULT);
 				e.gc.setBackground(oldBackground);
 			}
