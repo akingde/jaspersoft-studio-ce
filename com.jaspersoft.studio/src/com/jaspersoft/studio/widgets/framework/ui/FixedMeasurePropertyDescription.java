@@ -22,6 +22,8 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -79,6 +81,11 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 	 * Formatter used to format the number 
 	 */
 	protected static final DecimalFormat format = new DecimalFormat("0.################");
+	
+	/**
+	 * Flag used to avoid to commit a value on the focus lost when the currently shown value is a fallback
+	 */
+	private boolean fallbackModified = true;
 
 	public FixedMeasurePropertyDescription() {
 	}
@@ -130,6 +137,15 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 		//Store inside the control the focus listener, so it can be removed and added another time in some case
 		simpleControl.setData(FOCUS_KEY, focusListener);
 		
+		simpleControl.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				//regardless of there is or not a fallback the edit of the text
+				//open the guard 
+				fallbackModified = true;
+			}
+		});
 		
 		simpleControl.addKeyListener(new KeyAdapter() {
 			@Override
@@ -189,7 +205,12 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 					isFallback = true;
 				}
 				setDataNumber(v, simpleControl, wip);
-				
+				//close the guard of the fallback if we have set a fallback value, this
+				//will avoid to not commit the value actually in the simple control until it will
+				//be modified, because the currently displayed value is a fallback and should not
+				//be committed for a focus lost. Also this flag must be closed after the setDataNumber call
+				//otherwise the modifyLister is triggered and the flag reopened
+				fallbackModified = !isFallback;
 				changeFallbackForeground(isFallback, simpleControl);
 				cmp.switchToSecondContainer();
 			}
@@ -266,6 +287,13 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 			Entry<String, List<String>> entry = keyNameUnitsMap.entrySet().iterator().next();
 			return entry.getValue().get(0);
 		} else {
+		//Unable to find a measure on the textual value, try to find it on the fallback value
+			if(wiProp.getFallbackValue() != null){
+				measureUnitName = getMeasureUnitFromText(wiProp.getFallbackValue().toString());
+				if (measureUnitName != null && nameKeyUnitsMap.containsKey(measureUnitName)){
+					return measureUnitName;
+				} 
+			}
 			return null;
 		}
 	}
@@ -301,22 +329,26 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 				}
 			}
 		} else {
-			//Unable to find a measure on the model, search it on the text
-			String measureUnitName = getMeasureUnitFromText(text);
-			if (measureUnitName != null && nameKeyUnitsMap.containsKey(measureUnitName)){
-				MeasureDefinition newDefinition = new MeasureDefinition(nameKeyUnitsMap.get(measureUnitName), measureUnitName);
-				//store the resolved unit in the model
-				setMeasureUnit(newDefinition.getKey(), newDefinition.getName(), wItemProp);
-				return newDefinition;
-			} 
 			//At this point if it was not possible to get a measure unit check if there is only 
 			//one defined and in this case use that, otherwise return null
 			if (keyNameUnitsMap.size() == 1){
 				Entry<String, List<String>> entry = keyNameUnitsMap.entrySet().iterator().next();
 				MeasureDefinition newDefinition = new MeasureDefinition(entry.getKey(), entry.getValue().get(0));
-				//store the resolved unit in the model
-				setMeasureUnit(newDefinition.getKey(), newDefinition.getName(), wItemProp);
 				return newDefinition;
+			}
+			//Unable to find a measure on the model, search it on the text of the property
+			String measureUnitName = getMeasureUnitFromText(text);
+			if (measureUnitName != null && nameKeyUnitsMap.containsKey(measureUnitName)){
+				MeasureDefinition newDefinition = new MeasureDefinition(nameKeyUnitsMap.get(measureUnitName), measureUnitName);
+				return newDefinition;
+			} 
+			//Unable to find a measure on the textual value, try to find it on the fallback value
+			if(wItemProp.getFallbackValue() != null){
+				measureUnitName = getMeasureUnitFromText(wItemProp.getFallbackValue().toString());
+				if (measureUnitName != null && nameKeyUnitsMap.containsKey(measureUnitName)){
+					MeasureDefinition newDefinition = new MeasureDefinition(nameKeyUnitsMap.get(measureUnitName), measureUnitName);
+					return newDefinition;
+				} 	
 			}
 		}
 		return loadedDefinition;
@@ -457,7 +489,8 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 		if (!wiProp.isExpressionMode() && txt instanceof Text){
 			Text insertField = (Text)txt;
 			String text = insertField.getText().trim().toLowerCase();
-			if (!text.isEmpty()){
+			if (!text.isEmpty() && fallbackModified){
+				//the text is not empty and it is different from the fallback
 				String measureUnitName = resolveMeasureUnitText(text, wiProp);
 				String measureUnitKey = nameKeyUnitsMap.get(measureUnitName);
 				if (measureUnitKey != null) {
@@ -480,6 +513,8 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 				}	
 			} else {
 				wiProp.setValue(null, null);
+				//remove the measure unit property
+				removeMeasureUnit(wiProp);
 			}
 		} else super.handleEdit(txt, wiProp);
 	}

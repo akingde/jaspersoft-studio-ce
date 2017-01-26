@@ -339,6 +339,8 @@ public class MeasureUnitPropertyDescription extends AbstractMeasurePropertyDescr
 				}	
 			} else {
 				wiProp.setValue(null, null);
+				//remove the measure unit property
+				removeMeasureUnit(wiProp);
 			}
 		} else super.handleEdit(txt, wiProp);
 	}

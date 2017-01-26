@@ -49,7 +49,7 @@ public abstract class AbstractMeasurePropertyDescription<T> extends AbstractExpr
 	 * Name of the properties used to store in the model the last selected measure unit for this
 	 * property
 	 */
-	protected static final String CURRENT_MEASURE_KEY = ".measureUnit";
+	protected static final String CURRENT_MEASURE_KEY = "_measureUnit";
 	
 	/**
 	 * The key used to store inside the widget the focus listener
@@ -122,6 +122,17 @@ public abstract class AbstractMeasurePropertyDescription<T> extends AbstractExpr
 		MeasureDefinition definition = new MeasureDefinition(measureUnitKey, measureUnitName);
 		String encodedDefinition = encode(definition);
 		wItemProperty.getPropertyEditor().createUpdateProperty(measureUnitProperty, encodedDefinition != null ? encodedDefinition.toLowerCase() :  null, null);
+	}
+	
+	/**
+	 * Remove the current local measure unit for the element
+	 * 
+	 * @param wItemProperty the WItemProperty to write the property on the element
+	 */
+	protected void removeMeasureUnit(IWItemProperty wItemProperty){
+		String propertyName = wItemProperty.getPropertyName();
+		String measureUnitProperty = propertyName + CURRENT_MEASURE_KEY;
+		wItemProperty.getPropertyEditor().removeProperty(measureUnitProperty);
 	}
 	
 	/**
