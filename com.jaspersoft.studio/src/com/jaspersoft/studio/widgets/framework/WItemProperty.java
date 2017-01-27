@@ -59,6 +59,9 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
  *
  */
 public class WItemProperty extends Composite implements IExpressionContextSetter, IWItemProperty {
+	
+	/** Suffix for properties requiring a custom simple mode handling */
+	public static final String CUSTOM_SIMPLE_MODE_SUFFIX = "_customSimpleMode";
 
 	/**
 	 * Icon used in the button to open the edit dialog

@@ -32,7 +32,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import net.sf.jasperreports.engine.JRRuntimeException;
 
 /**
- * Generic class to handle a measure unit widget. This define the common utility method for the dyinamic 
+ * Generic class to handle a measure unit widget. This define the common utility method for the dynamic 
  * widgets that can handle a measure unit
  * 
  * @author Orlandin Marco
@@ -49,7 +49,7 @@ public abstract class AbstractMeasurePropertyDescription<T> extends AbstractExpr
 	 * Name of the properties used to store in the model the last selected measure unit for this
 	 * property
 	 */
-	protected static final String CURRENT_MEASURE_KEY = "_measureUnit";
+	public static final String CURRENT_MEASURE_KEY = "_measureUnit";
 	
 	/**
 	 * The key used to store inside the widget the focus listener

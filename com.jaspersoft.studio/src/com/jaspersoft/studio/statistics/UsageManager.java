@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.HttpUtils;
 
@@ -609,8 +610,7 @@ public class UsageManager {
 			uploadUsageStats.schedule();
 		}
 		// Check for update
-		String devmode = System.getProperty("devmode"); //$NON-NLS-1$
-		if (devmode == null || !devmode.equals("true")) { //$NON-NLS-1$
+		if (!UIUtils.isDevMode()) { //$NON-NLS-1$
 			Job job = new Job(Messages.UsageManager_checkVersionJobName) {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {

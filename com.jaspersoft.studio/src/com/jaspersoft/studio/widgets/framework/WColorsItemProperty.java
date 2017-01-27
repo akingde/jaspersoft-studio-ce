@@ -63,16 +63,16 @@ public class WColorsItemProperty extends WItemProperty {
 	}
 	
 	public void setCustomSimpleModeUsage() {
-		String simpleMode = getPropertyName() + ".customSimpleMode";
+		String simpleMode = getPropertyName() + WItemProperty.CUSTOM_SIMPLE_MODE_SUFFIX;
 		getPropertyEditor().createUpdateProperty(simpleMode, "true", null);
 	}
 	
 	public void removeCustomSimpleModeUsage() {
-		getPropertyEditor().removeProperty(getPropertyName() + ".customSimpleMode");
+		getPropertyEditor().removeProperty(getPropertyName() + WItemProperty.CUSTOM_SIMPLE_MODE_SUFFIX);
 	}
 	
 	public boolean isCustomSimpleMode(){
-		String customSimpleMode = getPropertyEditor().getPropertyValue(getPropertyName()+".customSimpleMode");
+		String customSimpleMode = getPropertyEditor().getPropertyValue(getPropertyName()+WItemProperty.CUSTOM_SIMPLE_MODE_SUFFIX);
 		return "true".equals(customSimpleMode);
 	}
 

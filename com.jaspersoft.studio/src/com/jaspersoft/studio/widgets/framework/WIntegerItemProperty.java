@@ -47,7 +47,7 @@ public class WIntegerItemProperty extends WItemProperty {
 	}
 	
 	private boolean isCustomSimpleMode(){
-		String customSimpleMode = getPropertyEditor().getPropertyValue(getPropertyName()+".customSimpleMode");
+		String customSimpleMode = getPropertyEditor().getPropertyValue(getPropertyName()+WItemProperty.CUSTOM_SIMPLE_MODE_SUFFIX);
 		return "true".equals(customSimpleMode);
 	}
 
@@ -74,13 +74,13 @@ public class WIntegerItemProperty extends WItemProperty {
 		setRefresh(true);
 		try {
 			if(staticValue!=null){
-				String simpleMode = getPropertyName() + ".customSimpleMode";
+				String simpleMode = getPropertyName() + WItemProperty.CUSTOM_SIMPLE_MODE_SUFFIX;
 				getPropertyEditor().createUpdateProperty(simpleMode, "true", null);
 				expressionValue=new JRDesignExpression(staticValue);
 				staticValue=null;
 			}
 			else {
-				getPropertyEditor().removeProperty(getPropertyName() + ".customSimpleMode");
+				getPropertyEditor().removeProperty(getPropertyName() + WItemProperty.CUSTOM_SIMPLE_MODE_SUFFIX);
 			}
 			getPropertyEditor().createUpdateProperty(getPropertyName(), staticValue, expressionValue);
 			updateWidget();
