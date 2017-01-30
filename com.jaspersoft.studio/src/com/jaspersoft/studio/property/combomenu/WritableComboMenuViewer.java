@@ -10,12 +10,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.jface.viewers.IOpenListener;
-import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -28,6 +28,8 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.help.HelpSystem;
 
+import net.sf.jasperreports.eclipse.ui.WritableComboButton;
+
 /**
  * Class that manage the Combo Popup, create the popup manu and execture the action. the combo popup want to imitate a
  * combobox where a series of element are listed, but the selection of one item is done using a popup menu, opened by a
@@ -36,7 +38,7 @@ import com.jaspersoft.studio.help.HelpSystem;
  * @author Orlandin Marco
  * 
  */
-public class ComboMenuViewer implements IMenuProvider {
+public class WritableComboMenuViewer implements IMenuProvider {
 
 	/**
 	 * Style bit: Create handle control and drop-down widget with default behaviours, i.e. showing text, showing image,
@@ -62,7 +64,7 @@ public class ComboMenuViewer implements IMenuProvider {
 	/**
 	 * Button that made the popup menu appears
 	 */
-	private ComboButton dropDownHandle;
+	private WritableComboButton dropDownHandle;
 
 	/**
 	 * List of the items inside the popup menu
@@ -193,12 +195,27 @@ public class ComboMenuViewer implements IMenuProvider {
 	 * @see #NO_IMAGE
 	 * @see #FILTERED
 	 */
-	public ComboMenuViewer(Composite parent, int style, String biggerString) {
-		dropDownHandle = new ComboButton(parent, style, biggerString, this);
+	public WritableComboMenuViewer(Composite parent, int style, String biggerString) {
+		dropDownHandle = new WritableComboButton(parent, style);
 		listeners = new ArrayList<ComboItemAction>();
-		dropDownHandle.addOpenListener(new IOpenListener() {
-			public void open(OpenEvent event) {
+		dropDownHandle.addOpenListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
 				openPopup();
+			}
+			
+		});
+		
+		dropDownHandle.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				String text = dropDownHandle.getText();
+				selectedItem = new ComboItem(text, true, -1, text, text);
+				for (ComboItemAction listener : listeners) {
+					listener.exec();
+				}
 			}
 		});
 	}
@@ -242,7 +259,7 @@ public class ComboMenuViewer implements IMenuProvider {
 	 *          the text
 	 */
 	public void setToolTipText(String text) {
-		dropDownHandle.getControl().setToolTipText(text);
+		dropDownHandle.setToolTipText(text);
 	}
 
 	/**
@@ -264,7 +281,7 @@ public class ComboMenuViewer implements IMenuProvider {
 	}
 
 	public int getWidth() {
-		return dropDownHandle.getWidth();
+		return dropDownHandle.getSize().x;
 	}
 
 	/**
@@ -335,7 +352,7 @@ public class ComboMenuViewer implements IMenuProvider {
 	 * @return A reference to the combobox control
 	 */
 	public Control getControl() {
-		return dropDownHandle.getControl();
+		return dropDownHandle;
 	}
 
 	/**
@@ -390,7 +407,8 @@ public class ComboMenuViewer implements IMenuProvider {
 
 			@Override
 			public void menuHidden(MenuEvent e) {
-				dropDownHandle.getControl().getParent().getParent().setFocus();
+				dropDownHandle.setEnabled(false);
+				dropDownHandle.setEnabled(true);
 			}
 		});
 		refreshPopupMenu(newMenu);
@@ -407,7 +425,6 @@ public class ComboMenuViewer implements IMenuProvider {
 		elementList = new ArrayList<ComboItem>(Arrays.asList(newItems));
 		if (popupMenu != null){
 			popupMenu.dispose();
-			popupMenu = null;
 		}
 		popupMenu = createPopupMenu();
 	}
@@ -422,7 +439,6 @@ public class ComboMenuViewer implements IMenuProvider {
 		elementList = newItems;
 		if (popupMenu != null){
 			popupMenu.dispose();
-			popupMenu = null;
 		}
 		popupMenu = createPopupMenu();
 	}
@@ -434,7 +450,7 @@ public class ComboMenuViewer implements IMenuProvider {
 	 *          uri to open when the help is requested
 	 */
 	public void setHelp(String href) {
-		HelpSystem.setHelp(dropDownHandle.getControl(), href);
+		HelpSystem.setHelp(dropDownHandle, href);
 		HelpProvider provider = new HelpProvider(getPopup());
 		provider.setHelp(href);
 	}

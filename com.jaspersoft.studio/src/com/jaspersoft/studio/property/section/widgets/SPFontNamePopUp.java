@@ -4,16 +4,20 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -25,11 +29,16 @@ import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
 import com.jaspersoft.studio.property.combomenu.ComboItemSeparator;
-import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
+import com.jaspersoft.studio.property.combomenu.WritableComboMenuViewer;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.ImageUtils;
 import com.jaspersoft.studio.utils.ModelUtils;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
+import net.sf.jasperreports.engine.design.JRDesignFont;
+import net.sf.jasperreports.engine.fonts.FontUtil;
 
 /**
  * A combo popup menu that could be used to represent a font
@@ -52,7 +61,7 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 	/**
 	 * The combo popup
 	 */
-	protected ComboMenuViewer combo;
+	protected WritableComboMenuViewer combo;
 
 	/**
 	 * True if the combo popup was already initialized with the data, false otherwise
@@ -65,41 +74,27 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 	}
 
-	/**
-	 * Create a sample image for a font. when an image is created it is cashed, so future request for that sample doesn't
-	 * Require the image recreation.
-	 * 
-	 * @param fontName
-	 *          name of the font for the requested sample
-	 * @return image of the sample
-	 */
-	private static Image getBaseImage() {
-		Image backGround = ResourceManager.getImage("baseFontBackGroundImage");
-		if (backGround == null) {
-			backGround = new Image(null, 55, 15);
-			ResourceManager.addImage("baseFontBackGroundImage", backGround);
-		}
-		return backGround;
-	}
+	public static BufferedImage createFontImage(final String fontName, FontUtil util) {
+		int width = 55;
+		int height = 15;
+	    BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+	
+	    Graphics2D ig2 = bi.createGraphics();
+		ig2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		ig2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-	public static Image createFontImage(final String fontName) {
-		Image stringImage = ResourceManager.getImage(fontName);
-		// Check if the image is cached
-		if (stringImage == null) {
-			ImageData imageData = getBaseImage().getImageData();
-			imageData.transparentPixel = imageData.getPixel(0, 0);
-			stringImage = new Image(null, imageData);
-			GC stringGc = new GC(stringImage);
-			try {
-				stringGc.setFont(ResourceManager.getFont(fontName, 10, 0));
-				stringGc.setTextAntialias(SWT.ON);
-				stringGc.drawText("Sample", 0, 0, SWT.DRAW_TRANSPARENT);
-			} finally {
-				stringGc.dispose();
-			}
-			ResourceManager.addImage(fontName, stringImage);
-		}
-		return stringImage;
+		JRFont jrFont = new JRDesignFont(null);
+		jrFont.setFontName(fontName);
+		jrFont.setFontSize(12f);
+	    Font font = util.getAwtFont(jrFont, Locale.getDefault());
+	    ig2.setFont(font);
+	    String message = "Sample";
+	    FontMetrics fontMetrics = ig2.getFontMetrics();
+	    int stringWidth = fontMetrics.stringWidth(message);
+	    int stringHeight = fontMetrics.getAscent();
+	    ig2.setPaint(Color.black);
+	    ig2.drawString(message, Math.max((width - stringWidth), 0) / 2,  height / 2 + stringHeight / 4);
+		return bi;
 	}
 
 	private APropertyNode pnode;
@@ -112,7 +107,6 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 		this.pnode = pnode;
 		if (pnode != null) {
 			if (!dataSetted) {
-				refreshFont();
 				combo.addSelectionListener(new ComboItemAction() {
 					/**
 					 * The action to execute when an entry is selected
@@ -123,6 +117,7 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 								combo.getSelectionValue() != null ? combo.getSelectionValue().toString() : null);
 					}
 				});
+				refreshFont();
 				dataSetted = true;
 			}
 			combo.setText(b.toString());
@@ -135,10 +130,16 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 		List<String[]> fontsList = ModelUtils.getFontNames(pnode.getJasperConfiguration());
 		List<ComboItem> itemsList = new ArrayList<ComboItem>();
 		int i = 0;
+		FontUtil util = FontUtil.getInstance(pnode.getJasperConfiguration());
 		for (int index = 0; index < fontsList.size(); index++) {
 			String[] fonts = fontsList.get(index);
 			for (String element : fonts) {
-				itemsList.add(new ComboItem(element, true, createFontImage(element), i, element, element));
+				Image resolvedImage = ResourceManager.getImage(element);
+				if (resolvedImage == null){
+					resolvedImage = new Image(UIUtils.getDisplay(), ImageUtils.convertToSWT(createFontImage(element, util)));
+					ResourceManager.addImage(element, resolvedImage);
+				}
+				itemsList.add(new ComboItem(element, true, resolvedImage, i, element, element));
 				i++;
 			}
 			if (index + 1 != fontsList.size() && fonts.length > 0) {
@@ -156,7 +157,7 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 	@Override
 	protected void createComponent(Composite parent) {
 		if (combo == null) {
-			combo = new ComboMenuViewer(parent, ComboMenuViewer.NO_IMAGE, "SampleSampleSample");
+			combo = new WritableComboMenuViewer(parent, WritableComboMenuViewer.NO_IMAGE, "SampleSampleSample");
 			combo.getControl().addDisposeListener(new DisposeListener() {
 
 				@Override

@@ -51,6 +51,8 @@ import com.jaspersoft.studio.property.combomenu.ComboButton;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtil;
 
+import net.sf.jasperreports.eclipse.ui.WritableComboButton;
+
 public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements IHighlightPropertyWidget {
 	
 	protected T pDescriptor;
@@ -322,6 +324,8 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.PUSH) == SWT.PUSH))
 			return new BorderHightLight(control, Combo.class);
 		if (control.getClass().equals(ComboButton.GraphicButton.class))
+			return new BackgroundHighlight(control);
+		if (control.getClass().equals(WritableComboButton.class))
 			return new BackgroundHighlight(control);
 		if (control instanceof Composite)
 			return new BorderHightLight(control);
