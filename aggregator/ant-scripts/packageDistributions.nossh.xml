@@ -97,8 +97,8 @@
 		<!-- copy additional licensing files -->
 		<copy file="${basedir}/rootfiles/license/license.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- copy fix files for Ubuntu -->
-		<copy file="${basedir}/rootfiles/linux/ubuntu.readme" todir="${dirlocation.linux.x86}/${productRootFolder}" />
-		<copy file="${basedir}/rootfiles/linux/runubuntu.sh" todir="${dirlocation.linux.x86}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/linux/linux.readme" todir="${dirlocation.linux.x86}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/linux/runjss.sh" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />
 		<!-- rename the folder -->
@@ -109,13 +109,13 @@
 			<tarfileset dir="${dirlocation.linux.x86}/" filemode="755">
 				<include name="**/features/jre.linux.gtk.x86.feature_*/jre/bin/*" />
 				<include name="**/Jaspersoft Studio" />
-				<include name="**/runubuntu.sh"/>
+				<include name="**/runjss.sh"/>
 			</tarfileset>
 			<tarfileset dir="${dirlocation.linux.x86}/">
 				<include name="**/*" />
 				<exclude name="**/features/jre.linux.gtk.x86.feature_*/jre/bin/*"/>
 				<exclude name="**/Jaspersoft Studio" />
-				<exclude name="**/runubuntu.sh"/>
+				<exclude name="**/runjss.sh"/>
 			</tarfileset>
 		</tar>
 		<!-- create debian package -->
@@ -136,8 +136,8 @@
 		<!-- copy additional licensing files -->
 		<copy file="${basedir}/rootfiles/license/license.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- copy fix files for Ubuntu -->
-		<copy file="${basedir}/rootfiles/linux/ubuntu.readme" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
-		<copy file="${basedir}/rootfiles/linux/runubuntu.sh" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/linux/linux.readme" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/linux/runjss.sh" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86_64}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />	
 		<!-- rename the folder -->
@@ -148,13 +148,13 @@
 			<tarfileset dir="${dirlocation.linux.x86_64}/" filemode="755">
 				<include name="**/features/jre.linux.gtk.x86_64.feature_*/jre/bin/*" />
 				<include name="**/Jaspersoft Studio" />
-				<include name="**/runubuntu.sh"/>
+				<include name="**/runjss.sh"/>
 			</tarfileset>
 			<tarfileset dir="${dirlocation.linux.x86_64}/">
 				<include name="**/*" />
 				<exclude name="**/features/jre.linux.gtk.x86_64.feature_*/jre/bin/*"/>
 				<exclude name="**/Jaspersoft Studio" />
-				<exclude name="**/runubuntu.sh"/>
+				<exclude name="**/runjss.sh"/>
 			</tarfileset>
 		</tar>
 		<!-- create debian package -->
@@ -252,7 +252,7 @@
 		</copy>
 		<echo file="${dist}/debian/postinst" append="false">#! /bin/sh
 chmod +x "/opt/tibco/${jss.distro.folder}/Jaspersoft Studio"
-chmod +x "/opt/tibco/${jss.distro.folder}/runubuntu.sh"
+chmod +x "/opt/tibco/${jss.distro.folder}/runjss.sh"
 chmod -R +x "/opt/tibco/${jss.distro.folder}/${jre.feature.location}/"
 exit 0;</echo>
 		<desktopEntry 
