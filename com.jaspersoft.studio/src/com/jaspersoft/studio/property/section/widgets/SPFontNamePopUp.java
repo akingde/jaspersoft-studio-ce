@@ -77,23 +77,22 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 	public static BufferedImage createFontImage(final String fontName, FontUtil util) {
 		int width = 55;
 		int height = 15;
-	    BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	
-	    Graphics2D ig2 = bi.createGraphics();
+		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+	  Graphics2D ig2 = bi.createGraphics();
 		ig2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		ig2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		JRFont jrFont = new JRDesignFont(null);
 		jrFont.setFontName(fontName);
 		jrFont.setFontSize(12f);
-	    Font font = util.getAwtFont(jrFont, Locale.getDefault());
-	    ig2.setFont(font);
-	    String message = "Sample";
-	    FontMetrics fontMetrics = ig2.getFontMetrics();
-	    int stringWidth = fontMetrics.stringWidth(message);
-	    int stringHeight = fontMetrics.getAscent();
-	    ig2.setPaint(Color.black);
-	    ig2.drawString(message, Math.max((width - stringWidth), 0) / 2,  height / 2 + stringHeight / 4);
+		Font font = util.getAwtFont(jrFont, Locale.getDefault());
+		ig2.setFont(font);
+		String message = "Sample";
+		FontMetrics fontMetrics = ig2.getFontMetrics();
+		int stringWidth = fontMetrics.stringWidth(message);
+		int stringHeight = fontMetrics.getAscent();
+		ig2.setPaint(Color.black);
+		ig2.drawString(message, Math.max((width - stringWidth), 0) / 2,  height / 2 + stringHeight / 4);
 		return bi;
 	}
 
