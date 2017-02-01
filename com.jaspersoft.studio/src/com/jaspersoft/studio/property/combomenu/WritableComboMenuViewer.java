@@ -18,6 +18,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -613,4 +614,8 @@ public class WritableComboMenuViewer implements IMenuProvider {
 		return getPopup();
 	}
 
+
+	public void setTextColor(Color color){
+		dropDownHandle.setTextColor(color);
+	}
 }
