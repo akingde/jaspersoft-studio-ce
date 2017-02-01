@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -62,6 +63,8 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 	 * The combo popup
 	 */
 	protected WritableComboMenuViewer combo;
+	
+	private APropertyNode pnode;
 
 	/**
 	 * True if the combo popup was already initialized with the data, false otherwise
@@ -78,7 +81,7 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 		int width = 55;
 		int height = 15;
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	  Graphics2D ig2 = bi.createGraphics();
+	  	Graphics2D ig2 = bi.createGraphics();
 		ig2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		ig2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
@@ -96,8 +99,21 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 		return bi;
 	}
 
-	private APropertyNode pnode;
-
+	/**
+	 * Set the data and uses the text color of the text to show if the value is inherithed or not
+	 */
+	@Override
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		setData(pnode, resolvedValue);
+		if (combo != null && !combo.getControl().isDisposed()){
+			if (elementValue != null){
+				combo.setTextColor(ColorConstants.black);
+			} else {
+				combo.setTextColor(ColorConstants.gray);
+			}
+		}
+	}
+	
 	/**
 	 * Set the data of the combo popup, and if it wasn't initialized the fonts will be added
 	 */
@@ -105,6 +121,8 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 	public void setData(APropertyNode pnode, Object b) {
 		this.pnode = pnode;
 		if (pnode != null) {
+			createContextualMenu(pnode);
+			combo.setEnabled(pnode.isEditable());
 			if (!dataSetted) {
 				combo.addSelectionListener(new ComboItemAction() {
 					/**
