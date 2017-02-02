@@ -9,14 +9,10 @@ import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
@@ -44,6 +40,8 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.ImageUtils;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * A composite that offer advanced controls to choose a color like the selection of 
@@ -496,17 +494,7 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 		 buttonData.verticalAlignment = SWT.CENTER;
 		 pickColorButton.setLayoutData(buttonData);
 		 pickColorButton.setText("");
-		 pickColorButton.addPaintListener(new PaintListener() {
-       public void paintControl(PaintEvent e) {
-        if (pickColorButton.getText().isEmpty()) {
-        	int size = 24;
-        	int x = (e.width/2) - (size/2);
-        	int y = (e.height/2) - (size/2);
-        	e.gc.setAntialias(SWT.ON);
-        	e.gc.drawImage(getPickerImage(size),x,y);
-        }
-       }
-		 });
+		 pickColorButton.setImage(getPickerImage(24));
 		 //When the button is pressed the color picking thread is started,
 	   //the button is disabled and its content is changed to tell the user
 	   //how to stop the picking thread
@@ -539,7 +527,7 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
   	String key = "pickerIcon"+String.valueOf(size); //$NON-NLS-1$
   	Image result = ResourceManager.getImage(key);
   	if (result == null){
-  		result = ImageUtils.resize(ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/picker.gif"), size, size); //$NON-NLS-1$
+  		result = ImageUtils.resize(ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/picker.png"), size, size); //$NON-NLS-1$
   		ImageData data = result.getImageData();
   		result.dispose();
   		int whitePixel = data.palette.getPixel(new RGB(255,255,255));
@@ -738,6 +726,7 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 		colorPickerThread.setStop(true);
     if (!pickColorButton.isDisposed()){
 	    pickColorButton.setText(""); //$NON-NLS-1$
+	    pickColorButton.setImage(getPickerImage(24));
 	    pickColorButton.setEnabled(true);
 			GridData buttonData = new GridData();
 			buttonData.widthHint = 50;
