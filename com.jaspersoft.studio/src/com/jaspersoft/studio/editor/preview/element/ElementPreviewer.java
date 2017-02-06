@@ -79,22 +79,40 @@ public class ElementPreviewer {
 		if (jd == null)
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 				public void run() {
-					StringBuffer sb = new StringBuffer();
-					sb.append("<html><head><style>");
-					sb.append(
-							".loader {border: 16px solid darkgrey; position: absolute; top: 50%;left: 50%;margin-top: -60px;margin-left: -60px;");
-					sb.append("border-top: 16px solid lightgrey;");
-					sb.append("border-radius: 50%;");
-					sb.append("width: 120px;");
-					sb.append("height: 120px;");
-					sb.append("animation: spin 2s linear infinite;");
-					sb.append("}");
-					sb.append("@keyframes spin {");
-					sb.append("0% { transform: rotate(0deg); }");
-					sb.append("100% { transform: rotate(360deg); }");
-					sb.append("}");
-					sb.append("</style></head><body style=\"margin:0;\"><div class=\"loader\"></div></body></html>");
-
+					StringBuffer sb = new StringBuffer(); 
+					sb.append("<!DOCTYPE html>")
+				     .append("<html >")
+				     .append("<head>")
+				     .append("    <title>Highcharts loading page</title>  ")
+				     .append("    <style>")
+				     .append("        .container{")
+				     .append("            display: flex;")
+				     .append("            align-items: center;")
+				     .append("            justify-content: center;")
+				     .append("            height:95%;")
+				     .append("        }")
+				     .append("        body, html{")
+				     .append("            height:95%;")
+				     .append("        }        ")
+				     .append("        .loading { ")
+				     .append("          font-size: 1.2em; ")
+				     .append("          font-family: Georgia;")
+				     .append("        }        ")
+				     .append("    </style>")
+				     .append("    <script>")
+				     .append("        i = 0;")
+				     .append("        setInterval(function() {")
+				     .append("            i = ++i % 4;")
+				     .append("            document.querySelector('.loading').innerHTML = \"Loading HTML5 chart \" + Array(i+1).join(\".\");")
+				     .append("        }, 800);")
+				     .append("    </script>")
+				     .append("</head>")
+				     .append("<body>")
+				     .append("    <div class=\"container\">")
+				     .append("        <div class=\"loading\">Loading HTML5 chart</div>")
+				     .append("    </div>  ")
+				     .append("</body>")
+				     .append("</html>");
 					browser.setText(sb.toString());
 				}
 			});
