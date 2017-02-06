@@ -43,7 +43,7 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	/**
 	 * The current page
 	 */
-	private PageEditPart page;
+	protected PageEditPart page;
 	
 	/**
 	 * The zoom manager for the current page

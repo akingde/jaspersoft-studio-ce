@@ -15,6 +15,7 @@ import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.CompoundSnapToHelper;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -29,6 +30,7 @@ import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
@@ -45,6 +47,7 @@ import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.JSSSnapFeedBackPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -419,7 +422,12 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		if (JSSCompoundCommand.REFRESH_UI_EVENT.equals(arg0.getPropertyName()) || 
 				!JSSCompoundCommand.isRefreshEventsIgnored((ANode)getModel())){
 			refreshChildren();
-			refreshVisuals();
+			//Avoid to repaint the children if the editor is not visible
+			IEditorPart refreshedEditor = ((DefaultEditDomain) getViewer().getEditDomain()).getEditorPart();
+			AbstractVisualEditor visualEditor = (AbstractVisualEditor)refreshedEditor;
+			if (visualEditor == null || visualEditor.isEditorVisible()){
+				refreshVisuals();
+			}
 		}
 	}
 

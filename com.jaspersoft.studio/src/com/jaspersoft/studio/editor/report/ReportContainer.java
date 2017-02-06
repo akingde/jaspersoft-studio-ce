@@ -652,4 +652,13 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 		}
 		return 0;
 	}
+	
+	/**
+	 * When the page change force a visual refresh of the content of the editor
+	 */
+	protected void pageChange(final int newPageIndex, final int oldPageIndex) {
+		super.pageChange(newPageIndex, oldPageIndex);
+		AbstractVisualEditor activeEditor = (AbstractVisualEditor) getActiveEditor();
+		JSSCompoundCommand.forceRefreshVisuals(JSSCompoundCommand.getMainNode(activeEditor.getModel()));
+	}
 }

@@ -18,6 +18,7 @@ import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.action.copy.SelectElementCommand;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MLockableRefresh;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.utils.SelectionHelper;
@@ -168,14 +169,14 @@ public class JSSCompoundCommand extends CompoundCommand {
 	 * @param startNode starting node of the model
 	 * @return a MLockableNode or null if it can not be found
 	 */
-	public static ANode getMainNode(ANode startNode){
+	public static ANode getMainNode(INode startNode){
 		if (startNode != null){
-			if (startNode instanceof MLockableRefresh) return startNode;
+			if (startNode instanceof MLockableRefresh) return (MLockableRefresh)startNode;
 			else if (startNode instanceof MRoot) {
 				//I'm on the root, need to go down
-				return getMainNode((ANode)startNode.getChildren().get(0));
+				return getMainNode(startNode.getChildren().get(0));
 			} else { 
-				ANode node = startNode.getParent();
+				INode node = startNode.getParent();
 				if (node instanceof MRoot) return null;
 				else return getMainNode(node);
 			}
