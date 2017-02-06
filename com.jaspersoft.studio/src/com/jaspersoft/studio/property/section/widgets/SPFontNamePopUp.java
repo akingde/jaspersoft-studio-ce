@@ -16,6 +16,8 @@ import java.util.Locale;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.Util;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
@@ -48,6 +50,9 @@ import net.sf.jasperreports.engine.fonts.FontUtil;
  * 
  */
 public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
+	
+	private static final String FONT_PREVIEW_MESSAGE = "Sample";
+	
 	private PreferenceListener preferenceListener = new PreferenceListener();
 
 	private final class PreferenceListener implements IPropertyChangeListener {
@@ -76,31 +81,88 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 		dataSetted = false;
 		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 	}
+	
+	/**
+	 * Resize the passed image keeping its aspect ratio. If the image has already the 
+	 * the correct width or height the original one is returned
+	 * 
+	 * @param img the source image, must be not null
+	 * @param newWidth the new width, can be different if the new height keeping the ratio is bigger than the passed newHeight
+	 * @param newHeight the new height, can be different if the new width keeping the ratio is bigger than the passed newWidth
+	 * @return
+	 */
+	private static BufferedImage resize(BufferedImage img, int newWidth, int newHeight) {
+		
+		int oldWidth = img.getWidth();
+		int oldHeight = img.getHeight();
+		
+		if (newWidth == oldWidth || newHeight == oldHeight) return img;
 
+    int scaledHeight = newHeight;
+    int scaledWidth = (int)((float)oldWidth*scaledHeight)/oldHeight;
+    if (scaledWidth > newWidth){
+    	scaledWidth = newWidth;
+    	scaledHeight = (int)((float)oldHeight*scaledWidth)/oldWidth;
+    } 
+    
+    /*BufferedImage after = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
+    AffineTransform at = new AffineTransform();
+    at.scale((float)scaledWidth / oldWidth, (float)scaledHeight / oldHeight);
+    AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+    after = scaleOp.filter(img, after);*/
+
+    
+    java.awt.Image tmp = img.getScaledInstance(scaledWidth, scaledHeight, BufferedImage.SCALE_AREA_AVERAGING);
+    BufferedImage dimg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+    
+    int yOffset = (newHeight - scaledHeight)/2;
+    int xOffset = (newWidth - scaledWidth)/2;
+    Graphics2D g2d = dimg.createGraphics();
+    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+    g2d.drawImage(tmp, xOffset, yOffset, null);
+    g2d.dispose();
+
+    return dimg;
+  }  
+
+	/**
+	 * Create the font image preview
+	 * 
+	 * @param fontName name of the font
+	 * @param util {@link FontUtil} used to resolve the font
+	 * @return and image with the preview of the font
+	 */
 	public static BufferedImage createFontImage(final String fontName, FontUtil util) {
-		int width = 55;
-		int height = 15;
+		int height = 16;
+		int width = Util.isLinux() ? 35  : 55;
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	  	Graphics2D ig2 = bi.createGraphics();
+	  Graphics2D ig2 = bi.createGraphics();
 		ig2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		ig2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		JRFont jrFont = new JRDesignFont(null);
 		jrFont.setFontName(fontName);
-		jrFont.setFontSize(12f);
+		jrFont.setFontSize(30f);
 		Font font = util.getAwtFont(jrFont, Locale.getDefault());
 		ig2.setFont(font);
-		String message = "Sample";
-		FontMetrics fontMetrics = ig2.getFontMetrics();
-		int stringWidth = fontMetrics.stringWidth(message);
-		int stringHeight = fontMetrics.getAscent();
+		FontMetrics metrics = ig2.getFontMetrics(font);
+		int stringWidth =  metrics.stringWidth(FONT_PREVIEW_MESSAGE);
+		int stringHeight = metrics.getAscent() + 5;
+		ig2.dispose();
+		
+		bi = new BufferedImage(stringWidth, stringHeight, BufferedImage.TYPE_INT_ARGB);
+	  ig2 = bi.createGraphics();
+		ig2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		ig2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		ig2.setFont(font);
 		ig2.setPaint(Color.black);
-		ig2.drawString(message, Math.max((width - stringWidth), 0) / 2,  height / 2 + stringHeight / 4);
-		return bi;
+		ig2.drawString(FONT_PREVIEW_MESSAGE, 0, bi.getHeight() / 2 + stringHeight / 4);
+		ig2.dispose();
+		return resize(bi, width, height);
 	}
 
 	/**
-	 * Set the data and uses the text color of the text to show if the value is inherithed or not
+	 * Set the data and uses the text color of the text to show if the value is inherited or not
 	 */
 	@Override
 	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
@@ -174,7 +236,7 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 	@Override
 	protected void createComponent(Composite parent) {
 		if (combo == null) {
-			combo = new WritableComboMenuViewer(parent, WritableComboMenuViewer.NO_IMAGE, "SampleSampleSample");
+			combo = new WritableComboMenuViewer(parent, WritableComboMenuViewer.NO_IMAGE | SWT.RIGHT_TO_LEFT, "SampleSampleSample");
 			combo.getControl().addDisposeListener(new DisposeListener() {
 
 				@Override
