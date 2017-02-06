@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.jface.util.Util;
 import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -412,7 +413,8 @@ public class ColorSelectionWidget {
 	private ToolItem createSingleColors(String text, Composite parent, AlfaRGB color){		
 		new Label(parent, SWT.NONE).setText(text);
 		final ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.WRAP | SWT.LEFT);
-		toolBar.setBackground(parent.getBackground());
+		//for some reasons in ubuntu 16 a not-set background is always return a black color instead of system default
+		if (!Util.isLinux()) toolBar.setBackground(parent.getBackground());
 
 		final ToolItem foreButton = new ToolItem(toolBar, SWT.PUSH);
 		setButtonColor(color, foreButton);
