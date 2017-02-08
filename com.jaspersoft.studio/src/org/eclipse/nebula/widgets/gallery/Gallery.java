@@ -560,6 +560,7 @@ public class Gallery extends Canvas {
 					Label nameLabel = new Label(parent, SWT.NONE);
 					nameLabel.setText(gi.getText());
 					nameLabel.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+					nameLabel.setForeground(display.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
 					// Shift a bit the tooltip position
 					Point[] cursorSizes = display.getCursorSizes();
 					if(cursorSizes.length>0){
