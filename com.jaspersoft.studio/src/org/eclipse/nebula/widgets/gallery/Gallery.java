@@ -533,18 +533,18 @@ public class Gallery extends Canvas {
 		redraw();
 		
 		// Attach a tooltip for the items
-		itemsTooltip = createTooltipForItems();
+		itemsTooltip = createTooltipForItems(this);
 		itemsTooltip.activate();
 	}
 
 	/*
 	 * Creates ToolTip instance associated to the current Gallery widget.
 	 */
-	private ToolTip createTooltipForItems() {
-		return new ToolTip(this) {
+	protected ToolTip createTooltipForItems(final Gallery gal) {
+		return new ToolTip(gal) {
 			@Override
 			protected boolean shouldCreateToolTip(Event event) {
-				GalleryItem gi = Gallery.this.getItem(new Point(event.x, event.y));
+				GalleryItem gi = gal.getItem(new Point(event.x, event.y));
 				if(gi == null || gi.getParentItem() == null){
 					//avoid tooltip on Group
 					return false;
@@ -554,12 +554,14 @@ public class Gallery extends Canvas {
 
 			@Override
 			protected Composite createToolTipContentArea(Event event, Composite parent) {
-				GalleryItem gi = Gallery.this.getItem(new Point(event.x, event.y));
+				GalleryItem gi = gal.getItem(new Point(event.x, event.y));
 				if(gi != null && !gi.getText().isEmpty()){ 
-					Label nameLabel = new Label(parent, SWT.BORDER);
+					Display display = UIUtils.getDisplay();
+					Label nameLabel = new Label(parent, SWT.NONE);
 					nameLabel.setText(gi.getText());
+					nameLabel.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 					// Shift a bit the tooltip position
-					Point[] cursorSizes = UIUtils.getDisplay().getCursorSizes();
+					Point[] cursorSizes = display.getCursorSizes();
 					if(cursorSizes.length>0){
 						this.setShift(new Point(cursorSizes[0].x/2, cursorSizes[0].y/2));
 					}
