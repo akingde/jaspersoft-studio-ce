@@ -212,8 +212,9 @@ public abstract class ChartCustomizerWidget {
 
 				CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone());
 				CustomizerNewWizard wizard = new CustomizerNewWizard(uniqueKey, getExpressionContext(), dto, jConfig, selectedPlot);		
+				String title = com.jaspersoft.studio.components.chart.messages.Messages.ChartCustomizerWidget_selectDialogTitle;
+				wizard.setWindowTitle(title);
 				PersistentLocationWizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);		
-				dialog.setTitle("Create Customizer");
 				dialog.setStoreSetting(false);
 				dialog.setDefaultSize(650, 500);
 				if (dialog.open() == Dialog.OK){
@@ -480,7 +481,8 @@ public abstract class ChartCustomizerWidget {
 			CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone());
 			CustomizerEditWizard wizard = new CustomizerEditWizard(editElement, getExpressionContext(), dto, jConfig);		
 			PersistentLocationWizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);
-			dialog.setTitle("Edit Customizer Properties");
+			String title = com.jaspersoft.studio.components.chart.messages.Messages.ChartCustomizerWidget_editDialogTitle;
+			wizard.setWindowTitle(title);
 			dialog.setStoreSetting(false);
 			dialog.setDefaultSize(650, 500);
 			if (dialog.open() == Dialog.OK){

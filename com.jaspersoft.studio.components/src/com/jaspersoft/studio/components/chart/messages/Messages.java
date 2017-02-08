@@ -90,6 +90,8 @@ public class Messages extends NLS {
 	public static String commoneditAction;
 	public static String commoneditToolTip;
 	public static String ChartAxesWizardPage_chartaxis_wizard_description;
+	public static String ChartCustomizerWidget_editDialogTitle;
+	public static String ChartCustomizerWidget_selectDialogTitle;
 	public static String ChartDataPage_description;
 	public static String ChartDataPage_title;
 	public static String ChartThemeNewWizard_PageDescription;
