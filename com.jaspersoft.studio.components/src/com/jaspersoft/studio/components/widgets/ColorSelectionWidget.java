@@ -414,7 +414,9 @@ public class ColorSelectionWidget {
 		new Label(parent, SWT.NONE).setText(text);
 		final ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.WRAP | SWT.LEFT);
 		//for some reasons in ubuntu 16 a not-set background is always return a black color instead of system default
-		if (!Util.isLinux()) toolBar.setBackground(parent.getBackground());
+		if (!Util.isLinux()) {
+			toolBar.setBackground(parent.getBackground());
+		}
 
 		final ToolItem foreButton = new ToolItem(toolBar, SWT.PUSH);
 		setButtonColor(color, foreButton);
