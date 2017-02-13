@@ -215,6 +215,8 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new CloseSubeditorDeletePolicy());
 		installEditPolicy("Snap Feedback", new JSSSnapFeedBackPolicy());
+		//This edit policy is used only for the showSelection, since the resize will be handle by the 
+		//BandResizableEditPolicy
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new BandMoveEditPolicy() {
 			@Override
 			protected void showSelection() {

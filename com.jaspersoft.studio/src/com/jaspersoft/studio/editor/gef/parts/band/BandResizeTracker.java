@@ -365,34 +365,6 @@ public class BandResizeTracker extends SimpleDragTracker {
 				| STATE_ACCESSIBLE_DRAG_IN_PROGRESS);
 	}
 	
-	/*
-	@Override
-	protected boolean handleButtonDown(int button) {
-		if (((BandEditPart)editpart).getBand().getHeight() == 0){
-			List<EditPart> excluded = new ArrayList<EditPart>();
-			excluded.add(this.editpart);
-			EditPart valid = passHandle(excluded);
-			System.out.println("trovata");
-			 
-		} 
-		return true;
-	};
-
-	
-
-	
-	public EditPart passHandle(List<EditPart> excluded){
-		EditPart part = ((GraphicalViewer) editpart.getViewer()).findObjectAtExcluding(getLocation(),excluded);
-		if (part instanceof BandEditPart)
-			if (((BandEditPart)part).getBand().getHeight()>0){
-				return part;
-			}
-		excluded.add(part);
-		if (part == null)
-			return null;
-		else return passHandle(excluded);
-	}*/
-	
 	/**
 	 * Override the original drag in progress to freeze the drag on the reaching of the maximum 
 	 * band dimension

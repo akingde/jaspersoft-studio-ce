@@ -15,6 +15,7 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -29,7 +30,6 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
-import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -222,13 +222,26 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 	 */
 	@Override
 	protected Command getResizeCommand(ChangeBoundsRequest request) {
-		SetValueCommand resizeCommand = new SetValueCommand();
-		resizeCommand.setLabel("Resize Band");
-		resizeCommand.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
-		MBand band = (MBand) getHost().getModel();
-		resizeCommand.setTarget(band);
-		resizeCommand.setPropertyValue(band.getValue().getHeight() + request.getSizeDelta().height);
-		return resizeCommand;
+		if (request.getSizeDelta().height != 0 && (request.getResizeDirection() == PositionConstants.SOUTH || request.getResizeDirection() == PositionConstants.NORTH)) {	
+			APropertyNode n = (APropertyNode) getHost().getModel();
+			int bandHeight = (Integer) n.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT);
+
+			Rectangle oldBounds = new Rectangle(0, 0, 0, bandHeight);
+
+			PrecisionRectangle rect2 = new PrecisionRectangle(new Rectangle(0, 0, request.getSizeDelta().width, request.getSizeDelta().height));
+			getHostFigure().translateToRelative(rect2);
+
+			int height = 	oldBounds.resize(rect2.width, rect2.height).height;
+			if (height < 0)
+				height = 0;
+
+			SetValueCommand setCommand = new SetValueCommand();
+			setCommand.setTarget(n);
+			setCommand.setLabel("Resize Band");
+			setCommand.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
+			setCommand.setPropertyValue(height);
+			return setCommand;
+		}
+		return null;
 	}
-	
 }
