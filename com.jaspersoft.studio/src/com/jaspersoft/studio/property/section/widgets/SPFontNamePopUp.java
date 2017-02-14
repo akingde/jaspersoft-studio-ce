@@ -236,7 +236,7 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 	@Override
 	protected void createComponent(Composite parent) {
 		if (combo == null) {
-			combo = new WritableComboMenuViewer(parent, WritableComboMenuViewer.NO_IMAGE | SWT.RIGHT_TO_LEFT, "SampleSampleSample");
+			combo = new WritableComboMenuViewer(parent, WritableComboMenuViewer.NO_IMAGE | SWT.RIGHT_TO_LEFT);
 			combo.getControl().addDisposeListener(new DisposeListener() {
 
 				@Override

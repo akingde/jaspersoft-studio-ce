@@ -195,7 +195,7 @@ public class WritableComboMenuViewer implements IMenuProvider {
 	 * @see #NO_IMAGE
 	 * @see #FILTERED
 	 */
-	public WritableComboMenuViewer(Composite parent, int style, String biggerString) {
+	public WritableComboMenuViewer(Composite parent, int style) {
 		dropDownHandle = new WritableComboButton(parent, style);
 		listeners = new ArrayList<ComboItemAction>();
 		dropDownHandle.addOpenListener(new SelectionAdapter() {
