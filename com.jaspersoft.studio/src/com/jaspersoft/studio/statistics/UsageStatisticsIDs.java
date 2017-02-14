@@ -37,4 +37,6 @@ public class UsageStatisticsIDs {
 	public static final String CATEGORY_REPORT = "Report";	
 	
 	public static final String CATEGORY_LANGUAGE = "Language";	
+	
+	public static final String CATEGORY_OPERATIVE_SYSTEM = "OperativeSystem";	
 }

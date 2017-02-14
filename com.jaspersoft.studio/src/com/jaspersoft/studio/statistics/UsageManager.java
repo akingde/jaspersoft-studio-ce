@@ -732,7 +732,9 @@ public class UsageManager {
 			newInstallation = 2;
 			setInstallationInfo(VERSION_INFO, getVersion());
 		}
-
+		//Log the current OS
+		String OS = System.getProperty("os.name");
+		audit_set(OS, UsageStatisticsIDs.CATEGORY_OPERATIVE_SYSTEM, 1);
 		StringBuilder urlBuilder = new StringBuilder();
 		urlBuilder.append(HEARTBEAT_SERVER_URL);
 		urlBuilder.append("?version=");//$NON-NLS-1$

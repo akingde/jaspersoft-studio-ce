@@ -72,12 +72,17 @@ public class VersionCheckResult {
 	/**
 	 * Validate the information to know if the update is available. The update
 	 * is available if the version on the server is not null and greater from
-	 * the currently installed version
+	 * the currently installed version. If there is any error it return 
+	 * false
 	 * 
 	 * @return true if the there is an update available, false otherwise
 	 */
 	public boolean canUpdate(){
-		return serverVersion != null && !serverVersion.equals("ko") && FileUtils.versionCompare(serverVersion, currentVersion) > 0;
+		try{ 
+			return serverVersion != null && !serverVersion.equals("ko") && FileUtils.versionCompare(serverVersion, currentVersion) > 0;
+		} catch (Exception ex){
+			return false;
+		}
 	}
 }
 
