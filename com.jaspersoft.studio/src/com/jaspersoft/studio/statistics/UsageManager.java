@@ -733,7 +733,7 @@ public class UsageManager {
 			setInstallationInfo(VERSION_INFO, getVersion());
 		}
 		//Log the current OS
-		String OS = System.getProperty("os.name");
+		String OS = OSIdentifier.getOSInfo();
 		audit_set(OS, UsageStatisticsIDs.CATEGORY_OPERATIVE_SYSTEM, 1);
 		StringBuilder urlBuilder = new StringBuilder();
 		urlBuilder.append(HEARTBEAT_SERVER_URL);
