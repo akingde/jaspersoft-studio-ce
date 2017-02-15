@@ -73,8 +73,8 @@ import com.jaspersoft.studio.background.action.BackgroundFitAction;
 import com.jaspersoft.studio.background.action.BackgroundKeepRatioAction;
 import com.jaspersoft.studio.background.action.BackgroundTransparencyAction;
 import com.jaspersoft.studio.callout.action.CreatePinAction;
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
-import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.ZoomActualAction;
 import com.jaspersoft.studio.editor.action.CustomDeleteAction;
 import com.jaspersoft.studio.editor.action.EncloseIntoFrameAction;
@@ -1206,10 +1206,12 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 * @return true if the editor is visible, false otherwise
 	 */
 	public boolean isEditorVisible(){
-		JrxmlEditor jrxmlEditor = (JrxmlEditor)SelectionHelper.getActiveJRXMLEditor();
-		if (jrxmlEditor != null && jrxmlEditor.getReportContainer() != null){
-			IEditorPart actieveEditor = jrxmlEditor.getReportContainer().getActiveEditor();
-			return (this == actieveEditor);	
+		AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor)SelectionHelper.getActiveJRXMLEditor();
+		if (jrxmlEditor != null){
+			IEditorPart activeEditor = jrxmlEditor.getActiveInnerEditor();
+			if (activeEditor != null){
+				return (this == activeEditor);
+			}
 		}
 		return true;
 	}

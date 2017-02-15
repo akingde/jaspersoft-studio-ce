@@ -38,6 +38,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
@@ -502,5 +503,20 @@ public class SimpleJRXMLEditor extends AbstractJRXMLEditor implements  IJROBject
 	 */
 	public ReportContainer getReportContainer() {
 		return reportContainer;
+	}
+	
+	/**
+	 * Gets the current active inner editor.
+	 * The {@link ReportContainer} is itself a {@link MultiPageEditorPart}, so
+	 * it can contains different opened editors (i.e. lists, tables, cross-tabs).
+	 * 
+	 * @return the second level active editor
+	 */
+	@Override
+	public IEditorPart getActiveInnerEditor() {
+		IEditorPart iep = getActiveEditor();
+		if (iep instanceof ReportContainer)
+			return ((ReportContainer) iep).getActiveEditor();
+		return iep;
 	}
 }
