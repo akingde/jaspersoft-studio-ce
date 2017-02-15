@@ -1206,8 +1206,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 * @return true if the editor is visible, false otherwise
 	 */
 	public boolean isEditorVisible(){
-		AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor)SelectionHelper.getActiveJRXMLEditor();
-		if (jrxmlEditor != null){
+		IEditorPart editor = SelectionHelper.getActiveJRXMLEditor();
+		if (editor != null && editor instanceof AbstractJRXMLEditor){
+			AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor) editor;
 			IEditorPart activeEditor = jrxmlEditor.getActiveInnerEditor();
 			if (activeEditor != null){
 				return (this == activeEditor);
