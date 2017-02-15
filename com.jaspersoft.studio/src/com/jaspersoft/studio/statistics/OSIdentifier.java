@@ -14,8 +14,17 @@ import org.eclipse.jface.util.Util;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
+/**
+ * This class allow to identify the current operative system. Identifying the OS
+ * is pretty easy in case of mac/windows, but in linux the system property return always
+ * as system name "Linux" and as version its kernel version. This make really hard to understand
+ * which distro of linux is really used. This class attempt to scan for some identifier files
+ * that are defined in the most common distro
+ *
+ */
 public class OSIdentifier {
 	
   private class OSDescription {
@@ -42,14 +51,29 @@ public class OSIdentifier {
     }
   }
 
+  /**
+   * The info of the current OS
+   */
   private OSDescription currentOSDescription;
 
+  /**
+   * The instance of this resolver
+   */
   private final static OSIdentifier INSTANCE;
   
+  /**
+   * Key used in linux to get the distro name from the platform file
+   */
   private static final String KEY_PRETTY_NAME = "PRETTY_NAME";
   
+  /**
+   * Key used in linux to get the distro description from the LSB-RELEASE file 
+   */
   private static final String KEY_LSB_DISTRIB_DESCRIPTION = "DISTRIB_DESCRIPTION";
-  
+
+  /**
+   * Key used in linux to get the distro name from the LSB-RELEASE file 
+   */
   private static final String KEY_LSB_DISTRIB_CODENAME = "DISTRIB_CODENAME";
   
   static{
@@ -59,38 +83,75 @@ public class OSIdentifier {
     INSTANCE = new OSIdentifier(name, version, architecture);
   }
   
+  /**
+   * Constructor, it is protected because the class is created as a singleton
+   */
   protected OSIdentifier(final String name, final String version, final String arch) {
-    if (name != null) {
-      if (Util.isWindows()) {
-        currentOSDescription = new OSDescription(name, version, arch);
-      } else if (Util.isMac()) {
-        this.currentOSDescription = new OSDescription("MacOS", version, arch);
-      } else if (Util.isLinux()) {
-        initLinuxOsInfo(name, version, arch);
-      }         
+    try{
+	  	if (name != null) {
+	      if (Util.isWindows()) {
+	        currentOSDescription = new OSDescription(name, version, arch);
+	      } else if (Util.isMac()) {
+	        this.currentOSDescription = new OSDescription("MacOS", version, arch);
+	      } else if (Util.isLinux()) {
+	        initLinuxOsInfo(name, version, arch);
+	      }         
+	    }
+    } catch (Exception ex){
+    	//This class is initialized during the JaspersoftStudioPlugin initialization, this
+    	//its instance field could no be assigned yet, so relay to the JasperReportsPlugin to log
+    	//the exception
+    	JasperReportsPlugin.getDefault().logError(ex);
+    	ex.printStackTrace();
+    	currentOSDescription = null;
     }
     if (currentOSDescription == null){
       currentOSDescription = new OSDescription(name, version, arch);
     }
   }
 
+  /**
+   * Return an informative name for the current OS
+   * 
+   * @return a not null string
+   */
   public static String getName() {
     return INSTANCE.currentOSDescription.getName();
   }
 
+  /**
+   * Return the architecture for the current OS
+   * 
+   * @return a not null string
+   */
   public static String getArchitecture() {
     return INSTANCE.currentOSDescription.getArchitecture();
   }
 
+  /**
+   * Return a version for the current OS
+   * 
+   * @return a not null string
+   */
   public static String getVersion() {
     return INSTANCE.currentOSDescription.getVersion();
   }
 
+  /**
+   * Return an informative description for the current OS
+   * 
+   * @return a not null string
+   */
   public static String getOSInfo(){
   	return getName() + " " + getVersion() + " " + getArchitecture();
   }
 
-  private void initLinuxOsInfo(final String name, final String version, final String arch) {
+  /**
+   * Search for linux identification file and try to read specific information
+   * of the current distribution
+   * 
+   */
+  private void initLinuxOsInfo(String name, String version, String arch) {
     OSDescription osInfo;
     // The most likely is to have a LSB compliant distro
     osInfo = getPlatformNameFromLsbRelease(name, version, arch);
@@ -135,7 +196,7 @@ public class OSIdentifier {
     this.currentOSDescription = osInfo;
   }
 
-  private String getFileEndingWith(final File dir, final String fileEndingWith) {
+  private String getFileEndingWith(File dir, final String fileEndingWith) {
     File[] fileList = dir.listFiles(new FilenameFilter() {
       public boolean accept(File dir, String filename) {
         return filename.endsWith(fileEndingWith);
@@ -190,7 +251,7 @@ public class OSIdentifier {
     return result;
   }
 
-  private OSDescription readPlatformName(final String name, final String version, final String arch, final BufferedReader br) throws IOException {
+  private OSDescription readPlatformName(String name, String version, String arch, BufferedReader br) throws IOException {
     String line;
     String lineToReturn = null;
     int lineNb = 0;
@@ -205,7 +266,7 @@ public class OSIdentifier {
     return new OSDescription(lineToReturn, version, arch);
   }
 
-  private OSDescription readPlatformNameFromLsb(final String name, final String version, final String arch, final BufferedReader br) throws IOException {
+  private OSDescription readPlatformNameFromLsb(String name, String version, String arch, BufferedReader br) throws IOException {
     String distribDescription = null;
     String distribCodename = null;
 
