@@ -236,6 +236,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 									MessageDialog.openError(getShell(), Messages.NewSubreportPage_FileSelectionErrorTitle,
 											Messages.NewSubreportPage_FileSelectionErrorMsg);
 									setSelectedFile(null);
+									return;
 								} else {
 									if (isJRXML != null && !isJRXML) {
 										JasperReport report = (JasperReport) JRLoader.loadObject(jConf, new ByteArrayInputStream(fByte));
@@ -249,10 +250,12 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 						} catch (JRException e1) {
 							e1.printStackTrace();
 						}
-					} else
+					} else {
 						setSelectedFile(null);
-					if (subreportExpressionEditor != null)
+					}
+					if (subreportExpressionEditor != null) {
 						subreportExpressionEditor.setExpression(selectedSubreportExpression);
+					}
 					storeSettings();
 				}
 			}
