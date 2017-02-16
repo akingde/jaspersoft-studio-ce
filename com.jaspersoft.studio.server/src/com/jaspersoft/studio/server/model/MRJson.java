@@ -39,6 +39,6 @@ public class MRJson extends AFileResource {
 
 	@Override
 	public String getDefaultFileExtension() {
-		return "css";
+		return "json";
 	}
 }
