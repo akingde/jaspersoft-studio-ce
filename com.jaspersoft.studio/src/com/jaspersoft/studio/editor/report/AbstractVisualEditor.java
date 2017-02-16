@@ -287,6 +287,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		super.createGraphicalViewer(rulerComp);
 		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
 	}
+	
+	/**
+	 * Return the ruler composite, the ruler has the possibility to 
+	 * layout the complete editor area trought the layout() method
+	 */
+	public JDRulerComposite getRuler(){
+		return rulerComp;
+	}
 
 	/*
 	 * (non-Javadoc)

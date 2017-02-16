@@ -403,8 +403,10 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 
 			@Override
 			public void partActivated(IWorkbenchPartReference partRef) {
-				if (partRef.getPart(false) == getSite().getPart())
-					partActivated = true;
+				if (partRef.getPart(false) == getSite().getPart()){
+					editorActivated();
+				}
+					
 			}
 
 			@Override
@@ -417,8 +419,9 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 
 			@Override
 			public void partDeactivated(IWorkbenchPartReference partRef) {
-				if (partRef.getPart(false) == getSite().getPart())
-					partActivated = false;
+				if (partRef.getPart(false) == getSite().getPart()){
+					editorDeactivated();
+				}
 			}
 
 			@Override
@@ -427,10 +430,16 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 
 			@Override
 			public void partHidden(IWorkbenchPartReference partRef) {
+				if (partRef.getPart(false) == getSite().getPart()){
+					editorHidden();
+				}
 			}
 
 			@Override
 			public void partVisible(IWorkbenchPartReference partRef) {
+				if (partRef.getPart(false) == getSite().getPart()){
+					editorVisible();
+				}
 			}
 
 			@Override
@@ -449,6 +458,23 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 		this.partActivated = partActivated;
 	}
 
+	protected void editorActivated(){
+		partActivated = true;
+	}
+	
+	protected void editorDeactivated(){
+		partActivated = false;
+	}
+	
+	protected void editorVisible(){
+		
+	}
+	
+	protected void editorHidden(){
+		
+	}
+	
+	
 	/**
 	 * Closes the editor if there are some errors.
 	 */

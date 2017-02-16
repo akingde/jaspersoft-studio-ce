@@ -20,6 +20,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
 import com.jaspersoft.studio.editor.report.ReportContainer;
@@ -193,5 +194,17 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 	@Override
 	protected INode createEditorModel() {
 		return ReportFactory.createReport(jrContext);
+	}
+	
+	/**
+	 * When the editor became visible layout the internal editors
+	 */
+	@Override
+	protected void editorVisible() {
+		super.editorActivated();
+		IEditorPart part = getActiveInnerEditor();
+		if (part instanceof AbstractVisualEditor){
+			((AbstractVisualEditor)part).getRuler().layout(true);
+		}
 	}
 }
