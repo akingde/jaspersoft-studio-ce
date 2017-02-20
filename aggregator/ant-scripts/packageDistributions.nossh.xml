@@ -121,6 +121,7 @@
 		<!-- create debian package -->
 		<antcall target="createDeb">
 			<param name="architecture" value="i386"/>
+			<param name="debpackage" value="jaspersoftstudio"/>
 			<param name= "zipdir.linux" value = "${dirlocation.linux.x86}/"/>
 			<param name="jre.feature.location" value="${jre.location.linux32}"/>
 		</antcall>
@@ -160,6 +161,7 @@
 		<!-- create debian package -->
 		<antcall target="createDeb">
 			<param name="architecture" value="amd64"/>
+			<param name="debpackage" value="jaspersoftstudio"/>
 			<param name= "zipdir.linux" value = "${dirlocation.linux.x86_64}/"/>
 			<param name="jre.feature.location" value="${jre.location.linux64}"/>
 		</antcall>
@@ -264,7 +266,7 @@ exit 0;</echo>
 				categories="Office"/>
 		<deb 
 				todir="${dist}" 
-				package="jaspersoftstudio"
+				package="${debpackage}"
 				section="editors" 
 				postinst="${dist}/debian/postinst" 
 				architecture="${architecture}"
@@ -283,6 +285,8 @@ exit 0;</echo>
 		</deb>
 
 		<delete dir="${dist}/debian" />
+		<!-- rename file to TIBCO compliant policy -->
+		<move file="${dist}/${debpackage}_${jss.version}_${architecture}.deb" tofile="${dist}/${jss.distro.prefix}_${jss.version}_linux_${architecture}.deb" />
 		<!-- END DEB CREATION -->
 	</target>
 </project>
