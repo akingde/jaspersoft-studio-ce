@@ -101,4 +101,6 @@ public class ContextHelpIDs {
 	public static final String WIZARD_DEFAULT_DATA_ADAPTER = PREFIX.concat("defaultDA");
 	
 	public static final String WIZARD_IMPORT_WORKSPACE = PREFIX.concat("importWorkspace");
+	
+	public static final String WIZARD_SELECT_BOOK_SECTIONS = PREFIX.concat("select_book_sections");
 }

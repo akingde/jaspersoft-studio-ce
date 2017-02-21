@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.book.bundle.BookTemplateBundle;
 import com.jaspersoft.studio.book.messages.Messages;
 import com.jaspersoft.studio.wizards.CongratulationsWizardPage;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
 import com.jaspersoft.studio.wizards.datasource.ReportWizardDataSourceDynamicPage;
@@ -95,7 +96,7 @@ public class BookWizardSectionsDynamicPage extends JSSWizardPage {
 
 	@Override
 	protected String getContextName() {
-		return null;
+		return ContextHelpIDs.WIZARD_SELECT_BOOK_SECTIONS;
 	}
 	
 	/**
