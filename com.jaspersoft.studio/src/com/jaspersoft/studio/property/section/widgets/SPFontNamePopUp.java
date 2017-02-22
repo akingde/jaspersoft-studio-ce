@@ -134,7 +134,7 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 	 */
 	public static BufferedImage createFontImage(final String fontName, FontUtil util) {
 		int height = 16;
-		int width = Util.isLinux() ? 35  : 55;
+		int width = 55;
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	  Graphics2D ig2 = bi.createGraphics();
 		ig2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -150,6 +150,8 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 		int stringHeight = metrics.getAscent() + 5;
 		ig2.dispose();
 		
+		if (stringWidth <= 0) stringWidth = width;
+		if (stringHeight <= 0) stringHeight = height;
 		bi = new BufferedImage(stringWidth, stringHeight, BufferedImage.TYPE_INT_ARGB);
 	  ig2 = bi.createGraphics();
 		ig2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
