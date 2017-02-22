@@ -301,6 +301,9 @@ public class DefaultManager {
 	private void addAll(INode parent){
 		for(INode node : parent.getChildren()){
 			if (node instanceof MGraphicElement){
+				MGraphicElement graphicalNode = (MGraphicElement)node;
+				CustomStyleResolver.copyInheritedAttributes(graphicalNode, graphicalNode.getValue());
+				graphicalNode.setStyle(null);
 				selectedDefaultsMap.put(node.getClass(), (MGraphicElement)node);
 			}
 			addAll(node);
