@@ -11,15 +11,12 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
@@ -33,32 +30,39 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Menu;
-import org.mihalis.opal.utils.StringUtil;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
 
+import net.sf.jasperreports.eclipse.ui.JSSTableCombo;
+
 /**
- * Extension of an swt widget to handle only numeric values. It uses different widgets in 
- * windows and other OS. In windows it is used internally a CCombo, this because there is an 
- * abnormal behavior in windows: when the combo is opened a modify listener is triggered. This
- * happen only on windows, the CCcombo is not affected by this. In the other OS this bug is not
- * present on both Combo and CCombo, so a base combo is used since it has a better look & feel.
+ * Extension of an swt widget to handle only numeric values. The combo is painted and
+ * the menu shown when clicking the arrow is obtained trough a table
  * 
  * @author Orlandin Marco
  *
  */
-public class NumericCombo extends Composite {
+public class NumericTableCombo extends Composite {
 	
 	/**
-	 * The combo control used in MacOS/Linux
+	 * Enumeration used as a result of the validation, valid it means the inserted text is 
+	 * a valid number, not valid means it can not be formatted as a number, out of bounds means
+	 * it is a valid number but exceeds the min or max accepted values
 	 */
-	private Combo controlCombo = null;
+	private enum VALIDATION_RESULT {VALID, NOT_VALID, OUT_OF_BOUNDS};
 	
 	/**
-	 * The combo control used on windows
+	 * The items inside the combo
 	 */
-	private CCombo controlCCombo = null;
+	private String[] items = new String[0];
+	
+	/**
+	 * The combo control
+	 */
+	private JSSTableCombo controlCombo = null;
 	
 	/**
 	 * The listeners on this widget
@@ -84,11 +88,6 @@ public class NumericCombo extends Composite {
 	 * Flag to know if the shown value is inherited or not
 	 */
 	private boolean isInherited = false;
-	
-	/**
-	 * Store the original color of the widget
-	 */
-	private Color currentColor = null;
 	
 	/**
 	 * Flag used to know if the trailing zeroes after the decimal separator should be removed or not
@@ -128,6 +127,21 @@ public class NumericCombo extends Composite {
 	private static Point defaultSize = null;
 	
 	/**
+	 * The background color to use when there aren't validation errors
+	 */
+	private Color defaultBackgroundColor;
+	
+	/**
+	 * Store the original color of the widget
+	 */
+	private Color foregroundColor = null;
+	
+	/**
+	 * The status of the value displayed
+	 */
+	private VALIDATION_RESULT currentState = VALIDATION_RESULT.VALID;
+	
+	/**
 	 * Custom layout used to place the elements inside the composite. This will remove 
 	 * every unnecessary space to have the combo completely fit the container area
 	 */
@@ -161,11 +175,9 @@ public class NumericCombo extends Composite {
 	private VerifyListener inputVerifier = new VerifyListener() {
 		@Override
 		public void verifyText(final VerifyEvent e) {
-			if (controlCCombo != null) {
-				e.doit = verifyEntryAndStoreValueCCombo(e.text, e.keyCode);
-			} else if (controlCombo != null) {
-				e.doit = verifyEntryAndStoreValueCombo(e.text, e.keyCode);
-			}
+			//Update the validation status
+			currentState = verifyEntryAndStoreValue(e.text, e.start, e.end);
+			e.doit = currentState != VALIDATION_RESULT.NOT_VALID;
 		}
 	};
 	
@@ -177,25 +189,15 @@ public class NumericCombo extends Composite {
 		
 		@Override
 		public void modifyText(ModifyEvent e) {
-			fireListeners();
+			if (currentState == VALIDATION_RESULT.VALID){
+				//Fire the listeners only if the value is valid
+				fireListeners();
+			}
 			//open the flag to fire the listeners
 			changedAfterFocus = true;
 		}
 	};
-	
-	/**
-	 * Selection listeners called when the value in the text area change, fire all the attached
-	 * selection listeners
-	 */
-	private SelectionListener selectionNotifier = new SelectionAdapter() {
-		
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fireListeners();
-			//open the flag to fire the listeners
-			changedAfterFocus = true;
-		}
-	};
+
 	
 	/**
 	 * Create the combo control
@@ -206,12 +208,13 @@ public class NumericCombo extends Composite {
 	 * @param decimalDigitsAccepted maximum number of decimal digits accepted. Set this to 0 mean no decimal digits, must be greater or equal of 
 	 * decimalDigitsShown	 
 	 */
-	public NumericCombo(Composite parent, int style, int decimalDigitsShown, int decimalDigitsAccepted){
+	public NumericTableCombo(Composite parent, int style, int decimalDigitsShown, int decimalDigitsAccepted){
 		super(parent, SWT.NONE);
 		createControls();
-		currentColor = getForeground();
+		foregroundColor = getForeground();
 		this.formatter = new ValidatedDecimalFormat(decimalDigitsShown, decimalDigitsAccepted);
 		addListeners();
+		//defaultBackgroundColor = parent.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
 	}
 	
 	/**
@@ -221,13 +224,14 @@ public class NumericCombo extends Composite {
 	 * @param formatter the formatter for this control
 	 * @param style the style bits, the supported ones are the same of a standard SWT text widget
 	 */
-	public NumericCombo(Composite parent, NumberFormat formatter, int style) {
+	public NumericTableCombo(Composite parent, NumberFormat formatter, int style) {
 		super(parent, SWT.NONE);
 		createControls();
-		currentColor = getForeground();
+		foregroundColor = getForeground();
 		addListeners();
 		this.formatter = formatter;
 		Assert.isTrue(formatter != null, "The formatter can't be null");
+		//defaultBackgroundColor = parent.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
 	}
 	
 	/**
@@ -241,11 +245,19 @@ public class NumericCombo extends Composite {
 			defaultSize = tempCombo.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			tempCombo.dispose();
 		}
-		if (Util.isWindows()){
-			controlCCombo = new CCombo(this, SWT.BORDER);
-		} else {
-			controlCombo = new Combo(this, SWT.DROP_DOWN);
-		}
+		controlCombo = new JSSTableCombo(this, JSSTableCombo.STRIGHT_CORNER){
+			@Override
+			protected void setTableData(Table table) {
+				refreshTableItems(table);
+			}
+		};
+		defaultBackgroundColor = ColorConstants.white;
+		// tell the TableCombo that I want 2 blank columns auto sized.
+		controlCombo.defineColumns(1);
+		// set which column will be used for the selected item.
+		controlCombo.setDisplayColumnIndex(0);
+		controlCombo.setShowTableHeader(false);
+		controlCombo.setShowColorWithinSelection(false);
 		layout();
 	}
 	
@@ -255,7 +267,6 @@ public class NumericCombo extends Composite {
 	protected void addListeners(){
 		addVerifyListener(inputVerifier);
 		addModifyListener(inputNotifier);
-		addComboSelectionListener(selectionNotifier);
 		addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(final FocusEvent e) {
@@ -318,10 +329,10 @@ public class NumericCombo extends Composite {
 	public void setInherited(boolean value){
 		if (isInherited != value){
 			if (value){
-				currentColor = getForeground();
+				foregroundColor = getForeground();
 				setComboForeground(ColorConstants.gray);
 			} else {
-				setComboForeground(currentColor);
+				setComboForeground(foregroundColor);
 			}
 			this.isInherited = value;
 		}
@@ -333,18 +344,13 @@ public class NumericCombo extends Composite {
 	 */
 	@Override
 	public void setForeground(Color color) {
-		currentColor = getForeground();
+		foregroundColor = getForeground();
 		if (!isInherited) setComboForeground(color);
 	}
 	
 	@Override
 	public Color getForeground() {
-		if (controlCombo != null){
-			return controlCombo.getForeground();
-		} else if (controlCCombo != null){
-			controlCCombo.getForeground();
-		}
-		return null;
+		return controlCombo.getForeground();
 	}
 	
 	/**
@@ -363,6 +369,24 @@ public class NumericCombo extends Composite {
 		this.setMinimum(minimum);
 		this.setMaximum(maximum);
 		setValue(selection);
+	}
+	
+	/**
+	 * Check if two number are the same, they are equals if they value is 
+	 * the same or if the formatted value with the current formatter is
+	 * the same
+	 * 
+	 * @param newValue the first value
+	 * @param storedValue the second value
+	 * @return  true if the values have the same textual representation, false otherwise
+	 */
+	protected boolean hasSameValue(Number newValue, Number storedValue){
+		if (ModelUtils.safeEquals(newValue, storedValue)) return true;
+		String newFormat = null;
+		if (newValue != null) newFormat = formatNumber(newValue);
+		String storedFormat = null;
+		if (storedValue != null) storedFormat = formatNumber(storedValue);
+		return ModelUtils.safeEquals(newFormat, storedFormat);
 	}
 	
 	/**
@@ -387,24 +411,6 @@ public class NumericCombo extends Composite {
 			result = result.replaceAll("0*$", "").replaceAll(ValidatedDecimalFormat.PATTERN_DECIMAL_SEPARATOR + "$", "");
 		}
 		return result;
-	}
-	
-	/**
-	 * Check if two number are the same, they are equals if they value is 
-	 * the same or if the formatted value with the current formatter is
-	 * the same
-	 * 
-	 * @param newValue the first value
-	 * @param storedValue the second value
-	 * @return  true if the values have the same textual representation, false otherwise
-	 */
-	protected boolean hasSameValue(Number newValue, Number storedValue){
-		if (ModelUtils.safeEquals(newValue, storedValue)) return true;
-		String newFormat = null;
-		if (newValue != null) newFormat = formatNumber(newValue);
-		String storedFormat = null;
-		if (storedValue != null) storedFormat = formatNumber(storedValue);
-		return ModelUtils.safeEquals(newFormat, storedFormat);
 	}
 	
 	/**
@@ -449,20 +455,26 @@ public class NumericCombo extends Composite {
 	protected void setValue(Number selection, boolean formatText) {
 		this.checkWidget();
 		if (selection != null){	
-			if (selection.doubleValue() < minimum) {
-				selection = this.minimum;
-			} else if (selection.doubleValue() > maximum) {
-				selection = this.maximum;
+			if (selection.doubleValue() < minimum || selection.doubleValue() > maximum) {
+				//out of bounds, update the validation status
+				updateBackground(ColorConstants.red);
+				currentState = VALIDATION_RESULT.OUT_OF_BOUNDS;
+			} else {
+				//valid value, update the validation status
+				updateBackground(defaultBackgroundColor);
+				currentState = VALIDATION_RESULT.VALID;
+				storedValue = selection;
 			}
-			storedValue = selection;
 			if (formatText) {
 				setText(formatNumber(selection));
 			} else {
 				setText(selection.toString());
 			}
-			setSelection(new Point(0, getText().length()));
 		} else {
 			if (isNullable){
+				//valid value, update the validation status
+				updateBackground(defaultBackgroundColor);
+				currentState = VALIDATION_RESULT.VALID;
 				storedValue = null;
 				if (defaultValue != null){
 					if (formatText) {
@@ -473,7 +485,6 @@ public class NumericCombo extends Composite {
 				} else {
 					setText("");
 				}
-				setSelection(new Point(0, getText().length()));
 			} else {
 				throw new IllegalArgumentException("The widget can not accept null values when the isNullable property is false");
 			}
@@ -481,60 +492,17 @@ public class NumericCombo extends Composite {
 	}
 	
 	/**
-	 * Verify the entry and store the value in the field storedValue, this is used for the ccombo
+	 * Handle the input of the user and output the final string 
 	 * 
-	 * @param entry entry to check
-	 * @param keyCode code of the typed key
-	 * @return <code>true</code> if the entry if correct, <code>false</code>
-	 *         otherwise
+	 * @param entry the key pressed by the user
+	 * @param keyCode the code of the key pressed by the user
+	 * @param text the current text on the widget
+	 * @param cursorSelection the current cursor selection on the widget
+	 * @return the text that should be on the widget after the key is pressed
 	 */
-	private boolean verifyEntryAndStoreValueCCombo(final String entry, final int keyCode) {
-		String work = "";
-		if (keyCode == SWT.DEL) {
-			Point cursorSelection = controlCCombo.getSelection();
-			String text = getText();
-			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != text.length()){
-				work = StringUtil.removeCharAt(getText(), cursorSelection.x);
-			} else {
-				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
-			}
-		} else if (keyCode == SWT.BS) {
-			Point cursorSelection = controlCCombo.getSelection();
-			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != 0){
-				work = StringUtil.removeCharAt(getText(), cursorSelection.x - 1);
-			} else if (cursorSelection.x != cursorSelection.y) {
-				String text = getText();
-				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
-			}
-		} else if (keyCode == 0) {
-			work = entry;
-		} else {
-			Point cursorSelection = controlCCombo.getSelection();
-			if (cursorSelection.x == cursorSelection.y){
-				work = StringUtil.insertString(getText(), entry, cursorSelection.x);
-			} else if (cursorSelection.x != cursorSelection.y) {
-				String text = getText();
-				work = text.substring(0, cursorSelection.x) + entry + text.substring(cursorSelection.y, text.length());
-			}
-		}
-		work = work.trim();
-		
-		if (work.isEmpty()){
-			if (isNullable){
-				storedValue = null;
-			} else {
-				return false;
-			}
-		} else {
-			try {			
-				Number newValue = formatter.parse(work);
-				if (newValue.doubleValue() < minimum || newValue.doubleValue() > maximum) return false;
-				storedValue = newValue;
-			} catch (ParseException nfe) {
-				return false;
-			}
-		}
-		return true;
+	protected String updateString(final String entry, String text, int start, int end){
+		String work = text.substring(0, start) + entry + text.substring(end);
+		return work;
 	}
 	
 	/**
@@ -545,47 +513,43 @@ public class NumericCombo extends Composite {
 	 * @return <code>true</code> if the entry if correct, <code>false</code>
 	 *         otherwise
 	 */
-	private boolean verifyEntryAndStoreValueCombo(final String entry, final int keyCode) {
-		String work = "";
-		if (keyCode == SWT.DEL) {
-			work = StringUtil.removeCharAt(getText(), getCaretPosition());
-		} else if (keyCode == SWT.BS) {
-			Point cursorSelection = controlCombo.getSelection();
-			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != 0){
-				work = StringUtil.removeCharAt(getText(), getCaretPosition() - 1);
-			} else if (cursorSelection.x != cursorSelection.y) {
-				String text = getText();
-				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
-			}
-		} else if (keyCode == 0) {
-			work = entry;
-		} else {
-			Point cursorSelection = controlCombo.getSelection();
-			if (cursorSelection.x == cursorSelection.y){
-				work = StringUtil.insertString(getText(), entry, cursorSelection.x);
-			} else if (cursorSelection.x != cursorSelection.y) {
-				String text = getText();
-				work = text.substring(0, cursorSelection.x) + entry + text.substring(cursorSelection.y, text.length());
-			}
-		}
-		work = work.trim();
+	private VALIDATION_RESULT verifyEntryAndStoreValue(final String entry, int start, int end) {
+		String text = getText();
+		String work = updateString(entry, text, start, end);
 		
 		if (work.isEmpty()){
 			if (isNullable){
 				storedValue = null;
 			} else {
-				return false;
+				return VALIDATION_RESULT.NOT_VALID;
 			}
 		} else {
 			try {			
 				Number newValue = formatter.parse(work);
-				if (newValue.doubleValue() < minimum || newValue.doubleValue() > maximum) return false;
-				storedValue = newValue;
+				if (newValue.doubleValue() < minimum || newValue.doubleValue() > maximum) {
+					updateBackground(ColorConstants.red);
+					return VALIDATION_RESULT.OUT_OF_BOUNDS;
+				} else {
+					storedValue = newValue;
+				}
 			} catch (ParseException nfe) {
-				return false;
+				return VALIDATION_RESULT.NOT_VALID;
 			}
 		}
-		return true;
+		updateBackground(defaultBackgroundColor);
+		return VALIDATION_RESULT.VALID;
+	}
+	
+	/**
+	 * On macos the update of the color need some additional operation because of an SWT bug
+	 * (https://bugs.eclipse.org/bugs/show_bug.cgi?id=346361). If the widget is focused it need
+	 * to lose the focus to be updated correctly. For this reason the widget is forced to loose
+	 * the focus and the it will regain it
+	 * 
+	 * @param color the color to set
+	 */
+	protected void updateBackground(Color color){
+		controlCombo.setBackground(color);
 	}
 
 	/**
@@ -798,14 +762,12 @@ public class NumericCombo extends Composite {
 	}
 	
 	public void select(int index) {
-		removeComboSelectionListener(selectionNotifier);
 		comboSelect(index);
 		int count = getItemCount ();
 		if (0 <= index && index < count) {
 			if (index == getSelectionIndex()) return;
 			setValue(Double.parseDouble(getItem(index)));
 		}
-		addComboSelectionListener(selectionNotifier);
 	}
 	
 	/**
@@ -817,43 +779,24 @@ public class NumericCombo extends Composite {
 	public void setRemoveTrailZeroes(boolean value){
 		this.removeTrailZeroes = value;
 	}
-	
+		
 	//THE FOLLOWING METHODS RECRATE SOME API OF THE COMBO AND CALL THEM ON
 	//THE APPROPRIATE COMBO, DEPENDING ON WHICH WAS INITIALIZED
 
 	protected void comboSelect(int index){
-		if (controlCombo != null){
-			controlCombo.select(index);
-		} else if (controlCCombo != null){
-			controlCCombo.select(index);
-		}
+		controlCombo.select(index);
 	}
 	
 	public int getItemCount(){
-		if (controlCombo != null){
-			return controlCombo.getItemCount();
-		} else if (controlCCombo != null){
-			return controlCCombo.getItemCount();
-		}
-		return 0;
+		return controlCombo.getItemCount();
 	}
 	
 	public int getSelectionIndex(){
-		if (controlCombo != null){
-			return controlCombo.getSelectionIndex();
-		} else if (controlCCombo != null){
-			return controlCCombo.getSelectionIndex();
-		}
-		return 0;
+		return controlCombo.getSelectionIndex();
 	}
 	
 	public String getItem(int index){
-		if (controlCombo != null){
-			return controlCombo.getItem(index);
-		} else if (controlCCombo != null){
-			return controlCCombo.getItem(index);
-		}
-		return null;
+		return controlCombo.getItem(index);
 	}
 	
 	public void setItems(String[] items) {
@@ -864,154 +807,83 @@ public class NumericCombo extends Composite {
 		addModifyListener(inputNotifier);
 	}
 	
-	protected void setComboItems(String[] items){
-		if (controlCombo != null){
-			controlCombo.setItems(items);
-		} else if (controlCCombo != null){
-			controlCCombo.setItems(items);
+	private void refreshTableItems(Table table){
+		table.clearAll();
+		for(String item : items){
+			TableItem tableItem = new TableItem(table, SWT.NONE);
+			tableItem.setText(0, item);
 		}
+	}
+	
+	protected void setComboItems(String[] items){
+		this.items = items;
+		refreshTableItems(controlCombo.getTable());
 	}
 	
 	public int getCaretPosition(){
-		if (controlCombo != null){
-			return controlCombo.getCaretPosition();
-		} else if (controlCCombo != null){
-			return controlCCombo.getSelection().y;
-		}
-		return 0;
+		return controlCombo.getCaretPosition();
+	}
+	
+	protected void addVerifyListener(VerifyListener listener){
+		controlCombo.addVerifyListener(listener);
+	}
+	
+	protected void removeVerifyListener(VerifyListener listener){
+		controlCombo.removeVerifyListener(listener);
 	}
 	
 	public String getText(){
-		if (controlCombo != null){
-			return controlCombo.getText();
-		} else if (controlCCombo != null){
-			return controlCCombo.getText();
-		}
-		return null;
+		return controlCombo.getText();
 	}
 	
 	@Override
 	public void setMenu(Menu menu) {
-		if (controlCombo != null){
-			controlCombo.setMenu(menu);
-		} else if (controlCCombo != null){
-			controlCCombo.setMenu(menu);
-		}
+		controlCombo.setMenu(menu);
 	}
 	
 	@Override
 	public Menu getMenu() {
-		if (controlCombo != null){
-			controlCombo.getMenu();
-		} else if (controlCCombo != null){
-			controlCCombo.getMenu();
-		}
-		return null;
-	}
-	
-	protected void addVerifyListener(VerifyListener listener){
-		if (controlCombo != null){
-			controlCombo.addVerifyListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.addVerifyListener(listener);
-		}
+		return controlCombo.getMenu();
 	}
 	
 	protected void addModifyListener(ModifyListener listener){
-		if (controlCombo != null){
-			controlCombo.addModifyListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.addModifyListener(listener);
-		}
-	}
-	
-	protected void removeVerifyListener(VerifyListener listener){
-		if (controlCombo != null){
-			controlCombo.removeVerifyListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.removeVerifyListener(listener);
-		}
+		controlCombo.addModifyListener(listener);
 	}
 	
 	protected void removeModifyListener(ModifyListener listener){
-		if (controlCombo != null){
-			controlCombo.removeModifyListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.removeModifyListener(listener);
-		}
-	}
-	
-	protected void addComboSelectionListener(SelectionListener listener){
-		if (controlCombo != null){
-			controlCombo.addSelectionListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.addSelectionListener(listener);
-		}
-	}
-	
-	protected void removeComboSelectionListener(SelectionListener listener){
-		if (controlCombo != null){
-			controlCombo.removeSelectionListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.removeSelectionListener(listener);
-		}
+		controlCombo.removeModifyListener(listener);
 	}
 	
 	@Override
 	public void addFocusListener(FocusListener listener){
-		if (controlCombo != null){
-			controlCombo.addFocusListener(listener);
-		} else if (controlCCombo != null){
-			controlCCombo.addFocusListener(listener);
-		}
+		controlCombo.addFocusListener(listener);
 	}
 	
 	protected void setComboText(String text){
-		if (controlCombo != null){
-			controlCombo.setText(text);
-		} else if (controlCCombo != null){
-			controlCCombo.setText(text);
-		}
+		controlCombo.setText(text);
 	}
 	
 	protected void comboCut(){
-		if (controlCombo != null){
-			controlCombo.cut();
-		} else if (controlCCombo != null){
-			controlCCombo.cut();
-		}
+		controlCombo.cut();
 	}
 	
 	protected void comboPaste(){
-		if (controlCombo != null){
-			controlCombo.paste();
-		} else if (controlCCombo != null){
-			controlCCombo.paste();
-		}
+		controlCombo.paste();
 	}
 	
 	public void setSelection(Point selection){
-		if (controlCombo != null){
-			controlCombo.setSelection(selection);
-		} else if (controlCCombo != null){
-			controlCCombo.setSelection(selection);
-		}
+		controlCombo.setSelection(selection);
 	}
 	
 	@Override
 	public void setBackground(Color color) {
-		if (controlCombo != null){
+		if (currentState != VALIDATION_RESULT.OUT_OF_BOUNDS) {
 			controlCombo.setBackground(color);
-		} else if (controlCCombo != null){
-			controlCCombo.setBackground(color);
 		}
+		defaultBackgroundColor = color;
 	}
 	
 	protected void setComboForeground(Color color){
-		if (controlCombo != null){
-			controlCombo.setForeground(color);
-		} else if (controlCCombo != null){
-			controlCCombo.setForeground(color);
-		}
+		controlCombo.setForeground(color);
 	}
 }

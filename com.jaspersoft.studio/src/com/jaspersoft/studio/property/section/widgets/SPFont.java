@@ -4,6 +4,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -12,10 +14,9 @@ import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,6 +28,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
@@ -34,17 +36,25 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
-import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
+import com.jaspersoft.studio.property.combomenu.ComboItem;
+import com.jaspersoft.studio.property.combomenu.ComboItemAction;
+import com.jaspersoft.studio.property.combomenu.ComboItemSeparator;
+import com.jaspersoft.studio.property.combomenu.WritableComboMenuViewer;
+import com.jaspersoft.studio.property.combomenu.WritableComboTableViewer;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.swt.widgets.NumericCombo;
+import com.jaspersoft.studio.utils.ImageUtils;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignFont;
+import net.sf.jasperreports.engine.fonts.FontUtil;
 import net.sf.jasperreports.engine.util.StyleResolver;
 
 /**
@@ -59,7 +69,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			if (event.getProperty().equals(FontsPreferencePage.FPP_FONT_LIST)) {
 				if (parentNode != null)
-					fontName.setItems(parentNode.getJasperConfiguration().getFontList());
+					refreshFont();
 			}
 		}
 	}
@@ -69,7 +79,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	/**
 	 * The combo popup with the font names
 	 */
-	private Combo fontName;
+	private WritableComboTableViewer fontName;
 
 	/**
 	 * The combo with the font size
@@ -222,6 +232,34 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		return 0;
 	}
 
+	
+	protected void refreshFont() {
+		if (parentNode == null)
+			return;
+		List<String[]> fontsList = ModelUtils.getFontNames(parentNode.getJasperConfiguration());
+		List<ComboItem> itemsList = new ArrayList<ComboItem>();
+		int i = 0;
+		FontUtil util = FontUtil.getInstance(parentNode.getJasperConfiguration());
+		for (int index = 0; index < fontsList.size(); index++) {
+			String[] fonts = fontsList.get(index);
+			for (String element : fonts) {
+				Image resolvedImage = ResourceManager.getImage(element);
+				if (resolvedImage == null){
+					resolvedImage = new Image(UIUtils.getDisplay(), ImageUtils.convertToSWT(SPFontNamePopUp.createFontImage(element, util)));
+					ResourceManager.addImage(element, resolvedImage);
+				}
+				itemsList.add(new ComboItem(element, true, resolvedImage, i, element, element));
+				i++;
+			}
+			if (index + 1 != fontsList.size() && fonts.length > 0) {
+				itemsList.add(new ComboItemSeparator(i));
+				i++;
+			}
+		}
+		fontName.setItems(itemsList);
+	}
+
+	
 	protected void createComponent(Composite parent) {
 		mainContainer = new Composite(parent, SWT.NONE);
 		GridLayout mainContainerLayout = new GridLayout(1, false);
@@ -236,28 +274,20 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		group = section.getWidgetFactory().createSection(mainContainer, pDescriptor.getDisplayName(), true, 3);
 		group.getParent().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		final FontNamePropertyDescriptor pd = (FontNamePropertyDescriptor) mfont
-				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
-		fontName = new Combo(group, SWT.NONE);
+		final FontNamePropertyDescriptor pd = (FontNamePropertyDescriptor) mfont.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
+		fontName = new WritableComboTableViewer(group, WritableComboMenuViewer.NO_IMAGE | SWT.RIGHT_TO_LEFT);
 		fontName.setToolTipText(pd.getDescription());
-		fontName.addModifyListener(new ModifyListener() {
-
-			private int time = 0;
-
-			public void modifyText(ModifyEvent e) {
-				if (e.time - time > 100) {
-					String value = fontName.getText();
-					if (!value.equals(FontUtils.separator))
-						propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME, value, pd);
-					else
-						fontName.select(indexOf(fontName, (String) mfont.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_NAME)));
-					int stringLength = fontName.getText().length();
-					fontName.setSelection(new Point(stringLength, stringLength));
-				}
-				time = e.time;
+		fontName.addSelectionListener(new ComboItemAction() {
+			/**
+			 * The action to execute when an entry is selected
+			 */
+			@Override
+			public void exec() {
+				propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME, fontName.getSelectionValue() != null ? fontName.getSelectionValue().toString() : null, pd);
 			}
 		});
-		fontName.addDisposeListener(new DisposeListener() {
+		fontName.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		fontName.getControl().addDisposeListener(new DisposeListener() {
 
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
@@ -382,16 +412,16 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 			JRFont fontValue = (JRFont) mfont.getValue();
 
 			if (!itemsSetted) {
-				fontName.setItems(parentNode.getJasperConfiguration().getFontList());
-				createContextualMenu(mfont, fontName, JRBaseFont.PROPERTY_FONT_NAME);
+				refreshFont();
+				createContextualMenu(mfont, fontName.getControl(), JRBaseFont.PROPERTY_FONT_NAME);
 				itemsSetted = true;
 			}
 			String strfontname = StyleResolver.getInstance().getFontName(fontValue);
 			fontName.setText(strfontname);
 			if (fontValue.getOwnFontName() != null){
-				fontName.setForeground(ColorConstants.black);
+				fontName.setTextColor(ColorConstants.black);
 			} else {
-				fontName.setForeground(ColorConstants.gray);
+				fontName.setTextColor(ColorConstants.gray);
 			}
 
 			setFontSizeNumber(fontValue.getFontsize(), fontValue.getOwnFontsize());

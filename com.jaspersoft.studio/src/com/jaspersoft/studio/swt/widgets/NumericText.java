@@ -180,7 +180,6 @@ public class NumericText extends Text {
 			}
 		}
 	};
-
 	
 	/**
 	 * Create the textual control

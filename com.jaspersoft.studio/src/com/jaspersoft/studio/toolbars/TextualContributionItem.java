@@ -7,6 +7,7 @@ package com.jaspersoft.studio.toolbars;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +17,6 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,6 +33,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -44,13 +44,22 @@ import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.property.ResetValueCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.swt.widgets.NumericCombo;
+import com.jaspersoft.studio.property.combomenu.ComboItem;
+import com.jaspersoft.studio.property.combomenu.ComboItemAction;
+import com.jaspersoft.studio.property.combomenu.ComboItemSeparator;
+import com.jaspersoft.studio.property.combomenu.WritableComboTableViewer;
+import com.jaspersoft.studio.property.section.widgets.SPFontNamePopUp;
+import com.jaspersoft.studio.swt.widgets.NumericTableCombo;
+import com.jaspersoft.studio.utils.ImageUtils;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.JSSTableCombo;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.fonts.FontUtil;
 import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 
@@ -109,14 +118,14 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	/**
 	 * Combo with the font names
 	 */
-	private Combo fontName;
+	private WritableComboTableViewer fontName;
 	
 	//Controls for the font size combo
 	
 	/**
 	 * Combo with the font sizes
 	 */
-	private NumericCombo fontSize;
+	private NumericTableCombo fontSize;
 
 	//Controls for the font size buttons
 	
@@ -274,10 +283,10 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	/**
 	 * Listener called when the element selected in the font name combo changes
 	 */
-	private ModifyListener fontNameComboModify = new ModifyListener() {
+	private ComboItemAction fontNameComboModify = new ComboItemAction() {
 		
 		@Override
-		public void modifyText(ModifyEvent e) {
+		public void exec() {
 			if (!refreshing){
 				List<Object> selection = getSelectionForType(MTextElement.class);
 				if (selection.isEmpty())
@@ -364,12 +373,13 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		controlsArea.setLayout(layout);
 		
 		fontList = null;
-		fontName = new Combo(controlsArea, SWT.DROP_DOWN);
+		fontName = new WritableComboTableViewer(controlsArea, JSSTableCombo.STRIGHT_CORNER);
 		fontName.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_NAME);
-		fontName.addModifyListener(fontNameComboModify);
+		fontName.addSelectionListener(fontNameComboModify);
 		setAvailableFonts();
 		
-		fontSize = new NumericCombo(controlsArea, SWT.NONE, 0, 6);
+		fontSize = new NumericTableCombo(controlsArea, SWT.NONE, 0, 6);
+		fontSize.setMaximum(Float.MAX_VALUE);
 		fontSize.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
 		fontSize.setItems(ModelUtils.FONT_SIZES);
 		fontSize.addSelectionListener(fontSizeComboModify);
@@ -384,7 +394,6 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		
 		//Italic and bold button
 
-		
 		boldToolbar = new ToolBar(controlsArea, SWT.FLAT | SWT.WRAP);
 		bold = new ToolItem(boldToolbar, SWT.CHECK);
 		bold.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/font-bold.gif"));		
@@ -452,24 +461,33 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	protected boolean fillWithToolItems(ToolBar parent) {
 		fontList = null;
 		ToolItem tiFontName = new ToolItem(parent,SWT.SEPARATOR);
-		fontName = new Combo(parent, SWT.DROP_DOWN);
+		fontName = new WritableComboTableViewer(parent, JSSTableCombo.STRIGHT_CORNER);
 		fontName.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_NAME);
-		fontName.addModifyListener(fontNameComboModify);
+		fontName.addSelectionListener(fontNameComboModify);
 		setAvailableFonts();
-		fontName.pack();
-		tiFontName.setWidth(fontName.getSize().x);
-		tiFontName.setControl(fontName);
+		fontName.getControl().pack();
+		tiFontName.setWidth(200);
+		tiFontName.setControl(fontName.getControl());
 		getToolItems().add(tiFontName);
 		
 		ToolItem tiFontSizeCombo = new ToolItem(parent,SWT.SEPARATOR);
-		fontSize = new NumericCombo(parent, SWT.NONE, 0, 6);
+		fontSize = new NumericTableCombo(parent, SWT.NONE, 0, 6);
+		fontSize.setMaximum(Float.MAX_VALUE);
 		fontSize.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
 		fontSize.setItems(ModelUtils.FONT_SIZES);
 		fontSize.addSelectionListener(fontSizeComboModify);
 		fontSize.pack();
-		tiFontSizeCombo.setWidth(50);
+		tiFontSizeCombo.setWidth(65);
 		tiFontSizeCombo.setControl(fontSize);
 		getToolItems().add(tiFontSizeCombo);
+		
+		/*ToolItem tiFontSizeCombo2 = new ToolItem(parent,SWT.SEPARATOR);
+		TableCombo comboTest = new TableCombo(parent, SWT.NONE);
+		new TableItem(comboTest.getTable(), SWT.NONE).setText("aaa");
+		comboTest.pack();
+		tiFontSizeCombo2.setWidth(65);
+		tiFontSizeCombo2.setControl(comboTest);
+		getToolItems().add(tiFontSizeCombo2);*/
 		
 		incrementButton = createFontSizeButton(true, parent);
 		ToolItem decrementButton = createFontSizeButton(false, parent);
@@ -616,14 +634,47 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		if (selection.size() > 0){
 			APropertyNode node = (APropertyNode)selection.get(0);
 			//The fonts are already cached here
-			String[] fonts = node.getJasperConfiguration().getFontList();
+			JasperReportsConfiguration jConfig = node.getJasperConfiguration();
+			String[] fonts = jConfig.getFontList();
 			if (needFontsUpdate(fonts) &&  fontName != null && !fontName.isDisposed()) {
-				fontName.setItems(fonts);
+				fontName.setItems(stringToItems(ModelUtils.getFontNames(jConfig), jConfig));
+				
 				fontList = fonts;
 			}
 		}
 		refreshing = false;
 	}
+	
+	/**
+	 * Convert a list of array of string into a List of ComboItem, ready to be inserted into a combo popup
+	 * 
+	 * @param fontsList
+	 *          List of array of fonts, between every array will be inserted a separator
+	 * @return List of combo item
+	 */
+	private List<ComboItem> stringToItems(List<String[]> fontsList, JasperReportsConfiguration jConfig) {
+		int i = 0;
+		List<ComboItem> itemsList = new ArrayList<ComboItem>();
+		FontUtil util = FontUtil.getInstance(jConfig);
+		for (int index = 0; index < fontsList.size(); index++) {
+			String[] fonts = fontsList.get(index);
+			for (String element : fonts) {
+				Image resolvedImage = ResourceManager.getImage(element);
+				if (resolvedImage == null){
+					resolvedImage = new Image(null, ImageUtils.convertToSWT(SPFontNamePopUp.createFontImage(element, util)));
+					ResourceManager.addImage(element, resolvedImage);
+				}
+				itemsList.add(new ComboItem(element, true, resolvedImage, i, element, element));
+				i++;
+			}
+			if (index + 1 != fontsList.size() && fonts.length > 0) {
+				itemsList.add(new ComboItemSeparator(i));
+				i++;
+			}
+		}
+		return itemsList;
+	}
+
 
 	@Override
 	public boolean isVisible() {
@@ -654,14 +705,14 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	 * @param elementValue the value of the element itself
 	 */
 	protected void setFontNameText(Object resolvedValue, Object elementValue) {
-		Point selection = fontName.getSelection();
+		//Point selection = fontName.getSelection();
 		fontName.setText(Misc.nvl(resolvedValue, "").toString());
 		if (elementValue == null){
 			fontName.setForeground(ColorConstants.gray);
 		} else {
 			fontName.setForeground(ColorConstants.black);
 		}
-		fontName.setSelection(selection);
+		//fontName.setSelection(selection);
 	}
 
 	/**
@@ -741,7 +792,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 			Object actaulNameValue = node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_NAME);
 			Object ownNameValue = node.getPropertyValue(JRDesignStyle.PROPERTY_FONT_NAME);
 			setFontNameText(actaulNameValue, ownNameValue);
-			createContextualMenu(node, fontName, JRDesignStyle.PROPERTY_FONT_NAME);
+			createContextualMenu(node, fontName.getControl(), JRDesignStyle.PROPERTY_FONT_NAME);
 			
 			italic.setSelection((Boolean) node.getPropertyActualValue(JRDesignStyle.PROPERTY_ITALIC));
 			createContextualMenu(node, italicToolbar, JRDesignStyle.PROPERTY_ITALIC);

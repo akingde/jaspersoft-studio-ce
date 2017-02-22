@@ -5,30 +5,24 @@
 package com.jaspersoft.studio.property.combomenu;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.MenuEvent;
-import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.help.HelpSystem;
 
-import net.sf.jasperreports.eclipse.ui.WritableComboButton;
+import net.sf.jasperreports.eclipse.ui.JSSTableCombo;
 
 /**
  * Class that manage the Combo Popup, create the popup manu and execture the action. the combo popup want to imitate a
@@ -38,7 +32,7 @@ import net.sf.jasperreports.eclipse.ui.WritableComboButton;
  * @author Orlandin Marco
  * 
  */
-public class WritableComboMenuViewer implements IMenuProvider {
+public class WritableComboTableViewer implements IMenuProvider {
 
 	/**
 	 * Style bit: Create handle control and drop-down widget with default behaviours, i.e. showing text, showing image,
@@ -64,7 +58,7 @@ public class WritableComboMenuViewer implements IMenuProvider {
 	/**
 	 * Button that made the popup menu appears
 	 */
-	private WritableComboButton dropDownHandle;
+	private JSSTableCombo dropDownHandle;
 
 	/**
 	 * List of the items inside the popup menu
@@ -72,115 +66,15 @@ public class WritableComboMenuViewer implements IMenuProvider {
 	private List<ComboItem> elementList = new ArrayList<ComboItem>();
 
 	/**
-	 * The popup menu
-	 */
-	private Menu popupMenu = null;
-
-	/**
 	 * Last element selected in the menu
 	 */
 	private ComboItem selectedItem = null;
 	
 	/**
-	 * Flag used to disable the update of the image and of the text inside the combo button. This 
-	 * is done to make the selection happen but not to show it in the button, and assigning it a static
-	 * Appearance
-	 */
-	private boolean disableSelectedItemUpdate = false;
-	
-	/**
 	 * Disable the emphasis effect on the last selected item when set to true
 	 */
 	private boolean disableSelectedItemEmphasis = false;
-
-	/**
-	 * Represent the action associated to every element of the menu, so it represent an entry in the menu
-	 * 
-	 * @author Orlandin Marco
-	 * 
-	 */
-	private class ComboAction extends SelectionAdapter {
-		/**
-		 * element that this entry represent
-		 */
-		private ComboItem item;
-
-		/**
-		 * Text value of this item
-		 */
-		private String name;
-
-		/**
-		 * Listener for this item
-		 */
-		private List<ComboItemAction> listeners;
-
-		/**
-		 * Image of the item
-		 */
-		private Image descriptor;
-
-		/**
-		 * Create a new entry for the menu
-		 * 
-		 * @param name
-		 *          Name of the entry
-		 * @param style
-		 *          Style of the entry
-		 * @param item
-		 *          element that this entry represent
-		 * @param Image
-		 *          of the item
-		 */
-		public ComboAction(String name, List<ComboItemAction> listeners, ComboItem item, Image descriptor) {
-			this.name = name;
-			this.listeners = listeners;
-			this.item = item;
-			this.descriptor = descriptor;
-		}
-
-		/**
-		 * Return the image for this item
-		 * 
-		 * @return image for the item, could be null
-		 */
-		public Image getImageDescriptor() {
-			return descriptor;
-		}
-
-		/**
-		 * Text value for this item
-		 * 
-		 * @return
-		 */
-		public String getText() {
-			return name;
-		}
-
-		/**
-		 * Return the element associated to this entry
-		 * 
-		 * @return
-		 */
-		public ComboItem getItem() {
-			return item;
-		}
-
-		/**
-		 * Selection event
-		 */
-		public void widgetSelected(SelectionEvent event) {
-			if (!disableSelectedItemUpdate){
-				dropDownHandle.setText(getText());
-				dropDownHandle.setImage(getImageDescriptor());
-			}
-			selectedItem = getItem();
-			for (ComboItemAction listener : this.listeners) {
-				listener.exec();
-			}
-		}
-
-	}
+	
 
 	/**
 	 * Constructs a new instance of this class given its parent and a style value describing its behavior and appearance.
@@ -195,17 +89,20 @@ public class WritableComboMenuViewer implements IMenuProvider {
 	 * @see #NO_IMAGE
 	 * @see #FILTERED
 	 */
-	public WritableComboMenuViewer(Composite parent, int style) {
-		dropDownHandle = new WritableComboButton(parent, style);
-		listeners = new ArrayList<ComboItemAction>();
-		dropDownHandle.addOpenListener(new SelectionAdapter() {
-			
+	public WritableComboTableViewer(Composite parent, int style) {
+		dropDownHandle = new JSSTableCombo(parent, style){
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				openPopup();
+			protected void setTableData(Table table) {
+				refreshTableItems(table);
 			}
-			
-		});
+		};
+		// tell the TableCombo that I want 2 blank columns auto sized.
+		dropDownHandle.defineColumns(2);
+		// set which column will be used for the selected item.
+		dropDownHandle.setDisplayColumnIndex(0);
+		dropDownHandle.setShowTableHeader(false);
+		listeners = new ArrayList<ComboItemAction>();
+
 		
 		dropDownHandle.addModifyListener(new ModifyListener() {
 			
@@ -220,18 +117,20 @@ public class WritableComboMenuViewer implements IMenuProvider {
 		});
 	}
 	
-	/**
-	 * Used to disable the update of the image and of the text inside the combo button. This 
-	 * is done to make the selection happen but not to show it in the button, and assigning it a static
-	 * Appearance
-	 * 
-	 * @param value true if the refresh of the button appearance should be disabled on selection, otherwise true. The
-	 * default value is false
-	 */
-	public void disableSelectedItemUpdate(boolean value){
-		disableSelectedItemUpdate = value;
-	}
+	private void refreshTableItems(Table table){
+		table.clearAll();
+		for(ComboItem item : elementList){
+			TableItem tableItem = new TableItem(table, SWT.NONE);
+			if (item instanceof ComboItemSeparator){
+				tableItem.setText("______________");		
+			} else {
+				tableItem.setText(0, item.getText());
+				tableItem.setImage(1, item.getImage());
+			}
 
+		}
+	}
+	
 	/**
 	 * Disable the emphasis effect on the last selected item
 	 * 
@@ -343,7 +242,7 @@ public class WritableComboMenuViewer implements IMenuProvider {
 	 * @param oldInput
 	 */
 	protected void inputChanged(Object input, Object oldInput) {
-		closePopup();
+		//dropDownHandle.setshow
 	}
 
 	/**
@@ -351,82 +250,8 @@ public class WritableComboMenuViewer implements IMenuProvider {
 	 * 
 	 * @return A reference to the combobox control
 	 */
-	public WritableComboButton getControl() {
+	public Control getControl() {
 		return dropDownHandle;
-	}
-
-	/**
-	 * Open the popup menu from a menu manager instantiated
-	 */
-	protected void openPopup() {
-		openPopupMenu(getPopup());
-	}
-
-	/**
-	 * Return the previous created popup menu, if it was never created before then it will be created and returned
-	 * 
-	 * @return a menu
-	 */
-	protected Menu getPopup() {
-		if (popupMenu == null) {
-			popupMenu = createPopupMenu();
-		}
-		return popupMenu;
-	}
-
-	/**
-	 * Open the popoup menu inside the menumanger and place it under the combobox
-	 * 
-	 * @param menuManager
-	 */
-	protected void openPopupMenu(Menu menu) {
-		if (menu != null && !menu.isDisposed()) {
-			if (menu.isVisible()) {
-				menu.setVisible(false);
-			} else {
-				locatePopupMenu(menu);
-				setSelectionToMenu(menu);
-				menu.setVisible(true);
-			}
-		}
-	}
-
-	/**
-	 * Create a new menumanger
-	 * 
-	 * @return
-	 */
-	protected Menu createPopupMenu() {
-		Menu newMenu = new Menu(getControl());
-		// When the menu is hidden i remove the focus from it, so the hover events continue to work
-		newMenu.addMenuListener(new MenuListener() {
-
-			@Override
-			public void menuShown(MenuEvent e) {
-			}
-
-			@Override
-			public void menuHidden(MenuEvent e) {
-				dropDownHandle.setEnabled(false);
-				dropDownHandle.setEnabled(true);
-			}
-		});
-		refreshPopupMenu(newMenu);
-		return newMenu;
-	}
-
-	/**
-	 * Set the elements inside the menu manager
-	 * 
-	 * @param newItems
-	 *          an array of element
-	 */
-	public void setItems(ComboItem[] newItems) {
-		elementList = new ArrayList<ComboItem>(Arrays.asList(newItems));
-		if (popupMenu != null){
-			popupMenu.dispose();
-		}
-		popupMenu = createPopupMenu();
 	}
 
 	/**
@@ -437,10 +262,7 @@ public class WritableComboMenuViewer implements IMenuProvider {
 	 */
 	public void setItems(List<ComboItem> newItems) {
 		elementList = newItems;
-		if (popupMenu != null){
-			popupMenu.dispose();
-		}
-		popupMenu = createPopupMenu();
+		if (dropDownHandle.getTable() != null) refreshTableItems(dropDownHandle.getTable());
 	}
 
 	/**
@@ -451,40 +273,11 @@ public class WritableComboMenuViewer implements IMenuProvider {
 	 */
 	public void setHelp(String href) {
 		HelpSystem.setHelp(dropDownHandle, href);
-		HelpProvider provider = new HelpProvider(getPopup());
+		HelpProvider provider = new HelpProvider(dropDownHandle.getMenu());
 		provider.setHelp(href);
 	}
 
-	/**
-	 * Refresh the popup menu deleting the old entry and creating the updated one
-	 * 
-	 * @param menuManager
-	 */
-	protected void refreshPopupMenu(Menu newMenu) {
-		// menuManager.removeAll();
-		// The elements will be sorted in ascending order
-		Collections.sort(elementList, new Comparator<ComboItem>() {
-			@Override
-			public int compare(ComboItem o1, ComboItem o2) {
-				return o1.getOrder() - o2.getOrder();
-			}
-		});
-		// Add the new elements
-		for (ComboItem element : elementList) {
-			if (element.isSeparator()) {
-				new MenuItem(newMenu, SWT.SEPARATOR);
-			} else {
-				MenuItem item = new MenuItem(newMenu, SWT.PUSH);
-				String text = element.getText();
-				item.setText(text);
-				item.setImage(element.getImage());
-				ComboAction action = new ComboAction(text, new ArrayList<ComboItemAction>(listeners), element,
-						element.getImage());
-				item.addSelectionListener(action);
-			}
-		}
-		setSelectionToMenu(newMenu);
-	}
+
 
 	/**
 	 * Set the menu in the right location, under the combobox
@@ -504,16 +297,7 @@ public class WritableComboMenuViewer implements IMenuProvider {
 		menu.setLocation(loc);
 	}
 
-	/**
-	 * Close the popoup menu
-	 */
-	protected void closePopup() {
-		if (popupMenu != null) {
-			if (popupMenu != null && !popupMenu.isDisposed()) {
-				popupMenu.setVisible(false);
-			}
-		}
-	}
+
 
 	/**
 	 * Set the actual item selected in the menu (the selected item has a bold like text)
@@ -543,7 +327,7 @@ public class WritableComboMenuViewer implements IMenuProvider {
 		if (index >= 0 && index < elementList.size()) {
 			selectedItem = elementList.get(index);
 			dropDownHandle.setText(selectedItem.getText());
-			dropDownHandle.setImage(selectedItem.getImage());
+			//dropDownHandle.setImage(selectedItem.getImage());
 		}
 	}
 	
@@ -555,7 +339,7 @@ public class WritableComboMenuViewer implements IMenuProvider {
 	 */
 	public void select(ComboItem item) {
 		dropDownHandle.setText(item.getText());
-		dropDownHandle.setImage(item.getImage());
+		//dropDownHandle.setImage(item.getImage());
 	}
 
 	/**
@@ -573,11 +357,7 @@ public class WritableComboMenuViewer implements IMenuProvider {
 	 * @param event
 	 */
 	protected void handleDispose(DisposeEvent event) {
-		closePopup();
-		if (popupMenu != null) {
-			popupMenu.dispose();
-			popupMenu = null;
-		}
+		dropDownHandle.dispose();
 	}
 
 	/**
@@ -599,23 +379,13 @@ public class WritableComboMenuViewer implements IMenuProvider {
 		return dropDownHandle.isEnabled();
 	}
 
-	/**
-	 * Check if the menu is visible
-	 * 
-	 * @return true if the popup menu is visible, otherwise false
-	 */
-	public boolean isDropDownVisible() {
-		return popupMenu != null && !popupMenu.isDisposed() && popupMenu.isVisible();
-	}
-
 	@Override
 	public Menu getMenu() {
-		return getPopup();
+		return dropDownHandle.getMenu();
 	}
 
-
 	public void setTextColor(Color color){
-		dropDownHandle.setTextColor(color);
+		//dropDownHandle.setTextColor(color);
 	}
 	
 	public void setData(Object data){

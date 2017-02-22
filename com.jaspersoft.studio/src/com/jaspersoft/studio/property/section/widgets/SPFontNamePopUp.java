@@ -32,7 +32,7 @@ import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
 import com.jaspersoft.studio.property.combomenu.ComboItemSeparator;
-import com.jaspersoft.studio.property.combomenu.WritableComboMenuViewer;
+import com.jaspersoft.studio.property.combomenu.WritableComboTableViewer;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ImageUtils;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -67,7 +67,7 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 	/**
 	 * The combo popup
 	 */
-	protected WritableComboMenuViewer combo;
+	protected WritableComboTableViewer combo;
 	
 	private APropertyNode pnode;
 
@@ -236,7 +236,7 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 	@Override
 	protected void createComponent(Composite parent) {
 		if (combo == null) {
-			combo = new WritableComboMenuViewer(parent, WritableComboMenuViewer.NO_IMAGE | SWT.RIGHT_TO_LEFT);
+			combo = new WritableComboTableViewer(parent, SWT.FLAT);
 			combo.getControl().addDisposeListener(new DisposeListener() {
 
 				@Override
