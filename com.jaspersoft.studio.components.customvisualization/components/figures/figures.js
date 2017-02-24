@@ -40,9 +40,17 @@ define('figures',['d3'], function (d3) {
         
         // Man or Women (default Man)
         var man = options.figure != "Female";
-        var items_count = options.itemsCount; // The number of items.
-        var items_value = options.itemsValue;
-        
+        var items_count = parseFloat(options.itemsCount); // The number of items.
+        var items_value = parseFloat(options.itemsValue);
+         
+        options.fgOpacity = parseFloat(options.fgOpacity);
+        options.bgOpacity = parseFloat(options.bgOpacity);
+        options.rows = parseFloat(options.rows);
+        options.columns = parseFloat(options.columns);
+        options.hPadding = parseFloat(options.hPadding);
+        options.vPadding = parseFloat(options.vPadding);
+         
+         
          var checkBoolean = function(v) {
                 if (typeof v !== "boolean")
                  {
@@ -391,8 +399,7 @@ define('figures',['d3'], function (d3) {
          svg.selectAll('g.figures-row')  //here's how you get all the nodes
 			.each(function(d, i) {
 					
-                     console.log("Adding vpadding to row: " + i + " ( "  + (i * options.vPadding) + ")");
-					 var row = d3.select(this);
+                     var row = d3.select(this);
 				     var box = row.node().getBBox();
 					 if (options.hAlign == "center")
 					 {
