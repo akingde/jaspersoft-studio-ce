@@ -69,8 +69,13 @@ public abstract class AWidget {
 			control = new WClassName(this);
 		else if (c.getType().equals("checkbox"))
 			control = new WBoolean(this);
-		else if (c.getPropertyType().equals(JRDesignExpression.class.getName())) {
-
+		else {
+			try {
+				Class<?> clazz = Class.forName(c.getPropertyType());
+				if (clazz.isEnum())
+					control = new WEnum(this, clazz);
+			} catch (ClassNotFoundException e) {
+			}
 		}
 		if (control == null)
 			control = new WText(this);
