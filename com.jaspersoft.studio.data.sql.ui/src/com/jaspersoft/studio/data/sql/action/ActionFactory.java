@@ -197,7 +197,7 @@ public class ActionFactory {
 		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_INTERSECT, treeViewer));
 		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_MINUS, treeViewer));
 		actions.add(null);
-		actions.add(new EditExpression(treeViewer));
+		actions.add(new EditExpression(designer, treeViewer));
 		actions.add(null);
 		actions.add(new DeleteAction<MUnion>(designer, treeViewer, Messages.ActionFactory_4, MUnion.class));
 		actions.add(null);

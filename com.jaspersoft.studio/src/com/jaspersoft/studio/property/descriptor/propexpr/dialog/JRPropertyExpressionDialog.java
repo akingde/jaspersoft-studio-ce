@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
@@ -75,8 +74,10 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 	 */
 	@Override
 	protected void initializeHints() {
-		hints = HintsPropertiesList.getElementProperties(value.getPnode().getValue());
-		Collections.sort(hints);
+		if (value.getPnode() != null) {
+			hints = HintsPropertiesList.getElementProperties(value.getPnode().getValue());
+			Collections.sort(hints);
+		}
 	}
 
 	@Override
@@ -93,15 +94,23 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 		};
 	}
 
+	private boolean showExpression = true;
+
+	public void setShowExpression(boolean showExpression) {
+		this.showExpression = showExpression;
+	}
+
 	/**
 	 * Create the checkbox
 	 */
 	protected void createAdditionalControls(Composite parent) {
-		buseexpr = new Button(parent, SWT.CHECK);
-		buseexpr.setText("Use An Expression");
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		buseexpr.setLayoutData(gd);
+		if (showExpression) {
+			buseexpr = new Button(parent, SWT.CHECK);
+			buseexpr.setText("Use An Expression");
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			buseexpr.setLayoutData(gd);
+		}
 	}
 
 	@Override
@@ -112,27 +121,29 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				synchText();
+				value.setValue(tvalue.getText());
 			}
 		});
 		vexp = createValueExpressionControl(stackComposite);
-		buseexpr.addSelectionListener(new SelectionListener() {
+		if (buseexpr != null)
+			buseexpr.addSelectionListener(new SelectionListener() {
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				stackLayout.topControl = buseexpr.getSelection() ? vexp : vcmp;
-				stackComposite.layout();
-				((PropertyExpressionDTO) value).setExpression(buseexpr.getSelection());
-				if (buseexpr.getSelection())
-					value.setValue(evalue.getExpression().getText());
-				else
-					value.setValue(tvalue.getText());
-			}
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					stackLayout.topControl = buseexpr.getSelection() ? vexp : vcmp;
+					stackComposite.layout();
+					((PropertyExpressionDTO) value).setExpression(buseexpr.getSelection());
+					if (buseexpr.getSelection())
+						value.setValue(evalue.getExpression().getText());
+					else
+						value.setValue(tvalue.getText());
+				}
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetDefaultSelected(e);
-			}
-		});
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					widgetDefaultSelected(e);
+				}
+			});
 		fillValue(value);
 		return composite;
 	}
@@ -206,8 +217,10 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 			ec = ModelUtils.getElementExpressionContext(null, node);
 		}
 		evalue.setExpressionContext(ec);
-		cprop.setText(Misc.nvl(value.getName()));
-		buseexpr.setSelection(value.isExpression());
+		if (cprop != null)
+			cprop.setText(Misc.nvl(value.getName()));
+		if (buseexpr != null)
+			buseexpr.setSelection(value.isExpression());
 		if (value.isExpression()) {
 			stackLayout.topControl = vexp;
 			stackComposite.layout();
@@ -228,11 +241,11 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 	protected synchronized void synchText() {
 		if (!updating) {
 			updating = true;
-			if (buseexpr.getSelection()) {
-				tvalue.setText(evalue.getText());
-			} else {
-				evalue.setExpression(new JRDesignExpression(tvalue.getText()));
-			}
+			if (buseexpr != null)
+				if (buseexpr.getSelection())
+					tvalue.setText(evalue.getText());
+				else
+					evalue.setExpression(new JRDesignExpression(tvalue.getText()));
 			updating = false;
 		}
 	}

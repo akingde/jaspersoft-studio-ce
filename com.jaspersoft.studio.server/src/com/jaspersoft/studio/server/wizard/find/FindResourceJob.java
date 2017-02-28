@@ -26,13 +26,19 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class FindResourceJob {
 	public static ResourceDescriptor doFindResource(MServerProfile msp, String[] in, String[] excl) {
-		return doFindResource(msp, in, excl, false);
+		return doFindResource(msp, in, excl, false, null);
 	}
 
 	public static ResourceDescriptor doFindResource(MServerProfile msp, String[] in, String[] excl,
 			boolean containedResource) {
+		return doFindResource(msp, in, excl, false, null);
+	}
+
+	public static ResourceDescriptor doFindResource(MServerProfile msp, String[] in, String[] excl,
+			boolean containedResource, String defaultName) {
 		FindResourceWizard wizard = new FindResourceWizard(msp, containedResource);
 		wizard.setFilterTypes(in, excl);
+		wizard.setDefaultName(defaultName);
 		WizardDialog dialog = new FindWizardDialog(UIUtils.getShell(), wizard);
 		dialog.setHelpAvailable(false);
 		dialog.create();

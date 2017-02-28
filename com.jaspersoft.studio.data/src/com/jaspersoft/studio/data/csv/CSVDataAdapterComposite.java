@@ -47,6 +47,8 @@ import com.jaspersoft.studio.data.AFileDataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DateNumberFormatWidget;
 import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.swt.events.ChangeEvent;
+import com.jaspersoft.studio.swt.events.ChangeListener;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.Misc;
@@ -252,7 +254,15 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		btnDelete.setText(Messages.CSVDataAdapterComposite_8);
 		btnDelete.setEnabled(false);
 
-		new ListOrderButtons().createOrderButtons(composite_4, tableViewer);
+		ListOrderButtons lb = new ListOrderButtons();
+		lb.createOrderButtons(composite_4, tableViewer);
+		lb.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event) {
+				pchangesuport.firePropertyChange("dirty", false, true);
+			}
+		});
 
 		Group grpOther = new Group(composite_2, SWT.NONE);
 		grpOther.setText(Messages.CSVDataAdapterComposite_9);
@@ -448,6 +458,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 
 				tableViewer.refresh();
 				setTableSelection(-1);
+				pchangesuport.firePropertyChange("dirty", false, true);
 			}
 		});
 
@@ -456,7 +467,6 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
 				removeEntries();
 			}
 		});
@@ -469,10 +479,8 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 			}
 
 			public void keyPressed(KeyEvent e) {
-
-				if (e.character == SWT.DEL) {
+				if (e.character == SWT.DEL)
 					removeEntries();
-				}
 			}
 		});
 
@@ -849,11 +857,14 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 				// To prevent an IndexOutOfBoundsException
 				// we need to subtract number of removed items
 				// from the removed item index.
-				rows.remove(i - removedItems);
+				int indx = i - removedItems;
+				if (indx >= 0 && indx > rows.size())
+					rows.remove(indx);
 				removedItems++;
 			}
 			tableViewer.refresh();
 			setTableSelection(indices[0]);
+			pchangesuport.firePropertyChange("dirty", false, true);
 		}
 	}
 
@@ -922,6 +933,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	@Override
 	protected void fireFileChanged(boolean showWarning) {
 		try {
+			super.fireFileChanged(showWarning);
 			if (showWarning) {
 				if (UIUtils.showConfirmation(Messages.CSVDataAdapterComposite_0, Messages.CSVDataAdapterComposite_1))
 					getCSVColumns();
@@ -995,6 +1007,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		setTableSelection(-1);
 		btnDelete.setEnabled(true);
 		btnCheckSkipFirstLine.setSelection(true);
+		pchangesuport.firePropertyChange("dirty", false, true);
 	}
 
 	/**

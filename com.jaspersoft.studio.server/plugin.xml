@@ -290,5 +290,11 @@
            exporterClass="com.jaspersoft.studio.server.editor.action.exporter.ExportedServersHandler">
      </resourceExporter>
   </extension>
+  <extension
+        point="com.jaspersoft.studio.parameterIC">
+     <parameterIC
+           ICParameterContributor="com.jaspersoft.studio.server.ic.ICParameterContributor">
+     </parameterIC>
+  </extension>
 
 </plugin>

@@ -15,13 +15,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.data.designer.AQueryDesigner;
 import com.jaspersoft.studio.data.sql.model.query.operand.ScalarOperand;
 
 public class DateWidget extends AScalarWidget {
 	private CDateTime date;
 
-	public DateWidget(Composite parent, ScalarOperand<?> operand) {
-		super(parent, SWT.NONE, operand);
+	public DateWidget(Composite parent, ScalarOperand<?> operand, AQueryDesigner designer) {
+		super(parent, SWT.NONE, operand, designer);
 	}
 
 	@Override

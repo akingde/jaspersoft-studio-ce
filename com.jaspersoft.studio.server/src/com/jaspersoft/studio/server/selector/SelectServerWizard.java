@@ -32,7 +32,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 public class SelectServerWizard extends Wizard {
 	private MServerProfile value;
 
-	protected SelectServerWizard() {
+	public SelectServerWizard() {
 		super();
 		setWindowTitle("JasperReports Servers");
 		setNeedsProgressMonitor(true);

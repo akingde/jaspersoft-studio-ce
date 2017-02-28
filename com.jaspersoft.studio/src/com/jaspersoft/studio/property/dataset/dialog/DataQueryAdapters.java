@@ -1,9 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -48,6 +49,7 @@ import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.property.dataset.da.DataAdapterUI;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -133,9 +135,28 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 		createQuery(tabFolder);
 		createMappingTools(tabFolder, fsetter);
+		createDataAdapterTab(tabFolder);
 
 		tabFolder.setSelection(0);
 		return tabFolder;
+	}
+
+	private DataAdapterUI daUI;
+
+	private void createDataAdapterTab(final CTabFolder tabFolder) {
+		daUI = new DataAdapterUI();
+		daUI.refreshDaUI(tabFolder, background, jDesign, newdataset, jConfig);
+		newdataset.getPropertiesMap().getEventSupport().addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				String pname = evt.getPropertyName();
+				if (pname.equals(DataQueryAdapters.DEFAULT_DATAADAPTER)
+						|| pname.equals(DataQueryAdapters.DEFAULT_DATAADAPTER)) {
+					daUI.refreshDaUI(tabFolder, background, jDesign, newdataset, jConfig);
+				}
+			}
+		});
 	}
 
 	private void createMappingTools(CTabFolder tabFolder, IFieldSetter fsetter) {

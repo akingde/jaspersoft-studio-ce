@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.ResourceFactory;
+import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.ic.ICParameterContributor;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -24,6 +26,7 @@ import com.jaspersoft.studio.server.preferences.JRSPreferencesPage;
 import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
+import com.jaspersoft.studio.server.publish.ResourcePublishMethod;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -47,7 +50,6 @@ public class ImpInputControls {
 		for (JRParameter p : jasper.getParametersList()) {
 			if (p.isSystemDefined() || !p.isForPrompting())
 				continue;
-
 			ResourceDescriptor rd = MInputControl.createDescriptor(mrunit);
 			rd.setName(IDStringValidator.safeChar(Misc.nvl(p.getName())));
 			rd.setLabel(p.getName());
@@ -95,13 +97,23 @@ public class ImpInputControls {
 				mrunit.removeChild(mres);
 				continue;
 			}
+
 			PublishOptions popt = AImpObject.createOptions(jrConfig, null);
 			String b = jrConfig.getProperty(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, "true");
 			if (b.equals("true") && rd.getIsNew())
 				popt.setOverwrite(OverwriteEnum.OVERWRITE);
 			mres.setPublishOptions(popt);
-
 			PublishUtil.loadPreferences(monitor, (IFile) jrConfig.get(FileUtils.KEY_FILE), mres);
+			String icpath = p.getPropertiesMap().getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_PATH);
+			if (!Misc.isNullOrEmpty(icpath)) {
+				rd.setUriString(icpath);
+				popt.setPublishMethod(ResourcePublishMethod.REFERENCE);
+				popt.setReferencedResource(rd);// WSClientHelper.getResource(monitor,
+												// mrunit.getWsClient(), rd,
+												// null));
+				popt.setOverwrite(OverwriteEnum.IGNORE);
+			}
+
 			PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
 		}
 	}

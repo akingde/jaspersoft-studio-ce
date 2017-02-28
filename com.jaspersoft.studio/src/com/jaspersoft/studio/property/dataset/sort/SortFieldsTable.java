@@ -2,7 +2,7 @@
  * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
  * All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
-package com.jaspersoft.studio.property.dataset.dialog;
+package com.jaspersoft.studio.property.dataset.sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +42,7 @@ import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.sortfield.command.wizard.SortFieldWizard;
 import com.jaspersoft.studio.model.variable.MVariable;
+import com.jaspersoft.studio.property.dataset.dialog.AbstractModifyTable;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;

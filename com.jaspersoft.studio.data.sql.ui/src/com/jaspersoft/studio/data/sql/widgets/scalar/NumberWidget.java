@@ -19,13 +19,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.designer.AQueryDesigner;
 import com.jaspersoft.studio.data.sql.model.query.operand.ScalarOperand;
 
 public class NumberWidget extends AScalarWidget {
 	private Text txt;
 
-	public NumberWidget(Composite parent, ScalarOperand<Number> operand) {
-		super(parent, SWT.NONE, operand);
+	public NumberWidget(Composite parent, ScalarOperand<Number> operand, AQueryDesigner designer) {
+		super(parent, SWT.NONE, operand, designer);
 
 	}
 

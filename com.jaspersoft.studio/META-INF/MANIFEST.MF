@@ -604,6 +604,8 @@ Export-Package: com.jaspersoft.studio;
    com.jaspersoft.studio.utils.jasper,
    com.jaspersoft.studio.data.designer,
    org.eclipse.swt.widgets",
+ com.jaspersoft.studio.property.dataset.fields.table,
+ com.jaspersoft.studio.property.dataset.fields.table.widget,
  com.jaspersoft.studio.property.dataset.wizard;
   uses:="org.eclipse.jface.wizard,
    net.sf.jasperreports.engine.design,
@@ -741,6 +743,7 @@ Export-Package: com.jaspersoft.studio;
  com.jaspersoft.studio.property.itemproperty.dialog,
  com.jaspersoft.studio.property.itemproperty.label,
  com.jaspersoft.studio.property.itemproperty.sp,
+ com.jaspersoft.studio.property.metadata,
  com.jaspersoft.studio.property.propertiesviewer;
   uses:="org.eclipse.swt.custom,
    org.eclipse.jface.viewers,

@@ -15,7 +15,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.property.dataset.dialog.DataPreviewTable.DataPreviewBean;
+import com.jaspersoft.studio.property.dataset.preview.DataPreviewTable;
+import com.jaspersoft.studio.property.dataset.preview.DataPreviewTable.DataPreviewBean;
 
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -23,7 +24,7 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 public class CopyDataDialog extends ATitledDialog {
 	private DataPreviewTable dpt;
 
-	protected CopyDataDialog(Shell parentShell, DataPreviewTable dpt) {
+	public CopyDataDialog(Shell parentShell, DataPreviewTable dpt) {
 		super(parentShell);
 		setTitle("Data");
 		setDefaultSize(500, 400);

@@ -13,13 +13,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.designer.AQueryDesigner;
 import com.jaspersoft.studio.data.sql.model.query.operand.UnknownOperand;
 
 public class UnknownOperandWidget extends AOperandWidget<UnknownOperand> {
 	private Text txt;
 
-	public UnknownOperandWidget(Composite parent, UnknownOperand operand) {
-		super(parent, SWT.NONE, operand);
+	public UnknownOperandWidget(Composite parent, UnknownOperand operand, AQueryDesigner designer) {
+		super(parent, SWT.NONE, operand, designer);
 
 	}
 
@@ -40,7 +41,8 @@ public class UnknownOperandWidget extends AOperandWidget<UnknownOperand> {
 		txt.setLayoutData(gd);
 
 		DataBindingContext bindingContext = new DataBindingContext();
-		bindingContext.bindValue(SWTObservables.observeText(txt, SWT.Modify), PojoObservables.observeValue(getValue(), "value")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(txt, SWT.Modify),
+				PojoObservables.observeValue(getValue(), "value")); //$NON-NLS-1$
 	}
 
 }

@@ -133,7 +133,7 @@ public class CreateExpression extends AAction {
 	}
 
 	protected void showDialog(MExpression mexpr) {
-		EditExpressionDialog dialog = new EditExpressionDialog(UIUtils.getShell());
+		EditExpressionDialog dialog = new EditExpressionDialog(UIUtils.getShell(), designer);
 		dialog.setValue(mexpr);
 		if (dialog.open() == Dialog.OK) {
 			mexpr.setOperator(Operator.getOperator((dialog.getOperator())));

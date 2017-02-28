@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
@@ -68,7 +67,7 @@ public class JRPropertyDialog extends Dialog {
 	 * List of special properties that the user can easily select
 	 */
 	protected List<ElementDescription> hints;
-
+	protected boolean showPropertyName = true;
 	/**
 	 * Composite with a stack layout where the value control is placed, other controls can be placed here and hidden using
 	 * the layout
@@ -86,6 +85,16 @@ public class JRPropertyDialog extends Dialog {
 		super(parentShell);
 	}
 
+	public void setShowPropertyName(boolean showPropertyName) {
+		this.showPropertyName = showPropertyName;
+	}
+
+	private String title = Messages.JRPropertyDialog_shellTitle;
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -93,7 +102,7 @@ public class JRPropertyDialog extends Dialog {
 	 */
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText(Messages.JRPropertyDialog_shellTitle);
+		newShell.setText(title);
 	}
 
 	@Override
@@ -131,27 +140,34 @@ public class JRPropertyDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2, false));
-		Label label = new Label(composite, SWT.NONE);
-		label.setText(Messages.JRPropertyDialog_propName);
 
-		cprop = new Combo(composite, SWT.BORDER);
-		GridData gd = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
-		gd.widthHint = 300;
-		cprop.setLayoutData(gd);
+		List<ElementDescription> h = null;
+		if (showPropertyName) {
+			Label label = new Label(composite, SWT.NONE);
+			label.setText(Messages.JRPropertyDialog_propName);
 
-		List<String> comboItems = new ArrayList<String>();
-		for (ElementDescription hint : getHints()) {
-			comboItems.add(hint.getName());
+			h = getHints();
+
+			cprop = new Combo(composite, SWT.BORDER);
+			GridData gd = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
+			gd.widthHint = 300;
+			cprop.setLayoutData(gd);
+
+			if (h != null) {
+				List<String> comboItems = new ArrayList<String>();
+				for (ElementDescription hint : h)
+					comboItems.add(hint.getName());
+				cprop.setItems(comboItems.toArray(new String[comboItems.size()]));
+			}
+			cprop.addModifyListener(getModifyListener());
 		}
-		cprop.setItems(comboItems.toArray(new String[comboItems.size()]));
-		cprop.addModifyListener(getModifyListener());
 
 		createAdditionalControls(composite);
 
 		stackComposite = new Composite(composite, SWT.NONE);
 		stackLayout = new StackLayout();
 		stackComposite.setLayout(stackLayout);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		stackComposite.setLayoutData(gd);
 
@@ -159,7 +175,8 @@ public class JRPropertyDialog extends Dialog {
 		stackLayout.topControl = vcmp;
 
 		fillValue(value);
-		createSpecialProperties(composite);
+		if (showPropertyName && !Misc.isNullOrEmpty(h))
+			createSpecialProperties(composite);
 		return composite;
 	}
 
@@ -268,7 +285,8 @@ public class JRPropertyDialog extends Dialog {
 	}
 
 	private void fillValue(PropertyDTO value) {
-		cprop.setText(Misc.nvl(value.getName()));
+		if (cprop != null)
+			cprop.setText(Misc.nvl(value.getName()));
 		tvalue.setText(getValueText(value.getValue()));
 	}
 

@@ -2,7 +2,7 @@
  * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
  * All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
-package com.jaspersoft.studio.property.dataset.dialog;
+package com.jaspersoft.studio.property.dataset.preview;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -49,6 +49,7 @@ import com.jaspersoft.studio.data.designer.AQueryDesignerContainer;
 import com.jaspersoft.studio.data.reader.DatasetReader;
 import com.jaspersoft.studio.data.reader.DatasetReaderListener;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.dataset.dialog.CopyDataDialog;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;

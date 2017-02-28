@@ -1,0 +1,102 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
+ ******************************************************************************/
+package com.jaspersoft.studio.property.dataset.fields.table.widget;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.widgets.Composite;
+
+import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
+
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertyExpression;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
+
+public class WJRProperties extends AWidget {
+	private MDataset mdataset;
+
+	public WJRProperties(Composite parent, TColumn c, final Object element) {
+		super(parent, c, element);
+		this.mdataset = (MDataset) c.getValue();
+		final PropertyChangeListener l = new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				control.fillValue();
+			}
+		};
+		if (element instanceof JRChangeEventsSupport)
+			((JRChangeEventsSupport) element).getEventSupport().addPropertyChangeListener(l);
+		if (element instanceof JRPropertiesHolder)
+			((JRPropertiesHolder) element).getPropertiesMap().getEventSupport().addPropertyChangeListener(l);
+		control.addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				if (element instanceof JRChangeEventsSupport)
+					((JRChangeEventsSupport) element).getEventSupport().removePropertyChangeListener(l);
+				if (element instanceof JRPropertiesHolder)
+					((JRPropertiesHolder) element).getPropertiesMap().getEventSupport().removePropertyChangeListener(l);
+			}
+		});
+	}
+
+	@Override
+	public void setValue(Object value) {
+		if (element != null && value instanceof PropertyExpressionsDTO) {
+			PropertyExpressionsDTO dto = (PropertyExpressionsDTO) value;
+			if (element instanceof JRDesignField) {
+				JRDesignField field = (JRDesignField) element;
+				JRPropertyExpression[] expr = field.getPropertyExpressions();
+				// Remove the old expression properties if any
+				if (expr != null)
+					for (JRPropertyExpression ex : expr)
+						field.removePropertyExpression(ex);
+				// Add the new expression properties
+				for (PropertyExpressionDTO p : dto.getProperties())
+					if (p.isExpression()) {
+						JRDesignPropertyExpression newExp = new JRDesignPropertyExpression();
+						newExp.setName(p.getName());
+						newExp.setValueExpression(p.getValueAsExpression());
+						field.addPropertyExpression(newExp);
+					}
+			}
+			if (element instanceof JRPropertiesHolder) {
+				JRPropertiesHolder field = (JRPropertiesHolder) element;
+				String[] names = field.getPropertiesMap().getPropertyNames();
+				for (int i = 0; i < names.length; i++)
+					field.getPropertiesMap().removeProperty(names[i]);
+				for (PropertyExpressionDTO p : dto.getProperties())
+					if (!p.isExpression())
+						field.getPropertiesMap().setProperty(p.getName(), p.getValue());
+			}
+		}
+	}
+
+	@Override
+	protected Object getValue() {
+		if (element instanceof JRDesignField) {
+			JRDesignField prop = (JRDesignField) element;
+			JRPropertyExpression[] propertyExpressions = prop.getPropertyExpressions();
+			if (propertyExpressions != null)
+				propertyExpressions = propertyExpressions.clone();
+			return new PropertyExpressionsDTO(propertyExpressions, MField.getPropertiesMapClone(prop), mdataset);
+		} else if (element instanceof JRDesignParameter) {
+			JRDesignParameter prop = (JRDesignParameter) element;
+			return new PropertyExpressionsDTO(null, MParameter.getPropertiesMapClone(prop), mdataset);
+		}
+		return null;
+	}
+}

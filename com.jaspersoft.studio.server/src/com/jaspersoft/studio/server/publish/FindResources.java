@@ -62,8 +62,8 @@ public class FindResources {
 				if (obj instanceof AMResource) {
 					AMResource m = (AMResource) obj;
 					ResourceDescriptor rd = m.getValue();
-					if (names.containsKey(rd.getUriString())) {
-						if (names.get(rd.getUriString()) == rd) {
+					if (names.containsKey(rd.getName())) {
+						if (names.get(rd.getName()) == rd) {
 							continue;
 						} else {
 							// renaming
@@ -73,10 +73,10 @@ public class FindResources {
 								rd.setName(rd.getName() + "_" + i);
 								rd.setLabel(rd.getLabel() + "_" + i);
 								rd.setUriString(rd.getUriString() + "_" + i);
-							} while (names.containsKey(rd.getUriString()) && i < 10000);
+							} while (names.containsKey(rd.getName()) && i < 10000);
 						}
 					}
-					names.put(rd.getUriString(), rd);
+					names.put(rd.getName(), rd);
 					rs.add(m);
 				}
 			}

@@ -24,13 +24,16 @@ public final class FindWizardDialog extends WizardDialog {
 	}
 
 	@Override
-	public void run(boolean fork, boolean cancelable, final IRunnableWithProgress runnable) throws InvocationTargetException, InterruptedException {
+	public void run(boolean fork, boolean cancelable, final IRunnableWithProgress runnable)
+			throws InvocationTargetException, InterruptedException {
 		ProgressMonitorPart mpart = (ProgressMonitorPart) getProgressMonitor();
 		mpart.setVisible(true);
 		try {
 
 			ModalContext.run(runnable, fork, getProgressMonitor(), getShell().getDisplay());
 		} finally {
+			if (mpart.isDisposed())
+				return;
 			mpart.done();
 			mpart.setVisible(false);
 		}

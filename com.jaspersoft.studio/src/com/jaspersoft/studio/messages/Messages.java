@@ -2433,6 +2433,15 @@ public class Messages extends NLS {
 	public static String ZoomActualAction_0;
 	public static String ZoomActualAction_1;
 	public static String ZoomActualAction_3;
+	 
+	public static String SelectParameterDialog_0;
+	public static String SelectParameterDialog_1;
+	public static String SelectParameterDialog_2;
+	public static String SelectParameterDialog_3;
+	public static String SelectParameterDialog_4;
+	public static String SelectParameterDialog_5;
+	public static String SelectParameterDialog_6;
+	public static String SelectParameterDialog_7;
 
 	private Messages() {
 	}

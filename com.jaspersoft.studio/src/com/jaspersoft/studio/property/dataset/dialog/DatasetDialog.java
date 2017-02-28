@@ -57,6 +57,10 @@ import com.jaspersoft.studio.model.parameter.command.DeleteParameterCommand;
 import com.jaspersoft.studio.model.parameter.command.ReplaceAllParametersCommand;
 import com.jaspersoft.studio.model.sortfield.command.ReplaceAllSortFieldsCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.property.dataset.fields.FieldsTable;
+import com.jaspersoft.studio.property.dataset.preview.DataPreviewTable;
+import com.jaspersoft.studio.property.dataset.prm.ParametersTable;
+import com.jaspersoft.studio.property.dataset.sort.SortFieldsTable;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
@@ -339,7 +343,7 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText(Messages.DatasetDialog_ParametersTab);
 
-		ptable = new ParametersTable(tabFolder, newdataset, background, mdataset.isMainDataset());
+		ptable = new ParametersTable(tabFolder, newdataset, background, mdataset.isMainDataset(), mdataset);
 
 		ptable.getPropertyChangeSupport().addPropertyChangeListener(prmListener);
 		bptab.setControl(ptable.getControl());

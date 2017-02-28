@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter;
 
@@ -185,6 +184,13 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		if (id.equals(JRDesignParameter.PROPERTY_EVALUATION_TIME))
 			return evaluationTimeD.getIntValue(jrParameter.getEvaluationTime());
 		return super.getPropertyValue(id);
+	}
+
+	public static JRPropertiesMap getPropertiesMapClone(JRDesignParameter jrField) {
+		JRPropertiesMap propertiesMap = jrField.getPropertiesMap();
+		if (propertiesMap != null)
+			propertiesMap = propertiesMap.cloneProperties();
+		return propertiesMap;
 	}
 
 	/*

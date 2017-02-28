@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
@@ -54,6 +53,11 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class JRPropertyExpressionPage extends JSSHelpWizardPage {
+	private boolean showExpression = true;
+
+	public void setShowExpression(boolean showExpression) {
+		this.showExpression = showExpression;
+	}
 
 	private final class EditElement implements IEditElement<PropertyDTO> {
 		@Override
@@ -65,6 +69,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			// the edited value must be a clone, otherwise changes done in the dialog
 			// will be propagated even if the cancel button is pressed
 			PropertyDTO editedValue = v.clone();
+			dialog.setShowExpression(showExpression);
 			dialog.setValue(editedValue);
 			if (dialog.open() == Window.OK)
 				input.set(pos, editedValue);
@@ -130,6 +135,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 						: new PropertyExpressionDTO(false, name, "NEW_VALUE");
 				v.setPnode(value.getPnode());
 				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
+				dialog.setShowExpression(showExpression);
 				dialog.setValue(v);
 				if (dialog.open() == Window.OK)
 					return v;
