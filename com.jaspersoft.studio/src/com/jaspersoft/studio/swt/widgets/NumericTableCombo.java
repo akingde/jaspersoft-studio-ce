@@ -156,15 +156,7 @@ public class NumericTableCombo extends Composite {
 		
 		@Override
 		protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
-			int width = wHint;
-			int height = hHint;
-			if (wHint == SWT.DEFAULT){
-				width = defaultSize != null ? defaultSize.x : 50;
-			}
-			if (hHint == SWT.DEFAULT){
-				height = defaultSize != null ? defaultSize.y : 23;
-			}
-			return new Point(width, height);
+			return NumericTableCombo.this.computeSize(composite, wHint, hHint);
 		}
 	};
 
@@ -209,7 +201,7 @@ public class NumericTableCombo extends Composite {
 	 * decimalDigitsShown	 
 	 */
 	public NumericTableCombo(Composite parent, int style, int decimalDigitsShown, int decimalDigitsAccepted){
-		super(parent, SWT.NONE);
+		super(parent, style);
 		createControls();
 		foregroundColor = getForeground();
 		this.formatter = new ValidatedDecimalFormat(decimalDigitsShown, decimalDigitsAccepted);
@@ -225,7 +217,7 @@ public class NumericTableCombo extends Composite {
 	 * @param style the style bits, the supported ones are the same of a standard SWT text widget
 	 */
 	public NumericTableCombo(Composite parent, NumberFormat formatter, int style) {
-		super(parent, SWT.NONE);
+		super(parent, style);
 		createControls();
 		foregroundColor = getForeground();
 		addListeners();
@@ -245,7 +237,7 @@ public class NumericTableCombo extends Composite {
 			defaultSize = tempCombo.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			tempCombo.dispose();
 		}
-		controlCombo = new JSSTableCombo(this, JSSTableCombo.STRIGHT_CORNER){
+		controlCombo = new JSSTableCombo(this, getStyle()){
 			@Override
 			protected void setTableData(Table table) {
 				refreshTableItems(table);
@@ -669,6 +661,33 @@ public class NumericTableCombo extends Composite {
 			setValue(newValue, true);
 		}
 		fireListeners();
+	}
+	
+	/**
+	 * Compute the size of this combo
+	 * 
+	 * @param composite composite where it is placed
+	 * @param wHint the hint for the width, could be SWT.DEFAULT
+	 * @param hHint the hint for the height, could be SWT.DEFAULT
+	 * @return the suggested size for this combo
+	 */
+	protected Point computeSize(Composite composite, int wHint, int hHint){
+		Control[] children = composite.getChildren();
+		Point size = children[0].computeSize(wHint, hHint, true);
+		return size;
+	}
+	
+	/**
+	 * Return the size of a empty native combo in the current OS, could be null.
+	 * It should be used mostly for the height
+	 * 
+	 * @return the size of the combo, or null
+	 */
+	protected Point getDefaultComboSize(){
+		if (defaultSize != null){
+			return new Point(defaultSize.x, defaultSize.y);
+		}
+		return null;
 	}
 	
 	/**

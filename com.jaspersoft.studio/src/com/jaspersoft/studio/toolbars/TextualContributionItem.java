@@ -120,8 +120,6 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	 */
 	private WritableComboTableViewer fontName;
 	
-	//Controls for the font size combo
-	
 	/**
 	 * Combo with the font sizes
 	 */
@@ -361,6 +359,35 @@ public class TextualContributionItem extends CommonToolbarHandler {
 			}
 		}
 	};
+	
+	/**
+	 * Build the font size combo with a fixed size
+	 * 
+	 * @param parent the parent of the combo
+	 * @return a not null {@link NumericTableCombo}
+	 */
+	protected NumericTableCombo getFontSizeCombo(Composite parent){
+		NumericTableCombo result = new NumericTableCombo(parent, JSSTableCombo.STRIGHT_CORNER, 0, 6){
+			
+			@Override
+			protected Point computeSize(Composite container, int wHint, int hHint) {
+				int width = wHint;
+				int height = hHint;
+				Point defaultSize = getDefaultComboSize();
+				if (wHint == SWT.DEFAULT){
+					width = defaultSize != null ? defaultSize.x : 50;
+				}
+				if (hHint == SWT.DEFAULT){
+					height = defaultSize != null ? defaultSize.y : 23;
+				}
+				return new Point(width, height);
+			};
+		};
+		result.setMaximum(Float.MAX_VALUE);
+		result.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
+		result.setItems(ModelUtils.FONT_SIZES);
+		return result;
+	}
 
 	@Override
 	protected Control createControl(Composite parent) {
@@ -378,10 +405,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontName.addSelectionListener(fontNameComboModify);
 		setAvailableFonts();
 		
-		fontSize = new NumericTableCombo(controlsArea, SWT.NONE, 0, 6);
-		fontSize.setMaximum(Float.MAX_VALUE);
-		fontSize.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
-		fontSize.setItems(ModelUtils.FONT_SIZES);
+		fontSize = getFontSizeCombo(controlsArea);
 		fontSize.addSelectionListener(fontSizeComboModify);
 
 		RowData data = new RowData();
@@ -471,10 +495,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		getToolItems().add(tiFontName);
 		
 		ToolItem tiFontSizeCombo = new ToolItem(parent,SWT.SEPARATOR);
-		fontSize = new NumericTableCombo(parent, SWT.NONE, 0, 6);
-		fontSize.setMaximum(Float.MAX_VALUE);
-		fontSize.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
-		fontSize.setItems(ModelUtils.FONT_SIZES);
+		fontSize = getFontSizeCombo(parent);
 		fontSize.addSelectionListener(fontSizeComboModify);
 		fontSize.pack();
 		tiFontSizeCombo.setWidth(65);

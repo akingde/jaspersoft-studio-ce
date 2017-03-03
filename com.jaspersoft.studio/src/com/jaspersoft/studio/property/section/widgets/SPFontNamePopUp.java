@@ -16,7 +16,6 @@ import java.util.Locale;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -171,9 +170,9 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 		setData(pnode, resolvedValue);
 		if (combo != null && !combo.getControl().isDisposed()){
 			if (elementValue != null){
-				combo.setTextColor(ColorConstants.black);
+				combo.setForeground(ColorConstants.black);
 			} else {
-				combo.setTextColor(ColorConstants.gray);
+				combo.setForeground(ColorConstants.gray);
 			}
 		}
 	}

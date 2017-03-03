@@ -25,9 +25,9 @@ import com.jaspersoft.studio.help.HelpSystem;
 import net.sf.jasperreports.eclipse.ui.JSSTableCombo;
 
 /**
- * Class that manage the Combo Popup, create the popup manu and execture the action. the combo popup want to imitate a
- * combobox where a series of element are listed, but the selection of one item is done using a popup menu, opened by a
- * left click on the combobox
+ * Class that manage the {@link JSSTableCombo}, where a combo is created trough a canvas and a table for the menu. the {@link JSSTableCombo}
+ * want to imitate a combobox where a series of element are listed, but the selection of one item is done using a Table into a separeted shell, 
+ * opened by a left click on the combobox
  * 
  * @author Orlandin Marco
  * 
@@ -382,10 +382,6 @@ public class WritableComboTableViewer implements IMenuProvider {
 	@Override
 	public Menu getMenu() {
 		return dropDownHandle.getMenu();
-	}
-
-	public void setTextColor(Color color){
-		//dropDownHandle.setTextColor(color);
 	}
 	
 	public void setData(Object data){

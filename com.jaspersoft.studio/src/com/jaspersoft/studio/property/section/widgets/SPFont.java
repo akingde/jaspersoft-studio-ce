@@ -44,7 +44,7 @@ import com.jaspersoft.studio.property.combomenu.WritableComboTableViewer;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.swt.widgets.NumericCombo;
+import com.jaspersoft.studio.swt.widgets.NumericTableCombo;
 import com.jaspersoft.studio.utils.ImageUtils;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -84,7 +84,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	/**
 	 * The combo with the font size
 	 */
-	private NumericCombo fontSize;
+	private NumericTableCombo fontSize;
 
 	/**
 	 * Buttom for the attribute bold
@@ -298,27 +298,14 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		final RWComboBoxPropertyDescriptor pd1 = (RWComboBoxPropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE);
 
-		Composite fontSizeLayout = new Composite(group, SWT.NONE);
-		GridData fontSizeData = new GridData();
-		fontSizeData.widthHint = 65;
-		fontSizeData.minimumWidth = 65;
-		fontSizeLayout.setLayout(new GridLayout(1, false));
-		fontSizeLayout.setLayoutData(fontSizeData);
-		fontSize = new NumericCombo(fontSizeLayout, SWT.FLAT, 0, 6);
-		fontSize.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		fontSize.setItems(pd1.getItems());
+		fontSize = getFontSizeCombo(group, pd1.getItems());
 		fontSize.addSelectionListener(new SelectionAdapter() {
 
-			private int time = 0;
-
 			public void widgetSelected(SelectionEvent e) {
-				if (e.time - time > 100) {
-					Float value = fontSize.getValueAsFloat();
-					changeProperty(section, pDescriptor.getId(), pd1.getId(), value);
-					int stringLength = fontSize.getText().length();
-					fontSize.setSelection(new Point(stringLength, stringLength));
-				}
-				time = e.time;
+				Float value = fontSize.getValueAsFloat();
+				changeProperty(section, pDescriptor.getId(), pd1.getId(), value);
+				int stringLength = fontSize.getText().length();
+				fontSize.setSelection(new Point(stringLength, stringLength));
 			};
 
 		});
@@ -352,6 +339,19 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 
 		strikeTroughtToolbar = new ToolBar(toolbarsConainer, SWT.FLAT | SWT.WRAP | SWT.LEFT);
 		strikeTroughtButton = createItem(strikeTroughtToolbar, JRBaseStyle.PROPERTY_STRIKE_THROUGH, "icons/resources/edit-strike.png");
+	}
+	
+	/**
+	 * Build the font size combo with a fixed size
+	 * 
+	 * @param parent the parent of the combo
+	 * @return a not null {@link NumericTableCombo}
+	 */
+	protected NumericTableCombo getFontSizeCombo(Composite parent, String[] items){
+		NumericTableCombo result = new NumericTableCombo(parent, SWT.FLAT, 0, 6);
+		result.setMaximum(Float.MAX_VALUE);
+		result.setItems(items);
+		return result;
 	}
 
 	/**
@@ -419,9 +419,9 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 			String strfontname = StyleResolver.getInstance().getFontName(fontValue);
 			fontName.setText(strfontname);
 			if (fontValue.getOwnFontName() != null){
-				fontName.setTextColor(ColorConstants.black);
+				fontName.setForeground(ColorConstants.black);
 			} else {
-				fontName.setTextColor(ColorConstants.gray);
+				fontName.setForeground(ColorConstants.gray);
 			}
 
 			setFontSizeNumber(fontValue.getFontsize(), fontValue.getOwnFontsize());
