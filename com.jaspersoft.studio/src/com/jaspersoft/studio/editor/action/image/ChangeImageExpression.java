@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
@@ -71,6 +72,7 @@ public class ChangeImageExpression extends ACachedSelectionAction implements IGl
 				} else {
 					imageModel.setPropertyValue(JRDesignImage.PROPERTY_EXPRESSION, imageExpression.getText());
 				}
+				JSSCompoundCommand.forceRefreshVisuals(imageModel);
 			}
 		}
 	}
