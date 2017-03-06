@@ -1,69 +1,63 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.properties.dialog;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-
-import com.jaspersoft.studio.model.ANode;
 
 /**
  * Container for the definition of a Standard property
  */
 public class PropertyDTO implements Cloneable {
-	
-	/**
-	 * The node where the property is or will be
-	 */
-	private ANode pnode;
-	
+
+	private Object jrElement;
+	private ExpressionContext eContext;
+
 	/**
 	 * The name of the property, must be not null
 	 */
 	private String name;
-	
+
 	/**
 	 * The property value as string
 	 */
 	private String value;
-	
+
 	/**
 	 * Create a container for a standard property definition
 	 * 
-	 * @param name The name of the property, must be not null
-	 * @param value The property value as string
+	 * @param name
+	 *          The name of the property, must be not null
+	 * @param value
+	 *          The property value as string
 	 */
-	public PropertyDTO(String name, String value){
+	public PropertyDTO(String name, String value) {
 		this.name = name;
 		this.value = value;
 	}
-	
-	/**
-	 * Return the node where the property is defined or will
-	 * be defined
-	 * 
-	 * @return ANode, can be null
-	 */
-	public ANode getPnode() {
-		return pnode;
+
+	public Object getJrElement() {
+		return jrElement;
+	}
+
+	public void setJrElement(Object jrElement) {
+		this.jrElement = jrElement;
+	}
+
+	public ExpressionContext geteContext() {
+		return eContext;
+	}
+
+	public void seteContext(ExpressionContext eContext) {
+		this.eContext = eContext;
 	}
 
 	/**
-	 * Set the node where the property is defined or will
-	 * be defined
-	 * 
-	 * @param pnode, the node, should be not null
-	 */
-	public void setPnode(ANode pnode) {
-		this.pnode = pnode;
-	}
-
-	/**
-	 * Used to know if the property is a standard one
-	 * or an expression property. since the property DTO represent
-	 * a standard property this return always false, but can be overridden
+	 * Used to know if the property is a standard one or an expression property. since the property DTO represent a
+	 * standard property this return always false, but can be overridden
 	 * 
 	 * @return false if the property is standard, true if it is an expression property
 	 */
@@ -88,21 +82,21 @@ public class PropertyDTO implements Cloneable {
 	public String getValue() {
 		return value;
 	}
-	
+
 	/**
-	 * Return the value of the property encapsulated inside
-	 * an expression
+	 * Return the value of the property encapsulated inside an expression
 	 * 
 	 * @return a not null JRDesignExpression
 	 */
-	public JRExpression getValueAsExpression(){
+	public JRExpression getValueAsExpression() {
 		return new JRDesignExpression(getValue());
 	}
 
 	/**
 	 * Set the name of the property
 	 * 
-	 * @param name the name of the property, must be not null
+	 * @param name
+	 *          the name of the property, must be not null
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -111,20 +105,20 @@ public class PropertyDTO implements Cloneable {
 	/**
 	 * Set the value of the property
 	 * 
-	 * @param value the value of the property represented as string,
-	 * can be null
+	 * @param value
+	 *          the value of the property represented as string, can be null
 	 */
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
+
 	/**
 	 * Clone the property and return a copy of it
 	 * 
 	 * @return a not null copy of the current property
 	 */
 	@Override
-	public PropertyDTO clone(){
+	public PropertyDTO clone() {
 		return new PropertyDTO(new String(this.getName()), new String(this.getValue()));
 	}
 }

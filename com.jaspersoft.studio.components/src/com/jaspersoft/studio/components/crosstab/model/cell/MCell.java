@@ -67,28 +67,26 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ModeEnum;
 
-public class MCell extends APropertyNode implements IGraphicElement, IPastable,
-		IContainerLayout, IPastableGraphic, IContainer, IContainerEditPart,
-		ILineBox, IGroupElement, IGraphicElementContainer,
-		IGraphicalPropertiesHandler {
-	
+public class MCell extends APropertyNode implements IGraphicElement, IPastable, IContainerLayout, IPastableGraphic,
+		IContainer, IContainerEditPart, ILineBox, IGroupElement, IGraphicElementContainer, IGraphicalPropertiesHandler {
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
 	public static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
-	
+
 	private static OpaqueModePropertyDescriptor opaqueD;
-	
+
 	private static RWComboBoxPropertyDescriptor styleD;
-	
+
 	private static IPropertyDescriptor[] descriptors;
-	
+
 	private MLineBox lineBox;
-	
+
 	private String name;
-	
+
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -207,56 +205,50 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
-		opaqueD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
-				Messages.MCell_transparent, NullEnum.NOTNULL);
+		opaqueD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MCell_transparent,
+				NullEnum.NOTNULL);
 		opaqueD.setDescription(Messages.MCell_transparent_description);
 		desc.add(opaqueD);
 
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(
-				JRBaseStyle.PROPERTY_BACKCOLOR, Messages.MCell_backcolor,
-				NullEnum.INHERITED);
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR,
+				Messages.MCell_backcolor, NullEnum.INHERITED);
 		backcolorD.setDescription(Messages.MCell_backcolor_description);
 		desc.add(backcolorD);
 
-		styleD = new RWComboBoxPropertyDescriptor(
-				JRDesignCellContents.PROPERTY_STYLE,
-				Messages.MCell_parent_style, new String[] { "" }, //$NON-NLS-1$
+		styleD = new RWComboBoxPropertyDescriptor(JRDesignCellContents.PROPERTY_STYLE, Messages.MCell_parent_style,
+				new String[] { "" }, //$NON-NLS-1$
 				NullEnum.NULL);
 		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);
 
-		PixelPropertyDescriptor wD = new PixelPropertyDescriptor(
-				JRDesignCrosstabCell.PROPERTY_WIDTH, Messages.common_width);
+		PixelPropertyDescriptor wD = new PixelPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_WIDTH,
+				Messages.common_width);
 		desc.add(wD);
 
-		PixelPropertyDescriptor hD = new PixelPropertyDescriptor(
-				JRDesignCrosstabCell.PROPERTY_HEIGHT, Messages.common_height);
+		PixelPropertyDescriptor hD = new PixelPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_HEIGHT,
+				Messages.common_height);
 		desc.add(hD);
 
-		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX,
-				Messages.MCell_line_box);
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MCell_line_box);
 		lineBoxD.setDescription(Messages.MCell_line_box_description);
 		desc.add(lineBoxD);
 
-		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(
-				MGraphicElement.PROPERTY_MAP,
+		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
 				com.jaspersoft.studio.messages.Messages.common_properties);
-		propertiesMapD
-				.setDescription(com.jaspersoft.studio.messages.Messages.common_properties);
+		propertiesMapD.setDescription(com.jaspersoft.studio.messages.Messages.common_properties);
 		desc.add(propertiesMapD);
 
-		setHelpPrefix(desc,
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstabCell");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstabCell");
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
-		
+
 		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, new DefaultValue(ModeEnum.OPAQUE, false));
 		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, new DefaultValue(null, true));
 		defaultsMap.put(JRDesignCellContents.PROPERTY_STYLE, new DefaultValue(null, true));
-		
+
 		return defaultsMap;
 	}
 
@@ -289,8 +281,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 				JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
 				if (lineBox == null) {
 					lineBox = new MLineBox(jrGraphicElement.getLineBox(), this);
-					lineBox.getPropertyChangeSupport()
-							.addPropertyChangeListener(this);
+					lineBox.getPropertyChangeSupport().addPropertyChangeListener(this);
 				}
 				return lineBox;
 			}
@@ -315,12 +306,10 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 			if (id.equals(JRBaseStyle.PROPERTY_MODE))
 				jrElement.setMode((ModeEnum) opaqueD.getEnumValue(value));
 			else if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR)) {
-				jrElement.setBackcolor(Colors
-						.getAWT4SWTRGBColor((AlfaRGB) value));
+				jrElement.setBackcolor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 			} else if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
 				if (!value.equals("")) { //$NON-NLS-1$
-					JRStyle style = (JRStyle) getJasperDesign().getStylesMap()
-							.get(value);
+					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
 						jrElement.setStyle(style);
 						jrElement.setStyleNameReference(null);
@@ -332,40 +321,31 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 			} else if (id.equals(JRDesignCrosstabCell.PROPERTY_WIDTH)) {
 				MCrosstab cross = getMCrosstab();
 				if (cross != null) {
-					cross.getCrosstabManager().setWidth(jrElement,
-							(Integer) value);
+					cross.getCrosstabManager().setWidth(jrElement, (Integer) value);
 
 					cross.getCrosstabManager().refresh();
 					getPropertyChangeSupport().firePropertyChange(
-							new PropertyChangeEvent(this,
-									JRDesignCrosstabCell.PROPERTY_WIDTH, null,
-									value));
+							new PropertyChangeEvent(this, JRDesignCrosstabCell.PROPERTY_WIDTH, null, value));
 				}
 			} else if (id.equals(JRDesignCrosstabCell.PROPERTY_HEIGHT)) {
 				MCrosstab cross = getMCrosstab();
 				if (cross != null) {
-					cross.getCrosstabManager().setHeight(jrElement,
-							(Integer) value);
+					cross.getCrosstabManager().setHeight(jrElement, (Integer) value);
 
 					cross.getCrosstabManager().refresh();
 					getPropertyChangeSupport().firePropertyChange(
-							new PropertyChangeEvent(this,
-									JRDesignCrosstabCell.PROPERTY_HEIGHT, null,
-									value));
+							new PropertyChangeEvent(this, JRDesignCrosstabCell.PROPERTY_HEIGHT, null, value));
 				}
 			} else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
 				JRPropertiesMap v = (JRPropertiesMap) value;
-				String[] names = jrElement.getPropertiesMap()
-						.getPropertyNames();
+				String[] names = jrElement.getPropertiesMap().getPropertyNames();
 				for (int i = 0; i < names.length; i++) {
 					jrElement.getPropertiesMap().removeProperty(names[i]);
 				}
 				names = v.getPropertyNames();
 				for (int i = 0; i < names.length; i++)
-					jrElement.getPropertiesMap().setProperty(names[i],
-							v.getProperty(names[i]));
-				this.getPropertyChangeSupport().firePropertyChange(
-						MGraphicElement.PROPERTY_MAP, false, true);
+					jrElement.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
+				this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
 			}
 
 		}
@@ -386,8 +366,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	public Rectangle getBounds() {
 		MCrosstab mc = getMCrosstab();
 		if (mc != null)
-			return mc.getCrosstabManager().getBounds(
-					new CrosstabCell(getValue()));
+			return mc.getCrosstabManager().getBounds(new CrosstabCell(getValue()));
 		return null;
 	}
 
@@ -412,7 +391,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		}
 		return 0;
 	}
-	
+
 	public Integer getBottomPadding() {
 		JRDesignCellContents c = null;
 		if (getValue() != null) {
@@ -439,11 +418,10 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		}
 		return 0;
 	}
-	
+
 	public MCrosstab getCrosstab() {
 		INode node = this;
-		while (node != null && node.getParent() != null
-				&& !(node instanceof MCrosstab) && !(node instanceof MRoot)) {
+		while (node != null && node.getParent() != null && !(node instanceof MCrosstab) && !(node instanceof MRoot)) {
 			node = node.getParent();
 		}
 		if (node instanceof MCrosstab)
@@ -490,30 +468,32 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	}
 
 	/**
-	 * When the style changes a refresh is sent not only to the current node, but
-	 * also to the node that are listening on the same JR element. This is done 
-	 * to propagate the change to every editor where the element is displayed
+	 * When the style changes a refresh is sent not only to the current node,
+	 * but also to the node that are listening on the same JR element. This is
+	 * done to propagate the change to every editor where the element is
+	 * displayed
 	 */
 	@Override
 	public void setStyleChangedProperty() {
-		//Performance improvement, avoid to send the event more than one time for each editor
+		// Performance improvement, avoid to send the event more than one time
+		// for each editor
 		HashSet<ANode> refreshedParents = new HashSet<ANode>();
-		for(PropertyChangeListener listener : getValue().getEventSupport().getPropertyChangeListeners()){
-			if (listener instanceof MCell){
-				MCell listenerCell = (MCell)listener;
+		for (PropertyChangeListener listener : getValue().getEventSupport().getPropertyChangeListeners()) {
+			if (listener instanceof MCell) {
+				MCell listenerCell = (MCell) listener;
 				MCrosstab crosstab = listenerCell.getMCrosstab();
-				if (crosstab != null){
+				if (crosstab != null) {
 					ANode tableParent = crosstab.getParent();
-					if (tableParent != null && !refreshedParents.contains(tableParent)){
+					if (tableParent != null && !refreshedParents.contains(tableParent)) {
 						refreshedParents.add(tableParent);
 						listenerCell.setChangedProperty(true);
-						
+
 					}
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Set the actual state of the property change flag
 	 */
@@ -570,7 +550,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	public HashMap<String, List<ANode>> getUsedStyles() {
 		JRDesignCellContents jrElement = getValue();
 		HashMap<String, List<ANode>> result = super.getUsedStyles();
-		if (jrElement != null && jrElement.getStyle() != null){
+		if (jrElement != null && jrElement.getStyle() != null) {
 			addElementStyle(jrElement.getStyle(), result);
 		}
 		for (INode node : getChildren()) {
@@ -580,15 +560,15 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		}
 		return result;
 	}
-	
+
 	@Override
 	public void setStyle(JRStyle style) {
 		JRDesignCellContents jrElement = getValue();
-		if (jrElement != null){
+		if (jrElement != null) {
 			jrElement.setStyle(style);
 		}
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		HashSet<String> graphicalProperties = getGraphicalProperties();
@@ -602,18 +582,19 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	public ILayout getDefaultLayout() {
 		return LayoutManager.getLayout(VerticalRowLayout.class.getName());
 	}
-	
+
 	/**
-	 * Override this to update the node name on some events (group name changed for example).
-	 * By default this doesn't to anything, trigger only an event to force the UI to refresh, so
-	 * it can be called by the override of this method
+	 * Override this to update the node name on some events (group name changed
+	 * for example). By default this doesn't to anything, trigger only an event
+	 * to force the UI to refresh, so it can be called by the override of this
+	 * method
 	 */
-	public void updateName(){
+	public void updateName() {
 		if (getValue() != null) {
 			propertyChange(new PropertyChangeEvent(getValue(), MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null));
 		}
 	}
-	
+
 	/**
 	 * Style descriptor used by the inheritance view section
 	 */

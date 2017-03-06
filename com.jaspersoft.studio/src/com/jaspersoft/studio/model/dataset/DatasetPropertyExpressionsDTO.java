@@ -1,12 +1,11 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset;
 
 import java.util.List;
 
-import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 
@@ -17,17 +16,19 @@ import net.sf.jasperreports.engine.type.PropertyEvaluationTimeEnum;
 
 public class DatasetPropertyExpressionsDTO extends PropertyExpressionsDTO {
 
-	public DatasetPropertyExpressionsDTO(ANode pnode) {
-		super(pnode);
+	public DatasetPropertyExpressionsDTO(Object jrElement, ExpressionContext eContext) {
+		super(jrElement, eContext);
 	}
 
-	public DatasetPropertyExpressionsDTO(JRPropertyExpression[] propExpressions, JRPropertiesMap propMap, ANode pnode) {
-		this(pnode);
+	public DatasetPropertyExpressionsDTO(JRPropertyExpression[] propExpressions, JRPropertiesMap propMap,
+			Object jrElement, ExpressionContext eContext) {
+		this(jrElement, eContext);
 		if (propExpressions != null) {
 			for (JRPropertyExpression prop : propExpressions) {
 				DatasetPropertyExpressionDTO newProp = new DatasetPropertyExpressionDTO(true, prop.getName(),
 						prop.getValueExpression().getText(), ((DesignDatasetPropertyExpression) prop).getEvaluationTime());
-				newProp.setPnode(pnode);
+				newProp.seteContext(eContext);
+				newProp.setJrElement(jrElement);
 				properties.add(newProp);
 			}
 		}
@@ -35,14 +36,16 @@ public class DatasetPropertyExpressionsDTO extends PropertyExpressionsDTO {
 			for (String prop : propMap.getPropertyNames()) {
 				DatasetPropertyExpressionDTO newProp = new DatasetPropertyExpressionDTO(false, prop, propMap.getProperty(prop),
 						null);
-				newProp.setPnode(pnode);
+				newProp.seteContext(eContext);
+				newProp.setJrElement(jrElement);
 				properties.add(newProp);
 			}
 		}
 	}
 
-	public DatasetPropertyExpressionsDTO(List<PropertyExpressionDTO> properties, ANode pnode) {
-		super(properties, pnode);
+	public DatasetPropertyExpressionsDTO(List<PropertyExpressionDTO> properties, Object jrElement,
+			ExpressionContext eContext) {
+		super(properties, jrElement, eContext);
 	}
 
 	@Override
@@ -50,7 +53,8 @@ public class DatasetPropertyExpressionsDTO extends PropertyExpressionsDTO {
 		if (!hasProperty(name, isExpression)) {
 			DatasetPropertyExpressionDTO newProp = new DatasetPropertyExpressionDTO(isExpression, name, value,
 					isExpression ? PropertyEvaluationTimeEnum.REPORT : null);
-			newProp.setPnode(pnode);
+			newProp.seteContext(geteContext());
+			newProp.setJrElement(getJrElement());
 			properties.add(newProp);
 			return true;
 		}
@@ -75,7 +79,8 @@ public class DatasetPropertyExpressionsDTO extends PropertyExpressionsDTO {
 		if (!hasProperty(name, isExpression)) {
 			DatasetPropertyExpressionDTO newProp = new DatasetPropertyExpressionDTO(isExpression, name, value,
 					isExpression ? PropertyEvaluationTimeEnum.REPORT : null);
-			newProp.setPnode(pnode);
+			newProp.seteContext(geteContext());
+			newProp.setJrElement(getJrElement());
 			properties.add(position, newProp);
 			return true;
 		}
@@ -84,7 +89,7 @@ public class DatasetPropertyExpressionsDTO extends PropertyExpressionsDTO {
 
 	@Override
 	public DatasetPropertyExpressionsDTO clone() {
-		DatasetPropertyExpressionsDTO copy = new DatasetPropertyExpressionsDTO(getPnode());
+		DatasetPropertyExpressionsDTO copy = new DatasetPropertyExpressionsDTO(getJrElement(), geteContext());
 		for (PropertyExpressionDTO prop : getProperties()) {
 			boolean exp = prop.isExpression();
 			copy.addProperty(prop.getName(), prop.getValue(), exp);

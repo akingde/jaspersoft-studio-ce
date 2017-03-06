@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -599,7 +598,8 @@ public class MGraphicElement extends APropertyNode
 			JRPropertyExpression[] propertyExpressions = jrElement.getPropertyExpressions();
 			if (propertyExpressions != null)
 				propertyExpressions = propertyExpressions.clone();
-			return new PropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrElement), this);
+			return new PropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrElement), getValue(),
+					ModelUtils.getExpressionContext(this));
 		}
 		if (id.equals(PROPERTY_MAP))
 			return getPropertiesMapClone(jrElement);

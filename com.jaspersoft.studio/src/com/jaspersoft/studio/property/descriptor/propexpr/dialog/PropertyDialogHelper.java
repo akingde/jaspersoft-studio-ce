@@ -29,7 +29,7 @@ public class PropertyDialogHelper {
 			TColumn tColumn = TColumnFactory.getTColumn(pm);
 			tColumn.setValue(jConf);
 			tcols.add(tColumn);
-			d = new PropertiesDialog<JRParameter>(UIUtils.getShell(), p, tcols, pm.getLabel());
+			d = new PropertiesDialog<JRParameter>(UIUtils.getShell(), p, tcols, pm.getLabel(), jConf);
 		} else {
 			d = new JRPropertyExpressionDialog(UIUtils.getShell());
 			((JRPropertyExpressionDialog) d).setShowPropertyName(true);

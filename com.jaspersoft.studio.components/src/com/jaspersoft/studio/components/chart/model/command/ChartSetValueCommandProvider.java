@@ -49,7 +49,7 @@ public class ChartSetValueCommandProvider implements ISetValueCommandProvider {
 			if (newVal instanceof CustomizerPropertyExpressionsDTO){
 				currentDTO = (CustomizerPropertyExpressionsDTO)newVal;
 			} else {
-				currentDTO = new CustomizerPropertyExpressionsDTO((PropertyExpressionsDTO)newVal);
+				currentDTO = new CustomizerPropertyExpressionsDTO((PropertyExpressionsDTO)newVal, (MChart)source);
 			}
 			JSSCompoundCommand command = new JSSCompoundCommand("Set Chart Customizers", (ANode)source);
 			

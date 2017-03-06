@@ -15,9 +15,11 @@ import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.property.metadata.PropertyMetadataRegistry;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -95,5 +97,37 @@ public class DatasetUtil {
 		for (JRParameter prm : dataset.getParameters())
 			if (!prm.isSystemDefined())
 				prm.getPropertiesMap().removeProperty(p);
+	}
+
+	public static DataAdapter getDataAdapter(JasperReportsConfiguration jConfig, JRDesignDataset ds) {
+		DataAdapter da = null;
+		String dapath = ds.getPropertiesMap()
+				.getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+		if (!Misc.isNullOrEmpty(dapath)) {
+			ADataAdapterStorage[] das = DataAdapterManager.getDataAdapter((IFile) jConfig.get(FileUtils.KEY_FILE), jConfig);
+			for (ADataAdapterStorage s : das) {
+				for (DataAdapterDescriptor dad : s.getDataAdapterDescriptors()) {
+					if (s.getUrl(dad).equals(dapath)) {
+						da = dad.getDataAdapter();
+						break;
+					}
+				}
+				if (da != null)
+					break;
+			}
+		}
+		if (da == null) {
+			String name = ds.getPropertiesMap().getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+			if (!Misc.isNullOrEmpty(name)) {
+				ADataAdapterStorage storage = DataAdapterManager.getJRDefaultStorage(jConfig);
+				for (DataAdapterDescriptor dad : storage.getDataAdapterDescriptors()) {
+					if (dad.getDataAdapter().getName().equals(name)) {
+						da = dad.getDataAdapter();
+						break;
+					}
+				}
+			}
+		}
+		return da;
 	}
 }

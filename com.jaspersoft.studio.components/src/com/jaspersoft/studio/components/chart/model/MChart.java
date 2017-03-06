@@ -440,7 +440,7 @@ public class MChart extends MGraphicElementLineBox
 		if (id.equals(CHART_PROPERTY_CUSTOMIZER)) {
 			PropertyExpressionsDTO dto = (PropertyExpressionsDTO) super.getPropertyValue(
 					JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS);
-			return new CustomizerPropertyExpressionsDTO(dto);
+			return new CustomizerPropertyExpressionsDTO(dto, this);
 		}
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
 			return titlePositionD.getIntValue(jrElement.getTitlePositionValue());

@@ -36,6 +36,7 @@ import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.property.dataset.dialog.AbstractModifyTable;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumnFactory;
+import com.jaspersoft.studio.property.descriptor.propexpr.dialog.HintsPropertiesList;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
 import com.jaspersoft.studio.swt.widgets.table.IEditElement;
@@ -45,6 +46,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
@@ -155,8 +157,11 @@ public class FieldsTable extends AbstractModifyTable {
 			@Override
 			public void editElement(List<JRDesignField> input, int pos) {
 				JRDesignField oldF = input.get(pos);
+				JasperReportsConfiguration jConf = mdataset.getJasperConfiguration();
+				jConf.put(HintsPropertiesList.COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE,
+						dataset.getQuery() != null ? dataset.getQuery().getLanguage() : null);
 				PropertiesDialog<JRDesignField> d = new PropertiesDialog<JRDesignField>(tviewer.getTable().getShell(),
-						(JRDesignField) oldF.clone(), tcolumns, MField.getIconDescriptor().getDescription());
+						(JRDesignField) oldF.clone(), tcolumns, MField.getIconDescriptor().getDescription(), jConf);
 				if (d.open() == Dialog.OK) {
 					dataset.removeField(oldF);
 					try {
@@ -166,6 +171,7 @@ public class FieldsTable extends AbstractModifyTable {
 						UIUtils.showError(e);
 					}
 				}
+				jConf.remove(HintsPropertiesList.COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE);
 			}
 		});
 		eb.editOnDoubleClick();

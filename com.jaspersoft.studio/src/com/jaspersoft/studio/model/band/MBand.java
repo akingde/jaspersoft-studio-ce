@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.model.band;
 
@@ -75,7 +74,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	private static final Integer CONST_HEIGHT = new Integer(50);
 
 	private static IPropertyDescriptor[] descriptors;
-	
+
 	/**
 	 * The icon descriptor.
 	 */
@@ -90,7 +89,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * The band type.
 	 */
 	private BandTypeEnum bandType;
-	
+
 	private JRBandDTO returnValuesDTO;
 
 	/**
@@ -325,6 +324,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 
 		return getIconDescriptor().getToolTip();
 	}
+
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
@@ -20,8 +21,8 @@ import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 public class WFieldName extends WProperty {
 	private JRDesignDataset dataset;
 
-	public WFieldName(Composite parent, TColumn c, Object element) {
-		super(parent, c, element);
+	public WFieldName(Composite parent, TColumn c, Object element, JasperReportsConfiguration jConfig) {
+		super(parent, c, element, jConfig);
 		this.dataset = (JRDesignDataset) c.getValue();
 	}
 

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.properties;
 
@@ -30,7 +29,7 @@ public class JPropertiesCellEditor extends EditableDialogCellEditor {
 			return wizard.getValue();
 		return null;
 	}
-	
+
 	private JPropertiesLabelProvider labelProvider;
 
 	@Override

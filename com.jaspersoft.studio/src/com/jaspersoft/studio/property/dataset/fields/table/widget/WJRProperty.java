@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertyExpression;
@@ -15,8 +16,8 @@ import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 
 public class WJRProperty extends AWidget {
 
-	public WJRProperty(Composite parent, TColumn c, Object element) {
-		super(parent, c, element);
+	public WJRProperty(Composite parent, TColumn c, Object element, JasperReportsConfiguration jConfig) {
+		super(parent, c, element, jConfig);
 	}
 
 	@Override

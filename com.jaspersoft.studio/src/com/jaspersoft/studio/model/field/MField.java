@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.model.field;
 
@@ -209,7 +208,8 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 			JRPropertyExpression[] propertyExpressions = jrField.getPropertyExpressions();
 			if (propertyExpressions != null)
 				propertyExpressions = propertyExpressions.clone();
-			return new PropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrField), this);
+			return new PropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrField), getValue(),
+					ModelUtils.getExpressionContext(this));
 		}
 		if (id.equals(PROPERTY_MAP))
 			return getPropertiesMapClone(jrField);

@@ -62,7 +62,8 @@ public class PropertyExpressionDTO extends PropertyDTO {
 		String v = this.getValue();
 		PropertyExpressionDTO result = new PropertyExpressionDTO(this.isExpression(), new String(this.getName()),
 				v == null ? v : new String(v));
-		result.setPnode(getPnode());
+		result.seteContext(geteContext());
+		result.setJrElement(getJrElement());
 		return result;
 	}
 

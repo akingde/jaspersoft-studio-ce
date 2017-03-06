@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -485,7 +484,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			JRPropertyExpression[] propertyExpressions = jrDesign.getPropertyExpressions();
 			if (propertyExpressions != null)
 				propertyExpressions = propertyExpressions.clone();
-			return new DatasetPropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrDesign), this);
+			return new DatasetPropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrDesign), getValue(),
+					ModelUtils.getExpressionContext(this));
 		}
 		if (id.equals(PROPERTY_MAP))
 			return getPropertiesMapClone(jrDesign);

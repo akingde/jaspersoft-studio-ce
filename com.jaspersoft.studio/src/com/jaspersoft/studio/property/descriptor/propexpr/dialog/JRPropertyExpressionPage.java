@@ -22,7 +22,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
@@ -133,8 +132,9 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				PropertyExpressionDTO v = value instanceof DatasetPropertyExpressionsDTO
 						? new DatasetPropertyExpressionDTO(false, name, "NEW_VALUE", null)
 						: new PropertyExpressionDTO(false, name, "NEW_VALUE");
-				v.setPnode(value.getPnode());
-				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
+				v.seteContext(value.geteContext());
+				v.setJrElement(value.getJrElement());
+				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(parent.getShell());
 				dialog.setShowExpression(showExpression);
 				dialog.setValue(v);
 				if (dialog.open() == Window.OK)

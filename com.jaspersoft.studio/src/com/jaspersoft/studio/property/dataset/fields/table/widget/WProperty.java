@@ -7,13 +7,14 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class WProperty extends AWidget {
 
-	public WProperty(Composite parent, TColumn c, Object element) {
-		super(parent, c, element);
+	public WProperty(Composite parent, TColumn c, Object element, JasperReportsConfiguration jConfig) {
+		super(parent, c, element, jConfig);
 	}
 
 	protected Object getValue() {

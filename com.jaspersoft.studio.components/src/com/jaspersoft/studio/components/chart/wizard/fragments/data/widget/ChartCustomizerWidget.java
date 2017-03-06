@@ -210,7 +210,7 @@ public abstract class ChartCustomizerWidget {
 				String uniqueKey = getPropertyDTO().getUniqueKey();
 				JRChartPlot selectedPlot = selectedElement.getValue().getPlot();
 
-				CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone());
+				CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone(), getPropertyDTO().getPnode());
 				CustomizerNewWizard wizard = new CustomizerNewWizard(uniqueKey, getExpressionContext(), dto, jConfig, selectedPlot);		
 				String title = com.jaspersoft.studio.components.chart.messages.Messages.ChartCustomizerWidget_selectDialogTitle;
 				wizard.setWindowTitle(title);
@@ -478,7 +478,7 @@ public abstract class ChartCustomizerWidget {
 				return;
 			}
 			
-			CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone());
+			CustomizerPropertyExpressionsDTO dto = new CustomizerPropertyExpressionsDTO(getPropertyDTO().clone(), getPropertyDTO().getPnode());
 			CustomizerEditWizard wizard = new CustomizerEditWizard(editElement, getExpressionContext(), dto, jConfig);		
 			PersistentLocationWizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);
 			String title = com.jaspersoft.studio.components.chart.messages.Messages.ChartCustomizerWidget_editDialogTitle;

@@ -19,9 +19,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
@@ -29,7 +26,6 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -74,10 +70,8 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 	 */
 	@Override
 	protected void initializeHints() {
-		if (value.getPnode() != null) {
-			hints = HintsPropertiesList.getElementProperties(value.getPnode().getValue());
-			Collections.sort(hints);
-		}
+		hints = HintsPropertiesList.getElementProperties(value.getJrElement(), value.geteContext());
+		Collections.sort(hints);
 	}
 
 	@Override
@@ -209,14 +203,7 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 	 *          value to set
 	 */
 	private void fillValue(PropertyDTO value) {
-		ANode node = value.getPnode();
-		ExpressionContext ec = null;
-		if (node instanceof APropertyNode) {
-			ec = ((APropertyNode) node).getExpressionContext();
-		} else {
-			ec = ModelUtils.getElementExpressionContext(null, node);
-		}
-		evalue.setExpressionContext(ec);
+		evalue.setExpressionContext(value.geteContext());
 		if (cprop != null)
 			cprop.setText(Misc.nvl(value.getName()));
 		if (buseexpr != null)

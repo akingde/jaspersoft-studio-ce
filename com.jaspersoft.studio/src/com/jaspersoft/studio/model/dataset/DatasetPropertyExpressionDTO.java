@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset;
 
@@ -29,7 +28,8 @@ public class DatasetPropertyExpressionDTO extends PropertyExpressionDTO {
 	public DatasetPropertyExpressionDTO clone() {
 		DatasetPropertyExpressionDTO result = new DatasetPropertyExpressionDTO(this.isExpression(),
 				new String(this.getName()), new String(this.getValue()), evalTime);
-		result.setPnode(getPnode());
+		result.seteContext(geteContext());
+		result.setJrElement(getJrElement());
 		return result;
 	}
 }

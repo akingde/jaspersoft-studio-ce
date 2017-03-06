@@ -53,38 +53,39 @@ import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyD
  *
  */
 public class MReportPart extends APropertyNode {
-	
-	private static final ImageDescriptor standardReportImgDesc = JRBookActivator.getDefault().getImageDescriptor("/icons/report_loading_preview.png");; //$NON-NLS-1$
-	
+
+	private static final ImageDescriptor standardReportImgDesc = JRBookActivator.getDefault()
+			.getImageDescriptor("/icons/report_loading_preview.png");; //$NON-NLS-1$
+
 	public static final String COMPONENT_NAMESPACE = "http://jasperreports.sourceforge.net/jasperreports/parts"; //$NON-NLS-1$
-	
+
 	public static final String COMPONENT_NAMESPACE_PREFIX = "p"; //$NON-NLS-1$
-	
+
 	public static final String COMPONENT_NAME = "subreportPart"; //$NON-NLS-1$
-	
+
 	public static final String REPORT_CONNECTION = "reportConnection"; //$NON-NLS-1$
-	
+
 	public static final String REPORT_DATASOURCE = "reportDatasource"; //$NON-NLS-1$
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	public static final String PROPERTY_EVALTIME_TYPE = "part_evaluationtime_type"; //$NON-NLS-1$
-	
+
 	public static final String PROPERTY_EVALTIME_GROUP = "part_evaluationtime_group"; //$NON-NLS-1$
-	
+
 	public static final String COMPONENT_EXPRESSION = "component_expression"; //$NON-NLS-1$
-	
+
 	public static final String COMPONENT_PARAMETERS = "component_parameters"; //$NON-NLS-1$
-	
+
 	public static final String REPORT_CONNECTION_PROPERTY = "REPORT_CONNECTION"; //$NON-NLS-1$
-	
+
 	public static final String REPORT_DATASOURCE_PROPERTY = "REPORT_DATA_SOURCE"; //$NON-NLS-1$
-	
+
 	// The icon descriptor
 	private static IIconDescriptor iconDescriptor;
 	// Array of property descriptors
 	private static IPropertyDescriptor[] descriptors;
-	
+
 	public MReportPart(ANode parent, JRPart bookpart, int newIndex) {
 		super(parent, newIndex);
 		setValue(bookpart);
@@ -94,7 +95,7 @@ public class MReportPart extends APropertyNode {
 	public JRDesignPart getValue() {
 		return (JRDesignPart) super.getValue();
 	}
-	
+
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -105,70 +106,74 @@ public class MReportPart extends APropertyNode {
 			iconDescriptor = new NodeIconDescriptor("reportpart"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
-	
+
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignPart jrpart = (JRDesignPart) getValue();
-		if(jrpart!=null) {
+		if (jrpart != null) {
 			PartEvaluationTime evalTime = jrpart.getEvaluationTime();
-			if(id.equals(JRDesignPart.PROPERTY_COMPONENT)) {
+			if (id.equals(JRDesignPart.PROPERTY_COMPONENT)) {
 				return jrpart.getComponent();
-			} 
-			if  (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE)){
-				if (jrpart.getComponent() != null && jrpart.getComponent() instanceof StandardSubreportPartComponent){
+			}
+			if (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE)) {
+				if (jrpart.getComponent() != null && jrpart.getComponent() instanceof StandardSubreportPartComponent) {
 					StandardSubreportPartComponent component = getSubreportComponent();
 					return component.getUsingCache();
 				}
 			}
-			if(id.equals(JRDesignPart.PROPERTY_COMPONENT_KEY)) {
+			if (id.equals(JRDesignPart.PROPERTY_COMPONENT_KEY)) {
 				return jrpart.getComponentKey();
 			}
-			if(id.equals(JRDesignPart.PROPERTY_EVALUATION_TIME)) {
+			if (id.equals(JRDesignPart.PROPERTY_EVALUATION_TIME)) {
 				return evalTime;
 			}
-			if(id.equals(JRDesignPart.PROPERTY_PART_NAME_EXPRESSION)){
+			if (id.equals(JRDesignPart.PROPERTY_PART_NAME_EXPRESSION)) {
 				return jrpart.getPartNameExpression();
 			}
-			if(id.equals(JRDesignPart.PROPERTY_PRINT_WHEN_EXPRESSION)){
+			if (id.equals(JRDesignPart.PROPERTY_PRINT_WHEN_EXPRESSION)) {
 				return jrpart.getPrintWhenExpression();
 			}
-			if(id.equals(PROPERTY_EVALTIME_GROUP)){
-				if(evalTime!=null){
+			if (id.equals(PROPERTY_EVALTIME_GROUP)) {
+				if (evalTime != null) {
 					return evalTime.getEvaluationGroup();
 				}
 			}
-			if(id.equals(PROPERTY_EVALTIME_TYPE)){
-				if(evalTime!=null){
+			if (id.equals(PROPERTY_EVALTIME_TYPE)) {
+				if (evalTime != null) {
 					return evalTime.getEvaluationTimeType();
 				}
 			}
-			if (id.equals(COMPONENT_EXPRESSION)){
+			if (id.equals(COMPONENT_EXPRESSION)) {
 				PartComponent component = jrpart.getComponent();
-				if (component != null && component instanceof StandardSubreportPartComponent){
-					StandardSubreportPartComponent subComponent = (StandardSubreportPartComponent)component;
+				if (component != null && component instanceof StandardSubreportPartComponent) {
+					StandardSubreportPartComponent subComponent = (StandardSubreportPartComponent) component;
 					return subComponent.getExpression();
 				}
 			}
-			if(id.equals(PROPERTY_MAP)){
+			if (id.equals(PROPERTY_MAP)) {
 				return jrpart.getPropertiesMap().cloneProperties();
 			}
-			if(id.equals(COMPONENT_PARAMETERS)){
+			if (id.equals(COMPONENT_PARAMETERS)) {
 				PartComponent component = jrpart.getComponent();
-				if (component != null && component instanceof StandardSubreportPartComponent){
-					StandardSubreportPartComponent subComponent = (StandardSubreportPartComponent)component;
+				if (component != null && component instanceof StandardSubreportPartComponent) {
+					StandardSubreportPartComponent subComponent = (StandardSubreportPartComponent) component;
 					return subComponent.getParameters();
 				}
 				return new JRSubreportParameter[0];
 			}
-			if (id.equals(REPORT_CONNECTION)){
+			if (id.equals(REPORT_CONNECTION)) {
 				JRSubreportParameter value = getParameterValue(REPORT_CONNECTION_PROPERTY);
-				if ( value != null) return value.getExpression();
-				else return null;
-			} 
-			if (id.equals(REPORT_DATASOURCE)){
+				if (value != null)
+					return value.getExpression();
+				else
+					return null;
+			}
+			if (id.equals(REPORT_DATASOURCE)) {
 				JRSubreportParameter value = getParameterValue(REPORT_DATASOURCE_PROPERTY);
-				if ( value != null) return value.getExpression() ;
-				else return null;
+				if (value != null)
+					return value.getExpression();
+				else
+					return null;
 			}
 		}
 		return null;
@@ -209,8 +214,8 @@ public class MReportPart extends APropertyNode {
 					jrpart.getPropertiesMap().removeProperty(names[i]);
 				}
 				names = v.getPropertyNames();
-				for (int i = 0; i < names.length; i++){
-					jrpart.getPropertiesMap().setProperty(names[i],v.getProperty(names[i]));
+				for (int i = 0; i < names.length; i++) {
+					jrpart.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
 				}
 				this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
 			} else if (id.equals(COMPONENT_PARAMETERS)) {
@@ -234,30 +239,32 @@ public class MReportPart extends APropertyNode {
 						}
 					}
 				}
-			} else if (id.equals(REPORT_CONNECTION)){
-				setParameterValue(REPORT_CONNECTION_PROPERTY, value != null ? ((JRExpression)value).getText() : null);
-			} else if (id.equals(REPORT_DATASOURCE)){
-				setParameterValue(REPORT_DATASOURCE_PROPERTY, value != null ? ((JRExpression)value).getText() : null);
+			} else if (id.equals(REPORT_CONNECTION)) {
+				setParameterValue(REPORT_CONNECTION_PROPERTY, value != null ? ((JRExpression) value).getText() : null);
+			} else if (id.equals(REPORT_DATASOURCE)) {
+				setParameterValue(REPORT_DATASOURCE_PROPERTY, value != null ? ((JRExpression) value).getText() : null);
 			}
 		}
 	}
-	
+
 	/**
-	 * Set the value of a parameter for the component of the element. This is done only if 
-	 * the component is of type StandardSubreportPartComponent. If the value of the parameter is
-	 * null then the parameter is removed
+	 * Set the value of a parameter for the component of the element. This is
+	 * done only if the component is of type StandardSubreportPartComponent. If
+	 * the value of the parameter is null then the parameter is removed
 	 * 
-	 * @param name of the parameter
-	 * @param value of the parameter
+	 * @param name
+	 *            of the parameter
+	 * @param value
+	 *            of the parameter
 	 */
-	private void setParameterValue(String parameterName, String value){
+	private void setParameterValue(String parameterName, String value) {
 		JRDesignPart jrpart = (JRDesignPart) getValue();
 		if (jrpart != null) {
 			PartComponent component = jrpart.getComponent();
 			if (component != null && component instanceof StandardSubreportPartComponent) {
 				StandardSubreportPartComponent subComponent = (StandardSubreportPartComponent) component;
 				subComponent.removeParameter(parameterName);
-				if (value != null && !value.isEmpty()){
+				if (value != null && !value.isEmpty()) {
 					JRDesignSubreportParameter parameter = new JRDesignSubreportParameter();
 					parameter.setName(parameterName);
 					parameter.setExpression(new JRDesignExpression(value));
@@ -270,16 +277,18 @@ public class MReportPart extends APropertyNode {
 			}
 		}
 	}
-	
+
 	/**
-	 * Return a value of a parameter for the component of the element. This is done only if 
-	 * the component is of type StandardSubreportPartComponent.
+	 * Return a value of a parameter for the component of the element. This is
+	 * done only if the component is of type StandardSubreportPartComponent.
 	 * 
-	 * @param parameterName the name of the parameter
-	 * @return the value of the parameter or null if the component is not of a type StandardSubreportPartComponent
-	 * or the parameter is not defined
+	 * @param parameterName
+	 *            the name of the parameter
+	 * @return the value of the parameter or null if the component is not of a
+	 *         type StandardSubreportPartComponent or the parameter is not
+	 *         defined
 	 */
-	private JRSubreportParameter getParameterValue(String parameterName){
+	private JRSubreportParameter getParameterValue(String parameterName) {
 		JRDesignPart jrpart = (JRDesignPart) getValue();
 		if (jrpart != null) {
 			PartComponent component = jrpart.getComponent();
@@ -290,13 +299,12 @@ public class MReportPart extends APropertyNode {
 		}
 		return null;
 	}
-	
-	public StandardSubreportPartComponent getSubreportComponent(){
+
+	public StandardSubreportPartComponent getSubreportComponent() {
 		JRDesignPart jrpart = (JRDesignPart) getValue();
-		return (StandardSubreportPartComponent)jrpart.getComponent();
+		return (StandardSubreportPartComponent) jrpart.getComponent();
 	}
 
-	
 	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
@@ -306,24 +314,23 @@ public class MReportPart extends APropertyNode {
 	public String getDisplayText() {
 		// Try to produce a name from the subreport component
 		JRDesignPart value = getValue();
-		if(value!=null){
+		if (value != null) {
 			PartComponent component = value.getComponent();
-			if(component instanceof SubreportPartComponent) {
-				JRExpression subreportExp = ((SubreportPartComponent)component).getExpression();
-				if(subreportExp!=null){
+			if (component instanceof SubreportPartComponent) {
+				JRExpression subreportExp = ((SubreportPartComponent) component).getExpression();
+				if (subreportExp != null) {
 					return subreportExp.getText();
 				}
 			}
 		}
 		// fallback to a generic one
-		int index = getParent().getChildren().indexOf(this);	
-		return NLS.bind("<Part {0}>",(index+1)); //$NON-NLS-1$
+		int index = getParent().getChildren().indexOf(this);
+		return NLS.bind("<Part {0}>", (index + 1)); //$NON-NLS-1$
 	}
-
 
 	@Override
 	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
-		descriptors=descriptors1;
+		descriptors = descriptors1;
 	}
 
 	@Override
@@ -333,65 +340,78 @@ public class MReportPart extends APropertyNode {
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
-		JRExpressionPropertyDescriptor printWhenExpD = new JRExpressionPropertyDescriptor(JRDesignPart.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MReportPart_printWhen);
+		JRExpressionPropertyDescriptor printWhenExpD = new JRExpressionPropertyDescriptor(
+				JRDesignPart.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MReportPart_printWhen);
 		printWhenExpD.setDescription(Messages.MReportPart_printWhenTooltip);
-		printWhenExpD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression")); //$NON-NLS-1$
+		printWhenExpD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression")); //$NON-NLS-1$
 		desc.add(printWhenExpD);
-		
-		JRExpressionPropertyDescriptor partNameExpression = new JRExpressionPropertyDescriptor(JRDesignPart.PROPERTY_PART_NAME_EXPRESSION, Messages.MReportPart_partName);
+
+		JRExpressionPropertyDescriptor partNameExpression = new JRExpressionPropertyDescriptor(
+				JRDesignPart.PROPERTY_PART_NAME_EXPRESSION, Messages.MReportPart_partName);
 		partNameExpression.setDescription(Messages.MReportPart_partNameTooltip);
-		partNameExpression.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#partNameExpression")); //$NON-NLS-1$
+		partNameExpression.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#partNameExpression")); //$NON-NLS-1$
 		desc.add(partNameExpression);
-		
-		JSSEvaluationComboPropertyDescriptor evaluationTimeD = new JSSEvaluationComboPropertyDescriptor(PROPERTY_EVALTIME_TYPE, Messages.common_evaluation_time, new String[]{});
+
+		JSSEvaluationComboPropertyDescriptor evaluationTimeD = new JSSEvaluationComboPropertyDescriptor(
+				PROPERTY_EVALTIME_TYPE, Messages.common_evaluation_time, new String[] {});
 		evaluationTimeD.setDescription(Messages.MReportPart_evaluationTimeTooltip);
 		desc.add(evaluationTimeD);
-		
-		JRExpressionPropertyDescriptor componentExpression = new JRExpressionPropertyDescriptor(COMPONENT_EXPRESSION, Messages.MReportPart_componentExpression);
+
+		JRExpressionPropertyDescriptor componentExpression = new JRExpressionPropertyDescriptor(COMPONENT_EXPRESSION,
+				Messages.MReportPart_componentExpression);
 		componentExpression.setDescription(Messages.MReportPart_componentExpressionTooltip);
-		componentExpression.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#partNameExpression")); //$NON-NLS-1$
+		componentExpression.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#partNameExpression")); //$NON-NLS-1$
 		desc.add(componentExpression);
-		
-		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, com.jaspersoft.studio.messages.Messages.common_properties);
+
+		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
+				com.jaspersoft.studio.messages.Messages.common_properties);
 		propertiesMapD.setDescription(com.jaspersoft.studio.messages.Messages.common_properties);
 		desc.add(propertiesMapD);
-		
-		ButtonsPropertyDescriptor returnDescriptor = new ButtonsPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES, SPPartReturnValuesButton.class);
+
+		ButtonsPropertyDescriptor returnDescriptor = new ButtonsPropertyDescriptor(
+				JRDesignSubreport.PROPERTY_RETURN_VALUES, SPPartReturnValuesButton.class);
 		returnDescriptor.setDescription(Messages.MReportPart_returnDescription);
 		desc.add(returnDescriptor);
-		
-		ButtonsPropertyDescriptor parametersDescriptor = new ButtonsPropertyDescriptor(JRDesignSubreport.PROPERTY_PARAMETERS, SPPartParametersButton.class);
+
+		ButtonsPropertyDescriptor parametersDescriptor = new ButtonsPropertyDescriptor(
+				JRDesignSubreport.PROPERTY_PARAMETERS, SPPartParametersButton.class);
 		parametersDescriptor.setDescription(Messages.MReportPart_parametersDescription);
 		desc.add(parametersDescriptor);
-		
-		CheckBoxPropertyDescriptor usingCache = new CheckBoxPropertyDescriptor(JRBaseSubreport.PROPERTY_USING_CACHE, Messages.MReportPart_cacheLabel);
+
+		CheckBoxPropertyDescriptor usingCache = new CheckBoxPropertyDescriptor(JRBaseSubreport.PROPERTY_USING_CACHE,
+				Messages.MReportPart_cacheLabel);
 		usingCache.setShowTextOnButton(false);
 		usingCache.setDescription(Messages.MReportPart_cacheDescription);
 		desc.add(usingCache);
-		
-		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(REPORT_CONNECTION, Messages.MReportPart_connectionExp);
+
+		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(REPORT_CONNECTION,
+				Messages.MReportPart_connectionExp);
 		connExprD.setDescription(Messages.MReportPart_connectionExpDesc);
 		desc.add(connExprD);
 
-		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(REPORT_DATASOURCE, Messages.MReportPart_dataSourceExp);
+		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(REPORT_DATASOURCE,
+				Messages.MReportPart_dataSourceExp);
 		dsExprD.setDescription(Messages.MReportPart_dataSourceExpDesc);
 		desc.add(dsExprD);
-		
+
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#part"); //$NON-NLS-1$
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
-		
+
 		defaultsMap.put(PROPERTY_EVALTIME_TYPE, new DefaultValue(PartEvaluationTimeType.NOW, false));
 		defaultsMap.put(PROPERTY_EVALTIME_GROUP, new DefaultValue(null, true));
 		defaultsMap.put(JRDesignPart.PROPERTY_PART_NAME_EXPRESSION, new DefaultValue(null, true));
 		defaultsMap.put(JRDesignPart.PROPERTY_PRINT_WHEN_EXPRESSION, new DefaultValue(null, true));
-		
+
 		return defaultsMap;
 	}
-	
+
 	public static JRDesignPart createJRElement(JRDesignExpression exp) {
 		JRDesignPart part = new JRDesignPart();
 		StandardSubreportPartComponent component = new StandardSubreportPartComponent();
@@ -401,13 +421,13 @@ public class MReportPart extends APropertyNode {
 		return part;
 	}
 
-	public ImageDescriptor getImageDescriptor(){
+	public ImageDescriptor getImageDescriptor() {
 		return standardReportImgDesc;
 	}
-	
+
 	@Override
 	public Object getAdapter(Class adapter) {
-		if(ExpressionContext.class.equals(adapter)){
+		if (ExpressionContext.class.equals(adapter)) {
 			return ExpressionEditorSupportUtil.getReportExpressionContext();
 		}
 		return super.getAdapter(adapter);

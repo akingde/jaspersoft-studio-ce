@@ -13,6 +13,7 @@ import java.util.Map;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -43,10 +44,12 @@ public abstract class AWidget {
 	protected TColumn c;
 	protected Object element;
 	protected AWControl control;
+	protected JasperReportsConfiguration jConfig;
 
-	public AWidget(Composite parent, TColumn c, Object element) {
+	public AWidget(Composite parent, TColumn c, Object element, JasperReportsConfiguration jConfig) {
 		this.c = c;
 		this.element = element;
+		this.jConfig = jConfig;
 
 		if (wmap.containsKey(c.getPropertyType())) {
 			try {
@@ -83,6 +86,10 @@ public abstract class AWidget {
 		control.createLabel(parent, c);
 		control.createControl(parent);
 		control.fillValue();
+	}
+
+	public JasperReportsConfiguration getjConfig() {
+		return jConfig;
 	}
 
 	public TColumn getTColumn() {

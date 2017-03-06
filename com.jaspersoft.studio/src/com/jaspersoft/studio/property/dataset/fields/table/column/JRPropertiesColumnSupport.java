@@ -14,6 +14,7 @@ import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsCellEditor;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -75,10 +76,12 @@ public class JRPropertiesColumnSupport extends PropertyColumnSupport {
 			JRPropertyExpression[] propertyExpressions = prop.getPropertyExpressions();
 			if (propertyExpressions != null)
 				propertyExpressions = propertyExpressions.clone();
-			return new PropertyExpressionsDTO(propertyExpressions, MField.getPropertiesMapClone(prop), mdataset);
+			return new PropertyExpressionsDTO(propertyExpressions, MField.getPropertiesMapClone(prop), element,
+					ModelUtils.getExpressionContext(mdataset));
 		} else if (element instanceof JRDesignParameter) {
 			JRDesignParameter prop = (JRDesignParameter) element;
-			return new PropertyExpressionsDTO(null, MParameter.getPropertiesMapClone(prop), mdataset);
+			return new PropertyExpressionsDTO(null, MParameter.getPropertiesMapClone(prop), element,
+					ModelUtils.getExpressionContext(mdataset));
 		}
 		return null;
 	}

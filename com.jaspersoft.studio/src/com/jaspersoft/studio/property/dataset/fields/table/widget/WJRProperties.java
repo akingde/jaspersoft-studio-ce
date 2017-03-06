@@ -16,6 +16,8 @@ import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertyExpression;
@@ -27,8 +29,8 @@ import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 public class WJRProperties extends AWidget {
 	private MDataset mdataset;
 
-	public WJRProperties(Composite parent, TColumn c, final Object element) {
-		super(parent, c, element);
+	public WJRProperties(Composite parent, TColumn c, final Object element, JasperReportsConfiguration jConfig) {
+		super(parent, c, element, jConfig);
 		this.mdataset = (MDataset) c.getValue();
 		final PropertyChangeListener l = new PropertyChangeListener() {
 
@@ -92,11 +94,14 @@ public class WJRProperties extends AWidget {
 			JRPropertyExpression[] propertyExpressions = prop.getPropertyExpressions();
 			if (propertyExpressions != null)
 				propertyExpressions = propertyExpressions.clone();
-			return new PropertyExpressionsDTO(propertyExpressions, MField.getPropertiesMapClone(prop), mdataset);
+			return new PropertyExpressionsDTO(propertyExpressions, MField.getPropertiesMapClone(prop), element,
+					ModelUtils.getExpressionContext(mdataset));
 		} else if (element instanceof JRDesignParameter) {
 			JRDesignParameter prop = (JRDesignParameter) element;
-			return new PropertyExpressionsDTO(null, MParameter.getPropertiesMapClone(prop), mdataset);
+			return new PropertyExpressionsDTO(null, MParameter.getPropertiesMapClone(prop), element,
+					ModelUtils.getExpressionContext(mdataset));
 		}
 		return null;
 	}
+
 }

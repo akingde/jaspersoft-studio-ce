@@ -340,7 +340,8 @@ public class ParametersTable extends AbstractModifyTable {
 			@Override
 			protected CellEditor createCellEditor() {
 				if (ce == null)
-					ce = new JRPropertyExpressionCellEditor((Composite) viewer.getControl(), false, false) {
+					ce = new JRPropertyExpressionCellEditor((Composite) viewer.getControl(), false, false,
+							mdataset.getJasperConfiguration()) {
 						@Override
 						protected String getDialogTitle() {
 							PropertyExpressionDTO v = (PropertyExpressionDTO) getValue();
@@ -462,7 +463,8 @@ public class ParametersTable extends AbstractModifyTable {
 				if (obj instanceof JRDesignParameter) {
 					JRDesignParameter oldF = (JRDesignParameter) obj;
 					PropertiesDialog<JRDesignParameter> d = new PropertiesDialog<JRDesignParameter>(tviewer.getTable().getShell(),
-							(JRDesignParameter) oldF.clone(), tcolumns, MParameter.getIconDescriptor().getDescription());
+							(JRDesignParameter) oldF.clone(), tcolumns, MParameter.getIconDescriptor().getDescription(),
+							mdataset.getJasperConfiguration());
 					if (d.open() == Dialog.OK) {
 						int pos = dataset.getParametersList().indexOf(oldF);
 						dataset.removeParameter(oldF.getName());
@@ -710,7 +712,8 @@ public class ParametersTable extends AbstractModifyTable {
 			public void editElement(List<JRDesignParameter> input, int pos) {
 				JRDesignParameter oldF = input.get(pos);
 				PropertiesDialog<JRDesignParameter> d = new PropertiesDialog<JRDesignParameter>(tviewer.getTable().getShell(),
-						(JRDesignParameter) oldF.clone(), tcolumns, MParameter.getIconDescriptor().getDescription());
+						(JRDesignParameter) oldF.clone(), tcolumns, MParameter.getIconDescriptor().getDescription(),
+						mdataset.getJasperConfiguration());
 				if (d.open() == Dialog.OK) {
 					dataset.removeParameter(oldF);
 					try {

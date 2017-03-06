@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.dialog.JRPropertyExpressionDialog;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 
@@ -21,7 +22,8 @@ public class JRPropertyExpressionCellEditor extends EditableDialogCellEditor {
 		super(parent);
 	}
 
-	public JRPropertyExpressionCellEditor(Composite parent, boolean showPropertyName, boolean showExpression) {
+	public JRPropertyExpressionCellEditor(Composite parent, boolean showPropertyName, boolean showExpression,
+			JasperReportsConfiguration jConfig) {
 		super(parent);
 		this.showPropertyName = showPropertyName;
 		this.showExpression = showExpression;

@@ -1,14 +1,13 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.properties.dialog;
-
-import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.messages.Messages;
+
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 public class JRPropertyEditor extends Wizard {
 	private JRPropertiesMap value;

@@ -1462,6 +1462,12 @@ public class ModelUtils {
 		return null;
 	}
 
+	public static ExpressionContext getExpressionContext(ANode node) {
+		if (node instanceof APropertyNode)
+			return ((APropertyNode) node).getExpressionContext();
+		return ModelUtils.getElementExpressionContext(null, node);
+	}
+
 	/**
 	 * Creates a valid name for a JRField element.
 	 * <p>
