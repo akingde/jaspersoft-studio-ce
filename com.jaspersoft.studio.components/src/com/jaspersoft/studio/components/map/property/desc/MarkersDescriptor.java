@@ -36,62 +36,62 @@ import net.sf.jasperreports.engine.JRExpression;
  * 
  */
 public class MarkersDescriptor extends ADescriptor {
-	
+
 	private IPropertyEditor standardItemEditor = new PropertyEditorAdapter() {
-		
+
 		@Override
 		public JRExpression getPropertyValueExpression(String propertyName) {
 
-			for(ItemProperty prop : item.getProperties()){
-				if (prop.getName().equals(propertyName)){
-					StandardItemProperty stdProp = (StandardItemProperty)prop;
+			for (ItemProperty prop : item.getProperties()) {
+				if (prop.getName().equals(propertyName)) {
+					StandardItemProperty stdProp = (StandardItemProperty) prop;
 					return stdProp.getValueExpression();
 				}
 			}
 			return null;
 		}
-		
+
 		@Override
 		public String getPropertyValue(String propertyName) {
 
-			for(ItemProperty prop : item.getProperties()){
-				if (prop.getName().equals(propertyName)){
-					StandardItemProperty stdProp = (StandardItemProperty)prop;
+			for (ItemProperty prop : item.getProperties()) {
+				if (prop.getName().equals(propertyName)) {
+					StandardItemProperty stdProp = (StandardItemProperty) prop;
 					return stdProp.getValue();
 				}
 			}
 			return null;
 		}
-		
+
 		@Override
 		public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
 			boolean found = false;
-			
-			for(ItemProperty prop : item.getProperties()){
-				if (prop.getName().equals(propertyName)){
-					StandardItemProperty stdProp = (StandardItemProperty)prop;
+
+			for (ItemProperty prop : item.getProperties()) {
+				if (prop.getName().equals(propertyName)) {
+					StandardItemProperty stdProp = (StandardItemProperty) prop;
 					stdProp.setValue(value);
 					stdProp.setValueExpression(valueExpression);
-					found = true; 
+					found = true;
 					break;
 				}
 			}
-			if (!found){
-				((StandardItem)item).addItemProperty(new StandardItemProperty(propertyName, value, valueExpression));
+			if (!found) {
+				((StandardItem) item).addItemProperty(new StandardItemProperty(propertyName, value, valueExpression));
 			}
 		}
-		
+
 		@Override
 		public void removeProperty(String propertyName) {
-			for(ItemProperty prop : item.getProperties()){
-				if (prop.getName().equals(propertyName)){
-					((StandardItem)item).removeItemProperty(prop);
+			for (ItemProperty prop : item.getProperties()) {
+				if (prop.getName().equals(propertyName)) {
+					((StandardItem) item).removeItemProperty(prop);
 					break;
 				}
 			}
 		}
 	};
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -122,10 +122,10 @@ public class MarkersDescriptor extends ADescriptor {
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_MARKER_title,
 						Messages.MarkersDescriptor_1, "", false, Messages.MarkersDescriptor_0), //$NON-NLS-1$
 
-				new DoublePropertyDescription(MapComponent.ITEM_PROPERTY_latitude,
-						Messages.MarkerPage_LatitudeColumn, "", false, new BigDecimal(37.7833d), -85d, 85d),
-				new DoublePropertyDescription(MapComponent.ITEM_PROPERTY_longitude,
-						Messages.MarkerPage_LongitudeColumn, "", false, new BigDecimal(-122.4167d), -180d, 180d),
+				new DoublePropertyDescription(MapComponent.ITEM_PROPERTY_latitude, Messages.MarkerPage_LatitudeColumn,
+						"", false, new BigDecimal("37.7833"), new BigDecimal("-85"), new BigDecimal("85")),
+				new DoublePropertyDescription(MapComponent.ITEM_PROPERTY_longitude, Messages.MarkerPage_LongitudeColumn,
+						"", false, new BigDecimal("-122.4167"), new BigDecimal("-180"), new BigDecimal("180")),
 
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_address, Messages.MarkersDescriptor_3,
 						Messages.MarkersDescriptor_4, false),
@@ -193,8 +193,8 @@ public class MarkersDescriptor extends ADescriptor {
 						Messages.MarkerPage_LabelColumn, Messages.MarkersDescriptor_54, false),
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_MARKER_cursor,
 						Messages.MarkersDescriptor_55, "", false), //$NON-NLS-1$
-				new IntegerPropertyDescription(MapComponent.ITEM_PROPERTY_MARKER_zIndex,
-						Messages.MarkersDescriptor_56, "", false, new Integer(0), null), //$NON-NLS-1$
+				new IntegerPropertyDescription(MapComponent.ITEM_PROPERTY_MARKER_zIndex, Messages.MarkersDescriptor_56,
+						"", false, new Integer(0), null), //$NON-NLS-1$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_clickable,
 						Messages.MarkersDescriptor_57, "", false, Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_draggable,
