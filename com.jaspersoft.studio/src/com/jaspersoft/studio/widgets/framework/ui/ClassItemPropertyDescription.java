@@ -24,6 +24,13 @@ import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
+/**
+ * Framework widget to acquire a class name. There is a combo with some suggestion and a button used to open a 
+ * class selection dialog
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class ClassItemPropertyDescription extends ComboItemPropertyDescription<String> {
 
 	public ClassItemPropertyDescription() {
@@ -36,6 +43,16 @@ public class ClassItemPropertyDescription extends ComboItemPropertyDescription<S
 
 	public ClassItemPropertyDescription(String name, String label, String description, boolean mandatory, String[] values) {
 		super(name, label, description, mandatory, values);
+	}
+	
+	public void handleEdit(Control txt, IWItemProperty wProp) {
+		if (txt instanceof Combo) {
+			//set the value inside the combo
+			wProp.setValue(((Combo)txt).getText(), null);
+		} else {
+			//it is an expression
+			super.handleEdit(txt, wProp);
+		}
 	}
 	
 	@Override
