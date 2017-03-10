@@ -60,7 +60,6 @@ public class ItemPropertyLayout extends Layout {
 
 	@Override
 	protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
-		//System.out.println("compute size");
 		if(!wItemProperty.isVisible()){
 			return new Point(0, 0);
 		} else {
@@ -94,7 +93,6 @@ public class ItemPropertyLayout extends Layout {
 			} else {
 				heightHint = isExpressionMode ? data.expressionHeightHint : data.widgetHeightHint;
 			}
-			//long time = System.currentTimeMillis();
 			Point controlSize = mainControl.computeSize (wHint, heightHint, flushCache);
 			width += controlSize.x;
 
