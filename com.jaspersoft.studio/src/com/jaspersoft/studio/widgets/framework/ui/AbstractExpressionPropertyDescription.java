@@ -152,12 +152,11 @@ public abstract class AbstractExpressionPropertyDescription<T> implements ItemPr
 			wiProp.setValue(null, new JRDesignExpression(Misc.nvl(tvalue)));
 		}
 	}
-
-	// Flag used to overcome the problem of focus events in Mac OS X
-	// - JSS Bugzilla 42999
-	// - Eclipse Bug 383750
-	// It makes sense only on E4 platform and Mac OS X operating systems.
-	public Control createControl(final IWItemProperty wiProp, Composite parent) {
+	
+	/**
+	 * Create the control to input the expression
+	 */
+	protected Control createExpressionControl(final IWItemProperty wiProp, Composite parent){
 		Text textExpression = new Text(parent, SWT.BORDER | SWT.WRAP);
 		//The expression control always fill the available area in both directions
 		GridData textData = new GridData(GridData.FILL_BOTH); 
@@ -193,6 +192,10 @@ public abstract class AbstractExpressionPropertyDescription<T> implements ItemPr
 		}
 
 		return textExpression;
+	}
+
+	public Control createControl(IWItemProperty wiProp, Composite parent) {
+		return createExpressionControl(wiProp, parent);
 	}
 
 	protected void setupContextMenu(final Control c, final IWItemProperty wiProp) {

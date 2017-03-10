@@ -53,13 +53,12 @@ public class ComboItemPropertyDescription<T> extends AbstractExpressionPropertyD
 		return kv;
 	}
 	
-	private String[] convert2Value(String[][] keyValues) {
+	protected String[] convert2Value(String[][] keyValues) {
 		String[] v = new String[keyValues.length];
 		for (int i = 0; i < keyValues.length; i++)
 			v[i] = keyValues[i][1];
 		return v;
 	}
-
 
 	public void handleEdit(Control txt, IWItemProperty wProp) {
 		super.handleEdit(txt, wProp);
@@ -103,7 +102,13 @@ public class ComboItemPropertyDescription<T> extends AbstractExpressionPropertyD
 				simpleControl.setSelection(p);
 			}
 		});
-		setupContextMenu(simpleControl, wiProp);
+		
+		if (isReadOnly()){
+			simpleControl.setEnabled(false);
+		} else {
+			setupContextMenu(simpleControl, wiProp);
+		}
+		
 		cmp.switchToSecondContainer();
 		return cmp;
 	}

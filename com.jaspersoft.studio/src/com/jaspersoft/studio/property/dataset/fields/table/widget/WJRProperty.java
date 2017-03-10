@@ -99,7 +99,6 @@ public class WJRProperty extends AWidget {
 			Label lbl = new Label(parent, SWT.NONE);
 			lbl.setText(Misc.nvl(c.getLabel(), c.getPropertyName()));
 
-			long stime = System.currentTimeMillis();
 			wip = new WItemProperty(parent, SWT.NONE, ipd, new IPropertyEditor() {
 
 				@Override
@@ -137,12 +136,8 @@ public class WJRProperty extends AWidget {
 			});
 			wip.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-			System.out.println("Widget: " + (System.currentTimeMillis() - stime));
-			stime = System.currentTimeMillis();
-
-			wip.updateWidget();
-
-			System.out.println("Set Value: " + (System.currentTimeMillis() - stime));
+			//Avoid to do the layout of the widget
+			wip.updateWidget(false);
 
 			lbl.setToolTipText(getToolTipText());
 		} else

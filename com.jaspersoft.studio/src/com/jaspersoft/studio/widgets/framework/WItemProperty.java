@@ -198,7 +198,9 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 
 		});
 
-		configureWidgetsLayoutData();
+		//Try to don't use a control listener and relying on SWT events
+		//configureWidgetsLayoutData();
+		
 		if (widgetDescriptor != null) {
 			String tt = widgetDescriptor.getToolTip();
 			expressionEditLabel.setToolTipText(tt);
@@ -207,7 +209,6 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		}
 		
 		setLayout(new ItemPropertyLayout(this, titleLabel, expressionEditLabel, editorControl, btnEditExpression));
-		layout();
 	}
 
 	@Override
@@ -226,6 +227,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	/**
 	 * Sets the layout data information for the custom widget controls.
 	 */
+	@SuppressWarnings("unused")
 	private void configureWidgetsLayoutData() {
 		addControlListener(new ControlAdapter() {
 			@Override
@@ -404,11 +406,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		return StandardContextualMenu.INSTANCE;
 	}
 
-	/**
-	 * Update the widget, avoid to re-trigger the set value trough the isUpdating flag
-	 */
 	@Override
-	public void updateWidget() {
+	public void updateWidget(boolean refreshLayout){
 		isUpdating = true;
 		try{
 			ipDesc.update(editorControl, this);
@@ -418,11 +417,20 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 				layout(true, true);
 			} else {
 				expressionEditLabel.setImage(null);
-				layout(true, true);
+				if (refreshLayout) layout(true, true);
 			}
 		} finally {
 			isUpdating = false;
 		}
+	}
+	
+	/**
+	 * Update the widget, avoid to re-trigger the set value trough the isUpdating flag
+	 * This will also re-layout the widget
+	 */
+	@Override
+	public void updateWidget() {
+		updateWidget(true);
 	}
 	
 	@Override

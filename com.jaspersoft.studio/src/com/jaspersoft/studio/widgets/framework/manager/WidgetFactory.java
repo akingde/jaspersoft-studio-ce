@@ -32,6 +32,7 @@ import com.jaspersoft.studio.widgets.framework.model.SectionPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.CheckboxItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.ClassItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.DoublePropertyDescription;
@@ -118,6 +119,7 @@ public class WidgetFactory {
 			hardcodedWidgets.put("double", new DoublePropertyDescription());
 			hardcodedWidgets.put("text", new TextPropertyDescription<String>());
 			hardcodedWidgets.put("selectable_combo", new SelectableComboItemPropertyDescription<String>());
+			hardcodedWidgets.put("class_combo", new ClassItemPropertyDescription());
 			hardcodedWidgets.put("fontfamily_combo", new FontFamilyComboPropertyDescription());
 			hardcodedWidgets.put("fontstyle_selector", new FontStylePropertyDescription());
 			hardcodedWidgets.put("checkbox_selector", new CheckboxItemPropertyDescription());

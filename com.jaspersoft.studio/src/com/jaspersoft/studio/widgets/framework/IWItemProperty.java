@@ -91,9 +91,18 @@ public interface IWItemProperty {
 	/**
 	 * Update the widget value with the one inside the model element. This should
 	 * not trigger the edit listener since the value inside the element is already
-	 * correct
+	 * correct. This will trigger the layout of the widget
 	 */
 	public void updateWidget();
+	
+	/**
+	 * Update the widget value with the one inside the model element. This should
+	 * not trigger the edit listener since the value inside the element is already
+	 * correct
+	 * 
+	 * @param layout true if the widget should be relayouted, galse otherwise
+	 */
+	public void updateWidget(boolean layout);
 	
 	/**
 	 * Return the contextual menu provider for this element

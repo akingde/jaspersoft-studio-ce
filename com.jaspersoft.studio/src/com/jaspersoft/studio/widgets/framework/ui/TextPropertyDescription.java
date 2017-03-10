@@ -92,7 +92,7 @@ public class TextPropertyDescription<T> extends AbstractExpressionPropertyDescri
 				if (UIUtil.isMacAndEclipse4()) {
 					if (((Text) e.getSource()).isDisposed())
 						return;
-					wiProp.updateWidget();
+					wiProp.updateWidget(false);
 				}
 			}
 
@@ -100,9 +100,10 @@ public class TextPropertyDescription<T> extends AbstractExpressionPropertyDescri
 
 		if (isReadOnly()){
 			simpleControl.setEnabled(false);
+		} else {
+			setupContextMenu(simpleControl, wiProp);
 		}
 		
-		setupContextMenu(simpleControl, wiProp);
 		cmp.switchToFirstContainer();
 		return cmp;
 	}
@@ -117,9 +118,8 @@ public class TextPropertyDescription<T> extends AbstractExpressionPropertyDescri
 			Text txtValue = (Text)cmp.getSecondContainer().getData();
 			String txt;
 			boolean isFallback = false;
-			String tmp = wip.getStaticValue();
-			if (tmp != null){
-				txt = tmp;
+			if (wip.getStaticValue() != null){
+				txt = wip.getStaticValue();
 			} else if (wip.getFallbackValue() != null){
 				txt = Misc.nvl(wip.getFallbackValue().toString());
 				isFallback = true;

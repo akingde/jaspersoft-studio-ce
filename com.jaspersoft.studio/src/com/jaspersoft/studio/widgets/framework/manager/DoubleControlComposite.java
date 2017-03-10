@@ -76,8 +76,10 @@ public class DoubleControlComposite extends Composite {
 	 * it also request a layout of this container and of its children
 	 */
 	public void switchToFirstContainer(){
-		layout.topControl = firstControlContainer;
-		layout(true, true);
+		if (layout.topControl != firstControlContainer){
+			layout.topControl = firstControlContainer;
+			layout(true, true);
+		}
 	}
 	
 	/**
@@ -85,7 +87,9 @@ public class DoubleControlComposite extends Composite {
 	 * it also request a layout of this container and of its children
 	 */
 	public void switchToSecondContainer(){
-		layout.topControl = secondControlContainer;
-		layout(true, true);
+		if (layout.topControl != secondControlContainer){
+			layout.topControl = secondControlContainer;
+			layout(true, true);
+		}
 	}
 }
