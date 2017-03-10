@@ -176,11 +176,8 @@ public class TColumnFactory {
 
 	public static TColumn getTColumn(PropertyMetadata pm) {
 		TColumn c = new TColumn();
-		c.setPropertyName(pm.getName());
-		c.setLabel(pm.getLabel());
-		c.setDescription(pm.getDescription());
+		c.setPropertyMetadata(pm);
 		c.setType("jrProperty");
-		c.setPropertyType(pm.getValueType());
 		return c;
 	}
 }

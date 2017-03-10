@@ -3,6 +3,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.fields.table;
 
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.properties.PropertyMetadata;
+
 public class TColumn {
 
 	private String propertyName;
@@ -12,8 +15,29 @@ public class TColumn {
 	private String type = "property";
 	private boolean readOnly = false;
 	private String propertyType = "java.lang.String";
-
+	private String defaultValue;
+	private transient PropertyMetadata propertyMetadata;
 	private transient Object value;
+
+	public PropertyMetadata getPropertyMetadata() {
+		return propertyMetadata;
+	}
+
+	public void setPropertyMetadata(PropertyMetadata propertyMetadata) {
+		this.propertyMetadata = propertyMetadata;
+		setPropertyName(propertyMetadata.getName());
+		setLabel(Misc.nvl(propertyMetadata.getLabel(), propertyMetadata.getName()));
+		setDescription(propertyMetadata.getDescription());
+		setPropertyType(propertyMetadata.getValueType());
+	}
+
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
 
 	public Object getValue() {
 		return value;

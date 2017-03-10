@@ -25,11 +25,11 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 	public DoublePropertyDescription() {
 	}
 	
-	public DoublePropertyDescription(String name, String label, String description, boolean mandatory,  BigDecimal defaultValue, Number min, Number max) {
+	public DoublePropertyDescription(String name, String label, String description, boolean mandatory,  BigDecimal defaultValue, BigDecimal min, BigDecimal max) {
 		super(name, label, description, mandatory, defaultValue, min, max);
 	}
 	
-	public DoublePropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max) {
+	public DoublePropertyDescription(String name, String label, String description, boolean mandatory, BigDecimal min, BigDecimal max) {
 		super(name, label, description, mandatory, min, max);
 	}
 	
@@ -41,7 +41,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 	}
 	
 	@Override
-	public ItemPropertyDescription<BigDecimal> clone(){
+	public DoublePropertyDescription clone(){
 		DoublePropertyDescription result = new DoublePropertyDescription();
 		result.defaultValue = defaultValue;
 		result.description = description;
@@ -57,7 +57,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
+	public DoublePropertyDescription getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
 		BigDecimal min = null;
 		BigDecimal max = null;
 		BigDecimal def = null;

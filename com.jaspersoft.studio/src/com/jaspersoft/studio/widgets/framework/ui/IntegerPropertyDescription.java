@@ -23,11 +23,11 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 	public IntegerPropertyDescription() {
 	}
 
-	public IntegerPropertyDescription(String name, String label, String description, boolean mandatory,  Integer defaultValue, Number min, Number max) {
+	public IntegerPropertyDescription(String name, String label, String description, boolean mandatory,  Integer defaultValue, Integer min, Integer max) {
 		super(name, label, description, mandatory, defaultValue, min, max);
 	}
 	
-	public IntegerPropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max) {
+	public IntegerPropertyDescription(String name, String label, String description, boolean mandatory, Integer min, Integer max) {
 		super(name, label, description, mandatory, min, max);
 	}
 	
@@ -39,7 +39,7 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 	}
 	
 	@Override
-	public ItemPropertyDescription<Integer> clone(){
+	public IntegerPropertyDescription clone(){
 		IntegerPropertyDescription result = new IntegerPropertyDescription();
 		result.defaultValue = defaultValue;
 		result.description = description;
@@ -55,7 +55,7 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
+	public IntegerPropertyDescription getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
 		Integer min = null;
 		Integer max = null;
 		Integer def = null;
@@ -94,8 +94,8 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 	protected FallbackNumericText createSimpleEditor(Composite parent) {
 		FallbackNumericText text = new FallbackNumericText(parent, SWT.BORDER, 0, 0);
 		text.setRemoveTrailZeroes(true);
-		Number max = getMax() != null ? getMax() : Integer.MAX_VALUE;
-		Number min = getMin() != null ? getMin() : Integer.MIN_VALUE;
+		Integer max = getMax() != null ? getMax() : Integer.MAX_VALUE;
+		Integer min = getMin() != null ? getMin() : Integer.MIN_VALUE;
 		text.setMaximum(max.doubleValue());
 		text.setMinimum(min.doubleValue());
 		return text;
@@ -116,7 +116,7 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 	}
 
 	@Override
-	protected Number convertValue(String v) {
+	protected Integer convertValue(String v) {
 		if (v == null || v.isEmpty()) return null;
 		return IntegerValidator.getInstance().validate(v, Locale.getDefault());
 	}

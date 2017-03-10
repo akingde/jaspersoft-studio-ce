@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.dialog;
 
@@ -38,13 +37,13 @@ import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
 
 public abstract class FormItemDialog extends AItemDialog {
-	
+
 	private boolean showAddDatasetButton = true;
 
 	protected Map<String, WItemProperty> map = new HashMap<String, WItemProperty>();
-	
+
 	protected ScrolledComposite sc;
-	
+
 	public FormItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig,
 			boolean showDataset) {
 		super(parentShell, descriptor, jrConfig, showDataset);
@@ -135,9 +134,10 @@ public abstract class FormItemDialog extends AItemDialog {
 				if (refresh)
 					return;
 				item.getProperties().clear();
-				for (String key : map.keySet()){
+				for (String key : map.keySet()) {
 					IWItemProperty wProp = map.get(key);
-					StandardItemProperty prop = new StandardItemProperty(wProp.getPropertyName(), wProp.getStaticValue(), wProp.getExpressionValue());
+					StandardItemProperty prop = new StandardItemProperty(wProp.getPropertyName(), wProp.getStaticValue(),
+							wProp.getExpressionValue());
 					item.addItemProperty(prop);
 				}
 				validateForm();
@@ -153,7 +153,7 @@ public abstract class FormItemDialog extends AItemDialog {
 		for (WItemProperty w : map.values())
 			w.setExpressionContext(currentExpContext);
 	}
-	
+
 	protected Composite createScrolledComposite(CTabFolder tabFolder, CTabItem bptab) {
 		Composite cmp = createScrolledComposite(tabFolder);
 		bptab.setControl(sc);
@@ -212,9 +212,6 @@ public abstract class FormItemDialog extends AItemDialog {
 				sc.setMinSize(sc.getContent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			}
 		});
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		ec.setLayoutData(gd);
 
 		Composite c = new Composite(ec, SWT.WRAP);
 		c.setLayout(new GridLayout(2, false));

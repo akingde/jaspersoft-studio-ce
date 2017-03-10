@@ -27,7 +27,7 @@ public abstract class AWControl {
 
 	protected void createLabel(Composite parent, TColumn c) {
 		Label lbl = new Label(parent, SWT.NONE);
-		lbl.setText(c.getLabel());
+		lbl.setText(Misc.nvl(c.getLabel(), c.getPropertyName()));
 	}
 
 	protected String getText() {

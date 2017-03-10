@@ -28,15 +28,20 @@ public class HintsPropertiesList {
 
 	public static List<ElementDescription> getElementProperties(Object holder, ExpressionContext eContext) {
 		List<ElementDescription> result = new ArrayList<ElementDescription>();
+		for (PropertyMetadata pm : getPropertiesMetadata(holder, eContext))
+			result.add(new ElementDescription(pm.getName(), pm.getDescription(), true));
+		return result;
+	}
+
+	public static List<PropertyMetadata> getPropertiesMetadata(Object holder, ExpressionContext eContext) {
+		List<PropertyMetadata> result = new ArrayList<PropertyMetadata>();
 		if (holder instanceof JasperDesign) {
 			PropertiesMetadataUtil pmu = PropertiesMetadataUtil.getInstance(eContext.getJasperReportsConfiguration());
 			ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
 			try {
 				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
 
-				List<PropertyMetadata> pms = pmu.getReportProperties((JasperDesign) holder);
-				for (PropertyMetadata pm : pms)
-					result.add(new ElementDescription(pm.getName(), pm.getDescription(), true));
+				return pmu.getReportProperties((JasperDesign) holder);
 			} finally {
 				Thread.currentThread().setContextClassLoader(oldCl);
 			}
@@ -47,10 +52,8 @@ public class HintsPropertiesList {
 			try {
 				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
 				try {
-					List<PropertyMetadata> pms = pmu.getDatasetProperties((JRDesignDataset) holder,
+					return pmu.getDatasetProperties((JRDesignDataset) holder,
 							DatasetUtil.getDataAdapter(eContext.getJasperReportsConfiguration(), ds));
-					for (PropertyMetadata pm : pms)
-						result.add(new ElementDescription(pm.getName(), pm.getDescription(), true));
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -62,9 +65,7 @@ public class HintsPropertiesList {
 			ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
 			try {
 				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
-				List<PropertyMetadata> pms = pmu.getElementProperties((JRElement) holder);
-				for (PropertyMetadata pm : pms)
-					result.add(new ElementDescription(pm.getName(), pm.getDescription(), true));
+				return pmu.getElementProperties((JRElement) holder);
 			} finally {
 				Thread.currentThread().setContextClassLoader(oldCl);
 			}
@@ -75,10 +76,8 @@ public class HintsPropertiesList {
 				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
 
 				try {
-					List<PropertyMetadata> pms = pmu.getQueryExecuterFieldProperties(
+					return pmu.getQueryExecuterFieldProperties(
 							(String) eContext.getJasperReportsConfiguration().get(COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE));
-					for (PropertyMetadata pm : pms)
-						result.add(new ElementDescription(pm.getName(), pm.getDescription(), true));
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -87,8 +86,7 @@ public class HintsPropertiesList {
 			}
 		} else if (holder instanceof JRParameter) {
 			Map<String, PropertyMetadata> map = DatasetUtil.getPmap(eContext.getJasperReportsConfiguration());
-			for (PropertyMetadata pm : map.values())
-				result.add(new ElementDescription(pm.getName(), pm.getDescription(), true));
+			result.addAll(map.values());
 		}
 
 		return result;

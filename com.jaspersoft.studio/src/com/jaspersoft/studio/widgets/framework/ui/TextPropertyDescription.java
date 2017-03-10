@@ -117,8 +117,9 @@ public class TextPropertyDescription<T> extends AbstractExpressionPropertyDescri
 			Text txtValue = (Text)cmp.getSecondContainer().getData();
 			String txt;
 			boolean isFallback = false;
-			if (wip.getStaticValue() != null){
-				txt = wip.getStaticValue();
+			String tmp = wip.getStaticValue();
+			if (tmp != null){
+				txt = tmp;
 			} else if (wip.getFallbackValue() != null){
 				txt = Misc.nvl(wip.getFallbackValue().toString());
 				isFallback = true;

@@ -21,11 +21,11 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	public FloatPropertyDescription() {
 	}
 	
-	public FloatPropertyDescription(String name, String label, String description, boolean mandatory,  Float defaultValue, Number min, Number max) {
+	public FloatPropertyDescription(String name, String label, String description, boolean mandatory,  Float defaultValue, Float min, Float max) {
 		super(name, label, description, mandatory, defaultValue, min, max);
 	}
 	
-	public FloatPropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max) {
+	public FloatPropertyDescription(String name, String label, String description, boolean mandatory, Float min, Float max) {
 		super(name, label, description, mandatory, min, max);
 	}
 	
@@ -37,7 +37,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	}
 	
 	@Override
-	public ItemPropertyDescription<Float> clone(){
+	public FloatPropertyDescription clone(){
 		FloatPropertyDescription result = new FloatPropertyDescription();
 		result.defaultValue = defaultValue;
 		result.description = description;
@@ -53,7 +53,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	}
 	
 	@Override
-	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
+	public FloatPropertyDescription getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
 		Float min = null;
 		Float max = null;
 		Float def = null;
@@ -92,8 +92,8 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	protected FallbackNumericText createSimpleEditor(Composite parent) {
 		FallbackNumericText text = new FallbackNumericText(parent, SWT.BORDER, 4, 6);
 		text.setRemoveTrailZeroes(true);
-		Number max = getMax() != null ? getMax() : Float.MAX_VALUE;
-		Number min = getMin() != null ? getMin() : Float.MIN_VALUE;
+		Float max = getMax() != null ? getMax() : Float.MAX_VALUE;
+		Float min = getMin() != null ? getMin() : Float.MIN_VALUE;
 		text.setMaximum(max.doubleValue());
 		text.setMinimum(min.doubleValue());
 		return text;

@@ -20,20 +20,20 @@ import com.jaspersoft.studio.widgets.framework.ui.widget.FallbackNumericText;
 
 public abstract class NumberPropertyDescription<T extends Number> extends AbstractExpressionPropertyDescription<T> {
 	
-	protected Number min;
+	protected T min;
 	
-	protected Number max;
+	protected T max;
 
 	public NumberPropertyDescription() {
 	}
 	
-	public NumberPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue, Number min, Number max) {
+	public NumberPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue, T min, T max) {
 		super(name, label, description, mandatory, defaultValue);
 		this.min = min;
 		this.max = max;
 	}
 
-	public NumberPropertyDescription(String name, String label, String description, boolean mandatory, Number min, Number max) {
+	public NumberPropertyDescription(String name, String label, String description, boolean mandatory, T min, T max) {
 		super(name, label, description, mandatory);
 		this.min = min;
 		this.max = max;
@@ -41,11 +41,11 @@ public abstract class NumberPropertyDescription<T extends Number> extends Abstra
 	
 	public abstract Class<?> getType();
 
-	public Number getMin() {
+	public T getMin() {
 		return min;
 	}
 
-	public Number getMax() {
+	public T getMax() {
 		return max;
 	}
 

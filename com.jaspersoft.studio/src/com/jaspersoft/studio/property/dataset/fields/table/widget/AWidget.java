@@ -51,6 +51,10 @@ public abstract class AWidget {
 		this.element = element;
 		this.jConfig = jConfig;
 
+		initControl(parent, c);
+	}
+
+	protected void initControl(Composite parent, TColumn c) {
 		if (wmap.containsKey(c.getPropertyType())) {
 			try {
 				Constructor<? extends AWControl> constr = wmap.get(c.getPropertyType()).getConstructor(AWidget.class);
