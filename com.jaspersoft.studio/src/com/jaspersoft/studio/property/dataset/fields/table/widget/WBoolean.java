@@ -33,7 +33,7 @@ public class WBoolean extends AWControl {
 
 		cmb = new Combo(cmp, SWT.BORDER | SWT.READ_ONLY);
 		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		cmb.setItems(new String[] { "", "true", "false" });
+		cmb.setItems(getValues());
 		cmb.addModifyListener(new ModifyListener() {
 
 			@Override
@@ -49,6 +49,10 @@ public class WBoolean extends AWControl {
 				cmb.setToolTipText(aw.getToolTipText());
 			}
 		});
+	}
+
+	protected String[] getValues() {
+		return new String[] { "", "true", "false" };
 	}
 
 	@Override

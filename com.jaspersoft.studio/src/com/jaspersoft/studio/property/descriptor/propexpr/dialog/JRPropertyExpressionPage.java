@@ -203,9 +203,8 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			if ((cat == null && pm.getCategory() != null) || (cat != null && !cat.equals(pm.getCategory()))) {
 				cat = pm.getCategory();
 
-				Section ec = new Section(cmp, Section.TREE_NODE);
-				ec.setText(StringUtils.capitalize(cat.substring(cat.indexOf(":") + 1)));
-				ec.setExpanded(true);
+				Section ec = new Section(cmp, Section.TREE_NODE | Section.EXPANDED);
+				ec.setText(StringUtils.capitalize(cat.substring(cat.indexOf(":") + 1))); 
 				ec.setFont(ResourceManager.getBoldFont(ec.getFont()));
 
 				Label lbl = new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL);

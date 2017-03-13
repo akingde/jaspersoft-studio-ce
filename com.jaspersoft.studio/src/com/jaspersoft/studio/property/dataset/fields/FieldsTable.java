@@ -56,8 +56,8 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.properties.PropertyMetadata;
 import net.sf.jasperreports.properties.PropertiesMetadataUtil;
+import net.sf.jasperreports.properties.PropertyMetadata;
 
 public class FieldsTable extends AbstractModifyTable {
 	private TableViewer tviewer;;
@@ -216,7 +216,7 @@ public class FieldsTable extends AbstractModifyTable {
 		TColumn c = new TColumn();
 		c.setPropertyName("valueClassName");
 		c.setLabel(Messages.common_classTypeLabel);
-		c.setType("classTypeCombo");
+		c.setPropertyType(Class.class.getName());
 		columns.add(TColumnFactory.addColumn(c, tviewer));
 		tcolumns.add(c);
 	}

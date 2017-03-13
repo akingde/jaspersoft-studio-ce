@@ -5,9 +5,12 @@ package com.jaspersoft.studio.property.dataset.fields;
 
 import java.util.List;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
@@ -40,8 +43,17 @@ public class PropertiesDialog<T> extends ATitledDialog {
 		Composite cmp = (Composite) super.createDialogArea(parent);
 		cmp.setLayout(new GridLayout(2, false));
 
-		for (TColumn c : tcolumns)
+		String type = null;
+		for (TColumn c : tcolumns) {
+			if (type != null && !type.equals(c.getType())) {
+				Label lbl = new Label(cmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+				gd.horizontalSpan = 2;
+				lbl.setLayoutData(gd);
+			}
+			type = c.getType();
 			TColumnFactory.addWidget(c, cmp, element, jConfig);
+		}
 
 		return cmp;
 	}

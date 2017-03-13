@@ -24,6 +24,7 @@ public abstract class AWidget {
 	static {
 		wmap.put(Class.class.getName(), WClassName.class);
 		wmap.put(Boolean.class.getName(), WBoolean.class);
+		wmap.put(boolean.class.getName(), WBooleanNative.class);
 		wmap.put(JRDesignExpression.class.getName(), WExpression.class);
 		wmap.put(JRPropertiesMap.class.getName(), WProperties.class);
 

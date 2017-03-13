@@ -19,6 +19,7 @@ import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
+import com.jaspersoft.studio.widgets.framework.ui.ClassItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.DoublePropertyDescription;
@@ -62,8 +63,8 @@ public class WJRProperty extends AWidget {
 				ipd = new TextPropertyDescription<String>(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue());
 			else if (c.getPropertyType().equals(Class.class.getName()))
-				ipd = new TextPropertyDescription<String>(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
-						c.getDefaultValue());
+				ipd = new ClassItemPropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
+						c.getDefaultValue(), new String[] {});
 			else if (c.getPropertyType().equals(Integer.class.getName()) || c.getPropertyType().equals(Long.class.getName()))
 				ipd = new IntegerPropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Integer.parseInt(c.getDefaultValue()) : null, null, null);
@@ -136,7 +137,7 @@ public class WJRProperty extends AWidget {
 			});
 			wip.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-			//Avoid to do the layout of the widget
+			// Avoid to do the layout of the widget
 			wip.updateWidget(false);
 
 			lbl.setToolTipText(getToolTipText());

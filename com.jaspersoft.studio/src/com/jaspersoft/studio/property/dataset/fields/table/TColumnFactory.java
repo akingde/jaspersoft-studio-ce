@@ -80,7 +80,7 @@ public class TColumnFactory {
 		tcol.getColumn().setText(c.getLabel());
 		tcol.getColumn().setWidth(200);
 
-		tcol.setEditingSupport(cs);
+		// tcol.setEditingSupport(cs);
 		tcol.setLabelProvider(new AColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {

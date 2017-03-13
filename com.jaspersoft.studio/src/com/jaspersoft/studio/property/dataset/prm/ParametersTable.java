@@ -123,6 +123,8 @@ public class ParametersTable extends AbstractModifyTable {
 						|| pname.equals(DataQueryAdapters.DEFAULT_DATAADAPTER)) {
 					refreshDataAdapter();
 					refreshProperties(da);
+					tviewer.refresh(true);
+					treeviewer.refresh(true);
 				}
 			}
 		});
@@ -818,7 +820,7 @@ public class ParametersTable extends AbstractModifyTable {
 		TColumn c = new TColumn();
 		c.setPropertyName("forPrompting");
 		c.setLabel(Messages.ParametersTable_isForPrompt);
-		c.setType("checkbox");
+		c.setPropertyType(boolean.class.getName());
 		columns.add(TColumnFactory.addColumn(c, tviewer, new CheckboxColumnSupport(tviewer, c) {
 
 			@Override
@@ -859,7 +861,6 @@ public class ParametersTable extends AbstractModifyTable {
 		c.setPropertyName("valueClassName");
 		c.setLabel(Messages.ParametersTable_class);
 		c.setPropertyType(Class.class.getName());
-		c.setType("classTypeCombo");
 		columns.add(TColumnFactory.addColumn(c, tviewer));
 		tcolumns.add(c);
 	}
@@ -869,7 +870,6 @@ public class ParametersTable extends AbstractModifyTable {
 		c.setPropertyName("defaultValueExpression");
 		c.setLabel(Messages.MParameter_default_value_expression);
 		c.setPropertyType(JRDesignExpression.class.getName());
-		c.setType("expression");
 		c.setValue(mdataset);
 		columns.add(TColumnFactory.addColumn(c, tviewer, new ExpressionColumnSupport(tviewer, c) {
 			@Override
