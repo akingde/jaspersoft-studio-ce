@@ -73,6 +73,10 @@ public class ItemPropertyLayoutData {
 		this.buttonSize = size;
 	}
 	
+	public Point getButtonSize(){
+		return this.buttonSize;
+	}
+	
 	public void setLabelSize(Point size){
 		this.labelSize = size;
 	}	
