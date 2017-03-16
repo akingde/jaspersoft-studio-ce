@@ -234,7 +234,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		desc.add(lineBoxD);
 
 		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
-				com.jaspersoft.studio.messages.Messages.common_properties);
+				com.jaspersoft.studio.messages.Messages.common_properties, getJasperConfiguration(), getValue());
 		propertiesMapD.setDescription(com.jaspersoft.studio.messages.Messages.common_properties);
 		desc.add(propertiesMapD);
 

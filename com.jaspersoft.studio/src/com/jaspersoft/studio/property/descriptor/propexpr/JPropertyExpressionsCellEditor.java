@@ -30,7 +30,6 @@ public class JPropertyExpressionsCellEditor extends EditableDialogCellEditor {
 		// clone the object to avoid side effect
 		wizard.setValue(((PropertyExpressionsDTO) getValue()).clone());
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
-		dialog.create();
 		if (dialog.open() == Dialog.OK)
 			return wizard.getValue();
 		return null;

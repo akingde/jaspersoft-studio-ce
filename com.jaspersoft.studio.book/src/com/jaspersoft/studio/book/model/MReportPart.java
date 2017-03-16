@@ -367,7 +367,7 @@ public class MReportPart extends APropertyNode {
 		desc.add(componentExpression);
 
 		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
-				com.jaspersoft.studio.messages.Messages.common_properties);
+				com.jaspersoft.studio.messages.Messages.common_properties, getJasperConfiguration(), getValue());
 		propertiesMapD.setDescription(com.jaspersoft.studio.messages.Messages.common_properties);
 		desc.add(propertiesMapD);
 

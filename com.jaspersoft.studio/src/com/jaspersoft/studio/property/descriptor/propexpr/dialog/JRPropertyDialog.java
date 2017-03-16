@@ -184,7 +184,7 @@ public class JRPropertyDialog extends Dialog {
 	 * Generate the properties hints
 	 */
 	protected void initializeHints() {
-		hints = HintsPropertiesList.getElementProperties(new JasperDesign(), value.geteContext());
+		hints = HintsPropertiesList.getElementProperties(value.getJrElement(), value.geteContext());
 		Collections.sort(hints);
 	}
 

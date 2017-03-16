@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
 
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.ic.ICParameterContributor;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
 
@@ -59,6 +60,7 @@ public class Activator extends AbstractJRUIPlugin {
 		super.postStartOperations();
 
 		ICParameterContributor.initMetadata();
+		AExporter.initMetadata();
 
 		Job initParametersJob = new Job("Init JRS built-in parameters") {
 

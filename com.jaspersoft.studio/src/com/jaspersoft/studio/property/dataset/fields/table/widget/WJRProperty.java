@@ -90,7 +90,6 @@ public class WJRProperty extends AWidget {
 								c.getDefaultValue(), items);
 					}
 				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
 				}
 				if (ipd == null)
 					ipd = new TextPropertyDescription<String>(c.getPropertyName(), c.getLabel(), c.getDescription(), false,

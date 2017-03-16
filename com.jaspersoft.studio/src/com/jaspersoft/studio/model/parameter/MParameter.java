@@ -130,7 +130,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#defaultValueExpression"));
 
 		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
-				Messages.common_properties);
+				Messages.common_properties, getJasperConfiguration(), getValue());
 		propertiesD.setDescription(Messages.MParameter_properties_description);
 		desc.add(propertiesD);
 		propertiesD.setHelpRefBuilder(

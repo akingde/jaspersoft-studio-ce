@@ -263,7 +263,7 @@ public class MBookReport extends MReport {
 		desc.add(whenNoDataD);
 
 		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
-				Messages.common_properties);
+				Messages.common_properties, getJasperConfiguration(), getValue());
 		propertiesMapD.setDescription(Messages.common_properties);
 		desc.add(propertiesMapD);
 

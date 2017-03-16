@@ -207,7 +207,7 @@ public class MCompositeElementReport extends MReport {
 		desc.add(ignorePaginationD);
 
 		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
-				Messages.common_properties);
+				Messages.common_properties, getJasperConfiguration(), getValue());
 		propertiesMapD.setDescription(Messages.common_properties);
 		desc.add(propertiesMapD);
 

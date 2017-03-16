@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import com.jaspersoft.studio.editor.action.copy.PastableProperties;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.CopyElementExpressionProperty;
@@ -40,6 +41,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.property.descriptor.propexpr.dialog.JRPropertyDialog;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -87,10 +89,15 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		}
 	}
 
-	protected JRPropertyPage(String pageName) {
+	private JasperReportsConfiguration jConfig;
+	private Object jrElement;
+
+	protected JRPropertyPage(String pageName, JasperReportsConfiguration jConfig, Object jrElement) {
 		super(pageName);
 		setTitle(Messages.common_properties);
 		setDescription(Messages.JRPropertyPage_description);
+		this.jConfig = jConfig;
+		this.jrElement = jrElement;
 	}
 
 	/**
@@ -126,6 +133,8 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				PropertyDTO p = new PropertyDTO(getPropertyName(), "NEW_VALUE");
+				p.seteContext(new ExpressionContext(jConfig));
+				p.setJrElement(jrElement);
 				JRPropertyDialog dialog = new JRPropertyDialog(UIUtils.getShell());
 				dialog.setValue(p);
 				if (dialog.open() == Window.OK) {

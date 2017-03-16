@@ -382,7 +382,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression")); //$NON-NLS-1$
 
 		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
-				Messages.common_properties);
+				Messages.common_properties, getJasperConfiguration(), getValue());
 		propertiesMapD.setDescription(Messages.common_properties);
 		desc.add(propertiesMapD);
 

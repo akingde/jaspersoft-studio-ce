@@ -55,12 +55,12 @@ public class JSSGridBagLayout extends AbstractLayout {
 	public static final String PROPERTY_ROWSPAN = "com.jaspersoft.layout.grid.rowspan"; //$NON-NLS-1$
 	
 	/**
-	 * The key used to store the row weight
+	 * The key used to store the column weight
 	 */
 	public static final String PROPERTY_WEIGHT_COLUMN = "com.jaspersoft.layout.grid.weight.x"; //$NON-NLS-1$
 	
 	/**
-	 * The key used to store the column weight
+	 * The key used to store the row weight
 	 */
 	public static final String PROPERTY_WEIGHT_ROW = "com.jaspersoft.layout.grid.weight.y"; //$NON-NLS-1$
 	

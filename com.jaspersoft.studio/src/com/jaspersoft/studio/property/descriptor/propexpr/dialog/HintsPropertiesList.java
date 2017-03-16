@@ -10,7 +10,9 @@ import java.util.Map;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.dataset.DatasetUtil;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
+import com.jaspersoft.studio.property.metadata.PropertyMetadataRegistry;
 
+import net.sf.jasperreports.annotations.properties.PropertyScope;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
@@ -41,7 +43,11 @@ public class HintsPropertiesList {
 			try {
 				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
 
-				return pmu.getReportProperties((JasperDesign) holder);
+				List<PropertyMetadata> eps = pmu.getReportProperties((JasperDesign) holder);
+				if (eps != null)
+					result.addAll(eps);
+				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.REPORT));
+				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.DATASET));
 			} finally {
 				Thread.currentThread().setContextClassLoader(oldCl);
 			}
@@ -52,8 +58,11 @@ public class HintsPropertiesList {
 			try {
 				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
 				try {
-					return pmu.getDatasetProperties((JRDesignDataset) holder,
+					List<PropertyMetadata> eps = pmu.getDatasetProperties((JRDesignDataset) holder,
 							DatasetUtil.getDataAdapter(eContext.getJasperReportsConfiguration(), ds));
+					if (eps != null)
+						result.addAll(eps);
+					result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.DATASET));
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -65,7 +74,10 @@ public class HintsPropertiesList {
 			ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
 			try {
 				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
-				return pmu.getElementProperties((JRElement) holder);
+				List<PropertyMetadata> eps = pmu.getElementProperties((JRElement) holder);
+				if (eps != null)
+					result.addAll(eps);
+				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.ELEMENT));
 			} finally {
 				Thread.currentThread().setContextClassLoader(oldCl);
 			}
@@ -76,8 +88,11 @@ public class HintsPropertiesList {
 				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
 
 				try {
-					return pmu.getQueryExecuterFieldProperties(
+					List<PropertyMetadata> eps = pmu.getQueryExecuterFieldProperties(
 							(String) eContext.getJasperReportsConfiguration().get(COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE));
+					if (eps != null)
+						result.addAll(eps);
+					result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.FIELD));
 				} catch (JRException e) {
 					e.printStackTrace();
 				}

@@ -141,6 +141,13 @@ public class PropertyExpressionsDTO {
 		return false;
 	}
 
+	public boolean hasProperty(String propertyName) {
+		for (PropertyExpressionDTO prop : properties)
+			if (propertyName.equals(prop.getName()))
+				return true;
+		return false;
+	}
+
 	/**
 	 * Add a property to the list, only if a property with the same name and of the same type is not already present
 	 * 

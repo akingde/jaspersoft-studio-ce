@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio;
 
@@ -26,6 +25,7 @@ import org.osgi.framework.BundleContext;
 import com.jaspersoft.studio.data.defaults.DefaultDAManager;
 import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
 import com.jaspersoft.studio.editor.gef.ui.actions.EditorSettingsContributorManager;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.preview.input.ext.InputControlTypeManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
 import com.jaspersoft.studio.jasper.ComponentConverterManager;
@@ -34,6 +34,8 @@ import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.property.PostSetValueManager;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.statistics.UsageManager;
 import com.jaspersoft.studio.utils.BrandingInfo;
 import com.jaspersoft.studio.utils.Misc;
@@ -58,34 +60,34 @@ import net.sf.jasperreports.engine.JRPropertiesUtil;
 public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 
 	public static final String ICONS_RESOURCES_REFRESH_16_PNG = "icons/resources/refresh-16.png"; //$NON-NLS-1$
-	
+
 	public static final String PLUGIN_ID = "com.jaspersoft.studio"; //$NON-NLS-1$
-	
+
 	public static final String COMPONENTS_ID = "com.jaspersoft.studio.components"; //$NON-NLS-1$
 
 	// The shared instance.
-	
+
 	private static ExtensionManager extensionManager;
 
 	private static ComponentConverterManager converterManager;
-	
-	/** 
-	 * The current instance of the plugin. 
+
+	/**
+	 * The current instance of the plugin.
 	 */
 	private static JaspersoftStudioPlugin plugin;
-	
+
 	/**
 	 * The update manager used to handle the usage statistics for the current instance
 	 */
 	private UsageManager manager;
-	
+
 	/**
 	 * Gets the single instance of JaspersoftStudioPlugin.
 	 * 
 	 * @return the plugin instance singleton.
 	 */
 	public static JaspersoftStudioPlugin getInstance() {
-		 //Plugin cannot be null, Eclipse takes care to instance it at startup.
+		// Plugin cannot be null, Eclipse takes care to instance it at startup.
 		return plugin;
 	}
 
@@ -100,14 +102,14 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	public JaspersoftStudioPlugin() {
 		plugin = this;
 	}
-	
+
 	/**
 	 * Return the usage manager defined in the current instance
 	 * 
 	 * @return a not null usage manager
 	 */
-	public synchronized UsageManager getUsageManager(){
-		if(manager==null) {
+	public synchronized UsageManager getUsageManager() {
+		if (manager == null) {
 			manager = new UsageManager();
 		}
 		return manager;
@@ -123,9 +125,9 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		//Must stop the manager of the statistics before to set the plugin instance to null
-		//since the usage manager uses the plugin instance to write on the logger
-		if(manager!=null){
+		// Must stop the manager of the statistics before to set the plugin instance to null
+		// since the usage manager uses the plugin instance to write on the logger
+		if (manager != null) {
 			manager.stop();
 		}
 		plugin = null;
@@ -135,6 +137,10 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	@Override
 	protected void postStartOperations() {
 		super.postStartOperations();
+
+		DataQueryAdapters.initMetadata();
+		PHolderUtil.initMetadata();
+		LayoutManager.initMetadata();
 
 		// Sets the branding information
 		BrandingInfo info = new BrandingInfo();
@@ -150,12 +156,13 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, c.getProperty(key));
 		key = "net.sf.jasperreports.default.font.size"; //$NON-NLS-1$
 		JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, c.getProperty(key));
-		
+
 		// Fix some JasperReports properties installation related.
 		// See Bugzilla #42275.
-		String defJRProperty = DefaultJasperReportsContext.getInstance().getProperty("net.sf.jasperreports.compiler.classpath"); //$NON-NLS-1$
+		String defJRProperty = DefaultJasperReportsContext.getInstance()
+				.getProperty("net.sf.jasperreports.compiler.classpath"); //$NON-NLS-1$
 		PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.compiler.classpath", Misc.nvl(defJRProperty)); //$NON-NLS-1$
-		defJRProperty =  DefaultJasperReportsContext.getInstance().getProperty("net.sf.jasperreports.compiler.temp.dir"); //$NON-NLS-1$
+		defJRProperty = DefaultJasperReportsContext.getInstance().getProperty("net.sf.jasperreports.compiler.temp.dir"); //$NON-NLS-1$
 		PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.compiler.temp.dir", Misc.nvl(defJRProperty)); //$NON-NLS-1$
 
 		// Initialize the extension manager
@@ -173,15 +180,15 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		precacheImagesJob.schedule();
 
 		// Force the initialization of some JR extensions
-//		Job extensionsPreloadingJob = new Job(Messages.JaspersoftStudioPlugin_CachingJRExtensionsJob) {
-//			@Override
-//			protected IStatus run(IProgressMonitor monitor) {
-//				ExtensionLoader.initializeJRExtensions(monitor);
-//				return Status.OK_STATUS;
-//			}
-//		};
-//		extensionsPreloadingJob.setPriority(Job.LONG);
-//		extensionsPreloadingJob.schedule();
+		// Job extensionsPreloadingJob = new Job(Messages.JaspersoftStudioPlugin_CachingJRExtensionsJob) {
+		// @Override
+		// protected IStatus run(IProgressMonitor monitor) {
+		// ExtensionLoader.initializeJRExtensions(monitor);
+		// return Status.OK_STATUS;
+		// }
+		// };
+		// extensionsPreloadingJob.setPriority(Job.LONG);
+		// extensionsPreloadingJob.schedule();
 
 		// JSS console activation (if requested)
 		if (getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_ENABLE_INTERNAL_CONSOLE)) {
@@ -199,18 +206,18 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 			};
 			j.schedule();
 		}
-		//Start the usage statistics plugin, among the other operations it will
-		//check for new versions
+		// Start the usage statistics plugin, among the other operations it will
+		// check for new versions
 		getUsageManager().start();
-		
-		// Sanity checks for Java Compiling settings: 
-		// possible issues when bundling a JDK 1.8 in 3.8.2 platform 
-		if(isRCP()){
+
+		// Sanity checks for Java Compiling settings:
+		// possible issues when bundling a JDK 1.8 in 3.8.2 platform
+		if (isRCP()) {
 			JDTUtils.forceWorkspaceCompilerSettings(JavaCore.VERSION_1_6);
 			try {
-				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();			
-				for(IProject prj : projects) {
-					if(ProjectUtil.isOpen(prj) && prj.hasNature(JasperReportsNature.NATURE_ID)) {
+				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+				for (IProject prj : projects) {
+					if (ProjectUtil.isOpen(prj) && prj.hasNature(JasperReportsNature.NATURE_ID)) {
 						JDTUtils.forceJRProjectCompilerSettings(JavaCore.create(prj), JavaCore.VERSION_1_6);
 					}
 				}
@@ -362,7 +369,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		System.setOut(pstream);
 		System.setErr(pstream);
 	}
-	
+
 	/**
 	 * Check if the running JSS is a RCP or plugin version. This is done looking for the plugins com.jaspersoft.studio.rcp
 	 * or com.jaspersoft.studio.pro.rcp that are available only on the RCP version

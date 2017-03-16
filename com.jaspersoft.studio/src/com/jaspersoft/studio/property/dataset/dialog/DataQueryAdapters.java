@@ -6,6 +6,7 @@ package com.jaspersoft.studio.property.dataset.dialog;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -50,10 +51,12 @@ import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.dataset.da.DataAdapterUI;
+import com.jaspersoft.studio.property.metadata.PropertyMetadataRegistry;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.annotations.properties.PropertyScope;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -64,6 +67,8 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
+import net.sf.jasperreports.properties.PropertyMetadata;
+import net.sf.jasperreports.properties.StandardPropertyMetadata;
 
 public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
@@ -77,6 +82,23 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 	private Color background;
 
 	private IFile file;
+
+	public static void initMetadata() {
+		List<PropertyMetadata> pm = new ArrayList<PropertyMetadata>();
+
+		StandardPropertyMetadata spm = new StandardPropertyMetadata();
+		spm.setName(DEFAULT_DATAADAPTER);
+		spm.setLabel("Data Adapter");
+		spm.setDescription("Last Data Adapter Used.");
+		spm.setValueType(String.class.getName());
+		List<PropertyScope> scopes = new ArrayList<PropertyScope>();
+		scopes.add(PropertyScope.DATASET);
+		spm.setScopes(scopes);
+		spm.setCategory("com.jaspersoft.studio.designer:dataset");
+		pm.add(spm);
+
+		PropertyMetadataRegistry.addMetadata(pm);
+	}
 
 	public DataQueryAdapters(Composite parent, JasperReportsConfiguration jConfig, JRDesignDataset newdataset,
 			Color background, IRunnableContext runner) {
