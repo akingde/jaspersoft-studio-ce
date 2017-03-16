@@ -9,9 +9,6 @@ import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -105,7 +102,6 @@ public abstract class AVParameters extends APreview {
 		scompo.setExpandHorizontal(true);
 		scompo.setExpandVertical(true);
 		scompo.setAlwaysShowScrollBars(false);
-		scompo.setMinSize(parent.getSize());
 
 		composite = new Composite(scompo, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -116,25 +112,21 @@ public abstract class AVParameters extends APreview {
 		composite.setBackground(parent.getBackground());
 		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 		scompo.setContent(composite);
-		composite.addControlListener(new ControlListener() {
 
-			@Override
-			public void controlResized(ControlEvent e) {
-				int w = scompo.getClientArea().width;
-				Point csize = composite.computeSize(w, SWT.DEFAULT, true);
-
-				composite.setSize(w, Math.max(csize.y, composite.getSize().y));
-				composite.layout();
-				scompo.setMinHeight(composite.getSize().y);
-
-				// setScrollbarMinHeight();
-			}
-
-			@Override
-			public void controlMoved(ControlEvent e) {
-
-			}
-		});
 		return scompo;
+	}
+	
+	protected void refreshControl() {
+		composite.pack();		
+		scompo.setVisible(true);
+		scompo.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT, true));
+		scompo.pack();
+		scompo.getParent().layout();
+	}
+	
+	@Override
+	public Control getControl() {
+		refreshControl();
+		return super.getControl();
 	}
 }

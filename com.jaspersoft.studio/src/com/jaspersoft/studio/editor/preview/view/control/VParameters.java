@@ -10,11 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -30,13 +25,18 @@ import com.jaspersoft.studio.preferences.execution.InputControlsPreferencePage;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+
 public class VParameters extends AVParameters {
 
 	public VParameters(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 	}
-
-	public void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
+	
+	protected void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
 		this.params = params;
 		this.prompts = prompts;
 		Map<String, Boolean> dirtyMap = new HashMap<String, Boolean>();
@@ -45,6 +45,7 @@ public class VParameters extends AVParameters {
 		incontrols.clear();
 		for (Control c : composite.getChildren())
 			c.dispose();
+		
 		boolean first = true;
 		if (prompts != null)
 			for (JRParameter p : prompts)
@@ -62,8 +63,6 @@ public class VParameters extends AVParameters {
 							e.printStackTrace();
 					}
 				}
-		composite.pack();
-		setScrollbarMinHeight();
 		if (defaultJob != null)
 			defaultJob.cancel();
 		if (defaultNonDirtyJob != null)
@@ -74,6 +73,8 @@ public class VParameters extends AVParameters {
 		} else
 			;// setupDefaultValuesNonDirty();
 		showEmptyParametersWarning = false;
+		
+		refreshControl();
 	}
 
 	protected boolean isSystem = false;

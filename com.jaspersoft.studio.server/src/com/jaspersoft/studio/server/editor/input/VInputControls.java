@@ -9,8 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -26,6 +24,8 @@ import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
 import com.jaspersoft.studio.server.editor.input.query.QueryInput;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class VInputControls extends AVParameters {
 
@@ -108,13 +108,12 @@ public class VInputControls extends AVParameters {
 				}
 			}
 
-		composite.pack();
-		setScrollbarMinHeight();
 		if (showEmptyParametersWarning) {
 			// setupDefaultValues();
 			setDirty(false);
 		}
 		showEmptyParametersWarning = false;
+		refreshControl();
 	}
 
 	public void setupDefaultValues(final IProgressMonitor monitor) throws Exception {

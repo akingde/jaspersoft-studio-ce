@@ -61,7 +61,7 @@ public class VReportParameters extends VParameters {
 	}
 
 	@Override
-	public void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
+	protected void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
 		super.createInputControls(prompts, params);
 
 		createVerticalSeprator(false);
@@ -125,8 +125,8 @@ public class VReportParameters extends VParameters {
 			pageTo.setEnabled(true);
 		} else
 			btAll.setSelection(true);
-
-		composite.layout();
+		
+		refreshControl();
 	}
 
 	private void createPage(Group container) {
@@ -223,7 +223,7 @@ public class VReportParameters extends VParameters {
 			to = from;
 		return Integer.toString(from) + ";" + Integer.toString(to); //$NON-NLS-1$
 	}
-
+	
 	class OffsetModifyListener implements ModifyListener {
 		private Text txt;
 		private String property;

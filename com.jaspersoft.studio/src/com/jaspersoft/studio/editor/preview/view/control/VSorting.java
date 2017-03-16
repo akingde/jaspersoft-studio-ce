@@ -7,13 +7,8 @@ package com.jaspersoft.studio.editor.preview.view.control;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -21,6 +16,9 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.editor.preview.inputs.dialog.SortFieldSection;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class VSorting extends APreview {
 
@@ -34,31 +32,18 @@ public class VSorting extends APreview {
 
 	@Override
 	protected Control createControl(Composite parent) {
-		scompo = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
+		scompo = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		scompo.setExpandHorizontal(true);
 		scompo.setExpandVertical(true);
 		scompo.setAlwaysShowScrollBars(false);
-		scompo.setMinSize(100, 200);
 
 		composite = new Composite(scompo, SWT.NONE);
 		composite.setBackground(parent.getBackground());
 		GridLayout layout = new GridLayout();
-		layout.marginBottom = 20;
+		layout.marginBottom = 10;
 		composite.setLayout(layout);
 		scompo.setContent(composite);
-
-		composite.addControlListener(new ControlListener() {
-
-			@Override
-			public void controlResized(ControlEvent e) {
-				refreshControl();
-			}
-
-			@Override
-			public void controlMoved(ControlEvent e) {
-
-			}
-		});
+		
 		return scompo;
 	}
 
@@ -80,15 +65,14 @@ public class VSorting extends APreview {
 
 		sortField = getSortField();
 		sortField.fillTable(composite, jDesign, prompts, params);
-		composite.pack();
-		scompo.setMinSize(composite.getSize());
+		refreshControl();
 	}
 
 	private void refreshControl() {
-		int h = composite.getSize().y;
-		composite.setSize(composite.computeSize(SWT.DEFAULT, h, true));
-		composite.layout();
-		scompo.setMinSize(composite.getSize());
+		composite.pack();
+		scompo.setVisible(true);
+		scompo.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT, true));
+		scompo.pack();
+		scompo.getParent().layout();
 	}
-
 }
