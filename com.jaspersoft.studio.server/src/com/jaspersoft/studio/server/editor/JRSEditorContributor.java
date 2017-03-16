@@ -43,17 +43,19 @@ public class JRSEditorContributor implements IEditorContributor {
 
 	public void onInitContext(final JasperReportsConfiguration jConfig) {
 		JSSFileRepositoryService repService = jConfig.getFileRepositoryService();
-		List<RepositoryService> rservices = repService.getRepositoryServices();
-		List<RepositoryService> toDel = new ArrayList<RepositoryService>();
-		for (RepositoryService rs : rservices)
-			if (rs instanceof JRSRepositoryService) {
-				toDel.add(rs);
-				FileRepositoryService frs = ((JRSRepositoryService) rs).getFileRepositoryService();
-				if (frs != null)
-					toDel.add(frs);
-			}
-		rservices.removeAll(toDel);
-		rservices.add(new JRSRepositoryService(repService, jConfig));
+		if (repService != null) {
+			List<RepositoryService> rservices = repService.getRepositoryServices();
+			List<RepositoryService> toDel = new ArrayList<RepositoryService>();
+			for (RepositoryService rs : rservices)
+				if (rs instanceof JRSRepositoryService) {
+					toDel.add(rs);
+					FileRepositoryService frs = ((JRSRepositoryService) rs).getFileRepositoryService();
+					if (frs != null)
+						toDel.add(frs);
+				}
+			rservices.removeAll(toDel);
+			rservices.add(new JRSRepositoryService(repService, jConfig));
+		}
 	}
 
 	public void onLoad(final JasperDesign jd, final EditorPart editor) {

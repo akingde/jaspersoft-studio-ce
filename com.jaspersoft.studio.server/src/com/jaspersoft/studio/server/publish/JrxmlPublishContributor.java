@@ -66,12 +66,14 @@ import net.sf.jasperreports.repo.RepositoryService;
 
 public class JrxmlPublishContributor implements IPublishContributor {
 
+	public static final String COM_JASPERSOFT_JRS_DATA_SOURCE = "com.jaspersoft.jrs.data.source";
+
 	public void publishJrxml(AMJrxmlContainer mrunit, IProgressMonitor monitor, JasperDesign jasper,
 			Set<String> fileset, IFile file, String version) throws Exception {
 		init(mrunit.getJasperConfiguration(), version);
 		publishJrxml(mrunit, monitor, jasper, fileset, file);
 		if (ResourceDescriptorUtil.isReportMain(file)) {
-			jasper.removeProperty("com.jaspersoft.jrs.data.source");
+			jasper.removeProperty(COM_JASPERSOFT_JRS_DATA_SOURCE);
 			if (mrunit instanceof MJrxml && mrunit.getValue().isMainReport())
 				mrunit = (AMJrxmlContainer) mrunit.getParent();
 			if (mrunit instanceof MReportUnit)

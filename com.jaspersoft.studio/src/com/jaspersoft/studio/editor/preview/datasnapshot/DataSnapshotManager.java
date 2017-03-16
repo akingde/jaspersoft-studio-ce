@@ -55,6 +55,8 @@ public class DataSnapshotManager {
 	}
 
 	public static void saveSnapshotIfExists(Map<String, Object> parameters) {
+		if (parameters == null)
+			return;
 		ReportContext context = (ReportContext) parameters.get(JRParameter.REPORT_CONTEXT);
 		if (context != null && context.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)
 				&& context.containsParameter(DataSnapshotManager.SAVE_SNAPSHOT)) {
