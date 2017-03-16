@@ -13,6 +13,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
@@ -132,10 +133,15 @@ public class ReportThumbnailsManager {
 	 */
 	public static File findFile(String location, JasperReportsConfiguration context)
 	{
-		// Check if the location is an absolute path...
-		File f = new File(location);
-		if (f.exists()) return f;
-		
+		// Check if the location is an absolute path or URL one
+		File f = null;
+		try {
+			f = new File(location);
+			if (f.exists()) return f;					
+			f = new File(new URI(location).getPath());
+			if (f.exists()) return f;
+		} catch (URISyntaxException e1) {
+		}
 		
 		// Check if the file can be found in the classpath...
 		URL url = context.getClassLoader().getResource(location);
