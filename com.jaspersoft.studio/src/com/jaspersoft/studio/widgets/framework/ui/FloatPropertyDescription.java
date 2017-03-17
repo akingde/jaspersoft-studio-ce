@@ -30,7 +30,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	}
 	
 	@Override
-	public Class<?> getType() {
+	public Class<? extends Number> getType() {
 		if (defaultValue != null)
 			return defaultValue.getClass();
 		return Float.class;

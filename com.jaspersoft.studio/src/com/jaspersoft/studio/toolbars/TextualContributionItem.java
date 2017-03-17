@@ -383,7 +383,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 				return new Point(width, height);
 			};
 		};
-		result.setMaximum(Float.MAX_VALUE);
+		result.setMaximum(new Double(Float.MAX_VALUE));
 		result.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
 		result.setItems(ModelUtils.FONT_SIZES);
 		return result;

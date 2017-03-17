@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -72,12 +73,12 @@ public class NumericTableCombo extends Composite {
 	/**
 	 * The minimum value accepted
 	 */
-	private double minimum = 0;
+	private Double minimum = 0d;
 	
 	/**
 	 * The maximum value accepted
 	 */
-	private double maximum = Double.MAX_VALUE;
+	private Double maximum = Double.MAX_VALUE;
 	
 	/**
 	 * Flag used to know if the null value is accepted or not
@@ -291,8 +292,8 @@ public class NumericTableCombo extends Composite {
 	 *            current maximum
 	 * 
 	 */
-	public void setMinimum(double min){
-		if (min < maximum){
+	public void setMinimum(Double min){
+		if (min == null || maximum == null || min < maximum){
 			this.minimum = min;
 		}
 	}
@@ -307,8 +308,8 @@ public class NumericTableCombo extends Composite {
 	 *            current minimum
 	 * 
 	 */
-	public void setMaximum(double max){
-		if (max > minimum){
+	public void setMaximum(Double max){
+		if (max == null || minimum == null || max > minimum){
 			this.maximum = max;
 		}
 	}
@@ -357,9 +358,9 @@ public class NumericTableCombo extends Composite {
 	 * @param minimum the new minimum value
 	 * @param maximum the new maximum value
 	 */
-	public void setValues(Number selection, int minimum, int maximum) {
-		this.setMinimum(minimum);
-		this.setMaximum(maximum);
+	public void setValues(Number selection, Number minimum, Number maximum) {
+		this.setMinimum(minimum != null ? minimum.doubleValue() : null);
+		this.setMaximum(maximum != null ? maximum.doubleValue() : null);
 		setValue(selection);
 	}
 	
@@ -447,7 +448,8 @@ public class NumericTableCombo extends Composite {
 	protected void setValue(Number selection, boolean formatText) {
 		this.checkWidget();
 		if (selection != null){	
-			if (selection.doubleValue() < minimum || selection.doubleValue() > maximum) {
+			if ((minimum != null && selection.doubleValue() < minimum) || 
+						(maximum != null && selection.doubleValue() > maximum)) {
 				//out of bounds, update the validation status
 				updateBackground(ColorConstants.red);
 				currentState = VALIDATION_RESULT.OUT_OF_BOUNDS;
@@ -518,7 +520,8 @@ public class NumericTableCombo extends Composite {
 		} else {
 			try {			
 				Number newValue = formatter.parse(work);
-				if (newValue.doubleValue() < minimum || newValue.doubleValue() > maximum) {
+				if ((minimum != null && newValue.doubleValue() < minimum) || 
+							(maximum != null && newValue.doubleValue() > maximum)) {
 					updateBackground(ColorConstants.red);
 					return VALIDATION_RESULT.OUT_OF_BOUNDS;
 				} else {
@@ -562,6 +565,16 @@ public class NumericTableCombo extends Composite {
 	public Long getValueAsLong(){
 		if (storedValue == null) return null;
 		else return storedValue.longValue();
+	}
+	
+	/**
+	 * Returns the numeric value stored inside the control, as a BigDecimal
+	 * 
+	 * @return the numeric value, could be null
+	 */
+	public BigDecimal getValueAsBigDecimal(){
+		if (storedValue == null) return null;
+		else return new BigDecimal(storedValue.toString());
 	}
 	
 	/**
@@ -634,7 +647,7 @@ public class NumericTableCombo extends Composite {
 			if (defaultValue != null){
 				defaultMin = defaultValue.intValue();
 			}
-			if (minimum > defaultMin) defaultMin = minimum;
+			if (minimum != null && minimum > defaultMin) defaultMin = minimum;
 			storedValue = new Double(defaultMin);
 		}
 		double newValue = storedValue.doubleValue() + increamentStep;
@@ -653,7 +666,7 @@ public class NumericTableCombo extends Composite {
 			if (defaultValue != null){
 				defaultMin = defaultValue.intValue();
 			}
-			if (minimum > defaultMin) defaultMin = minimum;
+			if (minimum != null && minimum > defaultMin) defaultMin = minimum;
 			storedValue = new Double(defaultMin);
 			setValue(storedValue, true);
 		} else {

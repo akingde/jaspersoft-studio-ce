@@ -349,7 +349,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	 */
 	protected NumericTableCombo getFontSizeCombo(Composite parent, String[] items){
 		NumericTableCombo result = new NumericTableCombo(parent, SWT.FLAT, 0, 6);
-		result.setMaximum(Float.MAX_VALUE);
+		result.setMaximum(new Double(Float.MAX_VALUE));
 		result.setItems(items);
 		return result;
 	}

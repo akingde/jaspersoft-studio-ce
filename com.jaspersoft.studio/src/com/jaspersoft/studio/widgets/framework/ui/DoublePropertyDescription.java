@@ -34,7 +34,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 	}
 	
 	@Override
-	public Class<?> getType() {
+	public Class<? extends Number> getType() {
 		if (defaultValue != null)
 			return defaultValue.getClass();
 		return Double.class;

@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -63,12 +64,12 @@ public class NumericText extends Text {
 	/**
 	 * The minimum value accepted
 	 */
-	private double minimum = 0;
+	private Double minimum = 0d;
 	
 	/**
 	 * The maximum value accepted
 	 */
-	private double maximum = Double.MAX_VALUE;
+	private Double maximum = Double.MAX_VALUE;
 	
 	/**
 	 * Flag used to know if the null value is accepted or not
@@ -234,10 +235,13 @@ public class NumericText extends Text {
 	 *            current maximum
 	 * 
 	 */
-	public void setMinimum(double min){
-		if (min < maximum){
+	public void setMinimum(Double min){
+		if (min == null){
+			//there is no maximum so the value is not updated
+			this.minimum = null;
+		} else if (maximum == null || min < maximum){
 			this.minimum = min;
-			if (storedValue != null && storedValue.doubleValue() < this.minimum){
+			if (storedValue != null && (this.minimum != null && storedValue.doubleValue() < this.minimum)){
 				setValue(minimum);
 			}
 		}
@@ -253,10 +257,13 @@ public class NumericText extends Text {
 	 *            current minimum
 	 * 
 	 */
-	public void setMaximum(double max){
-		if (max > minimum){
+	public void setMaximum(Double max){
+		if (max == null){
+			//there is no maximum so the value is not updated
+			this.maximum = null;
+		} else if (minimum == null || max > minimum){
 			this.maximum = max;
-			if (storedValue != null && storedValue.doubleValue() > this.maximum){
+			if (storedValue != null && (this.maximum != null && storedValue.doubleValue() > this.maximum)){
 				setValue(maximum);
 			}
 		}
@@ -301,9 +308,9 @@ public class NumericText extends Text {
 	 * @param minimum the new minimum value
 	 * @param maximum the new maximum value
 	 */
-	public void setValues(Number selection, int minimum, int maximum) {
-		this.setMinimum(minimum);
-		this.setMaximum(maximum);
+	public void setValues(Number selection, Number minimum, Number maximum) {
+		this.setMinimum(minimum != null ? minimum.doubleValue() : null);
+		this.setMaximum(maximum != null ? maximum.doubleValue() : null);
 		setValue(selection);
 	}
 	
@@ -391,7 +398,8 @@ public class NumericText extends Text {
 	protected void setValue(Number selection, boolean formatText) {
 		this.checkWidget();
 		if (selection != null){	
-			if (selection.doubleValue() < minimum || selection.doubleValue() > maximum) {
+			if ((minimum != null && selection.doubleValue() < minimum) || 
+						(maximum != null && selection.doubleValue() > maximum)) {
 				//out of bounds, update the validation status
 				updateBackground(ColorConstants.red);
 				currentState = VALIDATION_RESULT.OUT_OF_BOUNDS;
@@ -484,7 +492,8 @@ public class NumericText extends Text {
 		} else {
 			try {			
 				Number newValue = formatter.parse(work);
-				if (newValue.doubleValue() < minimum || newValue.doubleValue() > maximum) {
+				if ((minimum != null && newValue.doubleValue() < minimum) || 
+							(maximum != null && newValue.doubleValue() > maximum)) {
 					updateBackground(ColorConstants.red);
 					return VALIDATION_RESULT.OUT_OF_BOUNDS;
 				} else {
@@ -562,7 +571,16 @@ public class NumericText extends Text {
 		else return storedValue.floatValue();
 	}
 	
-
+	/**
+	 * Returns the numeric value stored inside the control, as a BigDecimal
+	 * 
+	 * @return the numeric value, could be null
+	 */
+	public BigDecimal getValueAsBigDecimal(){
+		if (storedValue == null) return null;
+		else return new BigDecimal(storedValue.toString());
+	}
+	
 	/**
 	 * Returns the numeric value stored inside the control
 	 * 
@@ -613,11 +631,11 @@ public class NumericText extends Text {
 			if (defaultValue != null){
 				defaultMin = defaultValue.intValue();
 			}
-			if (minimum > defaultMin) defaultMin = minimum;
+			if (minimum != null && minimum > defaultMin) defaultMin = minimum;
 			storedValue = new Double(defaultMin);
 		}
 		double newValue = storedValue.doubleValue() + increamentStep;
-		if (newValue >= minimum && newValue <= maximum){
+		if ((minimum != null && newValue >= minimum) && (maximum != null && newValue <= maximum)){
 			setValue(newValue, true);
 		}
 		fireListeners();
@@ -634,12 +652,12 @@ public class NumericText extends Text {
 			if (defaultValue != null){
 				defaultMin = defaultValue.intValue();
 			}
-			if (minimum > defaultMin) defaultMin = minimum;
+			if (minimum != null && minimum > defaultMin) defaultMin = minimum;
 			storedValue = new Double(defaultMin);
 			setValue(storedValue, true);
 		} else {
 			double newValue = storedValue.doubleValue() - increamentStep;	
-			if (newValue >= minimum && newValue <= maximum){
+			if ((minimum != null && newValue >= minimum) && (maximum != null && newValue <= maximum)){
 				setValue(newValue, true);
 			}
 		}

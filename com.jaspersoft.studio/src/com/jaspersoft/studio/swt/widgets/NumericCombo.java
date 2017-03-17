@@ -68,12 +68,12 @@ public class NumericCombo extends Composite {
 	/**
 	 * The minimum value accepted
 	 */
-	private double minimum = 0;
+	private Double minimum = 0d;
 	
 	/**
 	 * The maximum value accepted
 	 */
-	private double maximum = Double.MAX_VALUE;
+	private Double maximum = Double.MAX_VALUE;
 	
 	/**
 	 * Flag used to know if the null value is accepted or not
@@ -288,8 +288,8 @@ public class NumericCombo extends Composite {
 	 *            current maximum
 	 * 
 	 */
-	public void setMinimum(double min){
-		if (min < maximum){
+	public void setMinimum(Double min){
+		if (min == null || maximum == null || min < maximum){
 			this.minimum = min;
 		}
 	}
@@ -304,8 +304,8 @@ public class NumericCombo extends Composite {
 	 *            current minimum
 	 * 
 	 */
-	public void setMaximum(double max){
-		if (max > minimum){
+	public void setMaximum(Double max){
+		if (max == null || minimum == null || max > minimum){
 			this.maximum = max;
 		}
 	}
@@ -359,9 +359,9 @@ public class NumericCombo extends Composite {
 	 * @param minimum the new minimum value
 	 * @param maximum the new maximum value
 	 */
-	public void setValues(Number selection, int minimum, int maximum) {
-		this.setMinimum(minimum);
-		this.setMaximum(maximum);
+	public void setValues(Number selection, Number minimum, Number maximum) {
+		this.setMinimum(minimum != null ? minimum.doubleValue() : null);
+		this.setMaximum(maximum != null ? maximum.doubleValue() : null);
 		setValue(selection);
 	}
 	
@@ -449,9 +449,9 @@ public class NumericCombo extends Composite {
 	protected void setValue(Number selection, boolean formatText) {
 		this.checkWidget();
 		if (selection != null){	
-			if (selection.doubleValue() < minimum) {
+			if (minimum != null && selection.doubleValue() < minimum) {
 				selection = this.minimum;
-			} else if (selection.doubleValue() > maximum) {
+			} else if (maximum != null && selection.doubleValue() > maximum) {
 				selection = this.maximum;
 			}
 			storedValue = selection;
@@ -528,7 +528,8 @@ public class NumericCombo extends Composite {
 		} else {
 			try {			
 				Number newValue = formatter.parse(work);
-				if (newValue.doubleValue() < minimum || newValue.doubleValue() > maximum) return false;
+				if ((minimum != null && newValue.doubleValue() < minimum) || 
+							(maximum != null && newValue.doubleValue() > maximum)) return false;
 				storedValue = newValue;
 			} catch (ParseException nfe) {
 				return false;
@@ -579,7 +580,8 @@ public class NumericCombo extends Composite {
 		} else {
 			try {			
 				Number newValue = formatter.parse(work);
-				if (newValue.doubleValue() < minimum || newValue.doubleValue() > maximum) return false;
+				if ((minimum != null && newValue.doubleValue() < minimum) || 
+							( maximum != null && newValue.doubleValue() > maximum)) return false;
 				storedValue = newValue;
 			} catch (ParseException nfe) {
 				return false;
@@ -678,7 +680,7 @@ public class NumericCombo extends Composite {
 			if (defaultValue != null){
 				defaultMin = defaultValue.intValue();
 			}
-			if (minimum > defaultMin) defaultMin = minimum;
+			if (minimum != null && minimum > defaultMin) defaultMin = minimum;
 			storedValue = new Double(defaultMin);
 		}
 		double newValue = storedValue.doubleValue() + increamentStep;
@@ -697,7 +699,7 @@ public class NumericCombo extends Composite {
 			if (defaultValue != null){
 				defaultMin = defaultValue.intValue();
 			}
-			if (minimum > defaultMin) defaultMin = minimum;
+			if (minimum != null && minimum > defaultMin) defaultMin = minimum;
 			storedValue = new Double(defaultMin);
 			setValue(storedValue, true);
 		} else {

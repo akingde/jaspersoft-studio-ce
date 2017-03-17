@@ -38,8 +38,6 @@ public abstract class NumberPropertyDescription<T extends Number> extends Abstra
 		this.min = min;
 		this.max = max;
 	}
-	
-	public abstract Class<?> getType();
 
 	public T getMin() {
 		return min;
@@ -90,6 +88,13 @@ public abstract class NumberPropertyDescription<T extends Number> extends Abstra
 	 * Convert the string into a number for the simple control when necessary
 	 */
 	protected abstract Number convertValue(String v);
+	
+	/**
+	 * Return the type of the number handled by this class (ie integer, long...)
+	 * 
+	 * @return a not null class
+	 */
+	public abstract Class<? extends Number> getType();
 	
 	/**
 	 * Set the value inside the correct control, if the editor is in 

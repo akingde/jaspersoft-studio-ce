@@ -31,6 +31,7 @@ import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.model.SectionPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
+import com.jaspersoft.studio.widgets.framework.ui.BigDecimalPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.CheckboxItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ClassItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
@@ -44,6 +45,7 @@ import com.jaspersoft.studio.widgets.framework.ui.FontFamilyComboPropertyDescrip
 import com.jaspersoft.studio.widgets.framework.ui.FontStylePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.LongPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.MeasureUnitPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.SelectableComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
@@ -117,6 +119,8 @@ public class WidgetFactory {
 			hardcodedWidgets.put("float", new FloatPropertyDescription());
 			hardcodedWidgets.put("integer", new IntegerPropertyDescription());
 			hardcodedWidgets.put("double", new DoublePropertyDescription());
+			hardcodedWidgets.put("long", new LongPropertyDescription());
+			hardcodedWidgets.put("bigdecimal", new BigDecimalPropertyDescription());
 			hardcodedWidgets.put("text", new TextPropertyDescription<String>());
 			hardcodedWidgets.put("selectable_combo", new SelectableComboItemPropertyDescription<String>());
 			hardcodedWidgets.put("class_combo", new ClassItemPropertyDescription());
