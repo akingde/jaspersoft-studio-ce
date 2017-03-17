@@ -200,6 +200,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		sc = new ScrolledComposite(pcmp, SWT.H_SCROLL | SWT.V_SCROLL);
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
+		sc.setAlwaysShowScrollBars(true);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		sc.setLayoutData(gd);
@@ -230,6 +231,29 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	private void createButtons(Composite parent) {
 		buttons = new ToolBar(parent, SWT.FLAT);
 
+		final ToolItem badd = new ToolItem(buttons, SWT.PUSH);
+		badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/plus.png"));
+		badd.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				PropertyExpressionDTO v = value instanceof DatasetPropertyExpressionsDTO
+						? new DatasetPropertyExpressionDTO(false, "property.name", "value", null)
+						: new PropertyExpressionDTO(false, "property.name", "value");
+				v.seteContext(value.geteContext());
+				v.setJrElement(value.getJrElement());
+				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(UIUtils.getShell());
+				dialog.setShowExpression(showExpression);
+				dialog.setValue(v);
+				if (dialog.open() == Window.OK) {
+					value.addProperty(v.getName(), v.getValue(), v.isExpression());
+					refreshWidgets();
+				}
+			}
+
+		});
+		badd.setToolTipText("Add existing properties in the report template.");
+
 		final ToolItem bSystem = new ToolItem(buttons, SWT.CHECK);
 		bSystem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/jrxml_icon.png"));
 		bSystem.addListener(SWT.Selection, new Listener() {
@@ -251,30 +275,17 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	private ScrolledComposite sc;
 	private Composite cmp;
 	private List<PropertyMetadata> eds;
+	private List<PropertyMetadata> sortedEDS;
 	private Map<String, PropertyMetadata> props = new HashMap<String, PropertyMetadata>();
 
 	private void createFormWidgets(Composite cmp, final ScrolledComposite sc) {
 		eds = HintsPropertiesList.getPropertiesMetadata(value.getJrElement(), value.geteContext());
 		for (PropertyMetadata pm : eds)
 			props.put(pm.getName(), pm);
-		Collections.sort(eds, new Comparator<PropertyMetadata>() {
-			private NullComparator nc = new NullComparator(true);
-
-			@Override
-			public int compare(PropertyMetadata o1, PropertyMetadata o2) {
-				int i = nc.compare(o1.getCategory(), o2.getCategory());
-				if (i != 0)
-					return i;
-				if (o1.getCategory() != null && o2.getCategory() != null) {
-					i = o1.getCategory().compareTo(o2.getCategory());
-					if (i != 0)
-						return i;
-				}
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
 		refreshWidgets();
 	}
+
+	private boolean added = true;
 
 	protected void createProperties(String search) {
 		String cat = null;
@@ -286,8 +297,30 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				v.setName(pdto.getName());
 				v.setValueType(String.class.getName());
 				props.put(pdto.getName(), v);
+				added = true;
 			}
-		for (final PropertyMetadata pm : props.values()) {
+		if (added) {
+			sortedEDS = new ArrayList<PropertyMetadata>(props.values());
+			Collections.sort(sortedEDS, new Comparator<PropertyMetadata>() {
+				private NullComparator nc = new NullComparator(true);
+
+				@Override
+				public int compare(PropertyMetadata o1, PropertyMetadata o2) {
+					int i = nc.compare(o1.getCategory(), o2.getCategory());
+					if (i != 0)
+						return i;
+					if (o1.getCategory() != null && o2.getCategory() != null) {
+						i = o1.getCategory().compareTo(o2.getCategory());
+						if (i != 0)
+							return i;
+					}
+					return o1.getName().compareTo(o2.getName());
+				}
+			});
+			added = false;
+		}
+
+		for (final PropertyMetadata pm : sortedEDS) {
 			if (canceled)
 				return;
 			// if key contains {}
@@ -353,8 +386,10 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 			@Override
 			public void run() {
-				if (scmp != null)
+				if (scmp != null) {
 					cmp.layout(true);
+					sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
+				}
 				scmp = new Composite(cmp, SWT.NONE);
 				scmp.setLayout(new GridLayout(2, false));
 				GridData gd = new GridData(GridData.FILL_HORIZONTAL);

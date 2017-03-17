@@ -82,7 +82,7 @@ public class AExporter {
 
 		spm = new StandardPropertyMetadata();
 		spm.setName(PROP_REPORTUNIT);
-		spm.setLabel("Server URL");
+		spm.setLabel("Report Unit Path");
 		spm.setDescription("Report Unit path.");
 		spm.setValueType(ICParameterContributor.ICPATH);
 		scopes = new ArrayList<PropertyScope>();
