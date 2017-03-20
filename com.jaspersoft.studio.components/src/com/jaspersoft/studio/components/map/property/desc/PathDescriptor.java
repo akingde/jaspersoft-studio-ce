@@ -16,9 +16,9 @@ import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
+import com.jaspersoft.studio.widgets.framework.ui.BigDecimalPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
-import com.jaspersoft.studio.widgets.framework.ui.DoublePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FloatPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
@@ -139,9 +139,9 @@ public class PathDescriptor extends ADescriptor {
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_name, Messages.PathDescriptor_1,
 						Messages.PathDescriptor_2, false, MapComponent.DEFAULT_PATH_NAME),
 
-				new DoublePropertyDescription(MapComponent.ITEM_PROPERTY_latitude, Messages.MarkerPage_LatitudeColumn,
+				new BigDecimalPropertyDescription(MapComponent.ITEM_PROPERTY_latitude, Messages.MarkerPage_LatitudeColumn,
 						"", false, new BigDecimal("37.7833"), new BigDecimal("-85"), new BigDecimal("85")),
-				new DoublePropertyDescription(MapComponent.ITEM_PROPERTY_longitude, Messages.MarkerPage_LongitudeColumn,
+				new BigDecimalPropertyDescription(MapComponent.ITEM_PROPERTY_longitude, Messages.MarkerPage_LongitudeColumn,
 						"", false, new BigDecimal("-122.4167"), new BigDecimal("-180"), new BigDecimal("180")),
 
 				new TextPropertyDescription<String>(MapComponent.ITEM_PROPERTY_address, Messages.PathDescriptor_3,

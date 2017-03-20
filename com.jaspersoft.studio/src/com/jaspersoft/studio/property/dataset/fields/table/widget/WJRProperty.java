@@ -19,10 +19,10 @@ import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
+import com.jaspersoft.studio.widgets.framework.ui.BigDecimalPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ClassItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
-import com.jaspersoft.studio.widgets.framework.ui.DoublePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FloatPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
@@ -70,7 +70,7 @@ public class WJRProperty extends AWidget {
 						c.getDefaultValue() != null ? Integer.parseInt(c.getDefaultValue()) : null, null, null);
 			else if (c.getPropertyType().equals(BigDecimal.class.getName())
 					|| c.getPropertyType().equals(Double.class.getName()))
-				ipd = new DoublePropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
+				ipd = new BigDecimalPropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? new BigDecimal(c.getDefaultValue()) : null, null, null);
 			else if (c.getPropertyType().equals(Float.class.getName()))
 				ipd = new FloatPropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,

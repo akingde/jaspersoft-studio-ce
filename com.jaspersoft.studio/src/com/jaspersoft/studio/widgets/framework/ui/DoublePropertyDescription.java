@@ -4,8 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.ui;
 
-import java.math.BigDecimal;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -20,16 +18,16 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.widget.FallbackNumericText;
 
-public class DoublePropertyDescription extends NumberPropertyDescription<BigDecimal> {
+public class DoublePropertyDescription extends NumberPropertyDescription<Double> {
 	
 	public DoublePropertyDescription() {
 	}
 	
-	public DoublePropertyDescription(String name, String label, String description, boolean mandatory,  BigDecimal defaultValue, BigDecimal min, BigDecimal max) {
+	public DoublePropertyDescription(String name, String label, String description, boolean mandatory,  double defaultValue, double min, double max) {
 		super(name, label, description, mandatory, defaultValue, min, max);
 	}
 	
-	public DoublePropertyDescription(String name, String label, String description, boolean mandatory, BigDecimal min, BigDecimal max) {
+	public DoublePropertyDescription(String name, String label, String description, boolean mandatory, double min, double max) {
 		super(name, label, description, mandatory, min, max);
 	}
 	
@@ -58,37 +56,37 @@ public class DoublePropertyDescription extends NumberPropertyDescription<BigDeci
 	
 	@Override
 	public DoublePropertyDescription getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
-		BigDecimal min = null;
-		BigDecimal max = null;
-		BigDecimal def = null;
-		BigDecimal fallBack = null;
+		Double min = null;
+		Double max = null;
+		Double def = null;
+		Double fallBack = null;
 		
 		//setup the minimum
 		if (cpd.getMin() != null){
-			min = new BigDecimal(new Double(cpd.getMin()));
+			min = new Double(cpd.getMin());
 		} else {
 			//The IEEE 754 format has one bit reserved for the sign and the remaining bits representing the magnitude. 
 			//This means that it is "symmetrical" around origin (as opposed to the Integer values, which have one more negative value). 
 			//Thus the minimum value is simply the same as the maximum value, with the sign-bit changed, so -Double.MAX_VALUE is the smallest possible 
 			//actual number you can represent with a double.
-			min = new BigDecimal(-Double.MAX_VALUE);
+			min = -Double.MAX_VALUE;
 		}
 		
 		//setup the maximum
 		if (cpd.getMax() != null){
-			max = new BigDecimal(new Double(cpd.getMax()));
+			max = new Double(cpd.getMax());
 		} else {
-			max = new BigDecimal(Double.MAX_VALUE);
+			max = Double.MAX_VALUE;
 		}
 		
 		//setup the default value
 		if (cpd.getDefaultValue() != null && !cpd.getDefaultValue().isEmpty()){
-			def = new BigDecimal(new Double(cpd.getDefaultValue()));
+			def = new Double(cpd.getDefaultValue());
 		}
 		
 		//setup the fallback value
 		if (cpd.getFallbackValue() != null && !cpd.getFallbackValue().isEmpty()){
-			fallBack = new BigDecimal(new Double(cpd.getFallbackValue()));
+			fallBack = new Double(cpd.getFallbackValue());
 		}
 		DoublePropertyDescription doubleDesc = new DoublePropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), def, min, max);
 		doubleDesc.setReadOnly(cpd.isReadOnly());
