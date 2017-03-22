@@ -6,7 +6,6 @@ package com.jaspersoft.studio.data.csv;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -845,23 +844,12 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	 * Removes selected entries from the data model
 	 */
 	private void removeEntries() {
-
 		int[] indices = table.getSelectionIndices();
-
 		if (indices.length > 0) {
-
-			Arrays.sort(indices);
-			int removedItems = 0;
-
-			for (int i : indices) {
-				// To prevent an IndexOutOfBoundsException
-				// we need to subtract number of removed items
-				// from the removed item index.
-				int indx = i - removedItems;
-				if (indx >= 0 && indx > rows.size())
-					rows.remove(indx);
-				removedItems++;
-			}
+			List<String> toDel = new ArrayList<String>();
+			for (int i = 0; i < indices.length; i++)
+				toDel.add(rows.get(indices[i]));
+			rows.removeAll(toDel);
 			tableViewer.refresh();
 			setTableSelection(indices[0]);
 			pchangesuport.firePropertyChange("dirty", false, true);
