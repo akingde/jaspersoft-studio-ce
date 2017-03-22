@@ -195,11 +195,14 @@ public class DataAdapterEditorPart extends ABasicEditor {
 											Thread.currentThread().setContextClassLoader(cl);
 									}
 									das.test();
-
-									MessageBox mb = new MessageBox(btnTest.getShell(), SWT.ICON_INFORMATION | SWT.OK);
-									mb.setText(Messages.DataAdapterWizard_testbutton);
-									mb.setMessage(Messages.DataAdapterWizard_testsuccesful);
-									mb.open();
+									UIUtils.getDisplay().syncExec(new Runnable() {
+										public void run() {
+											MessageBox mb = new MessageBox(btnTest.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+											mb.setText(Messages.DataAdapterWizard_testbutton);
+											mb.setMessage(Messages.DataAdapterWizard_testsuccesful);
+											mb.open();
+										}
+									});
 								} catch (Exception e1) {
 									UIUtils.showError(e1);
 								} finally {
