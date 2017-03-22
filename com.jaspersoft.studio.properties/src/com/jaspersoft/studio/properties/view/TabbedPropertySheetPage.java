@@ -53,15 +53,79 @@ import com.jaspersoft.studio.properties.internal.TabbedPropertyViewer;
 import com.jaspersoft.studio.properties.view.validation.IValidable;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
 
+import net.sf.jasperreports.eclipse.util.Pair;
+
 /**
  * A property sheet page that provides a tabbed UI. It's is based on the
  * TabbedPropertySheetPage made by Anthony Hunter inside eclipse, but with some
- * optimization to be faster with Jaspersoft Studio.
+ * optimization to be faster with Jaspersoft Studio. The pages are cached but
+ * to avoid to cache too much widgets the page tab not used in the last 10 hours
+ * are discarded the waiting time before a page tab is discarded is defined by the
+ * variable PAGE_EXPIRATION_TIME, the discard of the page is done when a new
+ * one is loaded
  * 
  * @author Anthony Hunter & Orlandin Marco
  */
 public class TabbedPropertySheetPage extends Page implements IPropertySheetPage {
+	
+	/**
+	 * Class to collect every page created and will watched to be disposed after too much
+	 * time in the cache
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private static class PagesWatcher {
+		
+		/**
+		 * The list of the watched page
+		 */
+		private List<TabbedPropertySheetPage> pages = new ArrayList<TabbedPropertySheetPage>();
+		
+		/**
+		 * Process the pages, removing the disposed ones and to the not disposed is called the method
+		 * to dispose unused tabs
+		 */
+		public void processPages(){
+			for(TabbedPropertySheetPage page : new ArrayList<TabbedPropertySheetPage>(pages)){
+				if (page.tabbedPropertyComposite.isDisposed()){
+					pages.remove(page);
+				} else {
+					page.removeExpiredTabs();
+				}
+			}
+			
+		}
+		
+		/**
+		 * Add a page that will be watched 
+		 * 
+		 * @param page a not null page
+		 */
+		public void addPage(TabbedPropertySheetPage page){
+			if (page != null) pages.add(page);
+		}
+		
+		/**
+		 * Remove a watched page, typically called in the dispose of the page itsel
+		 * 
+		 * @param page the page 
+		 */
+		public void removePage(TabbedPropertySheetPage page){
+			if (page != null) pages.remove(page);
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	private static PagesWatcher WATCHER = new PagesWatcher();
 
+	/**
+	 * The page expiration time is 10 hours
+	 */
+	private Long PAGE_EXPIRATION_TIME = 36000000l;
+	
 	/**
 	 * Composite where the controls are shown
 	 */
@@ -110,7 +174,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	/**
 	 * Map to cache every tabcontents with the composite where it is shown
 	 */
-	private Map<TabContents, Composite> tabToComposite;
+	private Map<TabContents, Pair<Composite, Long>> tabToComposite;
 
 	/**
 	 * Map of the last tab selected for each element
@@ -123,6 +187,8 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	private boolean hasTitleBar;
 	
 	private ControlDecoration cd;
+	
+	private List<ValidationError> errors;
 
 	/**
 	 * SelectionChangedListener for the ListViewer.
@@ -133,44 +199,51 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 		 * Shows the tab associated with the selection.
 		 */
 		public void selectionChanged(SelectionChangedEvent event) {
-			if (!tabbedPropertyComposite.isDisposed()) {
-				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+			synchronized (TabbedPropertySheetPage.this) {
+				if (!tabbedPropertyComposite.isDisposed()) {
+					IStructuredSelection selection = (IStructuredSelection) event.getSelection();
 
-				TabContents tab = null;
-				ITabDescriptor descriptor = (ITabDescriptor) selection.getFirstElement();
-				if (currentTab != null)
-					currentTab.aboutToBeHidden();
-				if (descriptor != null) {
-					tab = getTab(descriptor);
-					if (tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
-						// force widgets to be resized
-						tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
-						TabState state = tabbedPropertyComposite.showTabContents(descriptor, tab);
-						if (state == TabState.TAB_NOT_DEFINED) {
-							// Tab not defined, it need to be created
-							Composite tabComposite = createTabComposite(descriptor);
-							tabToComposite.put(tab, tabComposite);
-							tab.createControls(tabComposite, TabbedPropertySheetPage.this);
-							tabbedPropertyComposite.showTabContents(descriptor, tab);
-						}
+					TabContents tab = null;
+					ITabDescriptor descriptor = (ITabDescriptor) selection.getFirstElement();
+					if (currentTab != null)
+						currentTab.aboutToBeHidden();
+					if (descriptor != null) {
+						tab = getTab(descriptor);
+						if (tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
+							// force widgets to be resized
+							tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
+							TabState state = tabbedPropertyComposite.showTabContents(descriptor, tab);
+							if (state == TabState.TAB_NOT_DEFINED) {
+								// Tab not defined, it need to be created
+								Composite tabComposite = createTabComposite(descriptor);
+								tabToComposite.put(tab, new Pair<Composite, Long>(tabComposite, -1l));
+								tab.createControls(tabComposite, TabbedPropertySheetPage.this);
+								tabbedPropertyComposite.showTabContents(descriptor, tab);
+							}
 
-						// store tab selection
-						storeCurrentTabSelection(descriptor);
-						tab.refresh();
-						currentTab = tab;
-						currentTab.aboutToBeShown();
-						if (state != TabState.TAB_ALREADY_VISIBLE) {
-							// The layout is done only if the tab was not
-							// visible
-							tabbedPropertyComposite.layout();
-							tabbedPropertyComposite.updatePageMinimumSize();
+							Pair<Composite, Long> showedComposite = tabToComposite.get(tab);
+							if (showedComposite != null){
+								showedComposite.setValue(System.currentTimeMillis());
+							}
+							WATCHER.processPages();
+							
+							// store tab selection
+							storeCurrentTabSelection(descriptor);
+							tab.refresh();
+							currentTab = tab;
+							currentTab.aboutToBeShown();
+							if (state != TabState.TAB_ALREADY_VISIBLE) {
+								// The layout is done only if the tab was not
+								// visible
+								tabbedPropertyComposite.layout();
+								tabbedPropertyComposite.updatePageMinimumSize();
+							}
+							showErrors();
 						}
-						showErrors();
 					}
 				}
-			}
+			}	
 		}
-
 	}
 
 	public void showErrors() {
@@ -213,8 +286,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 			}
 		}
 	}
-
-	private List<ValidationError> errors;
 
 	protected ControlDecoration getErrorControlDecorator() {
 		if (cd == null) {
@@ -271,10 +342,11 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 		hasTitleBar = showTitleBar;
 		contributor = tabbedPropertySheetPageContributor;
 		currentContributorId = contributor.getContributorId();
-		tabToComposite = new HashMap<TabContents, Composite>();
+		tabToComposite = new HashMap<TabContents, Pair<Composite, Long>>();
 		descriptorToTab = new HashMap<ITabDescriptor, TabContents>();
 		lastSelectedTabForElement = new HashMap<Object, String>();
 		validateRegistry();
+		WATCHER.addPage(this);
 	}
 
 	/**
@@ -300,9 +372,10 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * Take a TabContents and search a TabDescriptor for that tab
 	 */
 	private ITabDescriptor getTabDescriptor(TabContents tab) {
-		for (ITabDescriptor key : descriptorToTab.keySet()) {
-			if (descriptorToTab.get(key) == tab)
-				return key;
+		for(Entry<ITabDescriptor, TabContents> tabEntry : descriptorToTab.entrySet()){
+			if (tabEntry.getValue() == tab){
+				return tabEntry.getKey();
+			}
 		}
 		return null;
 	}
@@ -401,6 +474,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * @see org.eclipse.ui.part.IPage#dispose()
 	 */
 	public void dispose() {
+		WATCHER.removePage(this);
 		if (widgetFactory != null) {
 			widgetFactory.dispose();
 			widgetFactory = null;
@@ -421,8 +495,8 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * Dispose all the tabs and their controls
 	 */
 	private void disposeTabs() {
-		for (Entry<TabContents, Composite> pair : tabToComposite.entrySet()) {
-			Composite composite = pair.getValue();
+		for (Entry<TabContents, Pair<Composite, Long>> pair : tabToComposite.entrySet()) {
+			Composite composite = pair.getValue().getKey();
 			pair.getKey().dispose();
 			if (composite != null) {
 				composite.dispose();
@@ -625,5 +699,36 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 			result.add(getTab(desc));
 		}
 		return result;
+	}
+	
+	/**
+	 * Check if a tab associated to a descriptor is visible or not
+	 * 
+	 * @param descriptor the descriptor, must be not null
+ 	 * @return true if it is visible, false otherwise
+	 */
+	private boolean isTabVisible(ITabDescriptor descriptor){
+		return tabbedPropertyComposite.getTabState(descriptor) == TabState.TAB_ALREADY_VISIBLE;
+	}
+
+	/**
+	 * Cycle all the tabs of this page to remove the not visible and not used ones
+	 */
+	protected void removeExpiredTabs(){
+		synchronized (TabbedPropertySheetPage.this) {
+			long currentTime = System.currentTimeMillis();
+			Map<TabContents, Pair<Composite, Long>> mapCopy = new HashMap<TabContents, Pair<Composite,Long>>(tabToComposite);
+			for (Entry<TabContents, Pair<Composite, Long>> entry : mapCopy.entrySet()){
+				Pair<Composite, Long> entryValues = entry.getValue();
+				Long lastTimeUsed = entryValues.getValue();
+				if (lastTimeUsed != -1 && (currentTime - lastTimeUsed) > PAGE_EXPIRATION_TIME ){
+					ITabDescriptor descriptor = getTabDescriptor(entry.getKey());
+					if (descriptor != null && !isTabVisible(descriptor)){
+						tabbedPropertyComposite.destroyTabContents(descriptor);
+						tabToComposite.remove(entry.getKey());
+					}	
+				}
+			}	
+		}
 	}
 }

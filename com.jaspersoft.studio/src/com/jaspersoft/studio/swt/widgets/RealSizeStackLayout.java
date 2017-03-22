@@ -26,7 +26,7 @@ public class RealSizeStackLayout extends StackLayout {
 	 */
 	@Override
 	protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
-		if (topControl != null) {
+		if (topControl != null && !topControl.isDisposed()) {
 			Point size = topControl.computeSize(wHint, hHint, flushCache);
 			int width = size.x + 2 * marginWidth;
 			int height = size.y + 2 * marginHeight;

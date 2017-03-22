@@ -35,7 +35,7 @@ public class TabbedPropertyComposite extends Composite {
 	 * State of a tab
 	 */
 	public enum TabState {
-		TAB_NOT_DEFINED, TAB_ALREADY_VISIBLE, TAB_SET_VISIBLE, TAB_DYNAMIC_VISIBLE
+		TAB_NOT_DEFINED, TAB_ALREADY_VISIBLE, TAB_SET_VISIBLE, TAB_DYNAMIC_VISIBLE, TAB_NOT_VISIBLE
 	};
 
 	/**
@@ -205,7 +205,7 @@ public class TabbedPropertyComposite extends Composite {
 		if (tab == null)
 			showEmptyPage(true);
 		Control control = cacheMap.get(tab);
-		if (control == null)
+		if (control == null || control.isDisposed())
 			return TabState.TAB_NOT_DEFINED;
 		else {
 			if (cachedLayout.setTopControl(control)) {
@@ -213,6 +213,19 @@ public class TabbedPropertyComposite extends Composite {
 			}
 			if (contents.hasDynamicContent()) return TabState.TAB_DYNAMIC_VISIBLE;
 			else return TabState.TAB_ALREADY_VISIBLE;
+		}
+	}
+	
+	public TabState getTabState(ITabDescriptor tab){
+		Control control = cacheMap.get(tab);
+		if (control == null || control.isDisposed()) { 
+			return TabState.TAB_NOT_DEFINED;
+		} else {
+			if (cachedLayout.getTopControl() == control) {
+				return TabState.TAB_ALREADY_VISIBLE;
+			} else {
+				return TabState.TAB_NOT_VISIBLE;
+			}
 		}
 	}
 
@@ -295,6 +308,19 @@ public class TabbedPropertyComposite extends Composite {
 		return comp;
 	}
 	
+	/**
+	 * Dispose the content of a tab and remove it from the cache
+	 * 
+	 * @param tab the tab to dispose
+	 */
+	public void destroyTabContents(ITabDescriptor tab){
+		Control cont = cacheMap.get(tab);
+		if (cont != null){
+			cont.dispose();
+			cacheMap.remove(tab);
+		}
+	}
+		
 	public Rectangle getPropertiesArea(){
 		return tabComposite.getClientArea();
 	}

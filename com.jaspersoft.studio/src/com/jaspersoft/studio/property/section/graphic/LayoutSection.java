@@ -146,17 +146,17 @@ public class LayoutSection extends AbstractSection {
 			if (parentLayout != null){
 				//check if the layout of the parent require additional controls to be shown on the children
 				if (parentLayout.showAdditionalControls(elementProperties, parentProperties)){
-					if (!configurationMap.containsKey(parentLayout)){
+					Composite currentContainer = configurationMap.get(parentLayout);
+					if (currentContainer == null || currentContainer.isDisposed()){
 						//check if its controls where already created, if not create them
-						Composite container = new Composite(layoutConfigurationPanel, SWT.NONE);
-						container.setLayout(getNoSpaceLayout(1));
+						currentContainer = new Composite(layoutConfigurationPanel, SWT.NONE);
+						currentContainer.setLayout(getNoSpaceLayout(1));
 						ILayoutUIProvider controlsProvider = parentLayout.getControlsProvider();
-						controlsProvider.createControls(container);
-						container.setData(controlsProvider);
-						configurationMap.put(parentLayout, container);
+						controlsProvider.createControls(currentContainer);
+						currentContainer.setData(controlsProvider);
+						configurationMap.put(parentLayout, currentContainer);
 					}
 					//the control are for sure created here, move them in the foreground and set their data
-					Composite currentContainer = configurationMap.get(parentLayout);
 					((StackLayout)layoutConfigurationPanel.getLayout()).topControl = currentContainer;
 					setLayoutAreaVisible(true);
 					ILayoutUIProvider controlsProvider = (ILayoutUIProvider)currentContainer.getData();

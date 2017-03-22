@@ -88,7 +88,7 @@ public class ChartPlotSection extends AbstractRealValueSection {
 	/**
 	 * Stack layout used to show the correct panel
 	 */
-	private RealSizeStackLayout dyinamicCompositeLayout = new RealSizeStackLayout();
+	private RealSizeStackLayout dyinamicCompositeLayout;
 	
 	/**
 	 * Composite where the chart type specific controls are shown
@@ -100,7 +100,7 @@ public class ChartPlotSection extends AbstractRealValueSection {
 	 * that has the definition of the controls for that type of chart and the composite
 	 * container that contains the controls
 	 */
-	private HashMap<Class<?>, Pair<AbstractRealValueSection, Composite>> subsections = new HashMap<Class<?>, Pair<AbstractRealValueSection, Composite>>();
+	private HashMap<Class<?>, Pair<AbstractRealValueSection, Composite>> subsections;
 	
 	@Override
 	public void createControls(Composite parent,TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -112,8 +112,10 @@ public class ChartPlotSection extends AbstractRealValueSection {
 		mainComposite = new Composite(parent, SWT.NONE);
 		GridData mainCompositeData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		mainCompositeData.horizontalSpan = 2;
+		dyinamicCompositeLayout = new RealSizeStackLayout();
 		mainComposite.setLayoutData(mainCompositeData);
 		mainComposite.setLayout(dyinamicCompositeLayout);
+		subsections = new HashMap<Class<?>, Pair<AbstractRealValueSection, Composite>>();
 	}
 	
 
