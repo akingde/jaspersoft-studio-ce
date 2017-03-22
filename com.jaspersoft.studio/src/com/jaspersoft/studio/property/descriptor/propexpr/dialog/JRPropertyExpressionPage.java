@@ -61,6 +61,7 @@ import com.jaspersoft.studio.model.CopyElementProperty;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionDTO;
 import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionsDTO;
+import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumnFactory;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.TPropertyLabelProvider;
@@ -341,12 +342,16 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			}
 			if (scmp == cmp)
 				buildSectionComposite();
+			final TColumn col = TColumnFactory.getTColumn(pm);
+			boolean custom = !eds.contains(props.get(pm.getName()));
+			if (custom && !value.hasProperty(pm.getName()))
+				continue;
+			col.setLabelEditable(showExisting && custom);
 			UIUtils.getDisplay().syncExec(new Runnable() {
 
 				@Override
 				public void run() {
-					TColumnFactory.addWidget(TColumnFactory.getTColumn(pm), scmp, value,
-							value.geteContext().getJasperReportsConfiguration());
+					TColumnFactory.addWidget(col, scmp, value, value.geteContext().getJasperReportsConfiguration());
 				}
 			});
 		}
@@ -601,6 +606,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		Job job = new Job("refresh widgets") {
 
 			protected IStatus run(IProgressMonitor monitor) {
+				final boolean ex = showExisting;
 				try {
 					UIUtils.getDisplay().syncExec(new Runnable() {
 
@@ -633,7 +639,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 						@Override
 						public void run() {
-							if (!search.equals(txt.getText()))
+							if (!search.equals(txt.getText()) || ex != showExisting)
 								refreshWidgets();
 						}
 					});

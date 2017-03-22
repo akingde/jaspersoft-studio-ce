@@ -6,11 +6,20 @@ package com.jaspersoft.studio.property.dataset.fields.table.widget;
 import java.awt.Color;
 import java.math.BigDecimal;
 
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionDTO;
 import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionsDTO;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
@@ -23,6 +32,7 @@ import com.jaspersoft.studio.widgets.framework.ui.BigDecimalPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ClassItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ColorPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.DoublePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FloatPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
@@ -53,30 +63,30 @@ public class WJRProperty extends AWidget {
 	}
 
 	@Override
-	protected void initControl(Composite parent, TColumn c) {
+	protected void initControl(final Composite parent, final TColumn c) {
 		if (isPropertyExpressions(element)) {
 			ItemPropertyDescription<?> ipd = null;
+			String pname = c.getPropertyName();
 			if (c.getPropertyType().equals(Boolean.class.getName()))
-				ipd = new ComboItemPropertyDescription<Boolean>(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
+				ipd = new ComboItemPropertyDescription<Boolean>(pname, c.getLabel(), c.getDescription(), false,
 						Boolean.parseBoolean(c.getDefaultValue()), new String[] { "", "true", "false" });
 			else if (c.getPropertyType().equals(String.class.getName()))
-				ipd = new TextPropertyDescription<String>(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
-						c.getDefaultValue());
+				ipd = new TextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false, c.getDefaultValue());
 			else if (c.getPropertyType().equals(Class.class.getName()))
-				ipd = new ClassItemPropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
-						c.getDefaultValue(), new String[] {});
+				ipd = new ClassItemPropertyDescription(pname, c.getLabel(), c.getDescription(), false, c.getDefaultValue(),
+						new String[] {});
 			else if (c.getPropertyType().equals(Integer.class.getName()) || c.getPropertyType().equals(Long.class.getName()))
-				ipd = new IntegerPropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
+				ipd = new IntegerPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Integer.parseInt(c.getDefaultValue()) : null, null, null);
 			else if (c.getPropertyType().equals(BigDecimal.class.getName())
 					|| c.getPropertyType().equals(Double.class.getName()))
 				ipd = new BigDecimalPropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? new BigDecimal(c.getDefaultValue()) : null, null, null);
 			else if (c.getPropertyType().equals(Float.class.getName()))
-				ipd = new FloatPropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
+				ipd = new FloatPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Float.parseFloat(c.getDefaultValue()) : null, null, null);
 			else if (c.getPropertyType().equals(Color.class.getName()))
-				ipd = new ColorPropertyDescription<Color>(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
+				ipd = new ColorPropertyDescription<Color>(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Color.decode(c.getDefaultValue()) : null);
 			else {
 				try {
@@ -86,19 +96,66 @@ public class WJRProperty extends AWidget {
 						String[] items = new String[obj.length];
 						for (int i = 0; i < obj.length; i++)
 							items[i] = obj[i].toString();
-						ipd = new ComboItemPropertyDescription<String>(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
+						ipd = new ComboItemPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
 								c.getDefaultValue(), items);
 					}
 				} catch (ClassNotFoundException e) {
 				}
 				if (ipd == null)
-					ipd = new TextPropertyDescription<String>(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
+					ipd = new TextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
 							c.getDefaultValue());
 			}
+			if (c.isLabelEditable() || (pname.contains("{") && pname.contains("}"))) {
+				lblText = new Text(parent, SWT.BORDER);
+				lblText.setText(Misc.nvl(c.getLabel(), pname));
+				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+				if (!(pname.contains("{") && pname.contains("}"))) {
+					gd.horizontalIndent = 20;
+					lblText.addFocusListener(new FocusAdapter() {
+						private ControlDecoration cd;
 
-			Label lbl = new Label(parent, SWT.NONE);
-			lbl.setText(Misc.nvl(c.getLabel(), c.getPropertyName()));
+						@Override
+						public void focusGained(FocusEvent e) {
+							if (cd == null) {
+								cd = new ControlDecoration(lblText, SWT.CENTER);
+								cd.setDescriptionText("Remove property");
+								cd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/delete_style.gif"));
+								cd.addSelectionListener(new SelectionAdapter() {
+									@Override
+									public void widgetSelected(SelectionEvent e) {
+										removePropertyExpression(element, getValue().getName());
+										lblText.dispose();
+										wip.dispose();
+										parent.layout(true);
+									}
+								});
+							}
+							cd.show();
+						}
 
+						@Override
+						public void focusLost(FocusEvent e) {
+							cd.hide();
+						}
+					});
+				}
+				lblText.setLayoutData(gd);
+				lblText.addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+						PropertyExpressionDTO dto = getValue();
+						removePropertyExpression(element, dto.getName());
+						c.setPropertyName(lblText.getText());
+						dto.setName(lblText.getText());
+						setValue(dto);
+					}
+				});
+
+			} else {
+				lbl = new Label(parent, SWT.NONE);
+				lbl.setText(Misc.nvl(c.getLabel(), pname));
+			}
 			wip = new WItemProperty(parent, SWT.NONE, ipd, new IPropertyEditor() {
 
 				@Override
@@ -138,11 +195,16 @@ public class WJRProperty extends AWidget {
 
 			// Avoid to do the layout of the widget
 			wip.updateWidget(false);
-
-			lbl.setToolTipText(getToolTipText());
+			if (lbl != null)
+				lbl.setToolTipText(getToolTipText());
+			if (lblText != null)
+				lblText.setToolTipText(getToolTipText());
 		} else
 			super.initControl(parent, c);
 	}
+
+	private Label lbl;
+	private Text lblText;
 
 	@Override
 	protected String getToolTipText() {
@@ -204,7 +266,7 @@ public class WJRProperty extends AWidget {
 		} else if (element instanceof PropertyExpressionsDTO) {
 			PropertyExpressionsDTO d = (PropertyExpressionsDTO) element;
 			for (PropertyExpressionDTO dto : d.getProperties())
-				if (dto.getName().equals(c.getPropertyName())) {
+				if (dto.getName().equals(dto.getName())) {
 					dto.setExpression(value instanceof JRDesignExpression);
 					dto.setValue(value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString());
 					return;
@@ -286,6 +348,18 @@ public class WJRProperty extends AWidget {
 			((JasperDesign) element).removePropertyExpression(name);
 		else if (element instanceof JRDesignDataset)
 			((JRDesignDataset) element).removePropertyExpression(name);
+		else if (element instanceof PropertyExpressionsDTO) {
+			PropertyExpressionsDTO d = (PropertyExpressionsDTO) element;
+			PropertyExpressionDTO toDel = null;
+			for (PropertyExpressionDTO dto : d.getProperties()) {
+				if (dto.getName().equals(name)) {
+					toDel = dto;
+					break;
+				}
+			}
+			if (toDel != null)
+				d.getProperties().remove(toDel);
+		}
 	}
 
 	public void addPropertyExpression(Object element, String name, JRExpression exp, PropertyEvaluationTimeEnum pet) {

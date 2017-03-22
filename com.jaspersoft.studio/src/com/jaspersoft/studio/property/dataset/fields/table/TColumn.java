@@ -18,6 +18,15 @@ public class TColumn {
 	private String defaultValue;
 	private transient PropertyMetadata propertyMetadata;
 	private transient Object value;
+	private transient boolean labelEditable = false;
+
+	public void setLabelEditable(boolean labelEditable) {
+		this.labelEditable = labelEditable;
+	}
+
+	public boolean isLabelEditable() {
+		return labelEditable;
+	}
 
 	public PropertyMetadata getPropertyMetadata() {
 		return propertyMetadata;

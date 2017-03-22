@@ -4,8 +4,10 @@
 package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.dataset.DatasetUtil;
@@ -46,8 +48,14 @@ public class HintsPropertiesList {
 				List<PropertyMetadata> eps = pmu.getReportProperties((JasperDesign) holder);
 				if (eps != null)
 					result.addAll(eps);
+				eps = pmu.getDatasetProperties(((JasperDesign) holder).getMainDesignDataset(), DatasetUtil
+						.getDataAdapter(eContext.getJasperReportsConfiguration(), ((JasperDesign) holder).getMainDesignDataset()));
+				if (eps != null)
+					result.addAll(eps);
 				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.REPORT));
 				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.DATASET));
+			} catch (JRException e) {
+				e.printStackTrace();
 			} finally {
 				Thread.currentThread().setContextClassLoader(oldCl);
 			}
@@ -103,8 +111,15 @@ public class HintsPropertiesList {
 			Map<String, PropertyMetadata> map = DatasetUtil.getPmap(eContext.getJasperReportsConfiguration());
 			result.addAll(map.values());
 		}
-
-		return result;
+		List<PropertyMetadata> r = new ArrayList<PropertyMetadata>();
+		Set<String> set = new HashSet<String>();
+		for (PropertyMetadata p : result) {
+			if (set.contains(p.getName()))
+				continue;
+			set.add(p.getName());
+			r.add(p);
+		}
+		return r;
 	}
 
 	public static final String COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE = "com.jaspersoft.studio.dataset.language";
