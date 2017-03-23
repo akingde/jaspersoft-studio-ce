@@ -61,9 +61,12 @@ public class ColorPropertyDescription<T> extends AbstractExpressionPropertyDescr
 
 		Control expressionEditor = super.createControl(wiProp, cmp.getFirstContainer());
 		cmp.getFirstContainer().setData(expressionEditor);
+		cmp.setExpressionControlToHighlight(expressionEditor);
 
 		final WColorPicker simpleEditor = new WColorPicker(new AlfaRGB(new RGB(0, 0, 0), 0), cmp.getSecondContainer());
 		cmp.getSecondContainer().setData(simpleEditor);
+		cmp.setSimpleControlToHighlight(simpleEditor);
+		
 		simpleEditor.setHaveTransparency(isTransaprent());
 		simpleEditor.addColorSelectionListener(new ColorSelectionListener() {
 

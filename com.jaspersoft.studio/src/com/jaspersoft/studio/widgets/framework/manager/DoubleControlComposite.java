@@ -7,6 +7,7 @@ package com.jaspersoft.studio.widgets.framework.manager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
@@ -31,6 +32,16 @@ public class DoubleControlComposite extends Composite {
 	private Composite secondControlContainer;
 	
 	/**
+	 * The proponent control of the simple
+	 */
+	private Control simplecontrolToHighlight;
+
+	/**
+	 * The proponent control of the expression
+	 */
+	private Control expressionControlToHightLigh;
+	
+	/**
 	 * The layout of this control
 	 */
 	private StackLayout layout = new StackLayout();
@@ -50,6 +61,8 @@ public class DoubleControlComposite extends Composite {
 		firstControlContainer.setLayout(WidgetFactory.getNoPadLayout(1));
 		secondControlContainer = new Composite(this, SWT.NONE);
 		secondControlContainer.setLayout(WidgetFactory.getNoPadLayout(1));
+		simplecontrolToHighlight = secondControlContainer;
+		expressionControlToHightLigh = firstControlContainer;
 		layout.topControl = firstControlContainer;
 	}
 
@@ -91,5 +104,45 @@ public class DoubleControlComposite extends Composite {
 			layout.topControl = secondControlContainer;
 			layout(true, true);
 		}
+	}
+	
+	/**
+	 * Return the proponent control of the simple mode, by default it 
+	 * is the composite where the control is created but can be changed
+	 * 
+	 * @return a control can be null
+	 */
+	public Control getSimpleControlToHighlight(){
+		return simplecontrolToHighlight;
+	}
+	
+	/**
+	 * Set the proponent control of the simple mode, by default it 
+	 * is the composite where the control is created but can be changed
+	 * 
+	 * @param the new control
+	 */
+	public void setSimpleControlToHighlight(Control control){
+		simplecontrolToHighlight = control;
+	}
+	
+	/**
+	 * Return the proponent control of the expression mode, by default it 
+	 * is the composite where the control is created but can be changed
+	 * 
+	 * @return a control can be null
+	 */
+	public Control getExpressionControlToHighlight(){
+		return expressionControlToHightLigh;
+	}
+	
+	/**
+	 * Set the proponent control of the expression mode, by default it 
+	 * is the composite where the control is created but can be changed
+	 * 
+	 * @param the new control
+	 */
+	public void setExpressionControlToHighlight(Control control){
+		expressionControlToHightLigh = control;
 	}
 }

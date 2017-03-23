@@ -64,11 +64,13 @@ public class TextPropertyDescription<T> extends AbstractExpressionPropertyDescri
 		cmp.getFirstContainer().setLayout(WidgetFactory.getNoPadLayout(2));
 		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
 		cmp.getFirstContainer().setData(expressionControl);
+		cmp.setExpressionControlToHighlight(expressionControl);
 		
 		//create the simple control
 		cmp.getSecondContainer().setLayout(WidgetFactory.getNoPadLayout(2));
 		final Text simpleControl =  new Text(cmp.getSecondContainer(), SWT.BORDER);
 		cmp.getSecondContainer().setData(simpleControl);
+		cmp.setSimpleControlToHighlight(simpleControl);
 		GridData textData = new GridData(GridData.FILL_HORIZONTAL);
 		textData.verticalAlignment = SWT.CENTER;
 		simpleControl.setLayoutData(textData);

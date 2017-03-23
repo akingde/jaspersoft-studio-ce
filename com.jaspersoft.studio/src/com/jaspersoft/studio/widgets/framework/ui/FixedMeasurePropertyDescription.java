@@ -111,7 +111,8 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 
 		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
 		cmp.getFirstContainer().setData(expressionControl);
-
+		cmp.setExpressionControlToHighlight(expressionControl);
+		
 		final Text simpleControl = new Text(cmp.getSecondContainer(), SWT.BORDER); //$NON-NLS-1$
 		// Flag used to overcome the problem of focus events in Mac OS X
 		// - JSS Bugzilla 42999
@@ -162,6 +163,8 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 		}
 
 		cmp.getSecondContainer().setData(simpleControl);
+		cmp.setSimpleControlToHighlight(simpleControl);
+		
 		GridData textData = new GridData(GridData.FILL_HORIZONTAL);
 		textData.verticalAlignment = SWT.CENTER;
 		textData.grabExcessVerticalSpace = true;

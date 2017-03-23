@@ -62,11 +62,12 @@ public class ClassItemPropertyDescription extends ComboItemPropertyDescription<S
 
 		Control expressionControl = createExpressionControl(wiProp, cmp.getFirstContainer());
 		cmp.getFirstContainer().setData(expressionControl);
-
+		cmp.setExpressionControlToHighlight(expressionControl);
 
 		cmp.getSecondContainer().setLayout(WidgetFactory.getNoPadLayout(2));
 		final Combo simpleControl = createComboControl(cmp.getSecondContainer());
 		cmp.getSecondContainer().setData(simpleControl);
+		cmp.setSimpleControlToHighlight(simpleControl);
 		
 		GridData comboData = new GridData(GridData.FILL_HORIZONTAL);
 		comboData.verticalAlignment = SWT.CENTER;

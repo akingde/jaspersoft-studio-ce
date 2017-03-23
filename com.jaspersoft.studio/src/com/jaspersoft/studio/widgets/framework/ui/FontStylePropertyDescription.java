@@ -53,6 +53,7 @@ public class FontStylePropertyDescription extends AbstractExpressionPropertyDesc
 
 		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
 		cmp.getFirstContainer().setData(expressionControl);
+		cmp.setExpressionControlToHighlight(expressionControl);
 
 		Composite toolbarsContainer = new Composite(cmp.getSecondContainer(), SWT.NONE);
 		GridLayout containerLayout = new GridLayout(4, false);
@@ -80,6 +81,7 @@ public class FontStylePropertyDescription extends AbstractExpressionPropertyDesc
 		toolItems.add(new Pair<ToolItem, String>(strikeTroughtButton, JRBaseStyle.PROPERTY_STRIKE_THROUGH));
 		
 		cmp.getSecondContainer().setData(toolItems);
+		cmp.setSimpleControlToHighlight(toolbarsContainer);
 		
 		cmp.switchToSecondContainer();
 		return cmp;

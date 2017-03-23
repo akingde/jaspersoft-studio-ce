@@ -56,9 +56,11 @@ public class CheckboxItemPropertyDescription extends AbstractExpressionPropertyD
 
 		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
 		cmp.getFirstContainer().setData(expressionControl);
+		cmp.setExpressionControlToHighlight(expressionControl);
 
 		final Button simpleControl = new Button(cmp.getSecondContainer(), SWT.CHECK);
 		cmp.getSecondContainer().setData(simpleControl);
+		cmp.setSimpleControlToHighlight(simpleControl);
 		
 		simpleControl.addSelectionListener(new SelectionAdapter() {
 			@Override
