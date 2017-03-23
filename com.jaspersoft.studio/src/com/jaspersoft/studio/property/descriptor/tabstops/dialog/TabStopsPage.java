@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.tabstops.dialog;
 
@@ -13,6 +12,7 @@ import net.sf.jasperreports.engine.type.TabStopAlignEnum;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
@@ -195,8 +196,23 @@ public class TabStopsPage extends WizardPage {
 				tableViewer.refresh();
 			}
 		});
+		final TextCellEditor tce = new TextCellEditor(parent);
+		tce.setValidator(IntegerCellEditorValidator.instance());
+		tce.addListener(new ICellEditorListener() {
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new ComboBoxCellEditor(parent,
+			public void applyEditorValue() {
+				setErrorMessage(null);
+			}
+
+			public void cancelEditor() {
+				setErrorMessage(null);
+			}
+
+			public void editorValueChanged(boolean oldValidState, boolean newValidState) {
+				setErrorMessage(tce.getErrorMessage());
+			}
+		});
+		viewer.setCellEditors(new CellEditor[] { tce, new ComboBoxCellEditor(parent,
 				EnumHelper.getEnumNames(TabStopAlignEnum.values(), NullEnum.NOTNULL), SWT.READ_ONLY | SWT.FLAT) });
 		viewer.setColumnProperties(new String[] { "POSITION", "ALIGNEMENT" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
