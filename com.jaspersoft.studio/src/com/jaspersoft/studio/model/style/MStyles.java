@@ -206,12 +206,12 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 						n.setValue(evt.getNewValue());
 				}
 			}
-			super.propertyChange(evt);
 		} 
 		if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_DEFAULT) || evt.getPropertyName().equals(JasperDesign.PROPERTY_TEMPLATES) || evt.getPropertyName().equals(JasperDesign.PROPERTY_STYLES)){
 			//A style default flag has been changed or a external style has been added removed, need to update the default styles
 			updateDefaulStyle();
 		}
+		super.propertyChange(evt);
 	}
 
 }
