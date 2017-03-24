@@ -318,7 +318,15 @@ public class CreateElementCommand extends Command {
 			}
 		}
 		
-    DefaultManager.INSTANCE.applyDefault(srcNode.getClass(), jrElement);
+    	applayDefaultAttributes(srcNode.getClass(), jrElement);
+	}
+	
+	/**
+	 * Apply the attribute from the default set, can be overridden to provide 
+	 * specific behavior
+	 */
+	protected void applayDefaultAttributes(Class<?> clazz, JRElement element){
+		DefaultManager.INSTANCE.applyDefault(clazz, element);
 	}
 	
 	/**

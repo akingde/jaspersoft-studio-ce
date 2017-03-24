@@ -12,18 +12,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
-import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IFile;
@@ -53,6 +42,18 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 /**
  * Default manager that keep loaded the actual default template set (if present) 
@@ -331,6 +332,31 @@ public class DefaultManager {
 	public void applyDefault(Class<?> modelType, JRElement element){
 		if (DefaultManager.INSTANCE.hasDefault()){
 			MGraphicElement defaultSetter = selectedDefaultsMap.get(modelType);
+			if (defaultSetter != null){
+				defaultSetter.trasnferProperties(element);
+			}
+		}
+	}
+	
+	/**
+	 * Apply a template of a specific type to an element. The element and 
+	 * the class type must have a compatible type. Main difference between applyDefualt
+	 * and this is due the applyDefault search for a perfect match of class, instead this
+	 * search for a superclass of the specified class
+	 * 
+	 * @param modelType the type of the request template model
+	 * @param element the element to which the template will be applied. Typically the
+	 * model type is the ANode that contains (or will contain) the element 
+	 */
+	public void applySuperClassDefault(Class<?> modelType, JRElement element){
+		if (DefaultManager.INSTANCE.hasDefault()){
+			MGraphicElement defaultSetter = null;
+			for(Entry<Class<?>, MGraphicElement> entry : selectedDefaultsMap.entrySet()){
+				if (entry.getKey().isAssignableFrom(modelType)){
+					defaultSetter = entry.getValue();
+					break;
+				}
+			}
 			if (defaultSetter != null){
 				defaultSetter.trasnferProperties(element);
 			}
