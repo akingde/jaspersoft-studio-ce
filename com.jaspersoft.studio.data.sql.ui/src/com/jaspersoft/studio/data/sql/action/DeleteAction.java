@@ -47,7 +47,7 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	public static boolean showConfirmation(SQLQueryDesigner designer, String name, List<?> lst) {
 		boolean showConf = designer.getjConfig().getPropertyBoolean(SQLEditorPreferencesPage.P_DEL_SHOWCONFIRMATION,
 				false);
-		return !showConf || UIUtils.showDeleteConfirmation(
+		return !showConf || UIUtils.showDeleteConfirmation(designer.getControl().getShell(),
 				Messages.DeleteAction_2 + name.toLowerCase() + (lst.size() == 1 ? "?" : Messages.DeleteAction_3));
 	}
 

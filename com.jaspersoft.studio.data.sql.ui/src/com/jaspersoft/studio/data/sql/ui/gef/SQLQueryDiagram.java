@@ -384,7 +384,7 @@ public class SQLQueryDiagram {
 			@Override
 			public void execute() {
 				if (!firstRun)
-					run = UIUtils.showDeleteConfirmation(Messages.SQLQueryDiagram_6);
+					run = UIUtils.showDeleteConfirmation(viewer.getControl().getShell(),  Messages.SQLQueryDiagram_6);
 				firstRun = true;
 				if (run)
 					super.execute();

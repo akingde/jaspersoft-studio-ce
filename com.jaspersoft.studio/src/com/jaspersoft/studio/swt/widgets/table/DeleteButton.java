@@ -66,7 +66,7 @@ public class DeleteButton {
 	}
 
 	protected boolean confirmDelete(Object obj) {
-		if (confirm && !UIUtils.showDeleteConfirmation(net.sf.jasperreports.eclipse.messages.Messages.UIUtils_3))
+		if (confirm && !UIUtils.showDeleteConfirmation(delB.getShell(), net.sf.jasperreports.eclipse.messages.Messages.UIUtils_3))
 			return false;
 		return canRemove(obj);
 	}
