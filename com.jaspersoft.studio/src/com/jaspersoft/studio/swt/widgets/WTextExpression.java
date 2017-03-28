@@ -89,10 +89,10 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	private boolean isRefreshing = false;
 
 	// Widgets
-	private JRDesignExpression expression;
-	private Text textExpression;
-	private Button btnEditExpression;
-	private Label label;
+	protected JRDesignExpression expression;
+	protected Text textExpression;
+	protected Button btnEditExpression;
+	protected Label label;
 	
 	/**
 	 * Flag used to know if the tab should be added as text (with value false) or should
@@ -176,14 +176,18 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		this.customTextLinesNumber = linesNum;
 		setLayout(new FormLayout());
 
-		if (textLabel != null && (showMode == LABEL_ON_LEFT || showMode == LABEL_ON_TOP)) {
-			// Create the needed label
-			label = new Label(this, SWT.NONE);
-			label.setText(textLabel);
-		} else {
-			showMode = LABEL_NONE;
-		}
+		createLabelControl(textLabel, showMode);
+		createTextControl();
+		createButtonControl();
+		
+		configureWidgetsLayoutData(showMode);
 
+	}
+	
+	/**
+	 * Create the control to provide the expression
+	 */
+	protected void createTextControl(){
 		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		textExpression.addVerifyListener(new VerifyListener() {
 			@Override
@@ -236,7 +240,25 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 					}
 			}
 		});
-
+	}
+	
+	/**
+	 * Create the optional label
+	 */
+	protected void createLabelControl(String textLabel, int showMode){
+		if (textLabel != null && (showMode == LABEL_ON_LEFT || showMode == LABEL_ON_TOP)) {
+			// Create the needed label
+			label = new Label(this, SWT.NONE);
+			label.setText(textLabel);
+		} else {
+			showMode = LABEL_NONE;
+		}
+	}
+	
+	/**
+	 * Create the button to open the expression dialog
+	 */
+	protected void createButtonControl(){
 		btnEditExpression = new Button(this, SWT.FLAT);
 		btnEditExpression.setImage(JaspersoftStudioPlugin.getInstance().getImage(BUTTON_ICON_PATH));
 		btnEditExpression.addSelectionListener(new SelectionListener() {
@@ -258,15 +280,12 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 				widgetSelected(e);
 			}
 		});
-
-		configureWidgetsLayoutData(showMode);
-
 	}
 
 	/*
 	 * Sets the layout data information for the custom widget controls.
 	 */
-	private void configureWidgetsLayoutData(int showMode) {
+	protected void configureWidgetsLayoutData(int showMode) {
 		int heightHint = UIUtil.getCharHeight(textExpression);
 		if (showMode == LABEL_ON_LEFT) {
 			// Configuration with label on left
