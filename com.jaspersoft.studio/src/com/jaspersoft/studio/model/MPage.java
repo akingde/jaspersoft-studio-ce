@@ -38,12 +38,6 @@ public class MPage extends MLockableRefresh implements IGraphicElement, IContain
 	
 	private ANode realParent;
 	
-	private MDataset getDataset(JasperDesign jrDesign) {
-		MDataset mDataset = new MDataset(null, (JRDesignDataset) jrDesign.getMainDataset());
-		mDataset.setJasperConfiguration(getJasperConfiguration());
-		return mDataset;
-	}
-	
 	@Override
 	public INode getRoot() {
 		return this;
@@ -88,6 +82,12 @@ public class MPage extends MLockableRefresh implements IGraphicElement, IContain
 	public MPage(ANode parent, JasperDesign jd) {
 		super(parent, -1);
 		setValue(jd);
+	}
+	
+	private MDataset getDataset(JasperDesign jrDesign) {
+		MDataset mDataset = new MDataset(getReport(), (JRDesignDataset) jrDesign.getMainDataset());
+		mDataset.setJasperConfiguration(getJasperConfiguration());
+		return mDataset;
 	}
 
 	/*
@@ -250,5 +250,22 @@ public class MPage extends MLockableRefresh implements IGraphicElement, IContain
 			} 
 		}
 		return result;
+	}
+	
+	/**
+	 * Search the report node going up in hierarchy 
+	 * 
+	 * @return an MReport node or null if it can't be found
+	 */
+	protected MReport getReport(){
+		ANode parent = getRealParent();
+		while ((parent != null) && !(parent instanceof MReport)){
+			if (parent instanceof MPage){
+				parent = ((MPage) parent).getRealParent();
+			} else {
+				parent = parent.getParent();
+			}
+		}
+		return (MReport)parent;
 	}
 }
