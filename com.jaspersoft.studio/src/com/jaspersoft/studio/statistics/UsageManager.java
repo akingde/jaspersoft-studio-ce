@@ -770,9 +770,17 @@ public class UsageManager {
 			if (proxy != null)
 				req.viaProxy(proxy);
 			HttpResponse resp = exec.execute(req).returnResponse();
-			if (resp.getStatusLine().getStatusCode() == 200) {
+			int statusCode = resp.getStatusLine().getStatusCode() ;
+			if (statusCode == 200) {
+				
+				// Update the installation info only if the informations was given correctly to the server
+				setInstallationInfo(VERSION_INFO, getVersion());
+				// Remove the old backward compatibility value if present to switch to the new system
+				if (backward_uuid != null) {
+					ph.removeString(BACKWARD_UUID_PROPERTY, InstanceScope.SCOPE);
+				}
+				
 				String response = IOUtils.toString(resp.getEntity().getContent());
-
 				String serverVersion = null;
 				String optmsg = ""; //$NON-NLS-1$ 
 				for (String inputLine : IOUtils.readLines(new StringReader(response))) {
@@ -781,12 +789,6 @@ public class UsageManager {
 					} else {
 						optmsg += inputLine;
 					}
-				}
-				// Update the installation info only if the informations was given correctly to the server
-				setInstallationInfo(VERSION_INFO, getVersion());
-				// Remove the old backward compatibility value if present to switch to the new system
-				if (backward_uuid != null) {
-					ph.removeString(BACKWARD_UUID_PROPERTY, InstanceScope.SCOPE);
 				}
 				return new VersionCheckResult(serverVersion, optmsg, getVersion());
 			}
