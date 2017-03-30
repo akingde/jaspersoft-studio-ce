@@ -138,7 +138,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		isC = firstElement instanceof MJrxml || firstElement instanceof MFolder || firstElement instanceof MReportUnit;
 		if (isC && firstElement instanceof MFolder) {
 			AMJrxmlContainer runit = getReportUnit();
-			isC = runit instanceof AMJrxmlContainer && runit.getParent() != null;
+			isC = runit instanceof AMJrxmlContainer && runit.getParent() != null && bnRunit.getSelection();
 		}
 		return isC;
 	}
