@@ -179,7 +179,7 @@ public abstract class AFileResourcePageContent extends APageContent {
 		List<ComboItem> itemsList = getItemsList();
 		final ComboMenuViewer multipleButton = new ComboMenuViewer(parent, SWT.NORMAL,
 				SPRWPopUpCombo.getLongest(itemsList));
-		multipleButton.setItems(itemsList);
+
 		multipleButton.addSelectionListener(new ComboItemAction() {
 			/**
 			 * The action to execute when an entry is selected
@@ -189,6 +189,7 @@ public abstract class AFileResourcePageContent extends APageContent {
 				buttonSelected((Integer) multipleButton.getSelectionValue());
 			}
 		});
+		multipleButton.setItems(itemsList);
 		multipleButton.disableSelectedItemUpdate(true);
 		multipleButton.disableSelectedEmphasis(true);
 		multipleButton.select(defaultComboItem);
@@ -209,7 +210,7 @@ public abstract class AFileResourcePageContent extends APageContent {
 		// not when we create a new one
 		// so we hide the download option is hidden when we are creating an
 		// elemen
-		if (res.getRoot() instanceof MServerProfile)
+		if (res.getRoot() instanceof MServerProfile && !res.getValue().getIsNew())
 			itemsList.add(new ComboItem(Messages.AFileResourcePage_downloadfilebutton, true,
 					Activator.getDefault().getImage("icons/drive-download.png"), 0, 0, 0)); // $NON-NLS-2$
 		itemsList.add(new ComboItem(Messages.AFileResourcePageContent_uploadFromFS, true,
