@@ -24,9 +24,8 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -144,41 +143,15 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		});
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
+		GridLayout layout = new GridLayout(3, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		composite.setLayout(layout);
 		setControl(composite);
 
-		final CTabFolder tabFolder = new CTabFolder(composite, SWT.BOTTOM);
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.heightHint = 300;
-		tabFolder.setLayoutData(gd);
+		createButtons(composite);
 
-		buildTable(tabFolder);
-		buildForm(tabFolder);
-
-		tabFolder.setSelection(0);
-		tabFolder.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (tabFolder.getSelectionIndex() == 0)
-					fillTable();
-			}
-		});
-	}
-
-	private void buildForm(final CTabFolder tabFolder) {
-		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Form");
-
-		Composite pcmp = new Composite(tabFolder, SWT.NONE);
-		pcmp.setLayout(new GridLayout(2, false));
-		bptab.setControl(pcmp);
-
-		createButtons(pcmp);
-
-		txt = new Text(pcmp, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH);
+		txt = new Text(composite, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txt.setMessage("Search property");
 		txt.addModifyListener(new ModifyListener() {
@@ -198,13 +171,20 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			}
 		});
 
-		sc = new ScrolledComposite(pcmp, SWT.H_SCROLL | SWT.V_SCROLL);
+		createButtonsTable(composite);
+
+		propCmp = new Composite(composite, SWT.NONE);
+		propCmpLayout = new StackLayout();
+		propCmp.setLayout(propCmpLayout);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 3;
+		gd.heightHint = 500;
+		propCmp.setLayoutData(gd);
+
+		sc = new ScrolledComposite(propCmp, SWT.H_SCROLL | SWT.V_SCROLL);
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
 		sc.setAlwaysShowScrollBars(true);
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
-		sc.setLayoutData(gd);
 
 		cmp = new Composite(sc, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
@@ -216,6 +196,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 			@Override
 			public void run() {
+				txt.setFocus();
 				createFormWidgets(cmp, sc);
 			}
 		});
@@ -227,6 +208,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
 			}
 		});
+		propCmpLayout.topControl = sc;
 	}
 
 	private void createButtons(Composite parent) {
@@ -253,7 +235,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			}
 
 		});
-		badd.setToolTipText("Add existing properties in the report template.");
+		badd.setToolTipText("Add property.");
 
 		final ToolItem bSystem = new ToolItem(buttons, SWT.CHECK);
 		bSystem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/jrxml_icon.png"));
@@ -268,6 +250,38 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		});
 		bSystem.setToolTipText("Show only existing properties in the report template.");
 		bSystem.setSelection(false);
+	}
+
+	private void createButtonsTable(Composite parent) {
+		buttons = new ToolBar(parent, SWT.FLAT);
+
+		final ToolItem badd = new ToolItem(buttons, SWT.PUSH);
+		badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif"));
+		badd.addListener(SWT.Selection, new Listener() {
+			private boolean table = false;
+
+			@Override
+			public void handleEvent(Event event) {
+				if (!table) {
+					// create table if not created
+					if (tblCmp == null)
+						buildTable(propCmp);
+					propCmpLayout.topControl = tblCmp;
+					propCmp.layout(true);
+					// switch layout
+					badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/ui-scroll-pane-form.png"));
+					fillTable();
+				} else {
+					badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif"));
+					propCmpLayout.topControl = sc;
+					propCmp.layout(true);
+					refreshWidgets();
+				}
+				table = !table;
+			}
+
+		});
+		badd.setToolTipText("Show properties as table or form.");
 	}
 
 	private boolean showExisting = false;
@@ -416,17 +430,13 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		});
 	}
 
-	private void buildTable(final CTabFolder tabFolder) {
-		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Table");
+	private void buildTable(Composite parent) {
+		tblCmp = new Composite(parent, SWT.NONE);
+		tblCmp.setLayout(new GridLayout(2, false));
+		tblCmp.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		tblCmp.setBackgroundMode(SWT.INHERIT_FORCE);
 
-		Composite cmp = new Composite(tabFolder, SWT.NONE);
-		cmp.setLayout(new GridLayout(2, false));
-		bptab.setControl(cmp);
-		cmp.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		cmp.setBackgroundMode(SWT.INHERIT_FORCE);
-
-		table = new Table(cmp, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		table = new Table(tblCmp, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
 		table.addMouseListener(new MouseAdapter() {
 
@@ -465,7 +475,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		gd.heightHint = 400;
 		table.setLayoutData(gd);
 
-		Composite bGroup = new Composite(cmp, SWT.NONE);
+		Composite bGroup = new Composite(tblCmp, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
@@ -482,7 +492,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 						: new PropertyExpressionDTO(false, name, "NEW_VALUE");
 				v.seteContext(value.geteContext());
 				v.setJrElement(value.getJrElement());
-				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(tabFolder.getShell());
+				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(propCmp.getShell());
 				dialog.setShowExpression(showExpression);
 				dialog.setValue(v);
 				if (dialog.open() == Window.OK)
@@ -595,6 +605,9 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	private boolean refreshing = false;
 	private boolean canceled = false;
 	private String search;
+	private Composite propCmp;
+	private StackLayout propCmpLayout;
+	private Composite tblCmp;
 
 	protected void refreshWidgets() {
 		if (refreshing) {
