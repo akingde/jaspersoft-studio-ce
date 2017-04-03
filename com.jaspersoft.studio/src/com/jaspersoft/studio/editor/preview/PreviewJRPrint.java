@@ -150,7 +150,7 @@ public class PreviewJRPrint extends ABasicEditor {
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 			}
 			Statistics stats = new Statistics();
-			if (file.getFileExtension().equals(".jrpxml")) { //$NON-NLS-1$
+			if (file.getFileExtension().equalsIgnoreCase("jrpxml")) { //$NON-NLS-1$
 				setJasperPrint(stats, JRPrintXmlLoader.load(jrContext, in));
 			} else {
 				Object obj = JRLoader.loadObject(jrContext, in);
