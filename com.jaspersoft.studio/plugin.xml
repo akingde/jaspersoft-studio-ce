@@ -2213,4 +2213,17 @@
              DAQueryUIClass="com.jaspersoft.studio.property.dataset.da.HttpDataAdapterUI">
        </daQueryUI>
     </extension>
+    <extension
+          point="com.jaspersoft.studio.dynamicWidgetDefinitions">
+       <definition
+             id="com.jaspersoft.studio.widgets.framework.ui.JSSDataAdapterPropertyDescription"
+             widgetClass="com.jaspersoft.studio.widgets.framework.ui.JSSDataAdapterPropertyDescription"
+             widgetName="jssDataAdapter">
+       </definition>
+       <definition
+             id="com.jaspersoft.studio.widgets.framework.ui.JRDataAdapterPropertyDescription"
+             widgetClass="com.jaspersoft.studio.widgets.framework.ui.JRDataAdapterPropertyDescription"
+             widgetName="jrDataAdapter">
+       </definition>
+    </extension>
 </plugin>

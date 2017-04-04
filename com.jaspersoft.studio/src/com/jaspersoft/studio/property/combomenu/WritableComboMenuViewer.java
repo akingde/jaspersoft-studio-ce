@@ -547,6 +547,19 @@ public class WritableComboMenuViewer implements IMenuProvider {
 		}
 	}
 	
+	public int getElementIndex(String label){
+		if (label != null){
+			int index = 0;
+			for(ComboItem item : elementList){
+				if (label.equals(item.getText())){
+					return index;
+				}
+				index ++;
+			}
+		}
+		return -1;
+	}
+	
 	/**
 	 * Show in the button the image and the text of a specific item
 	 * 
