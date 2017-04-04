@@ -214,7 +214,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	private void createButtons(Composite parent) {
 		buttons = new ToolBar(parent, SWT.FLAT);
 
-		final ToolItem badd = new ToolItem(buttons, SWT.PUSH);
+		badd = new ToolItem(buttons, SWT.PUSH);
 		badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/plus.png"));
 		badd.addListener(SWT.Selection, new Listener() {
 
@@ -237,7 +237,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		});
 		badd.setToolTipText("Add property.");
 
-		final ToolItem bSystem = new ToolItem(buttons, SWT.CHECK);
+		bSystem = new ToolItem(buttons, SWT.CHECK);
 		bSystem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/jrxml_icon.png"));
 		bSystem.addListener(SWT.Selection, new Listener() {
 
@@ -255,9 +255,9 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	private void createButtonsTable(Composite parent) {
 		buttons = new ToolBar(parent, SWT.FLAT);
 
-		final ToolItem badd = new ToolItem(buttons, SWT.PUSH);
-		badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif"));
-		badd.addListener(SWT.Selection, new Listener() {
+		final ToolItem bTbl = new ToolItem(buttons, SWT.PUSH);
+		bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif"));
+		bTbl.addListener(SWT.Selection, new Listener() {
 			private boolean table = false;
 
 			@Override
@@ -269,19 +269,22 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 					propCmpLayout.topControl = tblCmp;
 					propCmp.layout(true);
 					// switch layout
-					badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/ui-scroll-pane-form.png"));
+					bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/ui-scroll-pane-form.png"));
 					fillTable();
 				} else {
-					badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif"));
+					bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif"));
 					propCmpLayout.topControl = sc;
 					propCmp.layout(true);
 					refreshWidgets();
 				}
+				badd.setEnabled(table);
+				bSystem.setEnabled(table);
+				txt.setEnabled(table);
 				table = !table;
 			}
 
 		});
-		badd.setToolTipText("Show properties as table or form.");
+		bTbl.setToolTipText("Show properties as table or form.");
 	}
 
 	private boolean showExisting = false;
@@ -608,6 +611,8 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	private Composite propCmp;
 	private StackLayout propCmpLayout;
 	private Composite tblCmp;
+	private ToolItem badd;
+	private ToolItem bSystem;
 
 	protected void refreshWidgets() {
 		if (refreshing) {
@@ -662,6 +667,5 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		};
 		job.setPriority(Job.SHORT);
 		job.schedule();
-
 	}
 }

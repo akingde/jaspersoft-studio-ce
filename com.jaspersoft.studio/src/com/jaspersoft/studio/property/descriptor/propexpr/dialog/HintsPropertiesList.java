@@ -16,6 +16,7 @@ import com.jaspersoft.studio.property.metadata.PropertyMetadataRegistry;
 
 import net.sf.jasperreports.annotations.properties.PropertyScope;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
@@ -86,6 +87,22 @@ public class HintsPropertiesList {
 				if (eps != null)
 					result.addAll(eps);
 				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.ELEMENT));
+			} finally {
+				Thread.currentThread().setContextClassLoader(oldCl);
+			}
+		} else if (holder instanceof JRElementGroup) {
+			PropertiesMetadataUtil pmu = PropertiesMetadataUtil.getInstance(eContext.getJasperReportsConfiguration());
+			ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
+			try {
+				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
+				List<PropertyMetadata> eps = pmu.getContainerProperties((JRElementGroup) holder);
+				if (eps != null)
+					result.addAll(eps);
+				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.BAND));
+				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.FRAME));
+				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.CROSSTAB_CELL));
+				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.TABLE_CELL));
+				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.TABLE_COLUMN));
 			} finally {
 				Thread.currentThread().setContextClassLoader(oldCl);
 			}

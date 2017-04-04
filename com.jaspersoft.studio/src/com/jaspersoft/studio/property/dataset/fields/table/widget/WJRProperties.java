@@ -20,9 +20,9 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 
@@ -96,11 +96,12 @@ public class WJRProperties extends AWidget {
 				propertyExpressions = propertyExpressions.clone();
 			return new PropertyExpressionsDTO(propertyExpressions, MField.getPropertiesMapClone(prop), element,
 					ModelUtils.getExpressionContext(mdataset));
-		} else if (element instanceof JRDesignParameter) {
-			JRDesignParameter prop = (JRDesignParameter) element;
-			return new PropertyExpressionsDTO(null, MParameter.getPropertiesMapClone(prop), element,
+		} else if (element instanceof JRPropertiesHolder)
+			return new PropertyExpressionsDTO(null, MParameter.getPropertiesMapClone((JRPropertiesHolder) element), element,
 					ModelUtils.getExpressionContext(mdataset));
-		}
+		else if (element instanceof JRPropertiesMap)
+			return new PropertyExpressionsDTO(null, ((JRPropertiesMap) element).cloneProperties(), element,
+					ModelUtils.getExpressionContext(mdataset));
 		return null;
 	}
 

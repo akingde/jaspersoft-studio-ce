@@ -33,6 +33,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -186,7 +187,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		return super.getPropertyValue(id);
 	}
 
-	public static JRPropertiesMap getPropertiesMapClone(JRDesignParameter jrField) {
+	public static JRPropertiesMap getPropertiesMapClone(JRPropertiesHolder jrField) {
 		JRPropertiesMap propertiesMap = jrField.getPropertiesMap();
 		if (propertiesMap != null)
 			propertiesMap = propertiesMap.cloneProperties();

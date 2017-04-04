@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.design.DesignDatasetPropertyExpression;
@@ -279,6 +280,9 @@ public class WJRProperty extends AWidget {
 				dto = new PropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
 						value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString());
 			((PropertyExpressionsDTO) element).getProperties().add(dto);
+		} else if (element instanceof JRPropertiesMap) {
+			JRPropertiesMap map = (JRPropertiesMap) element;
+			map.setProperty(c.getPropertyName(), (String) value);
 		}
 	}
 
@@ -314,6 +318,10 @@ public class WJRProperty extends AWidget {
 					dto = pe;
 					return dto;
 				}
+		} else if (element instanceof JRPropertiesMap) {
+			JRPropertiesMap field = (JRPropertiesMap) element;
+			String value = field.getProperty(c.getPropertyName());
+			return new PropertyExpressionDTO(false, c.getPropertyName(), value);
 		}
 		dto = new PropertyExpressionDTO(false, c.getPropertyName(), "");
 		return dto;
