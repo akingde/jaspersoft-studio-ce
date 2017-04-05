@@ -90,7 +90,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		spm.setName(DEFAULT_DATAADAPTER);
 		spm.setLabel("Data Adapter");
 		spm.setDescription("Last Data Adapter Used.");
-		spm.setValueType(String.class.getName());
+		spm.setValueType("jssDA");
 		List<PropertyScope> scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);

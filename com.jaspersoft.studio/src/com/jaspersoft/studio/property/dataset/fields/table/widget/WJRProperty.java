@@ -35,8 +35,11 @@ import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.FloatPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.JRDataAdapterPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.JSSDataAdapterPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.DatasetPropertyExpression;
 import net.sf.jasperreports.engine.JRDataset;
@@ -88,6 +91,10 @@ public class WJRProperty extends AWidget {
 			else if (c.getPropertyType().equals(Color.class.getName()))
 				ipd = new ColorPropertyDescription<Color>(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Color.decode(c.getDefaultValue()) : null);
+			else if (c.getPropertyType().equals(DataAdapter.class.getName()))
+				ipd = new JRDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false);
+			else if (c.getPropertyType().equals("jssDA"))
+				ipd = new JSSDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false);
 			else {
 				try {
 					Class<?> clazz = Class.forName(c.getPropertyType());
