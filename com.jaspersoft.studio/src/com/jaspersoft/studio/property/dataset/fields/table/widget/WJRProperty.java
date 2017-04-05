@@ -92,9 +92,9 @@ public class WJRProperty extends AWidget {
 				ipd = new ColorPropertyDescription<Color>(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Color.decode(c.getDefaultValue()) : null);
 			else if (c.getPropertyType().equals(DataAdapter.class.getName()))
-				ipd = new JRDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false);
+				ipd = new JRDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false, getjConfig());
 			else if (c.getPropertyType().equals("jssDA"))
-				ipd = new JSSDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false);
+				ipd = new JSSDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false, getjConfig());
 			else {
 				try {
 					Class<?> clazz = Class.forName(c.getPropertyType());

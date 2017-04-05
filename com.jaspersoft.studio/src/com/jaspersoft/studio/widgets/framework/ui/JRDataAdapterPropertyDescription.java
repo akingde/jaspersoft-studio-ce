@@ -56,12 +56,18 @@ public class JRDataAdapterPropertyDescription extends AbstractExpressionProperty
 		super();
 	}
 
-	public JRDataAdapterPropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue) {
+	public JRDataAdapterPropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue, JasperReportsConfiguration jConfig) {
 		super(name, label, description, mandatory, defaultValue);
+		this.jConfig = jConfig;
+		IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		daStorage = DataAdapterManager.getDataAdapter(file, jConfig);
 	}
 
-	public JRDataAdapterPropertyDescription(String name, String label, String description, boolean mandatory) {
+	public JRDataAdapterPropertyDescription(String name, String label, String description, boolean mandatory, JasperReportsConfiguration jConfig) {
 		super(name, label, description, mandatory);
+		this.jConfig = jConfig;
+		IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		daStorage = DataAdapterManager.getDataAdapter(file, jConfig);
 	}
 	
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
@@ -204,10 +210,7 @@ public class JRDataAdapterPropertyDescription extends AbstractExpressionProperty
 	
 	@Override
 	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
-		IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
-		JRDataAdapterPropertyDescription result = new JRDataAdapterPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
-		result.daStorage = DataAdapterManager.getDataAdapter(file, jConfig);
-		result.jConfig = jConfig; 
+		JRDataAdapterPropertyDescription result = new JRDataAdapterPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), jConfig);
 		result.setReadOnly(cpd.isReadOnly());
 		result.setFallbackValue(cpd.getFallbackValue());
 		return result;
