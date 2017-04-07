@@ -45,7 +45,7 @@ public final class JDCreationTool extends CreationTool {
 	@Override
 	protected void performCreation(int button) {
 		Command currCommand = getCurrentCommand();
-		if (currCommand instanceof DialogEnabledCommand) {
+		if (currCommand instanceof DialogEnabledCommand && currCommand.canExecute()) {
 			// If we have a special command that supports dialog (i.e: image creation)
 			// we'll show the popup dialog and continue with creation only if
 			// the user has confirmed.
