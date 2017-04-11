@@ -169,6 +169,10 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 		textData.verticalAlignment = SWT.CENTER;
 		textData.grabExcessVerticalSpace = true;
 		simpleControl.setLayoutData(textData);
+		String tt = getToolTip();
+		simpleControl.setToolTipText(tt);
+		
+		
 		defaultBackgroundColor = simpleControl.getBackground();
 		simpleControl.addSelectionListener(new SelectionAdapter() {
 			
@@ -623,6 +627,50 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 			i18nOpts.put("m", "m");
 		}
 		return i18nOpts;
+	}
+	
+	/**
+	 * Add to the entry of the contexutal menu a listener to remove the error status, this 
+	 * will force the widget to be updated when calling the updateWidget
+	 */
+	@Override
+	protected void setupContextMenu(final Control c, final IWItemProperty wiProp) {
+		super.setupContextMenu(c, wiProp);
+		Menu controlMenu = c.getMenu();
+		if (controlMenu != null && !controlMenu.isDisposed()){
+			for (MenuItem mi : controlMenu.getItems()) {
+				mi.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						setErrorStatus(null, (Text)c);
+						wiProp.updateWidget();
+					}
+				});
+			}		
+		}
+	}
+	
+	/**
+	 * Set the insert field into an error status, so with a red background
+	 * and a tooltip that describe the error. The differences between this and
+	 * the superclass one is that this append an informative message to the tooltip
+	 * when there aren't errors.
+	 * 
+	 * @param message the error message, it will be used as tooltip, can be null
+	 * for no error message (with null erase the old errors from the tooltip and 
+	 * restore the default ones)
+	 */
+	protected void setErrorStatus(String message, Text insertField){
+		if (message != null){
+			super.setErrorStatus(message, insertField);
+		} else {
+			updateBackground(defaultBackgroundColor, insertField);
+			String tt = getToolTip();
+			if (autocompleteValues.length > 1){
+				tt += "\nDouble click to switch between different dimensions";
+			}
+			insertField.setToolTipText(tt);			
+		}
 	}
 
 	@Override

@@ -287,7 +287,7 @@ public abstract class AbstractMeasurePropertyDescription<T> extends AbstractExpr
 		if (popUpMenu == null){
 			popUpMenu = createPopupMenu(insertField, wItemProp);
 		}
-		if (!popUpMenu.isDisposed()) {
+		if (!popUpMenu.isDisposed() && popUpMenu.getItemCount() > 1 && !insertField.getText().trim().isEmpty()) {
 			if (popUpMenu.isVisible()) {
 				popUpMenu.setVisible(false);
 			} else {

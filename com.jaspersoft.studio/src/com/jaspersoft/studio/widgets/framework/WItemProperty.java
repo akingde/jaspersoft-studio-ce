@@ -214,8 +214,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		if (widgetDescriptor != null) {
 			String tt = widgetDescriptor.getToolTip();
 			expressionEditLabel.setToolTipText(tt);
-			editorControl.setToolTipText(widgetDescriptor.getToolTip());
-			btnEditExpression.setToolTipText(widgetDescriptor.getToolTip());
+			editorControl.setToolTipText(tt);
+			btnEditExpression.setToolTipText(tt);
 		}
 		
 		setLayout(new ItemPropertyLayout(this, titleLabel, expressionEditLabel, editorControl, btnEditExpression));
