@@ -88,7 +88,7 @@ public class JRSRepositoryService implements RepositoryService {
 			if (f != null) {
 				try {
 					List<String[]> paths = PublishUtil.loadPath(new NullProgressMonitor(), f);
-					if (Misc.isNullOrEmpty(paths)) {
+					if (Misc.isNullOrEmpty(paths) && paths.size() > 0) {
 						uri = paths.get(0)[1];
 						if (paths.size() > 1)
 							serverUser = paths.get(1)[1];
