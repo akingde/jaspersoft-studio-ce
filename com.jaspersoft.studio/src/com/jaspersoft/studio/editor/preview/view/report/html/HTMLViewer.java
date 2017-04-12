@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.html;
 
@@ -32,9 +31,14 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPreferencePage {
 
 	private JasperPrint jrprint;
-	
+
+	@Override
+	public JasperPrint getJrPrint() {
+		return jrprint;
+	}
+
 	private ReportViewer rptviewer;
-	
+
 	public HTMLViewer(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 	}
@@ -55,11 +59,11 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 			tmanager.add(exportMenu);
 		}
 	}
-	
+
 	@Override
-	protected int getUrlWidth(Control control){
-		//Add the calculation of the toolbar width depending on the available size on the parent
-		//minus 130 to leave space to the refresh action and export action
+	protected int getUrlWidth(Control control) {
+		// Add the calculation of the toolbar width depending on the available size on the parent
+		// minus 130 to leave space to the refresh action and export action
 		return control.getParent().getSize().x - 130;
 	}
 

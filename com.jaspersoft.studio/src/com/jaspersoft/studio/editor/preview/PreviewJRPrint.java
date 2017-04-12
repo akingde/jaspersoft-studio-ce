@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview;
 
@@ -244,11 +243,13 @@ public class PreviewJRPrint extends ABasicEditor {
 				public void switchView(Statistics stats, String key) {
 					same = currentViewer == key;
 					currentViewer = key;
-					// APreview view = pmap.get(key);
+					APreview view = pmap.get(key);
 					// topToolBarManager.contributeItems(view);
-					// if (!switchRightView(view, stats, this))
-					// return;
-
+					if (view instanceof IJRPrintable) {
+						JasperPrint jp = ((IJRPrintable) view).getJrPrint();
+						if (jp == null)
+							same = false;
+					}
 					super.switchView(stats, key);
 				}
 
