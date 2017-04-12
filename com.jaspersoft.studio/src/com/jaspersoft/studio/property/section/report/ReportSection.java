@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.report;
+
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.layout.GridData;
@@ -52,6 +52,8 @@ public class ReportSection extends AbstractSection {
 		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE).getControl().setLayoutData(gd);
 
+		createWidget4Property(firstSection, JasperDesign.PROPERTY_PRINT_ORDER);
+
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_TITLE_NEW_PAGE, false).getControl().setLayoutData(gd);
@@ -73,12 +75,13 @@ public class ReportSection extends AbstractSection {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_IGNORE_PAGINATION, false).getControl().setLayoutData(gd);
-		
+
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		createWidget4Property(firstSection, MReport.PROPERY_CREATE_BOOKMARKS, false).getControl().setLayoutData(gd);
+
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
@@ -89,10 +92,10 @@ public class ReportSection extends AbstractSection {
 		addProvidedProperties(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE, Messages.MReport_when_no_data_type);
 		addProvidedProperties(JasperDesign.PROPERTY_TITLE_NEW_PAGE, Messages.MReport_title_on_a_new_page);
 		addProvidedProperties(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE, Messages.MReport_summary_on_a_new_page);
-		addProvidedProperties(JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, Messages.MReport_summary_with_page_header_and_footer);
+		addProvidedProperties(JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER,
+				Messages.MReport_summary_with_page_header_and_footer);
 		addProvidedProperties(JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER, Messages.MReport_float_column_footer);
 		addProvidedProperties(JasperDesign.PROPERTY_IGNORE_PAGINATION, Messages.MReport_ignore_pagination);
 	}
-	
 
 }
