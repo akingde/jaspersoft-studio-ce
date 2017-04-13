@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -214,9 +216,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			}
 			target = target.queryParam("orgId", sp.getOrganisation()); //$NON-NLS-1$
 			if (!Misc.isNullOrEmpty(sp.getLocale()))
-				target = target.queryParam("userLocale", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+				target = target.queryParam("userLocale", Locale.getDefault().toString()); //$NON-NLS-1$ //$NON-NLS-2$
 			if (!Misc.isNullOrEmpty(sp.getTimeZone()))
-				target = target.queryParam("userTimezone", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+				target = target.queryParam("userTimezone", TimeZone.getDefault().getID()); //$NON-NLS-1$ //$NON-NLS-2$
 
 			Builder req = target.request();
 			toObj(connector.get(req, monitor), String.class, monitor);

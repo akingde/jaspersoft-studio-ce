@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.protocol.restv2;
 
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -26,8 +27,7 @@ public class JSSApacheConnectorFactory extends ApacheConnectorProvider {
 		return conn;
 	}
 
-	private Response doWait(Future<Response> rf, IProgressMonitor monitor)
-			throws Exception {
+	private Response doWait(Future<Response> rf, IProgressMonitor monitor) throws Exception {
 		try {
 			if (monitor != null)
 				while (!rf.isDone() && !rf.isCancelled()) {
@@ -43,24 +43,24 @@ public class JSSApacheConnectorFactory extends ApacheConnectorProvider {
 		}
 	}
 
-	public synchronized Response get(Builder builder, IProgressMonitor monitor)
-			throws Exception {
+	public synchronized Response get(Builder builder, IProgressMonitor monitor) throws Exception {
+		builder.header("Accept-Timezone", TimeZone.getDefault().getID());
 		return doWait(builder.async().get(), monitor);
 	}
 
-	public Response delete(Builder builder, IProgressMonitor monitor)
-			throws Exception { 
+	public Response delete(Builder builder, IProgressMonitor monitor) throws Exception {
+		builder.header("Accept-Timezone", TimeZone.getDefault().getID());
 		return doWait(builder.async().delete(), monitor);
 	}
 
-	public Response post(Builder builder, Entity<?> entity,
-			IProgressMonitor monitor) throws Exception {
+	public Response post(Builder builder, Entity<?> entity, IProgressMonitor monitor) throws Exception {
+		builder.header("Accept-Timezone", TimeZone.getDefault().getID());
 		return doWait(builder.async().post(entity), monitor);
 	}
 
-	public Response put(Builder builder, Entity<?> entity,
-			IProgressMonitor monitor) throws Exception { 
+	public Response put(Builder builder, Entity<?> entity, IProgressMonitor monitor) throws Exception {
 		// builder.header("Content-Lenght", 0);
+		builder.header("Accept-Timezone", TimeZone.getDefault().getID());
 		builder.header("X-HTTP-Method-Override", "PUT");
 		return doWait(builder.async().post(entity), monitor);
 	}
