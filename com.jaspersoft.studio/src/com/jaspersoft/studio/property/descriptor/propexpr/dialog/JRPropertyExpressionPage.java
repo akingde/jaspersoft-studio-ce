@@ -341,6 +341,8 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		for (final PropertyMetadata pm : sortedEDS) {
 			if (canceled)
 				return;
+			if (cmp.isDisposed())
+				return;
 			// if key contains {}
 			if (showExisting && !value.hasProperty(pm.getName()))
 				continue;
@@ -408,6 +410,8 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 			@Override
 			public void run() {
+				if (cmp.isDisposed())
+					return;
 				if (scmp != null) {
 					cmp.layout(true);
 					sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
@@ -646,6 +650,8 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 							@Override
 							public void run() {
+								if (cmp.isDisposed())
+									return;
 								sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
 								cmp.layout(true);
 							}
@@ -657,6 +663,8 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 						@Override
 						public void run() {
+							if (txt.isDisposed())
+								return;
 							if (!search.equals(txt.getText()) || ex != showExisting)
 								refreshWidgets();
 						}
