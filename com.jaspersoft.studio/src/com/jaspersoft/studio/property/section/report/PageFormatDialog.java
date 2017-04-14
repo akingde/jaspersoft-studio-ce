@@ -31,6 +31,8 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.report.util.PageSize;
 import com.jaspersoft.studio.property.section.report.util.UnitsWidget;
@@ -43,6 +45,7 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.OrientationEnum;
+import net.sf.jasperreports.engine.type.PrintOrderEnum;
 
 public final class PageFormatDialog extends FormDialog {
 
@@ -85,6 +88,8 @@ public final class PageFormatDialog extends FormDialog {
 	private JasperReportsConfiguration jConfig;
 
 	private MReport jnode;
+
+	private Combo cPrintOrder;
 
 	public PageFormatDialog(Shell shell, ANode node) {
 		super(shell);
@@ -173,6 +178,7 @@ public final class PageFormatDialog extends FormDialog {
 				setTBounds();
 				textControl.setFocus();
 				textControl.setSelection(currentSelection.x, currentSelection.y);
+				enablePrintOrder();
 			}
 		};
 
@@ -187,6 +193,18 @@ public final class PageFormatDialog extends FormDialog {
 			}
 		});
 		space.addSelectionListener(spaceListener);
+
+		new Label(bright, SWT.NONE).setText(Messages.MReport_print_order);
+
+		cPrintOrder = new Combo(bright, SWT.READ_ONLY | SWT.BORDER);
+		String[] items = NamedEnumPropertyDescriptor
+				.getEnumItems(PrintOrderEnum.HORIZONTAL.getDeclaringClass().getEnumConstants(), NullEnum.NULL);
+		cPrintOrder.setItems(items);
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		cPrintOrder.setLayoutData(gd);
+		
+		enablePrintOrder();
 	}
 
 	private void recalcColumns() {
@@ -499,6 +517,9 @@ public final class PageFormatDialog extends FormDialog {
 			command.add(createCommand(JasperDesign.PROPERTY_COLUMN_WIDTH, cwidth.getValue()));
 		if (jd.getColumnSpacing() != space.getValue())
 			command.add(createCommand(JasperDesign.PROPERTY_COLUMN_SPACING, space.getValue()));
+		if (jd.getPrintOrderValue() != PrintOrderEnum.getByName(cPrintOrder.getText()))
+			command.add(createCommand(JasperDesign.PROPERTY_PRINT_ORDER, NamedEnumPropertyDescriptor
+					.getIntValue(PrintOrderEnum.HORIZONTAL, NullEnum.NULL, PrintOrderEnum.getByName(cPrintOrder.getText()))));
 
 		if (jd.getOrientationValue().equals(OrientationEnum.LANDSCAPE) && !landscape.getSelection())
 			command.add(createCommand(JasperDesign.PROPERTY_ORIENTATION, OrientationEnum.PORTRAIT));
@@ -530,5 +551,12 @@ public final class PageFormatDialog extends FormDialog {
 		cmd.setPropertyId(property);
 		cmd.setPropertyValue(value);
 		return cmd;
+	}
+
+	protected void enablePrintOrder() {
+		int c = cols.getValueAsInteger();
+		cPrintOrder.setEnabled(c > 1);
+		if (c <= 1)
+			cPrintOrder.select(0);
 	}
 }
