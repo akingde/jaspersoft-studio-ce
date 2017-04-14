@@ -74,7 +74,7 @@ public class CreatePNotExpression extends AAction {
 	}
 
 	protected void showDialog(MExpressionPNot mexpr) {
-		EditPNotExpressionDialog dialog = new EditPNotExpressionDialog(UIUtils.getShell());
+		EditPNotExpressionDialog dialog = new EditPNotExpressionDialog(treeViewer.getControl().getShell());
 		dialog.setValue(mexpr);
 		if (dialog.open() == Dialog.OK) {
 			mexpr.setValue(dialog.getValue());

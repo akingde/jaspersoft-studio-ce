@@ -46,7 +46,7 @@ public class CreateTable extends AAction {
 
 	@Override
 	public void run() {
-		TablesDialog dialog = new TablesDialog(UIUtils.getShell());
+		TablesDialog dialog = new TablesDialog(treeViewer.getControl().getShell());
 		dialog.setRoot(designer.getDbMetadata().getRoot());
 		if (dialog.open() == Window.OK)
 			run(dialog.getTable());

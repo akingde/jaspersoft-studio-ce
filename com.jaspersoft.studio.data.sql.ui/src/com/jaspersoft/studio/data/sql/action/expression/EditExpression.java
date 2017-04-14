@@ -46,7 +46,7 @@ public class EditExpression extends AAction {
 		for (Object obj : selection) {
 			if (obj instanceof MExpression) {
 				MExpression mcol = (MExpression) obj;
-				EditExpressionDialog dialog = new EditExpressionDialog(UIUtils.getShell(), designer);
+				EditExpressionDialog dialog = new EditExpressionDialog(treeViewer.getControl().getShell(), designer);
 				dialog.setValue(mcol);
 				if (dialog.open() == Dialog.OK) {
 					mcol.setOperator(Operator.getOperator((dialog.getOperator())));
@@ -57,7 +57,7 @@ public class EditExpression extends AAction {
 				break;
 			} else if (obj instanceof MExpressionX) {
 				MExpressionX mcol = (MExpressionX) obj;
-				EditExpressionXDialog dialog = new EditExpressionXDialog(UIUtils.getShell(), designer);
+				EditExpressionXDialog dialog = new EditExpressionXDialog(treeViewer.getControl().getShell(), designer);
 				dialog.setValue(mcol);
 				if (dialog.open() == Dialog.OK) {
 					mcol.setFunction(dialog.getFunction());
@@ -68,7 +68,7 @@ public class EditExpression extends AAction {
 				break;
 			} else if (obj instanceof MExpressionPNot) {
 				MExpressionPNot mcol = (MExpressionPNot) obj;
-				EditPNotExpressionDialog dialog = new EditPNotExpressionDialog(UIUtils.getShell());
+				EditPNotExpressionDialog dialog = new EditPNotExpressionDialog(treeViewer.getControl().getShell());
 				dialog.setValue(mcol);
 				if (dialog.open() == Dialog.OK) {
 					mcol.setValue(dialog.getValue());

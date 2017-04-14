@@ -111,7 +111,7 @@ public class CreateXExpression extends AAction {
 	}
 
 	protected void showDialog(MExpressionX mexpr) {
-		EditExpressionXDialog dialog = new EditExpressionXDialog(Display.getDefault().getActiveShell(), designer);
+		EditExpressionXDialog dialog = new EditExpressionXDialog(treeViewer.getControl().getShell(), designer);
 		dialog.setValue(mexpr);
 		if (dialog.open() == Dialog.OK) {
 			mexpr.setFunction(dialog.getFunction());

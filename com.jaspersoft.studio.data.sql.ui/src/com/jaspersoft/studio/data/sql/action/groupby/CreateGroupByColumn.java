@@ -59,7 +59,7 @@ public class CreateGroupByColumn extends AAction {
 
 	@Override
 	public void run() {
-		FromTableColumnsDialog dialog = new FromTableColumnsDialog(UIUtils.getShell());
+		FromTableColumnsDialog dialog = new FromTableColumnsDialog(treeViewer.getControl().getShell());
 		dialog.setSelection((ANode) selection[0]);
 		if (dialog.open() == Window.OK)
 			run(dialog.getColumns());

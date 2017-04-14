@@ -29,14 +29,12 @@ public class EditTable extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1
-				&& selection[0] instanceof ANode
+		return selection != null && selection.length == 1 && selection[0] instanceof ANode
 				&& isColumn((ANode) selection[0]);
 	}
 
 	protected boolean isColumn(ANode element) {
-		if (element instanceof MFromTable
-				&& element.getValue() instanceof MQueryTable)
+		if (element instanceof MFromTable && element.getValue() instanceof MQueryTable)
 			setText(Messages.EditTable_1);
 		else
 			setText(Messages.EditTable_0);
@@ -52,13 +50,11 @@ public class EditTable extends AAction {
 				break;
 			}
 		}
-		EditFromTableDialog d = new EditFromTableDialog(UIUtils.getShell());
+		EditFromTableDialog d = new EditFromTableDialog(treeViewer.getControl().getShell());
 		d.setValue(mcol);
 		if (d.open() == Dialog.OK) {
-			EditTableCommand c = new EditTableCommand(mcol, d.getAlias(),
-					d.getAliasKeyword());
-			designer.getDiagram().getViewer().getEditDomain().getCommandStack()
-					.execute(c);
+			EditTableCommand c = new EditTableCommand(mcol, d.getAlias(), d.getAliasKeyword());
+			designer.getDiagram().getViewer().getEditDomain().getCommandStack().execute(c);
 			selectInTree(mcol);
 		}
 	}

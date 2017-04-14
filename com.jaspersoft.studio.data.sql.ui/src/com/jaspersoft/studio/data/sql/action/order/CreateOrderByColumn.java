@@ -58,7 +58,7 @@ public class CreateOrderByColumn extends AAction {
 
 	@Override
 	public void run() {
-		FromTableColumnsDialog dialog = new FromTableColumnsDialog(Display.getDefault().getActiveShell());
+		FromTableColumnsDialog dialog = new FromTableColumnsDialog(treeViewer.getControl().getShell());
 		dialog.setSelection((ANode) selection[0]);
 		if (dialog.open() == Window.OK)
 			run(dialog.getColumns());

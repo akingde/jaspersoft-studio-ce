@@ -4,8 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.table;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
 
@@ -32,8 +30,7 @@ public class JoinTable extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1
-				&& selection[0] instanceof ANode
+		return selection != null && selection.length == 1 && selection[0] instanceof ANode
 				&& isColumn((ANode) selection[0]);
 	}
 
@@ -42,8 +39,7 @@ public class JoinTable extends AAction {
 													// MFromTableJoin);
 		if (b) {
 			MFrom mfrom = null;
-			if (element instanceof MFromTable
-					&& element.getValue() instanceof MQueryTable)
+			if (element instanceof MFromTable && element.getValue() instanceof MQueryTable)
 				mfrom = Util.getKeyword(element.getParent(), MFrom.class);
 			else
 				mfrom = Util.getKeyword(element, MFrom.class);
@@ -61,8 +57,7 @@ public class JoinTable extends AAction {
 				break;
 			}
 		}
-		JoinFromTableDialog dialog = new JoinFromTableDialog(
-				UIUtils.getShell(), designer, true);
+		JoinFromTableDialog dialog = new JoinFromTableDialog(treeViewer.getControl().getShell(), designer, true);
 		dialog.setValue(mfromTable);
 		if (dialog.open() == Dialog.OK) {
 			MFromTable destTbl = getFromTable(mfromTable, dialog);
@@ -75,22 +70,18 @@ public class JoinTable extends AAction {
 				mfromTable = tmp;
 			}
 
-			JoinTableCommand c = new JoinTableCommand(null, mfromTable, null,
-					destTbl, destTbl);
-			designer.getDiagram().getViewer().getEditDomain().getCommandStack()
-					.execute(c);
+			JoinTableCommand c = new JoinTableCommand(null, mfromTable, null, destTbl, destTbl);
+			designer.getDiagram().getViewer().getEditDomain().getCommandStack().execute(c);
 
 			selectInTree(c.getMexpr());
 
 		}
 	}
 
-	public static MFromTable getFromTable(MFromTable mcol,
-			JoinFromTableDialog dialog) {
+	public static MFromTable getFromTable(MFromTable mcol, JoinFromTableDialog dialog) {
 		String ft = dialog.getFromTable().replace(",", "").trim(); //$NON-NLS-1$ //$NON-NLS-2$
 		MFromTable mFromTable = null;
-		for (MFromTable mft : Util.getFromTables(Util.getKeyword(mcol,
-				MFrom.class))) {
+		for (MFromTable mft : Util.getFromTables(Util.getKeyword(mcol, MFrom.class))) {
 			if (mft == mcol)
 				continue;
 			String alias = ""; //$NON-NLS-1$

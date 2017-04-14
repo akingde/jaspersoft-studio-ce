@@ -50,7 +50,7 @@ public class EditTableJoin extends AAction {
 				break;
 			}
 		}
-		JoinFromTableDialog dialog = new JoinFromTableDialog(UIUtils.getShell(), designer);
+		JoinFromTableDialog dialog = new JoinFromTableDialog(treeViewer.getControl().getShell(), designer);
 		MFromTableJoin clone = (MFromTableJoin) mcol.clone();
 		ANode parent = mcol.getParent();
 		int indx = parent.getChildren().indexOf(mcol);
