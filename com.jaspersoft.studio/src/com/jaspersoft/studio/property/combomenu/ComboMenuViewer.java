@@ -233,6 +233,10 @@ public class ComboMenuViewer implements IMenuProvider {
 	 */
 	public void addSelectionListener(ComboItemAction listener) {
 		listeners.add(listener);
+		if (elementList != null && !elementList.isEmpty()) {
+			//rebuild the items with the new listener
+			setItems(elementList);
+		}
 	}
 
 	/**

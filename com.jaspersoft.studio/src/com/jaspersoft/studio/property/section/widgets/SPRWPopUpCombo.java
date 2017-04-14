@@ -95,13 +95,13 @@ public class SPRWPopUpCombo extends ASPropertyWidget<NamedEnumPropertyDescriptor
 	protected void createComponent(Composite parent) {
 		if (items != null) {
 			combo = new ComboMenuViewer(parent, SWT.NORMAL, getLongest(items));
-			combo.setItems(items);
 			combo.addSelectionListener(new ComboItemAction() {
 				@Override
 				public void exec() {
 					section.changeProperty(pDescriptor.getId(), combo.getSelectionValue());
 				}
 			});
+			combo.setItems(items);
 			combo.setToolTipText(pDescriptor.getDescription());
 			getControl().addFocusListener(focusListener);
 		}
