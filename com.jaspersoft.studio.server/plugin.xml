@@ -296,5 +296,13 @@
            ICParameterContributor="com.jaspersoft.studio.server.ic.ICParameterContributor">
      </parameterIC>
   </extension>
+  <extension
+        point="com.jaspersoft.studio.dynamicWidgetDefinitions">
+     <definition
+           id="com.jaspersoft.studio.server.ic.ResourcePropertyDescription"
+           widgetClass="com.jaspersoft.studio.server.ic.ResourcePropertyDescription"
+           widgetName="serverResourceBrowser">
+     </definition>
+  </extension>
 
 </plugin>
