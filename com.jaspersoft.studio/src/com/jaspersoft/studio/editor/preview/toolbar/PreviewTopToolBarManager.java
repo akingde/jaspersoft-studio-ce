@@ -131,7 +131,8 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 						if (!on) {
 							Map<String, Object> hm = container.getJrContext().getJRParameters();
 							SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
-							reportContext.getParameterValues().remove(DataSnapshotManager.SAVE_SNAPSHOT);
+							if (reportContext != null)
+								reportContext.getParameterValues().remove(DataSnapshotManager.SAVE_SNAPSHOT);
 						}
 					}
 				});
