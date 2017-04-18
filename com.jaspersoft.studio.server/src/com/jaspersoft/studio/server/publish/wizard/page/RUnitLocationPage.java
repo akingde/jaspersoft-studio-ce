@@ -138,7 +138,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		isC = firstElement instanceof MJrxml || firstElement instanceof MFolder || firstElement instanceof MReportUnit;
 		if (isC && firstElement instanceof MFolder) {
 			AMJrxmlContainer runit = getReportUnit();
-			isC = runit instanceof AMJrxmlContainer && runit.getParent() != null && bnRunit.getSelection();
+			isC = runit instanceof AMJrxmlContainer && runit.getParent() != null;
+			if (!(firstElement instanceof MFolder))
+				isC = bnRunit.getSelection();
 		}
 		return isC;
 	}
@@ -224,9 +226,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				boolean selected = bnRunit.getSelection();
 				// Enable/Disable the detail textboxes
-				// ruLabel.setEnabled(selected);
-				// ruID.setEnabled(selected);
-				// ruDescription.setEnabled(selected);
+				ruLabel.setEnabled(selected);
+				ruID.setEnabled(selected);
+				ruDescription.setEnabled(selected);
 
 				reportUnit = selected ? getNewRunit() : getNewJrxml();
 				if (reportUnit.getParent() == null) {
@@ -239,6 +241,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				setPageComplete(isPageComplete());
 			}
 		});
+		bnRunit.setSelection(true);
 
 		// Report Unit shown label (resource descriptor label)
 		Label lblRepoUnitName = new Label(composite, SWT.NONE);
@@ -465,8 +468,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			return;
 		isRefresh = true;
 		boolean isFolder = obj instanceof MFolder;
-		bnRunit.setSelection(isFolder);
-		bnRunit.setEnabled(isFolder);
+		// bnRunit.setSelection(isFolder);
+		// bnRunit.setEnabled(isFolder);
 		ruLabel.setEnabled(bnRunit.getSelection() && isFolder);
 		ruID.setEnabled(bnRunit.getSelection() && isFolder);
 		ruDescription.setEnabled(bnRunit.getSelection() && isFolder);

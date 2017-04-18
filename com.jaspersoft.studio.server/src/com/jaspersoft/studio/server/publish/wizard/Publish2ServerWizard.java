@@ -51,7 +51,6 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -200,6 +199,10 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 									page0.setValue(jDesign, getNode());
 									snode = page0.getSelectedNode();
 								}
+								if (snode instanceof MJrxml){
+									canFinish = true;
+									getContainer().updateButtons();
+								}
 								if (node != snode) {
 									node = snode;
 									doFindDependentResources();
@@ -227,6 +230,10 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 			if (!page0.isPageComplete()) {
 				page0.setValue(jDesign, getNode());
 				return page0;
+			}
+			if (!(page0.getSelectedNode() instanceof MReportUnit)) {
+				canFinish = true;
+				return null;
 			}
 		}
 		if (page == page2) {
