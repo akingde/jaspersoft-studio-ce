@@ -5,6 +5,8 @@ package com.jaspersoft.studio.property.dataset.fields.table.widget;
 
 import java.awt.Color;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
@@ -65,11 +67,21 @@ public class WJRProperty extends AWidget {
 		super(parent, c, element, jConfig);
 	}
 
+	private static Map<String, IWCallback> wmap = new HashMap<String, IWCallback>();
+
+	public static void addCallback(String key, IWCallback wcnt) {
+		wmap.put(key, wcnt);
+	}
+
 	@Override
 	protected void initControl(final Composite parent, final TColumn c) {
 		if (isPropertyExpressions(element)) {
 			ItemPropertyDescription<?> ipd = null;
 			String pname = c.getPropertyName();
+			if (wmap.containsKey(c.getPropertyType())){
+				c.setValue(element);
+				ipd = wmap.get(c.getPropertyType()).create(c);
+			}
 			if (c.getPropertyType().equals(Boolean.class.getName()))
 				ipd = new ComboItemPropertyDescription<Boolean>(pname, c.getLabel(), c.getDescription(), false,
 						Boolean.parseBoolean(c.getDefaultValue()), new String[] { "", "true", "false" });
