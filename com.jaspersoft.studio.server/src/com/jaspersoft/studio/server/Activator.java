@@ -76,20 +76,8 @@ public class Activator extends AbstractJRUIPlugin {
 
 			@Override
 			public ItemPropertyDescription<?> create(TColumn c) {
-				JRDataset ds = null;
-				if (c.getValue() instanceof PropertyDTO) {
-					PropertyDTO dto = (PropertyDTO) c.getValue();
-					List<JRDesignDataset> dts = dto.geteContext().getDatasets();
-					if (dts != null && !dts.isEmpty())
-						ds = dts.get(0);
-				} else if (c.getValue() instanceof PropertyExpressionsDTO) {
-					PropertyExpressionsDTO dto = (PropertyExpressionsDTO) c.getValue();
-					List<JRDesignDataset> dts = dto.geteContext().getDatasets();
-					if (dts != null && !dts.isEmpty())
-						ds = dts.get(0);
-				}
 				return new ResourcePropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
-						null, ds);
+						null, c.getValue());
 			}
 		});
 

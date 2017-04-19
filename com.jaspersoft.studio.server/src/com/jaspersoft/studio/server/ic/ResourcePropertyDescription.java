@@ -6,6 +6,7 @@ package com.jaspersoft.studio.server.ic;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -17,6 +18,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.AMResource;
@@ -32,6 +35,7 @@ import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 /**
  * Descriptor used to browse a resource on the server
@@ -41,6 +45,7 @@ import net.sf.jasperreports.engine.JRDataset;
  */
 public class ResourcePropertyDescription extends FilePropertyDescription {
 	private JRDataset ds;
+	private Object element;
 
 	public ResourcePropertyDescription() {
 		super();
@@ -52,9 +57,20 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 	}
 
 	public ResourcePropertyDescription(String name, String label, String description, boolean mandatory,
-			String defaultValue, JRDataset ds) {
+			String defaultValue, Object element) {
 		super(name, label, description, mandatory, defaultValue);
-		this.ds = ds;
+		this.element = element;
+		if (element instanceof PropertyDTO) {
+			PropertyDTO dto = (PropertyDTO) element;
+			List<JRDesignDataset> dts = dto.geteContext().getDatasets();
+			if (dts != null && !dts.isEmpty())
+				ds = dts.get(0);
+		} else if (element instanceof PropertyExpressionsDTO) {
+			PropertyExpressionsDTO dto = (PropertyExpressionsDTO) element;
+			List<JRDesignDataset> dts = dto.geteContext().getDatasets();
+			if (dts != null && !dts.isEmpty())
+				ds = dts.get(0);
+		}
 	}
 
 	/**
@@ -77,7 +93,7 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 					return;
 				wiProp.setRefresh(true);
 				try {
-					MServerProfile profile = getServerProfile();
+					MServerProfile profile = getServerProfile(wiProp);
 					if (profile != null) {
 						RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), profile) {
 
@@ -110,7 +126,7 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 		}
 	}
 
-	private MServerProfile getServerProfile() {
+	private MServerProfile getServerProfile(final IWItemProperty wiProp) {
 		String servURL = null;
 		String servUser = null;
 		if (ds != null) {
@@ -124,9 +140,19 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 			if (w.open() == Dialog.OK) {
 				msp = wizard.getValue();
 				try {
-					ds.getPropertiesMap().setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
-					ds.getPropertiesMap().setProperty(AExporter.PROP_USER, msp.getValue().getUser()
-							+ (msp.getValue().getOrganisation() != null ? "|" + msp.getValue().getOrganisation() : "")); //$NON-NLS-1$ //$NON-NLS-2$
+					if (element instanceof PropertyExpressionsDTO) {
+						PropertyExpressionsDTO dto = (PropertyExpressionsDTO) element;
+						dto.addProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl(), false);
+						dto.addProperty(AExporter.PROP_USER,
+								msp.getValue().getUser() + (msp.getValue().getOrganisation() != null
+										? "|" + msp.getValue().getOrganisation() : ""),
+								false);
+					} else {
+						ds.getPropertiesMap().setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
+						ds.getPropertiesMap().setProperty(AExporter.PROP_USER,
+								msp.getValue().getUser() + (msp.getValue().getOrganisation() != null
+										? "|" + msp.getValue().getOrganisation() : "")); //$NON-NLS-1$ //$NON-NLS-2$
+					}
 				} catch (MalformedURLException e1) {
 					e1.printStackTrace();
 				} catch (URISyntaxException e1) {

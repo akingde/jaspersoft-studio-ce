@@ -285,7 +285,7 @@ public class WJRProperty extends AWidget {
 		} else if (element instanceof PropertyExpressionsDTO) {
 			PropertyExpressionsDTO d = (PropertyExpressionsDTO) element;
 			for (PropertyExpressionDTO dto : d.getProperties())
-				if (dto.getName().equals(dto.getName())) {
+				if (dto.getName().equals(c.getPropertyName())) {
 					dto.setExpression(value instanceof JRDesignExpression);
 					dto.setValue(value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString());
 					return;
