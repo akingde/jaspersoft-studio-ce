@@ -4,10 +4,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.prm.prefs;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -23,9 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
-import org.w3c.tools.codec.Base64Decoder;
-import org.w3c.tools.codec.Base64Encoder;
-import org.w3c.tools.codec.Base64FormatException;
 
 import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
@@ -34,6 +30,10 @@ import com.jaspersoft.studio.prm.ParameterSet;
 import com.jaspersoft.studio.prm.ParameterSetProvider;
 import com.jaspersoft.studio.prm.dialog.ParameterSetDialog;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class ParameterSetFieldEditor extends TableFieldEditor {
 
@@ -98,7 +98,11 @@ public class ParameterSetFieldEditor extends TableFieldEditor {
 			ParameterSet pset = (ParameterSet) it.getData(ParameterSet.PARAMETER_SET);
 			ParameterSetProvider.storeParameterSet(pset, pstore);
 		}
-		pstore.setValue(ParameterSet.PARAMETER_SETS, new Base64Encoder(str).processString());
+		try {
+			pstore.setValue(ParameterSet.PARAMETER_SETS, Misc.encodeBase64String(str, FileUtils.LATIN1_ENCODING));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		removed.clear();
 	}
 
@@ -112,8 +116,8 @@ public class ParameterSetFieldEditor extends TableFieldEditor {
 			String str = getPreferenceStore().getString(ParameterSet.PARAMETER_SETS);
 			if (str != null) {
 				try {
-					str = new Base64Decoder(str).processString();
-				} catch (Base64FormatException e) {
+					str = Misc.decodeBase64String(str, FileUtils.LATIN1_ENCODING);
+				} catch (IOException e) {
 					e.printStackTrace();
 					return;
 				}

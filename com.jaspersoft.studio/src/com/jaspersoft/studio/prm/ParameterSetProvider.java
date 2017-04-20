@@ -4,23 +4,22 @@
 package com.jaspersoft.studio.prm;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Map;
-
-import net.sf.jasperreports.eclipse.util.CastorHelper;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.exolab.castor.mapping.Mapping;
-import org.w3c.tools.codec.Base64Decoder;
-import org.w3c.tools.codec.Base64Encoder;
-import org.w3c.tools.codec.Base64FormatException;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.util.CastorHelper;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class ParameterSetProvider {
 	private JasperReportsConfiguration jrConfig;
@@ -49,8 +48,8 @@ public class ParameterSetProvider {
 			String tmp = pstore.getString(ParameterSet.PARAMETER_SET + "." + setName);
 			if (!Misc.isNullOrEmpty(tmp)) {
 				try {
-					tmp = new Base64Decoder(tmp).processString();
-				} catch (Base64FormatException e) {
+					tmp = net.sf.jasperreports.eclipse.util.Misc.decodeBase64String(tmp, FileUtils.LATIN1_ENCODING);
+				} catch (IOException e) {
 					e.printStackTrace();
 					return null;
 				}
@@ -67,8 +66,12 @@ public class ParameterSetProvider {
 
 	public static void storeParameterSet(ParameterSet pset, IPreferenceStore pstore) {
 		if (pset != null) {
-			String prmset = new Base64Encoder(CastorHelper.write(pset, getMapping())).processString();
-			pstore.setValue(ParameterSet.PARAMETER_SET + "." + pset.getName(), prmset);
+			try {
+				String prmset = net.sf.jasperreports.eclipse.util.Misc.encodeBase64String(CastorHelper.write(pset, getMapping()), FileUtils.LATIN1_ENCODING);
+				pstore.setValue(ParameterSet.PARAMETER_SET + "." + pset.getName(), prmset);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

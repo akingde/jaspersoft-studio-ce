@@ -4,6 +4,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.prm.wizard;
 
+import java.io.IOException;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -13,14 +15,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
-import org.w3c.tools.codec.Base64Decoder;
-import org.w3c.tools.codec.Base64FormatException;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.prm.ParameterSet;
 import com.jaspersoft.studio.prm.ParameterSetProvider;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class ParameterSetWizardPage extends WizardPage {
 	private JasperReportsConfiguration jConfig;
@@ -62,8 +64,8 @@ public class ParameterSetWizardPage extends WizardPage {
 		String str = jConfig.getProperty(ParameterSet.PARAMETER_SETS);
 		if (str != null) {
 			try {
-				str = new Base64Decoder(str).processString();
-			} catch (Base64FormatException e) {
+				str = net.sf.jasperreports.eclipse.util.Misc.decodeBase64String(str, FileUtils.LATIN1_ENCODING);
+			} catch (IOException e) {
 				e.printStackTrace();
 				return;
 			}
