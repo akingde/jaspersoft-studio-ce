@@ -3,13 +3,13 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio Samples
 Bundle-SymbolicName: com.jaspersoft.studio.doc.samples;singleton:=true
-Bundle-Version: 6.4.1.qualifier
+Bundle-Version: 6.4.2.qualifier
 Bundle-Vendor: TIBCO Software Inc.
 Fragment-Host: com.jaspersoft.studio.doc;bundle-version="2.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
-Require-Bundle: net.sf.jasperreports.samples;bundle-version="6.4.1",
- net.sf.jasperreports.doc;bundle-version="6.4.1",
+Require-Bundle: net.sf.jasperreports.samples;bundle-version="6.4.2",
+ net.sf.jasperreports.doc;bundle-version="6.4.2",
  org.eclipse.ui.navigator.resources;bundle-version="3.4.200"
 Bundle-ClassPath: patch-library.jar,
  .

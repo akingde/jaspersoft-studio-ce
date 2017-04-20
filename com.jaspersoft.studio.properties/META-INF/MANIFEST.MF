@@ -3,15 +3,15 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio Properties
 Bundle-SymbolicName: com.jaspersoft.studio.properties;singleton:=true
-Bundle-Version: 6.4.1.qualifier
+Bundle-Version: 6.4.2.qualifier
 Bundle-Activator: com.jaspersoft.studio.properties.Activator
 Bundle-Vendor: TIBCO Software Inc.
 Require-Bundle: org.eclipse.ui;bundle-version="3.6.0";visibility:=reexport,
  org.eclipse.ui.forms;bundle-version="3.5.0";visibility:=reexport,
  org.eclipse.ui.views;bundle-version="3.5.0";visibility:=reexport,
  org.eclipse.core.runtime;bundle-version="3.6.0";visibility:=reexport,
- com.jaspersoft.studio.babel.editor;bundle-version="6.4.1",
- net.sf.jasperreports;bundle-version="6.4.1"
+ com.jaspersoft.studio.babel.editor;bundle-version="6.4.2",
+ net.sf.jasperreports;bundle-version="6.4.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy

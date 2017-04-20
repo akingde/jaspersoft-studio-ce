@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.rcp.feature"
       label="Jaspersoft Studio Community RCP Feature"
-      version="6.4.1.qualifier"
+      version="6.4.2.qualifier"
       provider-name="TIBCO Software Inc."
       plugin="net.sf.jasperreports"
       os="linux,macosx,win32"
@@ -101,7 +101,7 @@
 
    <requires>
       <import plugin="org.eclipse.ui.intro"/>
-      <import plugin="com.jaspersoft.studio" version="6.4.1" match="greaterOrEqual"/>
+      <import plugin="com.jaspersoft.studio" version="6.4.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.browser" version="3.3.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.equinox.p2.operations" version="2.0.0" match="greaterOrEqual"/>

@@ -3,7 +3,7 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Xtext JFace Integration
 Bundle-SymbolicName: com.jaspersoft.studio.xtext.jface;singleton:=true
-Bundle-Version: 6.4.1.qualifier
+Bundle-Version: 6.4.2.qualifier
 Bundle-Activator: com.jaspersoft.studio.xtext.jface.XJIActivator
 Bundle-Vendor: TIBCO Software Inc.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.6.0,4.0.0)",

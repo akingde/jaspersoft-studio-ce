@@ -4,7 +4,7 @@
    <description name="Jaspersoft Studio" url="http://jasperstudio.sf.net/updates">
       Jaspersoft Studio Update Site
    </description>
-   <feature url="features/com.jaspersoft.studio.feature_6.4.1.qualifier.jar" id="com.jaspersoft.studio.feature" version="6.4.1.qualifier" os="linux,macosx,win32" ws="cocoa,gtk,win32">
+   <feature url="features/com.jaspersoft.studio.feature_6.4.2.qualifier.jar" id="com.jaspersoft.studio.feature" version="6.4.2.qualifier" os="linux,macosx,win32" ws="cocoa,gtk,win32">
       <category name="com.jaspersoft.studio.category"/>
    </feature>
    <category-def name="com.jaspersoft.studio.category" label="Business Intelligence, Reporting Tools"/>

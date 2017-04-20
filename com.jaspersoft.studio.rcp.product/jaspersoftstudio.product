@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="6.4.1.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="6.4.2.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="../../../../com.jaspersoft.studio.rcp/icons/studio_logo_about.png"/>

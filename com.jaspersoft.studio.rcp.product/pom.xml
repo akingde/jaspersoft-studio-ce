@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.jaspersoft.studio.community-edition</groupId>
 		<artifactId>product</artifactId>
-		<version>6.4.1-SNAPSHOT</version>
+		<version>6.4.2-SNAPSHOT</version>
 		<relativePath>../aggregator/product/</relativePath>
 	</parent>
 
@@ -26,7 +26,7 @@
 
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>com.jaspersoft.studio.rcp.product</artifactId>
-	<version>6.4.1-SNAPSHOT</version>
+	<version>6.4.2-SNAPSHOT</version>
 	<packaging>eclipse-repository</packaging>
 	<build>
 		<plugins>

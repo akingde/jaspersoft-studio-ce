@@ -3,13 +3,13 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: JasperReports Server Integration with SOAP
 Bundle-SymbolicName: com.jaspersoft.studio.server.soap;singleton:=true
-Bundle-Version: 6.4.1.qualifier
+Bundle-Version: 6.4.2.qualifier
 Bundle-Activator: com.jaspersoft.studio.server.soap.Activator
 Bundle-Vendor: TIBCO Software Inc.
 Require-Bundle: org.apache.commons.httpclient;bundle-version="3.1.0",
  org.apache.commons.codec;bundle-version="1.3.0",
  org.apache.commons.discovery;bundle-version="0.2.0",
- com.jaspersoft.studio.server;bundle-version="6.4.1"
+ com.jaspersoft.studio.server;bundle-version="6.4.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
