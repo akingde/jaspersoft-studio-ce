@@ -50,6 +50,7 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 
 	public static final String JSS_REPORT_LOCALE = JRFiller.PROPERTY_DEFAULT_LOCALE; //$NON-NLS-1$
 	public static final String JSS_REPORT_TIMEZONE = JRFiller.PROPERTY_DEFAULT_TIMEZONE; //$NON-NLS-1$
+	public static final String JSS_REPORT_FORCE_PARAMETER_TIMEZONE = "com.jaspersoft.studio.parameters.usetimezone"; //$NON-NLS-1$
 
 	private BooleanFieldEditor bfeONEXIT;
 	private JSSComboFieldEditor cfeType;
@@ -74,12 +75,11 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new TimeZoneFieldEditor(JSS_REPORT_TIMEZONE, Messages.ReportExecutionPreferencePage_timeZoneLabel,
 				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(JSS_REPORT_FORCE_PARAMETER_TIMEZONE, "Use report timezone when acquiring data range as input parameters", getFieldEditorParent()));
 
-		bLimRec = new BooleanFieldEditor(JSS_LIMIT_RECORDS, Messages.ReportExecutionPreferencePage_limitNumberLabel,
-				getFieldEditorParent());
+		bLimRec = new BooleanFieldEditor(JSS_LIMIT_RECORDS, Messages.ReportExecutionPreferencePage_limitNumberLabel, getFieldEditorParent());
 		addField(bLimRec);
-		mnumrec = new SpinnerFieldEditor(JSS_MAX_RECORDS, Messages.ReportExecutionPreferencePage_maxNumberLabel,
-				getFieldEditorParent(), 0);
+		mnumrec = new SpinnerFieldEditor(JSS_MAX_RECORDS, Messages.ReportExecutionPreferencePage_maxNumberLabel, getFieldEditorParent(), 0);
 		mnumrec.setMinimum(-1);
 		mnumrec.setMaximum(Integer.MAX_VALUE);
 		mnumrec.getLabelControl(getFieldEditorParent()).setToolTipText(
@@ -230,6 +230,7 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JSS_IGNOREPAGINATION, "false");//$NON-NLS-1$
 		store.setDefault(JSS_REPORT_LOCALE, Locale.getDefault().toString());//$NON-NLS-1$
 		store.setDefault(JSS_REPORT_TIMEZONE, TimeZone.getDefault().getID());//$NON-NLS-1$ 
+		store.setDefault(JSS_REPORT_FORCE_PARAMETER_TIMEZONE, true);
 	}
 
 	@Override

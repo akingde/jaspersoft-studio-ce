@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.input;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 
@@ -35,5 +36,14 @@ public interface IDataInput {
 	public boolean isRemoved();
 
 	public void setDirty(boolean dirty);
+	
+	/**
+	 * Method that should called when one of the parameter changed value
+	 * to allow the other parameters to update their value. This is used because
+	 * some parameters could depend from the others
+	 * 
+	 * @param evt the event contains the name of the parameter that changed value
+	 */
+	public void parameterChanged(PropertyChangeEvent evt);
 
 }

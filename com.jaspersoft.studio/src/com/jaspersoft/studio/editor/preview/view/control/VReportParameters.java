@@ -25,6 +25,7 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
 import com.jaspersoft.studio.editor.preview.input.IParameter;
+import com.jaspersoft.studio.editor.preview.input.PropertyChangeNotifier;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.preferences.editor.pages.Pages;
@@ -44,8 +45,8 @@ public class VReportParameters extends VParameters {
 	private Button btAll;
 	private Pages pages;
 
-	public VReportParameters(Composite parent, JasperReportsConfiguration jContext) {
-		super(parent, jContext);
+	public VReportParameters(Composite parent, JasperReportsConfiguration jContext, PropertyChangeNotifier propertyChangeNotifier) {
+		super(parent, jContext, propertyChangeNotifier);
 		isSystem = true;
 	}
 

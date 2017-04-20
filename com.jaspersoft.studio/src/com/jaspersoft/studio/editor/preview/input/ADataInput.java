@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.input;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Map;
@@ -224,6 +225,18 @@ public abstract class ADataInput implements IDataInput {
 			return null;
 
 		return actionBars.getStatusLineManager();
+	}
+	
+	/**
+	 * Method that should called when one of the parameter changed value
+	 * to allow the other parameters to update their value. This is used because
+	 * some parameters could depend from the others. The default implementation
+	 * does notthing
+	 * 
+	 * @param evt the event contains the name of the parameter that changed value
+	 */
+	public void parameterChanged(PropertyChangeEvent evt){
+		
 	}
 
 	private static int defCharWidth = -1;

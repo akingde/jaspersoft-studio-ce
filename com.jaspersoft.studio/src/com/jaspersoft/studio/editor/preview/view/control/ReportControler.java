@@ -50,6 +50,7 @@ import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ImageInput;
 import com.jaspersoft.studio.editor.preview.input.LocaleInput;
 import com.jaspersoft.studio.editor.preview.input.PatternInput;
+import com.jaspersoft.studio.editor.preview.input.PropertyChangeNotifier;
 import com.jaspersoft.studio.editor.preview.input.TextInput;
 import com.jaspersoft.studio.editor.preview.input.TimeZoneInput;
 import com.jaspersoft.studio.editor.preview.input.URLInput;
@@ -226,8 +227,10 @@ public class ReportControler {
 
 	public LinkedHashMap<String, APreview> createControls(Composite composite) {
 		viewmap = new LinkedHashMap<String, APreview>();
-		viewmap.put(FORM_PARAMETERS, new VParameters(composite, jrContext));
-		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, jrContext));
+		//pass the parameter tabs the shared property change notifier
+		PropertyChangeNotifier sharedNotifier = new PropertyChangeNotifier();
+		viewmap.put(FORM_PARAMETERS, new VParameters(composite, jrContext, sharedNotifier));
+		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, jrContext, sharedNotifier));
 		viewmap.put(FORM_SORTING, new VSorting(composite, jrContext));
 		viewmap.put(FORM_BOOKMARKS, new VBookmarks(composite, jrContext, pcontainer));
 		viewmap.put(FORM_EXPORTER, new VExporter(composite, jrContext));
