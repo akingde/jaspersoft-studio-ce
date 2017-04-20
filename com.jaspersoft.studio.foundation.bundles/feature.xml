@@ -26,9 +26,6 @@
          version="0.0.0"/>
 
    <requires>
-      <import plugin="org.junit" version="4.10.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.commons.codec" version="1.6.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.commons.logging" version="1.1.1" match="greaterOrEqual"/>
       <import plugin="org.w3c.dom.svg" version="1.1.0" match="greaterOrEqual"/>
       <import plugin="org.w3c.dom.smil" version="1.0.1" match="greaterOrEqual"/>
       <import plugin="org.w3c.css.sac" version="1.3.1" match="greaterOrEqual"/>
@@ -74,7 +71,7 @@
          id="com.jaspersoft.studio.bundles.itext"
          download-size="0"
          install-size="0"
-         version="2.1.7.js5"/>
+         version="2.1.7.js6_b01"/>
 
    <plugin
          id="com.jaspersoft.studio.bundles.jxl"
@@ -87,7 +84,7 @@
          id="com.jaspersoft.studio.bundles.poi"
          download-size="0"
          install-size="0"
-         version="3.10.1.201502161145"/>
+         version="3.15.0.b01"/>
 
    <plugin
          id="com.fasterxml.jackson.core.jackson-annotations"
@@ -171,7 +168,7 @@
          id="com.jaspersoft.studio.bundles.zxing"
          download-size="0"
          install-size="0"
-         version="2.3.0"
+         version="3.2.1.b01"
          unpack="false"/>
 
    <plugin
