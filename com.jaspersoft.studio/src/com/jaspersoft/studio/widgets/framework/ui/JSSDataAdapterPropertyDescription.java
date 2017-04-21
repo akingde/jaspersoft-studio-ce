@@ -28,7 +28,6 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 /**
@@ -78,26 +77,11 @@ public class JSSDataAdapterPropertyDescription extends AbstractExpressionPropert
 		simpleControl.setLayoutData(comboData);
 		
 		JRDesignDataset currentDataset = jConfig.getJasperDesign().getMainDesignDataset();
-		JRQuery q = jConfig.getJasperDesign().getQuery();
-		String language = q != null ? q.getLanguage() : null;
 		List<ComboItem> items = new ArrayList<ComboItem>();
 		if (currentDataset != null) {
 			for (int i = 0; i < daStorage.length; i++) {
 				final ADataAdapterStorage s = daStorage[i];
 				for (DataAdapterDescriptor d : s.getDataAdapterDescriptors(currentDataset)) {
-					if (language != null) {
-						String[] langs = d.getLanguages();
-						if (langs != null) {
-							boolean exists = false;
-							for (String l : langs)
-								if (language.equalsIgnoreCase(l) || l.equals("*")) {
-									exists = true;
-									break;
-								}
-							if (!exists)
-								continue;
-						}
-					}
 					ComboItem m1 = new ComboItem(s.getLabel(d), true, d.getIcon(16), i, d, d);
 					items.add(m1);
 				}
