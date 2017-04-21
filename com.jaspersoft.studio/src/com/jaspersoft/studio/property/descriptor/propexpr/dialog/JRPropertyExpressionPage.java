@@ -423,7 +423,9 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				scmp.setLayoutData(gd);
 
 				Label lbl = new Label(scmp, SWT.NONE);
-				lbl.setText(WordUtils.capitalizeFully(cat.replace(".", " ")));
+				String gn = WordUtils.capitalizeFully(cat.replace(".", " "));
+				gn = gn.replaceAll("Jasperreports", "JasperReports");
+				lbl.setText(gn);
 				lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
 				gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.horizontalSpan = 2;

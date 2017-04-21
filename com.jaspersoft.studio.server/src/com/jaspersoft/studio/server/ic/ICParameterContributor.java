@@ -65,6 +65,7 @@ public class ICParameterContributor implements IParameterICContributor {
 		List<PropertyScope> scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.PARAMETER);
 		spm.setScopes(scopes);
+		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
 
 		pm.add(spm);
 		PropertyMetadataRegistry.addMetadata(pm);

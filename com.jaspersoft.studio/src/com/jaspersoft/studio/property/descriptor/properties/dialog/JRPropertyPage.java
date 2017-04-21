@@ -75,7 +75,6 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.properties.PropertyMetadata;
 import net.sf.jasperreports.properties.StandardPropertyMetadata;
@@ -734,7 +733,9 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 				scmp.setLayoutData(gd);
 
 				Label lbl = new Label(scmp, SWT.NONE);
-				lbl.setText(WordUtils.capitalizeFully(cat.replace(".", " ")));
+				String gn = WordUtils.capitalizeFully(cat.replace(".", " "));
+				gn = gn.replaceAll("Jasperreports", "JasperReports");
+				lbl.setText(gn);
 				lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
 				gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.horizontalSpan = 2;

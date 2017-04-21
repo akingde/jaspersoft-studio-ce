@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.dialogs.Dialog;
@@ -84,6 +85,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.UIUtil;
 
+import net.sf.jasperreports.annotations.properties.PropertyScope;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -479,8 +481,10 @@ public class ParametersTable extends AbstractModifyTable {
 						} catch (JRException ex) {
 							UIUtils.showError(ex);
 						}
+						params.clear();
+						fillTree();
 					}
-				} else {
+				} else if (obj instanceof Object[]) {
 					Object[] row = (Object[]) obj;
 					PropertyExpressionDTO v = new PropertyExpressionDTO(false, (String) row[0], (String) row[1]);
 					JRDesignParameter pold = (JRDesignParameter) row[2];
@@ -494,8 +498,6 @@ public class ParametersTable extends AbstractModifyTable {
 						row[1] = v.getValue();
 					}
 				}
-				params.clear();
-				fillTree();
 				treeviewer.refresh();
 				treeviewer.expandToLevel(obj, 2);
 				treeviewer.setSelection(new StructuredSelection(obj));
@@ -611,13 +613,16 @@ public class ParametersTable extends AbstractModifyTable {
 			gd.heightHint = 300;
 			cmb.setLayoutData(gd);
 			final List<String> items = new ArrayList<String>();
-			for (String key : DatasetUtil.getPmap(mdataset.getJasperConfiguration()).keySet())
-				if (!p.getPropertiesMap().containsProperty(key))
+			Map<String, PropertyMetadata> pmap = DatasetUtil.getPmap(mdataset.getJasperConfiguration());
+			for (String key : pmap.keySet()) {
+				List<PropertyScope> scopes = pmap.get(key).getScopes();
+				if (scopes != null && scopes.contains(PropertyScope.PARAMETER) && !p.getPropertiesMap().containsProperty(key))
 					items.add(key);
+			}
 			Collections.sort(items);
 
 			for (String it : items)
-				cmb.add(DatasetUtil.getPmap(mdataset.getJasperConfiguration()).get(it).getLabel());
+				cmb.add(pmap.get(it).getLabel());
 			cmb.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseDoubleClick(MouseEvent e) {

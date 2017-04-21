@@ -94,7 +94,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		List<PropertyScope> scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:dataset");
+		spm.setCategory("net.sf.jasperreports.metadata.property.category:data.source");
 		pm.add(spm);
 
 		PropertyMetadataRegistry.addMetadata(pm);

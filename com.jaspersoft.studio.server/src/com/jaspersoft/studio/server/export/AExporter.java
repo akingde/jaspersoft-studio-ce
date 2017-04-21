@@ -58,6 +58,7 @@ public class AExporter {
 		List<PropertyScope> scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
+		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
@@ -68,6 +69,7 @@ public class AExporter {
 		scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
+		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
@@ -78,6 +80,7 @@ public class AExporter {
 		scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
+		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
@@ -88,16 +91,18 @@ public class AExporter {
 		scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
+		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
 		spm.setName(JrxmlPublishContributor.COM_JASPERSOFT_JRS_DATA_SOURCE);
-		spm.setLabel("Datasource Path");
+		spm.setLabel("Report Unit Datasource Path");
 		spm.setDescription("Report Unit data source path.");
 		spm.setValueType(ICParameterContributor.ICPATH);
 		scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
+		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
 		pm.add(spm);
 
 		PropertyMetadataRegistry.addMetadata(pm);
