@@ -78,13 +78,16 @@ public class WJRProperty extends AWidget {
 		if (isPropertyExpressions(element)) {
 			ItemPropertyDescription<?> ipd = null;
 			String pname = c.getPropertyName();
-			if (wmap.containsKey(c.getPropertyType())){
+			if (wmap.containsKey(c.getPropertyType())) {
 				c.setValue(element);
 				ipd = wmap.get(c.getPropertyType()).create(c);
 			}
 			if (c.getPropertyType().equals(Boolean.class.getName()))
 				ipd = new ComboItemPropertyDescription<Boolean>(pname, c.getLabel(), c.getDescription(), false,
 						Boolean.parseBoolean(c.getDefaultValue()), new String[] { "", "true", "false" });
+			else if (c.getPropertyName().equals("net.sf.jasperreports.data.adapter")
+					|| c.getPropertyType().equals(DataAdapter.class.getName()))
+				ipd = new JRDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false, getjConfig());
 			else if (c.getPropertyType().equals(String.class.getName()))
 				ipd = new TextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false, c.getDefaultValue());
 			else if (c.getPropertyType().equals(Class.class.getName()))
@@ -103,8 +106,6 @@ public class WJRProperty extends AWidget {
 			else if (c.getPropertyType().equals(Color.class.getName()))
 				ipd = new ColorPropertyDescription<Color>(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Color.decode(c.getDefaultValue()) : null);
-			else if (c.getPropertyType().equals(DataAdapter.class.getName()))
-				ipd = new JRDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false, getjConfig());
 			else if (c.getPropertyType().equals("jssDA"))
 				ipd = new JSSDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false, getjConfig());
 			else {
