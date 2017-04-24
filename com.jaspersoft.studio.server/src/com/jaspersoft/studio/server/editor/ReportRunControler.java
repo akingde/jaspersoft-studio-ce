@@ -29,7 +29,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
-import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.editor.preview.view.control.VBookmarks;
 import com.jaspersoft.studio.editor.preview.view.control.VExporter;
 import com.jaspersoft.studio.editor.preview.view.control.VSimpleErrorPreview;
@@ -126,15 +126,15 @@ public class ReportRunControler {
 			JasperReportsConfiguration jContext) {
 		viewmap = new LinkedHashMap<String, APreview>();
 		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, jContext));
-		viewmap.put(ReportControler.FORM_BOOKMARKS, new VBookmarks(composite,
+		viewmap.put(ReportController.FORM_BOOKMARKS, new VBookmarks(composite,
 				jContext, pcontainer));
-		viewmap.put(ReportControler.FORM_EXPORTER, new VExporter(composite,
+		viewmap.put(ReportController.FORM_EXPORTER, new VExporter(composite,
 				jContext));
 		return viewmap;
 	}
 
 	public void viewerChanged(APreview view) {
-		VExporter vs = (VExporter) viewmap.get(ReportControler.FORM_EXPORTER);
+		VExporter vs = (VExporter) viewmap.get(ReportController.FORM_EXPORTER);
 		vs.setPreferencesPage(view);
 	}
 
@@ -164,7 +164,7 @@ public class ReportRunControler {
 		pcontainer.setJasperPrint(null, null);
 
 		stats = new Statistics();
-		stats.startCount(ReportControler.ST_REPORTEXECUTIONTIME);
+		stats.startCount(ReportController.ST_REPORTEXECUTIONTIME);
 		c.addMessage(Messages.ReportRunControler_statsstart);
 
 		pcontainer.setNotRunning(false);
@@ -207,9 +207,9 @@ public class ReportRunControler {
 						repExec = WSClientHelper.runReportUnit(monitor,
 								repExec, prmcopy);
 						if (repExec.getStatus().equals("ready")) { //$NON-NLS-1$
-							stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
+							stats.endCount(ReportController.ST_REPORTEXECUTIONTIME);
 							if (repExec.getTotalPages() != null)
-								stats.setValue(ReportControler.ST_PAGECOUNT,
+								stats.setValue(ReportController.ST_PAGECOUNT,
 										repExec.getTotalPages());
 							if (repExec.getReportOutputURL() != null) {
 								showURL(repExec);
@@ -222,7 +222,7 @@ public class ReportRunControler {
 									FileContent fc = (FileContent) files
 											.get(key);
 									stats.setValue(
-											ReportControler.ST_REPORTSIZE,
+											ReportController.ST_REPORTSIZE,
 											fc.getData().length);
 									if (reptype
 											.equals(Argument.RUN_OUTPUT_FORMAT_JRPRINT)) { //$NON-NLS-1$
@@ -305,7 +305,7 @@ public class ReportRunControler {
 						}
 					}
 				} catch (Throwable e) {
-					ReportControler.showRunReport(c, pcontainer, e);
+					ReportController.showRunReport(c, pcontainer, e);
 				} finally {
 					monitor.done();
 					finishReport();
@@ -318,7 +318,7 @@ public class ReportRunControler {
 
 					@Override
 					public void run() {
-						stats.setValue(ReportControler.ST_PAGECOUNT,
+						stats.setValue(ReportController.ST_PAGECOUNT,
 								obj == null ? 0 : obj.getPages().size());
 						APreview pv = pcontainer.getDefaultViewer();
 						if (pv instanceof IJRPrintable)
@@ -326,7 +326,7 @@ public class ReportRunControler {
 								((IJRPrintable) pv)
 										.setJRPRint(stats, obj, true);
 								VBookmarks vs = (VBookmarks) viewmap
-										.get(ReportControler.FORM_BOOKMARKS);
+										.get(ReportController.FORM_BOOKMARKS);
 								vs.setJasperPrint(obj);
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -396,7 +396,7 @@ public class ReportRunControler {
 	}
 
 	public void finishReport() {
-		ReportControler.finishCompiledReport(c, prmInput, pcontainer);
+		ReportController.finishCompiledReport(c, prmInput, pcontainer);
 	}
 
 	public void resetParametersToDefault(IProgressMonitor monitor)

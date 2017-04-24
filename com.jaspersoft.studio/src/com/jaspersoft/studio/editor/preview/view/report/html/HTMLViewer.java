@@ -21,7 +21,7 @@ import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsLHtmlAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
-import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
@@ -78,13 +78,13 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 				tmpFile = File.createTempFile("report", getExtension(), getTmpPath());
 
 			AExportAction exp = createExporter(rptviewer);
-			stats.startCount(ReportControler.ST_EXPORTTIME);
+			stats.startCount(ReportController.ST_EXPORTTIME);
 			exp.preview(tmpFile, new Callback<File>() {
 
 				@Override
 				public void completed(File value) {
-					stats.endCount(ReportControler.ST_EXPORTTIME);
-					stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
+					stats.endCount(ReportController.ST_EXPORTTIME);
+					stats.setValue(ReportController.ST_REPORTSIZE, tmpFile.length());
 
 					try {
 						setURL(tmpFile.toURI().toASCIIString());

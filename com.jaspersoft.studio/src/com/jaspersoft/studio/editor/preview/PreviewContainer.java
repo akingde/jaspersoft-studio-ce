@@ -54,7 +54,7 @@ import com.jaspersoft.studio.editor.preview.toolbar.LeftToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.PreviewTopToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
-import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
@@ -106,7 +106,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	 */
 	private boolean runWhenInitilizing = true;
 
-	private ReportControler reportControler;
+	private ReportController reportControler;
 	
 	protected boolean isParameterDirty = true;
 	
@@ -383,7 +383,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		tbm.update(true);
 
 		getLeftContainer().populate(cleftcompo, getReportControler().createControls(cleftcompo));
-		getLeftContainer().switchView(null, ReportControler.FORM_PARAMETERS);
+		getLeftContainer().switchView(null, ReportController.FORM_PARAMETERS);
 	}
 
 	private ABrowserViewer jiveViewer;
@@ -430,7 +430,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			dataDapterToolBarManager.setEnabled(false);
 			leftToolbar.setEnabled(false);
 			getLeftContainer().setEnabled(false);
-			getLeftContainer().switchView(null, ReportControler.FORM_PARAMETERS);
+			getLeftContainer().switchView(null, ReportController.FORM_PARAMETERS);
 
 			// Cache the DataAdapter used for this report only if it is not null.
 			if (myDataAdapter != null) {
@@ -498,9 +498,9 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			sashform.upHide();
 	}
 
-	public ReportControler getReportControler() {
+	public ReportController getReportControler() {
 		if (reportControler == null)
-			reportControler = new ReportControler(this, jrContext);
+			reportControler = new ReportController(this, jrContext);
 		return reportControler;
 	}
 

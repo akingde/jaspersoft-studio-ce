@@ -17,7 +17,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.editor.preview.view.control.AVParameters;
-import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
@@ -42,7 +42,7 @@ public class VInputControls extends AVParameters {
 		inputs.add(new DateInput());
 		inputs.add(new ListOfValuesInput());
 		inputs.add(new QueryInput());
-		inputs.addAll(ReportControler.inputs);
+		inputs.addAll(ReportController.inputs);
 	}
 
 	public InputControlsManager getIcm() {

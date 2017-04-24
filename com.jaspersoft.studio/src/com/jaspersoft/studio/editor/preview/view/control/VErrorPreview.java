@@ -433,16 +433,16 @@ public class VErrorPreview extends APreview {
 			return;
 		if (stats != null) {
 			// compilSubTime.setText(format(stats.getDuration(ReportControler.ST_COMPILATIONTIMESUBREPORT)));
-			compilationTime.setText(format(stats.getDuration(ReportControler.ST_COMPILATIONTIME)));
-			fillingTime.setText(format(stats.getDuration(ReportControler.ST_FILLINGTIME)));
-			exportTime.setText(format(stats.getDuration(ReportControler.ST_EXPORTTIME)));
-			execTime.setText(format(stats.getDuration(ReportControler.ST_REPORTEXECUTIONTIME)));
+			compilationTime.setText(format(stats.getDuration(ReportController.ST_COMPILATIONTIME)));
+			fillingTime.setText(format(stats.getDuration(ReportController.ST_FILLINGTIME)));
+			exportTime.setText(format(stats.getDuration(ReportController.ST_EXPORTTIME)));
+			execTime.setText(format(stats.getDuration(ReportController.ST_REPORTEXECUTIONTIME)));
 
-			totalPages.setText(Misc.nvl(stats.getValue(ReportControler.ST_PAGECOUNT), "0")); //$NON-NLS-1$
-			recordCount.setText(Misc.nvl(stats.getValue(ReportControler.ST_RECORDCOUNTER), "-")); //$NON-NLS-1$
-			fillSize.setText(Misc.nvl(stats.getValue(ReportControler.ST_REPORTSIZE), "0")); //$NON-NLS-1$
-			runTime.setText(Misc.nvl(stats.getValue(ReportControler.ST_RUNTIMESTAMP), ""));
-			snapshot.setText(Misc.nvl(stats.getValue(ReportControler.ST_SNAPSHOT), "No"));
+			totalPages.setText(Misc.nvl(stats.getValue(ReportController.ST_PAGECOUNT), "0")); //$NON-NLS-1$
+			recordCount.setText(Misc.nvl(stats.getValue(ReportController.ST_RECORDCOUNTER), "-")); //$NON-NLS-1$
+			fillSize.setText(Misc.nvl(stats.getValue(ReportController.ST_REPORTSIZE), "0")); //$NON-NLS-1$
+			runTime.setText(Misc.nvl(stats.getValue(ReportController.ST_RUNTIMESTAMP), ""));
+			snapshot.setText(Misc.nvl(stats.getValue(ReportController.ST_SNAPSHOT), "No"));
 			statAction.run();
 		} else {
 			// compilSubTime.setText("-"); //$NON-NLS-1$

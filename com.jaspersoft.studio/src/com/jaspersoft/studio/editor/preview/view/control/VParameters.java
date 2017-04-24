@@ -233,7 +233,7 @@ public class VParameters extends AVParameters {
 			createControl(sectionClient, pres, new BooleanNumericInput(), p, first);
 			return true;
 		}
-		for (IDataInput in : ReportControler.inputs) {
+		for (IDataInput in : ReportController.inputs) {
 			if (in.isForType(pres.getValueClass())) {
 				final IDataInput input = in.getInstance();
 				createControl(sectionClient, pres, input, p, first);		

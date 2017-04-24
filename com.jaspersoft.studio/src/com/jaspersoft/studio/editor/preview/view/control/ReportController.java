@@ -87,7 +87,7 @@ import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
 import net.sf.jasperreports.engine.fill.FillListener;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
 
-public class ReportControler {
+public class ReportController {
 
 	public static final String ST_RECORDCOUNTER = "RECORDCOUNTER"; //$NON-NLS-1$
 
@@ -137,7 +137,7 @@ public class ReportControler {
 	private PreviewContainer pcontainer;
 	private JasperReportsConfiguration jrContext;
 
-	public ReportControler(PreviewContainer pcontainer, JasperReportsConfiguration jrContext) {
+	public ReportController(PreviewContainer pcontainer, JasperReportsConfiguration jrContext) {
 		this.pcontainer = pcontainer;
 		setJrContext(jrContext);
 	}

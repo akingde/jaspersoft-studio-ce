@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.CoreException;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
-import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -225,7 +225,7 @@ public class DatasetReader {
 			// likely "default" value.
 			hm.putAll(jConfig.getJRParameters());
 		}
-		hm = ReportControler.resetParameters(hm, jConfig);
+		hm = ReportController.resetParameters(hm, jConfig);
 		if (maxRecords > 0) {
 			hm.put(JRDesignParameter.REPORT_MAX_COUNT, maxRecords);
 		} else {

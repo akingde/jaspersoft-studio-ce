@@ -28,7 +28,7 @@ import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
-import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.messages.Messages;
@@ -101,10 +101,10 @@ public abstract class AFileViewer extends APreview implements IJRPrintable, IPre
 					try {
 						File tmpFile = File.createTempFile("report", getExtension());
 						AExportAction exp = createExporterAction(rptviewer);
-						stats.startCount(ReportControler.ST_EXPORTTIME);
+						stats.startCount(ReportController.ST_EXPORTTIME);
 						exp.doPreview(tmpFile, jrprint, monitor);
-						stats.endCount(ReportControler.ST_EXPORTTIME);
-						stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
+						stats.endCount(ReportController.ST_EXPORTTIME);
+						stats.setValue(ReportController.ST_REPORTSIZE, tmpFile.length());
 						final String content = (FileUtils.readFileAsAString(tmpFile));
 						UIUtils.getDisplay().asyncExec(new Runnable() {
 

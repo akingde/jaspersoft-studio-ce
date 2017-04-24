@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
-import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
 import com.jaspersoft.studio.utils.Callback;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -35,7 +35,7 @@ public abstract class ASystemViewer extends SWTViewer {
 				final String ext = getExtension(jrprint);
 				final AExportAction exp = createExporterAction(rptviewer);
 				final File tmpFile = File.createTempFile("report", ext);
-				stats.startCount(ReportControler.ST_EXPORTTIME);
+				stats.startCount(ReportController.ST_EXPORTTIME);
 				UIUtils.getDisplay().asyncExec(new Runnable() {
 
 					@Override
@@ -45,8 +45,8 @@ public abstract class ASystemViewer extends SWTViewer {
 
 								@Override
 								public void completed(File value) {
-									stats.endCount(ReportControler.ST_EXPORTTIME);
-									stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
+									stats.endCount(ReportController.ST_EXPORTTIME);
+									stats.setValue(ReportController.ST_REPORTSIZE, tmpFile.length());
 
 									Program p = Program.findProgram(ext);
 									if (p != null)
