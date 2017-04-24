@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
@@ -24,6 +23,10 @@ public class DRDateTime extends CDateTime {
 				expr = text.getControl().getText();
 				if (expr != null && expr.trim().isEmpty())
 					expr = null;
+				else if (supportDateRange) {
+					if (getSelection() != null)
+						setSelection(null);
+				}
 			}
 		});
 	}
