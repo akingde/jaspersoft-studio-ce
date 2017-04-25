@@ -39,6 +39,7 @@ import net.sf.jasperreports.types.date.DateRange;
 import net.sf.jasperreports.types.date.DateRangeBuilder;
 import net.sf.jasperreports.types.date.DateRangeExpression;
 import net.sf.jasperreports.types.date.InvalidDateRangeExpressionException;
+import net.sf.jasperreports.types.date.RelativeDateRange;
 import net.sf.jasperreports.types.date.TimestampRange;
 
 public class DateInput extends ADataInput {
@@ -75,8 +76,26 @@ public class DateInput extends ADataInput {
 		else if (DateRange.class.isAssignableFrom(valueClass))
 			createDateRange(parent, param, params);
 		date.setToolTipText(VParameters.createToolTip(param));
+		if (supportDateRange) {
+			String tt = "Possible values to use as parameter:\n";
+			String del = "";
+			for (CalendarUnit cu : CalendarUnit.values()) {
+				tt += del;
+				if (cu.equals(CalendarUnit.WEEK)) {
+					DateRangeBuilder drb = new DateRangeBuilder("WEEK");
+					tt += cu.name() + "(" + namesOfDays[Misc.nvl(drb.getWeekStartDay(), RelativeDateRange.DEFAULT_WEEK_START_DAY)]
+							+ ")";
+				} else
+					tt += cu.name();
+				del = ", ";
+			}
+			date.setToolTipText(tt + "\n" + date.getToolTipText());
+		}
 		date.addFocusListener(focusListener);
 	}
+
+	private static String[] namesOfDays = new String[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+			"Saturday" };
 
 	private void setFormat(CDateTime cDateTime, String key) {
 		String f = JasperReportsConfiguration.getDefaultInstance().getProperty(key, "");

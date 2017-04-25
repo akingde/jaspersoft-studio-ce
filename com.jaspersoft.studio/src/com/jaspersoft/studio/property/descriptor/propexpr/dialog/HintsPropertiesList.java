@@ -116,7 +116,9 @@ public class HintsPropertiesList {
 					List<PropertyMetadata> eps = pmu.getQueryExecuterFieldProperties(
 							(String) eContext.getJasperReportsConfiguration().get(COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE));
 					if (eps != null)
-						result.addAll(eps);
+						for (PropertyMetadata pm : eps)
+							if (pm.getScopes().contains(PropertyScope.FIELD))
+								result.add(pm);
 					result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.FIELD));
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -126,7 +128,11 @@ public class HintsPropertiesList {
 			}
 		} else if (holder instanceof JRParameter) {
 			Map<String, PropertyMetadata> map = DatasetUtil.getPmap(eContext.getJasperReportsConfiguration());
-			result.addAll(map.values());
+			for (String key : map.keySet()) {
+				PropertyMetadata pm = map.get(key);
+				if (pm.getScopes().contains(PropertyScope.PARAMETER))
+					result.add(pm);
+			}
 		}
 		List<PropertyMetadata> r = new ArrayList<PropertyMetadata>();
 		Set<String> set = new HashSet<String>();
