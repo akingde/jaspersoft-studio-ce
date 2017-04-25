@@ -20,7 +20,7 @@ public class WBoolean extends AWControl {
 	}
 
 	protected boolean refresh = false;
-	private Combo cmb;
+	protected Combo cmb;
 
 	@Override
 	protected void createControl(Composite parent) {
@@ -40,15 +40,20 @@ public class WBoolean extends AWControl {
 			public void modifyText(ModifyEvent e) {
 				if (refresh)
 					return;
-				if (cmb.getSelectionIndex() == 0)
-					aw.setValue(null);
-				else if (cmb.getSelectionIndex() == 1)
-					aw.setValue(true);
-				else if (cmb.getSelectionIndex() == 2)
-					aw.setValue(false);
-				cmb.setToolTipText(aw.getToolTipText());
+				handleValueChanged();
 			}
+
 		});
+	}
+
+	protected void handleValueChanged() {
+		if (cmb.getSelectionIndex() == 0)
+			aw.setValue(null);
+		else if (cmb.getSelectionIndex() == 1)
+			aw.setValue(true);
+		else if (cmb.getSelectionIndex() == 2)
+			aw.setValue(false);
+		cmb.setToolTipText(aw.getToolTipText());
 	}
 
 	protected String[] getValues() {

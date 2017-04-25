@@ -9,6 +9,15 @@ public class WBooleanNative extends WBoolean {
 	}
 
 	@Override
+	protected void handleValueChanged() {
+		if (cmb.getSelectionIndex() == 0)
+			aw.setValue(true);
+		else if (cmb.getSelectionIndex() == 1)
+			aw.setValue(false);
+		cmb.setToolTipText(aw.getToolTipText());
+	}
+
+	@Override
 	protected String[] getValues() {
 		return new String[] { "true", "false" };
 	}
