@@ -198,12 +198,12 @@ public final class PageFormatDialog extends FormDialog {
 
 		cPrintOrder = new Combo(bright, SWT.READ_ONLY | SWT.BORDER);
 		String[] items = NamedEnumPropertyDescriptor
-				.getEnumItems(PrintOrderEnum.HORIZONTAL.getDeclaringClass().getEnumConstants(), NullEnum.NULL);
+				.getEnumItems(PrintOrderEnum.HORIZONTAL.getDeclaringClass().getEnumConstants(), NullEnum.NOTNULL);
 		cPrintOrder.setItems(items);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		cPrintOrder.setLayoutData(gd);
-		
+
 		enablePrintOrder();
 	}
 
@@ -556,7 +556,5 @@ public final class PageFormatDialog extends FormDialog {
 	protected void enablePrintOrder() {
 		int c = cols.getValueAsInteger();
 		cPrintOrder.setEnabled(c > 1);
-		if (c <= 1)
-			cPrintOrder.select(0);
 	}
 }
