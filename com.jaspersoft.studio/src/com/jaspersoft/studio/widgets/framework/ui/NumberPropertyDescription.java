@@ -52,9 +52,7 @@ public abstract class NumberPropertyDescription<T extends Number> extends Abstra
 		DoubleControlComposite cmp = new DoubleControlComposite(parent, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
-		cmp.getFirstContainer().setData(expressionControl);
-		cmp.setExpressionControlToHighlight(expressionControl);
+		lazyCreateExpressionControl(wiProp, cmp);
 
 		final NumericText simpleControl = createSimpleEditor(cmp.getSecondContainer());
 		cmp.getSecondContainer().setData(simpleControl);
@@ -106,6 +104,7 @@ public abstract class NumberPropertyDescription<T extends Number> extends Abstra
 	public void update(Control c, IWItemProperty wip) {
 		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
 		if (wip.isExpressionMode()) {
+			lazyCreateExpressionControl(wip, cmp);
 			Text expressionControl = (Text) cmp.getFirstContainer().getData();
 			super.update(expressionControl, wip);
 			cmp.switchToFirstContainer();

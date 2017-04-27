@@ -102,9 +102,7 @@ public class MeasureUnitPropertyDescription extends AbstractMeasurePropertyDescr
 		DoubleControlComposite cmp = new DoubleControlComposite(parent, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
-		cmp.getFirstContainer().setData(expressionControl);
-		cmp.setExpressionControlToHighlight(expressionControl);
+		lazyCreateExpressionControl(wiProp, cmp);
 
 		final Text simpleControl = new Text(cmp.getSecondContainer(), SWT.BORDER); //$NON-NLS-1$
 		// Flag used to overcome the problem of focus events in Mac OS X
@@ -165,6 +163,7 @@ public class MeasureUnitPropertyDescription extends AbstractMeasurePropertyDescr
 	public void update(Control c, IWItemProperty wip) {
 		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
 		if (wip.isExpressionMode()) {
+			lazyCreateExpressionControl(wip, cmp);
 			Text expressionControl = (Text) cmp.getFirstContainer().getData();
 			super.update(expressionControl, wip);
 			cmp.switchToFirstContainer();

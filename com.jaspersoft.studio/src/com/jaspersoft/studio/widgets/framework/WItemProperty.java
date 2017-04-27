@@ -38,6 +38,7 @@ import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.widgets.framework.manager.ItemPropertyLayout;
 import com.jaspersoft.studio.widgets.framework.manager.ItemPropertyLayoutData;
+import com.jaspersoft.studio.widgets.framework.manager.LazyExpressionLabel;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.IDialogProvider;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
@@ -95,7 +96,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	/**
 	 * The label that can be clicked to open the expression editor
 	 */
-	private Label expressionEditLabel;
+	private LazyExpressionLabel expressionEditLabel;
 	
 	/**
 	 * Flag typically set when the widget are writing the value
@@ -168,7 +169,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		}
 
 		//Create the expression label
-		expressionEditLabel = new Label(this, SWT.NONE);
+		expressionEditLabel = new LazyExpressionLabel(this);
 		expressionEditLabel.addMouseListener(new MouseAdapter() {
 
 			@Override

@@ -22,6 +22,7 @@ import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
+import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import com.jaspersoft.studio.widgets.framework.ui.menu.IMenuProvider;
 
 import net.sf.jasperreports.engine.JRExpression;
@@ -150,6 +151,19 @@ public abstract class AbstractExpressionPropertyDescription<T> implements ItemPr
 			if (tvalue != null && tvalue.isEmpty())
 				tvalue = null;
 			wiProp.setValue(null, new JRDesignExpression(Misc.nvl(tvalue)));
+		}
+	}
+	
+	/**
+	 * This is used to created the expression controls in a lazy way, doing this the expression 
+	 * control can be created only when the expression mode should be shown. It also check to 
+	 * avoid to create it multiple times
+	 */
+	protected void lazyCreateExpressionControl(IWItemProperty wiProp, DoubleControlComposite cmp){
+		if (wiProp.isExpressionMode() && cmp.getFirstContainer().getChildren().length == 0){
+			Control expressionControl = createExpressionControl(wiProp, cmp.getFirstContainer());
+			cmp.getFirstContainer().setData(expressionControl);
+			cmp.setExpressionControlToHighlight(expressionControl);
 		}
 	}
 	

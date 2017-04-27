@@ -50,11 +50,7 @@ public class FilePropertyDescription extends AbstractExpressionPropertyDescripti
 		DoubleControlComposite cmp = new DoubleControlComposite(parent, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		cmp.getFirstContainer().setLayout(WidgetFactory.getNoPadLayout(2));
-		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
-		cmp.getFirstContainer().setData(expressionControl);
-		cmp.setExpressionControlToHighlight(expressionControl);
-		createToolbarButton(cmp.getFirstContainer(), wiProp);
+		lazyCreateExpressionControl(wiProp, cmp);
 		
 		cmp.getSecondContainer().setLayout(WidgetFactory.getNoPadLayout(2));
 		final Text simpleControl =  new Text(cmp.getSecondContainer(), SWT.BORDER);
@@ -96,9 +92,23 @@ public class FilePropertyDescription extends AbstractExpressionPropertyDescripti
 		}
 		
 		setupContextMenu(simpleControl, wiProp);
-		setupContextMenu(expressionControl, wiProp);
 		cmp.switchToFirstContainer();
 		return cmp;
+	}
+	
+	/**
+	 * Override the method to add the contextual menu also on the expression control
+	 */
+	@Override
+	protected void lazyCreateExpressionControl(IWItemProperty wiProp, DoubleControlComposite cmp) {
+		if (wiProp.isExpressionMode() && cmp.getFirstContainer().getChildren().length == 0){
+			cmp.getFirstContainer().setLayout(WidgetFactory.getNoPadLayout(2));
+			Control expressionControl = createExpressionControl(wiProp, cmp.getFirstContainer());
+			cmp.getFirstContainer().setData(expressionControl);
+			cmp.setExpressionControlToHighlight(expressionControl);
+			createToolbarButton(cmp.getFirstContainer(), wiProp);
+			setupContextMenu(expressionControl, wiProp);
+		}
 	}
 	
 	/**
@@ -178,6 +188,7 @@ public class FilePropertyDescription extends AbstractExpressionPropertyDescripti
 	public void update(Control c, IWItemProperty wip) {
 		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
 		if (wip.isExpressionMode()) {
+			lazyCreateExpressionControl(wip, cmp);
 			Text expressionControl = (Text) cmp.getFirstContainer().getData();
 			super.update(expressionControl, wip);
 			cmp.switchToFirstContainer();

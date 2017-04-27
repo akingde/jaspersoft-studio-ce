@@ -62,9 +62,7 @@ public class JSSDataAdapterPropertyDescription extends AbstractExpressionPropert
 		DoubleControlComposite cmp = new DoubleControlComposite(parent, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
-		cmp.getFirstContainer().setData(expressionControl);
-		cmp.setExpressionControlToHighlight(expressionControl);
+		lazyCreateExpressionControl(wiProp, cmp);
 
 		final WritableComboMenuViewer viewer = new WritableComboMenuViewer(cmp.getSecondContainer(), SWT.READ_ONLY);
 		Control simpleControl = viewer.getControl();
@@ -119,6 +117,7 @@ public class JSSDataAdapterPropertyDescription extends AbstractExpressionPropert
 		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
 		boolean isFallback = false;
 		if (wip.isExpressionMode()) {
+			lazyCreateExpressionControl(wip, cmp);
 			Text txt = (Text) cmp.getFirstContainer().getData();
 			super.update(txt, wip);
 			cmp.switchToFirstContainer();

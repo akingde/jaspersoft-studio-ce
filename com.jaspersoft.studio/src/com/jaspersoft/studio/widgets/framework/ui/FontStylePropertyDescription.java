@@ -51,9 +51,7 @@ public class FontStylePropertyDescription extends AbstractExpressionPropertyDesc
 		DoubleControlComposite cmp = new DoubleControlComposite(parent, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Control expressionControl = super.createControl(wiProp, cmp.getFirstContainer());
-		cmp.getFirstContainer().setData(expressionControl);
-		cmp.setExpressionControlToHighlight(expressionControl);
+		lazyCreateExpressionControl(wiProp, cmp);
 
 		Composite toolbarsContainer = new Composite(cmp.getSecondContainer(), SWT.NONE);
 		GridLayout containerLayout = new GridLayout(4, false);
@@ -117,6 +115,7 @@ public class FontStylePropertyDescription extends AbstractExpressionPropertyDesc
 	public void update(Control c, IWItemProperty wip) {
 		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
 		if (wip.isExpressionMode()) {
+			lazyCreateExpressionControl(wip, cmp);
 			Text txt = (Text) cmp.getFirstContainer().getData();
 			super.update(txt, wip);
 			cmp.switchToFirstContainer();

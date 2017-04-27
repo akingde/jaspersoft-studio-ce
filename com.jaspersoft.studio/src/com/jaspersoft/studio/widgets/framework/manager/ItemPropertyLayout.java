@@ -27,7 +27,7 @@ public class ItemPropertyLayout extends Layout {
 	
 	private Label titleLabel;
 	
-	private Label expressionLabel;
+	private LazyExpressionLabel expressionLabel;
 	
 	private Control mainControl;
 	
@@ -50,7 +50,7 @@ public class ItemPropertyLayout extends Layout {
 	 */
 	public int leftMargin = 5;
 	
-	public ItemPropertyLayout(WItemProperty wItemProperty, Label titleLabel, Label expressionLabel, Control mainControl, Button dialogButton) {
+	public ItemPropertyLayout(WItemProperty wItemProperty, Label titleLabel, LazyExpressionLabel expressionLabel, Control mainControl, Button dialogButton) {
 		this.wItemProperty = wItemProperty;
 		this.mainControl = mainControl;
 		this.expressionLabel = expressionLabel;
@@ -157,7 +157,10 @@ public class ItemPropertyLayout extends Layout {
 			if (titleLabel != null){
 				titleLabel.setBounds(0, 0, 0, 0);
 			}
-			expressionLabel.setBounds(0, 0, 0, 0);
+			if (expressionLabel.isInitialized()) {
+				//since this hide the label avoid to execute if it s not initialized
+				expressionLabel.setBounds(0, 0, 0, 0);
+			}
 			mainControl.setBounds(0, 0, 0, 0);
 			dialogButton.setBounds(0, 0, 0, 0);
 		} else {	
@@ -206,7 +209,8 @@ public class ItemPropertyLayout extends Layout {
 				//Created the label, update the available space and start of the editor
 				availableWidth -= labelSize.x + horizontalSpacing;
 				startEditorX += labelSize.x + horizontalSpacing;
-			} else {
+			} else if (expressionLabel.isInitialized()) {
+				//since this hide the label avoid to execute if it s not initialized
 				expressionLabel.setVisible(false);
 				expressionLabel.setBounds(new Rectangle(0, 0, 0, 0));	
 			}

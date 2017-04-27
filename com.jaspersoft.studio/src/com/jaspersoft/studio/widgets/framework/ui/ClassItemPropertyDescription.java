@@ -60,9 +60,7 @@ public class ClassItemPropertyDescription extends ComboItemPropertyDescription<S
 		DoubleControlComposite cmp = new DoubleControlComposite(parent, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Control expressionControl = createExpressionControl(wiProp, cmp.getFirstContainer());
-		cmp.getFirstContainer().setData(expressionControl);
-		cmp.setExpressionControlToHighlight(expressionControl);
+		lazyCreateExpressionControl(wiProp, cmp);
 
 		cmp.getSecondContainer().setLayout(WidgetFactory.getNoPadLayout(2));
 		final Combo simpleControl = createComboControl(cmp.getSecondContainer());
