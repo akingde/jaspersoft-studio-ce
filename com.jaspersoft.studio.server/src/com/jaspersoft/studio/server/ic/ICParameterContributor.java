@@ -160,7 +160,7 @@ public class ICParameterContributor implements IParameterICContributor {
 									"Input Control name must be the same as parameter name to work on Jaspersoft Server.");
 					}
 				} else {
-					RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
+					RepositoryDialog rd = new RepositoryDialog(bpath.getShell(), msp) {
 
 						@Override
 						public boolean isResourceCompatible(AMResource r) {
@@ -191,6 +191,8 @@ public class ICParameterContributor implements IParameterICContributor {
 	public void refresh(JRDesignParameter prm) {
 		this.prm = prm;
 		String p = prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_PATH);
+		if (tpath.isDisposed())
+			return;
 		tpath.setText(Misc.nvl(p));
 		String tt = "This input control on the server.";
 		if (!Misc.isNullOrEmpty(tpath.getText()))
