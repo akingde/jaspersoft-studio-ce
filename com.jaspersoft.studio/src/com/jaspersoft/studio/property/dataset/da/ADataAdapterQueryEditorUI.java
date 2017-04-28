@@ -73,7 +73,10 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 	public Composite createPropertiesTable(Composite parent, List<HttpLocationParameter> lparams, String pname) {
 		PropertiesTable pt = new PropertiesTable();
 		pTables.add(pt);
-		return pt.create(parent, new ArrayList<HttpLocationParameter>(lparams), pname);
+		List<HttpLocationParameter> prms = new ArrayList<HttpLocationParameter>();
+		if (lparams != null)
+			prms.addAll(lparams);
+		return pt.create(parent, prms, pname);
 	}
 
 	public void createPropertyWidget(String p, Composite parent, String daValue, int width,
