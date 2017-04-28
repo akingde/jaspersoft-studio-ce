@@ -4,8 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.find;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -15,6 +13,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.INode;
@@ -23,6 +22,8 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class FindResourceJob {
 	public static ResourceDescriptor doFindResource(MServerProfile msp, String[] in, String[] excl) {
@@ -36,10 +37,15 @@ public class FindResourceJob {
 
 	public static ResourceDescriptor doFindResource(MServerProfile msp, String[] in, String[] excl,
 			boolean containedResource, String defaultName) {
+		return doFindResource(UIUtils.getShell(), msp, in, excl, containedResource, defaultName);
+	}
+
+	public static ResourceDescriptor doFindResource(Shell shell, MServerProfile msp, String[] in, String[] excl,
+			boolean containedResource, String defaultName) {
 		FindResourceWizard wizard = new FindResourceWizard(msp, containedResource);
 		wizard.setFilterTypes(in, excl);
 		wizard.setDefaultName(defaultName);
-		WizardDialog dialog = new FindWizardDialog(UIUtils.getShell(), wizard);
+		WizardDialog dialog = new FindWizardDialog(shell, wizard);
 		dialog.setHelpAvailable(false);
 		dialog.create();
 		if (dialog.open() == Dialog.OK)

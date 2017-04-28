@@ -127,7 +127,7 @@ public class ICParameterContributor implements IParameterICContributor {
 				msp = ServerManager.getServerByUrl(servURL, servUser);
 				if (msp == null) {
 					SelectServerWizard wizard = new SelectServerWizard();
-					WizardDialog w = new WizardDialog(UIUtils.getShell(), wizard);
+					WizardDialog w = new WizardDialog(bpath.getShell(), wizard);
 					if (w.open() == Dialog.OK) {
 						msp = wizard.getValue();
 						try {
@@ -150,7 +150,7 @@ public class ICParameterContributor implements IParameterICContributor {
 				JRPropertiesMap pmap = ICParameterContributor.this.prm.getPropertiesMap();
 				if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
 					String[] incl = new String[] { ResourceMediaType.INPUT_CONTROL_CLIENT_TYPE };
-					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, incl, null, true,
+					ResourceDescriptor rd = FindResourceJob.doFindResource(bpath.getShell(), msp, incl, null, true,
 							ICParameterContributor.this.prm.getName());
 					if (rd != null) {
 						if (rd.getName().equals(ICParameterContributor.this.prm.getName()))
