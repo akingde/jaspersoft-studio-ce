@@ -339,9 +339,9 @@ public class DataPreviewTable implements DatasetReaderListener {
 			dataReader.stop();
 		}
 		// Remove all table items if any
-		wtable.removeAll();
-		tviewer.setInput(null);
-		readItems = 0;
+//		wtable.removeAll();
+//		tviewer.setInput(null);
+//		readItems = 0;
 		infoMsg.setText(Messages.DataPreviewTable_Ready);
 		((GridData) progressBar.getLayoutData()).exclude = true;
 		progressBar.setVisible(false);
