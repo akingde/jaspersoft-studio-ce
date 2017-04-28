@@ -365,7 +365,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			boolean custom = !eds.contains(props.get(pm.getName()));
 			if (custom && !value.hasProperty(pm.getName()))
 				continue;
-			col.setLabelEditable(showExisting && custom);
+			col.setLabelEditable(custom);//showExisting && custom);
 			UIUtils.getDisplay().syncExec(new Runnable() {
 
 				@Override
