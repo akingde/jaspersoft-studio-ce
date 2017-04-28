@@ -293,9 +293,15 @@ public class WJRProperty extends AWidget {
 				}
 			PropertyExpressionDTO dto = null;
 			if (element instanceof DatasetPropertyExpressionsDTO)
-				dto = new DatasetPropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
-						value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString(),
-						PropertyEvaluationTimeEnum.LATE);
+				if (value instanceof PropertyExpressionDTO) {
+					PropertyExpressionDTO pedto = (PropertyExpressionDTO) value;
+					dto = new DatasetPropertyExpressionDTO(pedto.isExpression(), c.getPropertyName(),
+							pedto.isExpression() ? pedto.getValueAsExpression().toString() : pedto.getValue(),
+							PropertyEvaluationTimeEnum.LATE);
+				} else
+					dto = new DatasetPropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
+							value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString(),
+							PropertyEvaluationTimeEnum.LATE);
 			else
 				dto = new PropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
 						value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString());
