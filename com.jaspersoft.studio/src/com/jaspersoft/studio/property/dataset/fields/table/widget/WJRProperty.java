@@ -302,9 +302,13 @@ public class WJRProperty extends AWidget {
 					dto = new DatasetPropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
 							value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString(),
 							PropertyEvaluationTimeEnum.LATE);
-			else
-				dto = new PropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
-						value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString());
+			else {
+				if (value instanceof PropertyExpressionDTO)
+					dto = (PropertyExpressionDTO) value;
+				else
+					dto = new PropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
+							value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString());
+			}
 			((PropertyExpressionsDTO) element).getProperties().add(dto);
 		} else if (element instanceof JRPropertiesMap) {
 			JRPropertiesMap map = (JRPropertiesMap) element;
