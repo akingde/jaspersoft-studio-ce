@@ -148,10 +148,12 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 										? "|" + msp.getValue().getOrganisation() : ""),
 								false);
 					} else {
-						ds.getPropertiesMap().setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
-						ds.getPropertiesMap().setProperty(AExporter.PROP_USER,
-								msp.getValue().getUser() + (msp.getValue().getOrganisation() != null
-										? "|" + msp.getValue().getOrganisation() : "")); //$NON-NLS-1$ //$NON-NLS-2$
+						if (ds != null) {
+							ds.getPropertiesMap().setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
+							ds.getPropertiesMap().setProperty(AExporter.PROP_USER,
+									msp.getValue().getUser() + (msp.getValue().getOrganisation() != null
+											? "|" + msp.getValue().getOrganisation() : "")); //$NON-NLS-1$ //$NON-NLS-2$
+						}
 					}
 				} catch (MalformedURLException e1) {
 					e1.printStackTrace();
