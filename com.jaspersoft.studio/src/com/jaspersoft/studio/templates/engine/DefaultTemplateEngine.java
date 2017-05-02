@@ -204,9 +204,10 @@ public class DefaultTemplateEngine implements TemplateEngine {
 			}
 		}
 		// Remove extra groups...
-		if (!keepExtraGroups && !noLayoutChanges && groupFields != null) {
-			while (groupFields.size() < jd.getGroupsList().size()) {
-				jd.removeGroup((JRDesignGroup) jd.getGroupsList().get(groupFields.size()));
+		if (!keepExtraGroups && !noLayoutChanges) {
+			int groupFieldsCount = groupFields != null ? groupFields.size() : 0;
+			while (groupFieldsCount < jd.getGroupsList().size()) {
+				jd.removeGroup((JRDesignGroup) jd.getGroupsList().get(groupFieldsCount));
 			}
 		}
 
