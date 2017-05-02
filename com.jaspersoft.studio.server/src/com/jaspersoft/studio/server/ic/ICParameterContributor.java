@@ -190,7 +190,9 @@ public class ICParameterContributor implements IParameterICContributor {
 	@Override
 	public void refresh(JRDesignParameter prm) {
 		this.prm = prm;
-		String p = prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_PATH);
+		String p = null;
+		if (prm != null && prm.getPropertiesMap() != null)
+			p = prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_PATH);
 		if (tpath.isDisposed())
 			return;
 		tpath.setText(Misc.nvl(p));
@@ -198,7 +200,7 @@ public class ICParameterContributor implements IParameterICContributor {
 		if (!Misc.isNullOrEmpty(tpath.getText()))
 			tt = tpath.getText() + "\n\n" + tt;
 		tpath.setToolTipText(tt);
-		if (!Misc.isNullOrEmpty(p) && !p.equals(prm.getName()))
+		if (!Misc.isNullOrEmpty(p) && prm != null && !p.equals(prm.getName()))
 			decorator.show();
 		else
 			decorator.hide();
