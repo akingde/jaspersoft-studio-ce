@@ -75,7 +75,7 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new TimeZoneFieldEditor(JSS_REPORT_TIMEZONE, Messages.ReportExecutionPreferencePage_timeZoneLabel,
 				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(JSS_REPORT_FORCE_PARAMETER_TIMEZONE, "Use report timezone when acquiring data range as input parameters", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(JSS_REPORT_FORCE_PARAMETER_TIMEZONE, "Use report timezone when acquiring date range as input parameters", getFieldEditorParent()));
 
 		bLimRec = new BooleanFieldEditor(JSS_LIMIT_RECORDS, Messages.ReportExecutionPreferencePage_limitNumberLabel, getFieldEditorParent());
 		addField(bLimRec);
