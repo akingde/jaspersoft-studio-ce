@@ -15,6 +15,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -28,6 +29,8 @@ import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.selector.SelectServerWizard;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
+import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
+import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.FilePropertyDescription;
@@ -163,6 +166,20 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 			}
 		}
 		return msp;
+	}
+	
+	/**
+	 * Override the method to add the contextual menu also on the expression control, this will remove
+	 * the button in expression mode
+	 */
+	@Override
+	protected void lazyCreateExpressionControl(IWItemProperty wiProp, DoubleControlComposite cmp) {
+		if (wiProp.isExpressionMode() && cmp.getFirstContainer().getChildren().length == 0){
+			cmp.getFirstContainer().setLayout(WidgetFactory.getNoPadLayout(1));
+			Control expressionControl = createExpressionControl(wiProp, cmp.getFirstContainer());
+			cmp.getFirstContainer().setData(expressionControl);
+			cmp.setExpressionControlToHighlight(expressionControl);
+		}
 	}
 
 	@Override
