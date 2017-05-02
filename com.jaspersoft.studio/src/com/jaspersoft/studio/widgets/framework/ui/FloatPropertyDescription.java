@@ -114,7 +114,7 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	}
 
 	@Override
-	protected Number convertValue(String v) {
+	protected Number convertValue(String v) throws NumberFormatException {
 		if (v == null || v.isEmpty()) return null;
 		char separator = ValidatedDecimalFormat.DECIMAL_SEPARATOR;
 		//externally convert the current separator to the locale separator

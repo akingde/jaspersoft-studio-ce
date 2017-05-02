@@ -6,6 +6,7 @@ package com.jaspersoft.studio.widgets.framework.ui.widget;
 
 import java.text.NumberFormat;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 
@@ -82,5 +83,14 @@ public class FallbackNumericText extends NumericText {
 	@Override
 	protected boolean hasSameValue(Number newValue, Number storedValue) {
 		return false;
+	}
+	
+	/**
+	 * Set any text inside the widget but set its status to invalid
+	 */
+	public void setUnparsedValue(String text){
+		currentState = VALIDATION_RESULT.NOT_VALID;
+		updateBackground(ColorConstants.red);
+		setText(text);
 	}
 }

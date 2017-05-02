@@ -87,7 +87,7 @@ public abstract class NumberPropertyDescription<T extends Number> extends Abstra
 	/**
 	 * Convert the string into a number for the simple control when necessary
 	 */
-	protected abstract Number convertValue(String v);
+	protected abstract Number convertValue(String v) throws NumberFormatException;
 	
 	/**
 	 * Return the type of the number handled by this class (ie integer, long...)
@@ -117,7 +117,13 @@ public abstract class NumberPropertyDescription<T extends Number> extends Abstra
 				isFallback = true;
 			}
 			simpleControl.setFallback(isFallback);
-			simpleControl.setValue(convertValue(Misc.nvl(v)));
+			try{
+				Number numericValue = convertValue(Misc.nvl(v));
+				simpleControl.setValue(numericValue);
+			} catch (NumberFormatException ex){
+				simpleControl.setUnparsedValue(Misc.nvl(v));
+			}
+
 			simpleControl.setToolTipText(getToolTip());
 			changeFallbackForeground(isFallback, simpleControl);
 			cmp.switchToSecondContainer();

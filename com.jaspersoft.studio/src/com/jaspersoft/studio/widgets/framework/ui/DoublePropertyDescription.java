@@ -120,7 +120,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<Double>
 	}
 
 	@Override
-	protected Number convertValue(String v) {
+	protected Number convertValue(String v) throws NumberFormatException {
 		if (v == null || v.isEmpty()) return null;
 		char separator = ValidatedDecimalFormat.DECIMAL_SEPARATOR;
 		//convert the separator if necessary, since the internal double always use the dot

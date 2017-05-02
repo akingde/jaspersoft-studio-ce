@@ -54,7 +54,7 @@ public class NumericText extends Text {
 	 * a valid number, not valid means it can not be formatted as a number, out of bounds means
 	 * it is a valid number but exceeds the min or max accepted values
 	 */
-	private enum VALIDATION_RESULT {VALID, NOT_VALID, OUT_OF_BOUNDS};
+	protected enum VALIDATION_RESULT {VALID, NOT_VALID, OUT_OF_BOUNDS};
 	
 	/**
 	 * The listeners on this widget
@@ -125,7 +125,7 @@ public class NumericText extends Text {
 	/**
 	 * The status of the value displayed
 	 */
-	private VALIDATION_RESULT currentState = VALIDATION_RESULT.VALID;
+	protected VALIDATION_RESULT currentState = VALIDATION_RESULT.VALID;
 	
 	/**
 	 * Verify listener used to check if the typed value is valid or not

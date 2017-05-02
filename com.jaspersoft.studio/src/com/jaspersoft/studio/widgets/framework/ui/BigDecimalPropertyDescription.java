@@ -112,7 +112,7 @@ public class BigDecimalPropertyDescription extends NumberPropertyDescription<Big
 	}
 
 	@Override
-	protected BigDecimal convertValue(String v) {
+	protected BigDecimal convertValue(String v) throws NumberFormatException {
 		if (v == null || v.isEmpty()) return null;
 		return BigDecimalValidator.getInstance().validate(v, Locale.getDefault());
 	}
