@@ -62,6 +62,7 @@ import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRQuery;
+import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
@@ -479,7 +480,9 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			ClassLoader oldClassloader = Thread.currentThread().getContextClassLoader();
 			Thread.currentThread().setContextClassLoader(jConfig.getClassLoader());
 
-			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
+			DataAdapterService das = DataAdapterServiceUtil
+					.getInstance(new ParameterContributorContext(jConfig, newdataset, jConfig.getJRParameters()))
+					.getService(da.getDataAdapter());
 			try {
 				final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, newdataset);
 				if (fields != null) {
