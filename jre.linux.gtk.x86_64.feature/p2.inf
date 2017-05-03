@@ -1,4 +1,4 @@
 instructions.configure=\
-org.eclipse.equinox.p2.touchpoint.eclipse.setJvm(jvm:features/jre.linux.gtk.x86_64.feature_1.8.0.u121/jre/bin);
+org.eclipse.equinox.p2.touchpoint.eclipse.setJvm(jvm:features/jre.linux.gtk.x86_64.feature_1.8.0.u131/jre/bin);
 instructions.unconfigure=\
 org.eclipse.equinox.p2.touchpoint.eclipse.setJvm(jvm:null);

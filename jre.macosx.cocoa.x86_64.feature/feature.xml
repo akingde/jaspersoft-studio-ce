@@ -2,7 +2,7 @@
 <feature
       id="jre.macosx.cocoa.x86_64.feature"
       label="JRE for Mac OS X 64-bit systems"
-      version="1.8.0.u121"
+      version="1.8.0.u131"
       provider-name="TIBCO Software Inc."
       os="macosx"
       ws="cocoa"

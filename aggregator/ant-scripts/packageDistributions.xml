@@ -6,8 +6,8 @@
 	<property name="dist" value="${basedir}/../product/dist"/>
 	<property name="productRootFolder" value="jaspersoftstudio" />
 	<property name="productVersionFile" value="buildversion.properties" />
-	<property name="jre.location.linux32" value="features/jre.linux.gtk.x86.feature_1.8.0.u121/jre/bin" />
-	<property name="jre.location.linux64" value="features/jre.linux.gtk.x86_64.feature_1.8.0.u121/jre/bin" />
+	<property name="jre.location.linux32" value="features/jre.linux.gtk.x86.feature_1.8.0.u131/jre/bin" />
+	<property name="jre.location.linux64" value="features/jre.linux.gtk.x86_64.feature_1.8.0.u131/jre/bin" />
 	<!-- import properties for mac machine producing the DMG -->
 	<property file="authenticationInfo.properties"/>
 

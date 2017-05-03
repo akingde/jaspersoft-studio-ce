@@ -11,7 +11,7 @@
 
 	<properties>
 		<jre.product.version>
-			1.8.0.u121
+			1.8.0.u131
 		</jre.product.version>
 		<macosx.cocoa.x86_64.jre.relative.location>
 			macosx/cocoa/x86_64/jaspersoftstudio.app/Contents/Eclipse/features/jre.macosx.cocoa.x86_64.feature_${jre.product.version}/jre/Contents/Home/bin

@@ -2,7 +2,7 @@
 <feature
       id="jre.linux.gtk.x86_64.feature"
       label="JRE for Linux 64-bit systems"
-      version="1.8.0.u121"
+      version="1.8.0.u131"
       provider-name="TIBCO Software Inc."
       os="linux"
       ws="gtk"
