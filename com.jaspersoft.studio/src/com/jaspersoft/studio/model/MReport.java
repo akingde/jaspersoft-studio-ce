@@ -39,6 +39,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
@@ -214,6 +215,12 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		nameD.setDescription(Messages.MReport_report_name_description);
 		nameD.setCategory(Messages.common_report);
 		desc.add(nameD);
+
+		JRExpressionPropertyDescriptor descD = new JRExpressionPropertyDescriptor(
+				PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION, Messages.common_description);
+		nameD.setCategory(Messages.common_report);
+		descD.setDescription(Messages.common_description);
+		desc.add(descD);
 
 		NClassTypePropertyDescriptor formatFactoryClassD = new NClassTypePropertyDescriptor(
 				JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS, Messages.MReport_format_factory_class);
@@ -416,6 +423,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		JasperDesign jrDesign = (JasperDesign) getValue();
 		if (id.equals(JasperDesign.PROPERTY_NAME))
 			return jrDesign.getName();
+		if (id.equals(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION))
+			return jrDesign.getProperty(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
 		if (id.equals(JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS))
 			return jrDesign.getFormatFactoryClass();
 		if (id.equals(JasperDesign.PROPERTY_IMPORTS)) {
@@ -423,17 +432,15 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			String[] imports = jrDesign.getImports();
 			if (imports != null) {
 				int lenght = imports.length;
-				for (int i = 0; i < lenght; i++) {
+				for (int i = 0; i < lenght; i++)
 					res += imports[i] + ";"; //$NON-NLS-1$
-				}
 			}
 			return res;
 		}
 
 		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET)) {
-			if (mDataset == null) {
+			if (mDataset == null)
 				createDataset(jrDesign);
-			}
 			return mDataset;
 		}
 
@@ -493,8 +500,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			String value = jrDesign.getPropertiesMap().getProperty(JR_CREATE_BOOKMARKS);
 			if (value == null)
 				return false;
-			else
-				return Boolean.parseBoolean(value);
+			return Boolean.parseBoolean(value);
 		}
 		if (id.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)) {
 			JRDataset dataset = jrDesign.getMainDataset();
@@ -521,6 +527,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		JasperDesign jrDesign = (JasperDesign) getValue();
 		if (id.equals(JasperDesign.PROPERTY_NAME))
 			jrDesign.setName((String) value);
+		else if (id.equals(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION))
+			jrDesign.setProperty(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION, (String) value);
 		else if (id.equals(JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS)) {
 			if (value instanceof String && ((String) value).trim().isEmpty())
 				value = null;

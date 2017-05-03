@@ -13,6 +13,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 
 /**
  * The location section on the location tab.
@@ -39,6 +40,11 @@ public class ReportSection extends AbstractSection {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_NAME).getControl().setLayoutData(gd);
+
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		createWidget4Property(firstSection, PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION).getControl()
+				.setLayoutData(gd);
 
 		gd = new GridData();
 		gd.horizontalSpan = 2;

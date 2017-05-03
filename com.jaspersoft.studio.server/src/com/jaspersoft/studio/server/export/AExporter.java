@@ -46,6 +46,7 @@ public class AExporter {
 	public static final String PROP_USER = "ireport.jasperserver.user";
 	public static final String PROP_REPORTRESOURCE = "ireport.jasperserver.report.resource";
 	public static final String PROP_REPORTUNIT = "ireport.jasperserver.reportUnit";
+	public static final String COM_JASPERSOFT_STUDIO_REPORT_UNIT_DESCRIPTION = "com.jaspersoft.studio.report.unit.description";
 
 	public static void initMetadata() {
 		List<PropertyMetadata> pm = new ArrayList<PropertyMetadata>();
@@ -103,6 +104,16 @@ public class AExporter {
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
 		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
+		pm.add(spm);
+		
+		spm = new StandardPropertyMetadata();
+		spm.setName(COM_JASPERSOFT_STUDIO_REPORT_UNIT_DESCRIPTION);
+		spm.setLabel("Report Unit Description");
+		spm.setDescription("Report unitnit description.");
+		spm.setValueType(String.class.getName());
+		scopes = new ArrayList<PropertyScope>();
+		scopes.add(PropertyScope.REPORT);
+		spm.setScopes(scopes);
 		pm.add(spm);
 
 		PropertyMetadataRegistry.addMetadata(pm);

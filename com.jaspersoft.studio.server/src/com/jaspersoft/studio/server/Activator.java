@@ -4,8 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server;
 
-import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -15,8 +13,6 @@ import org.osgi.framework.BundleContext;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.property.dataset.fields.table.widget.IWCallback;
 import com.jaspersoft.studio.property.dataset.fields.table.widget.WJRProperty;
-import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
-import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.ic.ICParameterContributor;
 import com.jaspersoft.studio.server.ic.ResourcePropertyDescription;
@@ -24,8 +20,6 @@ import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 /**
  * The activator class controls the plug-in life cycle

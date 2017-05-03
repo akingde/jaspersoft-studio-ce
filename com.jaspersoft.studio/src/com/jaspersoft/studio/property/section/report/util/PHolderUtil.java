@@ -16,7 +16,8 @@ import net.sf.jasperreports.properties.PropertyMetadata;
 import net.sf.jasperreports.properties.StandardPropertyMetadata;
 
 public class PHolderUtil {
-	private static final String COM_JASPERSOFT_STUDIO_UNIT = "com.jaspersoft.studio.unit.";
+	public static final String COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION = "com.jaspersoft.studio.report.description";
+	public static final String COM_JASPERSOFT_STUDIO_UNIT = "com.jaspersoft.studio.unit.";
 
 	public static String getUnit(JRPropertiesHolder pholder, String prop, String def) {
 		return Misc.nvl(pholder.getPropertiesMap().getProperty(COM_JASPERSOFT_STUDIO_UNIT + prop), def);
@@ -187,6 +188,16 @@ public class PHolderUtil {
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
 		spm.setCategory("com.jaspersoft.studio.designer:units");
+		pm.add(spm);
+
+		spm = new StandardPropertyMetadata();
+		spm.setName(COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
+		spm.setLabel("Description");
+		spm.setDescription("Report description.");
+		spm.setValueType(String.class.getName());
+		scopes = new ArrayList<PropertyScope>();
+		scopes.add(PropertyScope.REPORT);
+		spm.setScopes(scopes);
 		pm.add(spm);
 
 		PropertyMetadataRegistry.addMetadata(pm);
