@@ -118,6 +118,11 @@ public class IntegerPropertyDescription extends NumberPropertyDescription<Intege
 	@Override
 	protected Integer convertValue(String v) throws NumberFormatException {
 		if (v == null || v.isEmpty()) return null;
-		return IntegerValidator.getInstance().validate(v, Locale.getDefault());
+		Integer parsedInt =  IntegerValidator.getInstance().validate(v, Locale.getDefault());
+		if (parsedInt == null) {
+			throw new NumberFormatException();
+		} else {
+			return parsedInt;
+		}
 	}
 }

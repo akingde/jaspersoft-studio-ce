@@ -118,6 +118,11 @@ public class LongPropertyDescription extends NumberPropertyDescription<Long> {
 	@Override
 	protected Long convertValue(String v) throws NumberFormatException {
 		if (v == null || v.isEmpty()) return null;
-		return LongValidator.getInstance().validate(v, Locale.getDefault());
+		Long parsedLong =  LongValidator.getInstance().validate(v, Locale.getDefault());
+		if (parsedLong == null) {
+			throw new NumberFormatException();
+		} else {
+			return parsedLong;
+		}
 	}
 }

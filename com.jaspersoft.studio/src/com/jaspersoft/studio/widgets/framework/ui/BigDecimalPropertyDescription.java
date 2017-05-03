@@ -114,6 +114,11 @@ public class BigDecimalPropertyDescription extends NumberPropertyDescription<Big
 	@Override
 	protected BigDecimal convertValue(String v) throws NumberFormatException {
 		if (v == null || v.isEmpty()) return null;
-		return BigDecimalValidator.getInstance().validate(v, Locale.getDefault());
+		BigDecimal parsedBigDecimal = BigDecimalValidator.getInstance().validate(v, Locale.getDefault());
+		if (parsedBigDecimal == null) {
+			throw new NumberFormatException();
+		} else {
+			return parsedBigDecimal;
+		}
 	}
 }
