@@ -147,9 +147,9 @@ public class JrxmlPublishContributor implements IPublishContributor {
 
 	private void setupDescription(ResourceDescriptor runit, ResourceDescriptor rd, JasperDesign jd) {
 		String d = jd.getProperty(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
-		if (!Misc.isNullOrEmpty(d))
+		if (Misc.isNullOrEmpty(rd.getDescription()) && !Misc.isNullOrEmpty(d))
 			rd.setDescription(d);
-		if (runit != null && rd.isMainReport()) {
+		if (runit != null && Misc.isNullOrEmpty(runit.getDescription())) {
 			if (!Misc.isNullOrEmpty(d))
 				runit.setDescription(d);
 			d = jd.getProperty(AExporter.COM_JASPERSOFT_STUDIO_REPORT_UNIT_DESCRIPTION);

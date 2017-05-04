@@ -318,6 +318,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		GridData descGD = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		descGD.heightHint = 50;
 		ruDescription.setLayoutData(descGD);
+		ruDescription.setText(""); //$NON-NLS-1$
 		ruDescription.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -329,7 +330,6 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				setErrorMessage(ValidationUtils.validateDesc(rtext));
 			}
 		});
-		ruDescription.setText(""); //$NON-NLS-1$
 
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -538,6 +538,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			String rUnitNAme = PublishUtil.getRUnitNAme(jDesign, jConfig);
 			ruID.setText(rUnitNAme.replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
 			ruLabel.setText(rUnitNAme);
+			ruDescription.setText(newrunit != null ? Misc.nvl(newrunit.getValue().getDescription()) : "");
 		}
 	}
 

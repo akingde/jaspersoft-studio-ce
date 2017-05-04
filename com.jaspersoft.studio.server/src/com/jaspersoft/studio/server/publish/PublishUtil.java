@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
@@ -58,6 +59,9 @@ public class PublishUtil {
 					ResourceDescriptor rd = new ResourceDescriptor();
 					rd.setName(jrxmln.substring((unit + WSClientHelper._FILES).length()));
 					rd.setLabel(IDStringValidator.safeChar(rd.getName()));
+					String d = jd.getProperty(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
+					if (!Misc.isNullOrEmpty(d))
+						rd.setDescription(d);
 					rd.setUriString(jrxmln);
 					rd.setParentFolder(unit + "_files");
 					rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
@@ -80,6 +84,9 @@ public class PublishUtil {
 		ResourceDescriptor mainr = new ResourceDescriptor();
 		mainr.setName(Messages.JrxmlPublishAction_defaultresourcename);
 		mainr.setLabel(Messages.JrxmlPublishAction_defaultresourcelabel);
+		String d = jd.getProperty(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
+		if (!Misc.isNullOrEmpty(d))
+			mainr.setDescription(d);
 		mainr.setWsType(ResourceDescriptor.TYPE_JRXML);
 		mainr.setIsNew(true);
 		mainr.setMainReport(true);
@@ -95,6 +102,16 @@ public class PublishUtil {
 			return;
 		String name = getRUnitNAme(jd, jConf);
 		initResourceName(name, runit.getValue());
+		if (Misc.isNullOrEmpty(runit.getValue().getDescription())) {
+			String d = jd.getProperty(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
+			if (!Misc.isNullOrEmpty(d))
+				runit.getValue().setDescription(d);
+			if (runit instanceof MReportUnit) {
+				d = jd.getProperty(AExporter.COM_JASPERSOFT_STUDIO_REPORT_UNIT_DESCRIPTION);
+				if (!Misc.isNullOrEmpty(d))
+					runit.getValue().setDescription(d);
+			}
+		}
 	}
 
 	public static String getRUnitNAme(JasperDesign jd, JasperReportsConfiguration jConf) {
