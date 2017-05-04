@@ -39,7 +39,6 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
@@ -216,7 +215,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		nameD.setCategory(Messages.common_report);
 		desc.add(nameD);
 
-		JRExpressionPropertyDescriptor descD = new JRExpressionPropertyDescriptor(
+		JSSTextPropertyDescriptor descD = new JSSTextPropertyDescriptor(
 				PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION, Messages.common_description);
 		nameD.setCategory(Messages.common_report);
 		descD.setDescription(Messages.common_description);
