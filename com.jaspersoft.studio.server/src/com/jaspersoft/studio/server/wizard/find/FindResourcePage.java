@@ -170,8 +170,14 @@ public class FindResourcePage extends WizardPage {
 		tabFolder.setSelection(0);
 
 		if (!Misc.isNullOrEmpty(name)) {
-			txt.setText(name);
-			doSearch();
+			UIUtils.getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					txt.setText(name);
+					// doSearch();
+				}
+			});
 		}
 
 		txt.setFocus();

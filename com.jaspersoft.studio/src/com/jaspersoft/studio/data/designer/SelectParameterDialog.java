@@ -97,7 +97,7 @@ public class SelectParameterDialog extends ATitledDialog {
 		if (dataset != null) {
 			List<String> prms = new ArrayList<String>();
 			for (JRParameter p : dataset.getParameters()) {
-				if (p.getName().equals(pname)){
+				if (p.getName().equals(pname)) {
 					prm = (JRDesignParameter) p;
 					prms.add(p.getName());
 					parameters.put(p.getName(), (JRDesignParameter) p);
@@ -169,6 +169,7 @@ public class SelectParameterDialog extends ATitledDialog {
 					addParameter();
 
 					wdef.setExpression((JRDesignExpression) prm.getDefaultValueExpression());
+					JaspersoftStudioPlugin.getExtensionManager().refreshICUI(prm);
 				}
 			}
 		});

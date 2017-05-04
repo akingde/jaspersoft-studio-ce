@@ -43,6 +43,7 @@ import com.jaspersoft.studio.utils.Misc;
 import net.sf.jasperreports.annotations.properties.PropertyScope;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.properties.PropertyMetadata;
@@ -120,9 +121,9 @@ public class ICParameterContributor implements IParameterICContributor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				JasperDesign jDesign = designer.getjDesign();
-				String servURL = jDesign.getProperty(AExporter.PROP_SERVERURL);
-				String servUser = jDesign.getProperty(AExporter.PROP_USER);
+				JRDesignDataset jd = designer.getjDataset();
+				String servURL = jd.getPropertiesMap().getProperty(AExporter.PROP_SERVERURL);
+				String servUser = jd.getPropertiesMap().getProperty(AExporter.PROP_USER);
 
 				msp = ServerManager.getServerByUrl(servURL, servUser);
 				if (msp == null) {
@@ -131,8 +132,8 @@ public class ICParameterContributor implements IParameterICContributor {
 					if (w.open() == Dialog.OK) {
 						msp = wizard.getValue();
 						try {
-							jDesign.setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
-							jDesign.setProperty(AExporter.PROP_USER,
+							jd.setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
+							jd.setProperty(AExporter.PROP_USER,
 									msp.getValue().getUser() + (msp.getValue().getOrganisation() != null
 											? "|" + msp.getValue().getOrganisation() : "")); //$NON-NLS-1$ //$NON-NLS-2$
 						} catch (MalformedURLException e1) {
@@ -190,6 +191,8 @@ public class ICParameterContributor implements IParameterICContributor {
 	@Override
 	public void refresh(JRDesignParameter prm) {
 		this.prm = prm;
+		tpath.setEnabled(prm != null);
+		bpath.setEnabled(prm != null);
 		String p = null;
 		if (prm != null && prm.getPropertiesMap() != null)
 			p = prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_PATH);
