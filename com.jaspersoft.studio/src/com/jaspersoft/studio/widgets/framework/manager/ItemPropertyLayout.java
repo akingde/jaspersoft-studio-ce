@@ -45,11 +45,6 @@ public class ItemPropertyLayout extends Layout {
 	 */
 	public int horizontalSpacing = 5;
 	
-	/**
-	 * Margin before the start of the first control
-	 */
-	public int leftMargin = 5;
-	
 	public ItemPropertyLayout(WItemProperty wItemProperty, Label titleLabel, LazyExpressionLabel expressionLabel, Control mainControl, Button dialogButton) {
 		this.wItemProperty = wItemProperty;
 		this.mainControl = mainControl;
@@ -66,6 +61,7 @@ public class ItemPropertyLayout extends Layout {
 			boolean isExpressionMode = wItemProperty.isExpressionMode();
 			//Get informations from the layout data
 			ItemPropertyLayoutData data = wItemProperty.getContentLayoutData();
+			int leftMargin = data.leftMargin;
 			Point labelSize = data.labelSize;
 			Point buttonSize = getButtonSize(hHint, data, isExpressionMode);
 			
@@ -188,8 +184,8 @@ public class ItemPropertyLayout extends Layout {
 				heightHint = isExpressionMode ? data.expressionHeightHint : data.widgetHeightHint;
 			}
 			
-			int availableWidth = compositeSize.width - leftMargin;
-			int startEditorX = leftMargin;
+			int availableWidth = compositeSize.width - data.leftMargin;
+			int startEditorX = data.leftMargin;
 			
 			//set the size of the label if present. The label is always centered vertically 
 			//and horizontally is on the left and can never take more then half the available space
