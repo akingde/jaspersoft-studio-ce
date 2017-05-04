@@ -25,7 +25,9 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -103,9 +105,11 @@ public class JrxmlPublishContributor implements IPublishContributor {
 					publishImage(mrunit, monitor, jasper, fileset, file, ele, version);
 				else if (ele instanceof JRDesignSubreport) {
 					publishSubreport(mrunit, monitor, jasper, fileset, file, ele, version);
-				} else if (ele instanceof JRChart){
-					//Currently not used since we decided that the user need to create by its own a working environment
-					//publishChartCustmomizer(mrunit, monitor, jasper, fileset, file, (JRChart)ele, version);
+				} else if (ele instanceof JRChart) {
+					// Currently not used since we decided that the user need to
+					// create by its own a working environment
+					// publishChartCustmomizer(mrunit, monitor, jasper, fileset,
+					// file, (JRChart)ele, version);
 				} else {
 					publishComponent(mrunit, monitor, jasper, fileset, file, ele, version);
 				}
@@ -114,11 +118,10 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			publishBundles(mrunit, monitor, jasper, fileset, file, version);
 			publishTemplates(mrunit, monitor, jasper, fileset, file, version);
 			publishParts(mrunit, monitor, jasper, fileset, file, version);
-			setupDescription(mrunit.getValue(), jasper);
 		}
 		// here extend and give possibility to contribute to plugins
 		extManager.publishJrxml(jrConfig, mres, monitor, jasper, fileset, file, version);
-		setupDescription(mres.getValue(), jasper);
+		setupDescription(mrunit != null ? mrunit.getValue() : null, mres.getValue(), jasper);
 	}
 
 	protected void publishParts(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset,
@@ -129,7 +132,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 				StandardSubreportPartComponent component = (StandardSubreportPartComponent) part.getComponent();
 				MJrxml fres = (MJrxml) impJRXML.publish(jasper, component, mrunit, monitor, fileset, file);
 				publishSubreport(fres, monitor, fileset);
-				setupDescription(fres.getValue(), jasper);
+				setupDescription(mrunit != null ? mrunit.getValue() : null, fres.getValue(), jasper);
 			}
 		}
 	}
@@ -139,13 +142,20 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		MJrxml fres = (MJrxml) impSRP.publish(jasper, ele, mrunit, monitor, fileset, file);
 		publishSubreport(fres, monitor, fileset);
 		if (fres != null)
-			setupDescription(fres.getValue(), jasper);
+			setupDescription(mrunit != null ? mrunit.getValue() : null, fres.getValue(), jasper);
 	}
 
-	private void setupDescription(ResourceDescriptor rd, JasperDesign jd) {
-		String d = jd.getProperty("net.sf.jasperreports.report.description");
+	private void setupDescription(ResourceDescriptor runit, ResourceDescriptor rd, JasperDesign jd) {
+		String d = jd.getProperty(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
 		if (!Misc.isNullOrEmpty(d))
 			rd.setDescription(d);
+		if (runit != null && rd.isMainReport()) {
+			if (!Misc.isNullOrEmpty(d))
+				runit.setDescription(d);
+			d = jd.getProperty(AExporter.COM_JASPERSOFT_STUDIO_REPORT_UNIT_DESCRIPTION);
+			if (!Misc.isNullOrEmpty(d))
+				runit.setDescription(d);
+		}
 	}
 
 	protected void publishSubreport(MJrxml fres, IProgressMonitor monitor, Set<String> fileset) throws Exception {
@@ -218,14 +228,16 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			IFile file, JRDesignElement ele, String version) throws Exception {
 		impImg.publish(jasper, ele, mrunit, monitor, fileset, file);
 	}
-	
+
 	/**
-	 * Publish the jar resources required by the chart customizers of a specific chart
+	 * Publish the jar resources required by the chart customizers of a specific
+	 * chart
 	 */
-	protected void publishChartCustmomizer(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, JRChart chart, String version) throws Exception {
+	protected void publishChartCustmomizer(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper,
+			Set<String> fileset, IFile file, JRChart chart, String version) throws Exception {
 		String customizerClass = chart.getCustomizerClass();
 		impChartCustomizer.publish(jasper, customizerClass, mrunit, monitor, fileset, file, version);
-		for(String subCustomizerClass : impChartCustomizer.getSubCustmizersClass(chart)){
+		for (String subCustomizerClass : impChartCustomizer.getSubCustmizersClass(chart)) {
 			impChartCustomizer.publish(jasper, subCustomizerClass, mrunit, monitor, fileset, file, version);
 		}
 	}

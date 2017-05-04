@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJrxml;
@@ -32,6 +33,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpJRXML {
@@ -113,7 +115,11 @@ public class ImpJRXML {
 				popt.setExpression("\"repo:" + IDStringValidator.safeChar(f.getName()) + "\"");
 			fileset.add(str);
 
-			return addResource(monitor, mrunit, fileset, f, popt);
+			AFileResource res = addResource(monitor, mrunit, fileset, f, popt);
+			String desc = jd.getProperty(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
+			if (!Misc.isNullOrEmpty(desc))
+				res.getValue().setDescription(desc);
+			return res;
 		}
 		return null;
 	}
