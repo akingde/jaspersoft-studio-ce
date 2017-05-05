@@ -20,6 +20,7 @@ import org.eclipse.gef.commands.ForwardUndoCompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
@@ -205,6 +206,45 @@ public class JRPropertySheetEntry extends CustomPropertySheetEntry {
 			getModel().getPropertyChangeSupport().removePropertyChangeListener(listener);
 		super.dispose();
 	}
+	
+	/**
+	 * Create the reset value command for a the element and eventually for its children adding
+	 * them to the {@link JSSCompoundCommand} container
+	 * 
+	 * @param cc a not null {@link JSSCompoundCommand}
+	 * @return true if one of the command can change the value, false otherwise
+	 */
+	protected boolean resetPropertyValue(JSSCompoundCommand cc) {
+		ResetValueCommand restoreCmd;
+		boolean change = false;
+		if (getParent() != null){
+			// Use our parent's values to reset our values.
+			Object[] objects = getParent().getValues();
+			for (int i = 0; i < objects.length; i++) {
+				IPropertySource source = getPropertySource(objects[i]);
+				if (source.isPropertySet(getDescriptor().getId())) {
+					// source.resetPropertyValue(getDescriptor()getId());
+					restoreCmd = new ResetValueCommand();
+					restoreCmd.setTarget(source);
+					restoreCmd.setPropertyId(getDescriptor().getId());
+					cc.add(restoreCmd);
+					cc.setReferenceNodeIfNull(source);
+					change = true;
+				} else if (source instanceof IJSSPropertySource){
+					IJSSPropertySource sourceNode = (IJSSPropertySource)source;
+					if (sourceNode.forcePropertyChildrenReset(getDescriptor().getId())){
+						for(IPropertySheetEntry entry : getChildEntries()){
+							if (entry instanceof JRPropertySheetEntry){
+								JRPropertySheetEntry jrEntry = (JRPropertySheetEntry)entry;
+								change = jrEntry.resetPropertyValue(cc) | change;
+							}
+						}
+					}
+				}
+			}
+		}
+		return change;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -212,28 +252,18 @@ public class JRPropertySheetEntry extends CustomPropertySheetEntry {
 	 * @see org.eclipse.ui.views.properties.PropertySheetEntry#resetPropertyValue()
 	 */
 	public void resetPropertyValue() {
-		JSSCompoundCommand cc = new JSSCompoundCommand(null);
-		ResetValueCommand restoreCmd;
-
-		if (getParent() == null)
-			// root does not have a default value
-			return;
-
-		// Use our parent's values to reset our values.
-		boolean change = false;
 		Object[] objects = getParent().getValues();
-		for (int i = 0; i < objects.length; i++) {
-			IPropertySource source = getPropertySource(objects[i]);
-			if (source.isPropertySet(getDescriptor().getId())) {
-				// source.resetPropertyValue(getDescriptor()getId());
-				restoreCmd = new ResetValueCommand();
-				restoreCmd.setTarget(source);
-				restoreCmd.setPropertyId(getDescriptor().getId());
-				cc.add(restoreCmd);
-				cc.setReferenceNodeIfNull(source);
-				change = true;
+		ANode node = null;
+		if (objects != null){
+			for (Object object : objects){
+				if (object instanceof ANode){
+					node = (ANode)object;
+					break;
+				}
 			}
 		}
+		JSSCompoundCommand cc = new JSSCompoundCommand(node);
+		boolean change = resetPropertyValue(cc);
 		if (change) {
 			getCommandStack().execute(cc);
 			refreshFromRoot();

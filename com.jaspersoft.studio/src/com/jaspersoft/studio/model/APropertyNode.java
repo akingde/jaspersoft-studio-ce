@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -18,6 +17,7 @@ import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.help.HelpPrefixBuilder;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.property.ElementLabelProvider;
+import com.jaspersoft.studio.property.IJSSPropertySource;
 import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -25,7 +25,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2 {
+public abstract class APropertyNode extends ANode implements IJSSPropertySource, IPropertySource2 {
 	
 	/**
 	 * Static default map used to keep the defaults value of every implementation of a property node.
@@ -200,6 +200,13 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		}
 	}
 
+	/**
+	 * By default the children are not resetted
+	 */
+	public boolean forcePropertyChildrenReset(Object id){
+		return false;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

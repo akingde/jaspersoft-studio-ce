@@ -28,6 +28,8 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 
+import com.jaspersoft.studio.properties.view.IResettablePropertySheetEntry;
+
 /**
  * This class is almost the same of the GEF class PropertySheetEntry, but
  * the original class has really a lot of constraint that doesn't allow to
@@ -51,7 +53,7 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
  * changes value.
  * </p>
  */
-public class CustomPropertySheetEntry extends EventManager implements IPropertySheetEntry {
+public class CustomPropertySheetEntry extends EventManager implements IResettablePropertySheetEntry {
 	/**
 	 * The values we are displaying/editing. These objects repesent the value of
 	 * one of the properties of the values of our parent entry. Except for the
@@ -71,13 +73,13 @@ public class CustomPropertySheetEntry extends EventManager implements IPropertyS
 	 */
 	private Object editValue;
 
-	private CustomPropertySheetEntry parent;
+	protected CustomPropertySheetEntry parent;
 
 	private IPropertySourceProvider propertySourceProvider;
 
 	private IPropertyDescriptor descriptor;
 
-	private CellEditor editor;
+	protected CellEditor editor;
 
 	private String errorText;
 
@@ -846,4 +848,38 @@ public class CustomPropertySheetEntry extends EventManager implements IPropertyS
 		}
 		return null;
 	}
+	
+	/**
+	 * Inspect the entry and its children if the entry is of type {@link IJSSPropertySource}
+	 * to find if the reset is available only on this entry or also on its children
+	 */
+	public RESET_TYPE getAvailableReset(){
+		RESET_TYPE result = RESET_TYPE.NO_RESET;
+		if (getParent() != null){
+			// Use our parent's values to reset our values.
+			Object[] objects = getParent().getValues();
+			for (int i = 0; i < objects.length; i++) {
+				IPropertySource source = getPropertySource(objects[i]);
+				if (source.isPropertySet(getDescriptor().getId())) {
+					result = RESET_TYPE.RESET_ELEMENT;
+					break;
+				} else if (source instanceof IJSSPropertySource){
+					IJSSPropertySource sourceNode = (IJSSPropertySource)source;
+					if (sourceNode.forcePropertyChildrenReset(getDescriptor().getId())){
+						for(IPropertySheetEntry entry : getChildEntries()){
+							if (entry instanceof JRPropertySheetEntry){
+								JRPropertySheetEntry jrEntry = (JRPropertySheetEntry)entry;
+								RESET_TYPE partialResult =  jrEntry.getAvailableReset();
+								if (partialResult != RESET_TYPE.NO_RESET){
+									result = RESET_TYPE.RESET_CHILDREN;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
 }

@@ -155,4 +155,15 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 			
 		}
 	}
+	
+	/**
+	 * Since this property aggregate more complex object this will allow to reset
+	 * also the children when the reset action happen on a LINE_BOX
+	 */
+	@Override
+	public boolean forcePropertyChildrenReset(Object id) {
+		if (id.equals(LINE_BOX)) {
+			return true;
+		} else return super.forcePropertyChildrenReset(id);
+	}
 }

@@ -17,8 +17,6 @@ public class PenPropertyDescriptor extends NTextPropertyDescriptor {
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
-		// CellEditor editor = new PenCellEditor(parent);
-		// return editor;
 		return null;
 	}
 

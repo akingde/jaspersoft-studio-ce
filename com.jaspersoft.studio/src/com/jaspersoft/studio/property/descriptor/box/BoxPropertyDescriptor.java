@@ -17,8 +17,7 @@ public class BoxPropertyDescriptor extends NTextPropertyDescriptor {
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
-		CellEditor editor = new BoxCellEditor(parent);
-		return editor;
+		return null;
 	}
 
 	@Override
