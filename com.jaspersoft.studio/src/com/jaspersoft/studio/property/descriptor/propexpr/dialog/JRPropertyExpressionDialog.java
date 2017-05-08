@@ -30,6 +30,7 @@ import com.jaspersoft.studio.utils.Misc;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.type.PropertyEvaluationTimeEnum;
+import net.sf.jasperreports.properties.PropertyMetadata;
 
 /**
  * Dialog that extend the dialog to define a property as key and value. This extension allow to use an expression as
@@ -84,6 +85,14 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 				if (propertiesSuggestions != null)
 					propertiesSuggestions.showOnlyElement(newtext);
 				value.setName(newtext);
+
+				if (!value.isExpression())
+					for (PropertyMetadata ed : HintsPropertiesList.getPropertiesMetadata(value.getJrElement(),
+							value.geteContext()))
+						if (ed.getName().equals(newtext) && ed.getDefaultValue() != null) {
+							tvalue.setText(ed.getDefaultValue());
+							break;
+						}
 			}
 		};
 	}
@@ -100,7 +109,7 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 	protected void createAdditionalControls(Composite parent) {
 		if (showExpression) {
 			buseexpr = new Button(parent, SWT.CHECK);
-			buseexpr.setText("Use An Expression");
+			buseexpr.setText(Messages.JRPropertyExpressionDialog_0);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			buseexpr.setLayoutData(gd);
@@ -155,7 +164,7 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 
 		if (value instanceof DatasetPropertyExpressionDTO) {
 			Label label = new Label(composite, SWT.NONE);
-			label.setText("Evaluation Time");
+			label.setText(Messages.JRPropertyExpressionDialog_1);
 
 			cevalTime = new Combo(composite, SWT.READ_ONLY);
 			cevalTime.setItems(new String[] { PropertyEvaluationTimeEnum.EARLY.getName(),
@@ -218,7 +227,7 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 		evalue.setExpression(new JRDesignExpression(text));
 		if (value instanceof DatasetPropertyExpressionDTO) {
 			PropertyEvaluationTimeEnum etime = ((DatasetPropertyExpressionDTO) value).getEvalTime();
-			cevalTime.setText(etime != null ? etime.getName() : "");
+			cevalTime.setText(etime != null ? etime.getName() : ""); //$NON-NLS-1$
 		}
 	}
 
@@ -248,6 +257,6 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog {
 		} else if (value instanceof JRExpression) {
 			return ((JRExpression) value).getText();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 }

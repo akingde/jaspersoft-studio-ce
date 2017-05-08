@@ -365,7 +365,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			boolean custom = !eds.contains(props.get(pm.getName()));
 			if (custom && !value.hasProperty(pm.getName()))
 				continue;
-			col.setLabelEditable(custom);//showExisting && custom);
+			col.setLabelEditable(custom);// showExisting && custom);
 			UIUtils.getDisplay().syncExec(new Runnable() {
 
 				@Override
@@ -496,9 +496,10 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				while (getName(input, name, i) == null)
 					i++;
 				name += "_" + i; //$NON-NLS-1$
+				String defValue = "NEW_VALUE";
 				PropertyExpressionDTO v = value instanceof DatasetPropertyExpressionsDTO
-						? new DatasetPropertyExpressionDTO(false, name, "NEW_VALUE", null)
-						: new PropertyExpressionDTO(false, name, "NEW_VALUE");
+						? new DatasetPropertyExpressionDTO(false, name, defValue, null)
+						: new PropertyExpressionDTO(false, name, defValue);
 				v.seteContext(value.geteContext());
 				v.setJrElement(value.getJrElement());
 				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(propCmp.getShell());
