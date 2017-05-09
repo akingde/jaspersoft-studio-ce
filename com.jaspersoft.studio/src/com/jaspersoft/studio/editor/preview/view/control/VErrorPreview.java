@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
@@ -425,6 +424,13 @@ public class VErrorPreview extends APreview {
 		gd.horizontalSpan = 2;
 		snapshot.setLayoutData(gd);
 
+		new Label(statComposite, SWT.NONE).setText("Data Snapshot File");
+
+		snapshotFile = new Label(statComposite, SWT.BOLD);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		snapshotFile.setLayoutData(gd);
+
 		setStats(null);
 	}
 
@@ -443,6 +449,7 @@ public class VErrorPreview extends APreview {
 			fillSize.setText(Misc.nvl(stats.getValue(ReportController.ST_REPORTSIZE), "0")); //$NON-NLS-1$
 			runTime.setText(Misc.nvl(stats.getValue(ReportController.ST_RUNTIMESTAMP), ""));
 			snapshot.setText(Misc.nvl(stats.getValue(ReportController.ST_SNAPSHOT), "No"));
+			snapshotFile.setText(Misc.nvl(stats.getValue(ReportController.ST_SNAPSHOT_FILE), ""));
 			statAction.run();
 		} else {
 			// compilSubTime.setText("-"); //$NON-NLS-1$
@@ -455,6 +462,7 @@ public class VErrorPreview extends APreview {
 			fillSize.setText("-"); //$NON-NLS-1$
 			runTime.setText("");
 			snapshot.setText("");
+			snapshotFile.setText("");
 		}
 		statComposite.layout();
 	}
@@ -564,6 +572,7 @@ public class VErrorPreview extends APreview {
 	private List<Object> auxil = new ArrayList<Object>();
 	private Label runTime;
 	private Label snapshot;
+	private Label snapshotFile;
 
 	private void addError2List(Object err, String message, Object aux) {
 		errors.add(err);

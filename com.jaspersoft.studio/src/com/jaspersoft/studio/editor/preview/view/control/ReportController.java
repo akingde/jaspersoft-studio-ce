@@ -102,6 +102,7 @@ public class ReportController {
 
 	public static final String ST_RUNTIMESTAMP = "RUNTIMESTAMP"; //$NON-NLS-1$
 	public static final String ST_SNAPSHOT = "SNAPSHOT"; //$NON-NLS-1$
+	public static final String ST_SNAPSHOT_FILE = "SNAPSHOT_FILE"; //$NON-NLS-1$
 
 	public static final String FORM_SORTING = "report_configuration_sorting"; //$NON-NLS-1$
 	public static final String FORM_BOOKMARKS = "report_configuration_bookmarks"; //$NON-NLS-1$
@@ -227,7 +228,7 @@ public class ReportController {
 
 	public LinkedHashMap<String, APreview> createControls(Composite composite) {
 		viewmap = new LinkedHashMap<String, APreview>();
-		//pass the parameter tabs the shared property change notifier
+		// pass the parameter tabs the shared property change notifier
 		PropertyChangeNotifier sharedNotifier = new PropertyChangeNotifier();
 		viewmap.put(FORM_PARAMETERS, new VParameters(composite, jrContext, sharedNotifier));
 		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, jrContext, sharedNotifier));
@@ -685,7 +686,7 @@ public class ReportController {
 					creationTimestamp = ((JSSColumnDataCacheHandler) dch).getCreationTimestamp();
 			}
 			if (rc.containsParameter(DataSnapshotManager.SAVE_SNAPSHOT))
-				msg += "   Data Snapshot Path: " + rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT);
+				stats.setValue(ST_SNAPSHOT_FILE, rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT));
 			stats.setValue(ST_SNAPSHOT, msg);
 		}
 		stats.setValue(ST_RUNTIMESTAMP, creationTimestamp.toString());
