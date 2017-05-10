@@ -45,10 +45,12 @@ import com.jaspersoft.studio.widgets.framework.ui.FontFamilyComboPropertyDescrip
 import com.jaspersoft.studio.widgets.framework.ui.FontStylePropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.LocaleComboPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.LongPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.MeasureUnitPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.SelectableComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.TimezoneComboPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TransparentColorPropertyDescription;
 
 /**
@@ -130,6 +132,8 @@ public class WidgetFactory {
 			hardcodedWidgets.put("measureunit", new MeasureUnitPropertyDescription());
 			hardcodedWidgets.put("fixedmeasureunit", new FixedMeasurePropertyDescription());
 			hardcodedWidgets.put("fixednumbermeasureunit", new FixedNumberMesurePropertyDescription());
+			hardcodedWidgets.put("timezone_combo", new TimezoneComboPropertyDescription());
+			hardcodedWidgets.put("locale_combo", new LocaleComboPropertyDescription());
 		}
 		return hardcodedWidgets;
 	}
