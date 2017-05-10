@@ -6,7 +6,9 @@ package com.jaspersoft.studio.property.dataset.fields.table.widget;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
@@ -39,7 +41,9 @@ import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.JRDataAdapterPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.JSSDataAdapterPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.LocaleComboPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.TimezoneComboPropertyDescription;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.eclipse.util.Misc;
@@ -106,6 +110,10 @@ public class WJRProperty extends AWidget {
 			else if (c.getPropertyType().equals(Color.class.getName()))
 				ipd = new ColorPropertyDescription<Color>(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Color.decode(c.getDefaultValue()) : null);
+			else if (c.getPropertyType().equals(TimeZone.class.getName()))
+				ipd = new TimezoneComboPropertyDescription(pname, c.getLabel(), c.getDescription(), false, c.getDefaultValue());
+			else if (c.getPropertyType().equals(Locale.class.getName()))
+				ipd = new LocaleComboPropertyDescription(pname, c.getLabel(), c.getDescription(), false, c.getDefaultValue());
 			else if (c.getPropertyType().equals("jssDA"))
 				ipd = new JSSDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false, getjConfig());
 			else {

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.expression;
 
@@ -8,6 +7,8 @@ import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -37,7 +38,9 @@ import com.jaspersoft.studio.widgets.framework.ui.IntegerPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.JRDataAdapterPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.JSSDataAdapterPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.LocaleComboPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.TimezoneComboPropertyDescription;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.engine.DatasetPropertyExpression;
@@ -60,45 +63,48 @@ import net.sf.jasperreports.engine.type.PropertyEvaluationTimeEnum;
 import net.sf.jasperreports.properties.PropertyMetadata;
 
 /**
- * {@link ASPropertyWidget} used to provide a widget to edit a textual property or 
- * an expression property of an element. The type of the widget depend from
- * the property expected value, so string properties will have a text widget,
- * numeric properties a numeric widget and so on. The widget come from the 
- * widget framework
+ * {@link ASPropertyWidget} used to provide a widget to edit a textual property or an expression property of an element.
+ * The type of the widget depend from the property expected value, so string properties will have a text widget, numeric
+ * properties a numeric widget and so on. The widget come from the widget framework
  * 
  * @author Orlandin Marco
  */
 public class ASPropertyExpressionWidget extends ASPropertyWidget<ExpressionPropertyDescriptor> {
-	
+
 	/**
 	 * The name of the edited property
 	 */
 	private String propertyName;
-	
+
 	/**
 	 * The dto of the edited property
 	 */
 	private PropertyExpressionDTO dto;
-	
+
 	/**
 	 * The widget wrapper used to edit the property
 	 */
 	private WItemProperty wip;
-	
+
 	/**
 	 * The JR element to which the property belong
 	 */
 	private Object element;
 
 	/**
-	 * Create the widget 
+	 * Create the widget
 	 * 
-	 * @param parent parent composite of the widget
-	 * @param section section where the widget is placed
-	 * @param pDescriptor the descriptor of this widget
-	 * @param propertyName the name of the handled property
+	 * @param parent
+	 *          parent composite of the widget
+	 * @param section
+	 *          section where the widget is placed
+	 * @param pDescriptor
+	 *          the descriptor of this widget
+	 * @param propertyName
+	 *          the name of the handled property
 	 */
-	public ASPropertyExpressionWidget(Composite parent, AbstractSection section, ExpressionPropertyDescriptor pDescriptor, String propertyName) {
+	public ASPropertyExpressionWidget(Composite parent, AbstractSection section, ExpressionPropertyDescriptor pDescriptor,
+			String propertyName) {
 		super(parent, section, pDescriptor);
 		this.propertyName = propertyName;
 		createComponent(parent);
@@ -108,22 +114,23 @@ public class ASPropertyExpressionWidget extends ASPropertyWidget<ExpressionPrope
 
 	@Override
 	protected void createComponent(Composite parent) {
-		//need to check this to avoid this method is called by the super constructor before the name is set
+		// need to check this to avoid this method is called by the super constructor before the name is set
 		if (propertyName != null) {
-			//get the metadata of the property
+			// get the metadata of the property
 			element = section.getElement().getValue();
-			List<PropertyMetadata> propertiesInfo = HintsPropertiesList.getPropertiesMetadata(element, section.getElement().getExpressionContext());
+			List<PropertyMetadata> propertiesInfo = HintsPropertiesList.getPropertiesMetadata(element,
+					section.getElement().getExpressionContext());
 			PropertyMetadata propertyInfo = null;
-			for(PropertyMetadata property : propertiesInfo){
-				if (propertyName.equalsIgnoreCase(property.getName())){
+			for (PropertyMetadata property : propertiesInfo) {
+				if (propertyName.equalsIgnoreCase(property.getName())) {
 					propertyInfo = property;
 					break;
 				}
 			}
-			//get the widget of the property
+			// get the widget of the property
 			ItemPropertyDescription<?> ipd = getWidget(propertyInfo);
 			wip = new WItemProperty(parent, SWT.NONE, ipd, new IPropertyEditor() {
-	
+
 				@Override
 				public String getPropertyValue(String propertyName) {
 					PropertyExpressionDTO dto = getValue();
@@ -131,7 +138,7 @@ public class ASPropertyExpressionWidget extends ASPropertyWidget<ExpressionPrope
 						return getValue().getValue();
 					return null;
 				}
-	
+
 				@Override
 				public JRExpression getPropertyValueExpression(String propertyName) {
 					PropertyExpressionDTO dto = getValue();
@@ -139,7 +146,7 @@ public class ASPropertyExpressionWidget extends ASPropertyWidget<ExpressionPrope
 						return getValue().getValueAsExpression();
 					return null;
 				}
-	
+
 				@Override
 				public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
 					PropertyExpressionDTO dto = getValue();
@@ -153,7 +160,7 @@ public class ASPropertyExpressionWidget extends ASPropertyWidget<ExpressionPrope
 					CommandStack cs = section.getEditDomain().getCommandStack();
 					cs.execute(command);
 				}
-	
+
 				@Override
 				public void removeProperty(String propertyName) {
 					removePropertyExpression(element, propertyName);
@@ -174,14 +181,15 @@ public class ASPropertyExpressionWidget extends ASPropertyWidget<ExpressionPrope
 		dto = null;
 		element = pnode.getValue();
 		getValue();
-		if (wip != null) wip.updateWidget();
+		if (wip != null)
+			wip.updateWidget();
 	}
 
 	@Override
 	public Control getControl() {
 		return wip;
 	}
-	
+
 	@Override
 	public Control getControlToBorder() {
 		return wip != null ? wip.getControl() : null;
@@ -190,39 +198,55 @@ public class ASPropertyExpressionWidget extends ASPropertyWidget<ExpressionPrope
 	/**
 	 * Using the metadata description of the property return the appropriate widget to handle its type
 	 * 
-	 * @param propertyMetadata the metadata of the property, if null it will used a text widget that is the most basic 
-	 * widget
+	 * @param propertyMetadata
+	 *          the metadata of the property, if null it will used a text widget that is the most basic widget
 	 * @return a not null {@link ItemPropertyDescription} used to handle the property
 	 */
 	protected ItemPropertyDescription<?> getWidget(PropertyMetadata propertyMetadata) {
 		ItemPropertyDescription<?> ipd = null;
 		String propertyType = propertyMetadata != null ? propertyMetadata.getValueType() : String.class.getName();
 		if (propertyType.equals(Boolean.class.getName()))
-			ipd = new ComboItemPropertyDescription<Boolean>(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false,
-					Boolean.parseBoolean(propertyMetadata.getDefaultValue()), new String[] { "", "true", "false" });
+			ipd = new ComboItemPropertyDescription<Boolean>(propertyName, propertyMetadata.getLabel(),
+					propertyMetadata.getDescription(), false, Boolean.parseBoolean(propertyMetadata.getDefaultValue()),
+					new String[] { "", "true", "false" });
 		else if (propertyName.equals("net.sf.jasperreports.data.adapter")
 				|| propertyType.equals(DataAdapter.class.getName()))
-			ipd = new JRDataAdapterPropertyDescription(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false, section.getElement().getJasperConfiguration());
+			ipd = new JRDataAdapterPropertyDescription(propertyName, propertyMetadata.getLabel(),
+					propertyMetadata.getDescription(), false, section.getElement().getJasperConfiguration());
 		else if (propertyType.equals(String.class.getName()))
-			ipd = new TextPropertyDescription<String>(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false, propertyMetadata.getDefaultValue());
+			ipd = new TextPropertyDescription<String>(propertyName, propertyMetadata.getLabel(),
+					propertyMetadata.getDescription(), false, propertyMetadata.getDefaultValue());
 		else if (propertyType.equals(Class.class.getName()))
-			ipd = new ClassItemPropertyDescription(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false, propertyMetadata.getDefaultValue(),
-					new String[] {});
+			ipd = new ClassItemPropertyDescription(propertyName, propertyMetadata.getLabel(),
+					propertyMetadata.getDescription(), false, propertyMetadata.getDefaultValue(), new String[] {});
 		else if (propertyType.equals(Integer.class.getName()) || propertyType.equals(Long.class.getName()))
-			ipd = new IntegerPropertyDescription(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false,
-					propertyMetadata.getDefaultValue() != null ? Integer.parseInt(propertyMetadata.getDefaultValue()) : null, null, null);
-		else if (propertyType.equals(BigDecimal.class.getName())
-				|| propertyType.equals(Double.class.getName()))
-			ipd = new BigDecimalPropertyDescription(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false,
-					propertyMetadata.getDefaultValue() != null ? new BigDecimal(propertyMetadata.getDefaultValue()) : null, null, null);
+			ipd = new IntegerPropertyDescription(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(),
+					false,
+					propertyMetadata.getDefaultValue() != null ? Integer.parseInt(propertyMetadata.getDefaultValue()) : null,
+					null, null);
+		else if (propertyType.equals(BigDecimal.class.getName()) || propertyType.equals(Double.class.getName()))
+			ipd = new BigDecimalPropertyDescription(propertyName, propertyMetadata.getLabel(),
+					propertyMetadata.getDescription(), false,
+					propertyMetadata.getDefaultValue() != null ? new BigDecimal(propertyMetadata.getDefaultValue()) : null, null,
+					null);
 		else if (propertyType.equals(Float.class.getName()))
-			ipd = new FloatPropertyDescription(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false,
-					propertyMetadata.getDefaultValue() != null ? Float.parseFloat(propertyMetadata.getDefaultValue()) : null, null, null);
+			ipd = new FloatPropertyDescription(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(),
+					false,
+					propertyMetadata.getDefaultValue() != null ? Float.parseFloat(propertyMetadata.getDefaultValue()) : null,
+					null, null);
 		else if (propertyType.equals(Color.class.getName()))
-			ipd = new ColorPropertyDescription<Color>(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false,
+			ipd = new ColorPropertyDescription<Color>(propertyName, propertyMetadata.getLabel(),
+					propertyMetadata.getDescription(), false,
 					propertyMetadata.getDefaultValue() != null ? Color.decode(propertyMetadata.getDefaultValue()) : null);
+		else if (propertyType.equals(TimeZone.class.getName()))
+			ipd = new TimezoneComboPropertyDescription(propertyName, propertyMetadata.getLabel(),
+					propertyMetadata.getDescription(), false, propertyMetadata.getDefaultValue());
+		else if (propertyType.equals(Locale.class.getName()))
+			ipd = new LocaleComboPropertyDescription(propertyName, propertyMetadata.getLabel(),
+					propertyMetadata.getDescription(), false, propertyMetadata.getDefaultValue());
 		else if (propertyType.equals("jssDA"))
-			ipd = new JSSDataAdapterPropertyDescription(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false, section.getElement().getJasperConfiguration());
+			ipd = new JSSDataAdapterPropertyDescription(propertyName, propertyMetadata.getLabel(),
+					propertyMetadata.getDescription(), false, section.getElement().getJasperConfiguration());
 		else {
 			try {
 				Class<?> clazz = Class.forName(propertyType);
@@ -231,14 +255,14 @@ public class ASPropertyExpressionWidget extends ASPropertyWidget<ExpressionPrope
 					String[] items = new String[obj.length];
 					for (int i = 0; i < obj.length; i++)
 						items[i] = obj[i].toString();
-					ipd = new ComboItemPropertyDescription<String>(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false,
-							propertyMetadata.getDefaultValue(), items);
+					ipd = new ComboItemPropertyDescription<String>(propertyName, propertyMetadata.getLabel(),
+							propertyMetadata.getDescription(), false, propertyMetadata.getDefaultValue(), items);
 				}
 			} catch (ClassNotFoundException e) {
 			}
 			if (ipd == null)
-				ipd = new TextPropertyDescription<String>(propertyName, propertyMetadata.getLabel(), propertyMetadata.getDescription(), false,
-						propertyMetadata.getDefaultValue());
+				ipd = new TextPropertyDescription<String>(propertyName, propertyMetadata.getLabel(),
+						propertyMetadata.getDescription(), false, propertyMetadata.getDefaultValue());
 		}
 		return ipd;
 	}
@@ -411,56 +435,59 @@ public class ASPropertyExpressionWidget extends ASPropertyWidget<ExpressionPrope
 			((JRDesignDataset) element).addPropertyExpression(pe);
 		}
 	}
-	
+
 	/**
-	 * Command used to change the value of the property. Using a command to do this
-	 * allow the undo of the set of the value 
+	 * Command used to change the value of the property. Using a command to do this allow the undo of the set of the value
 	 * 
 	 * @author Orlandin Marco
 	 *
 	 */
 	private class SetDtoCommand extends Command {
-		
+
 		/**
 		 * The DTO value to set on the property
 		 */
 		private Object newValue;
-	
+
 		/**
 		 * The DTO value of the property before the set, used for the undo
 		 */
 		private PropertyExpressionDTO oldValue;
-		
+
 		/**
 		 * The value of the DTO used to set the property
 		 * 
-		 * @param newValue a not null DTO value
+		 * @param newValue
+		 *          a not null DTO value
 		 */
 		public SetDtoCommand(Object newValue) {
-			this.newValue = newValue; 
+			this.newValue = newValue;
 		}
-		
+
 		@Override
 		public void execute() {
-			//store the old value
+			// store the old value
 			oldValue = getValue();
 			setValue(newValue);
 			// really important to trigger the property with source the JR object and not the node
 			// using the node could cause problem with the refresh of the advanced properties view
-			section.getElement().propertyChange(new PropertyChangeEvent(section.getElement().getValue(), MGraphicElement.PROPERTY_MAP, newValue, oldValue));
+			section.getElement().propertyChange(
+					new PropertyChangeEvent(section.getElement().getValue(), MGraphicElement.PROPERTY_MAP, newValue, oldValue));
 		}
-		
+
 		@Override
 		public void undo() {
 			setValue(oldValue);
-			section.getElement().propertyChange(new PropertyChangeEvent(section.getElement().getValue(), MGraphicElement.PROPERTY_MAP, newValue, oldValue));
+			section.getElement().propertyChange(
+					new PropertyChangeEvent(section.getElement().getValue(), MGraphicElement.PROPERTY_MAP, newValue, oldValue));
 		}
-		
+
 		@Override
 		public void redo() {
 			setValue(newValue);
-			section.getElement().propertyChange(new PropertyChangeEvent(section.getElement().getValue(), MGraphicElement.PROPERTY_MAP, newValue, oldValue));
-		}		
+			section.getElement().propertyChange(
+					new PropertyChangeEvent(section.getElement().getValue(), MGraphicElement.PROPERTY_MAP, newValue, oldValue));
+		}
 	}
 
 }
