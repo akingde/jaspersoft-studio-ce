@@ -152,15 +152,13 @@ public class ParameterPropertyWidget implements IWidget {
 
 		new MenuItem(menu, SWT.SEPARATOR);
 
-		for (JRParameter p : dataset.getParameters()) {
-			if (!p.isSystemDefined()) {
-				String cn = JRClassLoader.getClassRealName(c.getPropertyType());
-				try {
-					if (!p.getValueClass().isAssignableFrom(JRClassLoader.loadClassForName(cn)))
-						continue;
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
+		String cn = JRClassLoader.getClassRealName(c.getPropertyType());
+		try {
+			Class<?> cl = JRClassLoader.loadClassForName(cn);
+			for (JRParameter p : dataset.getParameters()) {
+				if (p.isSystemDefined()
+						|| !(p.getValueClass().isAssignableFrom(cl) || p.getValueClass().isAssignableFrom(String.class)))
+					continue;
 				final MenuItem mi = new MenuItem(menu, SWT.PUSH);
 				mi.setText(p.getName());
 				mi.setImage(JaspersoftStudioPlugin.getInstance().getImage(MParameter.getIconDescriptor().getIcon16()));
@@ -189,7 +187,12 @@ public class ParameterPropertyWidget implements IWidget {
 					}
 				});
 			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
+
+		if (menu.getItemCount() == 2)
+			mid.dispose();
 
 		return menu;
 	}

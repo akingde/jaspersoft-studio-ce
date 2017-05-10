@@ -410,10 +410,23 @@ public class ParametersTable extends AbstractModifyTable {
 				Object obj = sel.getFirstElement();
 				if (obj != null)
 					indx = prms.indexOf(obj);
-				if (indx >= 0)
+				if (indx >= 0) {
 					prms.add(indx, p);
-				else
+					try {
+						dataset.addParameter(indx, p);
+					} catch (JRException e1) {
+						e1.printStackTrace();
+					}
+				} else {
 					prms.add(p);
+					try {
+						dataset.addParameter(p);
+					} catch (JRException e1) {
+						e1.printStackTrace();
+					}
+				}
+
+				fireModifyListeners();
 
 				treeviewer.refresh();
 				treeviewer.expandToLevel(p, 2);
