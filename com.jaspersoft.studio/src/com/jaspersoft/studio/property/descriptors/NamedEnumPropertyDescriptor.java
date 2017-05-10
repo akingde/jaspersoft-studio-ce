@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptors;
 
@@ -27,8 +26,8 @@ import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.engine.type.NamedEnum;
 
-public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends ComboBoxPropertyDescriptor implements
-		IPropertyDescriptorWidget, IHelp, IEnumDescriptors {
+public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends ComboBoxPropertyDescriptor
+		implements IPropertyDescriptorWidget, IHelp, IEnumDescriptors {
 	private NullEnum type;
 	private T[] jrEnums;
 	private T nenum;
@@ -36,8 +35,8 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 	private IHelpRefBuilder refBuilder;
 
 	public NamedEnumPropertyDescriptor(Object id, String displayName, T nenum, NullEnum type) {
-		super(Misc.nvl(id, ""), Misc.nvl(displayName), getEnumItems((NamedEnum[]) nenum.getDeclaringClass()
-				.getEnumConstants(), type));
+		super(Misc.nvl(id, ""), Misc.nvl(displayName),
+				getEnumItems((NamedEnum[]) nenum.getDeclaringClass().getEnumConstants(), type));
 		this.nenum = nenum;
 		this.type = type;
 		this.allItems = getEnumItems((NamedEnum[]) nenum.getDeclaringClass().getEnumConstants(), type);
@@ -49,8 +48,20 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 		List<String> res = new ArrayList<String>();
 		if (type != NullEnum.NOTNULL)
 			res.add(type.getName());
-		for (int i = 0; i < items.length; i++)
-			res.add(MessagesByKeys.getString(items[i].getName()));
+		for (int i = 0; i < items.length; i++) {
+			String eval = MessagesByKeys.getString(items[i].getName());
+
+			try {
+				Deprecated dep = items[i].getClass().getField(((Enum<?>) items[i]).name()).getAnnotation(Deprecated.class);
+				if (dep != null)
+					eval += " (deprecated)";
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				e.printStackTrace();
+			}
+			res.add(eval);
+		}
 		return res.toArray(new String[res.size()]);
 	}
 
@@ -75,7 +86,7 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 			ind++;
 		return ind;
 	}
-	
+
 	public T getEnumValue(Object value) {
 		if (value == null)
 			return null;
@@ -99,12 +110,12 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String[] getEnumItems() {
 		return allItems;
 	}
-	
+
 	public T[] getEnumElements() {
 		return jrEnums;
 	}
@@ -128,7 +139,7 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 			return refBuilder.getHelpReference();
 		return null;
 	}
-	
+
 	@Override
 	public ILabelProvider getLabelProvider() {
 		if (isLabelProviderSet()) {
@@ -136,98 +147,105 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 		}
 		return new NamedEnumLabelProvider(allItems);
 	}
-	
-	//STATIC METHOD TO GET THE ENUM VALUE FROM AND TO INDEX WITHOUT CREATE OBJECTS
-	
+
+	// STATIC METHOD TO GET THE ENUM VALUE FROM AND TO INDEX WITHOUT CREATE OBJECTS
+
 	/**
-	 * Map where the values of a possible enum are keep cached 
+	 * Map where the values of a possible enum are keep cached
 	 */
 	private static HashMap<Class<?>, Object[]> enumValuesMap = new HashMap<Class<?>, Object[]>();
-	
+
 	/**
-	 * Get the values of an enum class. The values are keep cached so any following
-	 * request will look in the cache instead to recalculate the values
+	 * Get the values of an enum class. The values are keep cached so any following request will look in the cache instead
+	 * to recalculate the values
 	 * 
-	 * @param enumClass the class of the enum
+	 * @param enumClass
+	 *          the class of the enum
 	 * @return the array of values of the enum
 	 */
 	@SuppressWarnings("unchecked")
-	private static <T extends Enum<?> & NamedEnum> T[] getEnumValues(Class<T> enumClass){
+	private static <T extends Enum<?> & NamedEnum> T[] getEnumValues(Class<T> enumClass) {
 		Object[] cachedEnum = enumValuesMap.get(enumClass);
-		if (cachedEnum == null){
+		if (cachedEnum == null) {
 			cachedEnum = enumClass.getEnumConstants();
 			enumValuesMap.put(enumClass, cachedEnum);
 		}
-		return (T[])cachedEnum;
+		return (T[]) cachedEnum;
 	}
-	
+
 	public static <T extends Enum<?> & NamedEnum> Integer getIntValue(NullEnum type, T jrvalue) {
-		return getIntValue(jrvalue, type, jrvalue);	
+		return getIntValue(jrvalue, type, jrvalue);
 	}
-	
+
 	/**
-	 * Static version of the method getIntValue, can be used in the case the PropertyDescriptor
-	 * are created statically and no reference to them is keep locally
+	 * Static version of the method getIntValue, can be used in the case the PropertyDescriptor are created statically and
+	 * no reference to them is keep locally
 	 * 
-	 * @param nenum a value of the enum handled, its class will be used to get the other value
-	 * @param type Specify the null value
-	 * @param jrvalue The value stored in the jr element, will be converted to the enum index
+	 * @param nenum
+	 *          a value of the enum handled, its class will be used to get the other value
+	 * @param type
+	 *          Specify the null value
+	 * @param jrvalue
+	 *          The value stored in the jr element, will be converted to the enum index
 	 * @return the index of the jrvalue in the enum values list
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends Enum<?> & NamedEnum> Integer getIntValue(T nenum, NullEnum type, T jrvalue) {
-		if (jrvalue == null){
+		if (jrvalue == null) {
 			return 0;
 		}
 		int ind = 0;
-		T[] jrEnums = getEnumValues((Class<T>)nenum.getDeclaringClass());
-		for (; ind < jrEnums.length; ind++){
-			if (jrEnums[ind] == jrvalue){
+		T[] jrEnums = getEnumValues((Class<T>) nenum.getDeclaringClass());
+		for (; ind < jrEnums.length; ind++) {
+			if (jrEnums[ind] == jrvalue) {
 				break;
 			}
 		}
-		if (type != NullEnum.NOTNULL){
+		if (type != NullEnum.NOTNULL) {
 			ind++;
 		}
 		return ind;
 	}
 
 	/**
-	 * Static version of the method getEnumValue, can be used in the case the PropertyDescriptor
-	 * are created statically and no reference to them is keep locally
+	 * Static version of the method getEnumValue, can be used in the case the PropertyDescriptor are created statically
+	 * and no reference to them is keep locally
 	 * 
-	 * @param nenum a value of the enum handled, its class will be used to get the other value
-	 * @param type Specify the null value
-	 * @param value The value that need to be converted to an enum
-	 * @return The enum value of the passed value. Against value is tried the conversion directly to 
-	 * the enum value or to string or to integer to try to find the correct enum value
+	 * @param nenum
+	 *          a value of the enum handled, its class will be used to get the other value
+	 * @param type
+	 *          Specify the null value
+	 * @param value
+	 *          The value that need to be converted to an enum
+	 * @return The enum value of the passed value. Against value is tried the conversion directly to the enum value or to
+	 *         string or to integer to try to find the correct enum value
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends Enum<?> & NamedEnum> T getEnumValue(T nenum, NullEnum type, Object value) {
-		if (value == null){
+		if (value == null) {
 			return null;
 		}
-		if (value.getClass().isAssignableFrom(nenum.getClass())){
+		if (value.getClass().isAssignableFrom(nenum.getClass())) {
 			return (T) value;
 		}
-		T[] jrEnums = getEnumValues((Class<T>)nenum.getDeclaringClass());
+		T[] jrEnums = getEnumValues((Class<T>) nenum.getDeclaringClass());
 		if (value instanceof String) {
 			String v = (String) value;
-			if (type != NullEnum.NOTNULL && Misc.isNullOrEmpty(v)){
+			if (type != NullEnum.NOTNULL && Misc.isNullOrEmpty(v)) {
 				return null;
 			}
-			for (T en : jrEnums){
-				if (en.getName().equals(v)){
+			for (T en : jrEnums) {
+				if (en.getName().equals(v)) {
 					return en;
 				}
 			}
 		}
 		if (value instanceof Integer) {
 			int ind = (Integer) value;
-			if (type != NullEnum.NOTNULL && ind == 0){
+			if (type != NullEnum.NOTNULL && ind == 0) {
 				return null;
 			}
-			if (type != NullEnum.NOTNULL){
+			if (type != NullEnum.NOTNULL) {
 				ind--;
 			}
 			return jrEnums[ind];

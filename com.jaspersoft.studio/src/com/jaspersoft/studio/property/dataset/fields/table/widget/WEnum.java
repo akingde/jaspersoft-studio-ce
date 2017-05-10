@@ -35,8 +35,13 @@ public class WEnum extends AWControl {
 		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Object[] obj = clazz.getEnumConstants();
-		for (Object item : obj)
-			cmb.add(item.toString());
+		for (Object item : obj) {
+			String eval = item.toString();
+			Deprecated dep = obj.getClass().getAnnotation(Deprecated.class);
+			if (dep != null)
+				eval += " (deprecated)";
+			cmb.add(eval);
+		}
 
 		cmb.addModifyListener(new ModifyListener() {
 
@@ -44,7 +49,10 @@ public class WEnum extends AWControl {
 			public void modifyText(ModifyEvent e) {
 				if (refresh)
 					return;
-				aw.setValue(cmb.getText());
+				String v = cmb.getText();
+				if (v.endsWith(" (deprecated)"))
+					v = v.substring(0, v.indexOf(" (deprecated)"));
+				aw.setValue(v);
 				cmb.setToolTipText(aw.getToolTipText());
 			}
 		});
