@@ -203,6 +203,7 @@ public final class PageFormatDialog extends FormDialog {
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		cPrintOrder.setLayoutData(gd);
+		 
 		enablePrintOrder();
 	}
 
@@ -451,6 +452,8 @@ public final class PageFormatDialog extends FormDialog {
 			cPrintOrder.select(0);
 		if (jd.getPrintOrderValue().equals(PrintOrderEnum.HORIZONTAL))
 			cPrintOrder.select(1);
+		
+		enablePrintOrder();
 	}
 
 	/**
