@@ -30,8 +30,8 @@ public class LocaleComboPropertyDescription extends SelectableComboItemPropertyD
 		super();
 	}
 	
-	public LocaleComboPropertyDescription(String name, String label, String description, boolean mandatory, boolean defaultValue, String[][] keyValues) {
-		super(name, label, description, mandatory, defaultValue, keyValues);
+	public LocaleComboPropertyDescription(String name, String label, String description, boolean mandatory, boolean defaultValue) {
+		super(name, label, description, mandatory, defaultValue, getLocales());
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class LocaleComboPropertyDescription extends SelectableComboItemPropertyD
 		return result;
 	}
 
-	protected String[][] getLocales() {
+	protected static String[][] getLocales() {
 		if (locs == null) {
 			Locale[] locales = Locale.getAvailableLocales();
 			sortLocalesOnToString(locales);
@@ -82,7 +82,7 @@ public class LocaleComboPropertyDescription extends SelectableComboItemPropertyD
 		return locs;
 	}
 
-	private void sortLocalesOnToString(Locale[] locales) {
+	protected static void sortLocalesOnToString(Locale[] locales) {
 		Comparator<Locale> localeComparator = new Comparator<Locale>() {
 			public int compare(Locale locale1, Locale locale2) {
 				return locale1.getDisplayName().compareTo(locale2.getDisplayName());
@@ -93,8 +93,7 @@ public class LocaleComboPropertyDescription extends SelectableComboItemPropertyD
 	
 	@Override
 	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
-		String[][] i18nOpts = getLocales();
-		LocaleComboPropertyDescription result = new LocaleComboPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), defaultValue, i18nOpts);
+		LocaleComboPropertyDescription result = new LocaleComboPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), defaultValue);
 		result.setReadOnly(cpd.isReadOnly());
 		result.setFallbackValue(fallbackValue);
 		return result;

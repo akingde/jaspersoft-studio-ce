@@ -31,8 +31,8 @@ public class TimezoneComboPropertyDescription extends SelectableComboItemPropert
 		super();
 	}
 	
-	public TimezoneComboPropertyDescription(String name, String label, String description, boolean mandatory, boolean defaultValue, String[][] keyValues) {
-		super(name, label, description, mandatory, defaultValue, keyValues);
+	public TimezoneComboPropertyDescription(String name, String label, String description, boolean mandatory, boolean defaultValue) {
+		super(name, label, description, mandatory, defaultValue, getTimeZones());
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class TimezoneComboPropertyDescription extends SelectableComboItemPropert
 		return result;
 	}
 
-	protected String[][] getTimeZones() {
+	protected static String[][] getTimeZones() {
 		if (tzs == null) {
 			String[] tzones = TimeZone.getAvailableIDs();
 			Arrays.sort(tzones);
@@ -85,8 +85,7 @@ public class TimezoneComboPropertyDescription extends SelectableComboItemPropert
 	
 	@Override
 	public ItemPropertyDescription<?> getInstance(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
-		String[][] i18nOpts = getTimeZones();
-		TimezoneComboPropertyDescription result = new TimezoneComboPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), defaultValue, i18nOpts);
+		TimezoneComboPropertyDescription result = new TimezoneComboPropertyDescription(cpd.getName(), cd.getLocalizedString(cpd.getLabel()), cd.getLocalizedString(cpd.getDescription()), cpd.isMandatory(), defaultValue);
 		result.setReadOnly(cpd.isReadOnly());
 		result.setFallbackValue(fallbackValue);
 		return result;
