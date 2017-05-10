@@ -142,7 +142,7 @@ public class DateInput extends ADataInput {
 	 */
 	private boolean useReportTimezone() {
 		IPreferenceStore jssPreferenceStore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-		return jssPreferenceStore.getBoolean(ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE);
+		return !jssPreferenceStore.getBoolean(ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE);
 	}
 
 	protected void handleDateRangeChange(Class<? extends Date> clazz) {
@@ -163,7 +163,7 @@ public class DateInput extends ADataInput {
 			// if the value should be influenced by the timezone then read its value from the parameter
 			if (useReportTimezone()) {
 				Object timeZoneObj = params.get(JRParameter.REPORT_TIME_ZONE);
-				// boolean timeZoneSet = false;
+				boolean timeZoneSet = false;
 				if (timeZoneObj != null) {
 					TimeZone timeZone = null;
 					if (timeZoneObj instanceof String) {
@@ -173,16 +173,22 @@ public class DateInput extends ADataInput {
 					}
 					if (timeZone != null) {
 						drb.set(timeZone);
-						// timeZoneSet = true;
+						timeZoneSet = true;
 					}
 				}
-				// code currently not used, uncomment this to fallback to JSS preferences when the parameter is not set
-				/*
-				 * if (!timeZoneSet){ //look in the preferences IPreferenceStore jssPreferenceStore =
-				 * JaspersoftStudioPlugin.getInstance().getPreferenceStore(); String prefTimeZone =
-				 * jssPreferenceStore.getString(ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE); if (prefTimeZone != null){
-				 * TimeZone timeZone = TimeZone.getTimeZone(prefTimeZone); if (timeZone != null){ drb.set(timeZone); } } }
-				 */
+				//code currently not used, uncomment this to fallback to JSS preferences when the parameter is not set
+				if (!timeZoneSet){
+					//look in the preferences
+					IPreferenceStore jssPreferenceStore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+					String prefTimeZone = jssPreferenceStore.getString(ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE);
+					if (prefTimeZone != null){
+						TimeZone timeZone = TimeZone.getTimeZone(prefTimeZone);
+						if (timeZone != null){
+							drb.set(timeZone);
+						}
+					}
+				}
+				 
 			}
 
 			updateModel(drb.set(clazz).toDateRange());
@@ -199,9 +205,8 @@ public class DateInput extends ADataInput {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
-				if (// ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty()) || uncomment this to force
-						// the refresh of the parameter when the application timezone changes
-				ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE.equals(event.getProperty())) {
+				if (ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty()) ||
+						ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE.equals(event.getProperty())) {
 					handleDateRangeChange(Timestamp.class);
 				}
 			}
@@ -242,9 +247,8 @@ public class DateInput extends ADataInput {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
-				if (// ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty()) || uncomment this to force
-						// the refresh of the parameter when the application timezone changes
-				ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE.equals(event.getProperty())) {
+				if (ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty()) || 
+						ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE.equals(event.getProperty())) {
 					handleDateRangeChange(Date.class);
 				}
 			}

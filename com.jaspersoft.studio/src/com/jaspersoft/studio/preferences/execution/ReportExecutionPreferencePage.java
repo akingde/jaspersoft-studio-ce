@@ -75,7 +75,12 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new TimeZoneFieldEditor(JSS_REPORT_TIMEZONE, Messages.ReportExecutionPreferencePage_timeZoneLabel,
 				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(JSS_REPORT_FORCE_PARAMETER_TIMEZONE, "Use report timezone when acquiring date range as input parameters", getFieldEditorParent()));
+		
+		BooleanFieldEditor timezoneCheckBox = new BooleanFieldEditor(JSS_REPORT_FORCE_PARAMETER_TIMEZONE, 
+				"Calculate date ranges for input parameters using system time zone", getFieldEditorParent());
+		timezoneCheckBox.getDescriptionControl(getFieldEditorParent()).setToolTipText(
+				"Calculates date ranges for input parameters using the system time zone. Set to false to use the time zone set in the report (REPORT_TIME_ZONE).");
+		addField(timezoneCheckBox);
 
 		bLimRec = new BooleanFieldEditor(JSS_LIMIT_RECORDS, Messages.ReportExecutionPreferencePage_limitNumberLabel, getFieldEditorParent());
 		addField(bLimRec);
@@ -230,7 +235,7 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JSS_IGNOREPAGINATION, "false");//$NON-NLS-1$
 		store.setDefault(JSS_REPORT_LOCALE, Locale.getDefault().toString());//$NON-NLS-1$
 		store.setDefault(JSS_REPORT_TIMEZONE, TimeZone.getDefault().getID());//$NON-NLS-1$ 
-		store.setDefault(JSS_REPORT_FORCE_PARAMETER_TIMEZONE, true);
+		store.setDefault(JSS_REPORT_FORCE_PARAMETER_TIMEZONE, false);
 	}
 
 	@Override
