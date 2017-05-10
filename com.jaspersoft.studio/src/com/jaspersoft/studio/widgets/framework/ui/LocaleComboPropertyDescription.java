@@ -22,7 +22,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
  * It uses a combo to manage the value changes.
  *
  */
-public class LocaleComboPropertyDescription extends SelectableComboItemPropertyDescription<Boolean>{
+public class LocaleComboPropertyDescription extends SelectableComboItemPropertyDescription<String>{
 	
 	private static String[][] locs = null;
 
@@ -30,7 +30,7 @@ public class LocaleComboPropertyDescription extends SelectableComboItemPropertyD
 		super();
 	}
 	
-	public LocaleComboPropertyDescription(String name, String label, String description, boolean mandatory, boolean defaultValue) {
+	public LocaleComboPropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue) {
 		super(name, label, description, mandatory, defaultValue, getLocales());
 	}
 

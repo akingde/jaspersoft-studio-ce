@@ -23,7 +23,7 @@ import com.jaspersoft.studio.widgets.framework.ui.SelectableComboItemPropertyDes
  * It uses a combo to manage the value changes.
  *
  */
-public class TimezoneComboPropertyDescription extends SelectableComboItemPropertyDescription<Boolean>{
+public class TimezoneComboPropertyDescription extends SelectableComboItemPropertyDescription<String>{
 	
 	private static String[][] tzs = null;
 
@@ -31,7 +31,7 @@ public class TimezoneComboPropertyDescription extends SelectableComboItemPropert
 		super();
 	}
 	
-	public TimezoneComboPropertyDescription(String name, String label, String description, boolean mandatory, boolean defaultValue) {
+	public TimezoneComboPropertyDescription(String name, String label, String description, boolean mandatory, String defaultValue) {
 		super(name, label, description, mandatory, defaultValue, getTimeZones());
 	}
 
