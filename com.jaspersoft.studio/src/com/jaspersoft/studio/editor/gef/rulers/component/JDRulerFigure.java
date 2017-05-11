@@ -258,6 +258,7 @@ public class JDRulerFigure extends Figure {
 		 * for which a number is displayed) that is before the top of the clip rectangle.
 		 */
 		int startMark = (int) (clippedBounds.y / (dotsPerUnit * unitsPerMajorMark)) * divsPerMajorMark;
+		if (startMark > 0) startMark = 0;
 		if (clippedBounds.y < 0) {
 			// -2 / 10 = 0, not -1. so, if the top of the clip is negative, we need to move
 			// the startMark back by a whole major mark.
