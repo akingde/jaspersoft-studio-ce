@@ -23,6 +23,10 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
 public class ComboItemPropertyDescription<T> extends AbstractExpressionPropertyDescription<T> {
 
+	/**
+	 * Matrix of n*2 for n elements, the first column of the matrix is the key of the element, the second
+	 * the label
+	 */
 	protected String[][] keyValues;
 
 	public ComboItemPropertyDescription() {

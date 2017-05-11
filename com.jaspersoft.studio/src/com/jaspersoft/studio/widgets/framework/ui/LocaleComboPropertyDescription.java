@@ -69,14 +69,22 @@ public class LocaleComboPropertyDescription extends SelectableComboItemPropertyD
 		return result;
 	}
 
+	/**
+	 * Create the locale values. Since the value for the combo are handled
+	 * like a matrix with n*2 elements (or an array of pair) where the elements
+	 * on the first column are the values and the one on the second are the labels
+	 * 
+	 * @return a not null n*2 matrix where the first column is the value and the
+	 * second one the label associated to each value
+	 */
 	protected static String[][] getLocales() {
 		if (locs == null) {
 			Locale[] locales = Locale.getAvailableLocales();
 			sortLocalesOnToString(locales);
 			locs = new String[locales.length][2];
 			for (int i = 0; i < locs.length; i++) {
-				locs[i][0] = locales[i].getDisplayName();
-				locs[i][1] = locales[i].toString();
+				locs[i][0] = locales[i].toString();
+				locs[i][1] = locales[i].getDisplayName();
 			}
 		}
 		return locs;
