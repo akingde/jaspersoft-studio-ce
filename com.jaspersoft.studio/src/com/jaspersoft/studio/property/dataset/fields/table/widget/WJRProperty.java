@@ -12,6 +12,8 @@ import java.util.TimeZone;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -20,6 +22,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -181,8 +184,19 @@ public class WJRProperty extends AWidget {
 				});
 
 			} else {
-				lbl = new Label(parent, SWT.NONE);
-				lbl.setText(Misc.nvl(c.getLabel(), pname));
+				if (c.getPropertyMetadata().isDeprecated()) {
+					lbl = new StyledText(parent, SWT.NONE);
+					((StyledText) lbl).setText(Misc.nvl(c.getLabel(), pname));
+					StyleRange styleRange = new StyleRange();
+					styleRange.start = 0;
+					styleRange.length = ((StyledText) lbl).getText().length();
+					styleRange.strikeout = true;
+					styleRange.fontStyle = SWT.ITALIC;
+					((StyledText) lbl).setStyleRange(styleRange);
+				} else {
+					lbl = new Label(parent, SWT.NONE);
+					((Label) lbl).setText(Misc.nvl(c.getLabel(), pname));
+				}
 			}
 			wip = new WItemProperty(parent, SWT.NONE, ipd, new IPropertyEditor() {
 
@@ -204,6 +218,8 @@ public class WJRProperty extends AWidget {
 
 				@Override
 				public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
+					if (value == null)
+						return;
 					PropertyExpressionDTO dto = getValue();
 					dto.setValue(value);
 					dto.setExpression(false);
@@ -231,7 +247,7 @@ public class WJRProperty extends AWidget {
 			super.initControl(parent, c);
 	}
 
-	private Label lbl;
+	private Control lbl;
 	private Text lblText;
 
 	@Override
@@ -247,6 +263,8 @@ public class WJRProperty extends AWidget {
 				tt += "\n\n";
 			if (c.getType().equals("jrProperty"))
 				tt += c.getPropertyName() + "\n";
+			if (c.getPropertyMetadata().isDeprecated())
+				tt += "\nDeprecated\n";
 			tt += "Type: " + c.getPropertyType();
 			if (!Misc.isNullOrEmpty(c.getDescription())) {
 				if (!Misc.isNullOrEmpty(tt))
@@ -402,8 +420,10 @@ public class WJRProperty extends AWidget {
 					break;
 				}
 			}
-			if (toDel != null)
-				d.getProperties().remove(toDel);
+			if (toDel != null) {
+				d.removeProperty(toDel.getName(), toDel.isExpression());
+				dto = null;
+			}
 		}
 	}
 

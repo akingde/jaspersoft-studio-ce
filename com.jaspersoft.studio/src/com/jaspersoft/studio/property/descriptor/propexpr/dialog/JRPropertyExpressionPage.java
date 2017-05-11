@@ -610,6 +610,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 	private void fillTable() {
 		tableViewer.setInput(value.getProperties());
+		tableViewer.refresh(true);
 	}
 
 	private boolean refreshing = false;
