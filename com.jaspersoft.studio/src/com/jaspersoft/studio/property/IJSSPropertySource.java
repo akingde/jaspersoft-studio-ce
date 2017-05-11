@@ -18,4 +18,12 @@ public interface IJSSPropertySource extends IPropertySource {
 	 */
 	public boolean forcePropertyChildrenReset(Object id);
 	
+	/**
+	 * Return the reset value associated to specific property
+	 * 
+	 * @param id  the id of the property, should be a string
+	 * @return the reset value of the property, can ber null
+	 */
+	public Object getResetValue(Object id);
+	
 }

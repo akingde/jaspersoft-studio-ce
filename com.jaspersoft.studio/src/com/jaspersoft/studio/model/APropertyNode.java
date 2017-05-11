@@ -199,6 +199,15 @@ public abstract class APropertyNode extends ANode implements IJSSPropertySource,
 		} catch (Exception e) {
 		}
 	}
+	
+	@Override
+	public Object getResetValue(Object id) {
+		try {
+			return getPropertyDefaultValue((String) id);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 	/**
 	 * By default the children are not resetted

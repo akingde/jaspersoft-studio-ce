@@ -224,7 +224,7 @@ public class JRPropertySheetEntry extends CustomPropertySheetEntry {
 				IPropertySource source = getPropertySource(objects[i]);
 				if (source.isPropertySet(getDescriptor().getId())) {
 					// source.resetPropertyValue(getDescriptor()getId());
-					restoreCmd = new ResetValueCommand();
+					restoreCmd = new ResetEntryValueCommand(this);
 					restoreCmd.setTarget(source);
 					restoreCmd.setPropertyId(getDescriptor().getId());
 					cc.add(restoreCmd);
