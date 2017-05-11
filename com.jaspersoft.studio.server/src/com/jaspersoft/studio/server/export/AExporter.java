@@ -64,8 +64,8 @@ public class AExporter {
 
 		spm = new StandardPropertyMetadata();
 		spm.setName(PROP_USER);
-		spm.setLabel("User");
-		spm.setDescription("User identity.");
+		spm.setLabel("User/Ogranization");
+		spm.setDescription("User and organization if exists, separated by `|`.");
 		spm.setValueType(String.class.getName());
 		scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.DATASET);
