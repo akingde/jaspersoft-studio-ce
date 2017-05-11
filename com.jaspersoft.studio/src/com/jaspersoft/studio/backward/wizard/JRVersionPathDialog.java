@@ -24,11 +24,11 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.backward.JRBackwardManager;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.builder.JRDefinition;
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class JRVersionPathDialog extends ATitledDialog {
 	private JRDefinition value;

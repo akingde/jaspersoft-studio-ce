@@ -10,12 +10,6 @@ import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.text.MessageFormat;
 
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.xmla.XmlaDataAdapter;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.util.SecretsUtil;
-
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
@@ -36,7 +30,13 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.data.secret.DataAdaptersSecretsProvider;
 import com.jaspersoft.studio.swt.widgets.WSecretText;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.xmla.XmlaDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.util.SecretsUtil;
 
 public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 

@@ -48,7 +48,8 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.utils.RDUtil;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class Rest2Soap {
 

@@ -21,8 +21,9 @@ import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class DatasourceMongoDBPageContent extends APageContent {
 

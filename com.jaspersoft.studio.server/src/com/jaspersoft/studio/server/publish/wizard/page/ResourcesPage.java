@@ -53,11 +53,11 @@ import com.jaspersoft.studio.server.publish.action.ResourceExpressionAction;
 import com.jaspersoft.studio.server.publish.action.ResourceToFolderAction;
 import com.jaspersoft.studio.server.publish.action.SelectLocalAction;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 public class ResourcesPage extends JSSHelpWizardPage {

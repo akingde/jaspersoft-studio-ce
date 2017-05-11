@@ -27,7 +27,6 @@ import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.components.table.BaseColumn;
@@ -42,6 +41,7 @@ import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRDatasetRun;

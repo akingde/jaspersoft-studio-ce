@@ -4,16 +4,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils.expr;
 
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.launching.JavaRuntime;
 
-import bsh.Interpreter;
-
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import bsh.Interpreter;
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class JavaInterpreter extends AInterpreter {
 	private Interpreter interpreter = null;

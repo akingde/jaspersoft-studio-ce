@@ -23,9 +23,10 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidget<T> {
 	protected Text ftext;

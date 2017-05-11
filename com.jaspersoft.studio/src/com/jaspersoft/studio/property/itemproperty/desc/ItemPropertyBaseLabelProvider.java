@@ -10,10 +10,10 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.framework.ui.providers.BaseLabelProvider;
 
 import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRExpression;
 
 /*

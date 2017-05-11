@@ -4,12 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
-import net.sf.jasperreports.engine.type.RunDirectionEnum;
-import net.sf.jasperreports.export.JxlExporterConfiguration;
-import net.sf.jasperreports.export.JxlReportConfiguration;
-import net.sf.jasperreports.export.XlsExporterConfiguration;
-import net.sf.jasperreports.export.XlsReportConfiguration;
-
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
@@ -34,7 +28,13 @@ import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
 import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.type.RunDirectionEnum;
+import net.sf.jasperreports.export.JxlExporterConfiguration;
+import net.sf.jasperreports.export.JxlReportConfiguration;
+import net.sf.jasperreports.export.XlsExporterConfiguration;
+import net.sf.jasperreports.export.XlsReportConfiguration;
 
 /*
  * 

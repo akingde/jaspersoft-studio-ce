@@ -9,11 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.engine.JRConstants;
-
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.utils.Misc;
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JRConstants;
 
 public abstract class AMapElement extends APropertyNode {
 

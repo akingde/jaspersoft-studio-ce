@@ -29,9 +29,9 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
-import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.util.KeyValue;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class ConvertUtil {
 

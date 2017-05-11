@@ -14,9 +14,6 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import jersey.repackaged.com.google.common.collect.BiMap;
-import jersey.repackaged.com.google.common.collect.HashBiMap;
-
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.ClientUnknown;
 import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
@@ -45,7 +42,10 @@ import com.jaspersoft.jasperserver.dto.resources.ClientXmlaConnection;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
-import com.jaspersoft.studio.utils.Misc;
+
+import jersey.repackaged.com.google.common.collect.BiMap;
+import jersey.repackaged.com.google.common.collect.HashBiMap;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class WsTypes {
 	private WsTypes() {

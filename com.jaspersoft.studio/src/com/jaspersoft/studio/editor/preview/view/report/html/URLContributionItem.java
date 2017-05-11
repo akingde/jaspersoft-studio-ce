@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IPartListener;
 
-import com.jaspersoft.studio.utils.Misc;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class URLContributionItem extends ContributionItem implements PropertyChangeListener, Listener {
 

@@ -8,7 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.templates.ReportBundle;
+import com.jaspersoft.templates.TemplateBundle;
+import com.jaspersoft.templates.TemplateEngine;
+import com.jaspersoft.templates.TemplateEngineException;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -34,17 +45,6 @@ import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
-
-import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
-import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
-import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.templates.ReportBundle;
-import com.jaspersoft.templates.TemplateBundle;
-import com.jaspersoft.templates.TemplateEngine;
-import com.jaspersoft.templates.TemplateEngineException;
 
 /**
  * A default template Engine which expect in the settings a dataset with the key "main_dataset", and few other optional

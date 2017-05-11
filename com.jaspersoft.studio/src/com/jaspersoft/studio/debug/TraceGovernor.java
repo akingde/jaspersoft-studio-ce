@@ -7,6 +7,9 @@ package com.jaspersoft.studio.debug;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
 import net.sf.jasperreports.engine.JRField;
@@ -15,9 +18,6 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRScriptletException;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactoryContext;
-
-import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * @author Veaceslav Chicu (schicu@tibco.com)

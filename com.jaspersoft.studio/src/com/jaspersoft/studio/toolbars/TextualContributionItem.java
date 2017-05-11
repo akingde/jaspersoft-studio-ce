@@ -51,11 +51,11 @@ import com.jaspersoft.studio.property.combomenu.WritableComboTableViewer;
 import com.jaspersoft.studio.property.section.widgets.SPFontNamePopUp;
 import com.jaspersoft.studio.swt.widgets.NumericTableCombo;
 import com.jaspersoft.studio.utils.ImageUtils;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.JSSTableCombo;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;

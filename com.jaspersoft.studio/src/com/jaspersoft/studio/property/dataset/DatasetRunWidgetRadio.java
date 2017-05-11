@@ -4,9 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset;
 
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -23,7 +20,10 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 

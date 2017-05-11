@@ -37,7 +37,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class Util {
 	public static boolean columnExists(MSQLColumn c, MDBObjects orderBy,

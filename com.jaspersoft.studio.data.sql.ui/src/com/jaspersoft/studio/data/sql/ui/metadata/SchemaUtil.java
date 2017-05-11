@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jaspersoft.studio.utils.Misc;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class SchemaUtil {
 	public static String[] getSchemaPath(Connection c) {

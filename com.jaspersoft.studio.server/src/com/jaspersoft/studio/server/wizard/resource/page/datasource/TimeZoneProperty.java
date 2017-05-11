@@ -19,8 +19,9 @@ import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.restv2.DiffFields;
 import com.jaspersoft.studio.swt.widgets.WTimeZone;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class TimeZoneProperty {
 

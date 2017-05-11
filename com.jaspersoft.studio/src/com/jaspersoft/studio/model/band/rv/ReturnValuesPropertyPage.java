@@ -9,12 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.ExpressionReturnValue;
-import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.design.DesignExpressionReturnValue;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -38,9 +32,15 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.ExpressionReturnValue;
+import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.design.DesignExpressionReturnValue;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
 
 /**
  * Return values configuration page for a element

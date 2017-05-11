@@ -26,7 +26,8 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class ConvertTables {
 	public static void convertTables(SQLQueryDesigner designer, ANode qroot, OrTable tbls) {

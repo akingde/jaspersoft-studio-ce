@@ -4,15 +4,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.model.metadata;
 
-import net.sf.jasperreports.engine.JRConstants;
-
 import org.eclipse.jface.viewers.StyledString;
 
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.ui.metadata.DBMetadata;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JRConstants;
 
 public class MSqlSchema extends AMSQLObject {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

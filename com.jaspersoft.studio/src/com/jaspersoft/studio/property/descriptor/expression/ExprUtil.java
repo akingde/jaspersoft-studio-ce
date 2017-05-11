@@ -4,10 +4,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.expression;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-
-import com.jaspersoft.studio.utils.Misc;
 
 public class ExprUtil {
 	public static <T extends JRExpression> T setValues(T e, Object value) {

@@ -108,9 +108,9 @@ import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
-import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.util.FileExtension;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 

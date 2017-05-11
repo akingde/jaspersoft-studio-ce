@@ -6,8 +6,6 @@ package com.jaspersoft.studio.preferences.fonts.wizard;
 
 import java.io.File;
 
-import net.sf.jasperreports.engine.fonts.SimpleFontFace;
-
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -25,7 +23,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.fonts.SimpleFontFace;
 
 public class FontFaceFragment {
 

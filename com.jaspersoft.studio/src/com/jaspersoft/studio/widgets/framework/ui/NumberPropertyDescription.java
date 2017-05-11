@@ -13,10 +13,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.swt.widgets.NumericText;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import com.jaspersoft.studio.widgets.framework.ui.widget.FallbackNumericText;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public abstract class NumberPropertyDescription<T extends Number> extends AbstractExpressionPropertyDescription<T> {
 	

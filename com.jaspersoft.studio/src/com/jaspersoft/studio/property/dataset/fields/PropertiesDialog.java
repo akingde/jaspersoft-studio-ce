@@ -15,10 +15,10 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumnFactory;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class PropertiesDialog<T> extends ATitledDialog {
 	private T element;

@@ -23,9 +23,9 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IURLViewable;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 
 public class ABrowserViewer extends APreview implements IURLViewable {

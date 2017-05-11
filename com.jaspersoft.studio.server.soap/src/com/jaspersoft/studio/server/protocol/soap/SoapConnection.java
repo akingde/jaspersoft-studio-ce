@@ -6,7 +6,6 @@ package com.jaspersoft.studio.server.protocol.soap;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -57,9 +56,9 @@ import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
-import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRQueryChunk;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 

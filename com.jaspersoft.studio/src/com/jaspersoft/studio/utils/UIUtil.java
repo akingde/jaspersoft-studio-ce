@@ -54,6 +54,8 @@ import com.jaspersoft.studio.swt.widgets.NullableSpinner;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
 
+import net.sf.jasperreports.eclipse.util.Misc;
+
 public class UIUtil {
 	/** ID for the "Properties View" */
 	public static final String PROPERTIES_VIEW_ID = "org.eclipse.ui.views.PropertySheet"; //$NON-NLS-1$

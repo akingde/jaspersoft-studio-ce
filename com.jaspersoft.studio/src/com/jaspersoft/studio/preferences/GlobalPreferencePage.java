@@ -35,10 +35,10 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.KeyValue;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class GlobalPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	public static final String LOG_FILE = "com.jaspersoft.studio.log.file"; //$NON-NLS-1$

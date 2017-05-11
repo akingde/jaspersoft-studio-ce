@@ -30,9 +30,9 @@ import com.jaspersoft.studio.editor.preview.view.control.VParameters;
 import com.jaspersoft.studio.preferences.execution.InputControlsPreferencePage;
 import com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage;
 import com.jaspersoft.studio.swt.widgets.DRDateTime;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.types.date.CalendarUnit;
 import net.sf.jasperreports.types.date.DateRange;

@@ -6,6 +6,9 @@ package com.jaspersoft.studio.wizards.report;
 
 import java.util.List;
 
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -20,9 +23,6 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
-
-import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
-import com.jaspersoft.studio.utils.Misc;
 
 public class ReportGenerator {
 	public void processTemplate(JasperDesign jd, List<Object> fields, List<Object> groupFields) {

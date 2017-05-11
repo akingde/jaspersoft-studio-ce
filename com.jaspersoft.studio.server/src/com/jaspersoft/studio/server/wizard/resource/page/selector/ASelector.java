@@ -7,8 +7,6 @@ package com.jaspersoft.studio.server.wizard.resource.page.selector;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -41,8 +39,10 @@ import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.utils.IPageCompleteListener;
 import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public abstract class ASelector {
 	protected Button brRepo;

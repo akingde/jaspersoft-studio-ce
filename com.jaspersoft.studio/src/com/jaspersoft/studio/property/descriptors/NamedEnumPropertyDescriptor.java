@@ -22,8 +22,8 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPReadComboEnum;
-import com.jaspersoft.studio.utils.Misc;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.type.NamedEnum;
 
 public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends ComboBoxPropertyDescriptor

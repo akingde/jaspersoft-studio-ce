@@ -47,13 +47,13 @@ import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidg
 import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptorResolver;
 import com.jaspersoft.studio.components.customvisualization.ui.preferences.CVCDescriptorsPreferencePage;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.IDisposeListener;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.util.ResourceBundleMessageProvider;
 
 public class UIManager {

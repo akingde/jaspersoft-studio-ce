@@ -35,10 +35,10 @@ import org.eclipse.ui.progress.WorkbenchJob;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.ImageUtils;
-import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.repo.RepositoryUtil;
 

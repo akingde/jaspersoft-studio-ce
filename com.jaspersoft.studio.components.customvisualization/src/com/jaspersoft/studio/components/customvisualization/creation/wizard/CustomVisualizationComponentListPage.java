@@ -39,11 +39,11 @@ import com.jaspersoft.studio.components.customvisualization.creation.ModuleDefin
 import com.jaspersoft.studio.components.customvisualization.creation.ModuleManager;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 /**
  * Wizard page where the user can select the module (essentially a Custom

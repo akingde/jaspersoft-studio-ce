@@ -10,13 +10,14 @@ import org.eclipse.swt.widgets.Control;
 
 import com.ibm.icu.text.DecimalFormat;
 import com.jaspersoft.studio.swt.widgets.NumericText;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.widget.FallbackNumericText;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class DoublePropertyDescription extends NumberPropertyDescription<Double> {
 	

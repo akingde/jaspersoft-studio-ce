@@ -41,10 +41,10 @@ import org.eclipse.jface.dialogs.Dialog;
 import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.protocol.CRLVerifier;
-import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class CertChainValidator {
 	private static String fname = System.getProperty("javax.net.ssl.trustStore"); //$NON-NLS-1$

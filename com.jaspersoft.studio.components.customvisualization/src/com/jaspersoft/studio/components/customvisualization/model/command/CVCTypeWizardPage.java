@@ -25,9 +25,10 @@ import org.eclipse.swt.widgets.Scale;
 import com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator;
 import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
 import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptor;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class CVCTypeWizardPage extends JSSWizardPage {
 	private static final int GALLERY_HEIGHT = 100;

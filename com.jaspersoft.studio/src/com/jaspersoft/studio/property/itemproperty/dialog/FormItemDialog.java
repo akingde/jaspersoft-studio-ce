@@ -25,7 +25,6 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.DescriptorPropertyLabelProvider;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
@@ -35,6 +34,7 @@ import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
 import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public abstract class FormItemDialog extends AItemDialog {
 

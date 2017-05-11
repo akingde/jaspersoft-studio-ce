@@ -19,10 +19,10 @@ import org.eclipse.swt.widgets.List;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.prm.ParameterSet;
 import com.jaspersoft.studio.prm.ParameterSetProvider;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class ParameterSetWizardPage extends WizardPage {
 	private JasperReportsConfiguration jConfig;

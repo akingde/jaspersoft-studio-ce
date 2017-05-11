@@ -4,14 +4,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.model;
 
-import net.sf.jasperreports.engine.JRConstants;
-
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.IQueryString;
 import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JRConstants;
 
 public class AMSQLObject extends MDBObjects implements IQueryString {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

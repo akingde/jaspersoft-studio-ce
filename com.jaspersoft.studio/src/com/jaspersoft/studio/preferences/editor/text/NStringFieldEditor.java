@@ -21,7 +21,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.preferences.ITooltipSupport;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class NStringFieldEditor extends FieldEditor implements ITooltipSupport{
 	

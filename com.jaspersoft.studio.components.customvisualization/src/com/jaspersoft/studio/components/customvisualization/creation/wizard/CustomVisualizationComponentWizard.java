@@ -52,11 +52,11 @@ import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentPropertyDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentSectionDescriptor;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.VelocityUtils;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 
 /**

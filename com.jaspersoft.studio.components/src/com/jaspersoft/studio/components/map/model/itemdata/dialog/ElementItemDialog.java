@@ -41,7 +41,6 @@ import com.jaspersoft.studio.components.map.model.itemdata.ElementDataHelper;
 import com.jaspersoft.studio.components.map.model.itemdata.ElementsListWidgetConfiguration;
 import com.jaspersoft.studio.components.map.model.itemdata.dto.MapDataElementItemDTO;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -49,6 +48,7 @@ import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItem;
 import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 /**

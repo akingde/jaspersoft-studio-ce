@@ -7,9 +7,6 @@ package com.jaspersoft.studio.server.editor.input;
 import java.util.Date;
 import java.util.Map;
 
-import net.sf.jasperreports.types.date.DateRange;
-import net.sf.jasperreports.types.date.TimestampRange;
-
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.input.IParameter;
@@ -18,7 +15,10 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.swt.widgets.DRDateTime;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.types.date.DateRange;
+import net.sf.jasperreports.types.date.TimestampRange;
 
 public class DateInput extends com.jaspersoft.studio.editor.preview.input.DateInput {
 	public DateInput() {

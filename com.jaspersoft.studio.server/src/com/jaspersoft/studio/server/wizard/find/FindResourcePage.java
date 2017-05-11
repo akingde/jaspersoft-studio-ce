@@ -60,11 +60,11 @@ import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryComposite;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
-import com.jaspersoft.studio.utils.Misc;
 
 import jersey.repackaged.com.google.common.collect.BiMap;
 import jersey.repackaged.com.google.common.collect.HashBiMap;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class FindResourcePage extends WizardPage {
 	private FinderUI finderUI;

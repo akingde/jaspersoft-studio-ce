@@ -6,9 +6,6 @@ package com.jaspersoft.studio.components.map.model.marker.dialog;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -33,7 +30,10 @@ import com.jaspersoft.studio.property.infoList.SelectableComposite;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 public class MarkerPropertyDialog extends Dialog {
 	private StandardItemProperty value;

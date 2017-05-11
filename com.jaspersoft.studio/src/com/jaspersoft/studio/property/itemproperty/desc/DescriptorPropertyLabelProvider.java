@@ -8,10 +8,10 @@ import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.JRPropertySheetEntry;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
 import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 /*
  * @author Chicu Veaceslav

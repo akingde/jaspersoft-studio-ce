@@ -4,13 +4,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.model.query.operand;
 
-import net.sf.jasperreports.engine.JRConstants;
-
 import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JRConstants;
 
 public class FieldOperand extends AOperand {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

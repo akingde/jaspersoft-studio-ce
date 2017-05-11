@@ -6,12 +6,6 @@ package com.jaspersoft.studio.components.chart.property.widget;
 
 import java.util.List;
 
-import net.sf.jasperreports.charts.JRDataRange;
-import net.sf.jasperreports.charts.design.JRDesignDataRange;
-import net.sf.jasperreports.charts.util.JRMeterInterval;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRExpression;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -50,7 +44,13 @@ import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.charts.JRDataRange;
+import net.sf.jasperreports.charts.design.JRDesignDataRange;
+import net.sf.jasperreports.charts.util.JRMeterInterval;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JRExpression;
 
 /**
  * Dialog with a table that show all the meter intervals defined, and allow to edit, move

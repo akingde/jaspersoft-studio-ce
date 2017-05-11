@@ -7,8 +7,6 @@ package com.jaspersoft.studio.data.sql.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
@@ -16,7 +14,9 @@ import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage;
 import com.jaspersoft.studio.data.sql.ui.gef.command.DeleteObjectCommand;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	protected String name;

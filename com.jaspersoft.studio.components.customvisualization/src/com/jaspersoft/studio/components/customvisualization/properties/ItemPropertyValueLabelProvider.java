@@ -5,12 +5,12 @@
 package com.jaspersoft.studio.components.customvisualization.properties;
  
 
-import net.sf.jasperreports.components.items.ItemProperty;
-
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 
 import com.jaspersoft.studio.components.customvisualization.CVComponentUtil;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 /**
  * Label provider for the column value of a table containing a list of

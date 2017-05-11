@@ -22,11 +22,11 @@ import com.jaspersoft.studio.data.AFileDataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DateNumberFormatWidget;
 import com.jaspersoft.studio.data.messages.Messages;
-import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
 import net.sf.jasperreports.data.json.JsonExpressionLanguageEnum;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 public class JsonDataAdapterComposite extends AFileDataAdapterComposite {

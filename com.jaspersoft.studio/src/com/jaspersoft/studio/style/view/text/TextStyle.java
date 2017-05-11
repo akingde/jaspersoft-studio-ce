@@ -30,12 +30,12 @@ import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.style.view.TemplateStyleView;
 import com.jaspersoft.studio.utils.AlfaRGB;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion;
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion.RESPONSE_TYPE;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRFont;

@@ -7,10 +7,6 @@ package com.jaspersoft.studio.model;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRQuery;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -20,8 +16,12 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRQuery;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 public class MQuery extends APropertyNode implements IPropertySource {
 	

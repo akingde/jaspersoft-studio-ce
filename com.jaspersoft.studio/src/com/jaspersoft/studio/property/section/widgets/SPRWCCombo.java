@@ -34,7 +34,8 @@ import org.eclipse.wb.swt.ResourceCache;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.combo.RWCComboPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class SPRWCCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 	

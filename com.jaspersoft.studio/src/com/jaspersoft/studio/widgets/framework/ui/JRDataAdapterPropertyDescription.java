@@ -28,7 +28,6 @@ import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
 import com.jaspersoft.studio.property.combomenu.ComboItemSeparator;
 import com.jaspersoft.studio.property.combomenu.WritableComboMenuViewer;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
@@ -37,6 +36,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 

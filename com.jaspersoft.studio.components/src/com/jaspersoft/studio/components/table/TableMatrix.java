@@ -12,13 +12,12 @@ import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
-import com.jaspersoft.studio.utils.Misc;
-
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRGroup;
 
 public class TableMatrix {

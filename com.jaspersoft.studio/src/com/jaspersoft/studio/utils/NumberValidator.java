@@ -21,6 +21,8 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Text;
 
+import net.sf.jasperreports.eclipse.util.Misc;
+
 public class NumberValidator implements VerifyListener {
 	private Number min;
 	private Number max;

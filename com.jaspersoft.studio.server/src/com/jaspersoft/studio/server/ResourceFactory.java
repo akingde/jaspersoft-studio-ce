@@ -90,7 +90,8 @@ import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitContent
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitDatasourceContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitInputControlContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitQueryContent;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class ResourceFactory {
 

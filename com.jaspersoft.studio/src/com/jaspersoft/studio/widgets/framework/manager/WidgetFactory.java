@@ -25,7 +25,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.model.SectionPropertyDescriptor;
@@ -52,6 +51,8 @@ import com.jaspersoft.studio.widgets.framework.ui.SelectableComboItemPropertyDes
 import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TimezoneComboPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TransparentColorPropertyDescription;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 /**
  * Factory used to build the {@link ItemPropertyDescription} from a {@link WidgetPropertyDescriptor}. It handle also

@@ -7,9 +7,6 @@ package com.jaspersoft.studio.editor.jrexpressions.ui.support.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
-import net.sf.jasperreports.expressions.annotations.JRExprFunctionParameterBean;
-
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -33,8 +30,11 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
+
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
+import net.sf.jasperreports.expressions.annotations.JRExprFunctionParameterBean;
 
 /**
  * Details panel composite for a specific function ({@link JRExprFunctionBean}).

@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.jaspersoft.studio.utils.Misc;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class BooleanElement extends AWElement {
 

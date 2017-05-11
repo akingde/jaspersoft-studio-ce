@@ -46,12 +46,12 @@ import org.osgi.service.prefs.BackingStoreException;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.PreferenceInitializer;
-import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.preferences.IPreferenceExtendablePage;
 import net.sf.jasperreports.eclipse.preferences.IPreferencePageExtension;
 import net.sf.jasperreports.eclipse.preferences.PreferencesExtensionsManager;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.util.ResourcePreferences;
 
 public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage implements IWorkbenchPropertyPage, IWorkbenchPreferencePage, IPreferenceExtendablePage {

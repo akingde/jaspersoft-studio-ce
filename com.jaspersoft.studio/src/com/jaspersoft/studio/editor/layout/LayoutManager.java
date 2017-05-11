@@ -24,9 +24,9 @@ import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.metadata.PropertyMetadataRegistry;
-import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.annotations.properties.PropertyScope;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRCommonElement;

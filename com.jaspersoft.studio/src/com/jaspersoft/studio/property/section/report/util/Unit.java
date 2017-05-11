@@ -12,8 +12,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class Unit {
 	

@@ -6,16 +6,16 @@ package com.jaspersoft.studio.model.util;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItem;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescriptor;
 import com.jaspersoft.studio.utils.ExpressionInterpreter;
-import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class ItemPropertyUtil {
 	public static ItemProperty getProperty(List<ItemProperty> items, String name) {

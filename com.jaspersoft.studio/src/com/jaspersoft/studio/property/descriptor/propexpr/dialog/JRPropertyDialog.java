@@ -32,9 +32,8 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.infoList.SelectableComposite;
-import com.jaspersoft.studio.utils.Misc;
 
-import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 /**
  * 

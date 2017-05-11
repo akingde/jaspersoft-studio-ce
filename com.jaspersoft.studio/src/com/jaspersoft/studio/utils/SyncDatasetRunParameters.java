@@ -9,7 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jaspersoft.studio.model.IDatasetContainer;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.command.IQueryLanguageChanged;
+import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.util.ModelVisitor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRException;
@@ -21,15 +31,6 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.query.QueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRQueryExecuterUtils;
-
-import com.jaspersoft.studio.model.IDatasetContainer;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.command.IQueryLanguageChanged;
-import com.jaspersoft.studio.model.dataset.MDataset;
-import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.model.util.ModelVisitor;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SyncDatasetRunParameters {
 	private static Map<String, Object[]> bipMap = new HashMap<String, Object[]>();
