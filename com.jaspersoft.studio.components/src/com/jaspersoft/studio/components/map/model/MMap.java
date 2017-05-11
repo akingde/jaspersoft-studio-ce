@@ -389,25 +389,25 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		else if (id.equals(StandardMapComponent.PROPERTY_ON_ERROR_TYPE)) {
 			component.setOnErrorType(onErrorTypeD.getEnumValue(value));
 		} else if (id.equals(MapComponent.PROPERTY_KEY)) {
-			if (value instanceof String) {
+			if (value instanceof String && !Misc.isNullOrEmptyString(value)) {
 				getJasperDesign().setProperty(MapComponent.PROPERTY_KEY, (String) value);
 			} else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_KEY);
 			}
 		} else if (id.equals(MapComponent.PROPERTY_CLIENT_ID)) {
-			if (value instanceof String) {
+			if (value instanceof String && !Misc.isNullOrEmptyString(value)) {
 				getJasperDesign().setProperty(MapComponent.PROPERTY_CLIENT_ID, (String) value);
 			} else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_CLIENT_ID);
 			}
 		} else if (id.equals(MapComponent.PROPERTY_SIGNATURE)) {
-			if (value instanceof String) {
+			if (value instanceof String && !Misc.isNullOrEmptyString(value)) {
 				getJasperDesign().setProperty(MapComponent.PROPERTY_SIGNATURE, (String) value);
 			} else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_SIGNATURE);
 			}
 		} else if (id.equals(MapComponent.PROPERTY_VERSION)) {
-			if (value instanceof String) {
+			if (value instanceof String && !Misc.isNullOrEmptyString(value)) {
 				getJasperDesign().setProperty(MapComponent.PROPERTY_VERSION, (String) value);
 			} else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_VERSION);
