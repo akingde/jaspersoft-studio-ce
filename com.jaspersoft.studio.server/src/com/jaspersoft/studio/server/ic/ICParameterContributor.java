@@ -32,6 +32,7 @@ import com.jaspersoft.studio.property.dataset.fields.table.widget.AWidget;
 import com.jaspersoft.studio.property.metadata.PropertyMetadataRegistry;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.export.AExporter;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
@@ -45,14 +46,13 @@ import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.properties.PropertyMetadata;
 import net.sf.jasperreports.properties.StandardPropertyMetadata;
 
 public class ICParameterContributor implements IParameterICContributor {
 
-	public static final String ICPATH = "icpath";
-	public static final String PROPERTY_JS_INPUTCONTROL_PATH = "com.jaspersoft.studio.js.ic.path";
+	public static final String ICPATH = "icpath"; //$NON-NLS-1$
+	public static final String PROPERTY_JS_INPUTCONTROL_PATH = "com.jaspersoft.studio.js.ic.path"; //$NON-NLS-1$
 
 	public static void initMetadata() {
 		AWidget.addControlValueType(ICPATH, WInputControlPathSelector.class);
@@ -60,13 +60,13 @@ public class ICParameterContributor implements IParameterICContributor {
 		List<PropertyMetadata> pm = new ArrayList<PropertyMetadata>();
 		StandardPropertyMetadata spm = new StandardPropertyMetadata();
 		spm.setName(PROPERTY_JS_INPUTCONTROL_PATH);
-		spm.setLabel("Input Control Path");
-		spm.setDescription("This input control on the server.");
+		spm.setLabel(Messages.ICParameterContributor_2);
+		spm.setDescription(Messages.ICParameterContributor_3);
 		spm.setValueType(ICPATH);
 		List<PropertyScope> scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.PARAMETER);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
+		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server"); //$NON-NLS-1$
 
 		pm.add(spm);
 		PropertyMetadataRegistry.addMetadata(pm);
@@ -79,16 +79,16 @@ public class ICParameterContributor implements IParameterICContributor {
 
 	@Override
 	public void createUI(Composite parent, JRDesignParameter prm, final AQueryDesigner designer) {
-		if (!designer.getjDataset().isMainDataset())
+		final JRDesignDataset dataset = designer.getjDataset();
+		if (!dataset.isMainDataset())
 			return;
-		JasperDesign jDesign = designer.getjDesign();
-		String servURL = jDesign.getProperty(AExporter.PROP_SERVERURL);
-		String servUser = jDesign.getProperty(AExporter.PROP_USER);
+		String servURL = dataset.getPropertiesMap().getProperty(AExporter.PROP_SERVERURL);
+		String servUser = dataset.getPropertiesMap().getProperty(AExporter.PROP_USER);
 		if (servURL == null || servUser == null)
 			return;
 
 		this.prm = prm;
-		new Label(parent, SWT.NONE).setText("Input Control");
+		new Label(parent, SWT.NONE).setText(Messages.ICParameterContributor_5);
 
 		Composite cmp = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(2, false);
@@ -114,14 +114,14 @@ public class ICParameterContributor implements IParameterICContributor {
 		});
 
 		bpath = new Button(cmp, SWT.PUSH);
-		bpath.setText("...");
+		bpath.setText("..."); //$NON-NLS-1$
 		bpath.addSelectionListener(new SelectionAdapter() {
 
 			private MServerProfile msp;
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				JRDesignDataset jd = designer.getjDataset();
+				JRDesignDataset jd = dataset;
 				String servURL = jd.getPropertiesMap().getProperty(AExporter.PROP_SERVERURL);
 				String servUser = jd.getPropertiesMap().getProperty(AExporter.PROP_USER);
 
@@ -157,8 +157,7 @@ public class ICParameterContributor implements IParameterICContributor {
 						if (rd.getName().equals(ICParameterContributor.this.prm.getName()))
 							pmap.setProperty(PROPERTY_JS_INPUTCONTROL_PATH, rd.getUriString());
 						else
-							UIUtils.showWarning(
-									"Input Control name must be the same as parameter name to work on Jaspersoft Server.");
+							UIUtils.showWarning(Messages.ICParameterContributor_7);
 					}
 				} else {
 					RepositoryDialog rd = new RepositoryDialog(bpath.getShell(), msp) {
@@ -181,8 +180,7 @@ public class ICParameterContributor implements IParameterICContributor {
 			}
 		});
 		decorator = new ControlDecoration(tpath, SWT.CENTER);
-		decorator.setDescriptionText(
-				"Input Control name must be the same as parameter name to work on Jaspersoft Server.");
+		decorator.setDescriptionText(Messages.ICParameterContributor_7);
 		decorator.setImage(
 				FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR).getImage());
 		refresh(ICParameterContributor.this.prm);
@@ -199,15 +197,20 @@ public class ICParameterContributor implements IParameterICContributor {
 		if (tpath.isDisposed())
 			return;
 		tpath.setText(Misc.nvl(p));
-		String tt = "This input control on the server.";
+		String tt = Messages.ICParameterContributor_9;
 		if (!Misc.isNullOrEmpty(tpath.getText()))
-			tt = tpath.getText() + "\n\n" + tt;
+			tt = tpath.getText() + "\n\n" + tt; //$NON-NLS-1$
 		tpath.setToolTipText(tt);
-		if (!Misc.isNullOrEmpty(p) && prm != null && !p.equals(prm.getName()))
-			decorator.show();
-		else
-			decorator.hide();
-
+		if (!Misc.isNullOrEmpty(p) && prm != null) {
+			int ind = p.lastIndexOf("/");
+			if (ind >= 0)
+				p = p.substring(ind + 1);
+			if (!p.equals(prm.getName())) {
+				decorator.show();
+				return;
+			}
+		}
+		decorator.hide();
 	}
 
 }

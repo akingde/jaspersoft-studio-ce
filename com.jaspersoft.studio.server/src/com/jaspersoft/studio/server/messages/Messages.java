@@ -144,6 +144,11 @@ public class Messages extends NLS {
 	public static String FindResourcePage_7;
 	public static String FindResourcePage_uri;
 	public static String FindResourceWizard_0;
+	public static String ICParameterContributor_2;
+	public static String ICParameterContributor_3;
+	public static String ICParameterContributor_5;
+	public static String ICParameterContributor_7;
+	public static String ICParameterContributor_9;
 	public static String ImportDataSourceInfoFromDA_DialogTitle;
 	public static String ImportDataSourceInfoFromDA_InfoLabel;
 	public static String ImportDataSourceInJSSAction_ActionText;
