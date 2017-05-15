@@ -4,8 +4,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -286,7 +286,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 
 							@Override
 							protected void handleRemoveMarker(int[] mIndxs) {
-								List<Item> itms = new ArrayList<Item>();
+								CopyOnWriteArrayList<Item> itms = new CopyOnWriteArrayList<Item>();
 								for (int i : mIndxs)
 									itms.add(itemData.getItems().get(i));
 								for (Item it : itms)
