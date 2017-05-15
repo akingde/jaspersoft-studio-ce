@@ -202,7 +202,7 @@ public class CrosstabWizard extends JSSWizard {
 				try {
 					JRDesignCrosstabColumnGroup c = (JRDesignCrosstabColumnGroup) obj;
 					// c.setName(ModelUtils.getDefaultName(jdc, c.getName()));
-					CrosstabUtil.addColumnGroup(jdc, c, -1);
+					CrosstabUtil.addColumnGroup(jdc, c, -1, 20 * jdc.getMeasures().length);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -216,7 +216,7 @@ public class CrosstabWizard extends JSSWizard {
 				try {
 					JRDesignCrosstabRowGroup r = (JRDesignCrosstabRowGroup) obj;
 					// r.setName(ModelUtils.getDefaultName(jdc, r.getName()));
-					CrosstabUtil.addRowGroup(jdc, r, -1);
+					CrosstabUtil.addRowGroup(jdc, r, -1, 20 * jdc.getMeasures().length);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -232,7 +232,6 @@ public class CrosstabWizard extends JSSWizard {
 		ApplyCrosstabStyleAction applyAction = new ApplyCrosstabStyleAction(
 				step5.getSelectedStyle(), crosstab.getValue());
 		applyAction.applayStyle(getConfig().getJasperDesign());
-
 		return crosstab;
 	}
 
@@ -243,6 +242,7 @@ public class CrosstabWizard extends JSSWizard {
 			for (JRCrosstabCell c : cells) {
 				int y = 0;
 				if (c.getHeight() != null && measures.length > 0) {
+					//((JRDesignCrosstabCell)c).setHeight(20 * measures.length);
 					int h = c.getHeight() / measures.length;
 					for (int i = 0; i < measures.length; i++) {
 						JRDesignExpression exp = new JRDesignExpression();
@@ -264,17 +264,18 @@ public class CrosstabWizard extends JSSWizard {
 
 	private void setupRowGroups(JRDesignCrosstab jdc) {
 		List<JRCrosstabRowGroup> rows = jdc.getRowGroupsList();
-		for (JRCrosstabRowGroup colGroup : rows) {
-			for (JRElement e : colGroup.getHeader().getElements()) {
+		for (JRCrosstabRowGroup rowGroup : rows) {
+			((JRDesignCellContents)rowGroup.getHeader()).setHeight(20 * jdc.getMeasures().length);
+			for (JRElement e : rowGroup.getHeader().getElements()) {
 				JRDesignElement el = (JRDesignElement) e;
-				el.setWidth(colGroup.getHeader().getWidth());
-				el.setHeight(colGroup.getHeader().getHeight());
+				el.setWidth(rowGroup.getHeader().getWidth());
+				el.setHeight(rowGroup.getHeader().getHeight());
 			}
 
-			for (JRElement e : colGroup.getTotalHeader().getElements()) {
+			for (JRElement e : rowGroup.getTotalHeader().getElements()) {
 				JRDesignElement el = (JRDesignElement) e;
-				el.setWidth(colGroup.getTotalHeader().getWidth());
-				el.setHeight(colGroup.getTotalHeader().getHeight());
+				el.setWidth(rowGroup.getTotalHeader().getWidth());
+				el.setHeight(rowGroup.getTotalHeader().getHeight());
 			}
 		}
 	}
