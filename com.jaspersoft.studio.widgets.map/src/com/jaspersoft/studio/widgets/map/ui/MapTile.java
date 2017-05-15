@@ -7,8 +7,11 @@ package com.jaspersoft.studio.widgets.map.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 
 import com.jaspersoft.studio.widgets.map.MapActivator;
 import com.jaspersoft.studio.widgets.map.MapWidgetConstants;
@@ -68,6 +71,11 @@ public class MapTile {
 
 	protected void createBrowser(Composite parent, int style) {
 		mapControl = new Browser(parent, style);
+		mapControl.addListener(SWT.MenuDetect, new Listener() {
+			public void handleEvent(Event event) {
+				event.doit = false;
+			}
+		});
 	}
 
 	/**
