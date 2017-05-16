@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -121,6 +122,25 @@ public class ToggleNatureAction implements IObjectActionDelegate {
      */
     public void setActivePart(IAction action, IWorkbenchPart targetPart) {
     }
+    
+    private static void setBuilder(IProject project)  throws CoreException  {
+        IProjectDescription desc = project.getDescription();
+        ICommand[] commands = desc.getBuildSpec();
+
+        for (int i = 0; i < commands.length; ++i) {
+            if (commands[i].getBuilderName().equals(Builder.BUILDER_ID)) {
+                return;
+            }
+        }
+
+        ICommand[] newCommands = new ICommand[commands.length + 1];
+        System.arraycopy(commands, 0, newCommands, 0, commands.length);
+        ICommand command = desc.newCommand();
+        command.setBuilderName(Builder.BUILDER_ID);
+        newCommands[newCommands.length - 1] = command;
+        desc.setBuildSpec(newCommands);
+        project.setDescription(desc, null);
+    }
 
     /**
      * Toggles sample nature on a project
@@ -154,6 +174,8 @@ public class ToggleNatureAction implements IObjectActionDelegate {
                     + BabelUtils.join(newNatures, ", "));
             description.setNatureIds(newNatures);
             project.setDescription(description, null);
+            
+            setBuilder(project);
         } catch (CoreException e) {
         }
     }

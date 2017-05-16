@@ -33,7 +33,6 @@ import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.i18n.I18NPage;
-import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.views.MessagesBundleGroupOutline;
@@ -121,11 +120,9 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
         file = null;
     	if (editorInput instanceof IFileEditorInput) {
             file = ((IFileEditorInput) editorInput).getFile();
-            if (MsgEditorPreferences.isBuilderSetupAutomatically()) {
-                IProject p = file.getProject();
-                if (p != null && p.isAccessible()) {
-                    ToggleNatureAction.addOrRemoveNatureOnProject(p, true, true);
-                }
+            IProject p = file.getProject();
+            if (p != null && p.isAccessible()) {
+                ToggleNatureAction.addOrRemoveNatureOnProject(p, true, true);
             }
         } else if (editorInput instanceof FileStoreEditorInput) {
         	FileStoreEditorInput input = (FileStoreEditorInput)editorInput;

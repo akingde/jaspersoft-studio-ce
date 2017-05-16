@@ -697,7 +697,7 @@ public final class MsgEditorPreferences{
      *         projects.
      */
     public static boolean isBuilderSetupAutomatically() {
-        return PREFS.getBoolean(ADD_MSG_EDITOR_BUILDER_TO_JAVA_PROJECTS, true);
+        return PREFS.getBoolean(ADD_MSG_EDITOR_BUILDER_TO_JAVA_PROJECTS, false);
     }
     
     
