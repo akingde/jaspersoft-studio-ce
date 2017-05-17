@@ -48,7 +48,8 @@ public class HttpUtils {
 			if (c != null && cp != null)
 				cp.setCredentials(new AuthScope(new HttpHost(d.getHost(), d.getPort())), c);
 			clientConfig.property(ClientProperties.PROXY_URI,
-					d.getType().toLowerCase() + "://" + d.getHost() + ":" + d.getPort());
+					net.sf.jasperreports.eclipse.util.HttpUtils.getProxyProtocol(d) + "://" + d.getHost() + ":"
+							+ d.getPort());
 			break;
 		}
 		clientConfigs.put(clientConfig, uri);
