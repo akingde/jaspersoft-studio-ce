@@ -75,10 +75,10 @@ public abstract class WizardTemplateBundle extends GenericTemplateBundle {
 	public abstract IFile doFinish(ReportNewWizard mainWizard, IProgressMonitor monitor) throws CoreException;
 	
 	/**
-	 * This method is called when the wizard to create a new report is cancelled. It
-	 * can be used for example to set to null the references to the page of the report
+	 * This method is called when the wizard to create a new report is close (both for cancel or end of the wizard). 
+	 * It can be used for example to set to null the references to the page of the report
 	 */
-	public abstract void doCancel();
+	public abstract void wizardClosed();
 	
 	/**
 	 * Copy and Store all the resources provided by the report bundle in the same folder as the new report.

@@ -158,7 +158,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	@Override
 	public boolean performCancel() {
 		JDTUtils.restoreLinkedResourcesSupport();
-		templateChooserStep.getTemplateBundle().doCancel();
+		templateChooserStep.doCancel();
 		return super.performCancel();
 	}
 
@@ -202,6 +202,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 					} catch (Exception e) {
 						UIUtils.showError(e);
 					} finally {
+						//notify the wizard ended
+						templateChooserStep.doCancel();
 						monitor.done();
 					}
 				}

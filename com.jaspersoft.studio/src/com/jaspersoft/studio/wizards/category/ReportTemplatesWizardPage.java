@@ -121,6 +121,12 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	private TemplateBundle selectedTemplate = null;
 	
 	/**
+	 * Set used to keep track of the created template pages for each bundle. On this
+	 * pages can be called the method to notify the wizard closed when it happen
+	 */
+	private HashSet<TemplateBundle> createdBundles = new HashSet<TemplateBundle>();
+	
+	/**
 	 * Mouse wheel listener used to change the zoomfactor when the 
 	 * mouse wheel is used when the ctrl key is pressed
 	 */
@@ -232,7 +238,9 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		gal.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				getContainer().showPage(getNextPage());
+				if (validatePage()) {
+					getContainer().showPage(getNextPage());
+				}
 			}
 		});
 		return gal;
@@ -628,11 +636,24 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		if (selection != null && selection.length > 0) {
 
 			selectedTemplate = (TemplateBundle) selection[0].getData(TEMPLATE_KEY); //$NON-NLS-1$
+			createdBundles.add(selectedTemplate);
 			getSettings().put(TEMPLATE_KEY, selectedTemplate);
 		} else {
 			getSettings().remove(TEMPLATE_KEY); 
 			selectedTemplate = null;
 		}
+	}
+	
+	/**
+	 * Notify to all created pages that the wizard ended
+	 */
+	public void doCancel(){
+		for(TemplateBundle bundle : createdBundles){
+			if (bundle instanceof WizardTemplateBundle){
+				((WizardTemplateBundle)bundle).wizardClosed();
+			}
+		}
+		createdBundles.clear();
 	}
 
 }

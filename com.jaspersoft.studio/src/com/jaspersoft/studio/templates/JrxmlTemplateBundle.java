@@ -127,14 +127,11 @@ public class JrxmlTemplateBundle extends WizardTemplateBundle {
 			UIUtils.showError(e);
 		} 
 		FileUtils.closeStream(stream);
-		step1 = null;
-		step2 = null;
-		step3 = null;
 		return reportFile;
 	}
 
 	@Override
-	public void doCancel() {
+	public void wizardClosed() {
 		step1 = null;
 		step2 = null;
 		step3 = null;

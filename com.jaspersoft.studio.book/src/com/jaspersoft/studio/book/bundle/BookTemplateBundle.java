@@ -216,9 +216,6 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 			UIUtils.showError(e);
 		} 
 		FileUtils.closeStream(stream);
-		step1 = null;
-		step2 = null;
-		step3 = null;
 		return reportFile;
 	}
 	
@@ -372,7 +369,7 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 	 * On the abort all the three steps are set to null to be rebuild on the next opening
 	 */
 	@Override
-	public void doCancel() {
+	public void wizardClosed() {
 		step1 = null;
 		step2 = null;
 		step3 = null;
