@@ -6,7 +6,9 @@ package com.jaspersoft.studio.property.dataset.fields;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.dialogs.Dialog;
@@ -49,6 +51,7 @@ import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -261,18 +264,36 @@ public class FieldsTable extends AbstractModifyTable {
 	}
 
 	public <T extends JRField> void setFields(List<T> fields) {
-		List<T> newfields = new ArrayList<T>(fields);
-		tviewer.setInput(newfields);
-		tviewer.refresh();
+		Map<String, JRField> oldFieldsMap = new HashMap<String, JRField>();
+		for (JRField f : dataset.getFields())
+			oldFieldsMap.put(f.getName(), f);
 
 		for (JRField f : dataset.getFields())
 			dataset.removeField(f);
-		for (JRField f : newfields)
+
+		List<JRField> newfields = new ArrayList<JRField>(fields);
+		for (JRField f : fields)
 			try {
+				JRField oldField = oldFieldsMap.get(f.getName());
+				if (oldField != null) {
+					// merging properties, priority is for new properties. Ex. field type or description, mapping is changed in
+					// the database
+					JRPropertiesMap oldProperties = oldField.getPropertiesMap();
+					JRPropertiesMap newProperties = f.getPropertiesMap();
+					for (String property : oldProperties.getOwnPropertyNames())
+						if (Misc.isNullOrEmpty(newProperties.getProperty(property)))
+							newProperties.setProperty(property, oldProperties.getProperty(property));
+					if (Misc.isNullOrEmpty(f.getDescription()))
+						f.setDescription(oldField.getDescription());
+				}
 				dataset.addField(f);
+				newfields.add(f);
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
+
+		tviewer.setInput(newfields);
+		tviewer.refresh();
 	}
 
 	public List<JRDesignField> getFields() {
