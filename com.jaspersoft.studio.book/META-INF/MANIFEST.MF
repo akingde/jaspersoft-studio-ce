@@ -7,8 +7,8 @@ Bundle-Version: 6.4.2.qualifier
 Bundle-Activator: com.jaspersoft.studio.book.JRBookActivator
 Bundle-Vendor: TIBCO Software Inc.
 Require-Bundle: com.jaspersoft.studio;bundle-version="6.4.2";visibility:=reexport
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
- JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
+ JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.jaspersoft.studio.book
 Bundle-ClassPath: patch-library.jar,

@@ -5,8 +5,8 @@ Bundle-Name: Jaspersoft Studio Documentation
 Bundle-SymbolicName: com.jaspersoft.studio.doc; singleton:=true
 Bundle-Version: 6.4.2.qualifier
 Bundle-Vendor: TIBCO Software Inc.
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
- JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
+ JavaSE-1.8
 Require-Bundle: org.eclipse.ui.cheatsheets;bundle-version="3.4.0",
  com.jaspersoft.studio;bundle-version="6.4.2",
  com.jaspersoft.studio.server;bundle-version="6.4.2"

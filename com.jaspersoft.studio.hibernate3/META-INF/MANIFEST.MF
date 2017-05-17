@@ -6,8 +6,8 @@ Bundle-SymbolicName: com.jaspersoft.studio.hibernate3;singleton:=true
 Bundle-Version: 3.3.2.GA_01
 Bundle-Activator: com.jaspersoft.studio.hibernate3.Hibernate3Activator
 Bundle-Vendor: %Bundle-Vendor
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
- JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
+ JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: patch-library.jar,
  lib/ejb3-persistence.jar,
