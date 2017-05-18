@@ -74,8 +74,8 @@ public class FieldsTable extends AbstractModifyTable {
 		this.dataset = dataset;
 		this.background = background;
 		createControl(parent);
-		((JRDesignQuery) dataset.getQuery()).getEventSupport().addPropertyChangeListener(JRDesignQuery.PROPERTY_LANGUAGE,
-				new PropertyChangeListener() {
+		((JRDesignQuery) dataset.getQuery()).getEventSupport()
+				.addPropertyChangeListener(JRDesignQuery.PROPERTY_LANGUAGE, new PropertyChangeListener() {
 
 					@Override
 					public void propertyChange(PropertyChangeEvent evt) {
@@ -250,7 +250,8 @@ public class FieldsTable extends AbstractModifyTable {
 						JRDesignField f = (JRDesignField) n.getAdapter(JRDesignField.class);
 						if (f != null) {
 							// be sure that the name is ok
-							f.setName(ModelUtils.getNameForField((List<JRDesignField>) tviewer.getInput(), f.getName()));
+							f.setName(
+									ModelUtils.getNameForField((List<JRDesignField>) tviewer.getInput(), f.getName()));
 							fields.add(f);
 						}
 					}
@@ -271,12 +272,13 @@ public class FieldsTable extends AbstractModifyTable {
 		for (JRField f : dataset.getFields())
 			dataset.removeField(f);
 
-		List<JRField> newfields = new ArrayList<JRField>(fields);
+		List<JRField> newfields = new ArrayList<JRField>();
 		for (JRField f : fields)
 			try {
 				JRField oldField = oldFieldsMap.get(f.getName());
 				if (oldField != null) {
-					// merging properties, priority is for new properties. Ex. field type or description, mapping is changed in
+					// merging properties, priority is for new properties. Ex.
+					// field type or description, mapping is changed in
 					// the database
 					JRPropertiesMap oldProperties = oldField.getPropertiesMap();
 					JRPropertiesMap newProperties = f.getPropertiesMap();
