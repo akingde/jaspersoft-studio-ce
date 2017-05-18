@@ -173,7 +173,9 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			@Override
 			protected Command getMoveCommand(ChangeBoundsRequest req) {
 				EditPart parent = getHost().getParent();
-				if (parent != null) {
+				//during the drag and drop the edit parts list can be null inside the request,
+				//so we need to check that both the parent and the request is valid
+				if (parent != null && req.getEditParts() != null) {
 					ChangeBoundsRequest request = new ChangeBoundsRequest(REQ_MOVE_CHILDREN);
 					if (req.getEditParts().size() > 1)
 						request.setEditParts(req.getEditParts());
