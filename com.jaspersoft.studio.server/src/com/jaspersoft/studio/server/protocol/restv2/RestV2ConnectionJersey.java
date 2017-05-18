@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -210,7 +211,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				target = target.queryParam("ticket", token); //$NON-NLS-1$
 			} else {
 				target = target.queryParam("j_username", sp.getUser()); //$NON-NLS-1$
-				target = target.queryParam("j_password", parent.getPassword(monitor)); //$NON-NLS-1$
+				target = target.queryParam("j_password", URLEncoder.encode(parent.getPassword(monitor),"UTF-8")); //$NON-NLS-1$
 				if (monitor.isCanceled())
 					return false;
 			}
