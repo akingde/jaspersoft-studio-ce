@@ -20,6 +20,7 @@ import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.FileDataAdapter;
 import net.sf.jasperreports.data.http.HttpDataLocation;
 import net.sf.jasperreports.data.http.HttpDataService;
+import net.sf.jasperreports.data.http.RequestMethod;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 public class HttpDataAdapterUI extends ADataAdapterQueryEditorUI {
@@ -42,7 +43,10 @@ public class HttpDataAdapterUI extends ADataAdapterQueryEditorUI {
 		createPropertyWidget(HttpDataService.PROPERTY_USERNAME, cmp, dloc.getUsername(), 200, jConfig);
 		createPropertyWidget(HttpDataService.PROPERTY_PASSWORD, cmp, dloc.getPassword(), 200, jConfig);
 
-		createPropertyWidget(HttpDataService.PROPERTY_METHOD, cmp, dloc.getMethod().name(), 200, jConfig);
+		String m = RequestMethod.GET.name();
+		if (dloc.getMethod() != null)
+			m = dloc.getMethod().name();
+		createPropertyWidget(HttpDataService.PROPERTY_METHOD, cmp, m, 200, jConfig);
 
 		CTabFolder tFolder = new CTabFolder(cmp, SWT.FLAT | SWT.TOP);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -52,11 +56,13 @@ public class HttpDataAdapterUI extends ADataAdapterQueryEditorUI {
 
 		CTabItem bptab = new CTabItem(tFolder, SWT.NONE);
 		bptab.setText("URL Parameters");
-		bptab.setControl(createPropertiesTable(tFolder, dloc.getUrlParameters(), HttpDataService.PROPERTY_URL_PARAMETER));
+		bptab.setControl(
+				createPropertiesTable(tFolder, dloc.getUrlParameters(), HttpDataService.PROPERTY_URL_PARAMETER));
 
 		bptab = new CTabItem(tFolder, SWT.NONE);
 		bptab.setText("POST/PUT Parameters");
-		bptab.setControl(createPropertiesTable(tFolder, dloc.getPostParameters(), HttpDataService.PROPERTY_POST_PARAMETER));
+		bptab.setControl(
+				createPropertiesTable(tFolder, dloc.getPostParameters(), HttpDataService.PROPERTY_POST_PARAMETER));
 
 		createSectionBody(tFolder);
 
