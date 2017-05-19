@@ -121,11 +121,12 @@ public abstract class NumberPropertyDescription<T extends Number> extends Abstra
 			try{
 				Number numericValue = convertValue(Misc.nvl(v));
 				simpleControl.setValue(numericValue);
+				simpleControl.setToolTipText(getToolTip());
 			} catch (NumberFormatException ex){
 				simpleControl.setUnparsedValue(Misc.nvl(v));
+				simpleControl.setToolTipText("The current value can not be recognized \n" + getToolTip());
 			}
-
-			simpleControl.setToolTipText(getToolTip());
+			
 			changeFallbackForeground(isFallback, simpleControl);
 			cmp.switchToSecondContainer();
 		}
