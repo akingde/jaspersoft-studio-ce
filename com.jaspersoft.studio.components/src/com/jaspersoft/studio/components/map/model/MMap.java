@@ -241,7 +241,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		mapClientSignatureD.setDescription(Messages.MMap_SignatureDescription);
 		desc.add(mapClientSignatureD);
 
-		NTextPropertyDescriptor mapVersionD = new NTextPropertyDescriptor(MapComponent.PROPERTY_VERSION,
+		NTextPropertyDescriptor mapVersionD = new NTextPropertyDescriptor(MapComponent.PROPERTY_GOOGLE_VERSION,
 				Messages.MMap_VersionText);
 		mapVersionD.setDescription(Messages.MMap_VersionDescription);
 		desc.add(mapVersionD);
@@ -332,7 +332,10 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		} else if (id.equals(MapComponent.PROPERTY_SIGNATURE)) {
 			return getJasperDesign().getProperty(MapComponent.PROPERTY_SIGNATURE);
 		} else if (id.equals(MapComponent.PROPERTY_VERSION)) {
+			// FIXME - This will be soon removed
 			return getJasperDesign().getProperty(MapComponent.PROPERTY_VERSION);
+		} else if (id.equals(MapComponent.PROPERTY_GOOGLE_VERSION)){
+			return getJasperDesign().getProperty(MapComponent.PROPERTY_GOOGLE_VERSION);
 		}
 
 		if (id.equals(StandardMapComponent.PROPERTY_MARKER_DATA_LIST)) {
@@ -407,11 +410,18 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_SIGNATURE);
 			}
 		} else if (id.equals(MapComponent.PROPERTY_VERSION)) {
+			// FIXME - This will be soon removed 
 			if (value instanceof String && !Misc.isNullOrEmptyString(value)) {
 				getJasperDesign().setProperty(MapComponent.PROPERTY_VERSION, (String) value);
 			} else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_VERSION);
 			}
+		} else if (id.equals(MapComponent.PROPERTY_GOOGLE_VERSION)) {
+			if (value instanceof String && !Misc.isNullOrEmptyString(value)) {
+				getJasperDesign().setProperty(MapComponent.PROPERTY_GOOGLE_VERSION, (String) value);
+			} else {
+				getJasperDesign().removeProperty(MapComponent.PROPERTY_GOOGLE_VERSION);
+			}			
 		} else if (id.equals(StandardMapComponent.PROPERTY_MARKER_DATA_LIST)) {
 			if (value instanceof List<?>) {
 				@SuppressWarnings("unchecked")
