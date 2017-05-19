@@ -86,6 +86,10 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		Object sortFieldsValue = settings.get(ORDER_GROUP);
 		createSortFields = sortFieldsValue != null ? (Boolean)sortFieldsValue : false; 
 		if (dataset != null) {
+			//avoid to have a null main dataset
+			if (jdCopy.getMainDesignDataset() == null){
+				jdCopy.setMainDataset(new JRDesignDataset(jContext, true));
+			}
 			jdCopy.getMainDesignDataset().setQuery((JRDesignQuery) dataset.getQuery());
 			for (JRField f : dataset.getFields()) {
 				try {
