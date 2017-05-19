@@ -107,7 +107,7 @@ public abstract class AWidget {
 			tt += "\n\n";
 		if (c.getType().equals("jrProperty"))
 			tt += c.getPropertyName() + "\n";
-		if (c.getPropertyMetadata().isDeprecated())
+		if (c.getPropertyMetadata() != null && c.getPropertyMetadata().isDeprecated())
 			tt += "\nDeprecated\n";
 		tt += "Type: " + c.getPropertyType();
 		if (!Misc.isNullOrEmpty(c.getDescription())) {
