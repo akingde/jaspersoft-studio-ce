@@ -41,6 +41,8 @@ public class TColumn {
 	}
 
 	public String getDefaultValue() {
+		if (defaultValue == null && propertyMetadata != null)
+			return propertyMetadata.getDefaultValue();
 		return defaultValue;
 	}
 
