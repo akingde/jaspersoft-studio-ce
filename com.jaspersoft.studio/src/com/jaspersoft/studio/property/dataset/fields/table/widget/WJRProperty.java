@@ -154,6 +154,8 @@ public class WJRProperty extends AWidget {
 								cd.addSelectionListener(new SelectionAdapter() {
 									@Override
 									public void widgetSelected(SelectionEvent e) {
+										cd.setImage(null);
+										cd.dispose();
 										removePropertyExpression(element, getValue().getName());
 										lblText.dispose();
 										wip.dispose();
