@@ -94,13 +94,16 @@ public class WJRProperty extends AWidget {
 						Boolean.parseBoolean(c.getDefaultValue()), new String[] { "", "true", "false" });
 			else if (c.getPropertyName().equals("net.sf.jasperreports.data.adapter")
 					|| c.getPropertyType().equals(DataAdapter.class.getName()))
-				ipd = new JRDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false, getjConfig());
+				ipd = new JRDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
+						getjConfig());
 			else if (c.getPropertyType().equals(String.class.getName()))
-				ipd = new TextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false, c.getDefaultValue());
+				ipd = new TextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
+						c.getDefaultValue());
 			else if (c.getPropertyType().equals(Class.class.getName()))
-				ipd = new ClassItemPropertyDescription(pname, c.getLabel(), c.getDescription(), false, c.getDefaultValue(),
-						new String[] {});
-			else if (c.getPropertyType().equals(Integer.class.getName()) || c.getPropertyType().equals(Long.class.getName()))
+				ipd = new ClassItemPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
+						c.getDefaultValue(), new String[] {});
+			else if (c.getPropertyType().equals(Integer.class.getName())
+					|| c.getPropertyType().equals(Long.class.getName()))
 				ipd = new IntegerPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Integer.parseInt(c.getDefaultValue()) : null, null, null);
 			else if (c.getPropertyType().equals(BigDecimal.class.getName())
@@ -114,11 +117,14 @@ public class WJRProperty extends AWidget {
 				ipd = new ColorPropertyDescription<Color>(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Color.decode(c.getDefaultValue()) : null);
 			else if (c.getPropertyType().equals(TimeZone.class.getName()))
-				ipd = new TimezoneComboPropertyDescription(pname, c.getLabel(), c.getDescription(), false, c.getDefaultValue());
+				ipd = new TimezoneComboPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
+						c.getDefaultValue());
 			else if (c.getPropertyType().equals(Locale.class.getName()))
-				ipd = new LocaleComboPropertyDescription(pname, c.getLabel(), c.getDescription(), false, c.getDefaultValue());
+				ipd = new LocaleComboPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
+						c.getDefaultValue());
 			else if (c.getPropertyType().equals("jssDA"))
-				ipd = new JSSDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false, getjConfig());
+				ipd = new JSSDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
+						getjConfig());
 			else {
 				try {
 					Class<?> clazz = Class.forName(c.getPropertyType());
@@ -150,7 +156,8 @@ public class WJRProperty extends AWidget {
 							if (cd == null) {
 								cd = new ControlDecoration(lblText, SWT.CENTER);
 								cd.setDescriptionText("Remove property");
-								cd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/delete_style.gif"));
+								cd.setImage(JaspersoftStudioPlugin.getInstance()
+										.getImage("icons/resources/delete_style.gif"));
 								cd.addSelectionListener(new SelectionAdapter() {
 									@Override
 									public void widgetSelected(SelectionEvent e) {
@@ -220,16 +227,18 @@ public class WJRProperty extends AWidget {
 
 				@Override
 				public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
-					if (value == null)
+					if (value == null && valueExpression == null)
 						return;
 					PropertyExpressionDTO dto = getValue();
-					dto.setValue(value);
-					dto.setExpression(false);
 					if (valueExpression != null) {
 						dto.setExpression(true);
 						dto.setValue(valueExpression.getText());
+						setValue(valueExpression);
+					} else {
+						dto.setValue(value);
+						dto.setExpression(false);
+						setValue(value);
 					}
-					setValue(dto);
 				}
 
 				@Override
@@ -316,7 +325,8 @@ public class WJRProperty extends AWidget {
 			for (PropertyExpressionDTO dto : d.getProperties())
 				if (dto.getName().equals(c.getPropertyName())) {
 					dto.setExpression(value instanceof JRDesignExpression);
-					dto.setValue(value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString());
+					dto.setValue(value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText()
+							: value.toString());
 					return;
 				}
 			PropertyExpressionDTO dto = null;
@@ -327,15 +337,17 @@ public class WJRProperty extends AWidget {
 							pedto.isExpression() ? pedto.getValueAsExpression().toString() : pedto.getValue(),
 							PropertyEvaluationTimeEnum.LATE);
 				} else
-					dto = new DatasetPropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
-							value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString(),
+					dto = new DatasetPropertyExpressionDTO(value instanceof JRDesignExpression,
+							c.getPropertyName(), value instanceof JRDesignExpression
+									? ((JRDesignExpression) value).getText() : value.toString(),
 							PropertyEvaluationTimeEnum.LATE);
 			else {
 				if (value instanceof PropertyExpressionDTO)
 					dto = (PropertyExpressionDTO) value;
 				else
 					dto = new PropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
-							value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText() : value.toString());
+							value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText()
+									: value.toString());
 			}
 			((PropertyExpressionsDTO) element).getProperties().add(dto);
 		} else if (element instanceof JRPropertiesMap) {
