@@ -48,6 +48,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRQuery;
+import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.SimpleReportContext;
 import net.sf.jasperreports.engine.util.JRLoader;
 
@@ -130,7 +131,8 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 						DataSnapshotManager.setCaching(container.getJrContext().getJRParameters(), on);
 						if (!on) {
 							Map<String, Object> hm = container.getJrContext().getJRParameters();
-							SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
+							SimpleReportContext reportContext = (SimpleReportContext) hm
+									.get(JRParameter.REPORT_CONTEXT);
 							if (reportContext != null)
 								reportContext.getParameterValues().remove(DataSnapshotManager.SAVE_SNAPSHOT);
 						}
@@ -145,24 +147,29 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 						IFile f = (IFile) container.getJrContext().get(FileUtils.KEY_FILE);
 						if (f != null)
 							sname = FilenameUtils.getBaseName(f.getName()) + ".jrds"; //$NON-NLS-1$
+						fd.setFilterPath(f.getParent().getLocation().toOSString());
 						fd.setFileName(sname);
 						fd.setOverwrite(true);
 						fd.setFilterExtensions(new String[] { "*.jrds", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 						final String fname = fd.open();
+						Map<String, Object> hm = container.getJrContext().getJRParameters();
 						if (fname != null) {
 							itemCache.setSelection(true);
-							Map<String, Object> hm = container.getJrContext().getJRParameters();
 							DataCacheHandler cacheHandler = DataSnapshotManager.setDataSnapshot(hm, false);
 							if (cacheHandler.getDataSnapshot() != null) {
 								Date creationTimestamp = new Date();
 								if (cacheHandler instanceof JSSColumnDataCacheHandler)
-									creationTimestamp = ((JSSColumnDataCacheHandler) cacheHandler).getCreationTimestamp();
-								DataSnapshotManager.saveSnapshot(fname, creationTimestamp, cacheHandler.getDataSnapshot());
+									creationTimestamp = ((JSSColumnDataCacheHandler) cacheHandler)
+											.getCreationTimestamp();
+								DataSnapshotManager.saveSnapshot(fname, creationTimestamp,
+										cacheHandler.getDataSnapshot());
 							}
-							SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
+							SimpleReportContext reportContext = (SimpleReportContext) hm
+									.get(JRParameter.REPORT_CONTEXT);
 							reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
 							itemCache.setSelection(true);
-						}
+						} else
+							itemSave.setSelection(DataSnapshotManager.snapshotExists(hm));
 					}
 				});
 
@@ -187,8 +194,10 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 													((JssDataSnapshot) snapshot).getCreationTimestamp()),
 											false);
 								} else if (obj instanceof DataSnapshot)
-									DataSnapshotManager.setDataSnapshot(hm, new PopulatedSnapshotCacheHandler((DataSnapshot) obj), false);
-								SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
+									DataSnapshotManager.setDataSnapshot(hm,
+											new PopulatedSnapshotCacheHandler((DataSnapshot) obj), false);
+								SimpleReportContext reportContext = (SimpleReportContext) hm
+										.get(JRParameter.REPORT_CONTEXT);
 								reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
 								vexecAction.run();
 							} catch (Exception e1) {
