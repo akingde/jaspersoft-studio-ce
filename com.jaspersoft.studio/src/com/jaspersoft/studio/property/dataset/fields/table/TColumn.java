@@ -41,8 +41,12 @@ public class TColumn {
 	}
 
 	public String getDefaultValue() {
-		if (defaultValue == null && propertyMetadata != null)
-			return propertyMetadata.getDefaultValue();
+		if (defaultValue == null && propertyMetadata != null) {
+			String d = propertyMetadata.getDefaultValue();
+			if (d != null && d.equals("N/A"))
+				d = null;
+			return d;
+		}
 		return defaultValue;
 	}
 
