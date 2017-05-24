@@ -265,6 +265,7 @@ public class FieldsTable extends AbstractModifyTable {
 	}
 
 	public <T extends JRField> void setFields(List<T> fields) {
+		fields = new ArrayList<T>(fields);
 		Map<String, JRField> oldFieldsMap = new HashMap<String, JRField>();
 		for (JRField f : dataset.getFields())
 			oldFieldsMap.put(f.getName(), f);
