@@ -20,11 +20,11 @@ import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 public class MComponentElement extends MGraphicElement {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
+
 	private IPropertyDescriptor[] descriptors;
 
 	/**
@@ -49,11 +49,11 @@ public class MComponentElement extends MGraphicElement {
 	 * Instantiates a new m cross tab.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrCrosstab
-	 *          the jr crosstab
+	 *            the jr crosstab
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MComponentElement(ANode parent, JRDesignComponentElement jrCrosstab, int newIndex) {
 		super(parent, newIndex);
@@ -105,13 +105,14 @@ public class MComponentElement extends MGraphicElement {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		super.createPropertyDescriptors(desc);
 
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignComponentElement.PROPERTY_COMPONENT_KEY, "Component Key");
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignComponentElement.PROPERTY_COMPONENT_KEY,
+				"Component Key");
 		nameD.setDescription("Component key.");
 		nameD.setReadOnly(true);
 		desc.add(nameD);
@@ -122,7 +123,7 @@ public class MComponentElement extends MGraphicElement {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		if (id.equals(JRDesignComponentElement.PROPERTY_COMPONENT_KEY)) {
 			ComponentKey ckey = jrElement.getComponentKey();
-			return ckey.getNamespacePrefix() + ckey.getNamespace() + ckey.getName();
+			return ckey.getName() + " " + ckey.getNamespacePrefix() + " " + ckey.getNamespace();
 		}
 		return super.getPropertyValue(id);
 	}
