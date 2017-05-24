@@ -20,7 +20,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: patch-library.jar,
  lib/jasperserver-dto-6.1.0-SNAPSHOT.jar,
  lib/axis-1.4-JS-4.jar,
- lib/js-common.jar,
  lib/js-extra-classes.jar,
  lib/jersey/asm-all-repackaged-2.2.0-b24.jar,
  lib/jersey/cglib-2.2.0-b23.jar,
