@@ -13,6 +13,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.editor.outline.actions.DynamicActionContributionItem;
 import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
 import com.jaspersoft.studio.model.ANode;
@@ -183,5 +184,21 @@ public abstract class ACachedSelectionAction extends SetWorkbenchAction {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Method used to know if the action is dirty, this can be used by the action contributor
+	 * (ie {@link DynamicActionContributionItem} ) to refresh the action widget
+	 */
+	public boolean isDirty(){
+		return false;
+	}
+	
+	/**
+	 * Method used to know if the action is dynamic, this can be used by the action contributor
+	 * (ie {@link DynamicActionContributionItem} ) to refresh the action widget
+	 */
+	public boolean isDynamic(){
+		return false;
 	}
 }

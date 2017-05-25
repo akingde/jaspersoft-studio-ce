@@ -8,7 +8,10 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MCollection;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -63,6 +66,9 @@ public class MParameters<T> extends MCollection {
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
 	public ImageDescriptor getImagePath() {
+		if (SortParametersAction.areParametersSorted(getJasperConfiguration())){
+			return ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/parameters_ordered-16.png");
+		}
 		return getIconDescriptor().getIcon16();
 	}
 }

@@ -6,15 +6,14 @@ package com.jaspersoft.studio.model.variable;
 
 import java.beans.PropertyChangeEvent;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.INode;
@@ -22,6 +21,10 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 /*
  * The Class MVariables.
@@ -110,6 +113,9 @@ public class MVariables extends ANode implements IPastable, IContainerEditPart {
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
 	public ImageDescriptor getImagePath() {
+		if (SortVariablesAction.areVariablesSorted(getJasperConfiguration())){
+			return ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/variables_ordered-16.png");
+		}
 		return getIconDescriptor().getIcon16();
 	}
 

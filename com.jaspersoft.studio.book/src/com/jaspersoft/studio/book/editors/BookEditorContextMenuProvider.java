@@ -9,6 +9,7 @@ import java.util.Arrays;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
@@ -18,6 +19,7 @@ import com.jaspersoft.studio.book.editors.actions.CreateNewGroupAction;
 import com.jaspersoft.studio.book.editors.actions.DeleteBookPartAction;
 import com.jaspersoft.studio.book.editors.actions.DeleteBookSectionAction;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.ActionUtils;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
@@ -26,6 +28,9 @@ import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
+import com.jaspersoft.studio.editor.outline.actions.DynamicActionContributionItem;
+import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
+import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 
 public class BookEditorContextMenuProvider extends AContextMenuProvider {
@@ -49,8 +54,17 @@ public class BookEditorContextMenuProvider extends AContextMenuProvider {
 						CreateNewGroupAction.ID,CreateNewBookPartAction.ID,
 						CreateParameterAction.ID,CreateParameterSetAction.ID,
 						CreateFieldAction.ID,CreateSortFieldAction.ID,
-						CreateVariableAction.ID,CreateScriptletAction.ID, DatasetAction.ID}), 
+						CreateVariableAction.ID, CreateScriptletAction.ID, 
+						DatasetAction.ID}), 
 				actionRegistry, GEFActionConstants.GROUP_ADD);
+		
+		IAction action = getActionRegistry().getAction(SortParametersAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+		
+		action = getActionRegistry().getAction(SortVariablesAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
 		
 		menu.add(new Separator(GEFActionConstants.GROUP_COPY));
 		ActionUtils.appendActionToGroup(

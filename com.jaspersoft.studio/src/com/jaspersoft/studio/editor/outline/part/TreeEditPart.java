@@ -7,7 +7,7 @@ package com.jaspersoft.studio.editor.outline.part;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -34,6 +34,8 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.background.MBackgrounImage;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
+import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementTreeEditPolicy;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
@@ -43,13 +45,17 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MLockableRefresh;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
+import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
+import com.jaspersoft.studio.model.variable.MVariables;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
 
 /*
  * The Class ATreeEditPart.
@@ -174,8 +180,24 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			protected Command getMoveCommand(ChangeBoundsRequest req) {
 				EditPart parent = getHost().getParent();
 				//during the drag and drop the edit parts list can be null inside the request,
-				//so we need to check that both the parent and the request is valid
+				//so we need to check that both the parent and the request is valid. 
+				//If the node is a variables or parameters node it check if they are sorted and in that
+				//case deny the drag and drop
 				if (parent != null && req.getEditParts() != null) {
+					Object model = parent.getModel();
+					if (model != null){
+						if (model.getClass().equals(MVariables.class)){
+							MVariables variables = (MVariables)model;
+							if (SortVariablesAction.areVariablesSorted(variables.getJasperConfiguration())){
+								return UnexecutableCommand.INSTANCE;
+							}
+						} else if (model.getClass().equals(MParameters.class)){
+							MParameters<?> variables = (MParameters<?>)model;
+							if (SortParametersAction.areParametersSorted(variables.getJasperConfiguration())){
+								return UnexecutableCommand.INSTANCE;
+							}
+						}
+					}
 					ChangeBoundsRequest request = new ChangeBoundsRequest(REQ_MOVE_CHILDREN);
 					if (req.getEditParts().size() > 1)
 						request.setEditParts(req.getEditParts());
@@ -272,15 +294,17 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 		if (modelNode != null && modelNode.showChildren()) {
 			// Check if the default parameters and variables should be hidden
 			JasperReportsConfiguration jConfig = modelNode.getJasperConfiguration();
-			boolean showDefaults = jConfig != null
-					? jConfig.getPropertyBoolean(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
-			for (INode node : ((ANode) getModel()).getChildren()) {
-				// The background is never shown inside the outline
-				if (!node.getClass().equals(MBackgrounImage.class)) {
-					if (showDefaults) {
-						list.add(node);
-					} else if (!node.getClass().equals(MParameterSystem.class)
-							&& !node.getClass().equals(MVariableSystem.class)) {
+			boolean showDefaults = jConfig != null ? jConfig.getPropertyBoolean(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
+			
+			//when the node are the variables or the parameters apply special code to show or hide the system defaults and to sort them
+			if (modelNode.getClass().equals(MVariables.class)){
+				list.addAll(getVariables(jConfig, (MVariables)modelNode, showDefaults));
+			} else if (modelNode.getClass().equals(MParameters.class)){
+				list.addAll(getParameters(jConfig, (MParameters<?>)modelNode, showDefaults));
+			} else {
+				for (INode node : modelNode.getChildren()) {
+					// The background is never shown inside the outline
+					if (!node.getClass().equals(MBackgrounImage.class)) {
 						list.add(node);
 					}
 				}
@@ -288,6 +312,77 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 		}
 		return list;
 	}
+	
+	/**
+	 * Get the list of the variables, they could be ordered or the system default can be hidden
+	 * 
+	 * @param jConfig the {@link JasperReportsConfiguration} of the current report, must be not null
+	 * @param parentNode the {@link MVariables} node, must be not null
+	 * @param showDefaults true if the defaults should be shown, false otherwise
+	 * @return a not null list of the variables to show in the correct order
+	 */
+	protected List<INode> getVariables(JasperReportsConfiguration jConfig, MVariables parentNode, boolean showDefaults) {
+		List<INode> result = new ArrayList<INode>();
+		List<INode> children = new ArrayList<INode>(parentNode.getChildren());
+		if (SortVariablesAction.areVariablesSorted(jConfig)){
+			children.sort(new Comparator<INode>() {
+				
+				@Override
+				public int compare(INode o1, INode o2) {
+					MVariableSystem var1 = (MVariableSystem)o1;
+					MVariableSystem var2 = (MVariableSystem)o2;
+					String nameVar1 = (String)var1.getPropertyActualValue(JRDesignVariable.PROPERTY_NAME);
+					String nameVar2 = (String)var2.getPropertyActualValue(JRDesignVariable.PROPERTY_NAME);
+					return nameVar1.toLowerCase().compareTo(nameVar2.toLowerCase());
+				}
+			});
+		}
+		for (INode node : children) {
+			if (showDefaults) {
+				result.add(node);
+			} else if (!node.getClass().equals(MVariableSystem.class)) {
+				result.add(node);
+			}
+		}
+		
+		return children;
+	}
+	
+	/**
+	 * Get the list of the parameters, they could be ordered or the system default can be hidden
+	 * 
+	 * @param jConfig the {@link JasperReportsConfiguration} of the current report, must be not null
+	 * @param parentNode the {@link MParameters} node, must be not null
+	 * @param showDefaults true if the defaults should be shown, false otherwise
+	 * @return a not null list of the parameters to show in the correct order
+	 */
+	protected List<INode> getParameters(JasperReportsConfiguration jConfig, MParameters<?> parentNode, boolean showDefaults) {
+		List<INode> result = new ArrayList<INode>();
+		List<INode> children = new ArrayList<INode>(parentNode.getChildren());
+		if (SortParametersAction.areParametersSorted(jConfig)){
+			children.sort(new Comparator<INode>() {
+				
+				@Override
+				public int compare(INode o1, INode o2) {
+					MParameterSystem var1 = (MParameterSystem)o1;
+					MParameterSystem var2 = (MParameterSystem)o2;
+					String nameVar1 = (String)var1.getPropertyActualValue(JRDesignParameter.PROPERTY_NAME);
+					String nameVar2 = (String)var2.getPropertyActualValue(JRDesignParameter.PROPERTY_NAME);
+					return nameVar1.toLowerCase().compareTo(nameVar2.toLowerCase());
+				}
+			});
+		}
+		for (INode node : children) {
+			if (showDefaults) {
+				result.add(node);
+			} else if (!node.getClass().equals(MParameterSystem.class)) {
+				result.add(node);
+			}
+		}
+		
+		return children;
+	}
+
 
 	/**
 	 * Map of EditPart that need a refresh, they can be queued when the refresh
