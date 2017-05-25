@@ -12,17 +12,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
-import com.jaspersoft.studio.utils.ExpressionUtil;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-
 public class ParameterUtil {
 
 	public static void setParameters(JasperReportsConfiguration jConfig, JRDataset dataset, Map<String, Object> inmap) {
+		ExpressionUtil.initBuiltInParameters(jConfig, null);
 		Map<String, Object> map = jConfig.getJRParameters();
 		for (JRParameter p : dataset.getParameters()) {
 			if (!p.isSystemDefined()) {
@@ -39,14 +40,20 @@ public class ParameterUtil {
 				// Object val = p.getValueClass().newInstance();
 				// inmap.put(p.getName(), val);
 				// } catch (InstantiationException e) {
-				// inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
+				// inmap.put(p.getName(), getDefaultInstance(p, jConfig,
+				// dataset));
 				// } catch (IllegalAccessException e) {
-				// inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
+				// inmap.put(p.getName(), getDefaultInstance(p, jConfig,
+				// dataset));
 				// }
 				// } else {
 				// Even if no default value expression was specified, tries
-				// to provide a default value based on class type of the parameter.
-				inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
+				// to provide a default value based on class type of the
+				// parameter.
+				if (map.containsKey(p.getName()))
+					inmap.put(p.getName(), map.get(p.getName()));
+				else
+					inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
 				// }
 			}
 		}
