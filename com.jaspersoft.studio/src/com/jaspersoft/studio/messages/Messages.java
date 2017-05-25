@@ -1314,6 +1314,7 @@ public class Messages extends NLS {
 	public static String MGraphicElement_width_description;
 	public static String MGraphicElementLineBox_line_box_description;
 	public static String MGraphicElementLinePen_line_pen_description;
+	public static String MGroup_0;
 	public static String MGroup_expression_description;
 	public static String MGroup_footerPosDescription;
 	public static String MGroup_footerPosTitle;

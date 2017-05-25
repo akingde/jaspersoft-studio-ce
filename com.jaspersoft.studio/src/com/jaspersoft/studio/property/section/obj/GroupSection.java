@@ -6,11 +6,8 @@ package com.jaspersoft.studio.property.section.obj;
 
 import java.text.MessageFormat;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -20,6 +17,10 @@ import com.jaspersoft.studio.model.band.MBandGroupHeader;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class GroupSection extends AbstractSection {
 	private ASPropertyWidget<?> nameWidget;
@@ -32,13 +33,18 @@ public class GroupSection extends AbstractSection {
 		nameWidget = createWidget4Property(parent, JRDesignGroup.PROPERTY_NAME);
 
 		createWidget4Property(parent, JRDesignGroup.PROPERTY_EXPRESSION);
+		ASPropertyWidget<?> w = createWidget4Property(parent, JRDesignGroup.PROPERTY_PREVENT_ORPHAN_FOOTER, false);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		w.getControl().setLayoutData(gd);
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
 		addProvidedProperties(JRDesignGroup.PROPERTY_NAME, Messages.common_name);
 		addProvidedProperties(JRDesignGroup.PROPERTY_EXPRESSION, Messages.common_expression);
+		addProvidedProperties(JRDesignGroup.PROPERTY_PREVENT_ORPHAN_FOOTER, Messages.MGroup_0);
 	}
 
 	@Override
@@ -50,25 +56,28 @@ public class GroupSection extends AbstractSection {
 			return ((MBandGroupFooter) md).getMGroup();
 		return md;
 	}
-	
+
 	/**
-	 * Check if the property changed is the name and in this case check that the 
-	 * new name is different from any existing group. If it is different the change
-	 * is done, otherwise a warning message is shown and the original name is 
-	 * restored
+	 * Check if the property changed is the name and in this case check that the
+	 * new name is different from any existing group. If it is different the
+	 * change is done, otherwise a warning message is shown and the original
+	 * name is restored
 	 */
 	@Override
 	public boolean changeProperty(Object property, Object newValue) {
-		if (JRDesignGroup.PROPERTY_NAME.equals(property)){
+		if (JRDesignGroup.PROPERTY_NAME.equals(property)) {
 			JasperDesign jd = getElement().getJasperConfiguration().getJasperDesign();
 			String oldName = getElement().getPropertyValue(JRDesignGroup.PROPERTY_NAME).toString();
-			//If the new name is equals to the actual one the there is no need to change
-			if (oldName.equals(newValue)) return true;
+			// If the new name is equals to the actual one the there is no need
+			// to change
+			if (oldName.equals(newValue))
+				return true;
 			if (jd != null && jd.getGroupsMap().get(newValue) != null) {
 				nameWidget.setData(getElement(), oldName);
-				String message = MessageFormat.format(Messages.GroupSection_SameNameErrorMsg, new Object[] { newValue });
-				MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.GroupSection_SameNameErrorTitle, null,
-						message, MessageDialog.WARNING, new String[] { "Ok"}, 0); //$NON-NLS-1$
+				String message = MessageFormat.format(Messages.GroupSection_SameNameErrorMsg,
+						new Object[] { newValue });
+				MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.GroupSection_SameNameErrorTitle,
+						null, message, MessageDialog.WARNING, new String[] { "Ok" }, 0); //$NON-NLS-1$
 				dialog.open();
 				return false;
 			}
