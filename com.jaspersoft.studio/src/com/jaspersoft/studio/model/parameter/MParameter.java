@@ -46,7 +46,7 @@ import net.sf.jasperreports.engine.type.ParameterEvaluationTimeEnum;
  */
 public class MParameter extends MParameterSystem implements ICopyable {
 
-	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
+	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 

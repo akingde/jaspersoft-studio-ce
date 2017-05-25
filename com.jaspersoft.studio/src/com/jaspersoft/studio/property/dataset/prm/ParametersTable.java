@@ -9,6 +9,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -500,9 +501,9 @@ public class ParametersTable extends AbstractModifyTable {
 						try {
 							obj = d.getElement();
 							if (pos >= 0 && pos < dataset.getParametersList().size())
-								dataset.addParameter(pos, d.getElement());
+								dataset.addParameter(pos, (JRParameter) obj);
 							else
-								dataset.addParameter(d.getElement());
+								dataset.addParameter((JRParameter) obj);
 						} catch (JRException ex) {
 							UIUtils.showError(ex);
 						}
@@ -582,18 +583,25 @@ public class ParametersTable extends AbstractModifyTable {
 		treeviewer.setInput(params);
 	}
 
+	private Map<JRParameter, PropertyChangeListener> map = new HashMap<JRParameter, PropertyChangeListener>();
+
 	private void fillTree() {
+		for (JRParameter p : map.keySet())
+			p.getPropertiesMap().getEventSupport().removePropertyChangeListener(map.get(p));
+		map.clear();
 		for (JRParameter p : dataset.getParametersList()) {
 			params.add(p);
 			final JRParameter prm = p;
-			p.getPropertiesMap().getEventSupport().addPropertyChangeListener(new PropertyChangeListener() {
+			PropertyChangeListener pcl = new PropertyChangeListener() {
 
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					treeviewer.refresh(true);
 					treeviewer.expandToLevel(prm, 1);
 				}
-			});
+			};
+			map.put(p, pcl);
+			p.getPropertiesMap().getEventSupport().addPropertyChangeListener(pcl);
 		}
 	}
 
@@ -751,7 +759,10 @@ public class ParametersTable extends AbstractModifyTable {
 				if (d.open() == Dialog.OK) {
 					dataset.removeParameter(oldF);
 					try {
-						dataset.addParameter(d.getElement());
+						if (pos >= 0 && pos < dataset.getParametersList().size())
+							dataset.addParameter(pos, d.getElement());
+						else
+							dataset.addParameter(d.getElement());
 						input.set(pos, d.getElement());
 					} catch (JRException e) {
 						UIUtils.showError(e);
