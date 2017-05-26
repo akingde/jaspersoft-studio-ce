@@ -7,13 +7,18 @@ package com.jaspersoft.studio.swt.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -30,6 +35,7 @@ import com.jaspersoft.studio.swt.events.ColorSelectedEvent;
 import com.jaspersoft.studio.swt.events.ColorSelectionListener;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * A custom widget that lets the user pick a color using the standard {@link ColorDialog} window. The widgets is
@@ -49,6 +55,37 @@ import com.jaspersoft.studio.utils.Colors;
  * 
  */
 public class WColorPicker extends Composite {
+	
+	/**
+	 * Modify listener set on the text area
+	 */
+	private ModifyListener textModifyListener = new ModifyListener() {
+		
+		@Override
+		public void modifyText(ModifyEvent e) {
+			AlfaRGB newColor = hexParser(textColorValue.getText());
+			if (newColor != null){
+				currentState = VALIDATION_RESULT.VALID;
+				setColor(newColor);
+				updateBackground(defaultBackgroundColor);
+			} else {
+				currentState = VALIDATION_RESULT.NOT_VALID;
+				//invalid, update the validation status
+				updateBackground(ColorConstants.red);
+			}
+		}
+	};
+	
+	/**
+	 * Enumeration used as a result of the validation, valid it means the inserted text is 
+	 * a valid hex color, not valid means that the inserted value is not the hex of a color
+	 */
+	protected enum VALIDATION_RESULT {VALID, NOT_VALID};
+	
+	/**
+	 * Flag to know if this widget support the transparency
+	 */
+	private boolean haveTransparency = false;
 
 	private static final String BUTTON_ICON_LOCATION = "icons/resources/colorwheel-16.png"; //$NON-NLS-1$
 	private static final String BUTTON_DISABLED_ICON_LOCATION = "icons/resources/colorwheel-16-disabled.png"; //$NON-NLS-1$
@@ -57,6 +94,21 @@ public class WColorPicker extends Composite {
 	private Text textColorValue;
 	private List<ColorSelectionListener> colorSelectionListeners;
 	private ToolItem buttonColorChoser;
+	
+	/**
+	 * The background color to use when there aren't validation errors
+	 */
+	private Color defaultBackgroundColor;
+	
+	/**
+	 * Used to store the tooltip text when it is replaced with the error tooltip
+	 */
+	private String toolTipText = null;
+	
+	/**
+	 * The status of the value displayed
+	 */
+	protected VALIDATION_RESULT currentState = VALIDATION_RESULT.VALID;
 
 	public WColorPicker(AlfaRGB preselectedRGB, Composite parent) {
 		this(preselectedRGB, parent, SWT.NONE);
@@ -69,18 +121,8 @@ public class WColorPicker extends Composite {
 		createControl(parent);
 	}
 
-	private boolean haveTransparency = false;
-
 	public void setHaveTransparency(boolean haveTransparency) {
 		this.haveTransparency = haveTransparency;
-	}
-
-	@Override
-	public void setToolTipText(String string) {
-		super.setToolTipText(string);
-		imgColorPreview.setToolTipText(string);
-		textColorValue.setToolTipText(string);
-		buttonColorChoser.setToolTipText(string);
 	}
 
 	/*
@@ -98,7 +140,7 @@ public class WColorPicker extends Composite {
 		imgColorPreview.setLayoutData(gridData1);
 		imgColorPreview.setImage(Colors.getSWTColorPreview(Colors.getAWT4SWTRGBColor(selectedRGB), 16, 16));
 
-		textColorValue = new Text(this, SWT.BORDER | SWT.BORDER_SOLID | SWT.READ_ONLY);
+		textColorValue = new Text(this, SWT.BORDER | SWT.BORDER_SOLID);
 		GC tmpGC = new GC(textColorValue);
 		int charHeight = tmpGC.getFontMetrics().getHeight();
 		int averageCharWidth = tmpGC.getFontMetrics().getAverageCharWidth();
@@ -108,6 +150,8 @@ public class WColorPicker extends Composite {
 		gridData2.heightHint = charHeight;
 		textColorValue.setLayoutData(gridData2);
 		textColorValue.setText(Colors.getHexEncodedRGBColor(selectedRGB));
+		defaultBackgroundColor = textColorValue.getBackground();
+		textColorValue.addModifyListener(textModifyListener);
 
 		ToolBar toolBar = new ToolBar(this, SWT.NONE);
 		toolBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -128,11 +172,56 @@ public class WColorPicker extends Composite {
 					if (rgb != null)
 						newColor = AlfaRGB.getFullyOpaque(rgb);
 				}
-				if (newColor != null)
+				if (newColor != null){
 					setColor(newColor);
+					updateBackground(defaultBackgroundColor);
+				}
 			}
-
 		});
+	}
+	
+	/**
+	 * Convert the text into a alfa RGB color, but only if there are exactly seven chars, a # symbol followed by three pair of hex values
+	 * or simply the three pair of hex value
+	 * 
+	 * @param text a text representing a color as HexDecimal value
+	 * @return an alfa RGB color. If the color is provided as hex or as rgb the alpha is 255
+	 */
+	private AlfaRGB hexParser(String text){
+		try {
+			if ((text.startsWith("#") && text.length() == 7)) { //$NON-NLS-1$
+				AlfaRGB newColor = AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(text.substring(1, 3), 16), Integer.valueOf(text.substring(3, 5), 16), Integer.valueOf(text.substring(5, 7), 16)));
+				return newColor;
+			} else if ( text.length() == 6){
+				AlfaRGB newColor = AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(text.substring(0, 2), 16), Integer.valueOf(text.substring(2, 4), 16), Integer.valueOf(text.substring(4, 6), 16)));
+				return newColor;
+			}
+		} catch (Exception ex) {
+		}
+		return null;
+	}
+	
+	/**
+	 * On macos the update of the color need some additional operation because of an SWT bug
+	 * (https://bugs.eclipse.org/bugs/show_bug.cgi?id=346361). If the widget is focused it need
+	 * to lose the focus to be updated correctly. For this reason the widget is forced to loose
+	 * the focus and the it will regain it
+	 * 
+	 * @param color the color to set
+	 */
+	protected void updateBackground(Color color){
+		if (Util.isMac() && textColorValue.isFocusControl() && !ModelUtils.safeEquals(color, textColorValue.getBackground())){
+			Point caretPosition = textColorValue.getSelection();
+			boolean oldEnabled = textColorValue.getEnabled();
+			textColorValue.setEnabled(false);//Force the focus lost
+			textColorValue.setBackground(color);
+			textColorValue.setEnabled(oldEnabled);
+			textColorValue.setFocus();
+			textColorValue.setSelection(caretPosition.x);
+		} else {
+			textColorValue.setBackground(color);
+		}
+		updateTooltipText();
 	}
 
 	/*
@@ -145,6 +234,39 @@ public class WColorPicker extends Composite {
 			l.changed(evt);
 		}
 	}
+	
+	/**
+	 * Update the tooltip text on all the subwidgets that compose the color widget
+	 * 
+	 * @param text the text to set
+	 */
+	protected void setWidgetsToolTipText(String text){
+		super.setToolTipText(text);
+		imgColorPreview.setToolTipText(text);
+		textColorValue.setToolTipText(text);
+		buttonColorChoser.setToolTipText(text);
+	}
+
+	@Override
+	public void setToolTipText(String text) {
+		toolTipText = text;
+		setWidgetsToolTipText(text);
+	}
+	
+	/**
+	 * Update the tooltip text accordingly with the validation status
+	 */
+	protected void updateTooltipText(){
+		if (VALIDATION_RESULT.NOT_VALID == currentState){
+			String errorTooltip = "The current value can not be recognized";
+			if (toolTipText != null){
+				errorTooltip += " \n" + toolTipText;
+			}
+			setToolTipText(errorTooltip);
+		} else {
+			setToolTipText(toolTipText);
+		}
+	}
 
 	/**
 	 * Sets the new color (as {@link RGB} value). It also notifies all listeners of the color change occurred.
@@ -155,7 +277,11 @@ public class WColorPicker extends Composite {
 	public void setColor(AlfaRGB newColor) {
 		// Updates color information
 		selectedRGB = newColor;
+		Point caretPosition = textColorValue.getSelection();
+		textColorValue.removeModifyListener(textModifyListener);
 		textColorValue.setText(Colors.getHexEncodedRGBColor(selectedRGB));
+		textColorValue.addModifyListener(textModifyListener);
+		textColorValue.setSelection(caretPosition);
 		updatePreviewImage(isEnabled());
 		notifyColorSelection();
 	}
