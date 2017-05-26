@@ -24,23 +24,18 @@ public class SeriesXySection extends AbstractSection {
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
-	public void createControls(Composite parent,
-			TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent.setLayout(new GridLayout(2, false));
 
-		createWidget4Property(parent,
-				JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION);
-		createWidget4Property(parent,
-				JRDesignXySeries.PROPERTY_Y_VALUE_EXPRESSION);
-		createWidget4Property(parent,
-				JRDesignXySeries.PROPERTY_LABEL_EXPRESSION);
-		createWidget4Property(parent,
-				JRDesignXySeries.PROPERTY_SERIES_EXPRESSION);
-		createWidget4Property(parent, JRDesignXySeries.PROPERTY_AUTO_SORT);
+		createWidget4Property(parent, JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION);
+		createWidget4Property(parent, JRDesignXySeries.PROPERTY_Y_VALUE_EXPRESSION);
+		createWidget4Property(parent, JRDesignXySeries.PROPERTY_LABEL_EXPRESSION);
+		createWidget4Property(parent, JRDesignXySeries.PROPERTY_SERIES_EXPRESSION);
+		createWidget4Property(parent, JRDesignXySeries.PROPERTY_AUTO_SORT, false);
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
