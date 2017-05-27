@@ -7,6 +7,7 @@ package com.jaspersoft.studio.editor.outline.part;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -325,7 +326,8 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 		List<INode> result = new ArrayList<INode>();
 		List<INode> children = new ArrayList<INode>(parentNode.getChildren());
 		if (SortVariablesAction.areVariablesSorted(jConfig)){
-			children.sort(new Comparator<INode>() {
+			
+			Collections.sort(children, new Comparator<INode>() {
 				
 				@Override
 				public int compare(INode o1, INode o2) {
@@ -360,7 +362,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 		List<INode> result = new ArrayList<INode>();
 		List<INode> children = new ArrayList<INode>(parentNode.getChildren());
 		if (SortParametersAction.areParametersSorted(jConfig)){
-			children.sort(new Comparator<INode>() {
+			Collections.sort(children, new Comparator<INode>() {
 				
 				@Override
 				public int compare(INode o1, INode o2) {
