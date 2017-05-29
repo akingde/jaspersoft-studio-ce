@@ -45,7 +45,7 @@ public abstract class AbstractSortAction extends ACachedSelectionAction {
 	 * @param selectedNode the slected node
 	 * @return a not null command
 	 */
-	protected Command generateCommand(ANode selectedNode){
+	protected Command generateCommand(final ANode selectedNode){
 		Command cmd = new Command() {
 			
 			private boolean oldValue;
