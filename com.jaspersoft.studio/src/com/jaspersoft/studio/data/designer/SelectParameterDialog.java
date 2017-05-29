@@ -160,9 +160,10 @@ public class SelectParameterDialog extends ATitledDialog {
 			public void widgetSelected(SelectionEvent e) {
 				ParameterDialog d = new ParameterDialog(cmb.getShell());
 				if (d.open() == Dialog.OK) {
+					String type = getDefaultParameterType();
 					prm = new JRDesignParameter();
 					prm.setName(d.getPname());
-					prm.setValueClassName(getDefaultParameterType());
+					prm.setValueClassName(type);
 
 					cmb.add(prm.getName());
 					cmb.setText(prm.getName());
