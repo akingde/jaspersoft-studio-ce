@@ -141,6 +141,7 @@ public class SelectParameterDialog extends ATitledDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				prm = parameters.get(cmb.getText());
+				getButton(IDialogConstants.OK_ID).setEnabled(prm != null);
 				wdef.setExpression((JRDesignExpression) prm.getDefaultValueExpression());
 				JaspersoftStudioPlugin.getExtensionManager().refreshICUI(prm);
 			}
@@ -169,6 +170,8 @@ public class SelectParameterDialog extends ATitledDialog {
 					addParameter();
 
 					wdef.setExpression((JRDesignExpression) prm.getDefaultValueExpression());
+
+					getButton(IDialogConstants.OK_ID).setEnabled(prm != null);
 					JaspersoftStudioPlugin.getExtensionManager().refreshICUI(prm);
 				}
 			}
@@ -197,6 +200,14 @@ public class SelectParameterDialog extends ATitledDialog {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		sep.setLayoutData(gd);
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				if (prm == null)
+					getButton(IDialogConstants.OK_ID).setEnabled(false);
+			}
+		});
 
 		JaspersoftStudioPlugin.getExtensionManager().createParameterICUI(cmp, prm, designer);
 
