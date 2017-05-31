@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.tabstops;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -29,12 +30,10 @@ public class TabStopsCellEditor extends EditableDialogCellEditor {
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		TabStopsEditor wizard = new TabStopsEditor();
-		wizard.setValue((List<TabStop>) getValue());
+		wizard.setValue(new ArrayList<TabStop>((List<TabStop>) getValue()));
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
-		dialog.create();
-		if (dialog.open() == Dialog.OK) {
+		if (dialog.open() == Dialog.OK)
 			return wizard.getValue();
-		}
 		return null;
 	}
 
