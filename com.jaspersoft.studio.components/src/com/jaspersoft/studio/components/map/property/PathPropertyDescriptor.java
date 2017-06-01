@@ -134,19 +134,19 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 										else if (mapInfo.getAddress() != null)
 											setAddress(mapInfo.getAddress());
 										else {
-											postCreateMap.put(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
+											addPostCreateCommand(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
 													getMapCenter().getLat());
-											postCreateMap.put(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
+											addPostCreateCommand(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
 													getMapCenter().getLng());
 										}
 										if (mapInfo.getMapType() != null)
 											setMapType(MapType.fromStringID(mapInfo.getMapType().getName()));
 										else
-											postCreateMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, getMapType());
+											addPostCreateCommand(StandardMapComponent.PROPERTY_MAP_TYPE, getMapType());
 										if (mapInfo.getZoom() != 0)
 											setZoomLevel(mapInfo.getZoom());
 										else
-											postCreateMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
+											addPostCreateCommand(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
 													getZoomLevel());
 									}
 								} finally {
@@ -380,23 +380,23 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 
 							@Override
 							protected void handleAddressChanged(String address) {
-								postCreateMap.put(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION, address);
-								postCreateMap.put(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, null);
-								postCreateMap.put(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION, null);
+								addPostCreateCommand(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION, address);
+								addPostCreateCommand(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, null);
+								addPostCreateCommand(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION, null);
 							}
 
 							@Override
 							protected void handleMapZoomChanged(int newZoomLevel) {
 								if (initMarkers)
 									return;
-								postCreateMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, newZoomLevel);
+								addPostCreateCommand(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, newZoomLevel);
 							}
 
 							@Override
 							protected void handleMapTypeChanged(MapType mapType) {
 								if (initMarkers)
 									return;
-								postCreateMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, mapType.ordinal());
+								addPostCreateCommand(StandardMapComponent.PROPERTY_MAP_TYPE, mapType.ordinal());
 							}
 
 							@Override
@@ -405,10 +405,10 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 									return;
 								super.handleMapCenterChanged(position);
 								if (Misc.isNullOrEmpty(getAddress())) {
-									postCreateMap.put(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION, null);
-									postCreateMap.put(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
+									addPostCreateCommand(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION, null);
+									addPostCreateCommand(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
 											coordinatesFormatter.format(position.getLat()));
-									postCreateMap.put(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
+									addPostCreateCommand(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
 											coordinatesFormatter.format(position.getLng()));
 								}
 							}
