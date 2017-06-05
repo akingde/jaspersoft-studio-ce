@@ -242,7 +242,7 @@ public class CategoriesPage extends JSSWizardPage {
 		customCategory.setToolTipText(Messages.CategoriesPage_customCatBox);
 		customCategory.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		TableViewer leftTView = new TableViewer(leftTable);
+		final TableViewer leftTView = new TableViewer(leftTable);
 		leftTView.setContentProvider(new ListContentProvider());
 		setLabelProvider(leftTView);
 		createMenu(leftTView);
