@@ -432,6 +432,7 @@ public class BordersSection extends AbstractSection {
 
 		lineWidth = new NullableSpinner(composite, SWT.BORDER, 2, 6);
 		lineWidth.setDefaultValue(0f);
+		lineWidth.setIncrement(0.25f);
 		GridData lineWidthData = new GridData();
 		lineWidthData.widthHint = 50 ;
 		lineWidth.setLayoutData(lineWidthData);

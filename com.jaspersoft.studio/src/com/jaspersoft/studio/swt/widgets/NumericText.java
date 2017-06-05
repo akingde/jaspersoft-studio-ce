@@ -99,7 +99,7 @@ public class NumericText extends Text {
 	/**
 	 * The increment step where the increment or decrements methods are called
 	 */
-	private int increamentStep = 1;
+	private float increamentStep = 1;
 	
 	/**
 	 * The default value shown in the text area when the value is null
@@ -615,7 +615,7 @@ public class NumericText extends Text {
 	 *  
 	 * @param step a positive integer
 	 */
-	public void setIncrementStep(int step){
+	public void setIncrementStep(float step){
 		Assert.isTrue(step >= 0, "The step can't be negative");
 		this.increamentStep = step;
 	}
