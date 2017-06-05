@@ -52,6 +52,8 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 import com.jaspersoft.templates.TemplateBundle;
 
 import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion;
+import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion.RESPONSE_TYPE;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRExpression;
@@ -221,15 +223,27 @@ public class ResourcePage extends JSSHelpWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.SAVE);
-		    fd.setText(Messages.ExportImageAction_saveDialogTitle);
-		    String[] filterExt = { "*.jrxml" }; //$NON-NLS-1$
-		    fd.setFileName(bundle.getLabel());
-		    fd.setFilterExtensions(filterExt);
-		    String selected = fd.open();
-		    if (selected != null){
-		    	pathText.setText(selected);
-		    	if (!conflictResources) setPageComplete(true);
-		    }
+			    fd.setText(Messages.ExportImageAction_saveDialogTitle);
+			    String[] filterExt = { "*.jrxml" }; //$NON-NLS-1$
+			    fd.setFileName(bundle.getLabel());
+			    fd.setFilterExtensions(filterExt);
+			    String selected = fd.open();
+			    if (selected != null){
+			    	File checkExisting = new File(selected);
+			    	boolean doIt = true;
+			    	if (checkExisting.exists()){
+			    		RESPONSE_TYPE response = RunnableOverwriteQuestion.showQuestion(Messages.ResourcePage_templateAlreadyExistTitle, Messages.ResourcePage_templateAlreadyExistMessage, false);
+			    		if (!RESPONSE_TYPE.OVERWRITE.equals(response)){
+			    			doIt = false;
+			    		}
+			    	}
+			    	if (doIt) {
+			    		pathText.setText(selected);
+				    	if (!conflictResources) {
+				    		setPageComplete(true);
+				    	}
+			    	}
+			    }
 			}
 		});
 		
@@ -446,7 +460,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 				JRDesignImage im = (JRDesignImage) el;
 				String res = evalResourceName(im.getExpression());
 				File resFile = findFile(reportFile, res);
-				if (resFile != null) im.setExpression(new JRDesignExpression("\""+resFile.getName()+"\""));
+				if (resFile != null) im.setExpression(new JRDesignExpression("\""+resFile.getName()+"\"")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			if (el instanceof JRDesignSubreport) {
@@ -455,7 +469,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 				if (res.endsWith(".jasper")) { //$NON-NLS-1$
 					res = res.substring(0, res.length() - ".jasper".length()) + ".jrxml"; //$NON-NLS-1$ //$NON-NLS-2$
 					File resFile = findFile(reportFile, res);
-					sr.setExpression(new JRDesignExpression("\""+resFile.getName()+"\""));
+					sr.setExpression(new JRDesignExpression("\""+resFile.getName()+"\"")); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
@@ -466,7 +480,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 			String res = evalResourceName(t.getSourceExpression());
 			if (res != null && t instanceof JRDesignReportTemplate) {
 				File resFile = findFile(reportFile, res);
-				((JRDesignReportTemplate)t).setSourceExpression(new JRDesignExpression("\""+resFile.getName()+"\""));
+				((JRDesignReportTemplate)t).setSourceExpression(new JRDesignExpression("\""+resFile.getName()+"\"")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}

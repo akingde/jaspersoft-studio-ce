@@ -1931,6 +1931,8 @@ public class Messages extends NLS {
 	public static String ResourcePage_exportedResourceLabel;
 	public static String ResourcePage_pageDescription;
 	public static String ResourcePage_pageTitle;
+	public static String ResourcePage_templateAlreadyExistMessage;
+	public static String ResourcePage_templateAlreadyExistTitle;
 	public static String ReturnValuesPropertyPage_0;
 	public static String ReturnValuesPropertyPage_1;
 	public static String ReturnValuesPropertyPage_2;
