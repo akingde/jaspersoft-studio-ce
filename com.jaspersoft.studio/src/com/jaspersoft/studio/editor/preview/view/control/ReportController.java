@@ -309,7 +309,8 @@ public class ReportController {
 					MultiPageEditorPart mpe = ((MultiPageEditorSite) pcontainer.getSite()).getMultiPageEditor();
 					IEditorPart[] editors = mpe.findEditors(mpe.getEditorInput());
 					if (editors != null && editors.length > 0) {
-						// Dialog, if not ..., it's not clear for the user that error happened
+						// Dialog, if not ..., it's not clear for the user that
+						// error happened
 						UIUtils.showInformation(Messages.ReportControler_compilationerrors);
 
 						mpe.setActiveEditor(editors[0]);
@@ -372,7 +373,12 @@ public class ReportController {
 						jasperReport = compileJasperDesign(file, jd, monitor);
 					if (jasperReport != null) {
 						if (pcontainer.isRunDirty() || prmInput == null) {
+							Map<String, Object> oldm = new HashMap<String, Object>(jrContext.getJRParameters());
 							ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
+							Map<String, Object> pmap = jrContext.getJRParameters();
+							for (String key : oldm.keySet())
+								if (pmap.containsKey(key))
+									pmap.put(key, oldm.get(key));
 							if (viewmap != null)
 								fillForms();
 						}
@@ -400,10 +406,12 @@ public class ReportController {
 							c.startMessage(Messages.ReportControler_msg_fillreports);
 
 							setupRecordCounters();
-							JaspersoftStudioPlugin.getExtensionManager().onRun(jrContext, jasperReport, jasperParameters);
+							JaspersoftStudioPlugin.getExtensionManager().onRun(jrContext, jasperReport,
+									jasperParameters);
 
 							setupDataSnapshot();
-							// We create the fillHandle to run the report based on the type of data adapter....
+							// We create the fillHandle to run the report based
+							// on the type of data adapter....
 							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jrContext, jasperReport,
 									new HashMap<String, Object>(jasperParameters));
 
@@ -456,7 +464,8 @@ public class ReportController {
 		});
 	}
 
-	private JasperReport compileJasperDesign(IFile file, JasperDesign jd, IProgressMonitor monitor) throws CoreException {
+	private JasperReport compileJasperDesign(IFile file, JasperDesign jd, IProgressMonitor monitor)
+			throws CoreException {
 		// stats.startCount(ST_COMPILATIONTIMESUBREPORT);
 		// CompileAction.doRun(jrContext, monitor, false);
 		// stats.endCount(ST_COMPILATIONTIMESUBREPORT);
@@ -517,7 +526,8 @@ public class ReportController {
 		c.startMessage(Messages.ReportControler_msg_setdataadapter);
 		DataAdapterDescriptor daDesc = pcontainer.getDataAdapterDesc();
 		if (daDesc != null)
-			jasperParameters.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, daDesc.getDataAdapter());
+			jasperParameters.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER,
+					daDesc.getDataAdapter());
 		doneMessage();
 	}
 
@@ -678,7 +688,8 @@ public class ReportController {
 		Date creationTimestamp = new Date();
 		ReportContext rc = (ReportContext) jasperParameters.get(JRParameter.REPORT_CONTEXT);
 		if (rc != null && rc instanceof SimpleReportContext) {
-			DataCacheHandler dch = (DataCacheHandler) rc.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
+			DataCacheHandler dch = (DataCacheHandler) rc
+					.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
 			String msg = "No";
 			if (dch != null && dch.getDataSnapshot() != null) {
 				msg = "Yes";
@@ -715,6 +726,7 @@ public class ReportController {
 	}
 
 	// private void refreshRightView() {
-	// pcontainer.switchRightView(pcontainer.getDefaultViewer(), stats, pcontainer.getRightContainer());
+	// pcontainer.switchRightView(pcontainer.getDefaultViewer(), stats,
+	// pcontainer.getRightContainer());
 	// }
 }
