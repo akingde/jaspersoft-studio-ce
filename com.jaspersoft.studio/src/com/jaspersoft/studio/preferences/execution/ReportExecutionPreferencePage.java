@@ -44,13 +44,15 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 
 	public static final String JSS_EXECPREFIX = "com.jaspersoft.studio.execute."; //$NON-NLS-1$
 	public static final String JSS_LIMIT_RECORDS = JSS_EXECPREFIX + "limitrecords"; //$NON-NLS-1$
-	public static final String JSS_MAX_RECORDS = JSS_EXECPREFIX + JRDesignParameter.REPORT_MAX_COUNT; //$NON-NLS-1$
+	public static final String JSS_MAX_RECORDS = JSS_EXECPREFIX + JRDesignParameter.REPORT_MAX_COUNT; // $NON-NLS-1$
 
-	public static final String JSS_IGNOREPAGINATION = JSS_EXECPREFIX + JRDesignParameter.IS_IGNORE_PAGINATION; //$NON-NLS-1$
+	public static final String JSS_IGNOREPAGINATION = JSS_EXECPREFIX + JRDesignParameter.IS_IGNORE_PAGINATION; // $NON-NLS-1$
 
-	public static final String JSS_REPORT_LOCALE = JRFiller.PROPERTY_DEFAULT_LOCALE; //$NON-NLS-1$
-	public static final String JSS_REPORT_TIMEZONE = JRFiller.PROPERTY_DEFAULT_TIMEZONE; //$NON-NLS-1$
+	public static final String JSS_REPORT_LOCALE = JRFiller.PROPERTY_DEFAULT_LOCALE; // $NON-NLS-1$
+	public static final String JSS_REPORT_TIMEZONE = JRFiller.PROPERTY_DEFAULT_TIMEZONE; // $NON-NLS-1$
 	public static final String JSS_REPORT_FORCE_PARAMETER_TIMEZONE = "com.jaspersoft.studio.parameters.usetimezone"; //$NON-NLS-1$
+
+	public static final String JSS_RUNREPORTONDACHANGE = "com.jaspersoft.studio.run.report.on.da.change"; //$NON-NLS-1$
 
 	private BooleanFieldEditor bfeONEXIT;
 	private JSSComboFieldEditor cfeType;
@@ -67,32 +69,41 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	/**
-	 * Creates the field editors. Field editors are abstractions of the common GUI blocks needed to manipulate various
-	 * types of preferences. Each field editor knows how to save and restore itself.
+	 * Creates the field editors. Field editors are abstractions of the common
+	 * GUI blocks needed to manipulate various types of preferences. Each field
+	 * editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
+		BooleanFieldEditor brunOnDaChange = new BooleanFieldEditor(JSS_RUNREPORTONDACHANGE,
+				"Run report on Data Adapter change", getFieldEditorParent());
+		brunOnDaChange.getDescriptionControl(getFieldEditorParent())
+				.setToolTipText("Run report on Data Adapter change");
+		addField(brunOnDaChange);
+
+		BooleanFieldEditor timezoneCheckBox = new BooleanFieldEditor(JSS_REPORT_FORCE_PARAMETER_TIMEZONE,
+				"Calculate date ranges for input parameters using system time zone", getFieldEditorParent());
+		timezoneCheckBox.getDescriptionControl(getFieldEditorParent()).setToolTipText(
+				"Calculates date ranges for input parameters using the system time zone. Set to false to use the time zone set in theï¿½reportï¿½(REPORT_TIME_ZONE).");
+		addField(timezoneCheckBox);
+
 		addField(new LocaleFieldEditor(JSS_REPORT_LOCALE, Messages.ReportExecutionPreferencePage_localeLabel,
 				getFieldEditorParent()));
 		addField(new TimeZoneFieldEditor(JSS_REPORT_TIMEZONE, Messages.ReportExecutionPreferencePage_timeZoneLabel,
 				getFieldEditorParent()));
-		
-		BooleanFieldEditor timezoneCheckBox = new BooleanFieldEditor(JSS_REPORT_FORCE_PARAMETER_TIMEZONE, 
-				"Calculate date ranges for input parameters using system time zone", getFieldEditorParent());
-		timezoneCheckBox.getDescriptionControl(getFieldEditorParent()).setToolTipText(
-				"Calculates date ranges for input parameters using the system time zone. Set to false to use the time zone set in the report (REPORT_TIME_ZONE).");
-		addField(timezoneCheckBox);
 
-		bLimRec = new BooleanFieldEditor(JSS_LIMIT_RECORDS, Messages.ReportExecutionPreferencePage_limitNumberLabel, getFieldEditorParent());
+		bLimRec = new BooleanFieldEditor(JSS_LIMIT_RECORDS, Messages.ReportExecutionPreferencePage_limitNumberLabel,
+				getFieldEditorParent());
 		addField(bLimRec);
-		mnumrec = new SpinnerFieldEditor(JSS_MAX_RECORDS, Messages.ReportExecutionPreferencePage_maxNumberLabel, getFieldEditorParent(), 0);
+		mnumrec = new SpinnerFieldEditor(JSS_MAX_RECORDS, Messages.ReportExecutionPreferencePage_maxNumberLabel,
+				getFieldEditorParent(), 0);
 		mnumrec.setMinimum(-1);
 		mnumrec.setMaximum(Integer.MAX_VALUE);
-		mnumrec.getLabelControl(getFieldEditorParent()).setToolTipText(
-				Messages.ReportExecutionPreferencePage_maxNumberTooltip);
+		mnumrec.getLabelControl(getFieldEditorParent())
+				.setToolTipText(Messages.ReportExecutionPreferencePage_maxNumberTooltip);
 		addField(mnumrec);
 
-		addField(new BooleanFieldEditor(JSS_IGNOREPAGINATION, Messages.ReportExecutionPreferencePage_ignorePaginationLabel,
-				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(JSS_IGNOREPAGINATION,
+				Messages.ReportExecutionPreferencePage_ignorePaginationLabel, getFieldEditorParent()));
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
@@ -114,13 +125,14 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		HelpSystem.setHelp(sfePAGEELSIZE.getSpinnerControl(),
 				StudioPreferencePage.REFERENCE_PREFIX + sfePAGEELSIZE.getPreferenceName());
 
-		cfeType = new JSSComboFieldEditor(
-				JSS_VIRTUALIZER_TYPE,
-				Messages.ReportExecutionPreferencePage_typeLabel,
+		cfeType = new JSSComboFieldEditor(JSS_VIRTUALIZER_TYPE, Messages.ReportExecutionPreferencePage_typeLabel,
 				new String[][] {
-						{ Messages.ReportExecutionPreferencePage_fileVritualizerEntry, JRFileVirtualizer.class.getName() },
-						{ Messages.ReportExecutionPreferencePage_gzipMemoryVirtualizer, JRGzipVirtualizer.class.getName() },
-						{ Messages.ReportExecutionPreferencePage_singleSwapFileVirtualizer, JRSwapFileVirtualizer.class.getName() } },
+						{ Messages.ReportExecutionPreferencePage_fileVritualizerEntry,
+								JRFileVirtualizer.class.getName() },
+						{ Messages.ReportExecutionPreferencePage_gzipMemoryVirtualizer,
+								JRGzipVirtualizer.class.getName() },
+						{ Messages.ReportExecutionPreferencePage_singleSwapFileVirtualizer,
+								JRSwapFileVirtualizer.class.getName() } },
 				getFieldEditorParent());
 		addField(cfeType);
 
@@ -128,8 +140,8 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent(), 0);
 		msfe.setMinimum(0);
 		msfe.setMaximum(Integer.MAX_VALUE);
-		msfe.getLabelControl(getFieldEditorParent()).setToolTipText(
-				Messages.ReportExecutionPreferencePage_maximumSizeTooltip);
+		msfe.getLabelControl(getFieldEditorParent())
+				.setToolTipText(Messages.ReportExecutionPreferencePage_maximumSizeTooltip);
 		addField(msfe);
 
 		dfeTMP = new DirectoryFieldEditor(JSS_VIRTUALIZER_TMP, Messages.ReportExecutionPreferencePage_tempPathLabel,
@@ -154,8 +166,8 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		enableLimitRecords(getPreferenceStore().getBoolean(JSS_LIMIT_RECORDS));
 
 		enableSwapVirtualizer(vtype.equals(VirtualizerType.SWAP));
-		
-		//Eventually create the extensions for the page
+
+		// Eventually create the extensions for the page
 		super.createFieldEditors();
 	}
 
@@ -213,7 +225,8 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 * @see
+	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
 	}
@@ -231,11 +244,12 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JRFileVirtualizer.PROPERTY_TEMP_FILES_SET_DELETE_ON_EXIT, "false"); //$NON-NLS-1$
 
 		store.setDefault(JSS_LIMIT_RECORDS, "false");//$NON-NLS-1$
-		store.setDefault(JSS_MAX_RECORDS, -1);//$NON-NLS-1$
+		store.setDefault(JSS_MAX_RECORDS, -1);// $NON-NLS-1$
 		store.setDefault(JSS_IGNOREPAGINATION, "false");//$NON-NLS-1$
-		store.setDefault(JSS_REPORT_LOCALE, Locale.getDefault().toString());//$NON-NLS-1$
-		store.setDefault(JSS_REPORT_TIMEZONE, TimeZone.getDefault().getID());//$NON-NLS-1$ 
+		store.setDefault(JSS_REPORT_LOCALE, Locale.getDefault().toString());// $NON-NLS-1$
+		store.setDefault(JSS_REPORT_TIMEZONE, TimeZone.getDefault().getID());// $NON-NLS-1$
 		store.setDefault(JSS_REPORT_FORCE_PARAMETER_TIMEZONE, false);
+		store.setDefault(JSS_RUNREPORTONDACHANGE, "true");
 	}
 
 	@Override
