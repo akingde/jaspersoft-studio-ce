@@ -594,6 +594,7 @@ public class FixedMeasurePropertyDescription extends AbstractMeasurePropertyDesc
 				return super.createDialogArea(parent);
 			}
 		};
+		result.setForceExpressionMode(wItemProp.hasForcedExpression());
 		return result;
 	}
 

@@ -64,7 +64,14 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
  */
 public class WItemProperty extends Composite implements IExpressionContextSetter, IWItemProperty {
 	
-	/** Suffix for properties requiring a custom simple mode handling */
+	/**
+	 * Style bit: for only the expression mode on the advance dialog
+	 */
+	public static final int FORCE_EXPRESSION_DIALOG = 1 << 1;
+	
+	/** 
+	 * Suffix for properties requiring a custom simple mode handling 
+	 */
 	public static final String CUSTOM_SIMPLE_MODE_SUFFIX = "_customSimpleMode";
 
 	/**
@@ -373,6 +380,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			dialog = ((IDialogProvider)ipDesc).getDialog(this);
 		} else {
 			dialog = new ItemPropertyElementDialog(UIUtils.getShell(), ipDesc, this);
+			dialog.setForceExpressionMode(hasForcedExpression());
 		}
 		if (dialog.open() == Dialog.OK) {
 			setValue(dialog.getStaticValue(), dialog.getExpressionValue());
@@ -535,4 +543,15 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	public ItemPropertyLayoutData getContentLayoutData(){
 		return contentLayoutData;
 	}
+	
+	/**
+	 * Check if the elements has the flag to force only the expression editing in the dialog
+	 * 
+	 * @return true if the {@link WItemProperty} was created with the force expression dialog stylebit
+	 * false otherwise
+	 */
+	public boolean hasForcedExpression() {
+		return (getStyle() & FORCE_EXPRESSION_DIALOG) == FORCE_EXPRESSION_DIALOG;
+	}
+
 }
