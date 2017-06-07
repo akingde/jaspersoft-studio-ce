@@ -23,6 +23,8 @@ import com.jaspersoft.studio.model.MLockableRefresh;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
+import net.sf.jasperreports.engine.JRChild;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
@@ -288,13 +290,13 @@ public class JSSCompoundCommand extends CompoundCommand {
 					GraphicalViewer viewer = visaulEditor.getGraphicalViewer();
 					if (viewer != null){
 						List<?> selectedParts = viewer.getSelectedEditParts();
-						ArrayList<JRDesignElement> oldSelection = new ArrayList<JRDesignElement>();
+						ArrayList<JRChild> oldSelection = new ArrayList<JRChild>();
 						for(Object obj : selectedParts){
 							EditPart part = (EditPart)obj;
 							if (part.getModel() instanceof ANode){
 								ANode model = (ANode)part.getModel();
-								if (model.getValue() instanceof JRDesignElement){
-									oldSelection.add((JRDesignElement)model.getValue());
+								if (model.getValue() instanceof JRDesignElement || model.getValue() instanceof JRDesignBand){
+									oldSelection.add((JRChild)model.getValue());
 								}
 							}
 						}

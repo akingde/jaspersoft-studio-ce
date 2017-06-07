@@ -13,7 +13,7 @@ import org.eclipse.jface.viewers.ISelection;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 import net.sf.jasperreports.eclipse.util.Pair;
-import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.JRChild;
 
 /**
  * Command used to modify the selection of the current editor
@@ -26,7 +26,7 @@ public class SelectElementCommand extends Command {
 	/**
 	 * The element to select
 	 */
-	private List<JRDesignElement> elementsToSelect;
+	private List<JRChild> elementsToSelect;
 	
 	/**
 	 * The old selection, stored during the execute to allow the undo
@@ -38,7 +38,7 @@ public class SelectElementCommand extends Command {
 	 * 
 	 * @param elementsToSelect List of the JRDesignElement to select on the command execution
 	 */
-	public SelectElementCommand(List<JRDesignElement> elementsToSelect){
+	public SelectElementCommand(List<JRChild> elementsToSelect){
 		this.elementsToSelect = elementsToSelect;
 	}
 	

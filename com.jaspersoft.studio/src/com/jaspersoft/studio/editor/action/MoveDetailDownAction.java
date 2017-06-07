@@ -71,7 +71,7 @@ public class MoveDetailDownAction extends ACachedSelectionAction implements IGlo
 		if (!checkSameType(firstBand, bands)) return null;
 		
 		JSSCompoundCommand cmd = new JSSCompoundCommand(firstBand);
-		
+		cmd.enableSelectionRestore(true);
 		List<Pair<Integer, MBand>> bandsToMove = new ArrayList<Pair<Integer, MBand>>();
 		//Check that all the bands can be moved
 		for(Object obj : bands){

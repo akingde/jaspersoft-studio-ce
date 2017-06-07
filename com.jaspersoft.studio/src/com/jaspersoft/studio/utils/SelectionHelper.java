@@ -67,12 +67,13 @@ import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.eclipse.classpath.ClassLoaderUtil;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Pair;
+import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.util.FileResolver;
 
 public class SelectionHelper {
 
-	public static EditPart getEditPart(JRDesignElement jrElement) {
+	public static EditPart getEditPart(JRChild jrElement) {
 		ANode node = getNode(jrElement);
 
 		if (node != null) {
@@ -91,7 +92,7 @@ public class SelectionHelper {
 	 *          the element to search
 	 * @return the node of the passed element in the current editor, or null if it can't be found
 	 */
-	public static ANode getNode(JRDesignElement jrElement) {
+	public static ANode getNode(JRChild jrElement) {
 		AbstractJRXMLEditor editor = (AbstractJRXMLEditor) getActiveJRXMLEditor();
 		if (editor != null) {
 			IEditorPart designEditor = editor.getActiveInnerEditor();
@@ -177,7 +178,7 @@ public class SelectionHelper {
 		return false;
 	}
 
-	public static void setSelection(JRDesignElement jrElement, boolean add) {
+	public static void setSelection(JRChild jrElement, boolean add) {
 		EditPart ep = getEditPart(jrElement);
 		if (ep != null) {
 			// The selection is set only if the refresh is enabled
@@ -209,9 +210,9 @@ public class SelectionHelper {
 	 * @return the previous selection, in a pair where the key is the selection and the value is the viewer where it was
 	 *         set
 	 */
-	public static Pair<ISelection, EditPartViewer> setSelection(List<JRDesignElement> jrElements, boolean add) {
+	public static Pair<ISelection, EditPartViewer> setSelection(List<JRChild> jrElements, boolean add) {
 		ArrayList<EditPart> editParts = new ArrayList<EditPart>();
-		for (JRDesignElement jrElement : jrElements) {
+		for (JRChild jrElement : jrElements) {
 			EditPart ep = getEditPart(jrElement);
 			if (ep != null) {
 				editParts.add(ep);

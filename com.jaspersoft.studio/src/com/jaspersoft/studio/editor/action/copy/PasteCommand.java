@@ -30,6 +30,7 @@ import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.command.CreateConditionalStyleCommand;
 
+import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -90,7 +91,7 @@ public class PasteCommand extends Command {
 			return;
 		createdNodes = 0;
 		createdElements = new ArrayList<INode>();
-		List<JRDesignElement> createdDesignElements = new ArrayList<JRDesignElement>();
+		List<JRChild> createdDesignElements = new ArrayList<JRChild>();
 		for (ANode node : list.keySet()) {
 			JSSCompoundCommand cmd = new JSSCompoundCommand(node);
 			// create new Node put, clone into it
