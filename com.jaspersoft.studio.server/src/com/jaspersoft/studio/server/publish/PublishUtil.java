@@ -173,15 +173,20 @@ public class PublishUtil {
 				;// ovw = OverwriteEnum.OVERWRITE;
 			else if (ovw.equals(OverwriteEnum.OVERWRITE))
 				ovw = OverwriteEnum.IGNORE;
-			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"), ovw.getValue());
 
-			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"),
-					popt.getPublishMethod().toString());
-			if (popt.getReferencedResource() != null)
-				ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"),
-						popt.getReferencedResource().getUriString());
-			else
-				ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"), null);
+			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"), ovw.getValue());
+			if (ovw.equals(OverwriteEnum.ONLY_EXPRESSION)) {
+				ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".expression"),
+						popt.getExpression());
+			} else {
+				ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"),
+						popt.getPublishMethod().toString());
+				if (popt.getReferencedResource() != null)
+					ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"),
+							popt.getReferencedResource().getUriString());
+				else
+					ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"), null);
+			}
 		}
 	}
 
@@ -211,20 +216,28 @@ public class PublishUtil {
 				exists = true;
 				popt.setOverwrite(OverwriteEnum.getByValue(ovw));
 			}
-			String ref = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"));
-			if (ref != null) {
-				exists = true;
-				popt.setPublishMethod(ResourcePublishMethod.valueOf(ref));
-				String path = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"));
-				if (path != null) {
-					ResourceDescriptor rd = new ResourceDescriptor();
-					rd.setParentFolder(RDUtil.getParentFolder(path));
-					rd.setUriString(path);
-					rd.setWsType(f.getValue().getWsType());
-					popt.setReferencedResource(
-							WSClientHelper.getResource(monitor, f, rd, FileUtils.createTempFile("tmp", "")));
-				} else
-					popt.setPublishMethod(ResourcePublishMethod.LOCAL);
+			if (ovw.equals(OverwriteEnum.ONLY_EXPRESSION.getValue())) {
+				String exp = ifile
+						.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".expression"));
+				if (exp != null)
+					popt.setExpression(exp);
+			} else {
+				String ref = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"));
+				if (ref != null) {
+					exists = true;
+					popt.setPublishMethod(ResourcePublishMethod.valueOf(ref));
+					String path = ifile
+							.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"));
+					if (path != null) {
+						ResourceDescriptor rd = new ResourceDescriptor();
+						rd.setParentFolder(RDUtil.getParentFolder(path));
+						rd.setUriString(path);
+						rd.setWsType(f.getValue().getWsType());
+						popt.setReferencedResource(
+								WSClientHelper.getResource(monitor, f, rd, FileUtils.createTempFile("tmp", "")));
+					} else
+						popt.setPublishMethod(ResourcePublishMethod.LOCAL);
+				}
 			}
 		} catch (Exception e) {
 			popt.setPublishMethod(ResourcePublishMethod.LOCAL);
