@@ -78,7 +78,7 @@ public class TableDialog extends PersistentLocationDialog {
 				if (oldValue instanceof List) {
 					oldValue = value;
 				} else {
-					((Collection) oldValue).clear();
+					((Collection<?>) oldValue).clear();
 					((Collection) oldValue).addAll(value);
 				}
 			} else if (oldValue.getClass().isArray())
@@ -103,7 +103,9 @@ public class TableDialog extends PersistentLocationDialog {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+	 * @see
+	 * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.
+	 * Shell)
 	 */
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
