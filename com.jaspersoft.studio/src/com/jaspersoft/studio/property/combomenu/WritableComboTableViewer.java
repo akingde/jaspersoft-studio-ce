@@ -94,6 +94,11 @@ public class WritableComboTableViewer implements IMenuProvider {
 			protected void setTableData(Table table) {
 				refreshTableItems(table);
 			}
+			
+			@Override
+			protected int getTopItem(Table table) {
+				return computeTopItem(table);
+			}
 		};
 		// tell the TableCombo that I want 2 blank columns auto sized.
 		dropDownHandle.defineColumns(2);
@@ -127,6 +132,31 @@ public class WritableComboTableViewer implements IMenuProvider {
 			}
 
 		}
+	}
+	
+	/**
+	 * Return the index of the {@link TableItem} with the same text of the text area. if there is no element 
+	 * selected that completely match the text it return the one that start with the same text. If no element
+	 * start with the text of the text area then it return -1
+	 */
+	private int computeTopItem(Table table){
+		int firstFullMatch = -1;
+		int firstPartialMatch = -1;
+		int index = 0;
+		String text = dropDownHandle.getText().trim().toLowerCase();
+		for(TableItem item : table.getItems()){
+			String itemText = item.getText().trim().toLowerCase();
+			if (firstFullMatch == -1 && itemText.equals(text)){
+				firstFullMatch = index; 
+			}  
+			if (firstPartialMatch == -1 && itemText.startsWith(text)){
+				firstPartialMatch = index;
+			}
+			if (firstFullMatch != -1 && firstPartialMatch != -1) break;
+			index ++;
+		}
+		if (firstFullMatch != -1) return firstFullMatch;
+		else return firstPartialMatch;
 	}
 	
 	/**
@@ -294,8 +324,6 @@ public class WritableComboTableViewer implements IMenuProvider {
 		loc.y += r.height;
 		menu.setLocation(loc);
 	}
-
-
 
 	/**
 	 * Set the actual item selected in the menu (the selected item has a bold like text)

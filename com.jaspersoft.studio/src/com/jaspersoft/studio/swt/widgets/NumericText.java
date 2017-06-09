@@ -324,6 +324,7 @@ public class NumericText extends Text {
 	 * @return  true if the values have the same textual representation, false otherwise
 	 */
 	protected boolean hasSameValue(Number newValue, Number storedValue){
+		if (currentState != VALIDATION_RESULT.VALID) return false;
 		if (ModelUtils.safeEquals(newValue, storedValue)) return true;
 		String newFormat = null;
 		if (newValue != null) newFormat = formatNumber(newValue);

@@ -37,7 +37,6 @@ import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRFont;
-import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignFont;
 import net.sf.jasperreports.engine.fonts.FontUtil;
 
@@ -192,8 +191,15 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 					 */
 					@Override
 					public void exec() {
-						propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME,
-								combo.getSelectionValue() != null ? combo.getSelectionValue().toString() : null);
+						Object selectionValue = combo.getSelectionValue();
+						String newValue = null;
+						if (selectionValue != null && !selectionValue.toString().trim().isEmpty()){
+							newValue = selectionValue.toString();
+						}
+						boolean valueChanged = section.changeProperty(pDescriptor.getId(), newValue);
+						if (valueChanged){
+							setData(section.getElement(), section.getElement().getPropertyActualValue(pDescriptor.getId()), newValue);
+						}
 					}
 				});
 				refreshFont();
