@@ -453,7 +453,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				return new CreateParameterCommand((MCrosstabParameters) parent, (MParameter) child, newIndex);
 		}
 		if (child instanceof MMeasure) {
-			if (parent instanceof MCell || parent instanceof MMeasures)
+			if (parent instanceof MCell)
 				return UnexecutableCommand.INSTANCE;
 			if (parent instanceof MCrosstab)
 				return new CreateMeasureCommand((MCrosstab) parent, (MMeasure) child, newIndex);
