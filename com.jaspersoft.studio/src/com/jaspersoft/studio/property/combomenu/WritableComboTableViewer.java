@@ -75,7 +75,6 @@ public class WritableComboTableViewer implements IMenuProvider {
 	 */
 	private boolean disableSelectedItemEmphasis = false;
 	
-
 	/**
 	 * Constructs a new instance of this class given its parent and a style value describing its behavior and appearance.
 	 * 
@@ -102,7 +101,6 @@ public class WritableComboTableViewer implements IMenuProvider {
 		dropDownHandle.setDisplayColumnIndex(0);
 		dropDownHandle.setShowTableHeader(false);
 		listeners = new ArrayList<ComboItemAction>();
-
 		
 		dropDownHandle.addModifyListener(new ModifyListener() {
 			
@@ -118,7 +116,7 @@ public class WritableComboTableViewer implements IMenuProvider {
 	}
 	
 	private void refreshTableItems(Table table){
-		table.clearAll();
+		table.removeAll();
 		for(ComboItem item : elementList){
 			TableItem tableItem = new TableItem(table, SWT.NONE);
 			if (item instanceof ComboItemSeparator){
@@ -406,5 +404,9 @@ public class WritableComboTableViewer implements IMenuProvider {
 	
 	public void setBackground(Color color){
 		dropDownHandle.setBackground(color);
+	}
+	
+	public void setInherithed(boolean isInherited){
+		dropDownHandle.setInherithed(isInherited);
 	}
 }

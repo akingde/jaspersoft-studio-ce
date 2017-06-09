@@ -86,11 +86,6 @@ public class NumericTableCombo extends Composite {
 	private boolean isNullable = true;
 	
 	/**
-	 * Flag to know if the shown value is inherited or not
-	 */
-	private boolean isInherited = false;
-	
-	/**
 	 * Flag used to know if the trailing zeroes after the decimal separator should be removed or not
 	 */
 	private boolean removeTrailZeroes = false;
@@ -131,11 +126,6 @@ public class NumericTableCombo extends Composite {
 	 * The background color to use when there aren't validation errors
 	 */
 	private Color defaultBackgroundColor;
-	
-	/**
-	 * Store the original color of the widget
-	 */
-	private Color foregroundColor = null;
 	
 	/**
 	 * The status of the value displayed
@@ -204,7 +194,6 @@ public class NumericTableCombo extends Composite {
 	public NumericTableCombo(Composite parent, int style, int decimalDigitsShown, int decimalDigitsAccepted){
 		super(parent, style);
 		createControls();
-		foregroundColor = getForeground();
 		this.formatter = new ValidatedDecimalFormat(decimalDigitsShown, decimalDigitsAccepted);
 		addListeners();
 		//defaultBackgroundColor = parent.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
@@ -220,7 +209,6 @@ public class NumericTableCombo extends Composite {
 	public NumericTableCombo(Composite parent, NumberFormat formatter, int style) {
 		super(parent, style);
 		createControls();
-		foregroundColor = getForeground();
 		addListeners();
 		this.formatter = formatter;
 		Assert.isTrue(formatter != null, "The formatter can't be null");
@@ -320,15 +308,7 @@ public class NumericTableCombo extends Composite {
 	 * @param value true if the value is inherited, false otherwise
 	 */
 	public void setInherited(boolean value){
-		if (isInherited != value){
-			if (value){
-				foregroundColor = getForeground();
-				setComboForeground(ColorConstants.gray);
-			} else {
-				setComboForeground(foregroundColor);
-			}
-			this.isInherited = value;
-		}
+		controlCombo.setInherithed(value);
 	}
 	
 	/**
@@ -337,8 +317,7 @@ public class NumericTableCombo extends Composite {
 	 */
 	@Override
 	public void setForeground(Color color) {
-		foregroundColor = getForeground();
-		if (!isInherited) setComboForeground(color);
+		controlCombo.setForeground(color);
 	}
 	
 	@Override
@@ -918,4 +897,26 @@ public class NumericTableCombo extends Composite {
 	protected void setComboForeground(Color color){
 		controlCombo.setForeground(color);
 	}
+	
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public boolean setFocus () {
+	    checkWidget();
+	    if (!isEnabled () || !isVisible ()) return false;
+		if (isFocusControl ()) return true;
+		
+		return controlCombo.setFocus ();	    
+	}
+	
+	@Override
+	public boolean forceFocus() {
+		checkWidget();
+		if (!isEnabled () || !isVisible ()) return false;
+		if (isFocusControl ()) return true;
+			
+		return controlCombo.forceFocus();
+	}
+	
 }

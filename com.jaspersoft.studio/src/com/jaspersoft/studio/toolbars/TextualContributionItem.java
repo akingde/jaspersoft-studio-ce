@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -729,9 +728,9 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		//Point selection = fontName.getSelection();
 		fontName.setText(Misc.nvl(resolvedValue, "").toString());
 		if (elementValue == null){
-			fontName.setForeground(ColorConstants.gray);
+			fontName.setInherithed(true);
 		} else {
-			fontName.setForeground(ColorConstants.black);
+			fontName.setInherithed(false);
 		}
 		//fontName.setSelection(selection);
 	}
