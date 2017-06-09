@@ -66,6 +66,8 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.JREnum;
+import net.sf.jasperreports.engine.type.NamedValueEnum;
 import net.sf.jasperreports.engine.type.PropertyEvaluationTimeEnum;
 
 public class WJRProperty extends AWidget {
@@ -130,9 +132,16 @@ public class WJRProperty extends AWidget {
 					Class<?> clazz = Class.forName(c.getPropertyType());
 					if (clazz.isEnum()) {
 						Object[] obj = clazz.getEnumConstants();
-						String[] items = new String[obj.length];
-						for (int i = 0; i < obj.length; i++)
-							items[i] = obj[i].toString();
+						String[][] items = new String[obj.length][2];
+						for (int i = 0; i < obj.length; i++) {
+							items[i][1] = obj[i].toString();
+							if (obj[i] instanceof JREnum)
+								items[i][0] = ((JREnum) obj[i]).getName();
+							else if (obj[i] instanceof NamedValueEnum)
+								items[i][0] = ((NamedValueEnum<?>) obj[i]).getName();
+							else
+								items[i][0] = ((Enum<?>) obj[i]).name();
+						}
 						ipd = new ComboItemPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
 								c.getDefaultValue(), items);
 					}

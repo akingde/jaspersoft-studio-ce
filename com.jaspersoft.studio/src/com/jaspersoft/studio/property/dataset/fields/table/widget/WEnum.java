@@ -13,6 +13,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.type.JREnum;
+import net.sf.jasperreports.engine.type.NamedValueEnum;
 
 public class WEnum extends AWControl {
 	private Combo cmb;
@@ -37,9 +39,17 @@ public class WEnum extends AWControl {
 		Object[] obj = clazz.getEnumConstants();
 		for (Object item : obj) {
 			String eval = item.toString();
+			if (item instanceof JREnum)
+				eval = ((JREnum) item).getName();
+			else if (item instanceof NamedValueEnum)
+				eval = ((NamedValueEnum<?>) item).getName();
+			else
+				eval = ((Enum<?>) item).name();
+
 			Deprecated dep = obj.getClass().getAnnotation(Deprecated.class);
 			if (dep != null)
 				eval += " (deprecated)";
+
 			cmb.add(eval);
 		}
 
