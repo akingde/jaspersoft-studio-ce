@@ -67,7 +67,7 @@ public class SortParametersAction extends AbstractSortAction {
 	@Override
 	protected Command createCommand() {
 		List<Object> selection = editor.getSelectionCache().getSelectionModelForType(MParameters.class);
-		if (selection.size() == 1){
+		if (selection.size() == 1 && selection.get(0).getClass().equals(MParameters.class)){
 			final MParameters<?> selectedVariables = (MParameters<?>)selection.get(0);
 			return generateCommand(selectedVariables);
 		}

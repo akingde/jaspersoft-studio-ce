@@ -42,6 +42,13 @@ public class MCrosstabParameter extends MParameter {
 		super(parent, jrParameter, newIndex);
 	}
 	
+	/**
+	 * Instantiates a new m parameter.
+	 */
+	public MCrosstabParameter() {
+		super();
+	}
+	
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignCrosstabParameter parameter = (JRDesignCrosstabParameter)getValue();

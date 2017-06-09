@@ -8,9 +8,9 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.components.crosstab.model.parameter.MCrosstabParameter;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
-import com.jaspersoft.studio.model.parameter.MParameter;
 
 /*
  * The Class CreateGroupAction.
@@ -28,7 +28,7 @@ public class CreateCrosstabParameterAction extends ACreateAction {
 	 */
 	public CreateCrosstabParameterAction(IWorkbenchPart part) {
 		super(part);
-		setCreationFactory(new JDPaletteCreationFactory(MParameter.class));
+		setCreationFactory(new JDPaletteCreationFactory(MCrosstabParameter.class));
 	}
 
 	/**

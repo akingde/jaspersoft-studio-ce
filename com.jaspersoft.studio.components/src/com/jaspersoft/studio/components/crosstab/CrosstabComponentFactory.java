@@ -401,7 +401,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
 		
 		//Check to avoid that dataset objects are dragged inside the crosstab
-		boolean isDatasetType = (child instanceof MVariableSystem) || (child instanceof MField) || (child instanceof MParameterSystem);
+		boolean isDatasetType = (child instanceof MVariableSystem) || (child instanceof MField) || ((child instanceof MParameterSystem) &&  !(child instanceof MCrosstabParameter));
 		if (isDatasetType){
 			//It is a dataset object, check if the target is the crosstab
 			ANode currentParent = parent;
