@@ -18,6 +18,7 @@ public class TColumn {
 	private String defaultValue;
 	private transient PropertyMetadata propertyMetadata;
 	private transient Object value;
+	private transient Object value1;
 	private transient boolean labelEditable = false;
 
 	public void setLabelEditable(boolean labelEditable) {
@@ -52,6 +53,14 @@ public class TColumn {
 
 	public void setDefaultValue(String defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+
+	public Object getValue1() {
+		return value1;
+	}
+
+	public void setValue1(Object value1) {
+		this.value1 = value1;
 	}
 
 	public Object getValue() {

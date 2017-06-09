@@ -87,8 +87,13 @@ public class WInputControlPathSelector extends WText {
 			}
 
 			protected void showFindDialog(MServerProfile msp) {
-				if (aw.getElement() instanceof JRDesignParameter) {
-					final String name = ((JRDesignParameter) aw.getElement()).getName();
+				JRDesignParameter p = null;
+				if (aw.getElement() instanceof JRDesignParameter)
+					p = (JRDesignParameter) aw.getElement();
+				else if (aw.getTColumn().getValue1() instanceof JRDesignParameter)
+					p = (JRDesignParameter) aw.getTColumn().getValue1();
+				if (p != null) {
+					final String name = p.getName();
 					if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
 						String[] incl = new String[] { ResourceMediaType.INPUT_CONTROL_CLIENT_TYPE };
 						ResourceDescriptor rd = FindResourceJob.doFindResource(msp, incl, null, true, name);

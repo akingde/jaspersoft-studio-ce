@@ -27,7 +27,8 @@ import net.sf.jasperreports.properties.PropertiesMetadataUtil;
 import net.sf.jasperreports.properties.PropertyMetadata;
 
 /**
- * Class that define static methods to get the hint properties specific to some type of elements
+ * Class that define static methods to get the hint properties specific to some
+ * type of elements
  */
 public class HintsPropertiesList {
 
@@ -49,8 +50,9 @@ public class HintsPropertiesList {
 				List<PropertyMetadata> eps = pmu.getReportProperties((JasperDesign) holder);
 				if (eps != null)
 					result.addAll(eps);
-				eps = pmu.getDatasetProperties(((JasperDesign) holder).getMainDesignDataset(), DatasetUtil
-						.getDataAdapter(eContext.getJasperReportsConfiguration(), ((JasperDesign) holder).getMainDesignDataset()));
+				eps = pmu.getDatasetProperties(((JasperDesign) holder).getMainDesignDataset(),
+						DatasetUtil.getDataAdapter(eContext.getJasperReportsConfiguration(),
+								((JasperDesign) holder).getMainDesignDataset()));
 				if (eps != null)
 					result.addAll(eps);
 				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.REPORT));
@@ -113,8 +115,8 @@ public class HintsPropertiesList {
 				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
 
 				try {
-					List<PropertyMetadata> eps = pmu.getQueryExecuterFieldProperties(
-							(String) eContext.getJasperReportsConfiguration().get(COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE));
+					List<PropertyMetadata> eps = pmu.getQueryExecuterFieldProperties((String) eContext
+							.getJasperReportsConfiguration().get(COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE));
 					if (eps != null)
 						for (PropertyMetadata pm : eps)
 							if (pm.getScopes().contains(PropertyScope.FIELD))
@@ -128,6 +130,10 @@ public class HintsPropertiesList {
 			}
 		} else if (holder instanceof JRParameter) {
 			Map<String, PropertyMetadata> map = DatasetUtil.getPmap(eContext.getJasperReportsConfiguration());
+			if (map == null) {
+				DatasetUtil.refreshPropertiesMap(eContext.getJasperReportsConfiguration());
+				map = DatasetUtil.getPmap(eContext.getJasperReportsConfiguration());
+			}
 			for (String key : map.keySet()) {
 				PropertyMetadata pm = map.get(key);
 				if (pm.getScopes().contains(PropertyScope.PARAMETER))

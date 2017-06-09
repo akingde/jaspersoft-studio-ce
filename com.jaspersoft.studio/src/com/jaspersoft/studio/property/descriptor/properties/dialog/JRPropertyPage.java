@@ -262,6 +262,8 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 			if (scmp == cmp)
 				buildSectionComposite();
 			final TColumn col = TColumnFactory.getTColumn(pm);
+			col.setValue(jConfig);
+			col.setValue1(jrElement);
 			boolean custom = !eds.contains(propsMap.get(pm.getName()));
 			if (custom && !containsProperty(pm.getName()))
 				continue;
@@ -323,7 +325,8 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 					bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/ui-scroll-pane-form.png"));
 					fillTable();
 				} else {
-					bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif"));
+					bTbl.setImage(JaspersoftStudioPlugin.getInstance()
+							.getImage("icons/resources/eclipse/properties_view.gif"));
 					propCmpLayout.topControl = sc;
 					propCmp.layout(true);
 					refreshWidgets();
@@ -478,7 +481,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 	 * Edit an element opened a dialog to allow to modify it
 	 * 
 	 * @param edited
-	 *          the element to edit, must be not null
+	 *            the element to edit, must be not null
 	 */
 	private void editElement(PropertyDTO edited) {
 		PropertyDTO result = edited.clone();
@@ -595,7 +598,8 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 				if (Clipboard.getDefault().getContents() instanceof PastableProperties) {
 					PastableProperties pasteContainer = (PastableProperties) Clipboard.getDefault().getContents();
 					List<CopyElementExpressionProperty> copiedProperties = pasteContainer.getCopiedProperties();
-					pasteEnabled = copiedProperties != null && !copiedProperties.isEmpty() && canPaste(copiedProperties);
+					pasteEnabled = copiedProperties != null && !copiedProperties.isEmpty()
+							&& canPaste(copiedProperties);
 				}
 				pasteItem.setEnabled(pasteEnabled);
 			}
@@ -625,11 +629,13 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 	}
 
 	/**
-	 * Check if at least one of the copied properties can be pasted on the current element
+	 * Check if at least one of the copied properties can be pasted on the
+	 * current element
 	 * 
 	 * @param copiedProperties
-	 *          the copied properties
-	 * @return true if at least one of the copied properties can be pasted, false otherwise
+	 *            the copied properties
+	 * @return true if at least one of the copied properties can be pasted,
+	 *         false otherwise
 	 */
 	private boolean canPaste(List<CopyElementExpressionProperty> copiedProperties) {
 		for (CopyElementExpressionProperty property : copiedProperties) {
