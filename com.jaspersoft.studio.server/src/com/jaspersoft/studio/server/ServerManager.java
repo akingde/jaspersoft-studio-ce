@@ -333,6 +333,8 @@ public class ServerManager {
 	public static int getServerIndexByUrl(String url, String user) {
 		int i = 0;
 		int j = -1;
+		if (user.endsWith("|"))
+			user = user.substring(0, user.length() - 1);
 		for (MServerProfile sp : getServerProfiles()) {
 			ServerProfile v = sp.getValue();
 			try {
