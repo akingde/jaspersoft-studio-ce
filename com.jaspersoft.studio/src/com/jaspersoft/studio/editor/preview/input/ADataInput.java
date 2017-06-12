@@ -9,8 +9,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
@@ -18,6 +16,9 @@ import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -34,8 +35,11 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.UIUtil;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public abstract class ADataInput implements IDataInput {
 	protected Map<String, Object> params;
@@ -115,8 +119,8 @@ public abstract class ADataInput implements IDataInput {
 		if (prm.isMandatory()) {
 			ControlDecoration controlDecoration = new ControlDecoration(num, SWT.LEFT | SWT.TOP);
 			controlDecoration.setDescriptionText(Messages.ADataInput_mandatory);
-			controlDecoration.setImage(
-					FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_REQUIRED).getImage());
+			controlDecoration.setImage(FieldDecorationRegistry.getDefault()
+					.getFieldDecoration(FieldDecorationRegistry.DEC_REQUIRED).getImage());
 		}
 	}
 
@@ -166,8 +170,8 @@ public abstract class ADataInput implements IDataInput {
 			}
 		} else {
 			nullDecoration.setDescriptionText(Messages.ADataInput_removeparam_explain);
-			nullDecoration.setImage(
-					FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage());
+			nullDecoration.setImage(FieldDecorationRegistry.getDefault()
+					.getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage());
 		}
 		nullDecoration.show();
 		return;
@@ -204,6 +208,21 @@ public abstract class ADataInput implements IDataInput {
 		}
 
 	};
+	protected TraverseListener keyListener = new TraverseListener() {
+
+		@Override
+		public void keyTraversed(TraverseEvent e) {
+			if (pcontainer != null && e.detail == SWT.TRAVERSE_RETURN) {
+				pcontainer.runReport();
+			}
+		}
+	};
+
+	private PreviewContainer pcontainer;
+
+	public void setPcontainer(PreviewContainer pcontainer) {
+		this.pcontainer = pcontainer;
+	}
 
 	private IStatusLineManager getStatusLineManager() {
 		IWorkbench wb = PlatformUI.getWorkbench();
@@ -226,17 +245,19 @@ public abstract class ADataInput implements IDataInput {
 
 		return actionBars.getStatusLineManager();
 	}
-	
+
 	/**
-	 * Method that should called when one of the parameter changed value
-	 * to allow the other parameters to update their value. This is used because
+	 * Method that should called when one of the parameter changed value to
+	 * allow the other parameters to update their value. This is used because
 	 * some parameters could depend from the others. The default implementation
 	 * does notthing
 	 * 
-	 * @param evt the event contains the name of the parameter that changed value
+	 * @param evt
+	 *            the event contains the name of the parameter that changed
+	 *            value
 	 */
-	public void parameterChanged(PropertyChangeEvent evt){
-		
+	public void parameterChanged(PropertyChangeEvent evt) {
+
 	}
 
 	private static int defCharWidth = -1;

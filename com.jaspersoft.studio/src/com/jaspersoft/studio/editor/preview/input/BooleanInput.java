@@ -28,6 +28,7 @@ public class BooleanInput extends ADataInput {
 			bbuton.setText(prm.getLabel());
 			bbuton.setToolTipText(prm.getDescription());
 			bbuton.addFocusListener(focusListener);
+			bbuton.addTraverseListener(keyListener);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			bbuton.setLayoutData(gd);

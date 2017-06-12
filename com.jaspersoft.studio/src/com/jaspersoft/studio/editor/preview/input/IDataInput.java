@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.editor.preview.PreviewContainer;
+
 public interface IDataInput {
 	public boolean isForType(Class<?> valueClass);
 
@@ -36,13 +38,17 @@ public interface IDataInput {
 	public boolean isRemoved();
 
 	public void setDirty(boolean dirty);
-	
+
+	public void setPcontainer(PreviewContainer pcontainer);
+
 	/**
-	 * Method that should called when one of the parameter changed value
-	 * to allow the other parameters to update their value. This is used because
+	 * Method that should called when one of the parameter changed value to
+	 * allow the other parameters to update their value. This is used because
 	 * some parameters could depend from the others
 	 * 
-	 * @param evt the event contains the name of the parameter that changed value
+	 * @param evt
+	 *            the event contains the name of the parameter that changed
+	 *            value
 	 */
 	public void parameterChanged(PropertyChangeEvent evt);
 

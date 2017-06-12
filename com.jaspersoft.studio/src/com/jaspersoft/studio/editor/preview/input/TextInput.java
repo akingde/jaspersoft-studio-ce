@@ -29,6 +29,7 @@ public class TextInput extends ADataInput {
 			txt = new Text(parent, SWT.BORDER);
 			txt.setToolTipText(VParameters.createToolTip(param));
 			txt.addFocusListener(focusListener);
+			txt.addTraverseListener(keyListener);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			txt.setLayoutData(gd);

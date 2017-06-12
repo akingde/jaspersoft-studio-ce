@@ -50,6 +50,7 @@ public class PatternInput extends ADataInput {
 			txt = new Text(cmp, SWT.BORDER);
 			txt.setToolTipText(VParameters.createToolTip(param));
 			txt.addFocusListener(focusListener);
+			txt.addTraverseListener(keyListener);
 			txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			setMandatory(param, txt);
 

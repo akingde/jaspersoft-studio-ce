@@ -34,10 +34,14 @@ public class BigNumericInput extends ADataInput {
 
 	public boolean isForType(Class<?> valueClass) {
 		return Number.class.isAssignableFrom(valueClass);
-		// return (Long.class.isAssignableFrom(valueClass) || BigInteger.class.isAssignableFrom(valueClass)
-		// || BigDecimal.class.isAssignableFrom(valueClass) || Float.class.isAssignableFrom(valueClass)
-		// || Double.class.isAssignableFrom(valueClass) || Integer.class.isAssignableFrom(valueClass)
-		// || Short.class.isAssignableFrom(valueClass) || Byte.class.isAssignableFrom(valueClass) || Number.class
+		// return (Long.class.isAssignableFrom(valueClass) ||
+		// BigInteger.class.isAssignableFrom(valueClass)
+		// || BigDecimal.class.isAssignableFrom(valueClass) ||
+		// Float.class.isAssignableFrom(valueClass)
+		// || Double.class.isAssignableFrom(valueClass) ||
+		// Integer.class.isAssignableFrom(valueClass)
+		// || Short.class.isAssignableFrom(valueClass) ||
+		// Byte.class.isAssignableFrom(valueClass) || Number.class
 		// .isAssignableFrom(valueClass));
 	}
 
@@ -53,6 +57,7 @@ public class BigNumericInput extends ADataInput {
 
 			num.setToolTipText(VParameters.createToolTip(param));
 			num.addFocusListener(focusListener);
+			num.addTraverseListener(keyListener);
 			updateInput();
 			num.addListener(SWT.Verify, new Listener() {
 

@@ -55,6 +55,7 @@ public class CollectionInput extends ADataInput {
 			tt += param.getDescription();
 			label.setToolTipText(tt);
 			label.setLayoutData(new GridData(GridData.FILL_BOTH));
+			label.addTraverseListener(keyListener);
 			label.addModifyListener(new ModifyListener() {
 
 				@Override
@@ -123,6 +124,7 @@ public class CollectionInput extends ADataInput {
 			bbuton.setText("...");
 			bbuton.setToolTipText(param.getDescription());
 			bbuton.addFocusListener(focusListener);
+			bbuton.addTraverseListener(keyListener);
 			bbuton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {

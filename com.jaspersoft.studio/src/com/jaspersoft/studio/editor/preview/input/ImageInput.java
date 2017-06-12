@@ -49,6 +49,7 @@ public class ImageInput extends ADataInput {
 			btn.setText(Messages.ImageInput_selectimage);
 			btn.setToolTipText(param.getDescription());
 			btn.addFocusListener(focusListener);
+			btn.addTraverseListener(keyListener);
 			btn.setAlignment(SWT.LEFT);
 			GridData gd = new GridData();
 			gd.heightHint = 70;
@@ -58,8 +59,9 @@ public class ImageInput extends ADataInput {
 			btn.addSelectionListener(new SelectionListener() {
 
 				public void widgetSelected(SelectionEvent e) {
-					FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(Display.getCurrent()
-							.getActiveShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+					FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(
+							Display.getCurrent().getActiveShell(), false, ResourcesPlugin.getWorkspace().getRoot(),
+							IResource.FILE);
 					fd.setInitialPattern("*.png");//$NON-NLS-1$
 					if (fd.open() == Dialog.OK) {
 						IFile file = (IFile) fd.getFirstResult();
@@ -91,8 +93,8 @@ public class ImageInput extends ADataInput {
 	}
 
 	public static void setButtonImage(final Button txt, Image image) {
-		org.eclipse.swt.graphics.Image img = new org.eclipse.swt.graphics.Image(txt.getDisplay(), convertAWTImageToSWT(
-				image).scaledTo(50, 50));
+		org.eclipse.swt.graphics.Image img = new org.eclipse.swt.graphics.Image(txt.getDisplay(),
+				convertAWTImageToSWT(image).scaledTo(50, 50));
 
 		txt.setImage(img);
 	}
@@ -117,7 +119,7 @@ public class ImageInput extends ADataInput {
 	 * Converts a buffered image to SWT <code>ImageData</code>.
 	 * 
 	 * @param bufferedImage
-	 *          the buffered image (<code>null</code> not permitted).
+	 *            the buffered image (<code>null</code> not permitted).
 	 * 
 	 * @return The image data.
 	 */
@@ -126,8 +128,8 @@ public class ImageInput extends ADataInput {
 			DirectColorModel colorModel = (DirectColorModel) bufferedImage.getColorModel();
 			PaletteData palette = new PaletteData(colorModel.getRedMask(), colorModel.getGreenMask(),
 					colorModel.getBlueMask());
-			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(),
-					palette);
+			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(),
+					colorModel.getPixelSize(), palette);
 			WritableRaster raster = bufferedImage.getRaster();
 			int[] pixelArray = new int[3];
 			for (int y = 0; y < data.height; y++) {
@@ -152,8 +154,8 @@ public class ImageInput extends ADataInput {
 				rgbs[i] = new RGB(reds[i] & 0xFF, greens[i] & 0xFF, blues[i] & 0xFF);
 			}
 			PaletteData palette = new PaletteData(rgbs);
-			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(),
-					palette);
+			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(),
+					colorModel.getPixelSize(), palette);
 			data.transparentPixel = colorModel.getTransparentPixel();
 			WritableRaster raster = bufferedImage.getRaster();
 			int[] pixelArray = new int[1];

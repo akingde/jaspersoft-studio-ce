@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.input.BooleanNumericInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
@@ -34,25 +35,26 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 public class VParameters extends AVParameters {
 
 	private PropertyChangeNotifier propertyChangeNotifier;
-	
-	public VParameters(Composite parent, JasperReportsConfiguration jContext, PropertyChangeNotifier propertyChangeNotifier) {
+
+	public VParameters(Composite parent, JasperReportsConfiguration jContext,
+			PropertyChangeNotifier propertyChangeNotifier) {
 		super(parent, jContext);
 		this.propertyChangeNotifier = propertyChangeNotifier;
 	}
-	
+
 	protected void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
 		this.params = params;
 		this.prompts = prompts;
 		Map<String, Boolean> dirtyMap = new HashMap<String, Boolean>();
-		for (String key : incontrols.keySet()){
-			IDataInput control =  incontrols.get(key);
+		for (String key : incontrols.keySet()) {
+			IDataInput control = incontrols.get(key);
 			dirtyMap.put(key, control.isDirty());
 			propertyChangeNotifier.removeDataInput(control);
 		}
 		incontrols.clear();
 		for (Control c : composite.getChildren())
 			c.dispose();
-		
+
 		boolean first = true;
 		if (prompts != null)
 			for (JRParameter p : prompts)
@@ -80,7 +82,7 @@ public class VParameters extends AVParameters {
 		} else
 			;// setupDefaultValuesNonDirty();
 		showEmptyParametersWarning = false;
-		
+
 		refreshControl();
 	}
 
@@ -106,7 +108,8 @@ public class VParameters extends AVParameters {
 							if (params.get(pname) != null)
 								continue;
 							if (p.getDefaultValueExpression() != null)
-								params.put(pname, ExpressionUtil.cachedExpressionEvaluation(p.getDefaultValueExpression(), jContext));
+								params.put(pname, ExpressionUtil
+										.cachedExpressionEvaluation(p.getDefaultValueExpression(), jContext));
 							else
 								params.remove(pname);
 							keys.add(pname);
@@ -142,7 +145,8 @@ public class VParameters extends AVParameters {
 							continue;
 						if (p.getName().equals(pname)) {
 							if (p.getDefaultValueExpression() != null)
-								params.put(pname, ExpressionUtil.cachedExpressionEvaluation(p.getDefaultValueExpression(), jContext));
+								params.put(pname, ExpressionUtil
+										.cachedExpressionEvaluation(p.getDefaultValueExpression(), jContext));
 							else
 								params.remove(pname);
 							keys.add(pname);
@@ -205,7 +209,8 @@ public class VParameters extends AVParameters {
 					if (p.getDefaultValueExpression() != null)
 						defaultExists = true;
 					count++;
-					if ((params.containsKey(pname) || incontrols.get(pname).isRemoved()) && incontrols.get(pname).isDirty())
+					if ((params.containsKey(pname) || incontrols.get(pname).isRemoved())
+							&& incontrols.get(pname).isDirty())
 						return true;
 				}
 			}
@@ -217,18 +222,21 @@ public class VParameters extends AVParameters {
 		return true;
 	}
 
-	private void createControl(Composite sectionClient, ParameterJasper pres, final IDataInput in, JRDesignParameter p,boolean first) {
+	private void createControl(Composite sectionClient, ParameterJasper pres, final IDataInput in, JRDesignParameter p,
+			boolean first) {
 		incontrols.put(p.getName(), in);
 		createVerticalSeprator(first);
 		createLabel(sectionClient, pres, in);
 		in.createInput(sectionClient, pres, params);
 		propertyChangeNotifier.addDataInput(in);
+		in.setPcontainer(pcontainer);
 	}
 
-	protected boolean createInput(Composite sectionClient, JRDesignParameter p, Map<String, Object> params, boolean first)
-			throws ClassNotFoundException {
+	protected boolean createInput(Composite sectionClient, JRDesignParameter p, Map<String, Object> params,
+			boolean first) throws ClassNotFoundException {
 		ParameterJasper pres = new ParameterJasper(p, jContext);
-		// Use a custom control for the report maxcount instead of the integer standard one
+		// Use a custom control for the report maxcount instead of the integer
+		// standard one
 		if (p.getName().equals(JRParameter.REPORT_MAX_COUNT)) {
 			createControl(sectionClient, pres, new BooleanNumericInput(), p, first);
 			return true;
@@ -236,11 +244,18 @@ public class VParameters extends AVParameters {
 		for (IDataInput in : ReportController.inputs) {
 			if (in.isForType(pres.getValueClass())) {
 				final IDataInput input = in.getInstance();
-				createControl(sectionClient, pres, input, p, first);		
+				createControl(sectionClient, pres, input, p, first);
 				return true;
 			}
 		}
 		return false;
 	}
 
+	private PreviewContainer pcontainer;
+
+	public void setPcontainer(PreviewContainer pcontainer) {
+		this.pcontainer = pcontainer;
+		for (IDataInput in : incontrols.values())
+			in.setPcontainer(pcontainer);
+	}
 }

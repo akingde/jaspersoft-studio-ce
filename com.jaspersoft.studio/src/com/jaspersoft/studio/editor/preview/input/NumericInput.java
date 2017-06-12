@@ -55,6 +55,7 @@ public class NumericInput extends ADataInput {
 
 			num = new Spinner(parent, SWT.BORDER);
 			num.addFocusListener(focusListener);
+			num.addTraverseListener(keyListener);
 			num.setToolTipText(VParameters.createToolTip(param));
 			updateInput();
 			final ModifyListener listener2 = new ModifyListener() {

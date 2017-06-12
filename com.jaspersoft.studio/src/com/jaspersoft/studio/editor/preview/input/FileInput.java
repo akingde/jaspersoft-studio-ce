@@ -35,12 +35,14 @@ public class FileInput extends ADataInput {
 			btn.setText(Messages.FileInput_selectfile);
 			btn.setToolTipText(param.getDescription());
 			btn.addFocusListener(focusListener);
+			btn.addTraverseListener(keyListener);
 			btn.setAlignment(SWT.LEFT);
 			btn.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(
-							Display.getCurrent().getActiveShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+							Display.getCurrent().getActiveShell(), false, ResourcesPlugin.getWorkspace().getRoot(),
+							IResource.FILE);
 					if (fd.open() == Dialog.OK) {
 						IFile file = (IFile) fd.getFirstResult();
 						updateModel(new File(file.getLocationURI()));

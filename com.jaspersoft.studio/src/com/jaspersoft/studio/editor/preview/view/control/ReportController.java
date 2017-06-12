@@ -230,11 +230,16 @@ public class ReportController {
 		viewmap = new LinkedHashMap<String, APreview>();
 		// pass the parameter tabs the shared property change notifier
 		PropertyChangeNotifier sharedNotifier = new PropertyChangeNotifier();
-		viewmap.put(FORM_PARAMETERS, new VParameters(composite, jrContext, sharedNotifier));
-		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, jrContext, sharedNotifier));
+		VParameters vprm = new VParameters(composite, jrContext, sharedNotifier);
+		vprm.setPcontainer(pcontainer);
+		viewmap.put(FORM_PARAMETERS, vprm);
+		VReportParameters vrprm = new VReportParameters(composite, jrContext, sharedNotifier);
+		vrprm.setPcontainer(pcontainer);
+		viewmap.put(FORM_REPORT_PARAMETERS, vrprm);
 		viewmap.put(FORM_SORTING, new VSorting(composite, jrContext));
 		viewmap.put(FORM_BOOKMARKS, new VBookmarks(composite, jrContext, pcontainer));
 		viewmap.put(FORM_EXPORTER, new VExporter(composite, jrContext));
+
 		return viewmap;
 	}
 

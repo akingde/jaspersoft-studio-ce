@@ -25,9 +25,11 @@ import net.sf.jasperreports.eclipse.util.Misc;
 
 /**
  * 
- * This is a custom DataInput control done for edit the maximum number of record to display. This combine a checkbox to
- * say if or not consider this maximum, and a spinner that can be used if the checkbox is selected, to choose the
- * maximum amount of record to display. When the checkbox is not selected all the available records are show
+ * This is a custom DataInput control done for edit the maximum number of record
+ * to display. This combine a checkbox to say if or not consider this maximum,
+ * and a spinner that can be used if the checkbox is selected, to choose the
+ * maximum amount of record to display. When the checkbox is not selected all
+ * the available records are show
  * 
  * @author Orlandin Marco
  * 
@@ -56,6 +58,7 @@ public class BooleanNumericInput extends ADataInput {
 
 			num = new Spinner(container, SWT.BORDER);
 			num.addFocusListener(focusListener);
+			num.addTraverseListener(keyListener);
 			num.setToolTipText(VParameters.createToolTip(param));
 			updateInput();
 

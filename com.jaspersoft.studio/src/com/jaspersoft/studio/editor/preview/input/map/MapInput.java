@@ -47,6 +47,7 @@ public class MapInput extends ADataInput {
 			bbuton.setText("...");
 			bbuton.setToolTipText(param.getDescription());
 			bbuton.addFocusListener(focusListener);
+			bbuton.addTraverseListener(keyListener);
 			bbuton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {

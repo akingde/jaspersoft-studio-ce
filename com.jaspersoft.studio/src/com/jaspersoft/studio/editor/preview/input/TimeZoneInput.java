@@ -32,6 +32,7 @@ public class TimeZoneInput extends ADataInput {
 			txt = new WTimeZone(parent, SWT.DROP_DOWN | SWT.BORDER);
 			txt.setToolTipText(param.getDescription());
 			txt.addFocusListener(focusListener);
+			txt.addTraverseListener(keyListener);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			txt.setLayoutData(gd);

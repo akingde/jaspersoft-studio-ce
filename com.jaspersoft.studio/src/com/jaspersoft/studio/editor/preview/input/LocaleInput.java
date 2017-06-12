@@ -34,6 +34,7 @@ public class LocaleInput extends ADataInput {
 			tooltip = param.getDescription() != null ? param.getDescription() + "\n" : "";
 			wlocal.setToolTipText(tooltip);
 			wlocal.addFocusListener(focusListener);
+			wlocal.addTraverseListener(keyListener);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			wlocal.setLayoutData(gd);
@@ -52,7 +53,7 @@ public class LocaleInput extends ADataInput {
 
 	public void updateInput() {
 		Object value = params.get(param.getName());
-		if(value !=null && value instanceof String)
+		if (value != null && value instanceof String)
 			value = LocaleUtils.toLocale((String) value);
 		if (value != null && value instanceof Locale) {
 			Locale locale = (Locale) value;

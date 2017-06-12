@@ -83,7 +83,8 @@ public class DateInput extends ADataInput {
 				tt += del;
 				if (cu.equals(CalendarUnit.WEEK)) {
 					DateRangeBuilder drb = new DateRangeBuilder("WEEK");
-					tt += cu.name() + "(" + namesOfDays[Misc.nvl(drb.getWeekStartDay(), RelativeDateRange.DEFAULT_WEEK_START_DAY)]
+					tt += cu.name() + "("
+							+ namesOfDays[Misc.nvl(drb.getWeekStartDay(), RelativeDateRange.DEFAULT_WEEK_START_DAY)]
 							+ ")";
 				} else
 					tt += cu.name();
@@ -92,10 +93,11 @@ public class DateInput extends ADataInput {
 			date.setToolTipText(tt + "\n" + date.getToolTipText());
 		}
 		date.addFocusListener(focusListener);
+		date.addTraverseListener(keyListener);
 	}
 
-	private static String[] namesOfDays = new String[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-			"Saturday" };
+	private static String[] namesOfDays = new String[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
+			"Friday", "Saturday" };
 
 	private void setFormat(CDateTime cDateTime, String key) {
 		String f = JasperReportsConfiguration.getDefaultInstance().getProperty(key, "");
@@ -104,7 +106,8 @@ public class DateInput extends ADataInput {
 	}
 
 	/**
-	 * Called when the timezone changes, this force the parameter to be recalculated with the current timezone
+	 * Called when the timezone changes, this force the parameter to be
+	 * recalculated with the current timezone
 	 */
 	private void refresh() {
 		if (date != null && !date.isDisposed()) {
@@ -136,7 +139,8 @@ public class DateInput extends ADataInput {
 	}
 
 	/**
-	 * Check if the flag to use the report timezone is enabled in the preferences
+	 * Check if the flag to use the report timezone is enabled in the
+	 * preferences
 	 * 
 	 * @return true if the flag is enabled, false otherwise
 	 */
@@ -160,7 +164,8 @@ public class DateInput extends ADataInput {
 				drb = new DateRangeBuilder(wval);
 			}
 
-			// if the value should be influenced by the timezone then read its value from the parameter
+			// if the value should be influenced by the timezone then read its
+			// value from the parameter
 			if (useReportTimezone()) {
 				Object timeZoneObj = params.get(JRParameter.REPORT_TIME_ZONE);
 				boolean timeZoneSet = false;
@@ -176,19 +181,21 @@ public class DateInput extends ADataInput {
 						timeZoneSet = true;
 					}
 				}
-				//code currently not used, uncomment this to fallback to JSS preferences when the parameter is not set
-				if (!timeZoneSet){
-					//look in the preferences
+				// code currently not used, uncomment this to fallback to JSS
+				// preferences when the parameter is not set
+				if (!timeZoneSet) {
+					// look in the preferences
 					IPreferenceStore jssPreferenceStore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-					String prefTimeZone = jssPreferenceStore.getString(ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE);
-					if (prefTimeZone != null){
+					String prefTimeZone = jssPreferenceStore
+							.getString(ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE);
+					if (prefTimeZone != null) {
 						TimeZone timeZone = TimeZone.getTimeZone(prefTimeZone);
-						if (timeZone != null){
+						if (timeZone != null) {
 							drb.set(timeZone);
 						}
 					}
 				}
-				 
+
 			}
 
 			updateModel(drb.set(clazz).toDateRange());
@@ -205,13 +212,15 @@ public class DateInput extends ADataInput {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
-				if (ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty()) ||
-						ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE.equals(event.getProperty())) {
+				if (ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty())
+						|| ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE
+								.equals(event.getProperty())) {
 					handleDateRangeChange(Timestamp.class);
 				}
 			}
 		};
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferencesTimeZoneListener);
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+				.addPropertyChangeListener(preferencesTimeZoneListener);
 		date = new DRDateTime(parent, CDT.BORDER | CDT.DATE_SHORT | CDT.TIME_MEDIUM | CDT.DROP_DOWN);
 		((DRDateTime) date).setSupportDateRange(supportDateRange);
 
@@ -247,13 +256,15 @@ public class DateInput extends ADataInput {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
-				if (ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty()) || 
-						ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE.equals(event.getProperty())) {
+				if (ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty())
+						|| ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE
+								.equals(event.getProperty())) {
 					handleDateRangeChange(Date.class);
 				}
 			}
 		};
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferencesTimeZoneListener);
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+				.addPropertyChangeListener(preferencesTimeZoneListener);
 		date = new DRDateTime(parent, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN);
 		((DRDateTime) date).setSupportDateRange(supportDateRange);
 
