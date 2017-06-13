@@ -211,7 +211,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				target = target.queryParam("ticket", token); //$NON-NLS-1$
 			} else {
 				target = target.queryParam("j_username", sp.getUser()); //$NON-NLS-1$
-				target = target.queryParam("j_password", URLEncoder.encode(parent.getPassword(monitor),"UTF-8")); //$NON-NLS-1$
+				target = target.queryParam("j_password", URLEncoder.encode(parent.getPassword(monitor), "UTF-8")); //$NON-NLS-1$
 				if (monitor.isCanceled())
 					return false;
 			}
@@ -326,7 +326,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 						else if (name.endsWith(FileExtension.PointJRXML))
 							nrd.setWsType(ResourceDescriptor.TYPE_JRXML);
 						else if (name.endsWith(".jar")) //$NON-NLS-1$
-							nrd.setWsType("." + ResourceDescriptor.TYPE_CLASS_JAR); //$NON-NLS-1$
+							nrd.setWsType(ResourceDescriptor.TYPE_CLASS_JAR); // $NON-NLS-1$
 						else if (name.endsWith(FileExtension.PointJRTX))
 							nrd.setWsType(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
 						else if (name.endsWith("." + ResourceDescriptor.TYPE_CSS_FILE)) //$NON-NLS-1$

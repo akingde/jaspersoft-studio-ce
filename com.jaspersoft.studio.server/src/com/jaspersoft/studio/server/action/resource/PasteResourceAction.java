@@ -361,6 +361,8 @@ public class PasteResourceAction extends Action {
 								origin.setIsReference(true);
 						}
 						saveToReportUnit(monitor, (AMResource) parent, ws, origin);
+						if (parent instanceof MReportUnit)
+							parent.setValue(ws.get(monitor, ((AMResource) parent).getValue(), null));
 					}
 				}
 				deleteIfCut(monitor, m);
