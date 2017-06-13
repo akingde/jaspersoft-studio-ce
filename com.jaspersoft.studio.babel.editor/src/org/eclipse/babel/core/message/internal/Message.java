@@ -214,7 +214,7 @@ public final class Message extends AbstractMessageModel implements IMessage {
     	Locale newLocale = locale != null ?  (Locale)locale.clone() : null;
     	Message newMessage = new Message(new String(key), newLocale);
     	newMessage.setActive(isActive());
-    	newMessage.setComment(new String(getComment()), true);
+    	newMessage.setComment(getComment() != null ? new String(getComment()) : null, true);
     	newMessage.setText(new String(getValue()), true);
     	return newMessage;
     }

@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -362,17 +363,17 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
      */
     protected void dialogChanged() {
         String container = getContainerName();
-        String fileName = getFileName();
+        String baseName = getFileName();
 
         if (container.length() == 0) {
             updateStatus(Messages.editor_wiz_error_container, IMessageProvider.ERROR);
             return;
         }
-        if (fileName.length() == 0) {
+        if (baseName.length() == 0) {
             updateStatus(Messages.editor_wiz_error_bundleName, IMessageProvider.ERROR);
             return;
         }
-        int dotLoc = fileName.lastIndexOf('.');
+        int dotLoc = baseName.lastIndexOf('.');
         if (dotLoc != -1) {
             updateStatus(Messages.editor_wiz_error_extension, IMessageProvider.ERROR);
             return;
@@ -395,12 +396,30 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
             return;
         }
 
-        if (!projectExists(pathContainer.segment(0))) {
+        //check if the project folder exist
+        if (!resourceExist(pathContainer.segment(0))) {
             String errormessage = Messages.editor_wiz_error_projectnotexist;
             errormessage = String.format(errormessage, pathContainer.segment(0));
             updateStatus(errormessage, IMessageProvider.ERROR); 
             return;
         }
+
+      String[] locales = getLocaleStrings();
+      for (int i = 0; i < locales.length; i++) {
+          String fileName = baseName;
+          if (locales[i].equals(ResourceBundleNewWizardPage.DEFAULT_LOCALE)) {
+              fileName += ".properties"; //$NON-NLS-1$
+          } else {
+              fileName += "_" + locales[i] + ".properties";
+          }
+          IPath resourcePath = pathContainer.append(new Path(fileName));
+          if (resourceExist(resourcePath.toString())){
+        	  String errormessage = "A resource with name {0} already exist in the selected folder, please change the base name"; 
+              errormessage = String.format(errormessage, fileName);
+              updateStatus(errormessage, IMessageProvider.ERROR); 
+              return;
+          }
+      }
 
         updateStatus(null, IMessageProvider.NONE);
     }
@@ -465,9 +484,14 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
      * @param projectName
      * @return
      */
-     protected boolean projectExists(String projectName) {
+     protected boolean resourceExist(String projectName) {
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        Path containerNamePath = new Path("/" + projectName);
+        Path containerNamePath = null;
+        if (projectName.startsWith("/")){
+        	containerNamePath = new Path(projectName);
+        } else {
+        	containerNamePath = new Path("/" + projectName);
+        }
         IResource resource = root.findMember(containerNamePath);
         if (resource == null) {
             return false;
