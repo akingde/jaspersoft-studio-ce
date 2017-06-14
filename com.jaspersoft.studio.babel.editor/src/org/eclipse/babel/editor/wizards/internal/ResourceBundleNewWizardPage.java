@@ -79,8 +79,8 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 
     private LocaleSelector localeSelector;
 
-    private String defaultPath = "";
-    private String defaultRBName = "ApplicationResources";
+    private String defaultPath = ""; //$NON-NLS-1$
+    private String defaultRBName = "ApplicationResources"; //$NON-NLS-1$
 
     /**
      * Constructor for SampleNewWizardPage.
@@ -89,7 +89,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
      *            workbench selection
      */
     public ResourceBundleNewWizardPage(ISelection selection, String defaultPath, String defaultRBName) {
-        super("wizardPage");
+        super("wizardPage"); //$NON-NLS-1$
         setTitle(Messages.editor_wiz_title);
         setDescription(Messages.editor_wiz_desc);
         this.selection = selection;
@@ -101,7 +101,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
     }
     
     public ResourceBundleNewWizardPage(ISelection selection) {
-        super("wizardPage");
+        super("wizardPage"); //$NON-NLS-1$
         setTitle(Messages.editor_wiz_title);
         setDescription(Messages.editor_wiz_desc);
         this.selection = selection;
@@ -410,11 +410,11 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
           if (locales[i].equals(ResourceBundleNewWizardPage.DEFAULT_LOCALE)) {
               fileName += ".properties"; //$NON-NLS-1$
           } else {
-              fileName += "_" + locales[i] + ".properties";
+              fileName += "_" + locales[i] + ".properties"; //$NON-NLS-1$ //$NON-NLS-2$
           }
           IPath resourcePath = pathContainer.append(new Path(fileName));
           if (resourceExist(resourcePath.toString())){
-        	  String errormessage = "A resource with name {0} already exist in the selected folder, please change the base name"; 
+        	  String errormessage = Messages.ResourceBundleNewWizardPage_errorResourceExisting; 
               errormessage = String.format(errormessage, fileName);
               updateStatus(errormessage, IMessageProvider.ERROR); 
               return;
@@ -479,18 +479,18 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
     }
 
     /**
-     * Checks if there is a Project with the given name in the Package Explorer
+     * Checks if there is a resource with the given name in the Package Explorer
      * 
-     * @param projectName
+     * @param resourceName hte name of the resource
      * @return
      */
-     protected boolean resourceExist(String projectName) {
+     protected boolean resourceExist(String resourceName) {
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         Path containerNamePath = null;
-        if (projectName.startsWith("/")){
-        	containerNamePath = new Path(projectName);
+        if (resourceName.startsWith("/")){ //$NON-NLS-1$
+        	containerNamePath = new Path(resourceName);
         } else {
-        	containerNamePath = new Path("/" + projectName);
+        	containerNamePath = new Path("/" + resourceName); //$NON-NLS-1$
         }
         IResource resource = root.findMember(containerNamePath);
         if (resource == null) {

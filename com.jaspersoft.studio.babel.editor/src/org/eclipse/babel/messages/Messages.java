@@ -116,6 +116,8 @@ public class Messages extends NLS {
 	public static String resource_wiz_information_name;
 	public static String resource_wiz_information_description;
 	public static String resource_wiz_information_noPackage;
+
+	public static String ResourceBundleNewWizardPage_errorResourceExisting;
 	public static String selector_country;
 	public static String selector_language;
 	public static String selector_title;
