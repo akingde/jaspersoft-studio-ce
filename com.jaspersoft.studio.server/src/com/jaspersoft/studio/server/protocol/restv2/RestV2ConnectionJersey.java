@@ -6,6 +6,7 @@ package com.jaspersoft.studio.server.protocol.restv2;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
@@ -25,6 +26,9 @@ import java.util.logging.Logger;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientResponseContext;
+import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
@@ -49,6 +53,7 @@ import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.ClientResponse;
 import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.glassfish.jersey.client.spi.Connector;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -176,10 +181,44 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		HttpUtils.setupProxy(clientConfig, HttpUtils.toSafeUri(sp.getURL()));
 
 		clientConfig.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
+		clientConfig.property(ClientProperties.FOLLOW_REDIRECTS, true);
 		clientConfig.register(JacksonFeature.class).register(ClientQueryMapperProvider.class);
 
 		client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
 		client.register(MultiPartFeature.class);
+		client.register(new ClientResponseFilter() {
+
+			@Override
+			public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext)
+					throws IOException {
+				if (responseContext.getStatusInfo().getFamily() != Response.Status.Family.REDIRECTION)
+					return;
+
+				WebTarget tgt = requestContext.getClient().target(responseContext.getLocation());
+				requestContext.getEntity();
+
+				requestContext.getPropertyNames();
+
+				Builder req = tgt.request();
+				req.headers(requestContext.getHeaders());
+
+				for (String key : requestContext.getPropertyNames())
+					req.property(key, requestContext.getProperty(key));
+
+				Response resp = null;
+				if (requestContext.getMediaType() != null && requestContext.getEntity() != null)
+					resp = req.method(requestContext.getMethod(),
+							Entity.entity(requestContext.getEntity(), requestContext.getMediaType()));
+				else
+					resp = req.method(requestContext.getMethod());
+
+				responseContext.setEntityStream((InputStream) resp.getEntity());
+				responseContext.setStatusInfo(resp.getStatusInfo());
+				responseContext.setStatus(resp.getStatus());
+				((ClientResponse) responseContext).getHeaders().clear();
+				((ClientResponse) responseContext).headers(resp.getStringHeaders());
+			}
+		});
 
 		if (sp.isLogging()) {
 			logger = java.util.logging.Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
