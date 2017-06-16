@@ -189,6 +189,8 @@ public class ICParameterContributor implements IParameterICContributor {
 	@Override
 	public void refresh(JRDesignParameter prm) {
 		this.prm = prm;
+		if (tpath == null)
+			return;
 		tpath.setEnabled(prm != null);
 		bpath.setEnabled(prm != null);
 		String p = null;

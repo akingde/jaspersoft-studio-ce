@@ -25,6 +25,10 @@ public class ParameterUtil {
 	public static void setParameters(JasperReportsConfiguration jConfig, JRDataset dataset, Map<String, Object> inmap) {
 		ExpressionUtil.initBuiltInParameters(jConfig, null);
 		Map<String, Object> map = jConfig.getJRParameters();
+		if (map == null) {
+			map = new HashMap<String, Object>();
+			jConfig.setJRParameters(map);
+		}
 		for (JRParameter p : dataset.getParameters()) {
 			if (!p.isSystemDefined()) {
 				if (map != null && p.isForPrompting()) {

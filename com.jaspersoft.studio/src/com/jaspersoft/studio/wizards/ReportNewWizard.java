@@ -49,12 +49,13 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
 
 /**
- * Wizard to create a new report. It has three static step. The first one allow to the user to choose a template for the
- * report. The second one allow to choose the destination of the report on the hard disk. And the last one is simply a
- * "congratulation" step.
+ * Wizard to create a new report. It has three static step. The first one allow
+ * to the user to choose a template for the report. The second one allow to
+ * choose the destination of the report on the hard disk. And the last one is
+ * simply a "congratulation" step.
  * 
- * All the steps between the second one and the last one are contributed Dynamically by the template bundle selected
- * inside the first step
+ * All the steps between the second one and the last one are contributed
+ * Dynamically by the template bundle selected inside the first step
  * 
  * 
  * @author Orlandin Marco
@@ -63,14 +64,14 @@ import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
 public class ReportNewWizard extends JSSWizard implements INewWizard {
 
 	/**
-	 * Key to extract from the settings of the wizard the container name of the report. The container name is created when
-	 * the finish button is pressed
+	 * Key to extract from the settings of the wizard the container name of the
+	 * report. The container name is created when the finish button is pressed
 	 */
 	public static final String CONTAINER_NAME_KEY = "containerNameKey";
 
 	/**
-	 * Key to extract from the settings of the wizard the file name of the report. The file name is created when the
-	 * finish button is pressed
+	 * Key to extract from the settings of the wizard the file name of the
+	 * report. The file name is created when the finish button is pressed
 	 */
 	public static final String FILE_NAME_KEY = "fileNameKey";
 
@@ -82,18 +83,22 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	public static final String NEW_REPORT_JRXML = "report.jrxml";
 
 	/**
-	 * Page where the user can choose which template bundle will be used to generate the report
+	 * Page where the user can choose which template bundle will be used to
+	 * generate the report
 	 */
 	private ReportTemplatesWizardPage templateChooserStep;
 
 	/**
-	 * Step where the user can choose the location on the workspace of the report file and its name
+	 * Step where the user can choose the location on the workspace of the
+	 * report file and its name
 	 */
 	private DynamicNewFileCreationWizardPage fileLocationStep;
 
 	/**
-	 * Congratulation page placed at the end of the wizard. This page is optional and the flag showCongratulationStep can
-	 * be used to have or not it. If the flag is false the page is not created so this reference will be null
+	 * Congratulation page placed at the end of the wizard. This page is
+	 * optional and the flag showCongratulationStep can be used to have or not
+	 * it. If the flag is false the page is not created so this reference will
+	 * be null
 	 */
 	private CongratulationsWizardPage congratulationsStep;
 
@@ -103,7 +108,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	private boolean showCongratulationsStep = true;
 
 	/**
-	 * The current selection when the wizard is opened, used to get a destination folder is is opened by a contextual menu
+	 * The current selection when the wizard is opened, used to get a
+	 * destination folder is is opened by a contextual menu
 	 */
 	private ISelection selection;
 
@@ -118,6 +124,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		// the wizard caller, since we are forcing here a new config.
 		JasperReportsConfiguration jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
 		JasperDesign jd = new JasperDesign();
+		jd.setName("report");
 		jd.setJasperReportsContext(jrConfig);
 		jrConfig.setJasperDesign(jd);
 		setConfig(jrConfig, true);
@@ -152,8 +159,9 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	}
 
 	/**
-	 * This method is called when 'Cancel' button is pressed in the wizard. It notifiy to the current template bundle that
-	 * the wizard was aborted in case it need to unload some data
+	 * This method is called when 'Cancel' button is pressed in the wizard. It
+	 * notifiy to the current template bundle that the wizard was aborted in
+	 * case it need to unload some data
 	 */
 	@Override
 	public boolean performCancel() {
@@ -163,9 +171,10 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	}
 
 	/**
-	 * This method is called when 'Finish' button is pressed in the wizard. It store data from the static step inside the
-	 * shared settings then it call the finish code from the current template bundle. If the code return an IFile it is
-	 * also opened in the editor
+	 * This method is called when 'Finish' button is pressed in the wizard. It
+	 * store data from the static step inside the shared settings then it call
+	 * the finish code from the current template bundle. If the code return an
+	 * IFile it is also opened in the editor
 	 */
 	@Override
 	public boolean performFinish() {
@@ -180,17 +189,21 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask(Messages.ReportNewWizard_2, IProgressMonitor.UNKNOWN);
 					try {
-						// calls the finish method of the current template bundle
-						final IFile reportFile = templateChooserStep.getTemplateBundle().doFinish(ReportNewWizard.this, monitor);
+						// calls the finish method of the current template
+						// bundle
+						final IFile reportFile = templateChooserStep.getTemplateBundle().doFinish(ReportNewWizard.this,
+								monitor);
 						// If the report file is create correctly then open it
 						if (reportFile != null) {
 							monitor.setTaskName(Messages.ReportNewWizard_5);
 							// Log the used template to generate the report
 							JaspersoftStudioPlugin.getInstance().getUsageManager().audit(
-									templateChooserStep.getTemplateBundle().getClass().getName(), UsageStatisticsIDs.CATEGORY_REPORT);
+									templateChooserStep.getTemplateBundle().getClass().getName(),
+									UsageStatisticsIDs.CATEGORY_REPORT);
 							UIUtils.getDisplay().asyncExec(new Runnable() {
 								public void run() {
-									IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+									IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+											.getActivePage();
 									try {
 										IDE.openEditor(page, reportFile, true);
 									} catch (PartInitException e) {
@@ -202,7 +215,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 					} catch (Exception e) {
 						UIUtils.showError(e);
 					} finally {
-						//notify the wizard ended
+						// notify the wizard ended
 						templateChooserStep.doCancel();
 						monitor.done();
 					}
@@ -217,7 +230,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	}
 
 	/**
-	 * We will accept the selection in the workbench to see if we can initialize from it.
+	 * We will accept the selection in the workbench to see if we can initialize
+	 * from it.
 	 * 
 	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 */
@@ -233,7 +247,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 				if (obj instanceof EditPart) {
 					IEditorInput ein = SelectionHelper.getActiveJRXMLEditor().getEditorInput();
 					if (ein instanceof FileEditorInput) {
-						this.selection = new TreeSelection(new TreePath(new Object[] { ((FileEditorInput) ein).getFile() }));
+						this.selection = new TreeSelection(
+								new TreePath(new Object[] { ((FileEditorInput) ein).getFile() }));
 						return;
 					}
 				}
@@ -267,7 +282,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	}
 
 	/**
-	 * To check if the report can finish we check if both the static steps and the dynamic ones are completed
+	 * To check if the report can finish we check if both the static steps and
+	 * the dynamic ones are completed
 	 */
 	public boolean canFinish() {
 		// Check the static steps
@@ -286,7 +302,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	/**
 	 * Return the congratulation step
 	 * 
-	 * @return The congratulation step, can be null if hasCongratulationStep() is false
+	 * @return The congratulation step, can be null if hasCongratulationStep()
+	 *         is false
 	 */
 	public CongratulationsWizardPage getCongratulationsStep() {
 		return congratulationsStep;
@@ -320,8 +337,9 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	}
 
 	/**
-	 * Utility class to create a file using the methods from the File Location step. Since this methods relay to the
-	 * widgets in the dialog they must be executed inside a graphic thread.
+	 * Utility class to create a file using the methods from the File Location
+	 * step. Since this methods relay to the widgets in the dialog they must be
+	 * executed inside a graphic thread.
 	 * 
 	 * @author Orlandin Marco
 	 *
@@ -334,7 +352,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		private IFile result;
 
 		/**
-		 * The File Location, that contains the information and the methods to create the file
+		 * The File Location, that contains the information and the methods to
+		 * create the file
 		 */
 		private NewFileCreationWizardPage creationWizard;
 
@@ -342,7 +361,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		 * Create a FileCreator for a specific wizard
 		 * 
 		 * @param creationWizard
-		 *          wizard from where the File Location step is read
+		 *            wizard from where the File Location step is read
 		 */
 		public FileCreator(NewFileCreationWizardPage creationWizard) {
 			this.creationWizard = creationWizard;
@@ -368,8 +387,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	}
 
 	/**
-	 * Return a file using the information provided in the File Location step to know where it must be created and it's
-	 * name
+	 * Return a file using the information provided in the File Location step to
+	 * know where it must be created and it's name
 	 * 
 	 * @return the file defined in the file location step
 	 */
