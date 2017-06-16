@@ -102,7 +102,7 @@ public class SelectParameterDialog extends ATitledDialog {
 					prms.add(p.getName());
 					parameters.put(p.getName(), (JRDesignParameter) p);
 				}
-				if (isParameterCompatible(p)) { // here if it is compatible
+				if (isParameterCompatible(p) && !prms.contains(p.getName())) {
 					prms.add(p.getName());
 					parameters.put(p.getName(), (JRDesignParameter) p);
 				}
