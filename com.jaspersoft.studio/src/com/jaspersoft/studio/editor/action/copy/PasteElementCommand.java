@@ -4,10 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.copy;
 
-import net.sf.jasperreports.engine.JRCloneable;
-import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
@@ -22,6 +18,10 @@ import com.jaspersoft.studio.model.dataset.command.CopyDatasetCommand;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.command.CreateConditionalStyleCommand;
+
+import net.sf.jasperreports.engine.JRCloneable;
+import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
  *  Command used to paste the copied models. The paste 
@@ -96,20 +96,17 @@ public class PasteElementCommand extends Command {
 						Command cmdd = new CloseSubeditorsCommand(deleteCommand, node);
 						cmd.add(cmdd);
 					}
-				} else if (n instanceof MGraphicElement) {
+				}
+				if (n instanceof MGraphicElement){
 					MGraphicElement mge = (MGraphicElement) n;
-					JRDesignElement de = (JRDesignElement) mge.getValue();
-					if (parent == node.getParent()) {
-						de.setX(de.getX() + 5);
-						de.setY(de.getY() + 5);
-					}
 					rect = mge.getBounds();
+					JRDesignElement de = (JRDesignElement) mge.getValue();
 					rect.setLocation(de.getX(), de.getY());
 				}
 				if (node instanceof MDataset) {
 					Command cmdc = new CopyDatasetCommand((MDataset) node, ((ANode) parent).getJasperDesign());
 					cmd.add(cmdc);
-				} if (node instanceof MConditionalStyle) {
+				} else if (node instanceof MConditionalStyle) {
 					MStyle newParent = (MStyle)parent;
 					//If the current selected node is a conditional style take
 					//its parent
@@ -118,12 +115,17 @@ public class PasteElementCommand extends Command {
 					}
 					Command cmdc = new CreateConditionalStyleCommand(newParent, (JRDesignConditionalStyle)n.getValue());
 					cmd.add(cmdc);
-				}	else {
+				} else {
 					// create command
 					Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, rect, -1);
 					if (cmdc != null) {
 						createdElement = n;
 						cmd.add(cmdc);
+						if (n instanceof MGraphicElement) {
+							MGraphicElement mge = (MGraphicElement) n;
+							FixPositionCommand fixPositionCommand = new FixPositionCommand(mge, node.getParent(), parent);
+							cmd.add(fixPositionCommand);		
+						}
 					}
 				}
 			}
