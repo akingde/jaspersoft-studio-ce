@@ -46,8 +46,8 @@ public abstract class AViewsFactory {
 				if (val == null && getMap().get(key) != null) {
 					Class<? extends APreview> clazz = getMap().get(key);
 					try {
-						val = clazz.getConstructor(Composite.class, JasperReportsConfiguration.class).newInstance(composite,
-								jContext);
+						val = clazz.getConstructor(Composite.class, JasperReportsConfiguration.class)
+								.newInstance(composite, jContext);
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
 					} catch (SecurityException e) {
@@ -67,18 +67,8 @@ public abstract class AViewsFactory {
 			}
 		};
 		for (String key : getMap().keySet()) {
-			if (key.equals(ViewsFactory.EXCEL_API)
-					&& !jContext.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI, false))
-				continue;
-			if (key.equals(ViewsFactory.X_HTML)
-					&& !jContext.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML, false))
-				continue;
-			if (key.equals(ViewsFactory.HTML_NO_INTERACTIVITY)
-					&& !jContext.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_HTML, false))
-				continue;
-			if (key.equals(ViewsFactory.XLS_METADATA)
-					&& !jContext.getPropertyBoolean(
-							JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA, false))
+			if (key.equals(ViewsFactory.HTML_NO_INTERACTIVITY) && !jContext
+					.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_HTML, false))
 				continue;
 			pmap.put(key, null);
 		}

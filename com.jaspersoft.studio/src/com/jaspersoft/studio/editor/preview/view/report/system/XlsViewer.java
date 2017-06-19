@@ -4,16 +4,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.system;
 
-import net.sf.jasperreports.eclipse.viewer.ReportViewer;
-import net.sf.jasperreports.engine.JasperPrint;
-
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsAction;
-import com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.viewer.ReportViewer;
+import net.sf.jasperreports.engine.JasperPrint;
 
 public class XlsViewer extends ASystemViewer {
 
@@ -33,6 +33,6 @@ public class XlsViewer extends ASystemViewer {
 
 	@Override
 	public PreferencePage getPreferencePage() {
-		return new ExcelExporterPreferencePage();
+		return new JRExporterPreferencePage();
 	}
 }

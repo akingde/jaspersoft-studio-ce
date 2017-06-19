@@ -19,17 +19,14 @@ import com.jaspersoft.studio.editor.preview.view.report.file.XMLImagesViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.XMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.html.HTMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.html.LayeredHTMLViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.XHTMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.AExporterFactory;
 import com.jaspersoft.studio.editor.preview.view.report.system.DocxViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.ExcelAPIViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.OdsViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.OdtViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.PdfViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.PowerPointViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.RTFViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.XlsMetadataViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsxViewer;
 import com.jaspersoft.studio.messages.Messages;
@@ -47,9 +44,8 @@ public class ViewsFactory extends AViewsFactory {
 
 		pcmap.put("SEPARATOR1", null); //$NON-NLS-1$
 
-		pcmap.put(HTML, LayeredHTMLViewer.class); //$NON-NLS-1$
-		pcmap.put(HTML_NO_INTERACTIVITY, HTMLViewer.class); //$NON-NLS-1$
-		pcmap.put(X_HTML, XHTMLViewer.class); //$NON-NLS-1$
+		pcmap.put(HTML, LayeredHTMLViewer.class); // $NON-NLS-1$
+		pcmap.put(HTML_NO_INTERACTIVITY, HTMLViewer.class); // $NON-NLS-1$
 		pcmap.put("SEPARATOR1", null); //$NON-NLS-1$
 		pcmap.put("SEPARATOR1", null); //$NON-NLS-1$
 		pcmap.put("PDF", PdfViewer.class); //$NON-NLS-1$
@@ -66,9 +62,7 @@ public class ViewsFactory extends AViewsFactory {
 		pcmap.put("SEPARATOR3", null); //$NON-NLS-1$
 
 		pcmap.put("XLS", XlsViewer.class); //$NON-NLS-1$
-		pcmap.put(XLS_METADATA, XlsMetadataViewer.class);
 		pcmap.put("XLSx", XlsxViewer.class); //$NON-NLS-1$
-		pcmap.put(EXCEL_API, ExcelAPIViewer.class); //$NON-NLS-1$
 		pcmap.put("CSV", CSVViewer.class); //$NON-NLS-1$
 		pcmap.put(Messages.ViewsFactory_6, CSVMetadataViewer.class);
 		pcmap.put(Messages.ViewsFactory_7, JSONMetadataViewer.class);

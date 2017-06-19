@@ -13,7 +13,6 @@ import com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage;
 import com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage;
-import com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
@@ -31,7 +30,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
+	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
+	 * initializeDefaultPreferences()
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
@@ -48,7 +48,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		RulersGridPreferencePage.getDefaults(store);
 		JRExporterPreferencePage.getDefaults(store);
 		CSVExporterPreferencePage.getDefaults(store);
-		ExcelExporterPreferencePage.getDefaults(store);
 		HTMLExporterPreferencePage.getDefaults(store);
 		PDFExporterPreferencePage.getDefaults(store);
 		XMLExporterPreferencePage.getDefaults(store);
