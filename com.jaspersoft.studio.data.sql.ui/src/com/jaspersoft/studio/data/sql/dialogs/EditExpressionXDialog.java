@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.data.designer.AQueryDesigner;
+import com.jaspersoft.studio.data.designer.SelectParameterDialog;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
@@ -310,20 +311,15 @@ public class EditExpressionXDialog extends ATitledDialog {
 	}
 
 	private void handleAddInList(List inlist) {
-		int index = Math.max(0, inlist.getSelectionIndex());
-		OperandDialog dialog = new OperandDialog(getShell(), designer);
-		ArrayList<AOperand> ops = new ArrayList<AOperand>(operands);
-		if (index < ops.size())
-			ops.add(index, new ParameterPOperand(value));
-		else
-			ops.add(new ParameterPOperand(value));
-		dialog.setValues(value, ops, index);
-		if (dialog.open() == Dialog.OK) {
-			AOperand op = dialog.getOperand();
-			if (index < ops.size())
+		SelectParameterDialog d = new SelectParameterDialog(rcmp.getShell(), designer);
+		if (d.open() == Dialog.OK) {
+			int index = inlist.getSelectionIndex();
+			ParameterPOperand op = new ParameterPOperand(value);
+			op.setJrParameter(d.getPname());
+			if (index >= 0 && index < operands.size())
 				operands.add(index + 1, op);
 			else
-				ops.add(op);
+				operands.add(op);
 			showInList(inlist);
 		}
 	}
@@ -331,10 +327,10 @@ public class EditExpressionXDialog extends ATitledDialog {
 	private void handleEditInList(List inlist) {
 		int index = inlist.getSelectionIndex() + 1;
 		if (index >= 0 && index < operands.size()) {
-			OperandDialog dialog = new OperandDialog(getShell(), designer);
-			dialog.setValues(value, new ArrayList<AOperand>(operands), index);
-			if (dialog.open() == Dialog.OK) {
-				operands.set(index, dialog.getOperand());
+			ParameterPOperand pop = (ParameterPOperand) operands.get(index);
+			SelectParameterDialog d = new SelectParameterDialog(rcmp.getShell(), designer, pop.getJrParameter());
+			if (d.open() == Dialog.OK) {
+				pop.setJrParameter(d.getPname());
 				showInList(inlist);
 			}
 		}

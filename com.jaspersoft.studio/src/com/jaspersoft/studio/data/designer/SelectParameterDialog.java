@@ -56,6 +56,13 @@ public class SelectParameterDialog extends ATitledDialog {
 		dataset = (JRDesignDataset) designer.getjDataset().clone();
 	}
 
+	public SelectParameterDialog(Shell parentShell, AQueryDesigner designer, JRDesignParameter prm) {
+		this(parentShell, designer);
+		this.prm = prm;
+		if (prm != null)
+			this.pname = prm.getName();
+	}
+
 	protected Map<String, JRDesignParameter> parameters = new HashMap<String, JRDesignParameter>();
 	protected WTextExpression wdef;
 	protected Combo cmb;
@@ -75,6 +82,10 @@ public class SelectParameterDialog extends ATitledDialog {
 	protected void okPressed() {
 		commitValues();
 		super.okPressed();
+	}
+
+	public String getPname() {
+		return prm.getName();
 	}
 
 	protected void commitValues() {
