@@ -51,6 +51,18 @@ public abstract class AHandleBoundsFigure extends ComponentFigure implements Han
 	}
 	
 	/**
+	 * Check if a figure need to be repainted or can be used the cached value.
+	 * In the current implementation it return true if a property of model is mark
+	 * as changed or if the previous cached graphics ask for a refresh
+	 * 
+	 * @param originalGraphics the figure graphics for the repaint
+	 * @return true if the figure need to be repainted, false otherwise
+	 */
+	protected boolean needRefresh(Graphics2D originalGraphics){
+		return (cachedGraphics == null || model.hasChangedProperty() || cachedGraphics.needRepaint(originalGraphics));
+	}
+	
+	/**
 	 * Used to make explicit if the figure allow the caching of the drawing
 	 * 
 	 * @return true if the figure allow the caching, false otherwise

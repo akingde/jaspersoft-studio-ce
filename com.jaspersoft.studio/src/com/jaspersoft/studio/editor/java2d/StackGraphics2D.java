@@ -382,6 +382,10 @@ public class StackGraphics2D extends ACachedGraphics {
 		for(StackGraphics2D subGraphic : subGraphics){
 			subGraphic.paintCache();
 		}
+		double scaleX = realDrawer.getTransform().getScaleX();
+		double scaleY = realDrawer.getTransform().getScaleY();
+		this.scaleX = scaleX;
+		this.scaleY = scaleY;
 	}
 	
 	/**

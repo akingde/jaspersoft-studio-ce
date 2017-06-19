@@ -58,10 +58,11 @@ public class ComponentFigure extends RectangleFigure {
 
 	public static Graphics2D getG2D(Graphics graphics) {
 		Graphics2D graphics2d = null;
-		if (graphics instanceof J2DGraphics)
+		if (graphics instanceof J2DGraphics){
 			graphics2d = ((J2DGraphics) graphics).getGraphics2D();
-		else if (graphics instanceof J2DScaledGraphics)
+		} else if (graphics instanceof J2DScaledGraphics){
 			graphics2d = ((J2DScaledGraphics) graphics).getGraphics2D();
+		}
 		return graphics2d;
 	}
 

@@ -51,8 +51,8 @@ public class ImageFigure extends FrameFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (cachedGraphics == null || model.hasChangedProperty()){
-			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
+		Graphics2D oldGraphics = drawVisitor.getGraphics2d();
+		if (needRefresh(oldGraphics)){
 			cachedGraphics = getCachedGraphics(oldGraphics);
 			drawVisitor.setGraphics2D(cachedGraphics);
 			visitElement(drawVisitor, model);
