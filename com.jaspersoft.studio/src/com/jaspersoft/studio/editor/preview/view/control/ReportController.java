@@ -583,6 +583,7 @@ public class ReportController {
 	class PageGenerationListener implements AsynchronousFilllListener, FillListener {
 		JasperPrint jrPrint;
 		private boolean refresh = false;
+		private boolean viewerset = false;
 
 		@Override
 		public void pageUpdated(JasperPrint arg0, int page) {
@@ -595,6 +596,7 @@ public class ReportController {
 				UIUtils.getDisplay().syncExec(new Runnable() {
 					public void run() {
 						pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewer());
+						viewerset = true;
 					}
 				});
 			}
@@ -618,6 +620,12 @@ public class ReportController {
 		}
 
 		public void reportFinished(final JasperPrint jPrint) {
+			if (!viewerset)
+				UIUtils.getDisplay().syncExec(new Runnable() {
+					public void run() {
+						pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewer());
+					}
+				});
 			this.jrPrint = jPrint;
 			finishUpdateViewer(pcontainer, jPrint);
 		}
