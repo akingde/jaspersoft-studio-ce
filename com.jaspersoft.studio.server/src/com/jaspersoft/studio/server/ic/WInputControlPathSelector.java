@@ -104,6 +104,7 @@ public class WInputControlPathSelector extends WText {
 								UIUtils.showWarning(
 										"Input Control name must be the same as parameter name to work on Jaspersoft Server.");
 						}
+						fillValue();
 					} else {
 						RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
 
@@ -120,7 +121,7 @@ public class WInputControlPathSelector extends WText {
 							else
 								aw.setValue(null);
 						}
-
+						fillValue();
 					}
 				}
 			}

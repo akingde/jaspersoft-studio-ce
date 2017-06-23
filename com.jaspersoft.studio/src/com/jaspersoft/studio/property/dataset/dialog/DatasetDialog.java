@@ -545,6 +545,8 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 			boolean notexists = true;
 			for (JRParameter f : oldparams) {
 				JRDesignParameter prm = (JRDesignParameter) newdataset.getParametersMap().get(newf.getName());
+				if (prm == null)
+					continue;
 				if (newf.getName().equals(f.getName())) {
 					MParameterSystem mparam = mdataset.getParamater(newf.getName());
 					if (mparam != null) {
