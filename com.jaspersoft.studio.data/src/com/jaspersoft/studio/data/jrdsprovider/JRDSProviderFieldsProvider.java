@@ -18,6 +18,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -39,15 +40,16 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 		return false;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig,
+			JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		jrdsp = ((DataSourceProviderDataAdapterService) con).getProvider();
 		if (jrdsp != null) {
 			JasperReport jr = null;
 			try {
-				IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
-				if (file != null && file.exists()) {
+				JasperDesign jd = jConfig.getJasperDesign();
+				if (jd != null) {
 					JasperReportCompiler compiler = new JasperReportCompiler();
-					jr = compiler.compileReport(jConfig, file);
+					jr = compiler.compileReport(jConfig, jConfig.getJasperDesign());
 				}
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
