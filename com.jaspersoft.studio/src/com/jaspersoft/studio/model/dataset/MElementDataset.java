@@ -37,11 +37,11 @@ import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 public class MElementDataset extends APropertyNode implements IContainer, IContainerEditPart {
 	private static IIconDescriptor iconDescriptor;
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private IPropertyDescriptor[] descriptors;
-	
+
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -82,7 +82,7 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		setValue(value);
 		this.jasperDesign = jasperDesign;
 	}
-	
+
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
@@ -106,11 +106,12 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		desc.add(inctypeD);
 
 		JRExpressionPropertyDescriptor incWhenExprD = new JRExpressionPropertyDescriptor(
-				JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION, Messages.MElementDataset_increment_when_expression);
+				JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION,
+				Messages.MElementDataset_increment_when_expression);
 		incWhenExprD.setDescription(Messages.MElementDataset_increment_when_expression_description);
 		desc.add(incWhenExprD);
-		incWhenExprD.setHelpRefBuilder(
-				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#incrementWhenExpression"));
+		incWhenExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#incrementWhenExpression"));
 
 		resetGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_GROUP,
 				Messages.common_reset_group, new String[] { "" }); //$NON-NLS-1$
@@ -133,6 +134,14 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	}
 
 	public void setGroupItems(String[] items) {
+		if (resetGroupD == null) {
+			for (IPropertyDescriptor p : getPropertyDescriptors()) {
+				if (p.getId().equals(JRDesignElementDataset.PROPERTY_RESET_GROUP))
+					((RComboBoxPropertyDescriptor) p).setItems(items);
+				else if (p.getId().equals(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP))
+					((RComboBoxPropertyDescriptor) p).setItems(items);
+			}
+		}
 		if (resetGroupD != null)
 			resetGroupD.setItems(items);
 		if (incGroupD != null)
@@ -142,7 +151,9 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.
+	 * lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignElementDataset jrElement = (JRDesignElementDataset) getValue();
@@ -194,7 +205,9 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.
+	 * lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignElementDataset jrElement = (JRDesignElementDataset) getValue();
