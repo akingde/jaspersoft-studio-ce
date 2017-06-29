@@ -610,8 +610,10 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 		if (obj instanceof JasperDesign) {
 			setActivePage(0);
 		} else {
-			AbstractVisualEditor ave = createEditorPage(obj);
-			if (ave != null) {
+			AbstractVisualEditor ave = ccMap.get(obj);
+			if (ave == null){
+				//need to create the new subeditor
+				ave = createEditorPage(obj);
 				/**
 				 * If was created another editor with inside an mpage the i save
 				 * the parent of the current node inside the page. Doing this it
@@ -620,10 +622,13 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 				 * saved here since when an element change parent all the open
 				 * editors for the element are closed
 				 */
-				if (ave.getModel().getChildren().size() > 0 && ave.getModel().getChildren().get(0) instanceof MPage) {
+				if (ave != null && ave.getModel().getChildren().size() > 0 && ave.getModel().getChildren().get(0) instanceof MPage) {
 					MPage pageElement = (MPage) ave.getModel().getChildren().get(0);
 					pageElement.setRealParent(node.getParent());
 				}
+			}
+			
+			if (ave != null) {
 				if (getActiveEditor() != ave) {
 					int index = editors.indexOf(ave);
 					if (index > 0 && index <= editors.size() - 1) {
