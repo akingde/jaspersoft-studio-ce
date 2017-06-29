@@ -1,0 +1,124 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
+ * All Rights Reserved. Confidential & Proprietary.
+ ******************************************************************************/
+package com.jaspersoft.studio.components.barcode.model.barcode4j;
+
+import java.util.HashSet;
+import java.util.List;
+
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
+import com.jaspersoft.studio.components.barcode.messages.Messages;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
+
+import net.sf.jasperreports.components.barcode4j.EAN8Component;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.component.ComponentKey;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
+public class MEAN8 extends MBarcode4j {
+	
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
+
+	public MEAN8() {
+		super();
+	}
+
+	public MEAN8(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
+		super(parent, jrBarcode, newIndex);
+	}
+
+	@Override
+	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
+		JRDesignComponentElement el = new JRDesignComponentElement();
+		EAN8Component component = new EAN8Component();
+		JRDesignExpression exp = new JRDesignExpression();
+		exp.setText("\"1234567\""); //$NON-NLS-1$
+		component.setCodeExpression(exp);
+		el.setComponent(component);
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "EAN8")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		
+		return el;
+	}
+
+	@Override
+	public IPropertyDescriptor[] getDescriptors() {
+		return descriptors;
+	}
+
+	@Override
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
+		descriptors = descriptors1;
+	}
+
+	/**
+	 * Creates the property descriptors.
+	 * 
+	 * @param desc
+	 *            the desc
+	 */
+	@Override
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
+
+		JSSComboPropertyDescriptor checksumModeD = new JSSComboPropertyDescriptor(
+				EAN8Component.PROPERTY_CHECKSUM_MODE,
+				Messages.common_checksum_mode, ChecksumMode.getItems());
+		checksumModeD.setDescription(Messages.MEAN8_checksum_mode_description);
+		desc.add(checksumModeD);
+
+		checksumModeD.setCategory(Messages.MEAN8_properties_category);
+	}
+
+	@Override
+	public Object getPropertyValue(Object id) {
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		EAN8Component jrList = (EAN8Component) jrElement.getComponent();
+
+		if (id.equals(EAN8Component.PROPERTY_CHECKSUM_MODE))
+			return ChecksumMode.getPos4ChecksumMode(jrList.getChecksumMode());
+		return super.getPropertyValue(id);
+	}
+
+	@Override
+	public void setPropertyValue(Object id, Object value) {
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		EAN8Component jrList = (EAN8Component) jrElement.getComponent();
+
+		if (id.equals(EAN8Component.PROPERTY_CHECKSUM_MODE))
+			jrList.setChecksumMode(ChecksumMode
+					.getChecksumMode4Pos((Integer) value));
+
+		super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(EAN8Component.PROPERTY_CHECKSUM_MODE);
+		return properties;
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		EAN8Component jrSourceBarcode = (EAN8Component) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		EAN8Component jrTargetBarcode = (EAN8Component) jrTargetElement.getComponent();
+		
+		jrTargetBarcode.setChecksumMode(jrSourceBarcode.getChecksumMode());
+	}
+}

@@ -1,0 +1,39 @@
+{
+    "label": "Value Axis Range and Tick",
+    "description": "Customizer to set the range for the value axes and the tick spacing. If one of values are empty then it will not be applied to the chart.",
+    "customizerClass": "net.sf.jasperreports.customizers.axis.RangeAxisCustomizer",
+    "supportedPlot": ["13","14","15","1","2","3","7","8","11","12","20","21"],
+    "sections": [
+        {
+            "name": "Customizer configuration",
+            "expandable": false,
+            "properties": [
+				{
+                    "name": "minValue",
+                    "label": "Range Min",
+                    "description": "The minimum value on the axis",
+                    "mandatory": false,
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "maxValue",
+                    "label": "Range Max",
+                    "description": "The maximum value on the axis",
+                    "mandatory": false,
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "tickUnit",
+                    "label": "Distance",
+                    "description": "The space between ticks, each multiple of this value will have a tick on the corresponding value of the Y axis",
+                    "mandatory": false,
+                    "defaultValue": "1",
+                    "readOnly": false,
+                    "type": "double"
+                }
+            ]
+        }
+    ]
+}

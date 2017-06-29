@@ -1,0 +1,17 @@
+The runjss.sh script can be used to run Jaspersoft Studio from command line.
+The script helps tackling some problems faced in different Linux versions. 
+See the details below in order to understand the different issues verified.
+If necessary modify accordingly the script, for example commenting out some lines of the script. 
+
+Issue 1
+=======================
+Problem: In some Ubuntu versions there are issues related to the main menu not appearing.
+Solution: The UBUNTU_MENUPROXY export variable has been set.
+=======================
+
+Issue 2
+=======================
+Problem: In different Linux there are issues when the GTK3 library is used.
+Solution: The SWT_GTK3 export variable has been set in order to disable its usage and fallback to the old GTK2 library.
+Please note that this has a negative effect on the usage of the SWT Browser widget.
+So all the parts of the application using it will be affected (i.e Jive preview, Map markers editing, HTML-like previews, HTML5 preview). 
