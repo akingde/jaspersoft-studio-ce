@@ -239,12 +239,17 @@ public class MPage extends MLockableRefresh implements IGraphicElement, IContain
 	
 	/**
 	 * The Page return the list of styles of the children of the real
-	 * parent of the page
+	 * parent of the page, among to the list of the styles of the current node
 	 */
 	@Override
 	public HashMap<String, List<ANode>> getUsedStyles() {
 		HashMap<String, List<ANode>> result = super.getUsedStyles();
 		for(INode child : getRealParent().getChildren()){
+			if (child instanceof ANode){
+				mergeElementStyle(result, ((ANode) child).getUsedStyles());
+			} 
+		}
+		for(INode child : getChildren()){
 			if (child instanceof ANode){
 				mergeElementStyle(result, ((ANode) child).getUsedStyles());
 			} 
