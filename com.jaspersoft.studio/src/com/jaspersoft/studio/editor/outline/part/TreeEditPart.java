@@ -35,6 +35,9 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.background.MBackgrounImage;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultsParametersAction;
+import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementEditPolicy;
@@ -45,6 +48,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MLockableRefresh;
 import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.sortfield.MSortField;
@@ -55,6 +59,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 
@@ -197,6 +202,11 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 							if (SortParametersAction.areParametersSorted(variables.getJasperConfiguration())){
 								return UnexecutableCommand.INSTANCE;
 							}
+						} else if (model.getClass().equals(MFields.class)){
+							MFields variables = (MFields)model;
+							if (SortFieldsAction.areFieldsSorted(variables.getJasperConfiguration())){
+								return UnexecutableCommand.INSTANCE;
+							}
 						}
 					}
 					ChangeBoundsRequest request = new ChangeBoundsRequest(REQ_MOVE_CHILDREN);
@@ -299,9 +309,13 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			
 			//when the node are the variables or the parameters apply special code to show or hide the system defaults and to sort them
 			if (modelNode.getClass().equals(MVariables.class)){
-				list.addAll(getVariables(jConfig, (MVariables)modelNode, showDefaults));
+				boolean showVariables = !HideDefaultVariablesAction.areDefaultVariablesHidden(jConfig);
+				list.addAll(getVariables(jConfig, (MVariables)modelNode, showDefaults && showVariables));
 			} else if (modelNode.getClass().equals(MParameters.class)){
-				list.addAll(getParameters(jConfig, (MParameters<?>)modelNode, showDefaults));
+				boolean showParameters = !HideDefaultsParametersAction.areDefaultParametersHidden(jConfig);
+				list.addAll(getParameters(jConfig, (MParameters<?>)modelNode, showDefaults && showParameters));
+			} else if (modelNode.getClass().equals(MFields.class)){
+				list.addAll(getFields(jConfig, (MFields) modelNode));
 			} else {
 				for (INode node : modelNode.getChildren()) {
 					// The background is never shown inside the outline
@@ -312,6 +326,37 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			}
 		}
 		return list;
+	}
+	
+	/**
+	 * Get the list of the fields, they could be ordered 
+	 * 
+	 * @param jConfig the {@link JasperReportsConfiguration} of the current report, must be not null
+	 * @param parentNode the {@link MVariables} node, must be not null
+	 * @return a not null list of the variables to show in the correct order
+	 */
+	protected List<INode> getFields(JasperReportsConfiguration jConfig, MFields parentNode) {
+		List<INode> result = new ArrayList<INode>();
+		List<INode> children = new ArrayList<INode>(parentNode.getChildren());
+		if (SortFieldsAction.areFieldsSorted(jConfig)){
+			
+			Collections.sort(children, new Comparator<INode>() {
+				
+				@Override
+				public int compare(INode o1, INode o2) {
+					MField var1 = (MField)o1;
+					MField var2 = (MField)o2;
+					String nameVar1 = (String)var1.getPropertyActualValue(JRDesignField.PROPERTY_NAME);
+					String nameVar2 = (String)var2.getPropertyActualValue(JRDesignField.PROPERTY_NAME);
+					return nameVar1.toLowerCase().compareTo(nameVar2.toLowerCase());
+				}
+			});
+		}
+		for (INode node : children) {
+			result.add(node);
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -347,7 +392,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			}
 		}
 		
-		return children;
+		return result;
 	}
 	
 	/**
@@ -382,7 +427,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			}
 		}
 		
-		return children;
+		return result;
 	}
 
 

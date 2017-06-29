@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.design.JRDesignVariable;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariables;
@@ -69,6 +70,7 @@ public class ReorderVariableCommand extends Command {
 			}
 			boolean showDefaults = jrContext != null ? jrContext.getPropertyBoolean(
 					DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
+			showDefaults = showDefaults && !HideDefaultVariablesAction.areDefaultVariablesHidden(jrContext);
 			if (!showDefaults)
 				newIndex += i;
 			newIndex = Math.max(newIndex, i);

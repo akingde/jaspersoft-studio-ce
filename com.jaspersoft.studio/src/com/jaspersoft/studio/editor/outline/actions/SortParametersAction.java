@@ -18,7 +18,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Orlandin Marco
  *
  */
-public class SortParametersAction extends AbstractSortAction {
+public class SortParametersAction extends AbstractFilePropertyAction {
 	
 	/** 
 	 * The Constant ID. 
@@ -53,7 +53,7 @@ public class SortParametersAction extends AbstractSortAction {
 	 * @return true if they are sorted, false in any other case
 	 */
 	public static boolean areParametersSorted(JasperReportsConfiguration jConfig){
-		return areElementSorted(jConfig, SORT_PROPERTY_NAME);
+		return isPropertySet(jConfig, SORT_PROPERTY_NAME);
 	}
 	
 	/**
@@ -83,7 +83,7 @@ public class SortParametersAction extends AbstractSortAction {
 		List<Object> selection = editor.getSelectionCache().getSelectionModelForType(MParameters.class);
 		if (selection.size() == 1){
 			MParameters<?> selectedVariables = (MParameters<?>)selection.get(0);
-			return areElementSorted(selectedVariables.getJasperConfiguration(), getPersistentPropertyName());
+			return isPropertySet(selectedVariables.getJasperConfiguration(), getPersistentPropertyName());
 		}
 		return false;
 	}

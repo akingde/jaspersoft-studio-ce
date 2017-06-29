@@ -13,24 +13,24 @@ import com.jaspersoft.studio.model.variable.MVariables;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Action to sort the variables on the outline
+ * Action to hide the default variables on the outline
  *  
  * @author Orlandin Marco
  *
  */
-public class SortVariablesAction extends AbstractFilePropertyAction {
+public class HideDefaultVariablesAction extends AbstractFilePropertyAction {
 	
 	/** 
 	 * The Constant ID. 
 	 */
-	public static final String ID = "sort_variables"; //$NON-NLS-1$
+	public static final String ID = "hide_default_variables"; //$NON-NLS-1$
 	
 	/**
 	 * The id of the property set on the eclipse file resource
 	 */
-	private static final String SORT_PROPERTY_NAME = "com.jaspersoft.studio.sortVariables"; 
+	private static final String HIDE_PROPERTY_NAME = "com.jaspersoft.studio.hideVariables"; 
 	
-	public SortVariablesAction(IWorkbenchPart part) {
+	public HideDefaultVariablesAction(IWorkbenchPart part) {
 		super(part);
 	}
 
@@ -40,20 +40,20 @@ public class SortVariablesAction extends AbstractFilePropertyAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Sort Aphabetically");
-		setToolTipText("Sort the variables alphabetichally");
+		setText("Hide Default Variables");
+		setToolTipText("Hide the defualt variables");
 		setId(ID);
 		setEnabled(false);
 	}
 	
 	/**
-	 * Utility  method to check if the variable are sorted by name or not
+	 * Utility  method to check if the default variables are hidden or not
 	 * 
 	 * @param jConfig the {@link JasperReportsConfiguration} of the report
 	 * @return true if they are sorted, false in any other case
 	 */
-	public static boolean areVariablesSorted(JasperReportsConfiguration jConfig){
-		return isPropertySet(jConfig, SORT_PROPERTY_NAME);
+	public static boolean areDefaultVariablesHidden(JasperReportsConfiguration jConfig){
+		return isPropertySet(jConfig, HIDE_PROPERTY_NAME);
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class SortVariablesAction extends AbstractFilePropertyAction {
 	 */
 	@Override
 	protected String getPersistentPropertyName() {
-		return SORT_PROPERTY_NAME;
+		return HIDE_PROPERTY_NAME;
 	}
 	
 	@Override

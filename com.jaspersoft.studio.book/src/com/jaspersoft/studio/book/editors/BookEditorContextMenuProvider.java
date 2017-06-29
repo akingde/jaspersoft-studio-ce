@@ -29,6 +29,9 @@ import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DynamicActionContributionItem;
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultsParametersAction;
+import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
@@ -49,6 +52,37 @@ public class BookEditorContextMenuProvider extends AContextMenuProvider {
 				actionRegistry, GEFActionConstants.GROUP_UNDO);
 		
 		menu.add(new Separator(GEFActionConstants.GROUP_ADD));
+		
+		IAction action = getActionRegistry().getAction(SortParametersAction.ID);
+		if (action != null && action.isEnabled()){
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			
+			action = getActionRegistry().getAction(HideDefaultsParametersAction.ID);
+			if (action != null && action.isEnabled()){
+				menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			}
+			
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+		}
+		
+		action = getActionRegistry().getAction(SortVariablesAction.ID);
+		if (action != null && action.isEnabled()){
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			
+			action = getActionRegistry().getAction(HideDefaultVariablesAction.ID);
+			if (action != null && action.isEnabled()){
+				menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			}
+			
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+		}
+		
+		action = getActionRegistry().getAction(SortFieldsAction.ID);
+		if (action != null && action.isEnabled()){
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+		}
+		
 		ActionUtils.appendActionToGroup(
 				menu, Arrays.asList(new String[]{
 						CreateNewGroupAction.ID,CreateNewBookPartAction.ID,
@@ -57,14 +91,6 @@ public class BookEditorContextMenuProvider extends AContextMenuProvider {
 						CreateVariableAction.ID, CreateScriptletAction.ID, 
 						DatasetAction.ID}), 
 				actionRegistry, GEFActionConstants.GROUP_ADD);
-		
-		IAction action = getActionRegistry().getAction(SortParametersAction.ID);
-		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
-		
-		action = getActionRegistry().getAction(SortVariablesAction.ID);
-		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
 		
 		menu.add(new Separator(GEFActionConstants.GROUP_COPY));
 		ActionUtils.appendActionToGroup(

@@ -9,28 +9,28 @@ import java.util.List;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.model.variable.MVariables;
+import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Action to sort the variables on the outline
+ * Action to sort the fields on the outline
  *  
  * @author Orlandin Marco
  *
  */
-public class SortVariablesAction extends AbstractFilePropertyAction {
+public class SortFieldsAction extends AbstractFilePropertyAction {
 	
 	/** 
 	 * The Constant ID. 
 	 */
-	public static final String ID = "sort_variables"; //$NON-NLS-1$
+	public static final String ID = "sort_fields"; //$NON-NLS-1$
 	
 	/**
 	 * The id of the property set on the eclipse file resource
 	 */
-	private static final String SORT_PROPERTY_NAME = "com.jaspersoft.studio.sortVariables"; 
+	private static final String SORT_PROPERTY_NAME = "com.jaspersoft.studio.sortFields"; 
 	
-	public SortVariablesAction(IWorkbenchPart part) {
+	public SortFieldsAction(IWorkbenchPart part) {
 		super(part);
 	}
 
@@ -41,18 +41,18 @@ public class SortVariablesAction extends AbstractFilePropertyAction {
 	protected void init() {
 		super.init();
 		setText("Sort Aphabetically");
-		setToolTipText("Sort the variables alphabetichally");
+		setToolTipText("Sort the fields alphabetichally");
 		setId(ID);
 		setEnabled(false);
 	}
 	
 	/**
-	 * Utility  method to check if the variable are sorted by name or not
+	 * Utility  method to check if the fields are sorted by name or not
 	 * 
 	 * @param jConfig the {@link JasperReportsConfiguration} of the report
 	 * @return true if they are sorted, false in any other case
 	 */
-	public static boolean areVariablesSorted(JasperReportsConfiguration jConfig){
+	public static boolean areFieldsSorted(JasperReportsConfiguration jConfig){
 		return isPropertySet(jConfig, SORT_PROPERTY_NAME);
 	}
 	
@@ -66,9 +66,9 @@ public class SortVariablesAction extends AbstractFilePropertyAction {
 	
 	@Override
 	protected Command createCommand() {
-		List<Object> selection = editor.getSelectionCache().getSelectionModelForType(MVariables.class);
-		if (selection.size() == 1){
-			final MVariables selectedVariables = (MVariables)selection.get(0);
+		List<Object> selection = editor.getSelectionCache().getSelectionModelForType(MFields.class);
+		if (selection.size() == 1 && selection.get(0).getClass().equals(MFields.class)){
+			final MFields selectedVariables = (MFields)selection.get(0);
 			return generateCommand(selectedVariables);
 		}
 		return null;
@@ -80,9 +80,9 @@ public class SortVariablesAction extends AbstractFilePropertyAction {
 	 */
 	@Override
 	public boolean isChecked() {
-		List<Object> selection = editor.getSelectionCache().getSelectionModelForType(MVariables.class);
+		List<Object> selection = editor.getSelectionCache().getSelectionModelForType(MFields.class);
 		if (selection.size() == 1){
-			MVariables selectedVariables = (MVariables)selection.get(0);
+			MFields selectedVariables = (MFields)selection.get(0);
 			return isPropertySet(selectedVariables.getJasperConfiguration(), getPersistentPropertyName());
 		}
 		return false;

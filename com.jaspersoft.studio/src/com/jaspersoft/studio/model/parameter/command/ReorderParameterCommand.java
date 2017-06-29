@@ -4,18 +4,19 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter.command;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultsParametersAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 /*
  * /* The Class ReorderParameterCommand.
@@ -68,6 +69,7 @@ public class ReorderParameterCommand extends Command {
 			}
 			boolean showDefaults = jrContext != null ? jrContext.getPropertyBoolean(
 					DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
+			showDefaults = showDefaults && !HideDefaultsParametersAction.areDefaultParametersHidden(jrContext);
 			if (!showDefaults)
 				newIndex += i;
 			newIndex = Math.max(newIndex, i);

@@ -42,6 +42,9 @@ import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultsParametersAction;
+import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
@@ -140,6 +143,21 @@ public class SimpleReportEditor extends ReportEditor {
 					String id = DeleteGroupReportAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 	
+					id = SortVariablesAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+					
+					id = SortParametersAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+					
+					id = SortFieldsAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+					
+					id = HideDefaultsParametersAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+					
+					id = HideDefaultVariablesAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+					
 					id = CreateFieldAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 	
@@ -147,12 +165,6 @@ public class SimpleReportEditor extends ReportEditor {
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 	
 					id = CreateVariableAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
-	
-					id = SortVariablesAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
-					
-					id = SortParametersAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 					
 					id = CreateParameterAction.ID;

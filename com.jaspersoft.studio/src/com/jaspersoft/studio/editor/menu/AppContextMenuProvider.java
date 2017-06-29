@@ -72,11 +72,14 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.outline.actions.DynamicActionContributionItem;
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultsParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshImageAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
 import com.jaspersoft.studio.editor.report.ReportContainer;
@@ -257,7 +260,42 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		// -----------------------------------------------------------
-
+		
+		//ADD THE SORT ACTIONS
+		
+		action = getActionRegistry().getAction(SortVariablesAction.ID);
+		if (action != null && action.isEnabled()){
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			
+			action = getActionRegistry().getAction(HideDefaultVariablesAction.ID);
+			if (action != null && action.isEnabled()){
+				menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			}
+			
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+		}
+		
+		
+		action = getActionRegistry().getAction(SortParametersAction.ID);
+		if (action != null && action.isEnabled()){
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			
+			action = getActionRegistry().getAction(HideDefaultsParametersAction.ID);
+			if (action != null && action.isEnabled()){
+				menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			}
+			
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+		}
+		
+		action = getActionRegistry().getAction(SortFieldsAction.ID);
+		if (action != null && action.isEnabled()){
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+		}
+		
+		//ADD THE OTHER ACTIONS
+		
 		action = getActionRegistry().getAction(CreateFieldAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
@@ -269,14 +307,6 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(CreateVariableAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
-		
-		action = getActionRegistry().getAction(SortVariablesAction.ID);
-		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
-		
-		action = getActionRegistry().getAction(SortParametersAction.ID);
-		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
 
 		action = getActionRegistry().getAction(CreateScriptletAction.ID);
 		if (action != null && action.isEnabled())

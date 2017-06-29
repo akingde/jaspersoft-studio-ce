@@ -137,11 +137,14 @@ import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
+import com.jaspersoft.studio.editor.outline.actions.HideDefaultsParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshImageAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
@@ -679,7 +682,19 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new SortParametersAction(this);
 		registry.registerAction(action);
 		selectionActions.add(SortParametersAction.ID);
+		
+		action = new SortFieldsAction(this);
+		registry.registerAction(action);
+		selectionActions.add(SortFieldsAction.ID);
 
+		action = new HideDefaultsParametersAction(this);
+		registry.registerAction(action);
+		selectionActions.add(HideDefaultsParametersAction.ID);
+		
+		action = new HideDefaultVariablesAction(this);
+		registry.registerAction(action);
+		selectionActions.add(HideDefaultVariablesAction.ID);
+		
 		action = new CreateScriptletAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateScriptletAction.ID);
