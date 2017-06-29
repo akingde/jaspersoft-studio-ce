@@ -164,6 +164,8 @@ public class ExpressionUtil {
 					}
 					if (interpreter != null) {
 						return interpreter.interpretExpression(expString);
+						
+						//JRFillDataset.createCalculator(jConfig, jasperReport, jasperReport.getMainDataset());
 						// Object expressionValue = interpreter.interpretExpression(expString);
 						// if (expressionValue != null) evaluatedExpression = expressionValue.toString();
 					}
@@ -374,5 +376,64 @@ public class ExpressionUtil {
 			String text2 = exp2.getText();
 			return ModelUtils.safeEquals(text1, text2);
 		}
+	}
+	
+	/**
+	 * Extract the value of a variable provided like an annotation
+	 * 
+	 * @param variableName the name of the variable
+	 * @param expString the text fo the expression, should be not null
+	 * @return the value of the variable between double quotes, can be null if notthing is found
+	 */
+	public static String extractValueForVariable(String variableName, String expString){
+		int indexStartComments = expString.indexOf("/*" );
+		int indexEndComments = indexStartComments != -1 ? expString.indexOf("*/", indexStartComments) : -1;
+		if (indexEndComments != -1 && indexEndComments != -1){
+			String content = expString.substring(indexStartComments, indexEndComments + 2);
+			int annotationPos = content.indexOf(variableName);
+			if (annotationPos != -1){
+				boolean variableFound = false;
+				boolean parsingError = false;
+				boolean equalsFound = false;
+				boolean escaping = false;
+				int valueStart = -1;
+				int valueEnd = -1;
+				int currentIndex = annotationPos + variableName.length();
+				while (!(variableFound || parsingError)){
+					if (currentIndex<content.length()){
+						char currentChar = content.charAt(currentIndex);
+						if (currentChar == '=' && !escaping){
+							if (valueStart == -1){
+								parsingError = equalsFound;
+								equalsFound = true;
+							}
+						} else if (currentChar == '"' && !escaping){
+							if (equalsFound){
+								if (valueStart == -1){
+									valueStart = currentIndex;
+								} else {
+									valueEnd = currentIndex;
+									variableFound = true;
+								}
+							} else {
+								parsingError = true;
+							}
+						} 
+						if (currentChar == '\\' && !escaping){
+							escaping = true;
+						} else {
+							escaping = false;
+						}
+						currentIndex ++;
+					} else {
+						parsingError = true;
+					}
+				}
+				if (!parsingError && variableFound){
+					return content.substring(valueStart, valueEnd + 1);
+				}
+			}
+		}
+		return null;
 	}
 }

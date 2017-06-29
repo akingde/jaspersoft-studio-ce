@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplate;
 import net.sf.jasperreports.engine.JRTemplateReference;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
@@ -358,6 +359,19 @@ public class ExternalStylesManager {
 	}
 	
 	/**
+	 * Get the value of the expression of the style, but check also if there is an annotation defined
+	 * with the @path value
+	 */
+	protected static String getExpressionValue(JRExpression styleExpression){
+		String expString = styleExpression != null ? styleExpression.getText() : "";
+		String variableStaticPath = ExpressionUtil.extractValueForVariable(MStyleTemplate.PATH_ANNOTATION, expString);
+		if (variableStaticPath != null){
+			return variableStaticPath;
+		}
+		return expString;
+	}
+	
+	/**
 	 * Resolve an expression and return the reference to the style or null if it can not be resolve
 	 * 
 	 * @param styleExpression expression of the external style
@@ -369,11 +383,11 @@ public class ExternalStylesManager {
 		String evaluatedExpression = null;
 		String projectPath = project.getLocation().toPortableString();
 		JRExpression styleExpression = style.getSourceExpression();
-		String expString = styleExpression != null ? styleExpression.getText() : "";
+		String expString = getExpressionValue(styleExpression);
 		try{
 			//Check first if there are previous failed attempt to evaluate the expression
 			if (!isNotValuable(projectPath, expString)){
-				evaluatedExpression =  ExpressionUtil.cachedExpressionEvaluationString(styleExpression, jConfig); 
+				evaluatedExpression =  ExpressionUtil.cachedExpressionEvaluationString(new JRDesignExpression(expString), jConfig); 
 				if (evaluatedExpression == null){
 					//The expression is not valuable, add it to the map
 					addNotValuableExpression(projectPath, expString);
