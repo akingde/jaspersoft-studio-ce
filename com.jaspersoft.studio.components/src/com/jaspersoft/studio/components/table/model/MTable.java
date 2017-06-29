@@ -145,8 +145,8 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 					deleteGroup(jrGroup.getName());
 				}
 				// Run an event on the table to force a grapghical refresh of
-				// the columnss
-				setChangedProperty(true);
+				// the columns
+				setChangedProperty(true, evt);
 				MTable.this.propertyChange(new PropertyChangeEvent(getValue(),
 						StandardTable.PROPERTY_COLUMNS, null, null));
 			}
