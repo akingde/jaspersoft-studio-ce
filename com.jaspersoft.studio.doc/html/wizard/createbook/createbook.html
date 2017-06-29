@@ -1,0 +1,186 @@
+<html><head><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Creation of a Report Book</title><meta content="DocBook XSL Stylesheets V1.78.0" name="generator"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="N40003"></a>Creation of a Report Book</h2></div></div><hr></div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="N4000C"></a>Overview</h3></div></div></div>
+	
+	<p>
+	This tutorial shows how to create a simple JasperReports Book that uses the basic features in Jaspersoft Studio. 
+	The sample book contains the orders for each country as a separate report and a table of contents that shows the page number where each report part begins. 
+	You do this in three main steps:
+	</p>
+	<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+			<p>Create a report book with a query that groups records by country.</p>
+		</li><li class="listitem">
+			<p>Create a report with the information we want with a parameterized query for country.</p>
+		</li><li class="listitem">
+			<p>Add the report to the Content (detail) section of the report book and set the parameter appropriately.</p>
+		</li></ol></div>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="N4002C"></a>Introduction</h3></div></div></div>
+	
+	<p>
+	A report book is a single .jrxml that bundles multiple reports into a single object. 
+	A report book has sections, similar to bands. 
+	The possible sections are: detail, group header, and group footer sections. 
+	Like bands, you can have multiple instances of a section.  
+	Inside each section, you can have one or more reports or report books. You cannot have other element types in a report book.
+	</p>
+	<p>
+	The individual reports inside a report book are called "report parts". 
+	They are similar to subreports, but each report part is included as a whole report, not embedded as data. 
+	This means each report part starts on a separate page and different report parts can have different page layouts.
+	</p>
+	<p>
+	A report book has a dataset that determines how many times each part is instantiated. 
+	For example a part placed on the detail section is printed once for each record from the dataset. 
+	Dummy groups (that is, groups that have constant group expressions) can be used for parts that should only be included once in the generated document.
+	</p>
+	<p>
+	The group header or group footer section can be used to create a table of contents that lists the titles of the report parts.
+	</p>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="N4003F"></a>Creating a Report Book</h3></div></div></div>
+	
+	<p>
+	As mentioned above, this example creates a report that contains the orders for each country as a separate report, along with a table of contents that shows the page number where each report part begins.  
+	The first step is to create a new report book using the New Report Wizard:
+	</p>
+	<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+			<p>
+			Right-click on a project in the project explorer and select <span class="bold"><strong>New &gt; Jasper Report</strong></span> or click
+			<img src="img/jss-icon-new-report.png">
+			 on the Jaspersoft Studio toolbar.
+			</p>
+		</li><li class="listitem">
+			<p>
+			In the New Report Wizard, select <span class="bold"><strong>Report Books</strong></span> in the Categories pane on the left  and choose one of the available templates. 
+			For this example, choose the Abstract Book template, which includes all the components for a book with a cover, table of contents, detail pages, and back cover. Then click <span class="bold"><strong>Next</strong></span>.
+			</p><div class="mediaobject"><img src="img/screen_1.png" width="600"></div><p>		
+			</p>
+		</li><li class="listitem">
+			<p>
+			Enter a name, Orders_Book, and location for the book, then click <span class="bold"><strong>Next</strong></span>.
+			</p>
+		</li><li class="listitem">
+			<p>
+			Select a data adapter for the book. 
+			For this example, use the Sample DB data adapter to use the sample database shipped with Jaspersoft Studio. 
+			Then click <span class="bold"><strong>Next</strong></span>.
+			</p>
+		</li><li class="listitem">
+			<p>
+			Set up a query that groups orders by country. In the SQL query editor, enter the following query:
+			</p><pre class="programlisting">
+			
+SELECT SHIPCOUNTRY FROM orders GROUP BY SHIPCOUNTRY
+			</pre><p>
+			Then click <span class="bold"><strong>Next</strong></span>.
+			</p>
+		</li><li class="listitem">
+			<p>
+			Select SHIPCOUNTRY as a field, then click <span class="bold"><strong>Next</strong></span>. The Book Sections window is displayed.
+			</p><div class="mediaobject"><img src="img/screen_2.png" width="600"></div><p>			
+			</p>
+		</li><li class="listitem">
+			<p>
+			Leave the default selection on the sections to be created. 
+			As mentioned you want a cover, table of contents, and back cover for the final book sample. Click <span class="bold"><strong>Finish</strong></span>.<br> 
+			<span class="bold"><strong>NOTE</strong></span>: In this template, the Cover and Table of Contents section is a group header section, the Content section is a detail section, and the Backcover section is a group footer section.<br>
+			The report book and report parts are created and the JasperBook editor opens showing the book structure.
+			</p><div class="mediaobject"><img src="img/screen_3.png" width="600"></div><p>
+			</p>
+		</li></ol></div>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="N400C7"></a>Modifying the Report Parts In the Template</h3></div></div></div>
+	
+	<p>
+	The template includes some preformatted report parts, which you can easily modify. To edit the book cover report part and change the title and subtitle:	
+	</p>
+	<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+			<p>
+			Double-click on the "Orders_Book_cover" part to open the correct editor &ndash; in this case, the report editor showing the "Orders_Book_cover" file.
+			</p><div class="mediaobject"><img src="img/screen_4.png"></div><p>
+			</p>
+		</li><li class="listitem">
+			<p>
+			Edit the title and subtitle to match your report.
+			</p>
+		</li></ol></div>
+	<p>
+	The table of contents part is already correct and you can use it as it is. No need to change anything.
+	</p>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="N400EC"></a>Creating a Report Part for the Detail Section</h3></div></div></div>
+	
+	<p>
+	Next, create a new report part to generate the information for each country inside the content section. To do this:
+	</p>
+	<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+			<p>
+			Create a new report using a blank template, using the Sample DB with the following query:
+			</p><pre class="programlisting">
+				
+SELECT * FROM orders WHERE shipcountry = $P{country} ORDER BY shipcity
+				
+			</pre><p>
+			 This extracts all details for the orders for a specific country. You will create the proper "country" parameter in this report. 
+			 The next section shows how to correctly initialize this parameter in the book report. 
+			</p>
+		</li><li class="listitem">
+			<p>
+			Select all fields in the Outline view and drag them to the report's detail band. 
+			Then add $P{country} to the Title band. You should have something like the screenshot below: a bunch of fields with a bigger title.
+			</p><div class="mediaobject"><img src="img/screen_5.png" width="600"></div><p>			
+			</p>		
+		</li><li class="listitem">
+			<p>
+			To connect the link in the table of contents to a meaningful bookmark for each country, set an Anchor Name Expression for the text field in the Title band.
+			</p><div class="mediaobject"><img src="img/screen_6.png" width="600"></div><p>			
+			</p>
+		</li></ol></div>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="N40123"></a>Adding a Report Part to the Report Book</h3></div></div></div>
+	
+	<p>
+	You have only a couple of things left to do in the (main report) book.
+	</p>
+	<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+			<p>
+			Just select the part created in the previous section (for example, CountryOrders.jrxml) in the project explorer and drop it in the Content section of the report book. A dialog pops up to let you configure the connection for this part.
+			</p>
+			<p>
+			Since this is a simple example we can reuse the connection from the master report.
+			</p><div class="mediaobject"><img src="img/screen_7.png" width="600"></div><p>	
+			</p>
+		</li><li class="listitem">
+			<p>
+			Click <span class="bold"><strong>Next</strong></span> to set the parameter used to feed the part. Just remember the report that you previously created and the parameter that you set on it.
+			</p><div class="mediaobject"><img src="img/screen_8.png" width="600"></div><p>	
+			</p>
+		</li></ol></div>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="N40157"></a>Conclusions</h3></div></div></div>
+	
+	<p>
+	All is set and you can run the report preview, using the Sample DB as default data adapter, of course.
+	</p>
+	<p>
+	Give it a try, exploring the book and navigating through the different sections from the table of contents, which contains numbered references to the pages with details for each country.
+	</p>
+	<p>
+	If you want to explore a more complex example, look at the JasperReports sample project, JasperReportsSamples. 
+	You can build this in Jaspersoft Studio via <span class="bold"><strong>File &gt; New &gt; Project &gt; JasperReports Samples</strong></span>. The report book sample in the book subfolder showcases a more detailed table of contents along with a chart in each report part for more appealing results.
+	</p>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="N4016A"></a>References</h3></div></div></div>
+	
+	<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: opencircle; "><li class="listitem" style="list-style-type: circle">
+			<p>
+				<a class="ulink" href="http://jasperreports.sourceforge.net/sample.reference/book/index.html" target="_top">JasperReports Parts Sample</a>
+			</p>
+		</li><li class="listitem" style="list-style-type: circle">
+			<p>
+				<a class="ulink" href="http://community.jaspersoft.com/documentation?version=29351" target="_top">Jaspersoft Studio User Guide - Report Books</a>
+			</p>
+		</li></ul></div>
+</div>
+</div></body></html>
