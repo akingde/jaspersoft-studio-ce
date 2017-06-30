@@ -28,6 +28,7 @@ public class BandGroupSection extends AbstractSection {
 		parent = getWidgetFactory().createSection(parent, "Group Band Properties", false, 2);
 
 		createWidget4Property(parent, JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE);
+		createWidget4Property(parent, JRDesignGroup.PROPERTY_MIN_DETAILS_TO_START_FROM_TOP);
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
@@ -72,6 +73,7 @@ public class BandGroupSection extends AbstractSection {
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
 		addProvidedProperties(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, Messages.MGroup_minHeightTitle);
+		addProvidedProperties(JRDesignGroup.PROPERTY_MIN_DETAILS_TO_START_FROM_TOP, Messages.MGroup_1);
 		addProvidedProperties(JRDesignGroup.PROPERTY_FOOTER_POSITION, Messages.MGroup_footerPosTitle);
 		addProvidedProperties(JRDesignGroup.PROPERTY_START_NEW_COLUMN, Messages.MGroup_newColTitle);
 		addProvidedProperties(JRDesignGroup.PROPERTY_START_NEW_PAGE, Messages.MGroup_newPageTitle);

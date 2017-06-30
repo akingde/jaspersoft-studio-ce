@@ -25,6 +25,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
@@ -169,6 +170,11 @@ public class MGroup extends APropertyNode implements ICopyable, IDragable {
 		minhD.setDescription(Messages.MGroup_minHeightDescription);
 		desc.add(minhD);
 
+		IntegerPropertyDescriptor minStartTopD = new IntegerPropertyDescriptor(
+				JRBaseGroup.PROPERTY_MIN_DETAILS_TO_START_FROM_TOP, Messages.MGroup_1);
+		minStartTopD.setDescription(Messages.MGroup_2);
+		desc.add(minStartTopD);
+
 		CheckBoxPropertyDescriptor stNewColD = new CheckBoxPropertyDescriptor(JRBaseGroup.PROPERTY_START_NEW_COLUMN,
 				Messages.MGroup_newColTitle);
 		stNewColD.setDescription(Messages.MGroup_newColDescription);
@@ -212,6 +218,7 @@ public class MGroup extends APropertyNode implements ICopyable, IDragable {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
 
 		defaultsMap.put(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, new DefaultValue(CONST_MIN_HEIGHT, false));
+		defaultsMap.put(JRDesignGroup.PROPERTY_MIN_DETAILS_TO_START_FROM_TOP, new DefaultValue(0, false));
 		defaultsMap.put(JRDesignGroup.PROPERTY_KEEP_TOGETHER, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, new DefaultValue(Boolean.FALSE, false));
@@ -241,6 +248,8 @@ public class MGroup extends APropertyNode implements ICopyable, IDragable {
 			return ExprUtil.getExpression(jrGroup.getExpression());
 		if (id.equals(JRBaseGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE))
 			return jrGroup.getMinHeightToStartNewPage();
+		if (id.equals(JRBaseGroup.PROPERTY_MIN_DETAILS_TO_START_FROM_TOP))
+			return jrGroup.getMinDetailsToStartFromTop();
 
 		if (id.equals(JRBaseGroup.PROPERTY_START_NEW_COLUMN))
 			return jrGroup.isStartNewColumn();
@@ -301,6 +310,11 @@ public class MGroup extends APropertyNode implements ICopyable, IDragable {
 			if (value != null)
 				minH = Math.max(0, (Integer) value);
 			jrGroup.setMinHeightToStartNewPage(minH);
+		} else if (id.equals(JRBaseGroup.PROPERTY_MIN_DETAILS_TO_START_FROM_TOP)) {
+			int minH = 0;
+			if (value != null)
+				minH = Math.max(0, (Integer) value);
+			jrGroup.setMinDetailsToStartFromTop(minH);
 		} else if (id.equals(JRDesignGroup.PROPERTY_START_NEW_COLUMN))
 			jrGroup.setStartNewColumn((Boolean) value);
 		else if (id.equals(JRDesignGroup.PROPERTY_START_NEW_PAGE))
