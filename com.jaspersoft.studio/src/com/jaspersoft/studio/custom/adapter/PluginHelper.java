@@ -119,7 +119,7 @@ public class PluginHelper {
 				}
 			}
 
-			classpathEntries.add(JavaCore.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER + "/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6")));
+			classpathEntries.add(JavaCore.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER + "/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8")));
 			classpathEntries.add(JavaCore.newContainerEntry(new Path("org.eclipse.pde.core.requiredPlugins")));
 
 			javaProject.setRawClasspath(classpathEntries.toArray(new IClasspathEntry[classpathEntries.size()]), progressMonitor);
@@ -259,7 +259,7 @@ public class PluginHelper {
 		maniContent.append("Bundle-ActivationPolicy: lazy\n");
 		maniContent.append("Eclipse-BuddyPolicy: registered\n");
 		maniContent.append("Eclipse-RegisterBuddy: com.jaspersoft.studio.data\n");		
-		maniContent.append("Bundle-RequiredExecutionEnvironment: JavaSE-1.6\r\n");
+		maniContent.append("Bundle-RequiredExecutionEnvironment: JavaSE-1.8\r\n");
 		if (!externalLibs.isEmpty()){
 			maniContent.append("Bundle-ClassPath: ");
 			for(IFile lib : externalLibs){
