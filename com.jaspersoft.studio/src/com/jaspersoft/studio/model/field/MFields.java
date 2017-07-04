@@ -82,7 +82,7 @@ public class MFields extends ANode implements IPastable, IContainerEditPart {
 	 */
 	public ImageDescriptor getImagePath() {
 		if (SortFieldsAction.areFieldsSorted(getJasperConfiguration())){
-			return ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/fields	_ordered-16.png");
+			return ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/fields_ordered-16.png");
 		}
 		return getIconDescriptor().getIcon16();
 	}
