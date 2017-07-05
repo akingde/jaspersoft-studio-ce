@@ -73,27 +73,40 @@ public class FixPositionCommand extends Command{
 			int yOffset = 5;
 			if (newParent.getValue() instanceof JRBand){
 				JRBand band = (JRBand)newParent.getValue();
-				
+				boolean fixXaxes = false;
+				int height = de.getY() + yOffset+ de.getHeight();
+				if (band.getHeight() < height) {
+					fixXaxes = true;
+					yOffset = 0;
+				}
 				Rectangle startingLocation = new Rectangle(de.getX() + xOffset, de.getY() + yOffset, de.getWidth(), de.getHeight());
 				JRElement overlappingElement = getPerfectlyOverlappingChildren(de, band, startingLocation);
 				while(overlappingElement != null){
 					xOffset = overlappingElement.getX() + 5 - de.getX();
-					yOffset = overlappingElement.getY() + 5 - de.getY();
+					if (!fixXaxes) {
+						yOffset = overlappingElement.getY() + 5 - de.getY();
+					} else {
+						height = de.getY() + yOffset+ de.getHeight();
+						if (band.getHeight() < height) {
+							fixXaxes = true;
+							yOffset = 0;
+						}
+					}
 					startingLocation = new Rectangle(de.getX() + xOffset, de.getY() + yOffset, de.getWidth(), de.getHeight());
 					overlappingElement = getPerfectlyOverlappingChildren(de, band, startingLocation);
 				}
 				
-				int bandHeight = band.getHeight();
+				/*int bandHeight = band.getHeight();
 				if (de.getY() + yOffset + de.getHeight() > bandHeight){
 					Rectangle newPoisition = getOverlappingChildren(band, de, originalParent.getJasperDesign());
 					if (newPoisition != null){
 						yOffset = 0;
 						xOffset = newPoisition.x - de.getX();
 					}
-				}
+				}*/
 				
 				//check if the band need and could be resized
-				int height = de.getY() + yOffset+ de.getHeight();
+				height = de.getY() + yOffset+ de.getHeight();
 				if (band.getHeight() < height) {
 					int maxBandHeight = ModelUtils.getMaxBandHeight((JRDesignBand)band, originalParent.getJasperDesign());
 					if (maxBandHeight >= height) {
@@ -152,6 +165,7 @@ public class FixPositionCommand extends Command{
 	 * @return a location where the element doesn't intersect other elements or null if there is not a valid position
 	 * inside the page
 	 */
+	@SuppressWarnings("unused")
 	private Rectangle getOverlappingChildren(JRBand band, JRElement de, JasperDesign jd){
 		int availablePageSpace = jd.getPageWidth() - jd.getRightMargin();
 		Rectangle newLocation = new Rectangle(de.getX() + de.getWidth(), de.getY(), de.getWidth(), de.getHeight());
