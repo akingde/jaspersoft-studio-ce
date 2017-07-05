@@ -330,9 +330,7 @@ public class ImageGraphics2D extends ACachedGraphics {
 
 	@Override
 	public void setFont(Font font) {
-		//java.awt.Font awtFont = new java.awt.Font(fd.getName(), awtStyle, (int) Math.round(fd.getHeight() * _dpi));
-		Font test = new Font(font.getFontName(), font.getStyle(), font.getSize() * 5);
-		imageGraphics.setFont(test);
+		imageGraphics.setFont(font);
 	}
 
 	@Override
