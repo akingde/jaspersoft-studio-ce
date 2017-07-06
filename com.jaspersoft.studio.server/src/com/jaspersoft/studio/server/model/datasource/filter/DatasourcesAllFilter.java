@@ -27,6 +27,7 @@ public class DatasourcesAllFilter implements IDatasourceFilter {
 		types.add(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION);
 		types.add(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION);
 		types.add(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION);
+		types.add("azuresql");
 	}
 
 	public static Set<String> getTypes() {
@@ -48,11 +49,15 @@ public class DatasourcesAllFilter implements IDatasourceFilter {
 		// || wsType.equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC) ||
 		// wsType.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI) ||
 		// wsType.equals(MRDatasourceVDS.TYPE_DATASOURCE_VDS)
-		//				|| wsType.equals(MRDatasourceAWS.TYPE_AWS) || wsType.equals("Domain"); //$NON-NLS-1$
-		//				|| (wsType.equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM) //$NON-NLS-1$
-		//						&& r.getResourcePropertyValue("PROP_RESOURCE_TYPE") != null && r //$NON-NLS-1$
-		//						.getResourcePropertyValue("PROP_RESOURCE_TYPE") //$NON-NLS-1$
-		//						.equals("com.jaspersoft.jasperserver.api.metadata.jasperreports.domain.CustomReportDataSource")); //$NON-NLS-1$
+		// || wsType.equals(MRDatasourceAWS.TYPE_AWS) ||
+		// wsType.equals("Domain"); //$NON-NLS-1$
+		// || (wsType.equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)
+		// //$NON-NLS-1$
+		// && r.getResourcePropertyValue("PROP_RESOURCE_TYPE") != null && r
+		// //$NON-NLS-1$
+		// .getResourcePropertyValue("PROP_RESOURCE_TYPE") //$NON-NLS-1$
+		// .equals("com.jaspersoft.jasperserver.api.metadata.jasperreports.domain.CustomReportDataSource"));
+		// //$NON-NLS-1$
 	}
 
 }
