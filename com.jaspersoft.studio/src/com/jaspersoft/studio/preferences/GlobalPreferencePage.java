@@ -46,6 +46,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	public static final String LOG_ENABLE = "com.jaspersoft.studio.log.enable"; //$NON-NLS-1$
 	public static final String JSS_JETTY_PORT = "com.jaspersoft.studio.jetty.port"; //$NON-NLS-1$
 	public static final String JSS_USE_SECURE_STORAGE = "com.jaspersoft.studio.secure.storage"; //$NON-NLS-1$
+	public static final String JSS_DISABLE_EXPRESSION_EVALUATION = "com.jaspersoft.studio.secure.disableExpression"; //$NON-NLS-1$
 	public static final String JSS_ENABLE_INTERNAL_CONSOLE = "com.jaspersoft.studio.jss.console"; //$NON-NLS-1$
 	public static final String JSS_USE_ALWAYS_EXTERNAL_BROWSER = "com.jaspersoft.studio.jss.browser.external"; //$NON-NLS-1$
 	private BooleanFieldEditor enableLoggers;
@@ -144,6 +145,12 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 				Messages.GlobalPreferencePage_flagDescription, getFieldEditorParent());
 		addField(useSecStorage);
 
+		BooleanFieldEditor disableExpressions = new BooleanFieldEditor(JSS_DISABLE_EXPRESSION_EVALUATION,
+				Messages.GlobalPreferencePage_disableExpression , getFieldEditorParent());
+		
+		disableExpressions.getDescriptionControl(getFieldEditorParent()).setToolTipText(Messages.GlobalPreferencePage_disableExpressionTooltip);
+		addField(disableExpressions);
+		
 		Label separator3 = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
 		separator3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
@@ -531,6 +538,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		initVars();
 		store.setDefault(JSS_JETTY_PORT, 0);
 		store.setDefault(JSS_USE_SECURE_STORAGE, false);
+		store.setDefault(JSS_DISABLE_EXPRESSION_EVALUATION, false);
 		store.setDefault(JSS_ENABLE_INTERNAL_CONSOLE, false);
 		store.setDefault(JSS_USE_ALWAYS_EXTERNAL_BROWSER, false);
 		store.setDefault(LOG_ENABLE, false);
