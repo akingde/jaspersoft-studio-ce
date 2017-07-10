@@ -58,6 +58,11 @@ import net.sf.jasperreports.engine.type.ScaleImageEnum;
  */
 public class MImage extends MGraphicElementLineBox {
 	
+	/**
+	 * Annotation used on the image expression to override the original expression in studio
+	 */
+	public static final String PATH_ANNOTATION = "@path"; 
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	
 	private static NamedEnumPropertyDescriptor<ScaleImageEnum> scaleImageD;

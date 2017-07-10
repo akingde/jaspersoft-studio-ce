@@ -33,6 +33,7 @@ import net.sf.jasperreports.engine.base.JRBasePrintImage;
 import net.sf.jasperreports.engine.convert.ElementConverter;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
@@ -324,12 +325,25 @@ public class LazyImageConverter extends ElementConverter {
 	 *          the expression
 	 * @return the value of the expression or null if it can not be evaluated
 	 */
-	private String evaluatedExpression(JasperReportsConfiguration jConf, MGraphicElement modelElement,
-			JRExpression expr) {
+	private String evaluatedExpression(JasperReportsConfiguration jConf, MGraphicElement modelElement, JRExpression expr) {
 		JRDesignDataset jrd = ModelUtils.getFirstDatasetInHierarchy(modelElement);
-		return ExpressionUtil.cachedExpressionEvaluationString(expr, jConf, jrd);
+		String expressionText = getExpressionText(expr);
+		return ExpressionUtil.cachedExpressionEvaluationString(new JRDesignExpression(expressionText), jConf, jrd);
 	}
-
+	
+	/**
+	 * Get the value of the expression of the image, but check also if there is an annotation defined
+	 * with the @path value
+	 */
+	protected String getExpressionText(JRExpression styleExpression){
+		String expString = styleExpression != null ? styleExpression.getText() : "";
+		String variableStaticPath = ExpressionUtil.extractValueForVariable(MImage.PATH_ANNOTATION, expString);
+		if (variableStaticPath != null){
+			return variableStaticPath;
+		}
+		return expString;
+	}
+	
 	/**
 	 * Start the thread to refresh a specific image. when the thread has cached a new image then the model and the editor
 	 * are notified to ask a refresh. Multiple request for the same resource are queued until the resource is resolved and 

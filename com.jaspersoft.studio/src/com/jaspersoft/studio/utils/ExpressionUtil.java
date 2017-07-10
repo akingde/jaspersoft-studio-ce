@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRDataset;
@@ -120,6 +122,15 @@ public class ExpressionUtil {
 		}
 		return false;
 	}
+	
+	/**
+	 * check if the evaluation of the expression is disabled for security reasons
+	 * 
+	 * @return true if the expressions should not be evaluated, false otherwise
+	 */
+	protected static boolean isEvaluationDisabled(){
+		 return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_DISABLE_EXPRESSION_EVALUATION);
+	}
 
 	/**
 	 * Resolve an expression and return its value or null if it can not be resolve. First it will try to use a simple
@@ -136,44 +147,47 @@ public class ExpressionUtil {
 	 *          the context of the expression resolution
 	 * @return resolved expression or null it it can't be resolved
 	 */
-	public static Object cachedExpressionEvaluation(JRExpression exp, JasperReportsConfiguration jConfig,
-			JRDesignDataset dataset) {
-			String evaluatedExpression = null;
-			String expString = exp != null ? exp.getText() : "";
-			try {
-				evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(exp);
-				if (evaluatedExpression == null && dataset != null) {
-					// Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
-					JasperDesign jd = jConfig.getJasperDesign();
-					ExpressionInterpreter interpreter = null;
-					boolean interpreterCreated = false;
-					synchronized (datasetsIntepreters) {
-						interpreter = datasetsIntepreters.get(dataset);
-						if (interpreter == null) {
-							if (exp != null && jd != null) {
-								interpreter = new ExpressionInterpreter(dataset, jd, jConfig);
-								interpreterCreated = true;
-								datasetsIntepreters.put(dataset, interpreter);
-							}
+	public static Object cachedExpressionEvaluation(JRExpression exp, JasperReportsConfiguration jConfig, JRDesignDataset dataset) {
+			
+		//check if the evaluation of the expression is disabled and in case return null
+		if (isEvaluationDisabled()) return null;
+		
+		String evaluatedExpression = null;
+		String expString = exp != null ? exp.getText() : "";
+		try {
+			evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(exp);
+			if (evaluatedExpression == null && dataset != null) {
+				// Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
+				JasperDesign jd = jConfig.getJasperDesign();
+				ExpressionInterpreter interpreter = null;
+				boolean interpreterCreated = false;
+				synchronized (datasetsIntepreters) {
+					interpreter = datasetsIntepreters.get(dataset);
+					if (interpreter == null) {
+						if (exp != null && jd != null) {
+							interpreter = new ExpressionInterpreter(dataset, jd, jConfig);
+							interpreterCreated = true;
+							datasetsIntepreters.put(dataset, interpreter);
 						}
 					}
-					if(interpreterCreated) {
-						// The dataset was added to the cache, check if it has the listener and add them where are needed
-						setDatasetListners(dataset);
-						setDesignListener(jd, jConfig);
-					}
-					if (interpreter != null) {
-						return interpreter.interpretExpression(expString);
-						
-						//JRFillDataset.createCalculator(jConfig, jasperReport, jasperReport.getMainDataset());
-						// Object expressionValue = interpreter.interpretExpression(expString);
-						// if (expressionValue != null) evaluatedExpression = expressionValue.toString();
-					}
 				}
-			} catch (Exception ex) {
-				ex.printStackTrace();
+				if(interpreterCreated) {
+					// The dataset was added to the cache, check if it has the listener and add them where are needed
+					setDatasetListners(dataset);
+					setDesignListener(jd, jConfig);
+				}
+				if (interpreter != null) {
+					return interpreter.interpretExpression(expString);
+					
+					//JRFillDataset.createCalculator(jConfig, jasperReport, jasperReport.getMainDataset());
+					// Object expressionValue = interpreter.interpretExpression(expString);
+					// if (expressionValue != null) evaluatedExpression = expressionValue.toString();
+				}
 			}
-			return evaluatedExpression;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return evaluatedExpression;
 	}
 
 	public static ExpressionInterpreter getCachedInterpreter(JRDesignDataset ds, JasperDesign jd,
@@ -318,7 +332,7 @@ public class ExpressionUtil {
 	}
 
 	public static final Object eval(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig, JasperDesign jd) {
-		if (expr == null || jrd == null || jd == null)
+		if (expr == null || jrd == null || jd == null || isEvaluationDisabled())
 			return null;
 		return getInterpreter((JRDesignDataset) jrd, jConfig, jd).interpretExpression(expr.getText());
 	}

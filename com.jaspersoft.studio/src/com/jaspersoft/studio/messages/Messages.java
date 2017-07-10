@@ -883,6 +883,8 @@ public class Messages extends NLS {
 	public static String GlobalPreferencePage_19;
 	public static String GlobalPreferencePage_20;
 	public static String GlobalPreferencePage_5;
+	public static String GlobalPreferencePage_disableExpression;
+	public static String GlobalPreferencePage_disableExpressionTooltip;
 	public static String GlobalPreferencePage_EmbeddedBrowserSection;
 	public static String GlobalPreferencePage_flagDescription;
 	public static String GlobalPreferencePage_jettyServerTitle;
