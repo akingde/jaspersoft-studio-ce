@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
@@ -134,7 +135,16 @@ public class ComboItemPropertyDescription<T> extends AbstractExpressionPropertyD
 				v = wip.getFallbackValue().toString();
 				isFallback = true;
 			}
-			combo.setText(Misc.nvl(v));
+			String textualValue = Misc.nvl(v);
+			for(String[] keyValuePairs : keyValues){
+				String key = keyValuePairs[0];
+				String value = keyValuePairs[1];
+				if (ModelUtils.safeEquals(key, v)){
+					textualValue = value;
+					break;
+				}
+			}
+			combo.setText(textualValue);
 			combo.setToolTipText(getToolTip());
 			changeFallbackForeground(isFallback, combo);
 			cmp.switchToSecondContainer();
