@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
-import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
@@ -175,7 +174,6 @@ public abstract class AbstractExpressionPropertyDescription<T> implements ItemPr
 		//The expression control always fill the available area in both directions
 		GridData textData = new GridData(GridData.FILL_BOTH); 
 		textExpression.setLayoutData(textData);
-		InputHistoryCache.bindText(textExpression, name);
 		textExpression.addFocusListener(new FocusAdapter() {
 
 			@Override
