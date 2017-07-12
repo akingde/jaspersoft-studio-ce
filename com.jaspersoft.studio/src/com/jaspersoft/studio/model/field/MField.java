@@ -26,6 +26,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
+import com.jaspersoft.studio.property.descriptor.propexpr.dialog.HintsPropertiesList;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
@@ -82,11 +83,11 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	 * Instantiates a new m field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jfRield
-	 *          the jf rield
+	 *            the jf rield
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MField(ANode parent, JRDesignField jfRield, int newIndex) {
 		super(parent, newIndex);
@@ -147,7 +148,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
@@ -168,7 +169,8 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignField.PROPERTY_VALUE_CLASS_NAME,
 				Messages.common_class, ClassTypeComboCellEditor.DEFAULT_ITEMS) {
 			@Override
-			public ASPropertyWidget<RWComboBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+			public ASPropertyWidget<RWComboBoxPropertyDescriptor> createWidget(Composite parent,
+					AbstractSection section) {
 				SPClassTypeCombo<RWComboBoxPropertyDescriptor> classNameWidget = new SPClassTypeCombo<RWComboBoxPropertyDescriptor>(
 						parent, section, this);
 				classNameWidget.setClassesOfType(classes);
@@ -185,8 +187,8 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 				Messages.common_description);
 		descriptionD.setDescription(Messages.MField_description_description);
 		desc.add(descriptionD);
-		descriptionD.setHelpRefBuilder(
-				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#fieldDescription"));
+		descriptionD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#fieldDescription"));
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#field");
 	}
@@ -194,7 +196,9 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.
+	 * lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignField jrField = (JRDesignField) getValue();
@@ -208,8 +212,13 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 			JRPropertyExpression[] propertyExpressions = jrField.getPropertyExpressions();
 			if (propertyExpressions != null)
 				propertyExpressions = propertyExpressions.clone();
-			return new PropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrField), getValue(),
-					ModelUtils.getExpressionContext(this));
+
+			ExpressionContext ec = ModelUtils.getExpressionContext(this);
+			JRDesignDataset d = ModelUtils.getDataset(this);
+			if (d != null)
+				ec.getJasperReportsConfiguration().put(HintsPropertiesList.COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE,
+						d.getQuery() != null ? d.getQuery().getLanguage() : null);
+			return new PropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrField), getValue(), ec);
 		}
 		if (id.equals(PROPERTY_MAP))
 			return getPropertiesMapClone(jrField);
@@ -220,9 +229,10 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	 * Return a copy of the properties map
 	 * 
 	 * @param jrField
-	 *          field for where the map is read
+	 *            field for where the map is read
 	 * 
-	 * @return copy of the properties map, if the map was null then it retrun null
+	 * @return copy of the properties map, if the map was null then it retrun
+	 *         null
 	 */
 	public static JRPropertiesMap getPropertiesMapClone(JRDesignField jrField) {
 		JRPropertiesMap propertiesMap = jrField.getPropertiesMap();
@@ -247,7 +257,9 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.
+	 * lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignField jrField = (JRDesignField) getValue();
@@ -298,9 +310,12 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 						jrField.getPropertiesMap().setProperty(p.getName(), p.getValue());
 					}
 				}
-				// really important to trigger the property with source the JR object and not the node
-				// using the node could cause problem with the refresh of the advanced properties view
-				firePropertyChange(new PropertyChangeEvent(jrField, PROPERTY_MAP, originalMap, jrField.getPropertiesMap()));
+				// really important to trigger the property with source the JR
+				// object and not the node
+				// using the node could cause problem with the refresh of the
+				// advanced properties view
+				firePropertyChange(
+						new PropertyChangeEvent(jrField, PROPERTY_MAP, originalMap, jrField.getPropertiesMap()));
 			}
 		} else if (id.equals(PROPERTY_MAP)) {
 			JRPropertiesMap v = (JRPropertiesMap) value;
@@ -319,7 +334,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	 * Creates the jr field.
 	 * 
 	 * @param jrDataset
-	 *          the jr dataset
+	 *            the jr dataset
 	 * @return the jR design field
 	 */
 	public static JRDesignField createJRField(JRDesignDataset jrDataset) {
