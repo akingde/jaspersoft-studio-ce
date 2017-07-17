@@ -3,6 +3,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.reader;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
 import com.jaspersoft.studio.editor.preview.view.control.ReportController;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -242,12 +245,14 @@ public class DatasetReader {
 				hm.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
 				ReportContext rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
 				if (rc == null || !rc.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)) {
-					das = DataAdapterServiceUtil.getInstance(new ParameterContributorContext(jConfig, designDataset, hm))
+					das = DataAdapterServiceUtil
+							.getInstance(new ParameterContributorContext(jConfig, designDataset, hm))
 							.getService(dataAdapterDesc.getDataAdapter());
 					das.contributeParameters(hm);
 				}
 			}
-			ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(), jrobj.getMainDataset().getPropertiesMap());
+			ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(),
+					jrobj.getMainDataset().getPropertiesMap());
 
 			JaspersoftStudioPlugin.getExtensionManager().onRun(jConfig, jrobj, hm);
 
@@ -270,12 +275,13 @@ public class DatasetReader {
 	 * <li>adding the standard parameters and custom ones</li>
 	 * <li>adding the fields</li>
 	 * <li>compiling the report obtaining a jasper report object</li>
-	 * <li>setting the parameters (including data adapter contributed ones) map</li>
+	 * <li>setting the parameters (including data adapter contributed ones)
+	 * map</li>
 	 * <li>filling the report</li>
 	 * </ol>
 	 * 
 	 * @param jConfig
-	 *          the configuration instance
+	 *            the configuration instance
 	 */
 	public void start(JasperReportsConfiguration jConfig) {
 		// Temporary replace the class loader to get the "report" one.
@@ -309,6 +315,10 @@ public class DatasetReader {
 
 			// 7. Prepare parameters
 			hm = prepareParameters(jConfig, maxRecords);
+			if (recalcParameters) {
+				ExpressionUtil.initBuiltInParameters(jConfig, jrobj);
+				recalcParameters = false;
+			}
 			hm.put(DataPreviewScriptlet.PARAM_COLUMNS, columns);
 			hm.put(DataPreviewScriptlet.PARAM_LISTENERS, listeners);
 			rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
@@ -343,7 +353,8 @@ public class DatasetReader {
 		if (running) {
 			for (DatasetReaderListener l : listeners) {
 				// Invalidating the listener will cause the running scriptlet
-				// to launch a JRScriptletException, that will abort the running report.
+				// to launch a JRScriptletException, that will abort the running
+				// report.
 				l.invalidate();
 			}
 		}
@@ -371,9 +382,40 @@ public class DatasetReader {
 		return designDataset;
 	}
 
+	private boolean recalcParameters = false;
+
 	public void setDesignDataset(JRDesignDataset designDataset) {
 		this.designDataset = designDataset;
+
+		designDataset.getEventSupport().addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
+					recalcParameters = true;
+					listenParameters();
+				}
+			}
+		});
+
+		listenParameters();
 	}
+
+	private void listenParameters() {
+		for (JRParameter p : designDataset.getParameters()) {
+			((JRDesignParameter) p).getEventSupport().removePropertyChangeListener(dveListener);
+			((JRDesignParameter) p).getEventSupport().addPropertyChangeListener(dveListener);
+		}
+	}
+
+	private PropertyChangeListener dveListener = new PropertyChangeListener() {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION))
+				recalcParameters = true;
+		}
+	};
 
 	public int getMaxRecords() {
 		return maxRecords;
@@ -386,29 +428,30 @@ public class DatasetReader {
 	/* Listener methods */
 
 	/**
-	 * Adds a new {@link DatasetReaderListener} to the list of listeners that will be notified when a read event on the
-	 * dataset occurs.
+	 * Adds a new {@link DatasetReaderListener} to the list of listeners that
+	 * will be notified when a read event on the dataset occurs.
 	 * 
 	 * @param listener
-	 *          the listener to add
+	 *            the listener to add
 	 */
 	public void addDatasetReaderListener(DatasetReaderListener listener) {
 		listeners.add(listener);
 	}
 
 	/**
-	 * Removes the specified {@link DatasetReaderListener} from the list of listeners that will be notified when a read
-	 * event on the dataset occurs.
+	 * Removes the specified {@link DatasetReaderListener} from the list of
+	 * listeners that will be notified when a read event on the dataset occurs.
 	 * 
 	 * @param listener
-	 *          the listener to remove
+	 *            the listener to remove
 	 */
 	public void removeDatasetReaderListener(DatasetReaderListener listener) {
 		listeners.remove(listener);
 	}
 
 	/**
-	 * @return <code>true</code> if the dataset reader is running, <code>false</code> otherwise
+	 * @return <code>true</code> if the dataset reader is running,
+	 *         <code>false</code> otherwise
 	 */
 	public boolean isRunning() {
 		return this.running;
