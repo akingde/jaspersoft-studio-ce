@@ -18,12 +18,17 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.data.designer.AQueryDesigner;
 import com.jaspersoft.studio.data.designer.SelectParameterDialog;
+import com.jaspersoft.studio.data.jdbc.JDBCFieldsProvider;
+import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.ScalarOperand;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.util.JRClassLoader;
 
 public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 
@@ -90,13 +95,35 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 
 		@Override
 		protected boolean isParameterCompatible(JRParameter p) {
+			for (AOperand aop : getValue().getExpression().getOperands()) {
+				if (aop instanceof FieldOperand) {
+					String t = ((FieldOperand) aop).getMColumn().getUnformattedTypeName();
+					try {
+						if (JRClassLoader.loadClassForName(JDBCFieldsProvider.getJavaType4SQL(t))
+								.isAssignableFrom(p.getValueClass()))
+							return false;
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+						return false;
+					}
+				} else if (aop instanceof ScalarOperand<?>)
+					if (!((ScalarOperand<?>) aop).getType().isAssignableFrom(p.getValueClass()))
+						return false;
+			}
 			return true;
 		}
 
 		@Override
 		protected String getDefaultParameterType() {
-			if (prm != null)
+			if (prm != null && isParameterCompatible(prm))
 				return prm.getValueClassName();
+			for (AOperand aop : getValue().getExpression().getOperands()) {
+				if (aop instanceof FieldOperand) {
+					String t = ((FieldOperand) aop).getMColumn().getUnformattedTypeName();
+					return JDBCFieldsProvider.getJavaType4SQL(t);
+				} else if (aop instanceof ScalarOperand<?>)
+					return ((ScalarOperand<?>) aop).getType().getCanonicalName();
+			}
 			return Object.class.getName();
 		}
 	};

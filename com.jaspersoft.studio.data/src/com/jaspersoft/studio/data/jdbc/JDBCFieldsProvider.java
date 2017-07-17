@@ -22,6 +22,7 @@ import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 import com.jaspersoft.studio.utils.parameter.SimpleValueParameter;
 
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -41,8 +42,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		return true;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset jDataset)
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset)
 			throws JRException, UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		con.contributeParameters(parameters);
@@ -57,17 +57,13 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 
 			// JasperReports query executer instances require
 			// REPORT_PARAMETERS_MAP parameter to be defined and not null
-			Map<String, JRValueParameter> tmpMap = ParameterUtil.convertMap(
-					parameters, jDataset);
+			Map<String, JRValueParameter> tmpMap = ParameterUtil.convertMap(parameters, jDataset);
 			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP,
-					new SimpleValueParameter(
-							new HashMap<String, JRValueParameter>()));
+					new SimpleValueParameter(new HashMap<String, JRValueParameter>()));
 
-			QueryExecuterFactory queryExecuterFactory = JRQueryExecuterUtils
-					.getInstance(jConfig).getExecuterFactory(
-							jDataset.getQuery().getLanguage());
-			JRQueryExecuter qe = queryExecuterFactory.createQueryExecuter(
-					jConfig, jDataset, tmpMap);
+			QueryExecuterFactory queryExecuterFactory = JRQueryExecuterUtils.getInstance(jConfig)
+					.getExecuterFactory(jDataset.getQuery().getLanguage());
+			JRQueryExecuter qe = queryExecuterFactory.createQueryExecuter(jConfig, jDataset, tmpMap);
 			qe.createDatasource();
 			if (qe instanceof JRJdbcQueryExecuter) {
 				ResultSet rs = ((JRJdbcQueryExecuter) qe).getResultSet();
@@ -82,32 +78,32 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 						// metaData.getColumnName(i) +
 						// " Label: " + name);
 						if (colset.contains(name))
-							name = JRResultSetDataSource.INDEXED_COLUMN_PREFIX
-									+ i;
+							name = JRResultSetDataSource.INDEXED_COLUMN_PREFIX + i;
 						colset.add(name);
 						JRDesignField field = new JRDesignField();
 						field.setName(StringUtils.xmlEncode(name, null));
 
 						field.setValueClassName(getJdbcTypeClass(metaData, i));
-						// FIXME - Temporary commented for performance issues with Simba JDBC driver for Impala
-//						try {
-//							String catalog = metaData.getCatalogName(i);
-//							String schema = metaData.getSchemaName(i);
-//							String table = metaData.getTableName(i);
-//							if (!(Misc.isNullOrEmpty(catalog)
-//									&& Misc.isNullOrEmpty(schema) && Misc
-//										.isNullOrEmpty(table))) {
-//								ResultSet rsmc = c.getMetaData().getColumns(
-//										catalog, schema, table, name);
-//								while (rsmc.next()) {
-//									field.setDescription(StringUtils.xmlEncode(
-//											rsmc.getString("REMARKS"), null));
-//									break;
-//								}
-//							}
-//						} catch (SQLException se) {
-//							se.printStackTrace();
-//						}
+						// FIXME - Temporary commented for performance issues
+						// with Simba JDBC driver for Impala
+						// try {
+						// String catalog = metaData.getCatalogName(i);
+						// String schema = metaData.getSchemaName(i);
+						// String table = metaData.getTableName(i);
+						// if (!(Misc.isNullOrEmpty(catalog)
+						// && Misc.isNullOrEmpty(schema) && Misc
+						// .isNullOrEmpty(table))) {
+						// ResultSet rsmc = c.getMetaData().getColumns(
+						// catalog, schema, table, name);
+						// while (rsmc.next()) {
+						// field.setDescription(StringUtils.xmlEncode(
+						// rsmc.getString("REMARKS"), null));
+						// break;
+						// }
+						// }
+						// } catch (SQLException se) {
+						// se.printStackTrace();
+						// }
 						columns.add(field);
 					}
 				}
@@ -206,5 +202,39 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		if (type.startsWith("["))
 			return Object.class.getName();
 		return type;
+	}
+
+	private static Map<String, String> types = new HashMap<String, String>();
+	static {
+		types.put("CHAR", "java.lang.String");
+		types.put("VARCHAR", "java.lang.String");
+		types.put("LONGVARCHAR", "java.lang.String");
+		types.put("NUMERIC", "java.math.BigDecimal");
+		types.put("DECIMAL", "java.math.BigDecimal");
+		types.put("BIT", "boolean");
+		types.put("TINYINT", "byte");
+		types.put("SMALLINT", "short");
+		types.put("INTEGER", "int");
+		types.put("BIGINT", "long");
+		types.put("REAL", "float");
+		types.put("FLOAT", "double");
+		types.put("DOUBLE", "double");
+		types.put("BINARY", "byte[]");
+		types.put("VARBINARY", "byte[]");
+		types.put("LONGVARBINARY", "byte[]");
+		types.put("DATE", "java.sql.Date");
+		types.put("TIME", "java.sql.Time");
+		types.put("TIMESTAMP", "java.sql.Timestamp");
+		types.put("CLOB", "java.sql.Clob");
+		types.put("BLOB", "java.sql.Blob");
+		types.put("ARRAY", "java.sql.Array");
+		types.put("DISTINCT", "Mapping of underlying type");
+		types.put("STRUCT", "java.sql.Struct");
+		types.put("REF", "java.sql.Ref");
+		types.put("JAVA_OBJECT", "Underlying Java class");
+	}
+
+	public static String getJavaType4SQL(String type) {
+		return Misc.nvl(types.get(type), "java.lang.String");
 	}
 }

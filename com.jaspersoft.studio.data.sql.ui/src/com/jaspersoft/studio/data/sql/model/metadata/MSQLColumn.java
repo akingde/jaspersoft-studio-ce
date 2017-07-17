@@ -78,6 +78,10 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 		return super.getImagePath();
 	}
 
+	public String getUnformattedTypeName() {
+		return typeName;
+	}
+
 	public String getTypeName() {
 		return formatedType();
 	}
@@ -86,12 +90,17 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 		if (typeName == null)
 			return "";
 		String tname = "\n" + typeName;
-		if (typeName.equalsIgnoreCase("VARCHAR") || typeName.equalsIgnoreCase("CHAR") || typeName.equalsIgnoreCase("CHARACTER") || typeName.equalsIgnoreCase("NATIONAL CHARACTER")
-				|| typeName.equalsIgnoreCase("NCHAR") || typeName.equalsIgnoreCase("CHARACTER VARYING") || typeName.equalsIgnoreCase("NATIONAL CHARACTER VARYING") || typeName.equalsIgnoreCase("NVARCHAR")
-				|| typeName.equalsIgnoreCase("BIT") || typeName.equalsIgnoreCase("BIT VARYING") || typeName.equalsIgnoreCase(" TEXT") || typeName.equalsIgnoreCase("STRING")
-				|| typeName.equalsIgnoreCase("BINARY") || typeName.equalsIgnoreCase("VARBINARY") || typeName.equalsIgnoreCase("LONGVARBINARY") || typeName.equalsIgnoreCase("NVARCHAR2"))
+		if (typeName.equalsIgnoreCase("VARCHAR") || typeName.equalsIgnoreCase("CHAR")
+				|| typeName.equalsIgnoreCase("CHARACTER") || typeName.equalsIgnoreCase("NATIONAL CHARACTER")
+				|| typeName.equalsIgnoreCase("NCHAR") || typeName.equalsIgnoreCase("CHARACTER VARYING")
+				|| typeName.equalsIgnoreCase("NATIONAL CHARACTER VARYING") || typeName.equalsIgnoreCase("NVARCHAR")
+				|| typeName.equalsIgnoreCase("BIT") || typeName.equalsIgnoreCase("BIT VARYING")
+				|| typeName.equalsIgnoreCase(" TEXT") || typeName.equalsIgnoreCase("STRING")
+				|| typeName.equalsIgnoreCase("BINARY") || typeName.equalsIgnoreCase("VARBINARY")
+				|| typeName.equalsIgnoreCase("LONGVARBINARY") || typeName.equalsIgnoreCase("NVARCHAR2"))
 			tname += "(" + columnSize + ")";
-		else if (typeName.equalsIgnoreCase("NUMERIC") || typeName.equalsIgnoreCase("DECIMAL") || typeName.equalsIgnoreCase("NUMBER"))
+		else if (typeName.equalsIgnoreCase("NUMERIC") || typeName.equalsIgnoreCase("DECIMAL")
+				|| typeName.equalsIgnoreCase("NUMBER"))
 			tname += "(" + precission + ", " + scale + ")";
 		if (!nullable)
 			tname += " NOT NULL";
