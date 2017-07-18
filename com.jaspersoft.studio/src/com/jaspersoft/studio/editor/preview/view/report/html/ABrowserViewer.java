@@ -76,15 +76,17 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 	}
 
 	/**
-	 * Return the suggested width for the url control, considering also other controls palced after the url. In this way
-	 * it is possible to attribute always at the url the maximum size available
+	 * Return the suggested width for the url control, considering also other
+	 * controls palced after the url. In this way it is possible to attribute
+	 * always at the url the maximum size available
 	 * 
 	 * @param control
-	 *          the control of the url
+	 *            the control of the url
 	 * @return a suggested width for the url control
 	 */
 	protected int getUrlWidth(Control control) {
-		// Add the calculation of the toolbar width depending on the available size on the parent
+		// Add the calculation of the toolbar width depending on the available
+		// size on the parent
 		// minus 40 to leave space to the refresh action
 		return control.getParent().getSize().x - 40;
 	}
@@ -99,10 +101,12 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 				urlBar.setUrl(url);
 			}
 			if (browser != null) {
-				browser.clearSessions();
-				if (urlcookie != null && scookie != null)
+				Browser.clearSessions();
+				if (urlcookie != null && scookie != null) {
 					Browser.setCookie(scookie, urlcookie);
-				browser.setUrl(url, null, new String[] { "Accept-Timezone" + TimeZone.getDefault().getID() });
+					browser.setUrl(url, null, new String[] { "Accept-Timezone" + TimeZone.getDefault().getID() });
+				} else
+					browser.setUrl(url);
 			}
 		}
 	}
@@ -120,7 +124,6 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 				messageLbl.setText(Messages.ABrowserViewer_ExternalBrowserPreviewMsg);
 			}
 			stackLayout.topControl = externalBrowserCmp;
-			container.layout();
 		} else {
 			if (browser == null) {
 				try {
@@ -132,8 +135,8 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 				}
 			}
 			stackLayout.topControl = browser;
-			container.layout();
 		}
+		container.layout();
 	}
 
 	/*
