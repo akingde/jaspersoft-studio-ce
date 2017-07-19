@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.book.BookUtils;
+import com.jaspersoft.studio.book.editors.JRBookEditor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -180,7 +181,10 @@ public class OpenInEditorAction extends Action {
 
 			public void run() {
 				if (res instanceof MJrxml)
-					SelectionHelper.openEditorType(f, JrxmlEditor.JRXML_EDITOR_ID);
+					if (BookUtils.isValidJRBook(f))
+						SelectionHelper.openEditorType(f, JRBookEditor.BOOK_EDITOR_ID);
+					else
+						SelectionHelper.openEditorType(f, JrxmlEditor.JRXML_EDITOR_ID);
 				else
 					SelectionHelper.openEditor(f);
 			}
