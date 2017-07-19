@@ -50,7 +50,8 @@ public abstract class ATopToolBarManager {
 
 	public void removeAll() {
 		for (IContributionItem it : tbManager.getItems()) {
-			if (it instanceof ActionContributionItem && ((ActionContributionItem) it).getAction() instanceof IDisposable)
+			if (it instanceof ActionContributionItem
+					&& ((ActionContributionItem) it).getAction() instanceof IDisposable)
 				((IDisposable) ((ActionContributionItem) it).getAction()).dispose();
 			else if (it instanceof ContributionItem)
 				it.dispose();

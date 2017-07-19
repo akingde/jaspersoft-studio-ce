@@ -17,6 +17,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.APreview;
@@ -64,12 +65,17 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 	public void contribute2ToolBar(IToolBarManager tmanager) {
 		super.contribute2ToolBar(tmanager);
 		if (!useExternalBrowser()) {
-			urlBar = new URLContributionItem(Misc.nvl(url, "")) { //$NON-NLS-1$
-				@Override
-				protected int computeWidth(Control control) {
-					return Math.max(0, getUrlWidth(control));
-				}
-			};
+			if (urlBar == null)
+				urlBar = new URLContributionItem(Misc.nvl(url, "")) { //$NON-NLS-1$
+					private int w = -1;
+
+					@Override
+					protected int computeWidth(Control control) {
+						if (w < 0)
+							w = Math.max(200, getUrlWidth(control.getParent()) - 150);
+						return w;
+					}
+				};
 			tmanager.add(urlBar);
 			tmanager.add(getRefreshAction());
 		}
@@ -123,7 +129,10 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 				Label messageLbl = new Label(externalBrowserCmp, SWT.NONE);
 				messageLbl.setText(Messages.ABrowserViewer_ExternalBrowserPreviewMsg);
 			}
-			stackLayout.topControl = externalBrowserCmp;
+			if (stackLayout.topControl != externalBrowserCmp) {
+				stackLayout.topControl = externalBrowserCmp;
+				container.layout();
+			}
 		} else {
 			if (browser == null) {
 				try {
@@ -134,9 +143,11 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 					e.printStackTrace();
 				}
 			}
-			stackLayout.topControl = browser;
+			if (stackLayout.topControl != browser) {
+				stackLayout.topControl = browser;
+				container.layout();
+			}
 		}
-		container.layout();
 	}
 
 	/*
