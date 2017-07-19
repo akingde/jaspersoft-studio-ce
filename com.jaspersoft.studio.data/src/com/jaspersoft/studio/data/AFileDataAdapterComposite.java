@@ -59,6 +59,7 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 		textFileName = new Text(parent, SWT.BORDER);
 		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd.horizontalIndent = 8;
+		gd.widthHint = 500;
 		textFileName.setLayoutData(gd);
 		textFileName.setToolTipText(Messages.AFileDataAdapterComposite_0);
 		textFileName.addModifyListener(new ModifyListener() {
