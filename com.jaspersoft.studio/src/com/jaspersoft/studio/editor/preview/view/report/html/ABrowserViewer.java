@@ -72,7 +72,7 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 					@Override
 					protected int computeWidth(Control control) {
 						if (w < 0)
-							w = Math.max(200, getUrlWidth(control.getParent()) - 150);
+							w = Math.max(200, getUrlWidth(control.getParent()) - 200);
 						return w;
 					}
 				};
@@ -94,7 +94,7 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 		// Add the calculation of the toolbar width depending on the available
 		// size on the parent
 		// minus 40 to leave space to the refresh action
-		return control.getParent().getSize().x - 40;
+		return control.getParent().getSize().x - 80;
 	}
 
 	public void setURL(String url, String urlcookie, String scookie) throws Exception {
