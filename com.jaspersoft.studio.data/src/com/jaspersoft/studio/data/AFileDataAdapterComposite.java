@@ -17,6 +17,8 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationUpdater;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -59,6 +61,17 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 		gd.horizontalIndent = 8;
 		textFileName.setLayoutData(gd);
 		textFileName.setToolTipText(Messages.AFileDataAdapterComposite_0);
+		textFileName.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				String tt = textFileName.getText();
+				if (!tt.isEmpty())
+					tt += "\n\n";
+				tt += Messages.AFileDataAdapterComposite_0;
+				textFileName.setToolTipText(tt);
+			}
+		});
 
 		btnBrowse = new Button(parent, SWT.PUSH);
 		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
