@@ -7,6 +7,7 @@ package com.jaspersoft.studio.swt.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
@@ -63,7 +64,7 @@ public class WColorPicker extends Composite {
 		
 		@Override
 		public void modifyText(ModifyEvent e) {
-			AlfaRGB newColor = hexParser(textColorValue.getText());
+			AlfaRGB newColor = decodeColor(textColorValue.getText(),htmlColorNamesSupported);
 			if (newColor != null){
 				currentState = VALIDATION_RESULT.VALID;
 				setColor(newColor);
@@ -109,6 +110,9 @@ public class WColorPicker extends Composite {
 	 * The status of the value displayed
 	 */
 	protected VALIDATION_RESULT currentState = VALIDATION_RESULT.VALID;
+	
+	/** Flag to specify if the support for the HTML color names is activated */
+	private boolean htmlColorNamesSupported = false;
 
 	public WColorPicker(AlfaRGB preselectedRGB, Composite parent) {
 		this(preselectedRGB, parent, SWT.NONE);
@@ -181,14 +185,42 @@ public class WColorPicker extends Composite {
 	}
 	
 	/**
+	 * Enables/disables the ability for the color picker to detect 
+	 * HTML color names when entered in the text box.
+	 * 
+	 * @param enabled the enablement flag
+	 */
+	public void setHtmlColorNamesSupport(boolean enabled) {
+		this.htmlColorNamesSupported = enabled;
+	}
+	
+	/**
+	 * Verifies if the html color names support is enabled.
+	 * 
+	 * @return <code>true</code> if the support is enabled, <code>false</code> otherwise
+	 */
+	public boolean isHtmlColorNamesSupportEnabled() {
+		return this.htmlColorNamesSupported;
+	}
+	
+	/**
 	 * Convert the text into a alfa RGB color, but only if there are exactly seven chars, a # symbol followed by three pair of hex values
-	 * or simply the three pair of hex value
+	 * or simply the three pair of hex value.<br/>
+	 * If specified it allows also to detect possible HTML color names (i.e green, darkblue etc.) that are properly converted into the 
+	 * related hex value.
 	 * 
 	 * @param text a text representing a color as HexDecimal value
-	 * @return an alfa RGB color. If the color is provided as hex or as rgb the alpha is 255
+	 * @param htmlColorNamesSupported the flag to enable the HTML color names support
+	 * @return an Alfa RGB color. If the color is provided as hex or as RGB the alpha is 255
 	 */
-	private AlfaRGB hexParser(String text){
+	public static AlfaRGB decodeColor(String text, boolean htmlColorNamesSupported){
 		try {
+			if(htmlColorNamesSupported && StringUtils.isAlpha(text)) {
+				String htmlColorHex = Colors.getHtmlColorHex(text);
+				if(!StringUtils.isEmpty(htmlColorHex)){
+					return AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(htmlColorHex.substring(1, 3), 16), Integer.valueOf(htmlColorHex.substring(3, 5), 16), Integer.valueOf(htmlColorHex.substring(5, 7), 16)));
+				}
+			}
 			if ((text.startsWith("#") && text.length() == 7)) { //$NON-NLS-1$
 				AlfaRGB newColor = AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(text.substring(1, 3), 16), Integer.valueOf(text.substring(3, 5), 16), Integer.valueOf(text.substring(5, 7), 16)));
 				return newColor;

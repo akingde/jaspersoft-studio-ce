@@ -28,6 +28,9 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
  * @author Orlandin Marco
  */
 public class ColorPropertyDescription<T> extends AbstractExpressionPropertyDescription<T> {
+	
+	/** Flag to specify if the support for the HTML color names is activated */
+	private boolean htmlColorNamesSupported = false;
 
 	public ColorPropertyDescription() {
 		super();
@@ -92,14 +95,35 @@ public class ColorPropertyDescription<T> extends AbstractExpressionPropertyDescr
 			cmp.switchToFirstContainer();
 		} else {
 			WColorPicker colorPicker = (WColorPicker) cmp.getSecondContainer().getData();
+			colorPicker.setHtmlColorNamesSupport(htmlColorNamesSupported);
 			String v = wip.getStaticValue();
 			if (v == null && defaultValue != null){
 				v = defaultValue.toString();
 			}
-			colorPicker.setColor(new AlfaRGB(Colors.decodeHexStringAsSWTRGB(v), 0));
+			colorPicker.setHtmlColorNamesSupport(htmlColorNamesSupported);
+			colorPicker.setColor(WColorPicker.decodeColor(v, htmlColorNamesSupported));
 			colorPicker.setToolTipText(getToolTip());
 			cmp.switchToSecondContainer();
 		}
+	}
+	
+	/**
+	 * Enables/disables the ability for the color picker to detect 
+	 * HTML color names when entered in the text box.
+	 * 
+	 * @param enabled the enablement flag
+	 */
+	public void setHtmlColorNamesSupport(boolean enabled) {
+		this.htmlColorNamesSupported = enabled;
+	}
+	
+	/**
+	 * Verifies if the html color names support is enabled.
+	 * 
+	 * @return <code>true</code> if the support is enabled, <code>false</code> otherwise
+	 */
+	public boolean isHtmlColorNamesSupportEnabled() {
+		return this.htmlColorNamesSupported;
 	}
 	
 	/**
