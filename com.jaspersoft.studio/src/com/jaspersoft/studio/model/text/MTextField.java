@@ -38,6 +38,7 @@ import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
@@ -65,7 +66,7 @@ public class MTextField extends MTextElement {
 	private MHyperLink mHyperLink;
 
 	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
-	
+
 	private IPropertyDescriptor[] descriptors;
 
 	/**
@@ -90,11 +91,11 @@ public class MTextField extends MTextElement {
 	 * Instantiates a new m text field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrStaticText
-	 *          the jr static text
+	 *            the jr static text
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MTextField(ANode parent, JRTextField jrStaticText, int newIndex) {
 		super(parent, newIndex);
@@ -128,7 +129,7 @@ public class MTextField extends MTextElement {
 	 * Return the dataset nearest to this element
 	 * 
 	 * @param node
-	 *          the actual node
+	 *            the actual node
 	 * @return the dataset nearest to this element or null if it can't be found
 	 */
 	private JRDataset getElementDataset(ANode node) {
@@ -159,14 +160,15 @@ public class MTextField extends MTextElement {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		super.createPropertyDescriptors(desc);
 
-		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(JRDesignTextField.PROPERTY_EVALUATION_TIME,
-				Messages.common_evaluation_time, EvaluationTimeEnum.AUTO, NullEnum.NOTNULL);
+		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
+				JRDesignTextField.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time, EvaluationTimeEnum.AUTO,
+				NullEnum.NOTNULL);
 		evaluationTimeD.setDescription(Messages.MTextField_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
@@ -181,7 +183,8 @@ public class MTextField extends MTextElement {
 		desc.add(blankWhenNullD);
 
 		CheckBoxPropertyDescriptor stretchOverflowD = new CheckBoxPropertyDescriptor(
-				JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Messages.MTextField_stretch_with_overflow, NullEnum.NOTNULL);
+				JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Messages.MTextField_stretch_with_overflow,
+				NullEnum.NOTNULL);
 		stretchOverflowD.setDescription(Messages.MTextField_stretch_with_overflow_description);
 		desc.add(stretchOverflowD);
 
@@ -189,19 +192,19 @@ public class MTextField extends MTextElement {
 				Messages.common_expression);
 		exprD.setDescription(Messages.MTextField_expression_description);
 		desc.add(exprD);
-		exprD.setHelpRefBuilder(
-				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textFieldExpression")); //$NON-NLS-1$
+		exprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textFieldExpression")); //$NON-NLS-1$
 
 		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(
 				JRDesignTextField.PROPERTY_ANCHOR_NAME_EXPRESSION, Messages.MTextField_anchorNameLabel);
 		anchorNameExp.setDescription(Messages.MTextField_anchorNameDescription);
 		desc.add(anchorNameExp);
 
-		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL,
-				Messages.MTextField_bookmarkLevelLabel);
+		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(
+				JRDesignTextField.PROPERTY_BOOKMARK_LEVEL, Messages.MTextField_bookmarkLevelLabel);
 		bookmarkLevel.setDescription(Messages.MTextField_bookmarkLevelDescription);
-		bookmarkLevel.setHelpRefBuilder(
-				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
+		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
 		desc.add(bookmarkLevel);
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN,
@@ -214,8 +217,8 @@ public class MTextField extends MTextElement {
 		pexprD.setDescription("Pattern expression"); //$NON-NLS-1$
 		desc.add(pexprD);
 
-		pexprD.setHelpRefBuilder(
-				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#patternExpression")); //$NON-NLS-1$
+		pexprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#patternExpression")); //$NON-NLS-1$
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textField"); //$NON-NLS-1$
 
@@ -233,18 +236,18 @@ public class MTextField extends MTextElement {
 		stretchOverflowD.setCategory(Messages.MTextField_textfield_category);
 		pexprD.setCategory(Messages.MTextField_textfield_category);
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
-		
+
 		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, false));
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JRDesignStyle.PROPERTY_PATTERN, new DefaultValue(null, true));
-		
+
 		defaultsMap.putAll(new MHyperLink(null).getDefaultsPropertiesMap());
-		
+
 		return defaultsMap;
 	}
 
@@ -252,12 +255,12 @@ public class MTextField extends MTextElement {
 	public Object getPropertyActualValue(Object id) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 		JSSStyleResolver resolver = getStyleResolver();
-		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL)){
+		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL)) {
 			return resolver.isBlankWhenNull(jrElement);
-		} else if (id.equals(JRDesignStyle.PROPERTY_PATTERN)){
+		} else if (id.equals(JRDesignStyle.PROPERTY_PATTERN)) {
 			return resolver.getPattern(jrElement);
 		}
-		
+
 		return super.getPropertyActualValue(id);
 	}
 
@@ -340,9 +343,11 @@ public class MTextField extends MTextElement {
 			jrElement.setPatternExpression(ExprUtil.setValues(jrElement.getPatternExpression(), value));
 		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrElement.setBlankWhenNull((Boolean) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
+		else if (id.equals(JRDesignStyle.PROPERTY_PATTERN)) {
+			if (Misc.isNullOrEmpty((String) value))
+				value = null;
 			jrElement.setPattern((String) value);
-		else if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
+		} else if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
 			jrElement.setStretchWithOverflow(((Boolean) value).booleanValue());
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 			jrElement.setLinkTarget((String) value);
@@ -353,11 +358,13 @@ public class MTextField extends MTextElement {
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
 			jrElement.setHyperlinkPageExpression(ExprUtil.setValues(jrElement.getHyperlinkPageExpression(), value));
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
-			jrElement.setHyperlinkReferenceExpression(ExprUtil.setValues(jrElement.getHyperlinkReferenceExpression(), value));
+			jrElement.setHyperlinkReferenceExpression(
+					ExprUtil.setValues(jrElement.getHyperlinkReferenceExpression(), value));
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			jrElement.setHyperlinkWhenExpression(ExprUtil.setValues(jrElement.getHyperlinkWhenExpression(), value));
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
-			jrElement.setHyperlinkTooltipExpression(ExprUtil.setValues(jrElement.getHyperlinkTooltipExpression(), value));
+			jrElement.setHyperlinkTooltipExpression(
+					ExprUtil.setValues(jrElement.getHyperlinkTooltipExpression(), value));
 		else if (id.equals(JRDesignTextField.PROPERTY_ANCHOR_NAME_EXPRESSION))
 			jrElement.setAnchorNameExpression(ExprUtil.setValues(jrElement.getAnchorNameExpression(), value));
 		else if (id.equals(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL))
@@ -378,8 +385,8 @@ public class MTextField extends MTextElement {
 	}
 
 	/**
-	 * Listener for the expression of the element. This will ask for the refresh of its container or eventually of the
-	 * containers of the element
+	 * Listener for the expression of the element. This will ask for the refresh
+	 * of its container or eventually of the containers of the element
 	 * 
 	 * @author Orlandin Marco
 	 *
@@ -401,10 +408,13 @@ public class MTextField extends MTextElement {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (JRDesignExpression.PROPERTY_TEXT.equals(evt.getPropertyName()) && element != null) {
-				// Notify the change to the element, no need to set the the refresh to true, it will be done by
-				// the property change since the PROPERTY_EXPRESSION is a graphical property, the refresh will so be propagated 
+				// Notify the change to the element, no need to set the the
+				// refresh to true, it will be done by
+				// the property change since the PROPERTY_EXPRESSION is a
+				// graphical property, the refresh will so be propagated
 				// to the upper levels
-				element.getValue().getEventSupport().firePropertyChange(JRDesignTextField.PROPERTY_EXPRESSION, evt.getOldValue(), evt.getNewValue());
+				element.getValue().getEventSupport().firePropertyChange(JRDesignTextField.PROPERTY_EXPRESSION,
+						evt.getOldValue(), evt.getNewValue());
 			}
 		}
 	};
@@ -413,7 +423,7 @@ public class MTextField extends MTextElement {
 	 * Remove all the ExpressionNameChanged listeners from an expression element
 	 * 
 	 * @param expression
-	 *          the expression element
+	 *            the expression element
 	 */
 	private void removeListeners(JRDesignExpression expression) {
 		List<PropertyChangeListener> listenersToRemove = new ArrayList<PropertyChangeListener>();
@@ -428,16 +438,19 @@ public class MTextField extends MTextElement {
 	}
 
 	/**
-	 * When the value of the element is set, it will be removed also all the ExpressionNameChange from the expression of
-	 * its value and will be set a new ExpressionNameChange on the expression for the actual model. This is done to avoid
-	 * duplicate of the listener if for example the JRElement is moved from a model to another.
-	 * The listener is used to update the graphical appearance after a refactor of something used in the expression
+	 * When the value of the element is set, it will be removed also all the
+	 * ExpressionNameChange from the expression of its value and will be set a
+	 * new ExpressionNameChange on the expression for the actual model. This is
+	 * done to avoid duplicate of the listener if for example the JRElement is
+	 * moved from a model to another. The listener is used to update the
+	 * graphical appearance after a refactor of something used in the expression
 	 */
 	@Override
 	public void setValue(Object value) {
-		//Remove the expression change from the expression of the old value, if any 
+		// Remove the expression change from the expression of the old value, if
+		// any
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
-		if (jrElement != null){
+		if (jrElement != null) {
 			JRDesignExpression expression = (JRDesignExpression) jrElement.getExpression();
 			if (expression != null) {
 				removeListeners(expression);
@@ -445,11 +458,13 @@ public class MTextField extends MTextElement {
 		}
 		super.setValue(value);
 		jrElement = (JRDesignTextField) getValue();
-		//if the the new value is not null add an expression change listener to it
-		if (jrElement != null){
+		// if the the new value is not null add an expression change listener to
+		// it
+		if (jrElement != null) {
 			JRDesignExpression expression = (JRDesignExpression) jrElement.getExpression();
 			if (expression != null) {
-				//Since expression and element should have a 1-1 relation, remove any other listener
+				// Since expression and element should have a 1-1 relation,
+				// remove any other listener
 				removeListeners(expression);
 				expression.getEventSupport().addPropertyChangeListener(new ExpressionNameChanged(this));
 			}
@@ -459,7 +474,9 @@ public class MTextField extends MTextElement {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
+	 * @see
+	 * com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports
+	 * .engine.design.JasperDesign)
 	 */
 	@Override
 	public JRDesignTextField createJRElement(JasperDesign jasperDesign) {
