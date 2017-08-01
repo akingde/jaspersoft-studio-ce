@@ -811,7 +811,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				@Override
 				public void run() {
 					try {
-						if (sp.getUrl().trim().startsWith("https://")) { //$NON-NLS-1$
+						if (sp.getUrl() != null && sp.getUrl().trim().startsWith("https://")) { //$NON-NLS-1$
 							ssLabel.addMouseListener(mlistener);
 							setSslIcon();
 							ssLabel.setCursor(new Cursor(ssLabel.getDisplay(), SWT.CURSOR_HAND));

@@ -125,7 +125,8 @@ public class ProxyConnection implements IConnection {
 				}
 				Activator.getDefault().logError(e);
 				if (e.getMessage() != null
-						&& (e.getMessage().contains("connect timed out") || e.getMessage().contains("authentication")))
+						&& (e.getMessage().contains("connect timed out") || e.getMessage().contains("authentication")
+								|| e.getMessage().contains("Access") || e.getMessage().contains("Forbidden")))
 					throw e;
 				exc = e;
 			}
