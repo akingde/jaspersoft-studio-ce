@@ -54,15 +54,18 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.editors.text.StorageDocumentProvider#createDocument(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.editors.text.StorageDocumentProvider#createDocument(java.
+	 * lang.Object)
 	 */
 	@Override
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
 		if (document != null) {
 			IDocumentPartitioner partitioner = new XMLPartitioner(new XMLPartitionScanner(),
-					new String[] { XMLPartitionScanner.XML_START_TAG, XMLPartitionScanner.XML_PI, XMLPartitionScanner.XML_DOCTYPE,
-							XMLPartitionScanner.XML_END_TAG, XMLPartitionScanner.XML_TEXT, XMLPartitionScanner.XML_CDATA,
+					new String[] { XMLPartitionScanner.XML_START_TAG, XMLPartitionScanner.XML_PI,
+							XMLPartitionScanner.XML_DOCTYPE, XMLPartitionScanner.XML_END_TAG,
+							XMLPartitionScanner.XML_TEXT, XMLPartitionScanner.XML_CDATA,
 							XMLPartitionScanner.XML_COMMENT });
 			partitioner.connect(document);
 			document.setDocumentPartitioner(partitioner);
@@ -71,17 +74,18 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	}
 
 	/**
-	 * Initializes the given document from the given editor input using the given character encoding.
+	 * Initializes the given document from the given editor input using the
+	 * given character encoding.
 	 * 
 	 * @param document
-	 *          the document to be initialized
+	 *            the document to be initialized
 	 * @param editorInput
-	 *          the input from which to derive the content of the document
+	 *            the input from which to derive the content of the document
 	 * @param encoding
-	 *          the character encoding used to read the editor input
+	 *            the character encoding used to read the editor input
 	 * @return if the document content could be set, otherwise
 	 * @throws CoreException
-	 *           if the given editor input cannot be accessed
+	 *             if the given editor input cannot be accessed
 	 * @since 2.0
 	 */
 	@Override
@@ -95,7 +99,8 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 					IFile file = ((IFileEditorInput) editorInput).getFile();
 					stream = file.getContents(false);
 					setDocumentContent(document,
-							JRXMLUtils.getXML(jrContext, editorInput, encoding, stream, JRXmlWriterHelper.LAST_VERSION), encoding);
+							JRXMLUtils.getXML(jrContext, editorInput, encoding, stream, JRXmlWriterHelper.LAST_VERSION),
+							encoding);
 				} else
 					return super.setDocumentContent(document, editorInput, encoding);
 			}
@@ -110,13 +115,15 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.editors.text.FileDocumentProvider#doSaveDocument(org.eclipse.core.runtime.IProgressMonitor,
-	 * java.lang.Object, org.eclipse.jface.text.IDocument, boolean)
+	 * @see org.eclipse.ui.editors.text.FileDocumentProvider#doSaveDocument(org.
+	 * eclipse.core.runtime.IProgressMonitor, java.lang.Object,
+	 * org.eclipse.jface.text.IDocument, boolean)
 	 */
 	@Override
 	protected void doSaveDocument(IProgressMonitor monitor, Object element, IDocument document, boolean overwrite)
 			throws CoreException {
-		if (JRXMLUtils.getFileExtension((IEditorInput) element).equals(FileExtension.JASPER)) {
+		String fext = JRXMLUtils.getFileExtension((IEditorInput) element);
+		if (fext != null && fext.equals(FileExtension.JASPER)) {
 			return; // do not save .jasper files, they are binary
 		}
 		if (element instanceof FileStoreEditorInput) {
@@ -157,15 +164,18 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 			} catch (CharacterCodingException ex) {
 				Assert.isTrue(ex instanceof UnmappableCharacterException);
 				String message = "Error charset mapping"; //$NON-NLS-1$
-				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message, null);
+				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message,
+						null);
 				throw new CoreException(s);
 			} catch (FileNotFoundException e) {
 				String message = "FileNotFoundException"; //$NON-NLS-1$
-				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message, null);
+				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message,
+						null);
 				throw new CoreException(s);
 			} catch (IOException e) {
 				String message = "IOException"; //$NON-NLS-1$
-				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message, null);
+				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message,
+						null);
 				throw new CoreException(s);
 			} finally {
 				if (stream != null)
@@ -173,7 +183,8 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 						stream.close();
 					} catch (IOException e) {
 						String message = "IOException"; //$NON-NLS-1$
-						IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message, null);
+						IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED,
+								message, null);
 						throw new CoreException(s);
 					}
 			}
