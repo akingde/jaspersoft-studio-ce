@@ -49,6 +49,8 @@ import com.jaspersoft.studio.editor.gef.rulers.JDRulerContextMenuProvider;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 public class JDRulerComposite extends Composite {
 
 	private EditDomain rulerEditDomain;
@@ -311,22 +313,22 @@ public class JDRulerComposite extends Composite {
 					RulerProvider rh = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER);
 					if (rh != null)
 						((ReportRuler) rh.getRuler()).setHoffset((Integer) evt.getNewValue());
-					Display.getCurrent().asyncExec(runnable);
+					UIUtils.getDisplay().asyncExec(runnable);
 				} else if (property.equals(ReportRuler.PROPERTY_HEND)) { //$NON-NLS-1$
 					RulerProvider rh = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER);
 					if (rh != null)
 						((ReportRuler) rh.getRuler()).setHend((Integer) evt.getNewValue());
-					Display.getCurrent().asyncExec(runnable);
+					UIUtils.getDisplay().asyncExec(runnable);
 				} else if (property.equals(ReportRuler.PROPERTY_VOFFSET)) { //$NON-NLS-1$
 					RulerProvider rh = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_VERTICAL_RULER);
 					if (rh != null)
 						((ReportRuler) rh.getRuler()).setVoffset((Integer) evt.getNewValue());
-					Display.getCurrent().asyncExec(runnable);
+					UIUtils.getDisplay().asyncExec(runnable);
 				} else if (property.equals(ReportRuler.PROPERTY_VEND)) { //$NON-NLS-1$
 					RulerProvider rh = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_VERTICAL_RULER);
 					if (rh != null)
 						((ReportRuler) rh.getRuler()).setVend((Integer) evt.getNewValue());
-					Display.getCurrent().asyncExec(runnable);
+					UIUtils.getDisplay().asyncExec(runnable);
 				}
 
 				if (RulerProvider.PROPERTY_HORIZONTAL_RULER.equals(property)) {
@@ -371,7 +373,7 @@ public class JDRulerComposite extends Composite {
 		if (container.getContents() != ruler) {
 			container.setContents(ruler);
 			needToLayout = true;
-			Display.getCurrent().asyncExec(runnable);
+			UIUtils.getDisplay().asyncExec(runnable);
 		}
 	}
 
