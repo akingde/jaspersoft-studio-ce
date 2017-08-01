@@ -134,7 +134,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 				getLayoutTargetFeedback(request);
 			}
 
-			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index, Request request) {
+			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
 				if (parent instanceof MPage)
 					parent = getModel();
 				Rectangle b = getModel().getBounds();
@@ -142,7 +142,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 				int y = constraint.y - b.y - ReportPageFigure.PAGE_BORDER.top;
 				constraint = new Rectangle(x, y, constraint.width, constraint.height);
 
-				return super.getCreateCommand(parent, obj, constraint, index, request);
+				return super.getCreateCommand(parent, obj, constraint, index);
 			}
 			
 			/**
@@ -178,7 +178,6 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 					MGraphicElement cmodel = (MGraphicElement) child.getModel();
 					MCell cparent = (MCell) cmodel.getParent();
 					if (cparent == getModel()) {
-						//case when an element is moved inside the same cell
 						SetPageConstraintCommand cmd = new SetPageConstraintCommand();
 						MGraphicElement model = (MGraphicElement) child.getModel();
 						Rectangle r = model.getBounds();
@@ -190,7 +189,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 						cmd.setContext(getModel(), (ANode) child.getModel(), rect);
 
 						return cmd;
-					} else if (cparent != null) {
+					} else if (cparent != null){
 						//case when an element is moved from a cell to another
 						//Return a CompoundCommand, because the JSSCompoundCommand will be created by the getAddCommand method
 						CompoundCommand c = new CompoundCommand();
