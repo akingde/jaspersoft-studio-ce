@@ -70,9 +70,17 @@ public class HttpUtils {
 	private static void setupUriHost(URI uri, String host) {
 		if (uri.getHost() == null) {
 			try {
-				Field f = URI.class.getDeclaredField("host");
-				f.setAccessible(true);
-				f.set(uri, host);
+				String[] s = uri.getAuthority().split(":");
+				if (s.length > 0) {
+					Field f = URI.class.getDeclaredField("host");
+					f.setAccessible(true);
+					f.set(uri, s[0]);
+					if (s.length > 1) {
+						f = URI.class.getDeclaredField("port");
+						f.setAccessible(true);
+						f.set(uri, Integer.valueOf(s[1]));
+					}
+				}
 			} catch (NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
 			} catch (IllegalArgumentException e) {
@@ -97,7 +105,7 @@ public class HttpUtils {
 
 	public static Builder getRequest(WebTarget target, Builder req) {
 		try {
-			if (!target.getUri().getHost().contains("_"))
+			if (target.getUri().getHost() != null && !target.getUri().getHost().contains("_"))
 				return req;
 			Field f = JerseyInvocation.Builder.class.getDeclaredField("requestContext");
 			f.setAccessible(true);
@@ -109,7 +117,6 @@ public class HttpUtils {
 				if (uri.getHost() == null)
 					setupUriHost(uri, target.getUri().getHost());
 			}
-
 		} catch (NoSuchFieldException | SecurityException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
