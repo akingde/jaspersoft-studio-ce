@@ -52,6 +52,9 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.variable.MVariable;
 
 /*
  * The Class PageLayoutEditPolicy.
@@ -63,15 +66,17 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		return new Dimension(1, 1);
 	}
 
-	protected Command chainGuideAttachmentCommand(Request request, IGuidebleElement part, Command cmd, boolean horizontal) {
+	protected Command chainGuideAttachmentCommand(Request request, IGuidebleElement part, Command cmd,
+			boolean horizontal) {
 		Command result = cmd;
 
 		// Attach to guide, if one is given
-		Integer guidePos = (Integer) request.getExtendedData().get(
-				horizontal ? SnapToGuides.KEY_HORIZONTAL_GUIDE : SnapToGuides.KEY_VERTICAL_GUIDE);
+		Integer guidePos = (Integer) request.getExtendedData()
+				.get(horizontal ? SnapToGuides.KEY_HORIZONTAL_GUIDE : SnapToGuides.KEY_VERTICAL_GUIDE);
 		if (guidePos != null) {
-			int alignment = ((Integer) request.getExtendedData().get(
-					horizontal ? SnapToGuides.KEY_HORIZONTAL_ANCHOR : SnapToGuides.KEY_VERTICAL_ANCHOR)).intValue();
+			int alignment = ((Integer) request.getExtendedData()
+					.get(horizontal ? SnapToGuides.KEY_HORIZONTAL_ANCHOR : SnapToGuides.KEY_VERTICAL_ANCHOR))
+							.intValue();
 			ChangeGuideCommand cgm = new ChangeGuideCommand(part, horizontal);
 			cgm.setNewGuide(findGuideAt(guidePos.intValue(), horizontal), alignment);
 			result = result.chain(cgm);
@@ -80,12 +85,13 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		return result;
 	}
 
-	protected Command chainGuideDetachmentCommand(Request request, IGuidebleElement part, Command cmd, boolean horizontal) {
+	protected Command chainGuideDetachmentCommand(Request request, IGuidebleElement part, Command cmd,
+			boolean horizontal) {
 		Command result = cmd;
 
 		// Detach from guide, if none is given
-		Integer guidePos = (Integer) request.getExtendedData().get(
-				horizontal ? SnapToGuides.KEY_HORIZONTAL_GUIDE : SnapToGuides.KEY_VERTICAL_GUIDE);
+		Integer guidePos = (Integer) request.getExtendedData()
+				.get(horizontal ? SnapToGuides.KEY_HORIZONTAL_GUIDE : SnapToGuides.KEY_VERTICAL_GUIDE);
 		if (guidePos == null)
 			result = result.chain(new ChangeGuideCommand(part, horizontal));
 
@@ -101,7 +107,9 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.XYLayoutEditPolicy#getConstraintFor(org.eclipse.gef.requests.ChangeBoundsRequest,
+	 * @see
+	 * org.eclipse.gef.editpolicies.XYLayoutEditPolicy#getConstraintFor(org.
+	 * eclipse.gef.requests.ChangeBoundsRequest,
 	 * org.eclipse.gef.GraphicalEditPart)
 	 */
 	@Override
@@ -130,7 +138,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		rect.translate(getLayoutOrigin().getNegated());
 		if (request.getSizeDelta().width == 0 && request.getSizeDelta().height == 0) {
 			Rectangle cons = getCurrentConstraintFor(child);
-			if (cons != null) // Bug 86473 allows for unintended use of this method
+			if (cons != null) // Bug 86473 allows for unintended use of this
+								// method
 				rect.setSize(cons.width, cons.height);
 		} else { // resize
 			Dimension minSize = getMinimumSizeFor(child);
@@ -155,7 +164,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.LayoutEditPolicy#getCreateCommand(org.eclipse.gef.requests.CreateRequest)
+	 * @see org.eclipse.gef.editpolicies.LayoutEditPolicy#getCreateCommand(org.
+	 * eclipse.gef.requests.CreateRequest)
 	 */
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
@@ -172,7 +182,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 					Rectangle rparent = ((IGraphicElement) parent).getBounds();
 					int w = rparent.width / objs.size();
 					int rest = rparent.width - w * objs.size();
-					copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left, copyconstraint.getLocation().y);
+					copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left,
+							copyconstraint.getLocation().y);
 					// Commented for back-compatibility in 3.6.
 					// Replaced with the following line.
 					// copyconstraint.setWidth(w + rest);
@@ -226,7 +237,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	 */
 	private IGraphicElement searchParent(ANode child) {
 		if (child != null) {
-			// This use the model for the search because every EditPart in the report has the same father.
+			// This use the model for the search because every EditPart in the
+			// report has the same father.
 			Object parentModel = child.getParent();
 			for (Object actualChild : getHost().getParent().getChildren()) {
 				EditPart actualChildPart = (EditPart) actualChild;
@@ -239,8 +251,9 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	/**
-	 * Added the search of the container element in case the the parent node is not a container.
-	 * Doing this is necessary to permit to user to placing and element up another even if the second is not a container.
+	 * Added the search of the container element in case the the parent node is
+	 * not a container. Doing this is necessary to permit to user to placing and
+	 * element up another even if the second is not a container.
 	 * 
 	 * @param parent
 	 * @param obj
@@ -284,6 +297,12 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 						parent = (ANode) container;
 					}
 				}
+			} else if (aNode instanceof MField || aNode instanceof MParameter || aNode instanceof MVariable) {
+				if (parent.getChildren().isEmpty())
+					if (parent instanceof MGraphicElement)
+						constraint.y = ((MGraphicElement) parent).getBounds().y;
+					else if (parent instanceof MBand)
+						constraint.y = ((MBand) parent).getBounds().y;
 			}
 			return OutlineTreeEditPartFactory.getCreateCommand(parent, aNode, constraint, index);
 		}
@@ -293,14 +312,14 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy#createChangeConstraintCommand(org.eclipse.gef.EditPart,
-	 * java.lang.Object)
+	 * @see org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy#
+	 * createChangeConstraintCommand(org.eclipse.gef.EditPart, java.lang.Object)
 	 */
 	@Override
 	protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
 		// if (child instanceof IContainerPart) {
-		// return ((IContainerPart) child).createChangeConstraintCommand(child, constraint);
+		// return ((IContainerPart) child).createChangeConstraintCommand(child,
+		// constraint);
 		// }
 		if (child instanceof CalloutEditPart)
 			return new CalloutSetConstraintCommand(((CalloutEditPart) child).getModel(), adaptConstraint(constraint));
@@ -332,10 +351,14 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 				if (guidePos != null) {
 					result = chainGuideAttachmentCommand(request, part, result, true);
 				} else if (part.getHorizontalGuide() != null) {
-					// SnapToGuides didn't provide a horizontal guide, but this part is attached
-					// to a horizontal guide. Now we check to see if the part is attached to
-					// the guide along the edge being resized. If that is the case, we need to
-					// detach the part from the guide; otherwise, we leave it alone.
+					// SnapToGuides didn't provide a horizontal guide, but this
+					// part is attached
+					// to a horizontal guide. Now we check to see if the part is
+					// attached to
+					// the guide along the edge being resized. If that is the
+					// case, we need to
+					// detach the part from the guide; otherwise, we leave it
+					// alone.
 					int alignment = part.getHorizontalGuide().getAlignment(part);
 					int edgeBeingResized = 0;
 					if ((request.getResizeDirection() & PositionConstants.NORTH) != 0)
@@ -376,7 +399,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy#createChildEditPolicy(org.eclipse.gef.EditPart)
+	 * @see org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy#
+	 * createChildEditPolicy(org.eclipse.gef.EditPart)
 	 */
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
@@ -390,17 +414,19 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			return new PinMoveEditPolicy();
 		return super.createChildEditPolicy(child);
 	}
-	
+
 	/**
-	 * Override of the method to avoid to add the standard edit policy on the 
-	 * background elements, since it need its own policies to be handled correctly,
-	 * for example it has a drag behavior really different from the other elements.
+	 * Override of the method to avoid to add the standard edit policy on the
+	 * background elements, since it need its own policies to be handled
+	 * correctly, for example it has a drag behavior really different from the
+	 * other elements.
 	 * 
-	 * Also add the policy only to the elements that doesn't already have a specific EditPolicy.PRIMARY_DRAG_ROLE
+	 * Also add the policy only to the elements that doesn't already have a
+	 * specific EditPolicy.PRIMARY_DRAG_ROLE
 	 */
 	@Override
 	protected void decorateChild(EditPart child) {
-		if (!(child instanceof BackgroundImageEditPart) && child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE) == null){
+		if (!(child instanceof BackgroundImageEditPart) && child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE) == null) {
 			EditPolicy policy = createChildEditPolicy(child);
 			child.installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, policy);
 		}
