@@ -23,7 +23,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.http.client.ClientProtocolException;
@@ -88,6 +87,7 @@ import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
 import net.sf.jasperreports.repo.FileRepositoryService;
 import net.sf.jasperreports.repo.PersistenceServiceFactory;
 import net.sf.jasperreports.repo.RepositoryService;
+import net.sf.jasperreports.utils.JRExtensionsUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext implements JasperReportsContext {
 
@@ -757,12 +757,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 */
 	private List<FunctionsBundle> getExtensionFunctions() {
 		if (functionsBundles == null || refreshFunctionsBundles) {
-			// We need to be sure that the resource bundles are fresh new
-			// NOTE: Let's use this for now as quick solution, in case of
-			// bad performances we'll have to fix this approach
-			ResourceBundle.clearCache(getClassLoader());
-			functionsBundles = super.getExtensions(FunctionsBundle.class);
-			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(functionsBundles);
+			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(
+					JRExtensionsUtils.getReloadedExtensions(FunctionsBundle.class, "functions"));
 			functionsBundles = new ArrayList<FunctionsBundle>(fBundlesSet);
 			refreshFunctionsBundles = false;
 		}
