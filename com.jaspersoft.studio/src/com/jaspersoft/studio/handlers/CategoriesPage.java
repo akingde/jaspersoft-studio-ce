@@ -319,7 +319,7 @@ public class CategoriesPage extends JSSWizardPage {
 				return true;
 			}
 		}
-		for(Category category : inFields){
+		for(Category category : outFileds){
 			String name = category.name;
 			if (newCategory.equalsIgnoreCase(name)){
 				return true;
