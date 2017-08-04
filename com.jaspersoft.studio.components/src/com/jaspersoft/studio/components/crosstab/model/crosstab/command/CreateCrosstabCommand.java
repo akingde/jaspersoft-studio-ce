@@ -117,6 +117,7 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getCrosstab();
+				if (location == null) location = new Rectangle(0, 0, 0, 0);
 				location.setWidth(computeCrosstabWidth(((MCrosstab)srcNode)));
 				location.setHeight(computeCrosstabHeight(((MCrosstab)srcNode)));
 				addCommands(wizard.getCommands());
