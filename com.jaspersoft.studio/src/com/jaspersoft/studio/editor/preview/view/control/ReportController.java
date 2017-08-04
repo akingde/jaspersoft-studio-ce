@@ -5,6 +5,7 @@ package com.jaspersoft.studio.editor.preview.view.control;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -73,6 +74,7 @@ import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRScriptlet;
@@ -86,6 +88,7 @@ import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
 import net.sf.jasperreports.engine.fill.FillListener;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
+import net.sf.jasperreports.repo.RepositoryUtil;
 
 public class ReportController {
 
@@ -503,6 +506,7 @@ public class ReportController {
 					VSimpleErrorPreview errorView = showErrorView(pcontainer);
 					errorView.setMessage(Messages.ReportControler_compilationerrors);
 				}
+
 			});
 		}
 		doneMessage();
@@ -617,6 +621,7 @@ public class ReportController {
 					refresh = false;
 				}
 			});
+
 		}
 
 		public void reportFinished(final JasperPrint jPrint) {
@@ -709,9 +714,25 @@ public class ReportController {
 				if (dch instanceof JSSColumnDataCacheHandler)
 					creationTimestamp = ((JSSColumnDataCacheHandler) dch).getCreationTimestamp();
 			}
-			if (rc.containsParameter(DataSnapshotManager.SAVE_SNAPSHOT))
+			if (rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT) != null)
 				stats.setValue(ST_SNAPSHOT_FILE, rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT));
 			stats.setValue(ST_SNAPSHOT, msg);
+		} else if (jasperReport.getProperty(DataSnapshotManager.SAVE_SNAPSHOT) != null) {
+			String fname = jasperReport.getProperty(DataSnapshotManager.SAVE_SNAPSHOT);
+			if (!Misc.isNullOrEmpty(fname)) {
+				InputStream in = null;
+				try {
+					in = RepositoryUtil.getInstance(jrContext).getInputStreamFromLocation(fname);
+					if (in != null) {
+						DataSnapshotManager.setCaching(jrContext.getJRParameters(), true);
+						DataSnapshotManager.loadSnapshot(jrContext, fname);
+						setupDataSnapshot();
+					}
+				} catch (JRException e) {
+				} finally {
+					FileUtils.closeStream(in);
+				}
+			}
 		}
 		stats.setValue(ST_RUNTIMESTAMP, creationTimestamp.toString());
 	}

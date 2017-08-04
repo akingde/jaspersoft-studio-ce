@@ -12,13 +12,18 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.data.cache.DataSnapshot;
+import net.sf.jasperreports.data.cache.PopulatedSnapshotCacheHandler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.SimpleReportContext;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRSaver;
 
 public class DataSnapshotManager {
@@ -79,6 +84,16 @@ public class DataSnapshotManager {
 				&& context.containsParameter(DataSnapshotManager.SAVE_SNAPSHOT);
 	}
 
+	public static boolean snapshotFileExists(Map<String, Object> parameters) {
+		ReportContext context = (ReportContext) parameters.get(JRParameter.REPORT_CONTEXT);
+		return snapshotExists(parameters) && context.getParameterValue(SAVE_SNAPSHOT) != null;
+	}
+
+	public static void removeSnapshotFile(Map<String, Object> parameters) {
+		ReportContext context = (ReportContext) parameters.get(JRParameter.REPORT_CONTEXT);
+		context.setParameterValue(SAVE_SNAPSHOT, null);
+	}
+
 	public static void saveSnapshot(final String fname, final Date creationTimestamp, final DataSnapshot snapshot) {
 		Job job = new Job("Saving snapshot to: " + fname) {
 
@@ -88,8 +103,8 @@ public class DataSnapshotManager {
 				try {
 					// should save it to IFile?
 					new JssDataSnapshot(creationTimestamp, snapshot);
-
-					JRSaver.saveObject(new JssDataSnapshot(creationTimestamp, snapshot), new File(fname));
+					if (!Misc.isNullOrEmpty(fname))
+						JRSaver.saveObject(new JssDataSnapshot(creationTimestamp, snapshot), new File(fname));
 				} catch (JRException e) {
 					UIUtils.showError(e);
 				}
@@ -99,5 +114,21 @@ public class DataSnapshotManager {
 		job.schedule();
 	}
 
-	public static final String SAVE_SNAPSHOT = "SAVESNAPSHOT";
+	public static void loadSnapshot(JasperReportsConfiguration jConfig, String fname) throws JRException {
+		Map<String, Object> hm = jConfig.getJRParameters();
+		Object obj = JRLoader.loadObject(new File(fname));
+		if (obj instanceof JssDataSnapshot) {
+			JssDataSnapshot snapshot = (JssDataSnapshot) obj;
+			DataSnapshotManager.setDataSnapshot(hm,
+					new JSSColumnDataCacheHandler(((JssDataSnapshot) snapshot).getSnapshot(),
+							((JssDataSnapshot) snapshot).getCreationTimestamp()),
+					false);
+		} else if (obj instanceof DataSnapshot)
+			DataSnapshotManager.setDataSnapshot(hm, new PopulatedSnapshotCacheHandler((DataSnapshot) obj), false);
+		SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
+		reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
+		jConfig.getMap().put(DataSnapshotManager.SAVE_SNAPSHOT, fname);
+	}
+
+	public static final String SAVE_SNAPSHOT = "net.sf.jasperreports.datasnapshot.SAVESNAPSHOT";
 }
