@@ -577,7 +577,7 @@ public class ParametersTable extends AbstractModifyTable {
 				new NodeDragListener(treeviewer));
 		treeviewer.expandAll();
 
-		params = new ArrayList<JRParameter>();
+		params = new ArrayList<JRDesignParameter>();
 		if (dataset.getParametersList() != null)
 			fillTree();
 		treeviewer.setInput(params);
@@ -590,7 +590,7 @@ public class ParametersTable extends AbstractModifyTable {
 			p.getPropertiesMap().getEventSupport().removePropertyChangeListener(map.get(p));
 		map.clear();
 		for (JRParameter p : dataset.getParametersList()) {
-			params.add(p);
+			params.add((JRDesignParameter) p);
 			final JRParameter prm = p;
 			PropertyChangeListener pcl = new PropertyChangeListener() {
 
@@ -961,7 +961,7 @@ public class ParametersTable extends AbstractModifyTable {
 		tviewer.refresh();
 
 		if (treeviewer != null) {
-			params = new ArrayList<JRParameter>();
+			params = new ArrayList<JRDesignParameter>();
 			if (dataset.getParametersList() != null)
 				fillTree();
 			treeviewer.setInput(params);
@@ -971,7 +971,8 @@ public class ParametersTable extends AbstractModifyTable {
 	}
 
 	public List<JRDesignParameter> getParameters() {
-		return (List<JRDesignParameter>) tviewer.getInput();
+
+		return params;// (List<JRDesignParameter>) tviewer.getInput();
 	}
 
 	private PropertyChangeSupport propertyChangeSupport;
@@ -988,7 +989,7 @@ public class ParametersTable extends AbstractModifyTable {
 	}
 
 	private List<TColumn> tcolumns = new ArrayList<TColumn>();
-	private List<JRParameter> params;
+	private List<JRDesignParameter> params;
 
 	private void refreshProperties(DataAdapter da) {
 		for (TableViewerColumn tvc : columns)

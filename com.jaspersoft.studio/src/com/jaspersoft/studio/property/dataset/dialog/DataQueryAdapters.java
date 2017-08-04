@@ -48,6 +48,7 @@ import com.jaspersoft.studio.data.designer.AQueryDesignerContainer;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
+import com.jaspersoft.studio.editor.preview.datasnapshot.DataSnapshotManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.dataset.da.DataAdapterUI;
@@ -96,6 +97,17 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
 		spm.setCategory("net.sf.jasperreports.metadata.property.category:data.source");
+		pm.add(spm);
+
+		spm = new StandardPropertyMetadata();
+		spm.setName(DataSnapshotManager.SAVE_SNAPSHOT);
+		spm.setLabel("Data Snapshot File");
+		spm.setDescription("File where to save data snapshot.");
+		spm.setValueType("java.io.File");
+		scopes = new ArrayList<PropertyScope>();
+		scopes.add(PropertyScope.REPORT);
+		spm.setScopes(scopes);
+		spm.setCategory("net.sf.jasperreports.metadata.property.category:data.snapshot");
 		pm.add(spm);
 
 		PropertyMetadataRegistry.addMetadata(pm);
