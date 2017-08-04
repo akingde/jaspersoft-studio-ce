@@ -12,6 +12,7 @@
 
 package org.eclipse.babel.editor.wizards.internal;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 
 import org.eclipse.babel.editor.widgets.LocaleSelector;
@@ -415,7 +416,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
           IPath resourcePath = pathContainer.append(new Path(fileName));
           if (resourceExist(resourcePath.toString())){
         	  String errormessage = Messages.ResourceBundleNewWizardPage_errorResourceExisting; 
-              errormessage = String.format(errormessage, fileName);
+              errormessage = MessageFormat.format(errormessage, fileName);
               updateStatus(errormessage, IMessageProvider.ERROR); 
               return;
           }
