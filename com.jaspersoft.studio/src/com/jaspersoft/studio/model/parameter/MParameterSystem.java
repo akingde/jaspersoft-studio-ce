@@ -48,7 +48,7 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
-	private static IPropertyDescriptor[] descriptors;
+	private   IPropertyDescriptor[] descriptors;
 
 	private static ParameterNameValidator validator;
 

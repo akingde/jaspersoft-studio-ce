@@ -22,6 +22,10 @@ public class JPropertiesPropertyDescriptor extends NTextPropertyDescriptor {
 		this.jrElement = jrElement;
 	}
 
+	public void setJrElement(Object jrElement) {
+		this.jrElement = jrElement;
+	}
+
 	public CellEditor createPropertyEditor(Composite parent) {
 		CellEditor editor = new JPropertiesCellEditor(parent, jConfig, jrElement);
 		HelpSystem.bindToHelp(this, editor.getControl());
