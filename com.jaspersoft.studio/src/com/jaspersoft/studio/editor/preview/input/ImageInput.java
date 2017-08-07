@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -27,14 +28,18 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
+import com.jaspersoft.studio.editor.preview.view.control.VParameters;
 import com.jaspersoft.studio.messages.Messages;
 
 public class ImageInput extends ADataInput {
+	private Text txt;
 	private Button btn;
 
 	public boolean isForType(Class<?> valueClass) {
@@ -45,17 +50,28 @@ public class ImageInput extends ADataInput {
 	public void createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
 		super.createInput(parent, param, params);
 		if (isForType(param.getValueClass())) {
-			btn = new Button(parent, SWT.NONE);
+			final Composite cmp = new Composite(parent, SWT.NONE);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalIndent = 8;
+			cmp.setLayoutData(gd);
+			GridLayout layout = new GridLayout(2, false);
+			layout.marginHeight = 0;
+			layout.marginWidth = 0;
+			cmp.setLayout(layout);
+
+			txt = new Text(cmp, SWT.BORDER);
+			txt.setToolTipText(VParameters.createToolTip(param));
+			txt.addFocusListener(focusListener);
+			txt.addTraverseListener(keyListener);
+			txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			setMandatory(param, txt);
+
+			btn = new Button(cmp, SWT.NONE);
 			btn.setText(Messages.ImageInput_selectimage);
 			btn.setToolTipText(param.getDescription());
 			btn.addFocusListener(focusListener);
 			btn.addTraverseListener(keyListener);
 			btn.setAlignment(SWT.LEFT);
-			GridData gd = new GridData();
-			gd.heightHint = 70;
-			gd.widthHint = 300;
-			gd.horizontalIndent = 8;
-			btn.setLayoutData(gd);
 			btn.addSelectionListener(new SelectionListener() {
 
 				public void widgetSelected(SelectionEvent e) {
@@ -68,6 +84,7 @@ public class ImageInput extends ADataInput {
 						Image image;
 						try {
 							image = ImageIO.read(file.getContents());
+							txt.setText(Misc.nvl(file.getProjectRelativePath().toOSString()));
 							updateModel(image);
 							setButtonImage(btn, image);
 						} catch (Exception e1) {
@@ -87,8 +104,13 @@ public class ImageInput extends ADataInput {
 
 	public void updateInput() {
 		Object value = params.get(param.getName());
-		if (value != null && value instanceof Image)
+		if (value != null && value instanceof String)
+			txt.setText((String) value);
+		else if (value != null && value instanceof Image)
 			setButtonImage(btn, (Image) value);
+		else
+			txt.setText(value == null ? "" : value.toString());
+
 		setDecoratorNullable(param);
 	}
 

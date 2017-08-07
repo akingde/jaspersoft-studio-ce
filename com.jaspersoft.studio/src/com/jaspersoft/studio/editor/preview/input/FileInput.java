@@ -13,14 +13,21 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
+import com.jaspersoft.studio.editor.preview.view.control.VParameters;
 import com.jaspersoft.studio.messages.Messages;
 
+import net.sf.jasperreports.eclipse.util.Misc;
+
 public class FileInput extends ADataInput {
+	private Text txt;
 	private Button btn;
 
 	public boolean isForType(Class<?> valueClass) {
@@ -31,7 +38,23 @@ public class FileInput extends ADataInput {
 	public void createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
 		super.createInput(parent, param, params);
 		if (isForType(param.getValueClass())) {
-			btn = new Button(parent, SWT.PUSH);
+			final Composite cmp = new Composite(parent, SWT.NONE);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalIndent = 8;
+			cmp.setLayoutData(gd);
+			GridLayout layout = new GridLayout(2, false);
+			layout.marginHeight = 0;
+			layout.marginWidth = 0;
+			cmp.setLayout(layout);
+
+			txt = new Text(cmp, SWT.BORDER);
+			txt.setToolTipText(VParameters.createToolTip(param));
+			txt.addFocusListener(focusListener);
+			txt.addTraverseListener(keyListener);
+			txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			setMandatory(param, txt);
+
+			btn = new Button(cmp, SWT.PUSH);
 			btn.setText(Messages.FileInput_selectfile);
 			btn.setToolTipText(param.getDescription());
 			btn.addFocusListener(focusListener);
@@ -45,6 +68,7 @@ public class FileInput extends ADataInput {
 							IResource.FILE);
 					if (fd.open() == Dialog.OK) {
 						IFile file = (IFile) fd.getFirstResult();
+						txt.setText(Misc.nvl(file.getProjectRelativePath().toOSString()));
 						updateModel(new File(file.getLocationURI()));
 					}
 				}
@@ -57,6 +81,11 @@ public class FileInput extends ADataInput {
 
 	public void updateInput() {
 		Object value = params.get(param.getName());
+		if (value != null && value instanceof String)
+			txt.setText((String) value);
+		else
+			txt.setText(value == null ? "" : value.toString());
+
 		if (value != null && value instanceof File)
 			btn.setToolTipText(((File) value).getAbsolutePath());
 		setDecoratorNullable(param);

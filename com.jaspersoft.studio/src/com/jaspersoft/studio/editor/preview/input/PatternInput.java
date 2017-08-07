@@ -105,9 +105,17 @@ public class PatternInput extends ADataInput {
 			txt.setText((String) value);
 		else {
 			isRefresh = true;
-			txt.setText(value == null ? "" : value.toString());
+			txt.setText(value == null ? "" : getPattern(value));
 			isRefresh = false;
 		}
 		setDecoratorNullable(param);
+	}
+
+	private String getPattern(Object value) {
+		if (value instanceof SimpleDateFormat)
+			return ((SimpleDateFormat) value).toPattern();
+		if (value instanceof DecimalFormat)
+			return ((DecimalFormat) value).toPattern();
+		return value.toString();
 	}
 }
