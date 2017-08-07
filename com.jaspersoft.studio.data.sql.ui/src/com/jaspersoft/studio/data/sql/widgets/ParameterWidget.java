@@ -97,6 +97,8 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 		protected boolean isParameterCompatible(JRParameter p) {
 			for (AOperand aop : getValue().getExpression().getOperands()) {
 				if (aop instanceof FieldOperand) {
+					if (((FieldOperand) aop).getMColumn() == null)
+						return true;
 					String t = ((FieldOperand) aop).getMColumn().getUnformattedTypeName();
 					try {
 						if (JRClassLoader.loadClassForName(JDBCFieldsProvider.getJavaType4SQL(t))
