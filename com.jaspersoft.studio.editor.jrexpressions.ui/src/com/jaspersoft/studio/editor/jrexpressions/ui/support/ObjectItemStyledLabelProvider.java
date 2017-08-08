@@ -4,8 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.jrexpressions.ui.support;
 
-import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
-
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
@@ -19,6 +17,8 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.editor.expression.ExpObject;
 import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
+
+import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
 
 /**
  * Styled label provider for the a tree containing object items.
@@ -127,6 +127,15 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 		cell.setText(text.toString());
 		cell.setStyleRanges(text.getStyleRanges());
 		super.update(cell);
+	}
+	
+	@Override
+	public String getToolTipText(Object element) {
+		if (element instanceof String && 
+				(Category.RECENT_EXPRESSIONS.equals(currentCategory) ||	Category.USER_DEFINED_EXPRESSIONS.equals(currentCategory))){
+			return (String) element;
+		}
+		return super.getToolTipText(element);
 	}
 
 	public void setCategory(Category currentCategory) {

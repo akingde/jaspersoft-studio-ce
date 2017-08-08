@@ -12,20 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
-import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
-import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
-import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
-import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
-
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -62,6 +48,20 @@ import com.jaspersoft.studio.editor.jrexpressions.ui.support.TreeArrayContentPro
 import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
 import com.jaspersoft.studio.utils.RecentExpressions;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
+import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
+import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
 
 /**
  * The details panel (composite) for a specific object category ({@link ObjectCategoryItem}).
@@ -110,7 +110,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		
 		Composite categoryContentCmp=new Composite(panelSashForm, SWT.NONE);
 		final GridLayout layout2 = new GridLayout(1,false);
-		layout2.marginWidth=5;
+		layout2.marginWidth=0;
 		layout2.marginHeight=0;
 		categoryContentCmp.setLayout(layout2);
 		categoryContent=new TreeViewer(categoryContentCmp, SWT.BORDER);
@@ -145,20 +145,20 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				if(selObject instanceof ExpObject){
 					// Parameters, Variables, Fields
 					editingAreaInfo.setUpdate(true);
-					editingAreaInfo.insertAtCurrentLocation(((ExpObject) selObject).getExpression(),false);
+					editingAreaInfo.insertAtCurrentLocation(((ExpObject) selObject).getExpression(),false, true);
 					editingAreaInfo.setUpdate(false);
 				}
 				else if (selObject instanceof JRExprFunctionBean){
 					// Functions
 					editingAreaInfo.setUpdate(true);
-					editingAreaInfo.insertAtCurrentLocation(((JRExprFunctionBean) selObject).getId()+"( )",false); //$NON-NLS-1$
+					editingAreaInfo.insertAtCurrentLocation(((JRExprFunctionBean) selObject).getId()+"( )",false, false); //$NON-NLS-1$
 					editingAreaInfo.setUpdate(false);
 					showFunctionDetailsPanel();
 				}
 				else if (selObject instanceof String){
 					// Recent or user defined expressions
 					editingAreaInfo.setUpdate(true);
-					editingAreaInfo.insertAtCurrentLocation((String)selObject,false);
+					editingAreaInfo.insertAtCurrentLocation((String)selObject,false, true);
 					editingAreaInfo.setUpdate(false);
 				}
 			}
@@ -337,9 +337,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				buttonsToolbar.getParent().layout();
 				break;
 			case RECENT_EXPRESSIONS:
-				List<String> recentExpressions = RecentExpressions.getRecentExpressionsList();
-				Collections.reverse(recentExpressions);
-				categoryDetails.addAll(recentExpressions);
+				categoryDetails.addAll(RecentExpressions.getRecentExpressionsList());
 				configureMinimalLayout();
 				break;
 			case USER_DEFINED_EXPRESSIONS:
@@ -472,7 +470,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 							editingAreaInfo.setUpdate(true);
 							editingAreaInfo.insertAtCurrentLocation(
 									((ExpObject)categoryContentSel).getExpression() + "." + //$NON-NLS-1$
-									detailStr.substring(0,detailStr.lastIndexOf(')')+1),false);
+									detailStr.substring(0,detailStr.lastIndexOf(')')+1),false, true);
 							editingAreaInfo.setUpdate(false);
 						}
 					}

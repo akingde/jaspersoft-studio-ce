@@ -50,10 +50,10 @@ public class RecentExpressions {
 	 * @param expression the expression string to add
 	 */
 	public static void addNewExpression(String expression){
-		if(!recentExpressions.contains(expression)){
-			recentExpressions.remove(expression);
-			recentExpressions.add(expression);
+		if(recentExpressions.contains(expression)){
+			recentExpressions.remove(expression);			
 		}
+		recentExpressions.add(0, expression);
 	}
 	
 	/**

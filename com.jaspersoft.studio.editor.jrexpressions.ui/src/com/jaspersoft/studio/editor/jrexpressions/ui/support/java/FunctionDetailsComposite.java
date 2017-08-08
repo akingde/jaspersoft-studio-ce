@@ -193,7 +193,7 @@ public class FunctionDetailsComposite extends Composite {
 						editingAreaInfo.setUpdate(true);
 						editingAreaInfo.ignoreAutoEditStrategies(true);
 						editingAreaInfo.insertAtCurrentLocation(
-								((Text) e.widget).getText(), true);
+								((Text) e.widget).getText(), true, false);
 						editingAreaInfo.ignoreAutoEditStrategies(false);
 						editingAreaInfo.setUpdate(false);
 					}

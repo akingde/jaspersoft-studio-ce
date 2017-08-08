@@ -34,6 +34,9 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -109,6 +112,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	private List<IExpressionStatusChangeListener> statusChangeListeners;
 	private ClassType valueType;
 	private SashForm mainSashForm;
+	private boolean hasFocus;
 
 	// Support data structures and classes
 	private static final int UPDATE_DELAY=300;
@@ -255,15 +259,21 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		editorAreaGD.widthHint=500;
 		editorArea.setLayoutData(editorAreaGD);
 		editorArea.addModifyListener(new ModifyListener() {
-
 			public void modifyText(ModifyEvent e) {
 				performUpdate();
 			}
 		});
 		editorArea.addCaretListener(new CaretListener() {
-
 			public void caretMoved(CaretEvent event) {
 				performUpdate();
+			}
+		});
+		editorArea.addPaintListener(new PaintListener() {
+			@Override
+			public void paintControl(PaintEvent e) {
+				if(!hasFocus){
+					editingAreaInfo.drawFakeCursor();
+				}
 			}
 		});
 		
@@ -273,7 +283,6 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		editingAreaInfo = new EditingAreaHelper(xtextAdapter, editorArea);
 		editingAreaInfo
 				.addCategorySelectionListener(new ObjectCategorySelectionListener() {
-
 					public void select(ObjectCategorySelectionEvent event) {
 						performCategorySelection(event.selectedCategory);
 					}
@@ -281,11 +290,19 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		editorArea.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
+				hasFocus = false;
 				editingAreaInfo.ignoreAutoEditStrategies(true);
+				editingAreaInfo.drawFakeCursor();
 			}
 			@Override
 			public void focusGained(FocusEvent e) {
+				hasFocus = true;
 				editingAreaInfo.ignoreAutoEditStrategies(false);
+				// dirty-trick to avoid painted "fake cursors" left on the widget
+				Point currSelection = editorArea.getSelection();
+				String currSelectionTxt = editorArea.getSelectionText();
+				editorArea.replaceTextRange(currSelection.x, currSelectionTxt.length(), currSelectionTxt);
+				editorArea.setSelection(currSelection);
 			}
 		});
 	}
