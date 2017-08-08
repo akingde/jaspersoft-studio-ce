@@ -362,23 +362,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				currentDesigner.setDataAdapter(da);
 				qStatus.showInfo(""); //$NON-NLS-1$
 
-				String filter = jConfig.getProperty(DesignerPreferencePage.P_DAFILTER);
-				if (filter != null && filter.equals("lang")) {
-					String[] langs = da.getLanguages();
-					langCombo.removeAll();
-					if (Misc.isNullOrEmpty(langs) || ArrayUtils.contains(langs, "*")) {
-						langCombo.setItems(languages);
-						return;
-					}
-					String lang = langCombo.getText();
-					for (String l : langs) {
-						langCombo.add(l);
-						if (l.equals(lang))
-							return;
-					}
-					langCombo.setText(langs[0]);
-					changeLanguage();
-				}
+				refreshLangCombo(da);
 				dscombo.getMenu(tb);
 			}
 
@@ -528,6 +512,27 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				monitor.done();
 			}
 		}
+	}
+
+	protected void refreshLangCombo(DataAdapterDescriptor da) {
+		String filter = jConfig.getProperty(DesignerPreferencePage.P_DAFILTER);
+		langCombo.removeAll();
+		if (filter != null && filter.equals("lang")) {
+			String[] langs = da.getLanguages();
+			if (Misc.isNullOrEmpty(langs) || ArrayUtils.contains(langs, "*")) {
+				langCombo.setItems(languages);
+				return;
+			}
+			String lang = langCombo.getText();
+			for (String l : langs) {
+				langCombo.add(l);
+				if (l.equals(lang))
+					return;
+			}
+			langCombo.setText(langs[0]);
+			changeLanguage();
+		} else
+			langCombo.setItems(languages);
 	}
 
 	class IconAction extends Action implements IMenuCreator {
