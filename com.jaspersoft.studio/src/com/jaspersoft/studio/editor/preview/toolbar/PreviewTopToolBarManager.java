@@ -324,12 +324,13 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 	public void refreshDataAdapters() {
 		JasperReportsConfiguration jrContext = container.getJrContext();
 		String filter = jrContext.getProperty(DesignerPreferencePage.P_DAFILTER);
-		if (filter != null && filter.equals("da")) { //$NON-NLS-1$
+		if (filter != null && filter.equals("da") && jrContext.getJasperDesign() != null) { //$NON-NLS-1$
 			JRQuery q = jrContext.getJasperDesign().getQuery();
 			dataSourceWidget.setLanguage(q != null ? q.getLanguage() : null);
 		} else
 			dataSourceWidget.setLanguage(null);
-		dataSourceWidget.getMenu(getTopToolBar());
+		if (!getTopToolBar().isDisposed())
+			dataSourceWidget.getMenu(getTopToolBar());
 	}
 
 	public DataAdapterAction getDataSourceWidget() {
