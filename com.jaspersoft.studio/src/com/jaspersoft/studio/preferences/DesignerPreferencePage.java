@@ -20,6 +20,8 @@ import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.property.section.report.util.Unit;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 /*
  * 
  */
@@ -32,33 +34,38 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_DAFILTER = "com.jaspersoft.studio.data.adapter.filter"; //$NON-NLS-1$
 
 	/**
-	 * Key of the behavior used when a field is dragged from the outline into the detail band
+	 * Key of the behavior used when a field is dragged from the outline into the
+	 * detail band
 	 */
 	public static final String BEHAVIOR_ON_FIELD_DROP = "fieldDrop"; //$NON-NLS-1$
 
 	/**
-	 * This behavior specify to create a label aligned with the new filed, into the column header band if there is enough
-	 * space, otherwise in the detail band.
+	 * This behavior specify to create a label aligned with the new filed, into the
+	 * column header band if there is enough space, otherwise in the detail band.
 	 */
 	public static final String BEHAVIOR_CREATE_LABEL = "create_label"; //$NON-NLS-1$
 
 	/**
-	 * This behavior specify to create only the text field when a field is dragged from the outline into the detail band
+	 * This behavior specify to create only the text field when a field is dragged
+	 * from the outline into the detail band
 	 */
 	public static final String BEHAVIOR_DO_NOTHING = "do_nothing"; //$NON-NLS-1$
 
 	/**
-	 * This behavior specify to ask to the user what to do when a field is dragged from the outline into the detail band
+	 * This behavior specify to ask to the user what to do when a field is dragged
+	 * from the outline into the detail band
 	 */
 	public static final String BEHAVIOR_ASK_EVERYTIME = "ask_everytime"; //$NON-NLS-1$
 
 	/**
-	 * This constants specify the default behavior when a field is dragged from the outline into the detail band
+	 * This constants specify the default behavior when a field is dragged from the
+	 * outline into the detail band
 	 */
 	public static final String DEFAULT_BEHAVIOR = BEHAVIOR_CREATE_LABEL; // $NON-NLS-1$
 
 	/**
-	 * Key for the property to set the advanced tab always as default in the properties view
+	 * Key for the property to set the advanced tab always as default in the
+	 * properties view
 	 */
 	public static final String P_DEFAULT_ADVANCED_TAB = "defaultAdvanced"; //$NON-NLS-1$
 
@@ -81,7 +88,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
 	// editors font information
 	public static final String P_INTERNAL_EDITORS_FONT = "internalEditorsFont"; //$NON-NLS-1$
-	// specify whether to use the description or the name when dropping a field in the detail band
+	// specify whether to use the description or the name when dropping a field in
+	// the detail band
 	public static final String P_USE_FIELD_DESCRIPTION = "useDescriptionOnFieldDrop"; //$NON-NLS-1$
 
 	public DesignerPreferencePage() {
@@ -94,11 +102,11 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	 *
 	 */
 	public void createFieldEditors() {
-		addField(
-				new ComboFieldEditor(P_ELEMENT_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_element_design_border_style,
-						new String[][] { { Messages.DesignerPreferencePage_corners, "corners" }, //$NON-NLS-1$
-								{ Messages.common_rectangle, "rectangle" } }, //$NON-NLS-1$
-						getFieldEditorParent()));
+		addField(new ComboFieldEditor(P_ELEMENT_DESIGN_BORDER_STYLE,
+				Messages.DesignerPreferencePage_element_design_border_style,
+				new String[][] { { Messages.DesignerPreferencePage_corners, "corners" }, //$NON-NLS-1$
+						{ Messages.common_rectangle, "rectangle" } }, //$NON-NLS-1$
+				getFieldEditorParent()));
 
 		addField(new ComboFieldEditor(P_PAGE_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_page_border_style,
 				new String[][] { { Messages.DesignerPreferencePage_fancy_shadow, DEFAULT_BORDERSTYLE },
@@ -136,8 +144,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 						{ Messages.DesignerPreferencePage_field_behavior_ask, BEHAVIOR_ASK_EVERYTIME } },
 				getFieldEditorParent()));
 
-		addField(new BooleanFieldEditor(P_USE_FIELD_DESCRIPTION, Messages.DesignerPreferencePage_UseDescriptionForLabelText,
-				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_USE_FIELD_DESCRIPTION,
+				Messages.DesignerPreferencePage_UseDescriptionForLabelText, getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(P_CENTER_SELECTION, Messages.DesignerPreferencePage_centerEditorOption,
 				getFieldEditorParent()));
@@ -161,7 +169,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_DAFILTER, "all"); //$NON-NLS-1$
 		store.setDefault(P_TITLEICON, false);
 		store.setDefault(P_PAGE_DESIGN_BORDER_STYLE, DEFAULT_BORDERSTYLE);
-		// store.setDefault(P_ELEMENT_DESIGN_BORDER_COLOR, DEFAULT_ELEMENT_DESIGN_BORDER_COLOR);
+		// store.setDefault(P_ELEMENT_DESIGN_BORDER_COLOR,
+		// DEFAULT_ELEMENT_DESIGN_BORDER_COLOR);
 		store.setDefault(P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
 		store.setDefault(P_PAGE_DEFAULT_UNITS, "px"); //$NON-NLS-1$
 		// store.setDefault(P_CONTAINER_MARGIN_COLOR, DEFAULT_MARGINCOLOR);
@@ -171,11 +180,11 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(BEHAVIOR_ON_FIELD_DROP, DEFAULT_BEHAVIOR);
 		store.setDefault(P_USE_FIELD_DESCRIPTION, false);
 		store.setDefault(P_DEFAULT_ADVANCED_TAB, false);
-		PreferenceConverter.setDefault(store, P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());
 		store.setDefault(P_SAVE_ON_PREVIEW, false);
 		store.setDefault(P_CENTER_SELECTION, true);
 		store.setDefault(P_RESIZE_CONTAINER, true);
 		store.setDefault(P_SHOW_VARIABLES_DEFAULTS, true);
+		PreferenceConverter.setDefault(store, P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());
 	}
 
 	@Override

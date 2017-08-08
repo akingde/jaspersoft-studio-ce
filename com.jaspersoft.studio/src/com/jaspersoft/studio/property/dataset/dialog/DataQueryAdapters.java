@@ -5,6 +5,7 @@ package com.jaspersoft.studio.property.dataset.dialog;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.operation.IRunnableContext;
@@ -23,8 +26,7 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -33,12 +35,16 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.IFieldSetter;
@@ -323,24 +329,28 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		comp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		comp.setBackgroundMode(SWT.INHERIT_FORCE);
 
-		final Label lbl = new Label(comp, SWT.NONE);
-		lbl.setImage(JaspersoftStudioPlugin.getInstance().getImage(MDataAdapters.getIconDescriptor().getIcon16()));
-		lbl.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
-				if (f != null) {
-					PreferenceDialog pref = PreferencesUtil.createPropertyDialogOn(UIUtils.getShell(), f.getProject(),
-							DesignerPreferencePage.PAGE_ID, null, null);
-					if (pref != null && pref.open() == Dialog.OK)
-						refreshDsCombo();
-				}
-			}
-		});
+		// final Label lbl = new Label(comp, SWT.NONE);
+		// lbl.setImage(JaspersoftStudioPlugin.getInstance().getImage(MDataAdapters.getIconDescriptor().getIcon16()));
+		// lbl.addMouseListener(new MouseAdapter() {
+		// @Override
+		// public void mouseUp(MouseEvent e) {
+		// IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		// if (f != null) {
+		// PreferenceDialog pref =
+		// PreferencesUtil.createPropertyDialogOn(UIUtils.getShell(), f.getProject(),
+		// DesignerPreferencePage.PAGE_ID, null, null);
+		// if (pref != null && pref.open() == Dialog.OK)
+		// refreshDsCombo();
+		// }
+		// }
+		// });
 
 		tb = new ToolBar(comp, SWT.FLAT | SWT.RIGHT);
 		tb.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		final ToolBarManager manager = new ToolBarManager(tb);
+
+		manager.add(new IconAction());
+
 		IDataAdapterRunnable adapterRunReport = new IDataAdapterRunnable() {
 
 			public void runReport(DataAdapterDescriptor da) {
@@ -520,4 +530,132 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		}
 	}
 
+	class IconAction extends Action implements IMenuCreator {
+		public IconAction() {
+			super();
+			setId("iconAction"); //$NON-NLS-1$
+			setEnabled(true);
+			setImageDescriptor(MDataAdapters.getIconDescriptor().getIcon16());
+			setDisabledImageDescriptor(MDataAdapters.getIconDescriptor().getIcon16());
+		}
+
+		@Override
+		public boolean isEnabled() {
+			return true;
+		}
+
+		@Override
+		public void runWithEvent(Event event) {
+			Point point = ((ToolItem) event.widget).getParent().toDisplay(new Point(event.x, event.y));
+			menu = getMenu(((ToolItem) event.widget).getParent());
+			menu.setLocation(point.x, point.y);
+			menu.setVisible(true);
+		}
+
+		private Menu menu;
+		private MenuItem itemFilterAll;
+		private MenuItem itemFilterDA;
+		private MenuItem itemFilterLang;
+		private MenuItem itemFilter;
+
+		@Override
+		public void dispose() {
+			if (menu != null)
+				menu.dispose();
+		}
+
+		@Override
+		public Menu getMenu(final Control parent) {
+			if (menu == null) {
+				menu = new Menu(parent);
+
+				new MenuItem(menu, SWT.SEPARATOR);
+
+				itemFilterAll = new MenuItem(menu, SWT.CHECK);
+				itemFilterAll.setText("Show All Data Adapters");
+				itemFilterAll.addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						try {
+							if (itemFilterAll.getSelection()) {
+								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "all");
+								jConfig.getPrefStore().save();
+								refreshDsCombo();
+							}
+						} catch (IOException e1) {
+							UIUtils.showError(e1);
+						}
+					}
+				});
+
+				itemFilterDA = new MenuItem(menu, SWT.CHECK);
+				itemFilterDA.setText(Messages.DesignerPreferencePage_6);
+				itemFilterDA.addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						try {
+							if (itemFilterDA.getSelection()) {
+								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "lang");
+								jConfig.getPrefStore().save();
+								refreshDsCombo();
+							}
+						} catch (IOException e1) {
+							UIUtils.showError(e1);
+						}
+					}
+				});
+
+				itemFilterLang = new MenuItem(menu, SWT.CHECK);
+				itemFilterLang.setText(Messages.DesignerPreferencePage_8);
+				itemFilterLang.addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						try {
+							if (itemFilterLang.getSelection()) {
+								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "da");
+								jConfig.getPrefStore().save();
+								refreshDsCombo();
+							}
+						} catch (IOException e1) {
+							UIUtils.showError(e1);
+						}
+					}
+				});
+
+				new MenuItem(menu, SWT.SEPARATOR);
+
+				itemFilter = new MenuItem(menu, SWT.PUSH);
+				itemFilter.setText("Global Preferences");
+				itemFilter.addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
+						if (f != null) {
+							PreferenceDialog pref = PreferencesUtil.createPropertyDialogOn(UIUtils.getShell(), f,
+									DesignerPreferencePage.PAGE_ID, null, null);
+							if (pref != null && pref.open() == Dialog.OK)
+								refreshDsCombo();
+						}
+					}
+				});
+
+			}
+			String daFilter = jConfig.getPrefStore().getString(DesignerPreferencePage.P_DAFILTER);
+			itemFilterAll.setSelection(daFilter != null && daFilter.equals("all"));
+			itemFilterDA.setSelection(daFilter != null && daFilter.equals("lang"));
+			itemFilterLang.setSelection(daFilter != null && daFilter.equals("da"));
+
+			return menu;
+		}
+
+		@Override
+		public Menu getMenu(Menu parent) {
+			return null;
+		}
+
+	}
 }

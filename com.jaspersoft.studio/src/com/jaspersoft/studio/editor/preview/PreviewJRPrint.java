@@ -87,7 +87,8 @@ public class PreviewJRPrint extends ABasicEditor {
 		// if (console != null) {
 		// IEditorPart ceditor = getSite().getPage().getActiveEditor();
 		// if (partRef.getPart(false).getClass().equals(ceditor.getClass())) {
-		// if (ceditor instanceof JrxmlEditor && ((JrxmlEditor) ceditor).getActivePage() == JrxmlEditor.PAGE_PREVIEW) {
+		// if (ceditor instanceof JrxmlEditor && ((JrxmlEditor) ceditor).getActivePage()
+		// == JrxmlEditor.PAGE_PREVIEW) {
 		// console.showConsole();
 		// }
 		// if (ceditor instanceof PreviewJRPrint)
@@ -192,9 +193,9 @@ public class PreviewJRPrint extends ABasicEditor {
 	 * Set the current preview type
 	 * 
 	 * @param viewerKey
-	 *          key of the type to show
+	 *            key of the type to show
 	 * @param refresh
-	 *          flag to set if the preview should also be refreshed
+	 *            flag to set if the preview should also be refreshed
 	 */
 	public void setCurrentViewer(String viewerKey, boolean refresh) {
 		if (getViewFactory().getKeys().contains(viewerKey)) {
@@ -292,7 +293,8 @@ public class PreviewJRPrint extends ABasicEditor {
 		if (view instanceof IJRPrintable) {
 			try {
 				((IJRPrintable) view).setJRPRint(stats, jasperPrint);
-				console.setStatistics(stats);
+				if (console != null)
+					console.setStatistics(stats);
 			} catch (Exception e) {
 				errorPreview.setMessage(Messages.PreviewJRPrint_2);
 				container.switchView(stats, errorPreview);
