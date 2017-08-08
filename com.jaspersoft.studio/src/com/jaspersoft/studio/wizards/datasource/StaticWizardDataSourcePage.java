@@ -57,13 +57,20 @@ import com.jaspersoft.studio.wizards.group.ReportWizardFieldsGroupByDynamicPage;
 
 /**
  * 
- * This data source wizard page allows to select a data adapter and, if supported by the specific data adapter, edit a
- * query to get the fields. The fields are retrieved with the support of the
- * {@link com.jaspersoft.studio.wizards.JSSWizardRunnablePage JSSWizardRunnablePage} abstract class.</br> </br> The
- * result of the elaboration must be checked by the wizard, which will be in charge to decide or not to display other
- * steps, like Fields selection and Group By fields selection.</br> </br> After the elaboration, this page puts inside
- * the wizard settings map an List of JRDesignField with the key WizardDataSourcePage.DISCOVERED_FIELDS.</br> Any
- * interested step can use this List.</br> The WizardFieldsPage will use this key to populate the list of available
+ * This data source wizard page allows to select a data adapter and, if
+ * supported by the specific data adapter, edit a query to get the fields. The
+ * fields are retrieved with the support of the
+ * {@link com.jaspersoft.studio.wizards.JSSWizardRunnablePage
+ * JSSWizardRunnablePage} abstract class.</br>
+ * </br>
+ * The result of the elaboration must be checked by the wizard, which will be in
+ * charge to decide or not to display other steps, like Fields selection and
+ * Group By fields selection.</br>
+ * </br>
+ * After the elaboration, this page puts inside the wizard settings map an List
+ * of JRDesignField with the key WizardDataSourcePage.DISCOVERED_FIELDS.</br>
+ * Any interested step can use this List.</br>
+ * The WizardFieldsPage will use this key to populate the list of available
  * fields.</br>
  * 
  * @see StaticWizardFieldsPage
@@ -92,8 +99,9 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 	private Map<DataAdapterDescriptor, AWizardDataEditorComposite> editors = new HashMap<DataAdapterDescriptor, AWizardDataEditorComposite>();
 
 	/**
-	 * This variable is used to initialize this page with all the defaults as it gets visible. If this is not the first
-	 * load, the loadSettings method will probably do nothing.
+	 * This variable is used to initialize this page with all the defaults as it
+	 * gets visible. If this is not the first load, the loadSettings method will
+	 * probably do nothing.
 	 * 
 	 */
 	boolean firstLoad = true;
@@ -139,7 +147,8 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 		Label lblDataAdapter = new Label(composite_container, SWT.NONE);
 		lblDataAdapter.setText(Messages.WizardDataSourcePage_lblNewLabel_text);
 		dataAdaptersCombo = new Combo(composite_container, SWT.READ_ONLY);
-		// Code used for TableCombo from Nebula, unfortunately on Mac it looks too bad to be used.
+		// Code used for TableCombo from Nebula, unfortunately on Mac it looks too bad
+		// to be used.
 		// dataAdaptersCombo.defineColumns(1);
 		// dataAdaptersCombo.setShowTableHeader(false);
 		dataAdaptersCombo.addDisposeListener(new DisposeListener() {
@@ -183,7 +192,8 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 		composite_editor = new Composite(composite_container, SWT.NONE);
 		composite_editor.setLayout(new StackLayout());
 		// FormData fd_composite_editor = new FormData();
-		// fd_composite_editor.right = new FormAttachment(composite_dataadapter, 0, SWT.RIGHT);
+		// fd_composite_editor.right = new FormAttachment(composite_dataadapter, 0,
+		// SWT.RIGHT);
 		// fd_composite_editor.left = new FormAttachment(0, 0);
 		// fd_composite_editor.top = new FormAttachment(composite_dataadapter, 10);
 		// fd_composite_editor.bottom = new FormAttachment(100, 0);
@@ -196,8 +206,8 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 	}
 
 	/**
-	 * This procedure initialize the dialog page with the list of data adapters only if this is for real just the first
-	 * time the page is shown.
+	 * This procedure initialize the dialog page with the list of data adapters only
+	 * if this is for real just the first time the page is shown.
 	 * 
 	 */
 	public void loadSettings() {
@@ -223,8 +233,8 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 					selectedProject = resource.getProject();
 				}
 			} else if (getSettings().get(JSSWizard.JASPERREPORTS_CONFIGURATION) != null) {
-				JasperReportsConfiguration jConfig = (JasperReportsConfiguration) getSettings().get(
-						JSSWizard.JASPERREPORTS_CONFIGURATION);
+				JasperReportsConfiguration jConfig = (JasperReportsConfiguration) getSettings()
+						.get(JSSWizard.JASPERREPORTS_CONFIGURATION);
 				IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
 				if (f != null)
 					selectedProject = f.getProject();
@@ -234,8 +244,10 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 
 		storages = new ArrayList<ADataAdapterStorage>();
 		// Load all the data adapters...
-		// Attention, we are not loading all the possible data storages, but only the ones we know
-		// which are preferences and project. In the future we may have other data storages
+		// Attention, we are not loading all the possible data storages, but only the
+		// ones we know
+		// which are preferences and project. In the future we may have other data
+		// storages
 		storages.add(DataAdapterManager.getPreferencesStorage());
 
 		if (selectedProject != null) {
@@ -352,7 +364,6 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 
 	@Override
 	public void run(final IProgressMonitor monitor) throws Exception {
-
 		if (activeEditor != null) {
 
 			getSettings().remove(DISCOVERED_FIELDS);
@@ -368,22 +379,18 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 					monitor.setTaskName("Getting fields...");
 				}
 			});
-			
+
 			ProgressMonitorCheckerThread checker = new ProgressMonitorCheckerThread(monitor);
 			checker.addListener(activeEditor);
 			checker.start();
+
+			setupParameters();
 
 			List<JRDesignField> fields = activeEditor.readFields();
 
 			if (fields != null && !fields.isEmpty()) {
 				if (getSettings() != null) {
 					getSettings().put(DISCOVERED_FIELDS, fields);
-				}
-			}
-			List<JRDesignParameter> prms = activeEditor.readParameters();
-			if (prms != null && !prms.isEmpty()) {
-				if (getSettings() != null) {
-					getSettings().put(DISCOVERED_PARAMETERS, prms);
 				}
 			}
 		} else {
@@ -393,11 +400,20 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 		}
 	}
 
+	public void setupParameters() throws Exception {
+		if (activeEditor != null) {
+			List<JRDesignParameter> prms = activeEditor.readParameters();
+			if (prms != null && !prms.isEmpty() && getSettings() != null)
+				getSettings().put(DISCOVERED_PARAMETERS, prms);
+		}
+	}
+
 	/**
-	 * We don't want to start an elaboration if there is not a suitable editor active...
+	 * We don't want to start an elaboration if there is not a suitable editor
+	 * active...
 	 * 
-	 * @return boolean true if an elaboration is required, or false if the current status of the page does not require to
-	 *         trigger an elaboration
+	 * @return boolean true if an elaboration is required, or false if the current
+	 *         status of the page does not require to trigger an elaboration
 	 */
 	@Override
 	public boolean requireElaboration() {

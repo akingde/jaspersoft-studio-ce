@@ -47,6 +47,7 @@ import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
+import com.jaspersoft.studio.wizards.datasource.StaticWizardDataSourcePage;
 
 /**
  * Wizard to create a new report. It has three static step. The first one allow
@@ -70,8 +71,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	public static final String CONTAINER_NAME_KEY = "containerNameKey";
 
 	/**
-	 * Key to extract from the settings of the wizard the file name of the
-	 * report. The file name is created when the finish button is pressed
+	 * Key to extract from the settings of the wizard the file name of the report.
+	 * The file name is created when the finish button is pressed
 	 */
 	public static final String FILE_NAME_KEY = "fileNameKey";
 
@@ -83,22 +84,21 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	public static final String NEW_REPORT_JRXML = "report.jrxml";
 
 	/**
-	 * Page where the user can choose which template bundle will be used to
-	 * generate the report
+	 * Page where the user can choose which template bundle will be used to generate
+	 * the report
 	 */
 	private ReportTemplatesWizardPage templateChooserStep;
 
 	/**
-	 * Step where the user can choose the location on the workspace of the
-	 * report file and its name
+	 * Step where the user can choose the location on the workspace of the report
+	 * file and its name
 	 */
 	private DynamicNewFileCreationWizardPage fileLocationStep;
 
 	/**
-	 * Congratulation page placed at the end of the wizard. This page is
-	 * optional and the flag showCongratulationStep can be used to have or not
-	 * it. If the flag is false the page is not created so this reference will
-	 * be null
+	 * Congratulation page placed at the end of the wizard. This page is optional
+	 * and the flag showCongratulationStep can be used to have or not it. If the
+	 * flag is false the page is not created so this reference will be null
 	 */
 	private CongratulationsWizardPage congratulationsStep;
 
@@ -108,8 +108,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	private boolean showCongratulationsStep = true;
 
 	/**
-	 * The current selection when the wizard is opened, used to get a
-	 * destination folder is is opened by a contextual menu
+	 * The current selection when the wizard is opened, used to get a destination
+	 * folder is is opened by a contextual menu
 	 */
 	private ISelection selection;
 
@@ -160,8 +160,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 
 	/**
 	 * This method is called when 'Cancel' button is pressed in the wizard. It
-	 * notifiy to the current template bundle that the wizard was aborted in
-	 * case it need to unload some data
+	 * notifiy to the current template bundle that the wizard was aborted in case it
+	 * need to unload some data
 	 */
 	@Override
 	public boolean performCancel() {
@@ -171,10 +171,10 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	}
 
 	/**
-	 * This method is called when 'Finish' button is pressed in the wizard. It
-	 * store data from the static step inside the shared settings then it call
-	 * the finish code from the current template bundle. If the code return an
-	 * IFile it is also opened in the editor
+	 * This method is called when 'Finish' button is pressed in the wizard. It store
+	 * data from the static step inside the shared settings then it call the finish
+	 * code from the current template bundle. If the code return an IFile it is also
+	 * opened in the editor
 	 */
 	@Override
 	public boolean performFinish() {
@@ -184,6 +184,14 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 			// Store in the settings some information from the location step
 			settings.put(CONTAINER_NAME_KEY, fileLocationStep.getContainerFullPath().toPortableString());
 			settings.put(FILE_NAME_KEY, fileLocationStep.getFileName());
+
+			IWizardPage p = getContainer().getCurrentPage();
+			if (p instanceof StaticWizardDataSourcePage)
+				try {
+					((StaticWizardDataSourcePage) p).setupParameters();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			// Create and open the report
 			getContainer().run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
@@ -282,8 +290,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	}
 
 	/**
-	 * To check if the report can finish we check if both the static steps and
-	 * the dynamic ones are completed
+	 * To check if the report can finish we check if both the static steps and the
+	 * dynamic ones are completed
 	 */
 	public boolean canFinish() {
 		// Check the static steps
@@ -302,8 +310,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	/**
 	 * Return the congratulation step
 	 * 
-	 * @return The congratulation step, can be null if hasCongratulationStep()
-	 *         is false
+	 * @return The congratulation step, can be null if hasCongratulationStep() is
+	 *         false
 	 */
 	public CongratulationsWizardPage getCongratulationsStep() {
 		return congratulationsStep;
@@ -337,9 +345,9 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	}
 
 	/**
-	 * Utility class to create a file using the methods from the File Location
-	 * step. Since this methods relay to the widgets in the dialog they must be
-	 * executed inside a graphic thread.
+	 * Utility class to create a file using the methods from the File Location step.
+	 * Since this methods relay to the widgets in the dialog they must be executed
+	 * inside a graphic thread.
 	 * 
 	 * @author Orlandin Marco
 	 *
@@ -352,8 +360,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		private IFile result;
 
 		/**
-		 * The File Location, that contains the information and the methods to
-		 * create the file
+		 * The File Location, that contains the information and the methods to create
+		 * the file
 		 */
 		private NewFileCreationWizardPage creationWizard;
 

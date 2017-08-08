@@ -28,16 +28,19 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeListener {
 
 	/**
-	 * The key to identify the JasperReports configuration inside the wizard settings.
+	 * The key to identify the JasperReports configuration inside the wizard
+	 * settings.
 	 * 
-	 * @see getConfig() is a shortcut to quickly get the configuration. By default, there is always one configuration in
-	 *      the wizard, but subclasses may force the use of a local configuration.
+	 * @see getConfig() is a shortcut to quickly get the configuration. By default,
+	 *      there is always one configuration in the wizard, but subclasses may
+	 *      force the use of a local configuration.
 	 */
 	public static final String JASPERREPORTS_CONFIGURATION = "jasperreports_configuration"; //$NON-NLS-1$
 
 	/**
-	 * Key to retrieve the path of the directory in which resides the file being edited (or the location in which we are
-	 * working in order to get a reference to a project).
+	 * Key to retrieve the path of the directory in which resides the file being
+	 * edited (or the location in which we are working in order to get a reference
+	 * to a project).
 	 * 
 	 * The key points to an element of type IPath
 	 * 
@@ -50,19 +53,19 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	public static final String FILE_NAME = "file_name";
 
 	private IWizard parentWizard;
-	
+
 	protected IWizardPage fallbackPage;
-	
+
 	private List<IWizard> childWizards = new ArrayList<IWizard>();
 
 	private Map<String, Object> settings = new HashMap<String, Object>();
-	
+
 	private List<Command> commands;
-	
+
 	/**
-	 * Flag to keep track if the context was created internally to this wizard
-	 * or passed from outside. If it was created internally then it is disposed
-	 * at the end, otherwise not.
+	 * Flag to keep track if the context was created internally to this wizard or
+	 * passed from outside. If it was created internally then it is disposed at the
+	 * end, otherwise not.
 	 */
 	private boolean disposeConfig = true;
 
@@ -70,13 +73,13 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 		super();
 		setForcePreviousAndNextButtons(true);
 	}
-	
+
 	public JSSWizard(IWizard parentWizard, IWizardPage fallbackPage) {
 		this();
 		this.parentWizard = parentWizard;
 		this.fallbackPage = fallbackPage;
 	}
-	
+
 	/**
 	 * Allows pages to share keyed objects for general porpuses.
 	 * 
@@ -126,8 +129,8 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 
 	@Override
 	/*
-	 * (non-Javadoc) Method declared on IWizard. The default behavior is to return the page that was added to this wizard
-	 * after the given page.
+	 * (non-Javadoc) Method declared on IWizard. The default behavior is to return
+	 * the page that was added to this wizard after the given page.
 	 */
 	public IWizardPage getNextPage(IWizardPage page) {
 
@@ -156,13 +159,14 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	}
 
 	/**
-	 * Set the {@link JasperReportsConfiguration} of the wizard. The wizard
-	 * can also dispose it at the end according to the value of the passed
-	 * flag
+	 * Set the {@link JasperReportsConfiguration} of the wizard. The wizard can also
+	 * dispose it at the end according to the value of the passed flag
 	 * 
-	 * @param config the config, if null it is removed
-	 * @param disposeConfig true if the JR Configuration should be disposed at the end
-	 * of the wizard, false otherwise
+	 * @param config
+	 *            the config, if null it is removed
+	 * @param disposeConfig
+	 *            true if the JR Configuration should be disposed at the end of the
+	 *            wizard, false otherwise
 	 */
 	public void setConfig(JasperReportsConfiguration config, boolean disposeConfig) {
 		this.disposeConfig = disposeConfig;
@@ -212,10 +216,11 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	private List<IWizardPage> wizardPages = new ArrayList<IWizardPage>();
 
 	/**
-	 * Adds a new page to this wizard. The page is inserted at the end of the page list.
+	 * Adds a new page to this wizard. The page is inserted at the end of the page
+	 * list.
 	 * 
 	 * @param page
-	 *          the new page
+	 *            the new page
 	 */
 	public void addPage(IWizardPage page) {
 		wizardPages.add(page);
@@ -235,10 +240,11 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	}
 
 	/**
-	 * Adds a new page to this wizard. The page is inserted at the end of the page list.
+	 * Adds a new page to this wizard. The page is inserted at the end of the page
+	 * list.
 	 * 
 	 * @param page
-	 *          the new page
+	 *            the new page
 	 */
 	public void addPage(int index, IWizardPage page) {
 		wizardPages.add(index, page);
@@ -254,7 +260,8 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	}
 
 	public void removePage(IWizardPage page) {
-		// Check if the page to remove is the current one, in that case it is not possible to remove that page...
+		// Check if the page to remove is the current one, in that case it is not
+		// possible to remove that page...
 		if (getContainer() != null && getContainer().getCurrentPage() == page)
 			return;
 
@@ -271,8 +278,9 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	}
 
 	/**
-	 * The <code>Wizard</code> implementation of this <code>IWizard</code> method does nothing. Subclasses should extend
-	 * if extra pages need to be added before the wizard opens. New pages should be added by calling <code>addPage</code>.
+	 * The <code>Wizard</code> implementation of this <code>IWizard</code> method
+	 * does nothing. Subclasses should extend if extra pages need to be added before
+	 * the wizard opens. New pages should be added by calling <code>addPage</code>.
 	 */
 	public void addPages() {
 	}
@@ -291,10 +299,11 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	}
 
 	/**
-	 * The <code>Wizard</code> implementation of this <code>IWizard</code> method creates all the pages controls using
-	 * <code>IDialogPage.createControl</code>. Subclasses should reimplement this method if they want to delay creating
-	 * one or more of the pages lazily. The framework ensures that the contents of a page will be created before
-	 * attempting to show it.
+	 * The <code>Wizard</code> implementation of this <code>IWizard</code> method
+	 * creates all the pages controls using <code>IDialogPage.createControl</code>.
+	 * Subclasses should reimplement this method if they want to delay creating one
+	 * or more of the pages lazily. The framework ensures that the contents of a
+	 * page will be created before attempting to show it.
 	 */
 	public void createPageControls(Composite pageContainer) {
 		// the default behavior is to create all the pages controls
@@ -309,9 +318,10 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	}
 
 	/**
-	 * The <code>Wizard</code> implementation of this <code>IWizard</code> method disposes all the pages controls using
-	 * <code>DialogPage.dispose</code>. Subclasses should extend this method if the wizard instance maintains addition SWT
-	 * resource that need to be disposed.
+	 * The <code>Wizard</code> implementation of this <code>IWizard</code> method
+	 * disposes all the pages controls using <code>DialogPage.dispose</code>.
+	 * Subclasses should extend this method if the wizard instance maintains
+	 * addition SWT resource that need to be disposed.
 	 */
 	public void dispose() {
 
@@ -366,8 +376,8 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	}
 
 	/*
-	 * (non-Javadoc) Method declared on IWizard. The default behavior is to return the page that was added to this wizard
-	 * before the given page.
+	 * (non-Javadoc) Method declared on IWizard. The default behavior is to return
+	 * the page that was added to this wizard before the given page.
 	 */
 	public IWizardPage getPreviousPage(IWizardPage page) {
 		int index = wizardPages.indexOf(page);
@@ -379,7 +389,8 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	}
 
 	/*
-	 * (non-Javadoc) Method declared on IWizard. By default this is the first page inserted into the wizard.
+	 * (non-Javadoc) Method declared on IWizard. By default this is the first page
+	 * inserted into the wizard.
 	 */
 	public IWizardPage getStartingPage() {
 		if (wizardPages.size() == 0) {
