@@ -156,6 +156,7 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 									reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
 									jContext.getMap().put(DataSnapshotManager.SAVE_SNAPSHOT, fname);
 									jContext.getJasperDesign().setProperty(DataSnapshotManager.SAVE_SNAPSHOT, fname);
+									UIUtils.showInformation("Data will be saved to:\n" + fname);
 								} else
 									doSelectDataSnapshotFile(menu.getShell());
 							}
@@ -178,13 +179,11 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 						Map<String, Object> hm = jrContext.getJRParameters();
 						SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
 						if (reportContext != null) {
-							Map<String, Object> pv = reportContext.getParameterValues();
 							if (on) {
 								String fname = (String) jrContext.getMap().get(DataSnapshotManager.SAVE_SNAPSHOT);
-								if (fname != null) {
-									reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
-								}
+								reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
 							} else {
+								Map<String, Object> pv = reportContext.getParameterValues();
 								String fname = (String) pv.get(DataSnapshotManager.SAVE_SNAPSHOT);
 								if (fname != null)
 									jrContext.getMap().put(DataSnapshotManager.SAVE_SNAPSHOT, fname);
