@@ -18,6 +18,8 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
+import net.sf.jasperreports.eclipse.util.StringUtils;
+
 /**
  * Expression editor preference page.
  * 
@@ -75,7 +77,7 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 		if (expressionListStr != null) {
 			StringTokenizer st = new StringTokenizer(expressionListStr, ExpressionListFieldEditor.EXPRESSION_SEP);
 			while (st.hasMoreElements()) {
-				v.add((String) st.nextElement());
+				v.add(StringUtils.safeDecode64((String) st.nextElement()));
 			}
 		}
 		return v;

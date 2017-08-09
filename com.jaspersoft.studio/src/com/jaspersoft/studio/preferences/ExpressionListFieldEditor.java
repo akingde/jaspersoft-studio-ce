@@ -6,6 +6,7 @@ package com.jaspersoft.studio.preferences;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.StringTokenizer;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -21,6 +22,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
 import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 /**
@@ -43,7 +45,7 @@ public class ExpressionListFieldEditor extends ListEditor{
         StringBuffer expressionsBuff = new StringBuffer("");//$NON-NLS-1$
 
         for (int i = 0; i < items.length; i++) {
-        	expressionsBuff.append(items[i]);
+        	expressionsBuff.append(Base64.getEncoder().encodeToString(items[i].getBytes()));
         	expressionsBuff.append(EXPRESSION_SEP);
         }
         return expressionsBuff.toString();
@@ -79,7 +81,8 @@ public class ExpressionListFieldEditor extends ListEditor{
         StringTokenizer st = new StringTokenizer(stringList, EXPRESSION_SEP);//$NON-NLS-1$
         ArrayList<String> v = new ArrayList<String>();
         while (st.hasMoreElements()) {
-            v.add((String)st.nextElement());
+            String nextElement = (String)st.nextElement();
+            v.add(StringUtils.safeDecode64(nextElement));
         }
         return v.toArray(new String[v.size()]);
 	}
