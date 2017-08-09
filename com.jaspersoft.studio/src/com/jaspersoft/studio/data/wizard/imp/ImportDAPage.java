@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard.imp;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -71,7 +73,13 @@ public class ImportDAPage extends JSSHelpWizardPage {
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection s = (IStructuredSelection) viewer.getSelection();
 				setPageComplete(!s.isEmpty());
-				selection = (List<DataAdapterDescriptor>) s.toList();
+				selection = new ArrayList<DataAdapterDescriptor>();
+				for (Object obj : s.toList()) {
+					if (obj instanceof DataAdapterDescriptor)
+						selection.add((DataAdapterDescriptor) obj);
+					else if (obj instanceof ADataAdapterStorage)
+						selection.addAll(((ADataAdapterStorage) obj).getDataAdapterDescriptors());
+				}
 			}
 		});
 
