@@ -517,22 +517,29 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 	protected void refreshLangCombo(DataAdapterDescriptor da) {
 		String filter = jConfig.getProperty(DesignerPreferencePage.P_DAFILTER);
 		langCombo.removeAll();
-		if (filter != null && filter.equals("lang")) {
-			String[] langs = da.getLanguages();
-			if (Misc.isNullOrEmpty(langs) || ArrayUtils.contains(langs, "*")) {
-				langCombo.setItems(languages);
-				return;
-			}
-			String lang = langCombo.getText();
-			for (String l : langs) {
-				langCombo.add(l);
-				if (l.equals(lang))
-					return;
-			}
-			langCombo.setText(langs[0]);
-			changeLanguage();
-		} else
+		String[] langs = null;
+		if (filter != null && filter.equals("lang"))
+			langs = da.getLanguages();
+		else
+			langs = languages;
+		if (!setupLanguagesCombo(langs))
+			return;
+		changeLanguage();
+	}
+
+	protected boolean setupLanguagesCombo(String[] langs) {
+		if (Misc.isNullOrEmpty(langs) || ArrayUtils.contains(langs, "*")) {
 			langCombo.setItems(languages);
+			return false;
+		}
+		String lang = langCombo.getText();
+		for (String l : langs) {
+			langCombo.add(l);
+			if (l.equals(lang))
+				return false;
+		}
+		langCombo.setText(langs[0]);
+		return true;
 	}
 
 	class IconAction extends Action implements IMenuCreator {
@@ -586,6 +593,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 							if (itemFilterAll.getSelection()) {
 								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "all");
 								jConfig.getPrefStore().save();
+								refreshLangCombo(dscombo.getSelected());
 								refreshDsCombo();
 							}
 						} catch (IOException e1) {
@@ -604,6 +612,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 							if (itemFilterDA.getSelection()) {
 								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "lang");
 								jConfig.getPrefStore().save();
+								refreshLangCombo(dscombo.getSelected());
 								refreshDsCombo();
 							}
 						} catch (IOException e1) {
@@ -622,6 +631,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 							if (itemFilterLang.getSelection()) {
 								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "da");
 								jConfig.getPrefStore().save();
+								refreshLangCombo(dscombo.getSelected());
 								refreshDsCombo();
 							}
 						} catch (IOException e1) {
@@ -640,10 +650,12 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 					public void widgetSelected(SelectionEvent e) {
 						IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
 						if (f != null) {
-							PreferenceDialog pref = PreferencesUtil.createPropertyDialogOn(UIUtils.getShell(), f,
-									DesignerPreferencePage.PAGE_ID, null, null);
-							if (pref != null && pref.open() == Dialog.OK)
+							PreferenceDialog pref = PreferencesUtil.createPreferenceDialogOn(UIUtils.getShell(),
+									DesignerPreferencePage.PAGEID, null, null);
+							if (pref != null && pref.open() == Dialog.OK) {
+								refreshLangCombo(dscombo.getSelected());
 								refreshDsCombo();
+							}
 						}
 					}
 				});
