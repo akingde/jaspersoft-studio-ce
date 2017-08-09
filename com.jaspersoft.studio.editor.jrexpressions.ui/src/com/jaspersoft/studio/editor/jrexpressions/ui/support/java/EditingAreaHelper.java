@@ -462,6 +462,25 @@ public class EditingAreaHelper {
 	public void ignoreAutoEditStrategies(boolean ignore){
 		xtextAdapter.ignoreAutoEditStrategies(ignore);
 	}
+
+	/**
+	 * Tries to move the caret position after the next parenthesis if any.
+	 */
+	public void moveCaretToNextParenthesis() {
+		int caretOffset = textArea.getCaretOffset();
+		int textLength = textArea.getText().length();
+		String text = textArea.getText();
+		int newPosition = -1;
+		for(int i=caretOffset;i<=textLength;i++){
+			if(text.charAt(i) == '('){
+				newPosition = i+1;
+				break;
+			}
+		}
+		if(newPosition!=-1){
+			textArea.setSelection(newPosition, newPosition);
+		}
+	}
 	
 	
 }

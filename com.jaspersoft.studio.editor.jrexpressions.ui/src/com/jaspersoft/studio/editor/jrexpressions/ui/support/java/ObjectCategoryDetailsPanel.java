@@ -156,6 +156,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 					// Functions
 					editingAreaInfo.setUpdate(true);
 					editingAreaInfo.insertAtCurrentLocation(((JRExprFunctionBean) selObject).getId()+"( )",false, false); //$NON-NLS-1$
+					editingAreaInfo.moveCaretToNextParenthesis();
 					editingAreaInfo.setUpdate(false);
 					showFunctionDetailsPanel();
 				}
