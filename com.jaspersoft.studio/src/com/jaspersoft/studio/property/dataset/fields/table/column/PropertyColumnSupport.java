@@ -34,6 +34,8 @@ public class PropertyColumnSupport extends EditingSupport {
 			protected void doSetValue(Object value) {
 				if (value == null)
 					value = "";
+				if (!(value instanceof String))
+					value = value.toString();
 				super.doSetValue(value);
 			}
 		};
