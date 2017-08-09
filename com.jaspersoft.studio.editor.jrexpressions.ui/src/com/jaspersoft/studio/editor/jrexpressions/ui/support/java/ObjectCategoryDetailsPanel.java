@@ -181,11 +181,11 @@ public class ObjectCategoryDetailsPanel extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				if(additionalDetailsStackLayout.topControl!=null) {
 					additionalDetailsStackLayout.topControl.setVisible(ExpressionEditorSupportUtil.toggleShowBuiltInParameters());
-					refreshPanelUI(selItem);
+					refreshPanelUI(selItem,true);
 				}
 				else {
 					ExpressionEditorSupportUtil.toggleShowBuiltInParameters();
-					refreshPanelUI(selItem);
+					refreshPanelUI(selItem,true);
 				}
 			}
 		});
@@ -200,11 +200,11 @@ public class ObjectCategoryDetailsPanel extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				if(additionalDetailsStackLayout.topControl!=null) {
 					additionalDetailsStackLayout.topControl.setVisible(ExpressionEditorSupportUtil.toggleShowBuiltInVariables());
-					refreshPanelUI(selItem);
+					refreshPanelUI(selItem,true);
 				}
 				else {
 					ExpressionEditorSupportUtil.toggleShowBuiltInVariables();
-					refreshPanelUI(selItem);
+					refreshPanelUI(selItem,true);
 				}
 			}
 		});
@@ -219,7 +219,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				ExpressionEditorSupportUtil.toggleSortIncreaseItems(getExpObjectType(selItem));
 				sortDecreaseItems.setSelection(false);
-				refreshPanelUI(selItem);
+				refreshPanelUI(selItem,true);
 			}
 		});
 		sortDecreaseItems = new ToolItem(buttonsToolbar, SWT.CHECK);
@@ -232,7 +232,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				ExpressionEditorSupportUtil.toggleSortDecreaseItems(getExpObjectType(selItem));
 				sortIncreaseItems.setSelection(false);
-				refreshPanelUI(selItem);
+				refreshPanelUI(selItem,true);
 			}
 		});
 		
@@ -266,11 +266,22 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	 * Refreshes the UI of the panel using the new selected item information.
 	 * 
 	 * @param selItem the new category selected
+	 * @param force flag to force the refresh anyway
 	 */
 	public void refreshPanelUI(ObjectCategoryItem selItem) {
+		refreshPanelUI(selItem,false);
+	}
+	
+	/**
+	 * Refreshes the UI of the panel using the new selected item information.
+	 * 
+	 * @param selItem the new category selected
+	 * @param force flag to force the refresh anyway
+	 */
+	public void refreshPanelUI(ObjectCategoryItem selItem, boolean force) {
 		this.selItem=selItem;
 		categoryContentLblProvider.setCategory(this.selItem.getCategory());		
-		if(!selItem.getCategory().equals(previousCategory)){
+		if(force || !selItem.getCategory().equals(previousCategory)){
 			updateCategoryChildren(selItem);
 			this.previousCategory = this.selItem.getCategory();
 		}
