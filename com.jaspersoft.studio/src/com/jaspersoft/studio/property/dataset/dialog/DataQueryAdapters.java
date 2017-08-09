@@ -96,24 +96,24 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 		StandardPropertyMetadata spm = new StandardPropertyMetadata();
 		spm.setName(DEFAULT_DATAADAPTER);
-		spm.setLabel("Data Adapter");
-		spm.setDescription("Last Data Adapter Used.");
-		spm.setValueType("jssDA");
+		spm.setLabel(Messages.DataQueryAdapters_0);
+		spm.setDescription(Messages.DataQueryAdapters_1);
+		spm.setValueType("jssDA"); //$NON-NLS-1$
 		List<PropertyScope> scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
-		spm.setCategory("net.sf.jasperreports.metadata.property.category:data.source");
+		spm.setCategory("net.sf.jasperreports.metadata.property.category:data.source"); //$NON-NLS-1$
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
 		spm.setName(DataSnapshotManager.SAVE_SNAPSHOT);
-		spm.setLabel("Data Snapshot File");
-		spm.setDescription("File where to save data snapshot.");
-		spm.setValueType("java.io.File");
+		spm.setLabel(Messages.DataQueryAdapters_4);
+		spm.setDescription(Messages.DataQueryAdapters_5);
+		spm.setValueType("java.io.File"); //$NON-NLS-1$
 		scopes = new ArrayList<PropertyScope>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
-		spm.setCategory("net.sf.jasperreports.metadata.property.category:data.snapshot");
+		spm.setCategory("net.sf.jasperreports.metadata.property.category:data.snapshot"); //$NON-NLS-1$
 		pm.add(spm);
 
 		PropertyMetadataRegistry.addMetadata(pm);
@@ -312,7 +312,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 	protected void refreshDsCombo() {
 		String filter = jConfig.getProperty(DesignerPreferencePage.P_DAFILTER);
-		if (filter != null && filter.equals("da"))
+		if (filter != null && filter.equals("da")) //$NON-NLS-1$
 			dscombo.setLanguage(langCombo.getText());
 		else
 			dscombo.setLanguage(null);
@@ -518,7 +518,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		String filter = jConfig.getProperty(DesignerPreferencePage.P_DAFILTER);
 		langCombo.removeAll();
 		String[] langs = null;
-		if (filter != null && filter.equals("lang"))
+		if (filter != null && filter.equals("lang")) //$NON-NLS-1$
 			langs = da.getLanguages();
 		else
 			langs = languages;
@@ -528,7 +528,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 	}
 
 	protected boolean setupLanguagesCombo(String[] langs) {
-		if (Misc.isNullOrEmpty(langs) || ArrayUtils.contains(langs, "*")) {
+		if (Misc.isNullOrEmpty(langs) || ArrayUtils.contains(langs, "*")) { //$NON-NLS-1$
 			langCombo.setItems(languages);
 			return false;
 		}
@@ -584,14 +584,14 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				new MenuItem(menu, SWT.SEPARATOR);
 
 				itemFilterAll = new MenuItem(menu, SWT.CHECK);
-				itemFilterAll.setText("Show All Data Adapters");
+				itemFilterAll.setText(Messages.DataQueryAdapters_13);
 				itemFilterAll.addSelectionListener(new SelectionAdapter() {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						try {
 							if (itemFilterAll.getSelection()) {
-								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "all");
+								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "all"); //$NON-NLS-1$
 								jConfig.getPrefStore().save();
 								refreshLangCombo(dscombo.getSelected());
 								refreshDsCombo();
@@ -610,7 +610,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 					public void widgetSelected(SelectionEvent e) {
 						try {
 							if (itemFilterDA.getSelection()) {
-								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "lang");
+								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "lang"); //$NON-NLS-1$
 								jConfig.getPrefStore().save();
 								refreshLangCombo(dscombo.getSelected());
 								refreshDsCombo();
@@ -629,7 +629,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 					public void widgetSelected(SelectionEvent e) {
 						try {
 							if (itemFilterLang.getSelection()) {
-								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "da");
+								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "da"); //$NON-NLS-1$
 								jConfig.getPrefStore().save();
 								refreshLangCombo(dscombo.getSelected());
 								refreshDsCombo();
@@ -643,7 +643,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				new MenuItem(menu, SWT.SEPARATOR);
 
 				itemFilter = new MenuItem(menu, SWT.PUSH);
-				itemFilter.setText("Global Preferences");
+				itemFilter.setText(Messages.DataQueryAdapters_17);
 				itemFilter.addSelectionListener(new SelectionAdapter() {
 
 					@Override
@@ -662,9 +662,9 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 			}
 			String daFilter = jConfig.getPrefStore().getString(DesignerPreferencePage.P_DAFILTER);
-			itemFilterAll.setSelection(daFilter != null && daFilter.equals("all"));
-			itemFilterDA.setSelection(daFilter != null && daFilter.equals("lang"));
-			itemFilterLang.setSelection(daFilter != null && daFilter.equals("da"));
+			itemFilterAll.setSelection(daFilter != null && daFilter.equals("all")); //$NON-NLS-1$
+			itemFilterDA.setSelection(daFilter != null && daFilter.equals("lang")); //$NON-NLS-1$
+			itemFilterLang.setSelection(daFilter != null && daFilter.equals("da")); //$NON-NLS-1$
 
 			return menu;
 		}

@@ -481,7 +481,13 @@ public class Messages extends NLS {
 	public static String DataPreviewTable_RecordsNum1000;
 	public static String DataPreviewTable_RecordsNum500;
 	public static String DataPreviewTable_RecordsNumAll;
+	public static String DataQueryAdapters_0;
+	public static String DataQueryAdapters_1;
 	public static String DataQueryAdapters_10;
+	public static String DataQueryAdapters_13;
+	public static String DataQueryAdapters_17;
+	public static String DataQueryAdapters_4;
+	public static String DataQueryAdapters_5;
 	public static String DataQueryAdapters_9;
 	public static String DataQueryAdapters_jobname;
 	public static String DataQueryAdapters_languagetitle;
