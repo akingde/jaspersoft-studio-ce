@@ -20,13 +20,14 @@ import net.sf.jasperreports.repo.RepositoryUtil;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
- * @version $Id: DataAdapterParameterContributorFactory.java 4734 2011-10-21 12:13:21Z teodord $
+ * @version $Id: DataAdapterParameterContributorFactory.java 4734 2011-10-21
+ *          12:13:21Z teodord $
  */
 public final class DataAdapterParameterContributorFactory implements ParameterContributorFactory {
 
 	public static final String PARAMETER_DATA_ADAPTER = "PARAMETER_DATA_ADAPTER";
 	private static final DataAdapterParameterContributorFactory INSTANCE = new DataAdapterParameterContributorFactory();
-	
+
 	private DataAdapterParameterContributorFactory() {
 	}
 
@@ -48,15 +49,16 @@ public final class DataAdapterParameterContributorFactory implements ParameterCo
 		if (param != null && param instanceof DataAdapter)
 			dataAdapter = (DataAdapter) param;
 		if (dataAdapter == null) {
-			String dataAdapterUri = JRPropertiesUtil.getInstance(context.getJasperReportsContext()).getProperty(context.getDataset(), "net.sf.jasperreports.data.adapter");
-			if (dataAdapterUri != null)
-			{
-				DataAdapterResource dataAdapterResource = RepositoryUtil.getInstance(context.getJasperReportsContext()).getResourceFromLocation(dataAdapterUri, DataAdapterResource.class);
+			String dataAdapterUri = JRPropertiesUtil.getInstance(context.getJasperReportsContext())
+					.getProperty(context.getDataset(), "net.sf.jasperreports.data.adapter");
+			if (dataAdapterUri != null) {
+				DataAdapterResource dataAdapterResource = RepositoryUtil.getInstance(context.getJasperReportsContext())
+						.getResourceFromLocation(dataAdapterUri, DataAdapterResource.class);
 				dataAdapter = dataAdapterResource.getDataAdapter();
 			}
 		}
 		if (dataAdapter != null) {
-			ParameterContributor dataAdapterService = DataAdapterServiceUtil.getInstance(context.getJasperReportsContext())
+			ParameterContributor dataAdapterService = DataAdapterServiceUtil.getInstance(context)
 					.getService(dataAdapter);
 
 			return Collections.singletonList(dataAdapterService);
