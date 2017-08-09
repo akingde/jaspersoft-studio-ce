@@ -98,6 +98,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.type.ParameterEvaluationTimeEnum;
 import net.sf.jasperreports.properties.PropertyMetadata;
 
 public class ParametersTable extends AbstractModifyTable {
@@ -935,6 +936,16 @@ public class ParametersTable extends AbstractModifyTable {
 		tcolumns.add(c);
 	}
 
+	private void createEvaluationTime() {
+		TColumn c = new TColumn();
+		c.setPropertyName("evaluationTime");
+		c.setLabel(Messages.common_evaluation_time);
+		c.setValue(dataset);
+		c.setPropertyType(ParameterEvaluationTimeEnum.class.getName());
+		columns.add(TColumnFactory.addColumn(c, tviewer));
+		tcolumns.add(c);
+	}
+
 	private void createPropertiesColumn() {
 		TColumn c = new TColumn();
 		c.setPropertyName("properties");
@@ -971,8 +982,10 @@ public class ParametersTable extends AbstractModifyTable {
 	}
 
 	public List<JRDesignParameter> getParameters() {
-
-		return params;// (List<JRDesignParameter>) tviewer.getInput();
+		List<JRDesignParameter> t = new ArrayList<JRDesignParameter>();
+		for (JRParameter p : dataset.getParametersList())
+			t.add((JRDesignParameter) p);
+		return t;// (List<JRDesignParameter>) tviewer.getInput();
 	}
 
 	private PropertyChangeSupport propertyChangeSupport;
@@ -1006,6 +1019,7 @@ public class ParametersTable extends AbstractModifyTable {
 		createTypeColumn();
 		createDescriptionColumn();
 		createDefaultExpression();
+		createEvaluationTime();
 		createPropertiesColumn();
 
 		tviewer.getTable().layout(true);

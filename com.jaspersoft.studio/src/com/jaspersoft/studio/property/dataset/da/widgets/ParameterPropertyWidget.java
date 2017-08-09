@@ -30,6 +30,8 @@ import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.type.ParameterEvaluationTimeEnum;
 import net.sf.jasperreports.engine.util.JRClassLoader;
 
 public class ParameterPropertyWidget implements IWidget {
@@ -156,13 +158,14 @@ public class ParameterPropertyWidget implements IWidget {
 		try {
 			Class<?> cl = JRClassLoader.loadClassForName(cn);
 			for (JRParameter p : dataset.getParameters()) {
-				if (p.isSystemDefined()
-						|| !(p.getValueClass().isAssignableFrom(cl) || p.getValueClass().isAssignableFrom(String.class)))
+				if (p.isSystemDefined() || !(p.getValueClass().isAssignableFrom(cl)
+						|| p.getValueClass().isAssignableFrom(String.class)))
 					continue;
 				final MenuItem mi = new MenuItem(menu, SWT.PUSH);
 				mi.setText(p.getName());
 				mi.setImage(JaspersoftStudioPlugin.getInstance().getImage(MParameter.getIconDescriptor().getIcon16()));
-				final String def = p.getDefaultValueExpression() != null ? p.getDefaultValueExpression().getText() : null;
+				final String def = p.getDefaultValueExpression() != null ? p.getDefaultValueExpression().getText()
+						: null;
 				String tt = "Default: " + (def == null ? "" : "null");
 				if (!Misc.isNullOrEmpty(p.getDescription()))
 					tt += "\n\n" + p.getDescription();
@@ -181,6 +184,7 @@ public class ParameterPropertyWidget implements IWidget {
 							DatasetUtil.removeProperty(dataset, c.getPropertyName());
 
 							pmap.setProperty(c.getPropertyName(), null);
+							((JRDesignParameter) p).setEvaluationTime(ParameterEvaluationTimeEnum.EARLY);
 						} finally {
 							refresh = false;
 						}

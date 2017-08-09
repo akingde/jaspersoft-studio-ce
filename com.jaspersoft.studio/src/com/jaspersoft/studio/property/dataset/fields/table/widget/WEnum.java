@@ -62,7 +62,8 @@ public class WEnum extends AWControl {
 				String v = cmb.getText();
 				if (v.endsWith(" (deprecated)"))
 					v = v.substring(0, v.indexOf(" (deprecated)"));
-				aw.setValue(v);
+
+				aw.setValue(Enum.valueOf((Class) clazz, v));
 				cmb.setToolTipText(aw.getToolTipText());
 			}
 		});
