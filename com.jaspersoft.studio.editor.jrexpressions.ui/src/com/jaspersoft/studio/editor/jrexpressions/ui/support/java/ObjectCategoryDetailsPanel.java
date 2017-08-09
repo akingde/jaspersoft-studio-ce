@@ -15,6 +15,7 @@ import java.util.Map;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -91,6 +92,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	private List<Object> categoryDetails;
 	private boolean functionMode=false;
 	private EditingAreaHelper editingAreaInfo;
+	private Category previousCategory;
 
 	/**
 	 * Creates the details panel composite.
@@ -264,11 +266,48 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	 * 
 	 * @param selItem the new category selected
 	 */
-	@SuppressWarnings("unchecked")
 	public void refreshPanelUI(ObjectCategoryItem selItem) {
 		this.selItem=selItem;
-		categoryContentLblProvider.setCategory(this.selItem.getCategory());
-		// Update the list of category children
+		categoryContentLblProvider.setCategory(this.selItem.getCategory());		
+		if(!selItem.getCategory().equals(previousCategory)){
+			updateCategoryChildren(selItem);
+			this.previousCategory = this.selItem.getCategory();
+		}
+		
+		// We are inside a JRFunction
+		if(selItem.getCategory()==Category.BUILT_IN_FUNCTIONS && 
+				editingAreaInfo!=null && editingAreaInfo.getCurrentLibraryFunctionName()!=null){
+			final String currFunctionName = editingAreaInfo.getCurrentLibraryFunctionName();
+			for(TreeItem item : categoryContent.getTree().getItems()){
+				JRExprFunctionBean function = (JRExprFunctionBean)item.getData();
+				if(function.getId().equals(currFunctionName)){
+					functionMode=true;
+					StructuredSelection currSelection = (StructuredSelection)categoryContent.getSelection();
+					if(!item.getData().equals(currSelection.getFirstElement())){
+						categoryContent.setSelection(new StructuredSelection(item.getData()),true);
+						break;
+					}
+				}
+			}
+		}
+
+		// Otherwise preselect the first one (if possible)
+		else if(categoryContent.getTree().getItemCount()>0){
+			ISelection currSelection = categoryContent.getSelection();
+			if(currSelection==null || StructuredSelection.EMPTY.equals(currSelection)){
+				TreeItem item = categoryContent.getTree().getItem(0);
+				if(!item.getData().equals(((StructuredSelection)currSelection).getFirstElement())){
+					categoryContent.setSelection(new StructuredSelection(item.getData()),true);
+				}
+			}
+		}
+	}
+
+	/*
+	 *	Update the list of category children.
+	 */
+	@SuppressWarnings("unchecked")
+	private void updateCategoryChildren(ObjectCategoryItem selItem) {
 		categoryContent.getTree().clearAll(true);
 		categoryDetails = new ArrayList<Object>();		
 		switch (selItem.getCategory()) {
@@ -403,27 +442,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		default:
 			break;
 		}
-		
 		categoryContent.setInput(categoryDetails.toArray());
-		
-		// We are inside a JRFunction
-		if(selItem.getCategory()==Category.BUILT_IN_FUNCTIONS && 
-				editingAreaInfo!=null && editingAreaInfo.getCurrentLibraryFunctionName()!=null){
-			final String currFunctionName = editingAreaInfo.getCurrentLibraryFunctionName();
-			for(TreeItem item : categoryContent.getTree().getItems()){
-				JRExprFunctionBean function = (JRExprFunctionBean)item.getData();
-				if(function.getId().equals(currFunctionName)){
-					functionMode=true;
-					categoryContent.setSelection(new StructuredSelection(item.getData()),true);
-					break;
-				}
-			}
-		}
-		// Otherwise preselect the first one (if possible)
-		else if(categoryContent.getTree().getItemCount()>0){
-			TreeItem item = categoryContent.getTree().getItem(0);
-			categoryContent.setSelection(new StructuredSelection(item.getData()),true);
-		}
 	}
 
 	/*
