@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -117,6 +118,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		GridData catContentGD=new GridData(SWT.FILL, SWT.FILL, true, true);
 		catContentGD.heightHint=350;
 		categoryContent.getTree().setLayoutData(catContentGD);
+		ColumnViewerToolTipSupport.enableFor(categoryContent);
 		categoryContentLblProvider = new ObjectItemStyledLabelProvider();
 		categoryContent.setLabelProvider(categoryContentLblProvider);
 		categoryContent.setContentProvider(new TreeArrayContentProvider());
@@ -451,6 +453,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				gl.marginWidth=0;
 				cmp.setLayout(gl);
 				final TreeViewer tv=new TreeViewer(cmp, SWT.BORDER | SWT.BORDER_SOLID);
+				ColumnViewerToolTipSupport.enableFor(tv);
 				tv.getTree().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 				currentControl=cmp;
 				

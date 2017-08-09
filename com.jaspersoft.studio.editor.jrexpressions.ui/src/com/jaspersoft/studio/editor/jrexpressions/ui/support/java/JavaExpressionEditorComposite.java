@@ -28,6 +28,7 @@ import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
@@ -36,6 +37,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -252,7 +254,15 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		editorContainer.setLayout(layout);
 
 		editorArea = new StyledText(editorContainer, SWT.BORDER
-				| SWT.BORDER_SOLID | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+				| SWT.BORDER_SOLID | SWT.WRAP | SWT.V_SCROLL);
+		editorArea.addVerifyKeyListener(new VerifyKeyListener() {
+		    @Override
+		    public void verifyKey(VerifyEvent e) {
+		        if (e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+		           e.doit = false;
+		        }
+		    }
+		});
 		
 		new UndoRedoImpl(editorArea);
 		GridData editorAreaGD=new GridData(SWT.FILL, SWT.FILL, true, true);
