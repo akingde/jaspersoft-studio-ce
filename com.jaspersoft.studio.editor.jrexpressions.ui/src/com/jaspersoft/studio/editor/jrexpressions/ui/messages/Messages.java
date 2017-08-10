@@ -11,10 +11,13 @@ public class Messages extends NLS {
 	public static String DefaultExpressionEditorSupportFactory_NewClassCreationError;
 	public static String FunctionDetailsComposite_ComplexExprTooltip;
 	public static String FunctionDetailsComposite_ReturnTypeText;
+	public static String JavaExpressionEditorComposite_AddCustomExpressionItemText;
+	public static String JavaExpressionEditorComposite_AddCustomExpressionItemTooltip;
 	public static String JavaExpressionEditorComposite_BackCompatibilitySection;
 	public static String JavaExpressionEditorComposite_ClassTypeDialogTitle;
 	public static String JavaExpressionEditorComposite_ExpressionInvalidError;
 	public static String JavaExpressionEditorComposite_JobName;
+	public static String JavaExpressionEditorComposite_MainDatasetLabel;
 	public static String JavaExpressionEditorComposite_MessageBundlesCategory;
 	public static String JavaExpressionEditorComposite_NoValidationIssuesInfo;
 	public static String JavaExpressionEditorComposite_TaskName;

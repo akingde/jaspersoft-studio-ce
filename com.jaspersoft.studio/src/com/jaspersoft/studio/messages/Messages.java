@@ -788,10 +788,17 @@ public class Messages extends NLS {
 	public static String ExportMetadataPage_9;
 	public static String ExportStyleAsTemplateAction_actionName;
 	public static String ExportStyleAsTemplateAction_actionTooltip;
+	public static String ExpressionEditorPreferencePage_confirmationOnClosing;
+	public static String ExpressionEditorPreferencePage_rememberLocation;
+	public static String ExpressionEditorPreferencePage_rememberSize;
 	public static String ExpressionEditorPreferencePage_subtitle;
 	public static String ExpressionEditorPreferencePage_userDefinedExpressions;
 	public static String ExpressionEditorSupportUtil_ConfirmOnCloseMessage;
 	public static String ExpressionEditorSupportUtil_ConfirmOnCloseTitle;
+	public static String ExpressionListFieldEditor_CustomExpressionCreationWarningMsg;
+	public static String ExpressionListFieldEditor_CustomExpressionCreationWarningTitle;
+	public static String ExpressionListFieldEditor_CustomExpressionEditWarningMessage;
+	public static String ExpressionListFieldEditor_CustomExpressionEditWarningTitle;
 	public static String FieldEditorOverlayPage_2;
 	public static String FieldEditorOverlayPage_3;
 	public static String FieldEditorOverlayPage_4;

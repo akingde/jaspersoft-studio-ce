@@ -23,8 +23,16 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ST;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.FontMetrics;
@@ -39,8 +47,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.ResourceManager;
@@ -543,4 +554,74 @@ public class UIUtil {
 			toFocus.setFocus();
 		}
 	}
+	
+	/**
+	 * Add a context menu to the specified styled text widget.
+	 * <p>
+	 * This means that three menu items for the basic operations cut/copy/past
+	 * are added.
+	 * 
+	 * @param widget the styled text widget
+	 */
+	public static void enableCopyPasteCutContextMenu(StyledText widget) {
+		Menu menu = new Menu(widget.getShell(), SWT.POP_UP);
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		final MenuItem cutItem = new MenuItem(menu, SWT.PUSH);
+		cutItem.setText(Messages.UIUtil_CutMenuItemText);
+		cutItem.setToolTipText(Messages.UIUtil_CutMenuItemTooltip);
+		cutItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				widget.invokeAction(ST.CUT);
+			}
+		});
+		cutItem.setImage(
+			ResourceManager.getImage(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT)));
+
+		final MenuItem copyItem = new MenuItem(menu, SWT.PUSH);
+		copyItem.setText(Messages.UIUtil_CopyMenuItemText);
+		copyItem.setToolTipText(Messages.UIUtil_CopyMenuItemTooltip);
+		copyItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				widget.invokeAction(ST.COPY);
+			}
+		});
+		copyItem.setImage(
+			ResourceManager.getImage(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)));
+		
+		final MenuItem pasteItem = new MenuItem(menu, SWT.PUSH);
+		pasteItem.setText(Messages.UIUtil_PasteMenuItemText);
+		pasteItem.setToolTipText(Messages.UIUtil_PasteMenuItemTooltip);
+		pasteItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				widget.invokeAction(ST.PASTE);
+			}
+		});
+		pasteItem.setImage(
+			ResourceManager.getImage(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE)));
+
+		menu.addMenuListener(new MenuListener() {
+			@Override
+			public void menuShown(MenuEvent e) {
+				cutItem.setEnabled(!widget.getSelectionText().isEmpty());
+				copyItem.setEnabled(!widget.getSelectionText().isEmpty());
+				Clipboard cb = new Clipboard(widget.getDisplay());
+				Object contents = cb.getContents(TextTransfer.getInstance());
+				if(contents instanceof String && !((String) contents).isEmpty()){
+					pasteItem.setEnabled(true);
+				}
+				else {
+					pasteItem.setEnabled(false);
+				}
+			}
+			
+			@Override
+			public void menuHidden(MenuEvent e) {
+			}
+		});
+		widget.setMenu(menu);
+	}
+	
 }

@@ -6,7 +6,6 @@ package com.jaspersoft.studio.preferences;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.StringTokenizer;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -19,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
 
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
 import net.sf.jasperreports.eclipse.util.Misc;
@@ -33,7 +33,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
  */
 public class ExpressionListFieldEditor extends ListEditor{
 	
-	public static final String EXPRESSION_SEP="\n";
+	public static final String EXPRESSION_SEP="\n"; //$NON-NLS-1$
 
 	public ExpressionListFieldEditor(String name, String labelText,
 			Composite parent) {
@@ -42,13 +42,7 @@ public class ExpressionListFieldEditor extends ListEditor{
 
 	@Override
 	protected String createList(String[] items) {
-        StringBuffer expressionsBuff = new StringBuffer("");//$NON-NLS-1$
-
-        for (int i = 0; i < items.length; i++) {
-        	expressionsBuff.append(Base64.getEncoder().encodeToString(items[i].getBytes()));
-        	expressionsBuff.append(EXPRESSION_SEP);
-        }
-        return expressionsBuff.toString();
+		return ExpressionEditorPreferencePage.encodeUserDefinedExpression(Arrays.asList(items));
 	}
 
 	@Override
@@ -60,11 +54,11 @@ public class ExpressionListFieldEditor extends ListEditor{
 			if (dialog.open() == Dialog.OK) {
 				JRDesignExpression newExp = wizard.getValue();
 				if(newExp!=null &&
-						!Misc.nvl(newExp.getText()).equals("")){
+						!Misc.nvl(newExp.getText()).equals("")){ //$NON-NLS-1$
 					String newExprString = newExp.getText();
 					java.util.List<String> itemsLst = Arrays.asList(getList().getItems());
 					if(itemsLst.contains(newExprString)){
-						MessageDialog.openWarning(getShell(), "Custom expression creation", "The entered expression already exists!");
+						MessageDialog.openWarning(getShell(), Messages.ExpressionListFieldEditor_CustomExpressionCreationWarningTitle, Messages.ExpressionListFieldEditor_CustomExpressionCreationWarningMsg);
 						return null;
 					}
 					else{
@@ -119,11 +113,11 @@ public class ExpressionListFieldEditor extends ListEditor{
 				JRDesignExpression newExp = wizard.getValue();
 				java.util.List<String> itemsLst = Arrays.asList(getList().getItems());
 				if(newExp!=null &&
-						!Misc.nvl(newExp.getText()).equals("")){
+						!Misc.nvl(newExp.getText()).equals("")){ //$NON-NLS-1$
 					String newExprString = newExp.getText();
 					if(!currExprTxt.equals(newExprString)){
 						if(itemsLst.contains(newExprString)){
-							MessageDialog.openWarning(getShell(), "Custom expression modification", "The entered expression already exists!");
+							MessageDialog.openWarning(getShell(), Messages.ExpressionListFieldEditor_CustomExpressionEditWarningTitle, Messages.ExpressionListFieldEditor_CustomExpressionEditWarningMessage);
 						}
 						else{
 							getList().setItem(selectionIndex, newExprString);

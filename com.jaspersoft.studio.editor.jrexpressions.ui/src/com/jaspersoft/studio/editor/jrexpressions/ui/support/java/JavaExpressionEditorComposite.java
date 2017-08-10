@@ -32,10 +32,14 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -43,11 +47,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.progress.WorkbenchJob;
+import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.xtext.validation.Issue;
 
 import com.google.inject.Injector;
@@ -62,6 +68,7 @@ import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionStatusChangeListener;
 import com.jaspersoft.studio.editor.jrexpressions.functions.AdditionalStaticFunctions;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
@@ -70,10 +77,13 @@ import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelec
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectsNavigatorContentProvider;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectsNavigatorLabelProvider;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.StyledTextXtextAdapter2;
+import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
 import com.jaspersoft.studio.swt.widgets.ClassType;
+import com.jaspersoft.studio.utils.UIUtil;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+import net.sf.jasperreports.eclipse.util.BundleCommonUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -305,8 +315,50 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 				editorArea.setSelection(currSelection);
 			}
 		});
+		
+		// Enable context menu on the styled text
+		UIUtil.enableCopyPasteCutContextMenu(editorArea);
+		new MenuItem(editorArea.getMenu(), SWT.SEPARATOR);
+		final MenuItem addUserDefinedExprItem = new MenuItem(editorArea.getMenu(), SWT.PUSH);
+		addUserDefinedExprItem.setText(Messages.JavaExpressionEditorComposite_AddCustomExpressionItemText);
+		addUserDefinedExprItem.setToolTipText(Messages.JavaExpressionEditorComposite_AddCustomExpressionItemTooltip);
+		addUserDefinedExprItem.setImage(ResourceManager.getImage(
+						BundleCommonUtils.getImageDescriptor(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/expression_obj.gif"))); //$NON-NLS-1$
+		addUserDefinedExprItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String selectionText = editorArea.getSelectionText();
+				if(!selectionText.isEmpty()){
+					ExpressionEditorPreferencePage.addUserDefinedExpression(selectionText);
+					// trigger update
+					String tmpKey = Category.USER_DEFINED_EXPRESSIONS.getDisplayName() + "_" //$NON-NLS-1$
+							+ Category.USER_DEFINED_EXPRESSIONS.getDisplayName();
+					ObjectCategoryDetailsPanel tmpControl = detailPanels.get(tmpKey);
+					if(detailsPanelStackLayout.topControl.equals(tmpControl)){
+						tmpControl.refreshPanelUI(
+								new ObjectCategoryItem(Category.USER_DEFINED_EXPRESSIONS), true);
+					}
+					else {
+						if(tmpControl!=null){
+							tmpControl.dispose();
+							detailPanels.remove(tmpKey);
+						}
+					}
+				}
+			}
+		});
+		editorArea.getMenu().addMenuListener(new MenuListener() {
+			@Override
+			public void menuShown(MenuEvent e) {
+				addUserDefinedExprItem.setEnabled(!editorArea.getSelectionText().isEmpty());
+			}
+			
+			@Override
+			public void menuHidden(MenuEvent e) {
+			}
+		});
 	}
-
+	
 	/*
 	 * Creates the categories tree navigator.
 	 */
@@ -422,7 +474,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 				for(JRDesignDataset ds : contextDatasets) {
 					String dsname = ds.getName();
 					if(ds.isMainDataset()){
-						dsname = "Main Dataset";
+						dsname = Messages.JavaExpressionEditorComposite_MainDatasetLabel;
 					}
 					// all parameters for the dataset
 					ObjectCategoryItem pItems = new ObjectCategoryItem(Category.PDATASET, dsname);

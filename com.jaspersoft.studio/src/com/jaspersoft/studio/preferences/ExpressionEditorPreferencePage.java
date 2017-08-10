@@ -5,6 +5,7 @@
 package com.jaspersoft.studio.preferences;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -50,9 +51,9 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 	protected void createFieldEditors() {
 		addField(new ExpressionListFieldEditor(P_USER_DEFINED_EXPRESSIONS, Messages.ExpressionEditorPreferencePage_userDefinedExpressions,
 				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_CONFIRMATION_ON_CLOSE, "Ask for confirmation before closing the Expression Editor", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_REMEMBER_EXPEDITOR_SIZE, "Remember the size of the Expression Editor window", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_REMEMBER_EXPEDITOR_LOCATION, "Remember the location of the Expression Editor window", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_CONFIRMATION_ON_CLOSE, Messages.ExpressionEditorPreferencePage_confirmationOnClosing, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_REMEMBER_EXPEDITOR_SIZE, Messages.ExpressionEditorPreferencePage_rememberSize, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_REMEMBER_EXPEDITOR_LOCATION, Messages.ExpressionEditorPreferencePage_rememberLocation, getFieldEditorParent()));
 
 		//Eventually create the extensions for the page
 		super.createFieldEditors();
@@ -81,6 +82,36 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 			}
 		}
 		return v;
+	}
+	
+	/**
+	 * Adds a new user defined expression to the list of the existing ones.
+	 * 
+	 * @param text the new expression to add
+	 */
+	public static void addUserDefinedExpression(String text){
+		List<String> expressions = getUserDefinedExpressionList();
+		if(!expressions.contains(text)){
+			expressions.add(text);
+			Preferences preferences = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+			preferences.put(P_USER_DEFINED_EXPRESSIONS, encodeUserDefinedExpression(expressions));
+		}
+	}
+	
+
+	/**
+	 * Produces a Base64 encoded property string from the list of user defined expressions.</br>
+	 * 
+	 * @param expressions the list of user defined expressions
+	 * @return the enconded property value
+	 */
+	public static String encodeUserDefinedExpression(List<String> expressions){
+        StringBuffer expressionsBuff = new StringBuffer("");//$NON-NLS-1$
+        for (String e : expressions) {
+        	expressionsBuff.append(Base64.getEncoder().encodeToString(e.getBytes()));
+        	expressionsBuff.append(ExpressionListFieldEditor.EXPRESSION_SEP);
+        }
+        return expressionsBuff.toString();
 	}
 	
 	/**
