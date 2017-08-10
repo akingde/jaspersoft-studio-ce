@@ -145,23 +145,23 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						JasperReportsConfiguration jContext = container.getJrContext();
-						JasperReportsConfiguration jrContext = jContext;
 						setupItemSaveMenu(menu.getShell());
 						if (itemSave.getSelection()) {
 							SimpleReportContext reportContext = (SimpleReportContext) jContext.getJRParameters()
 									.get(JRParameter.REPORT_CONTEXT);
 							if (reportContext != null) {
-								String fname = (String) jrContext.getMap().get(DataSnapshotManager.SAVE_SNAPSHOT);
+								String fname = (String) jContext.getMap().get(DataSnapshotManager.SAVE_SNAPSHOT);
 								if (fname != null) {
 									reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
 									jContext.getMap().put(DataSnapshotManager.SAVE_SNAPSHOT, fname);
 									jContext.getJasperDesign().setProperty(DataSnapshotManager.SAVE_SNAPSHOT, fname);
 									UIUtils.showInformation("Data will be saved to:\n" + fname);
-								} else
-									doSelectDataSnapshotFile(menu.getShell());
+									return;
+								}
 							}
+							doSelectDataSnapshotFile(menu.getShell());
 						} else {
-							DataSnapshotManager.removeSnapshotFile(jrContext.getJRParameters());
+							DataSnapshotManager.removeSnapshotFile(jContext.getJRParameters());
 							jContext.getJasperDesign().removeProperty(DataSnapshotManager.SAVE_SNAPSHOT);
 							itemFile.dispose();
 						}
