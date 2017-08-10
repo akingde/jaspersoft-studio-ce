@@ -1077,6 +1077,7 @@ public class Messages extends NLS {
 	public static String JRExporterPreferencePage_alwaysOverwrite;
 	public static String JRExporterPreferencePage_askTheUser;
 	public static String JRExporterPreferencePage_fileExistingOption;
+	public static String JRExpressionEditor_undefinedLanguage;
 	public static String JRExpressionPage_1;
 	public static String JRExpressionPage_description;
 	public static String JRPropertyDialog_propName;
