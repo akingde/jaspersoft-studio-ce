@@ -162,8 +162,8 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 	}
 
 	/**
-	 * Set the root control of the wizard, and also add a listener to do the
-	 * perform help action and set the context of the top control.
+	 * Set the root control of the wizard, and also add a listener to do the perform
+	 * help action and set the context of the top control.
 	 */
 	protected void setHelpControl(Control newControl) {
 		newControl.addListener(SWT.Help, new Listener() {
@@ -175,8 +175,8 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 	};
 
 	/**
-	 * Set and show the help data if a context, that bind this wizard with the
-	 * data, is provided
+	 * Set and show the help data if a context, that bind this wizard with the data,
+	 * is provided
 	 */
 	public void performHelp() {
 		String child = dataquery.getContextHelpId();
@@ -425,7 +425,8 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 
 	public void createCommand() {
 		JRDesignDataset ds = (JRDesignDataset) (mdataset.getParent() == null
-				? mdataset.getJasperConfiguration().getJasperDesign().getMainDesignDataset() : mdataset.getValue());
+				? mdataset.getJasperConfiguration().getJasperDesign().getMainDesignDataset()
+				: mdataset.getValue());
 		command = new JSSCompoundCommand(mdataset.getMreport());
 
 		String lang = newdataset.getQuery().getLanguage();
@@ -473,6 +474,9 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 						addSetValueCommand(command, JRDesignField.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(),
 								mfield);
 						addSetValueCommand(command, JRDesignField.PROPERTY_DESCRIPTION, newf.getDescription(), mfield);
+						addSetValueCommand(command, JRDesignField.PROPERTY_PROPERTY_EXPRESSIONS,
+								newf.getPropertyExpressionsList(), mfield);
+						addSetValueCommand(command, MField.PROPERTY_MAP, newf.getPropertiesMap(), mfield);
 					}
 					notexists = false;
 				} else if (mapfields.containsValue(newf)) {
@@ -488,6 +492,8 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 						addSetValueCommand(command, JRDesignField.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(),
 								mfield);
 						addSetValueCommand(command, JRDesignField.PROPERTY_DESCRIPTION, newf.getDescription(), mfield);
+						addSetValueCommand(command, JRDesignField.PROPERTY_PROPERTY_EXPRESSIONS,
+								newf.getPropertyExpressionsList(), mfield);
 						addSetValueCommand(command, MField.PROPERTY_MAP, newf.getPropertiesMap(), mfield);
 					}
 					notexists = false;
@@ -558,6 +564,8 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 								prm.getDefaultValueExpression(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_FOR_PROMPTING, prm.isForPrompting(),
 								mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_EVALUATION_TIME, prm.getEvaluationTime(),
+								mparam);
 						addSetValueCommand(command, MParameter.PROPERTY_MAP, prm.getPropertiesMap(), mparam);
 					}
 					notexists = false;
@@ -578,6 +586,8 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 								mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,
 								prm.getDefaultValueExpression(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_EVALUATION_TIME, prm.getEvaluationTime(),
+								mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_FOR_PROMPTING, prm.isForPrompting(),
 								mparam);
 						addSetValueCommand(command, MParameter.PROPERTY_MAP, prm.getPropertiesMap(), mparam);
@@ -605,9 +615,8 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 	}
 
 	/**
-	 * Create a new setvalue command, but only if the old value and the new
-	 * value are different. If created the command is added to the compound
-	 * command
+	 * Create a new setvalue command, but only if the old value and the new value
+	 * are different. If created the command is added to the compound command
 	 * 
 	 * @param cc
 	 *            the compound command
@@ -629,9 +638,8 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 	}
 
 	/**
-	 * Used to compare two values. Since some JR Objects used inside here
-	 * dosen't support the equals method, this one apply some special cases for
-	 * that objects
+	 * Used to compare two values. Since some JR Objects used inside here dosen't
+	 * support the equals method, this one apply some special cases for that objects
 	 * 
 	 * @param value1
 	 *            the first value to compare, can be null
@@ -683,8 +691,7 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.jaspersoft.studio.data.IDataPreviewInfoProvider#getDesignDataset()
+	 * @see com.jaspersoft.studio.data.IDataPreviewInfoProvider#getDesignDataset()
 	 */
 	public JRDesignDataset getDesignDataset() {
 		return this.newdataset;

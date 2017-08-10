@@ -185,8 +185,11 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		}
 		if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME))
 			return jrParameter.getNestedTypeName();
-		if (id.equals(JRDesignParameter.PROPERTY_EVALUATION_TIME))
+		if (id.equals(JRDesignParameter.PROPERTY_EVALUATION_TIME)) {
+			if (evaluationTimeD == null)
+				getPropertyDescriptors();
 			return evaluationTimeD.getIntValue(jrParameter.getEvaluationTime());
+		}
 		return super.getPropertyValue(id);
 	}
 
@@ -209,6 +212,8 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		JRDesignParameter jrParameter = (JRDesignParameter) getValue();
 
 		if (id.equals(JRDesignParameter.PROPERTY_EVALUATION_TIME)) {
+			if (evaluationTimeD == null)
+				getPropertyDescriptors();
 			jrParameter.setEvaluationTime(evaluationTimeD.getEnumValue(value));
 		} else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION))
 			jrParameter.setDescription((String) value);

@@ -222,7 +222,7 @@ public class WJRProperty extends AWidget {
 				public String getPropertyValue(String propertyName) {
 					PropertyExpressionDTO dto = getValue();
 					if (!dto.isExpression())
-						return getValue().getValue();
+						return dto.getValue();
 					return null;
 				}
 
@@ -230,7 +230,7 @@ public class WJRProperty extends AWidget {
 				public JRExpression getPropertyValueExpression(String propertyName) {
 					PropertyExpressionDTO dto = getValue();
 					if (dto.isExpression())
-						return getValue().getValueAsExpression();
+						return dto.getValueAsExpression();
 					return null;
 				}
 
@@ -277,7 +277,7 @@ public class WJRProperty extends AWidget {
 			if (tt == null) {
 				JRExpression exp = wip.getExpressionValue();
 				if (exp != null)
-					tt = wip.getExpressionValue().getText();
+					tt = exp.getText();
 			}
 			if (!Misc.isNullOrEmpty(tt))
 				tt += "\n\n";
@@ -346,9 +346,9 @@ public class WJRProperty extends AWidget {
 							pedto.isExpression() ? pedto.getValueAsExpression().toString() : pedto.getValue(),
 							PropertyEvaluationTimeEnum.LATE);
 				} else
-					dto = new DatasetPropertyExpressionDTO(value instanceof JRDesignExpression,
-							c.getPropertyName(), value instanceof JRDesignExpression
-									? ((JRDesignExpression) value).getText() : value.toString(),
+					dto = new DatasetPropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
+							value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText()
+									: value.toString(),
 							PropertyEvaluationTimeEnum.LATE);
 			else {
 				if (value instanceof PropertyExpressionDTO)
