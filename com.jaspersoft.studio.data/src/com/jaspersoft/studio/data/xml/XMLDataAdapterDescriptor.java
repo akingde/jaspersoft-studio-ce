@@ -228,6 +228,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor
 			description = prefix + item.getNodeName();
 			f.setDescription(description);
 		}
+		f.getPropertiesMap().setProperty("net.sf.jasperreports.xpath.field.expression", description);
 		// Let's consider the description indicating the XPath query
 		// as unique and therefore as map key.
 		fieldsMap.put(description, f);
@@ -241,6 +242,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor
 		f.setName(ModelUtils.getNameForField(new ArrayList<JRDesignField>(fieldsMap.values()), item.getNodeName()));
 		f.setValueClass(String.class);
 		f.setDescription(".");
+		f.getPropertiesMap().setProperty("net.sf.jasperreports.xpath.field.expression", ".");
 		fieldsMap.put(".", f);
 	}
 
