@@ -216,10 +216,13 @@ public class ParametersTable extends AbstractModifyTable {
 
 			@Override
 			public void handleEvent(Event event) {
-				if (bDA.getSelection())
+				if (bDA.getSelection()) {
 					layout.topControl = treeCmp;
-				else
+					refreshTree();
+				} else {
 					layout.topControl = tblCmp;
+					refreshTable(dataset.getParametersList());
+				}
 				pcmp.layout();
 			}
 
@@ -968,9 +971,17 @@ public class ParametersTable extends AbstractModifyTable {
 	}
 
 	public <T extends JRParameter> void setFields(List<T> fields) {
-		tviewer.setInput(new ArrayList(fields));
-		tviewer.refresh();
+		refreshTable(new ArrayList<T>(fields));
 
+		refreshTree();
+	}
+
+	protected <T extends JRParameter> void refreshTable(List<T> fields) {
+		tviewer.setInput(fields);
+		tviewer.refresh();
+	}
+
+	protected void refreshTree() {
 		if (treeviewer != null) {
 			params = new ArrayList<JRDesignParameter>();
 			if (dataset.getParametersList() != null)
