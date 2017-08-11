@@ -236,8 +236,10 @@ public class WJRProperty extends AWidget {
 
 				@Override
 				public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
-					if (value == null && valueExpression == null)
+					if (value == null && valueExpression == null) {
+						removeProperty(propertyName);
 						return;
+					}
 					PropertyExpressionDTO dto = getValue();
 					if (valueExpression != null) {
 						dto.setExpression(true);
