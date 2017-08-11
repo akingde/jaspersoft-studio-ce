@@ -67,6 +67,7 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 
 		TextFieldEditor te = new TextFieldEditor(TextExporterConfiguration.PROPERTY_PAGE_SEPARATOR,
 				Messages.TextExporterPreferencePage_12, true, getFieldEditorParent());
+		te.setEmptyStringAllowed(true);
 		addField(te);
 		
 		//Eventually create the extensions for the page
