@@ -46,12 +46,23 @@ public class TextPropertyDescription<T> extends AbstractExpressionPropertyDescri
 			return;
 		if (!wiProp.isExpressionMode() && txt instanceof Text){
 			String tvalue = ((Text) txt).getText();
-			if (tvalue != null && tvalue.isEmpty())
-				tvalue = null;
-			wiProp.setValue(tvalue, null);
+			wiProp.setValue(parseText(tvalue), null);
 		} else super.handleEdit(txt, wiProp);
 	}
 
+	/**
+	 * Parse the text in the text area and return the appropriate value to be written
+	 * in the model
+	 * 
+	 * @param widgetText the text in the widget, can be null
+	 * @return the text to store in the model, can be null
+	 */
+	protected String parseText(String widgetText){
+		if (widgetText != null && widgetText.isEmpty())
+			return null;
+		else return widgetText;
+	}
+	
 	// Flag used to overcome the problem of focus events in Mac OS X
 	// - JSS Bugzilla 42999
 	// - Eclipse Bug 383750
