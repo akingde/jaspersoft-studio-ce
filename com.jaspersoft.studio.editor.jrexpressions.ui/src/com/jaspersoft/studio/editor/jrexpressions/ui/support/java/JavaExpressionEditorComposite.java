@@ -725,7 +725,8 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 
 		List<Issue> validationIssues = xtextAdapter.getXtextValidationIssues();
 		if (validationIssues != null && !validationIssues.isEmpty()) {
-			ExpressionStatus exprStatus = ExpressionStatus.ERROR;
+			// let's relax the message and use a warning
+			ExpressionStatus exprStatus = ExpressionStatus.WARNING;
 			for (Issue vi : validationIssues) {
 				exprStatus.getMessages().add(vi.getMessage());
 			}

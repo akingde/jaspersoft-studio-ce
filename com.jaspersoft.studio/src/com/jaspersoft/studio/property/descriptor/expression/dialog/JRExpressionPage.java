@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.expression.dialog;
 
+import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
@@ -84,11 +85,17 @@ public class JRExpressionPage extends JSSHelpWizardPage {
 			contributedComposite.setExpressionContext(getExpressionContext());
 			contributedComposite.addExpressionStatusChangeListener(new IExpressionStatusChangeListener() {
 				public void statusChanged(ExpressionStatus status) {
-					if(status.equals(ExpressionStatus.ERROR)){
-						setErrorMessage(status.getShortDescription());
-					}
-					else{
-						setErrorMessage(null);
+					setErrorMessage(null);
+					switch (status) {
+						case INFO:
+							setMessage(Messages.JRExpressionPage_description);
+							break;
+						case ERROR: 
+							setMessage(status.getShortDescription(),DialogPage.ERROR);
+							break;
+						case WARNING: 
+							setMessage(status.getShortDescription(),DialogPage.WARNING);
+							break;
 					}
 				}
 			});
