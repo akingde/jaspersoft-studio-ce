@@ -45,7 +45,7 @@ import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.JRDataAdapterPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.JSSDataAdapterPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.LocaleComboPropertyDescription;
-import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.NotNullableTextPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TimezoneComboPropertyDescription;
 
 import net.sf.jasperreports.data.DataAdapter;
@@ -99,7 +99,7 @@ public class WJRProperty extends AWidget {
 				ipd = new JRDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
 						getjConfig());
 			else if (c.getPropertyType().equals(String.class.getName()))
-				ipd = new TextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
+				ipd = new NotNullableTextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue());
 			else if (c.getPropertyType().equals(Class.class.getName()))
 				ipd = new ClassItemPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
@@ -148,7 +148,7 @@ public class WJRProperty extends AWidget {
 				} catch (ClassNotFoundException e) {
 				}
 				if (ipd == null)
-					ipd = new TextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
+					ipd = new NotNullableTextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
 							c.getDefaultValue());
 			}
 			if (c.isLabelEditable() || (pname.contains("{") && pname.contains("}"))) {
