@@ -235,6 +235,8 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		langCombo.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
+				if (isRefresh)
+					return;
 				String lang = langCombo.getText();
 				int index = Misc.indexOf(languages, lang);
 				if (index < 0) {
@@ -515,31 +517,41 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 	}
 
 	protected void refreshLangCombo(DataAdapterDescriptor da) {
-		String filter = jConfig.getProperty(DesignerPreferencePage.P_DAFILTER);
-		langCombo.removeAll();
-		String[] langs = null;
-		if (filter != null && filter.equals("lang")) //$NON-NLS-1$
-			langs = da.getLanguages();
-		else
-			langs = languages;
-		if (!setupLanguagesCombo(langs))
-			return;
-		changeLanguage();
+		isRefresh = true;
+		try {
+			String filter = jConfig.getProperty(DesignerPreferencePage.P_DAFILTER);
+
+			String[] langs = null;
+			if (filter != null && filter.equals("lang")) //$NON-NLS-1$
+				langs = da.getLanguages();
+			else
+				langs = languages;
+			if (!setupLanguagesCombo(langs))
+				return;
+			changeLanguage();
+		} finally {
+			isRefresh = false;
+		}
 	}
 
 	protected boolean setupLanguagesCombo(String[] langs) {
+		boolean changeLang = true;
+		String lang = langCombo.getText();
+		langCombo.removeAll();
 		if (Misc.isNullOrEmpty(langs) || ArrayUtils.contains(langs, "*")) { //$NON-NLS-1$
 			langCombo.setItems(languages);
 			return false;
 		}
-		String lang = langCombo.getText();
 		for (String l : langs) {
 			langCombo.add(l);
 			if (l.equals(lang))
-				return false;
+				changeLang = false;
 		}
-		langCombo.setText(langs[0]);
-		return true;
+		if (!changeLang)
+			langCombo.setText(lang);
+		else
+			langCombo.setText(langs[0]);
+		return changeLang;
 	}
 
 	class IconAction extends Action implements IMenuCreator {
