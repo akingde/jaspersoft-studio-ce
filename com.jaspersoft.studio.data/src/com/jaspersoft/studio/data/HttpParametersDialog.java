@@ -39,6 +39,7 @@ import com.jaspersoft.studio.swt.widgets.table.EditButton;
 import com.jaspersoft.studio.swt.widgets.table.IEditElement;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
+import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.UIUtil;
 
@@ -362,8 +363,12 @@ public class HttpParametersDialog extends ATitledDialog {
 				bEditPrm.push();
 			}
 		});
+
 		final DeleteButton delb = new DeleteButton();
 		delb.createDeleteButton(bGroup, tviewer);
+
+		new ListOrderButtons().createOrderButtons(bGroup, tviewer);
+
 		return tviewer;
 	}
 
