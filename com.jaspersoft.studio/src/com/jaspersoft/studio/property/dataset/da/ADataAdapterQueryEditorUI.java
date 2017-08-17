@@ -82,8 +82,8 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 
 	public void createPropertyWidget(String p, Composite parent, String daValue, int width,
 			JasperReportsConfiguration jConfig) {
-		ParameterPropertyWidget ppw = TColumnFactory.createParameterPropertyWidget(p, parent, icon, daValue, dataset, width,
-				jConfig);
+		ParameterPropertyWidget ppw = TColumnFactory.createParameterPropertyWidget(p, parent, icon, daValue, dataset,
+				width, jConfig);
 		if (ppw != null)
 			ppwTable.add(ppw);
 	}
@@ -230,7 +230,8 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 					HttpLocationParameter hlp = (HttpLocationParameter) element;
 					JRParameter prm = fParam.get(hlp.getName());
 					if (prm != null)
-						return JaspersoftStudioPlugin.getInstance().getImage(MParameter.getIconDescriptor().getIcon16());
+						return JaspersoftStudioPlugin.getInstance()
+								.getImage(MParameter.getIconDescriptor().getIcon16());
 					for (HttpLocationParameter p : lparams)
 						if (p.getName().equals(hlp.getName()))
 							return icon;
@@ -246,8 +247,8 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 			new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
 				public Object newElement(List<?> input, int pos) {
-					HttpParameterDialog d = new HttpParameterDialog(parent.getShell(), dataset, PropertiesTable.this.input,
-							pname);
+					HttpParameterDialog d = new HttpParameterDialog(parent.getShell(), dataset,
+							PropertiesTable.this.input, pname);
 					if (d.open() == Dialog.OK) {
 						fParam.put(d.getName(), d.getPrm());
 						try {
@@ -305,7 +306,8 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 						input.add(new HttpLocationParameter(pp, null));
 				}
 			}
-			tviewer.setInput(input);
+			if (!tviewer.getControl().isDisposed())
+				tviewer.setInput(input);
 		}
 	}
 
@@ -378,8 +380,10 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 						continue;
 					final MenuItem mi = new MenuItem(menu, SWT.PUSH);
 					mi.setText(p.getName());
-					mi.setImage(JaspersoftStudioPlugin.getInstance().getImage(MParameter.getIconDescriptor().getIcon16()));
-					final String def = p.getDefaultValueExpression() != null ? p.getDefaultValueExpression().getText() : null;
+					mi.setImage(
+							JaspersoftStudioPlugin.getInstance().getImage(MParameter.getIconDescriptor().getIcon16()));
+					final String def = p.getDefaultValueExpression() != null ? p.getDefaultValueExpression().getText()
+							: null;
 					String tt = "Default: " + (def == null ? "" : "null");
 					if (!Misc.isNullOrEmpty(p.getDescription()))
 						tt += "\n\n" + p.getDescription();
@@ -396,7 +400,7 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 										prm.getPropertiesMap().removeProperty(v.getName());
 								fParam.put(v.getName(), p);
 								p.getPropertiesMap().setProperty(pname, v.getName());
-								((JRDesignParameter)p).setEvaluationTime(ParameterEvaluationTimeEnum.EARLY);
+								((JRDesignParameter) p).setEvaluationTime(ParameterEvaluationTimeEnum.EARLY);
 							} finally {
 								refresh = false;
 							}

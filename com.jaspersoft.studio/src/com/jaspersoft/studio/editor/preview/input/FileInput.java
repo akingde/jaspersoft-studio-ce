@@ -11,6 +11,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -40,7 +42,6 @@ public class FileInput extends ADataInput {
 		if (isForType(param.getValueClass())) {
 			final Composite cmp = new Composite(parent, SWT.NONE);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalIndent = 8;
 			cmp.setLayoutData(gd);
 			GridLayout layout = new GridLayout(2, false);
 			layout.marginHeight = 0;
@@ -51,8 +52,29 @@ public class FileInput extends ADataInput {
 			txt.setToolTipText(VParameters.createToolTip(param));
 			txt.addFocusListener(focusListener);
 			txt.addTraverseListener(keyListener);
-			txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalIndent = 8;
+			txt.setLayoutData(gd);
 			setMandatory(param, txt);
+
+			ModifyListener listener = new ModifyListener() {
+
+				public void modifyText(ModifyEvent e) {
+					if (!isRefresh) {
+						hideError(txt);
+						if (param.getValueClass().equals(File.class))
+							try {
+								File f = new File(txt.getText());
+								if (!f.exists())
+									setError(txt, "File does not exists");
+								updateModel(f);
+							} catch (Exception e1) {
+								setError(txt, e1.getMessage());
+							}
+					}
+				}
+			};
+			txt.addModifyListener(listener);
 
 			btn = new Button(cmp, SWT.PUSH);
 			btn.setText(Messages.FileInput_selectfile);
@@ -76,15 +98,20 @@ public class FileInput extends ADataInput {
 			});
 			updateInput();
 			setNullable(param, btn);
+			setNullable(param, txt);
 		}
 	}
 
+	private boolean isRefresh = false;
+
 	public void updateInput() {
 		Object value = params.get(param.getName());
+		isRefresh = true;
 		if (value != null && value instanceof String)
 			txt.setText((String) value);
 		else
 			txt.setText(value == null ? "" : value.toString());
+		isRefresh = false;
 
 		if (value != null && value instanceof File)
 			btn.setToolTipText(((File) value).getAbsolutePath());
