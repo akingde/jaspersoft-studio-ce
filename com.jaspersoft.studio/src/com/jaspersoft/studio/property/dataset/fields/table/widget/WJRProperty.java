@@ -64,6 +64,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.JREnum;
@@ -410,8 +411,12 @@ public class WJRProperty extends AWidget {
 
 	public boolean isPropertyExpressions(Object element) {
 		if (element instanceof JRDesignField || element instanceof JRElement || element instanceof JRReport
-				|| element instanceof JRDataset || element instanceof PropertyExpressionsDTO)
+				|| element instanceof JRDataset || element instanceof PropertyExpressionsDTO) {
+			if (element instanceof PropertyExpressionsDTO
+					&& ((PropertyExpressionsDTO) element).getJrElement() instanceof JRDesignParameter)
+				return false;
 			return true;
+		}
 		return false;
 	}
 
