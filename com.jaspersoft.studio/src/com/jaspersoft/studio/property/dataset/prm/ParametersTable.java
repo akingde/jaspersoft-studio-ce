@@ -555,9 +555,13 @@ public class ParametersTable extends AbstractModifyTable {
 				StructuredSelection sel = (StructuredSelection) treeviewer.getSelection();
 				List<JRDesignParameter> prms = (List<JRDesignParameter>) treeviewer.getInput();
 				for (Object obj : sel.toList()) {
-					if (obj instanceof JRDesignParameter)
+					if (obj instanceof JRDesignParameter) {
 						prms.remove(obj);
-					else if (obj instanceof Object[]) {
+						JRDesignParameter p = (JRDesignParameter) obj;
+						for (String key : p.getPropertiesMap().getPropertyNames())
+							p.getPropertiesMap().removeProperty(key);
+						dataset.removeParameter((JRDesignParameter) obj);
+					} else if (obj instanceof Object[]) {
 						Object[] row = (Object[]) obj;
 						((JRDesignParameter) row[2]).getPropertiesMap().removeProperty((String) row[0]);
 					}

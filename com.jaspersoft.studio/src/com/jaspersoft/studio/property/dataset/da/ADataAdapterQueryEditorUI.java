@@ -54,6 +54,7 @@ import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.type.ParameterEvaluationTimeEnum;
 import net.sf.jasperreports.engine.util.JRClassLoader;
 
 public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEditorUI {
@@ -296,7 +297,7 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 					fParam.put(pp, p);
 					boolean exists = false;
 					for (HttpLocationParameter hlp : lparams)
-						if (hlp.getName().equals(pname)) {
+						if (hlp.getName().equals(pp)) {
 							exists = true;
 							break;
 						}
@@ -395,6 +396,7 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 										prm.getPropertiesMap().removeProperty(v.getName());
 								fParam.put(v.getName(), p);
 								p.getPropertiesMap().setProperty(pname, v.getName());
+								((JRDesignParameter)p).setEvaluationTime(ParameterEvaluationTimeEnum.EARLY);
 							} finally {
 								refresh = false;
 							}
