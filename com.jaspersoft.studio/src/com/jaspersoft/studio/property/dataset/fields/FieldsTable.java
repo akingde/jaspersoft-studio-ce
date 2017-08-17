@@ -74,15 +74,16 @@ public class FieldsTable extends AbstractModifyTable {
 		this.dataset = dataset;
 		this.background = background;
 		createControl(parent);
-		((JRDesignQuery) dataset.getQuery()).getEventSupport()
-				.addPropertyChangeListener(JRDesignQuery.PROPERTY_LANGUAGE, new PropertyChangeListener() {
+		if (dataset.getQuery() != null)
+			((JRDesignQuery) dataset.getQuery()).getEventSupport()
+					.addPropertyChangeListener(JRDesignQuery.PROPERTY_LANGUAGE, new PropertyChangeListener() {
 
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
 
-						refreshFields((String) evt.getNewValue());
-					}
-				});
+							refreshFields((String) evt.getNewValue());
+						}
+					});
 	}
 
 	public Composite getControl() {

@@ -287,7 +287,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		if (!isRefresh) {
 			qStatus.showInfo(""); //$NON-NLS-1$
 			String lang = langCombo.getText();
-			if (Misc.isNullOrEmpty(lang)) {
+			if (Misc.isNullOrEmpty(lang) && newdataset.getQuery() != null) {
 				lang = "SQL"; //$NON-NLS-1$
 				langCombo.setText("SQL"); //$NON-NLS-1$
 			}

@@ -132,23 +132,24 @@ public class ParametersTable extends AbstractModifyTable {
 				}
 			}
 		});
-		((JRDesignQuery) dataset.getQuery()).getEventSupport()
-				.addPropertyChangeListener(JRDesignQuery.PROPERTY_LANGUAGE, new PropertyChangeListener() {
+		if (dataset.getQuery() != null)
+			((JRDesignQuery) dataset.getQuery()).getEventSupport()
+					.addPropertyChangeListener(JRDesignQuery.PROPERTY_LANGUAGE, new PropertyChangeListener() {
 
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						UIUtils.getDisplay().asyncExec(new Runnable() {
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							UIUtils.getDisplay().asyncExec(new Runnable() {
 
-							@Override
-							public void run() {
-								List<JRParameter> fields = dataset.getParametersList();
-								if (fields == null)
-									fields = new ArrayList<JRParameter>();
-								setFields(fields);
-							}
-						});
-					}
-				});
+								@Override
+								public void run() {
+									List<JRParameter> fields = dataset.getParametersList();
+									if (fields == null)
+										fields = new ArrayList<JRParameter>();
+									setFields(fields);
+								}
+							});
+						}
+					});
 	}
 
 	public Composite getControl() {
