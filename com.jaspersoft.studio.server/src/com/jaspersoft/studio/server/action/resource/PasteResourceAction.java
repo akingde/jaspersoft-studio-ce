@@ -162,7 +162,8 @@ public class PasteResourceAction extends Action {
 					try {
 						INode root = parent.getRoot();
 						final String puri = parent instanceof AMResource
-								? ((AMResource) parent).getValue().getUriString() : ""; //$NON-NLS-1$
+								? ((AMResource) parent).getValue().getUriString()
+								: ""; //$NON-NLS-1$
 						doWork(monitor, parent, list);
 						ANode p = parent;
 						if (parent instanceof AMResource)
@@ -502,6 +503,12 @@ public class PasteResourceAction extends Action {
 
 	protected void saveToReportUnit(IProgressMonitor monitor, AMResource parent, IConnection ws,
 			ResourceDescriptor origin) throws IOException, Exception {
+		ResourceDescriptor prd = putIntoReportUnit(monitor, parent, ws, origin);
+		ws.addOrModifyResource(monitor, prd, null);
+	}
+
+	public static ResourceDescriptor putIntoReportUnit(IProgressMonitor monitor, AMResource parent, IConnection ws,
+			ResourceDescriptor origin) throws IOException, Exception {
 		ResourceDescriptor prd = parent.getValue();
 		ResourceDescriptor rd = null;
 		File file = null;
@@ -533,7 +540,7 @@ public class PasteResourceAction extends Action {
 			}
 		}
 		prd.getChildren().add(rd);
-		ws.addOrModifyResource(monitor, prd, null);
+		return prd;
 	}
 
 	public static boolean isSameServer(ANode parent, AMResource m) {
@@ -555,7 +562,7 @@ public class PasteResourceAction extends Action {
 		return true;
 	}
 
-	protected ResourceDescriptor doPasteIntoReportUnit(ResourceDescriptor prd, ResourceDescriptor origin) {
+	protected static ResourceDescriptor doPasteIntoReportUnit(ResourceDescriptor prd, ResourceDescriptor origin) {
 		String ruuri = prd.getUriString();
 		origin.setParentFolder(ruuri + "_files"); //$NON-NLS-1$
 		origin.setIsNew(true);
@@ -573,7 +580,7 @@ public class PasteResourceAction extends Action {
 		return origin;
 	}
 
-	private String getRName(String name, List<?> children) {
+	private static String getRName(String name, List<?> children) {
 		String n = name;
 		int j = 0;
 		for (int i = 0; i < children.size(); i++) {

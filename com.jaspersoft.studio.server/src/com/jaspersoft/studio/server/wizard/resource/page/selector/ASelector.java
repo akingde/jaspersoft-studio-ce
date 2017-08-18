@@ -344,14 +344,15 @@ public abstract class ASelector {
 		jsLocDS.setText(""); //$NON-NLS-1$
 
 		ResourceDescriptor r = getResourceDescriptor(resRD);
-		if (r == null && resRD != null) {
-			for (ResourceDescriptor rd : resRD.getChildren()) {
-				if (rd != null && rd.getWsType() != null && rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
-					r = rd;
-					pos = 0;
-				}
-			}
-		}
+		// if (r == null && resRD != null) {
+		// for (ResourceDescriptor rd : resRD.getChildren()) {
+		// if (rd != null && rd.getWsType() != null &&
+		// rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
+		// r = rd;
+		// pos = 0;
+		// }
+		// }
+		// }
 		switch (pos) {
 		case 0:
 			bRef.setEnabled(true);
@@ -421,5 +422,15 @@ public abstract class ASelector {
 		rnew.setWsType(rd.getWsType());
 
 		return rnew;
+	}
+
+	protected ResourceDescriptor checkReference(ResourceDescriptor r) {
+		if (r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
+			try {
+				return WSClientHelper.getReference(new NullProgressMonitor(), res, r);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		return null;
 	}
 }

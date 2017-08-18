@@ -48,9 +48,15 @@ public class SelectorOlapConnection extends ASelector {
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION)
-					|| r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION)
-					|| r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION))
+			ResourceDescriptor tmp = checkReference(r);
+			if (tmp != null)
+				r = tmp;
+			String t = r.getWsType();
+			if (r.getIsReference() && r.getReferenceType() != null)
+				t = r.getReferenceType();
+			if (t.equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION)
+					|| t.equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION)
+					|| t.equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION))
 				return r;
 		}
 		return null;

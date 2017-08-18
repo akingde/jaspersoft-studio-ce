@@ -55,7 +55,9 @@ public class PermissionPage extends WizardPage {
 		setDescription(Messages.PermissionPage_1);
 		this.res = res;
 		optRole.setRecipientTypeUser(false);
+		optRole.setEffectivePermissions(true);
 		optUser.setRecipientTypeUser(true);
+		optUser.setEffectivePermissions(true);
 	}
 
 	@Override
@@ -73,8 +75,7 @@ public class PermissionPage extends WizardPage {
 		c.setLayout(layout);
 		Label lbl = new Label(c, SWT.NONE);
 		lbl.setText(Messages.PermissionPage_7);
-		GridData gd = new GridData(GridData.END | GridData.HORIZONTAL_ALIGN_END
-				| GridData.VERTICAL_ALIGN_CENTER);
+		GridData gd = new GridData(GridData.END | GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_CENTER);
 		gd.horizontalIndent = 200;
 		lbl.setLayoutData(gd);
 
@@ -97,8 +98,7 @@ public class PermissionPage extends WizardPage {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				List<RepositoryPermission> perms = tabFolder
-						.getSelectionIndex() == 0 ? permsUser : permsRoles;
+				List<RepositoryPermission> perms = tabFolder.getSelectionIndex() == 0 ? permsUser : permsRoles;
 				if (perms != null) {
 					String txt = tSearch.getText().toLowerCase();
 					if (Misc.isNullOrEmpty(txt))
@@ -116,8 +116,7 @@ public class PermissionPage extends WizardPage {
 		});
 
 		final int toolbarHeight = tSearch.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-		tabFolder
-				.setTabHeight(Math.max(toolbarHeight, tabFolder.getTabHeight()));
+		tabFolder.setTabHeight(Math.max(toolbarHeight, tabFolder.getTabHeight()));
 		tabFolder.setTopRight(c, SWT.FILL);
 
 		createByUser(tabFolder);
@@ -144,21 +143,17 @@ public class PermissionPage extends WizardPage {
 			getContainer().run(false, true, new IRunnableWithProgress() {
 
 				@Override
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(Messages.PermissionPage_4,
-							IProgressMonitor.UNKNOWN);
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(Messages.PermissionPage_4, IProgressMonitor.UNKNOWN);
 					try {
 						IConnection wsClient = res.getWsClient();
 						if (tabFolder.getSelectionIndex() == 0) {
 							if (permsUser == null)
-								permsUser = wsClient.getPermissions(
-										res.getValue(), monitor, optUser);
+								permsUser = wsClient.getPermissions(res.getValue(), monitor, optUser);
 							showPermissions(permsUser);
 						} else {
 							if (permsRoles == null)
-								permsRoles = wsClient.getPermissions(
-										res.getValue(), monitor, optRole);
+								permsRoles = wsClient.getPermissions(res.getValue(), monitor, optRole);
 							showPermissions(permsRoles);
 						}
 					} catch (Exception e) {
@@ -176,16 +171,14 @@ public class PermissionPage extends WizardPage {
 
 	protected void showPermissions(List<RepositoryPermission> perms) {
 		Composite cmp = tabFolder.getSelectionIndex() == 0 ? cmpUser : cmpRole;
-		ScrolledComposite sc = tabFolder.getSelectionIndex() == 0 ? scUser
-				: scRole;
+		ScrolledComposite sc = tabFolder.getSelectionIndex() == 0 ? scUser : scRole;
 
 		for (Control c : cmp.getChildren())
 			c.dispose();
 		for (RepositoryPermission rp : perms)
 			createPair(cmp, rp);
 		cmp.layout();
-		sc.setMinSize(cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
-				cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		sc.setMinSize(cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT).x, cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 	}
 
 	private void createByUser(CTabFolder tabFolder) {
@@ -240,19 +233,16 @@ public class PermissionPage extends WizardPage {
 		lbl.setToolTipText(perm.getRecipient());
 
 		final Combo cperm = new Combo(cmp, SWT.READ_ONLY);
-		String[] items = new String[] { Messages.PermissionPage_3,
-				Messages.PermissionPage_8, Messages.PermissionPage_9,
-				Messages.PermissionPage_10, Messages.PermissionPage_11,
-				Messages.PermissionPage_12, Messages.PermissionPage_13,
-				Messages.PermissionPage_14 };
+		String[] items = new String[] { Messages.PermissionPage_3, Messages.PermissionPage_8, Messages.PermissionPage_9,
+				Messages.PermissionPage_10, Messages.PermissionPage_11, Messages.PermissionPage_12,
+				Messages.PermissionPage_13, Messages.PermissionPage_14 };
 		int sel = -1;
 		for (int i = 1; i < masks.length; i++)
 			if (perm.getMask() == masks[i]) {
 				sel = i;
 				break;
 			}
-		if (perm.getUri() == null
-				|| !perm.getUri().equals(res.getValue().getUriString()))
+		if (perm.getUri() == null || !perm.getUri().equals(res.getValue().getUriString()))
 			items[sel] += " *"; //$NON-NLS-1$
 		cperm.setItems(items);
 		cperm.select(Math.max(sel, 0));
@@ -291,22 +281,16 @@ public class PermissionPage extends WizardPage {
 			getContainer().run(false, true, new IRunnableWithProgress() {
 
 				@Override
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(Messages.PermissionPage_15,
-							IProgressMonitor.UNKNOWN);
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(Messages.PermissionPage_15, IProgressMonitor.UNKNOWN);
 					boolean b = tabFolder.getSelectionIndex() == 0;
 					try {
 						if (permsUser != null)
-							permsUser = res.getWsClient()
-									.setPermissions(res.getValue(), permsUser,
-											optUser, monitor);
+							permsUser = res.getWsClient().setPermissions(res.getValue(), permsUser, optUser, monitor);
 						if (monitor.isCanceled())
 							return;
 						if (permsRoles != null)
-							permsRoles = res.getWsClient().setPermissions(
-									res.getValue(), permsRoles, optRole,
-									monitor);
+							permsRoles = res.getWsClient().setPermissions(res.getValue(), permsRoles, optRole, monitor);
 					} catch (Exception e) {
 						UIUtils.showError(e);
 					}
@@ -321,8 +305,7 @@ public class PermissionPage extends WizardPage {
 		}
 	}
 
-	protected void updatePermission(final RepositoryPermission perm,
-			final Combo cperm) {
+	protected void updatePermission(final RepositoryPermission perm, final Combo cperm) {
 		if (cperm.getSelectionIndex() == -1)
 			perm.setUri(null);
 		else

@@ -41,6 +41,12 @@ public class ResourceBundleSelector extends ASelector {
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
+			ResourceDescriptor tmp = checkReference(r);
+			if (tmp != null)
+				r = tmp;
+			if (r.getIsReference() && r.getReferenceType() != null
+					&& r.getReferenceType().equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE))
+				return r;
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE))
 				return r;
 		}

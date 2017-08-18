@@ -28,8 +28,10 @@ public class SelectorLov extends ASelector {
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			String t = r.getWsType();
-			if (t.equals(ResourceDescriptor.TYPE_LOV))
+			ResourceDescriptor tmp = checkReference(r);
+			if (tmp != null)
+				r = tmp;
+			if (r.getWsType().equals(ResourceDescriptor.TYPE_LOV))
 				return r;
 		}
 		return null;

@@ -53,7 +53,7 @@ public class SelectorQueryWithNon extends SelectorQuery {
 	public void setEnabled(int pos) {
 		brNon.setSelection(false);
 		super.setEnabled(pos);
-		if (pos == 2 && brNon != null)
+		if (pos == 2 && brNon != null && !bRef.getSelection() && !bLoc.getSelection())
 			brNon.setSelection(true);
 	}
 

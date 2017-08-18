@@ -7,11 +7,8 @@ package com.jaspersoft.studio.server.protocol.restv2;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.IDN;
-import java.net.URI;
 import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.text.ParseException;
@@ -1260,8 +1257,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		Builder req = HttpUtils.getRequest(tgt);
 		Response r = connector.get(req, monitor);
 		RepositoryPermissionListWrapper state = toObj(r, RepositoryPermissionListWrapper.class, monitor);
-
-		return state.getPermissions();
+		if (state != null)
+			return state.getPermissions();
+		return new ArrayList<RepositoryPermission>();
 	}
 
 	@Override

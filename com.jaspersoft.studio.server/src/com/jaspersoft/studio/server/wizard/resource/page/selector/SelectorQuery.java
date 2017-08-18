@@ -27,14 +27,19 @@ public class SelectorQuery extends ASelector {
 		return r instanceof MRQuery;
 	}
 
-	private static ResourceDescriptor getQuery(ResourceDescriptor ru) {
+	private ResourceDescriptor getQuery(ResourceDescriptor ru) {
 		if (ru != null)
 			for (Object obj : ru.getChildren()) {
 				ResourceDescriptor r = (ResourceDescriptor) obj;
 				if (r == null)
 					continue;
-				String t = r.getWsType();
-				if (t.equals(ResourceDescriptor.TYPE_QUERY))
+				ResourceDescriptor tmp = checkReference(r);
+				if (tmp != null)
+					r = tmp;
+				if (r.getIsReference() && r.getReferenceType() != null
+						&& r.getReferenceType().equals(ResourceDescriptor.TYPE_QUERY))
+					return r;
+				if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
 					return r;
 			}
 		return null;

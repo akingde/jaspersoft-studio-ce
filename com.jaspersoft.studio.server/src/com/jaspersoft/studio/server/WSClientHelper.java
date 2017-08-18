@@ -520,7 +520,7 @@ public class WSClientHelper {
 				p.removeChild(mr);
 				return ResourceFactory.getResource(p, cli.get(monitor, mr.getValue(), null), ind);
 			}
-			if (prunit.startsWith(uri) && prunit.length() >= uri.length()) {
+			if (prunit != null && uri != null && prunit.startsWith(uri) && prunit.length() >= uri.length()) {
 				if (maxl < uri.length()) {
 					maxl = uri.length();
 					pos = i;

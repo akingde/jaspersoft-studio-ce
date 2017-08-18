@@ -28,7 +28,13 @@ public class SelectorOlapMondrianSchema extends ASelector {
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
+			ResourceDescriptor tmp = checkReference(r);
+			if (tmp != null)
+				r = tmp;
+			String t = r.getWsType();
+			if (r.getIsReference() && r.getReferenceType() != null)
+				t = r.getReferenceType();
+			if (t.equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
 				return r;
 		}
 		return null;
