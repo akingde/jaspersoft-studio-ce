@@ -46,7 +46,6 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -341,10 +340,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 				hasFocus = true;
 				editingAreaInfo.ignoreAutoEditStrategies(false);
 				// dirty-trick to avoid painted "fake cursors" left on the widget
-				Point currSelection = editorArea.getSelection();
-				String currSelectionTxt = editorArea.getSelectionText();
-				editorArea.replaceTextRange(currSelection.x, currSelectionTxt.length(), currSelectionTxt);
-				editorArea.setSelection(currSelection);
+				editorArea.redraw();
 			}
 		});
 		

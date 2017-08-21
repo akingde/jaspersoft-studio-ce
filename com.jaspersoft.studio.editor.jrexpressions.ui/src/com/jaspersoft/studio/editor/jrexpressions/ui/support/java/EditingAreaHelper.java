@@ -367,12 +367,12 @@ public class EditingAreaHelper {
 	 * @param moveAfterText flag to decide if the cursor should be moved at the end of the inserted text
 	 */
 	public void insertAtCurrentLocation(String partialExpression,boolean selectNewText,boolean moveAfterText){
-		// Trick to avoid a "dirty insert effect": it appears that simply inserting/replacing
-		// with the new text leaves part of the original text selected left in the widget area.
 		Point currSelection = textArea.getSelection();
-		textArea.replaceTextRange(currSelection.x, currSelection.y-currSelection.x, "");
 		// Insert the new text in the cursor position
 		textArea.insert(partialExpression);
+		// Trick to avoid a "dirty insert effect": it appears that simply inserting/replacing
+		// with the new text leaves part of the original text selected left in the widget area.
+		textArea.redraw();
 		// Fix the selection if the old selection should be restored
 		int start=currSelection.x;
 		int end=start;
