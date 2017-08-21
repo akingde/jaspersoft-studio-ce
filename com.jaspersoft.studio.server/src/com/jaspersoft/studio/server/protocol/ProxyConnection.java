@@ -108,6 +108,9 @@ public class ProxyConnection implements IConnection {
 						soap = co;
 				}
 				serverInfo = co.getServerInfo();
+				// if server is 6.4 or bigger don't use soap, it's probably closed
+				if (serverInfo.getVersion().compareTo("6.4") > 0)
+					break;
 			} catch (CertificateException e) {
 				throw e;
 			} catch (RuntimeException e) {
