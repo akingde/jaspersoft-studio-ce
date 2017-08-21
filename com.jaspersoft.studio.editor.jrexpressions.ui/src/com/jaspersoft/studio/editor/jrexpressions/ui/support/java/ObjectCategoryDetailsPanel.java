@@ -305,11 +305,8 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				JRExprFunctionBean function = (JRExprFunctionBean)item.getData();
 				if(function.getId().equals(currFunctionName)){
 					functionMode=true;
-					StructuredSelection currSelection = (StructuredSelection)categoryContent.getSelection();
-					if(!item.getData().equals(currSelection.getFirstElement())){
-						categoryContent.setSelection(new StructuredSelection(item.getData()),true);
-						break;
-					}
+					categoryContent.setSelection(new StructuredSelection(item.getData()),true);
+					break;
 				}
 			}
 		}
