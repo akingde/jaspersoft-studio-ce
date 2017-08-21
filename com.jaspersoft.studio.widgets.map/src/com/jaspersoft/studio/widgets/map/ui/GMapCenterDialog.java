@@ -14,6 +14,7 @@ import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
 
 import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class GMapCenterDialog extends PersistentLocationDialog {
 
@@ -42,58 +43,61 @@ public class GMapCenterDialog extends PersistentLocationDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
+		try {
+			mapPanel = new GMapsCenterPanel(container, SWT.NONE) {
 
-		mapPanel = new GMapsCenterPanel(container, SWT.NONE) {
+				@Override
+				public void setMapCenter(LatLng mapCenter) {
+					super.setMapCenter(mapCenter);
+					GMapCenterDialog.this.mapCenter = mapCenter;
+				}
 
-			@Override
-			public void setMapCenter(LatLng mapCenter) {
-				super.setMapCenter(mapCenter);
-				GMapCenterDialog.this.mapCenter = mapCenter;
-			}
+				@Override
+				public void setZoomLevel(int zoomLevel) {
+					super.setZoomLevel(zoomLevel);
+					GMapCenterDialog.this.zoomLevel = zoomLevel;
+				}
 
-			@Override
-			public void setZoomLevel(int zoomLevel) {
-				super.setZoomLevel(zoomLevel);
-				GMapCenterDialog.this.zoomLevel = zoomLevel;
-			}
+				@Override
+				public void setMapType(MapType mapType) {
+					super.setMapType(mapType);
+					GMapCenterDialog.this.mapType = mapType;
+				}
 
-			@Override
-			public void setMapType(MapType mapType) {
-				super.setMapType(mapType);
-				GMapCenterDialog.this.mapType = mapType;
-			}
+				@Override
+				public void setAddress(String address) {
+					super.setAddress(address);
+					GMapCenterDialog.this.address = address;
+				}
 
-			@Override
-			public void setAddress(String address) {
-				super.setAddress(address);
-				GMapCenterDialog.this.address = address;
-			}
+				@Override
+				protected void handleMapCenterChanged(LatLng position) {
+					super.handleMapCenterChanged(position);
+					setMapCenter(position);
+				}
 
-			@Override
-			protected void handleMapCenterChanged(LatLng position) {
-				super.handleMapCenterChanged(position);
-				setMapCenter(position);
-			}
+				@Override
+				protected void handleMapZoomChanged(int newZoomLevel) {
+					setZoomLevel(newZoomLevel);
+				}
 
-			@Override
-			protected void handleMapZoomChanged(int newZoomLevel) {
-				setZoomLevel(newZoomLevel);
-			}
+				@Override
+				protected void handleAddressChanged(String address) {
+					setAddress(address);
+				}
 
-			@Override
-			protected void handleAddressChanged(String address) {
-				setAddress(address);
-			}
-
-			@Override
-			protected void handleMapTypeChanged(MapType mapType) {
-				setMapType(mapType);
-			}
-		};
-		mapPanel.setAddress(address);
-		mapPanel.setMapCenter(mapCenter);
-		mapPanel.setMapType(mapType);
-		mapPanel.setZoomLevel(zoomLevel);
+				@Override
+				protected void handleMapTypeChanged(MapType mapType) {
+					setMapType(mapType);
+				}
+			};
+			mapPanel.setAddress(address);
+			mapPanel.setMapCenter(mapCenter);
+			mapPanel.setMapType(mapType);
+			mapPanel.setZoomLevel(zoomLevel);
+		} catch (Throwable e) {
+			UIUtils.showError(e);
+		}
 		return container;
 	}
 
