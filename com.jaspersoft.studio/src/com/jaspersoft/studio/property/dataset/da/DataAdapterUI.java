@@ -33,6 +33,9 @@ public class DataAdapterUI {
 		DataAdapter da = DatasetUtil.refreshDataAdapter(jd, dataset, jConfig);
 		List<IDataAdapterQueryEditorUI> ui = getUI(da);
 		if (ui != null) {
+			if (bptab != null)
+				bptab.dispose();
+
 			bptab = new CTabItem(tabFolder, SWT.NONE);
 			bptab.setText("Data Adapter");
 
