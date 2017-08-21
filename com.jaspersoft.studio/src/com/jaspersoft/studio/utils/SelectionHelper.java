@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
@@ -75,12 +76,15 @@ public class SelectionHelper {
 
 	public static EditPart getEditPart(JRChild jrElement) {
 		ANode node = getNode(jrElement);
-
+		return getEditPart(node);
+	}
+	
+	public static EditPart getEditPart(ANode node) {
 		if (node != null) {
 			EditPart figure = node.getFigureEditPart();
 			if (figure != null) {
 				return figure;
-			}
+			} else return node.getTreeEditPart();
 		}
 		return null;
 	}
@@ -206,7 +210,7 @@ public class SelectionHelper {
 	 * @param jrElements
 	 *          list of the jrElements to select, must be not null
 	 * @param add
-	 *          true if the selection should be added to the existing onem false otherwise
+	 *          true if the selection should be added to the existing one or false otherwise
 	 * @return the previous selection, in a pair where the key is the selection and the value is the viewer where it was
 	 *         set
 	 */
@@ -218,6 +222,21 @@ public class SelectionHelper {
 				editParts.add(ep);
 			}
 		}
+		return setEditPartsSelection(editParts, add);
+	}
+	
+	public static Pair<ISelection, EditPartViewer> setNodeSelection(List<ANode> elements, boolean add) {
+		ArrayList<EditPart> editParts = new ArrayList<EditPart>();
+		for (ANode element : elements) {
+			EditPart ep = getEditPart(element);
+			if (ep != null) {
+				editParts.add(ep);
+			}
+		}
+		return setEditPartsSelection(editParts, add);
+	}
+	
+	public static Pair<ISelection, EditPartViewer> setEditPartsSelection(List<EditPart> editParts, boolean add) {
 		if (!editParts.isEmpty()) {
 			EditPart firstPart = editParts.get(0);
 			// The selection is set only if the refresh is enabled
@@ -240,6 +259,19 @@ public class SelectionHelper {
 		}
 		return null;
 	}
+	
+	public static EditPart getEditPartByValue(Object jrValue, EditPartViewer viewer){
+		for(Object entry : viewer.getEditPartRegistry().entrySet()){
+			Entry<?, ?> typedEntry = (Entry<?,?>)entry;
+			if (typedEntry.getKey() instanceof INode){
+				INode node = (INode)typedEntry.getKey();
+				Object value = node.getValue();
+				if (value == jrValue) return (EditPart)typedEntry.getValue();
+			}
+		}
+		return null;
+	}
+
 
 	/**
 	 * Deselect every element in the current editor

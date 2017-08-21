@@ -82,6 +82,24 @@ public class ReorderParameterCommand extends Command {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public boolean canExecute() {
+		int i = 0;
+		for (JRParameter v : jrDataset.getParametersList()) {
+			if (v.isSystemDefined())
+				i++;
+			else
+				break;
+		}
+		boolean showDefaults = jrContext != null ? jrContext.getPropertyBoolean(
+				DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
+		showDefaults = showDefaults && !HideDefaultsParametersAction.areDefaultParametersHidden(jrContext);
+		if (showDefaults){
+			return newIndex >= i;
+		}
+		return newIndex >= 0 && newIndex <= jrDataset.getParametersList().size();
+	}
 
 	/*
 	 * (non-Javadoc)

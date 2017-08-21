@@ -4,10 +4,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.toolbars;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -18,10 +22,15 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.gef.selection.SelectElementsByValueCommand;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.variable.MVariable;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
  * Create the toolbar buttons to change the order of the elements
@@ -45,11 +54,11 @@ public class OrderContributionItem extends CommonToolbarHandler{
 		
 	
 		public void widgetSelected(SelectionEvent e) {
-			List<Object> selection = getSelectionForType(MGraphicElement.class);
+			List<Object> selection = getSelectionForType(ANode.class);
 			if (selection.isEmpty())
 				return;
 			
-			JSSCompoundCommand compoundCmd = null;
+			CompoundCommand compoundCmd = null;
 			if (ORDER_TYPE.FORWARD.equals(e.widget.getData(WIDGET_DATA_KEY))){
 				compoundCmd = generateBringForwardCommand(selection);
 			} else if (ORDER_TYPE.BACKWARD.equals(e.widget.getData(WIDGET_DATA_KEY))){
@@ -78,7 +87,7 @@ public class OrderContributionItem extends CommonToolbarHandler{
 		moveButton.addSelectionListener(pushButtonPressed);
 		
 		moveButton = new ToolItem(buttons, SWT.PUSH);
-		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_to_back.gif"));
+		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_backward.gif"));
 		moveButton.setData(WIDGET_DATA_KEY, ORDER_TYPE.BACKWARD);
 		moveButton.setToolTipText(Messages.BringBackwardAction_send_backward_tool_tip);
 		moveButton.addSelectionListener(pushButtonPressed);
@@ -90,7 +99,7 @@ public class OrderContributionItem extends CommonToolbarHandler{
 		moveButton.addSelectionListener(pushButtonPressed);
 		
 		moveButton = new ToolItem(buttons, SWT.PUSH);
-		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_backward.gif"));
+		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_to_back.gif"));
 		moveButton.setData(WIDGET_DATA_KEY, ORDER_TYPE.BOTTOM);
 		moveButton.setToolTipText(Messages.BringToBackAction_send_to_back_tool_tip);
 		moveButton.addSelectionListener(pushButtonPressed);
@@ -135,81 +144,154 @@ public class OrderContributionItem extends CommonToolbarHandler{
 	public boolean isVisible() {
 		if (!super.isVisible()) return false;
 		List<Object> selection = getSelectionForType(MGraphicElement.class);
-		return selection.size() > 0;
+		if (selection.size() == 0){
+			 selection = getSelectionForType(MField.class);
+			 if (selection.size() == 0){
+				 selection = getSelectionForType(MVariable.class);
+				 if (selection.size() == 0){
+					 selection = getSelectionForType(MParameter.class);
+					 if (selection.size() == 0){
+						 return false;
+					 }
+				 }
+			 }
+		}
+		return true;
 	}
 	
-	private JSSCompoundCommand generateBringForwardCommand(List<Object> selection){
-		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Move Elements", null);
+	private CompoundCommand generateBringForwardCommand(List<Object> selection){
+		CompoundCommand compoundCmd = new CompoundCommand("Move Elements");
+		JSSCompoundCommand sortCommand = new JSSCompoundCommand("Move elements", null);
 		Command cmd = null;
+		List<Object> movedElements = new ArrayList<Object>();
+		EditPartViewer viewer = null;
 		for(Object model : selection){
-			ANode parent = (ANode) ((MGraphicElement) model).getParent();
-			compoundCmd.setReferenceNodeIfNull(parent);
+			ANode currentElement = (ANode)model;
+			ANode parent =  currentElement.getParent();
+			sortCommand.setReferenceNodeIfNull(parent);
 			if (parent != null && parent.getChildren() != null) {
 				int newIndex = parent.getChildren().indexOf(model) + 1;
 				if (newIndex < parent.getChildren().size()) {
 					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
-				} else
+					if (cmd != null && cmd.canExecute()){
+						movedElements.add(currentElement.getValue());
+						if (viewer == null){
+							EditPart part = SelectionHelper.getEditPart(currentElement);
+							if (part != null){
+								viewer = part.getViewer();
+							}
+						}
+						sortCommand.add(cmd);
+					}
+				} else {
 					return null;
-				if (cmd != null)
-					compoundCmd.add(cmd);
+				}
 			}
 		}
+		compoundCmd.add(sortCommand);
+		compoundCmd.add(new SelectElementsByValueCommand(movedElements, viewer));
 		return compoundCmd;
 	}
 	
-	private JSSCompoundCommand generateBringBackwardCommand(List<Object> selection){
-		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Move Elements", null);
+	private CompoundCommand generateBringBackwardCommand(List<Object> selection){
+		CompoundCommand compoundCmd = new CompoundCommand("Move Elements");
+		JSSCompoundCommand sortCommand = new JSSCompoundCommand("Move elements", null);
 		Command cmd = null;
+		List<Object> movedElements = new ArrayList<Object>();
+		EditPartViewer viewer = null;
 		for(Object model : selection){
-				ANode parent = (ANode) ((MGraphicElement) model).getParent();
-				compoundCmd.setReferenceNodeIfNull(parent);
-				if (parent == null) return null;
-				int newIndex = parent.getChildren().indexOf(model) - 1;
-				if (newIndex >= 0) {
-					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
-				} else
-					return null;
-				if (cmd != null)
-					compoundCmd.add(cmd);
+			ANode currentElement = (ANode)model;
+			ANode parent = currentElement.getParent();
+			sortCommand.setReferenceNodeIfNull(parent);
+			if (parent == null) return null;
+			int newIndex = parent.getChildren().indexOf(model) - 1;
+			if (newIndex >= 0) {
+				cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
+				if (cmd != null && cmd.canExecute()){
+					movedElements.add(currentElement.getValue());
+					if (viewer == null){
+						EditPart part = SelectionHelper.getEditPart(currentElement);
+						if (part != null){
+							viewer = part.getViewer();
+						}
+					}
+					sortCommand.add(cmd);
+				}
+			} else {
+				return null;
+			}
 		}
+		compoundCmd.add(sortCommand);
+		compoundCmd.add(new SelectElementsByValueCommand(movedElements, viewer));
 		return compoundCmd;
 	}
 	
-	private JSSCompoundCommand generateBringTopCommand(List<Object> selection){
-		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Move Elements", null);
+	private CompoundCommand generateBringTopCommand(List<Object> selection){
+		CompoundCommand compoundCmd = new CompoundCommand("Move Elements");
+		JSSCompoundCommand sortCommand = new JSSCompoundCommand("Move elements", null);
 		Command cmd = null;
 		int j = 0;
+		List<Object> movedElements = new ArrayList<Object>();
+		EditPartViewer viewer = null;
 		for (Object model : selection) {
-			ANode parent = (ANode) ((MGraphicElement) model).getParent();
-			compoundCmd.setReferenceNodeIfNull(parent);
+			ANode currentElement = (ANode)model;
+			ANode parent = currentElement.getParent();
+			sortCommand.setReferenceNodeIfNull(parent);
 			if (parent != null) {
 				int newIndex = parent.getChildren().size() - 1;
-				if (parent.getChildren().indexOf(model) < parent.getChildren().size() - 1) {
-					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex - j);
+				if (parent.getChildren().indexOf(currentElement) < parent.getChildren().size() - 1) {
+					cmd = OutlineTreeEditPartFactory.getReorderCommand(currentElement, parent, newIndex - j);
 					j++;
-				} else return null;
-				if (cmd != null)
-					compoundCmd.add(cmd);
+					if (cmd != null && cmd.canExecute()){
+						movedElements.add(currentElement.getValue());
+						if (viewer == null){
+							EditPart part = SelectionHelper.getEditPart(currentElement);
+							if (part != null){
+								viewer = part.getViewer();
+							}
+						}
+						sortCommand.add(cmd);
+					}
+				} else {
+					return null;
+				}
 			}
 		}
+		compoundCmd.add(sortCommand);
+		compoundCmd.add(new SelectElementsByValueCommand(movedElements, viewer));
 		return compoundCmd;
 	}
 	
-	private JSSCompoundCommand generateBringBottomCommand(List<Object> selection){
-		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Move Elements", null);
+	private CompoundCommand generateBringBottomCommand(List<Object> selection){
+		CompoundCommand compoundCmd = new CompoundCommand("Move Elements");
+		JSSCompoundCommand sortCommand = new JSSCompoundCommand("Move elements", null);
 		Command cmd = null;
 		int j = 0;
+		List<Object> movedElements = new ArrayList<Object>();
+		EditPartViewer viewer = null;
 		for (Object model : selection) {
-			ANode parent = (ANode) ((MGraphicElement) model).getParent();
-			compoundCmd.setReferenceNodeIfNull(parent);
+			ANode currentElement = (ANode)model;
+			ANode parent = currentElement.getParent();
+			sortCommand.setReferenceNodeIfNull(parent);
 			if (parent != null && parent.getChildren().indexOf(model) > 0) {
 				cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, j);
 				j++;
-			} else return null;
-			
-			if (cmd != null)
-					compoundCmd.add(cmd);
+				if (cmd != null && cmd.canExecute()){
+					movedElements.add(currentElement.getValue());
+					if (viewer == null){
+						EditPart part = SelectionHelper.getEditPart(currentElement);
+						if (part != null){
+							viewer = part.getViewer();
+						}
+					}
+					sortCommand.add(cmd);
+				}
+			} else {
+				return null;
+			}
 		}
+		compoundCmd.add(sortCommand);
+		compoundCmd.add(new SelectElementsByValueCommand(movedElements, viewer));
 		return compoundCmd;
 	}
 }

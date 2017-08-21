@@ -361,7 +361,7 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 	 * 
 	 * @param workbenchPart the editor where the actual selection was done
 	 */
-	private void setWorkbenchPart(IEditorPart workbenchPart) {
+	protected void setWorkbenchPart(IEditorPart workbenchPart) {
 		this.workbenchPart = workbenchPart;
 	}
 	

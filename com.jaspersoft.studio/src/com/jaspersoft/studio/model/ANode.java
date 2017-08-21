@@ -24,8 +24,7 @@ import org.eclipse.swt.graphics.Point;
 import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.pin.PinEditPart;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
-import com.jaspersoft.studio.editor.outline.part.ContainerTreeEditPart;
-import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
+import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -464,8 +463,15 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 
 	public EditPart getFigureEditPart() {
 		for (Object o : propertyChangeSupport.getPropertyChangeListeners()) {
-			if (o instanceof FigureEditPart || o instanceof CalloutEditPart || o instanceof PinEditPart
-					|| o instanceof ContainerTreeEditPart || o instanceof NotDragableContainerTreeEditPart)
+			if (o instanceof FigureEditPart || o instanceof CalloutEditPart || o instanceof PinEditPart)
+				return (EditPart) o;
+		}
+		return null;
+	}
+	
+	public EditPart getTreeEditPart() {
+		for (Object o : propertyChangeSupport.getPropertyChangeListeners()) {
+			if (o instanceof TreeEditPart)
 				return (EditPart) o;
 		}
 		return null;

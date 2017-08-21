@@ -15,7 +15,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IEditorPart;
 
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
-import com.jaspersoft.studio.editor.action.copy.SelectElementCommand;
+import com.jaspersoft.studio.editor.gef.selection.SelectElementCommand;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
