@@ -89,6 +89,8 @@ public class SelectorDatasource {
 	 */
 	public static ResourceDescriptor getDatasource(ResourceDescriptor ru, AMResource res) {
 		for (Object obj : ru.getChildren()) {
+			if (obj == null)
+				continue;
 			ResourceDescriptor r = (ResourceDescriptor) obj;
 			ResourceDescriptor tmp = checkReference(r, res);
 			if (tmp != null)
