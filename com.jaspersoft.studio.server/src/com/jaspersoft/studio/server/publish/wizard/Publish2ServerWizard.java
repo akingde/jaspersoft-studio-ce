@@ -31,16 +31,23 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.editor.JRSEditorContributor;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.Publish;
+import com.jaspersoft.studio.server.publish.PublishOptions;
+import com.jaspersoft.studio.server.publish.PublishUtil;
+import com.jaspersoft.studio.server.publish.ResourcePublishMethod;
 import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionPage;
 import com.jaspersoft.studio.server.publish.wizard.page.FileSelectionPage;
 import com.jaspersoft.studio.server.publish.wizard.page.RUnitLocationPage;
@@ -51,6 +58,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -67,9 +75,9 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	private JasperReportsConfiguration jrConfig;
 
 	/**
-	 * Flag to keep track if the context was created internally to this wizard
-	 * or passed from outside. If it was created internally then it is disposed
-	 * at the end, otherwise not.
+	 * Flag to keep track if the context was created internally to this wizard or
+	 * passed from outside. If it was created internally then it is disposed at the
+	 * end, otherwise not.
 	 */
 	private boolean disposeContext = true;
 
@@ -199,7 +207,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 									page0.setValue(jDesign, getNode());
 									snode = page0.getSelectedNode();
 								}
-								if (snode instanceof MJrxml){
+								if (snode instanceof MJrxml) {
 									canFinish = true;
 									getContainer().updateButtons();
 								}
@@ -259,7 +267,9 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
 					try {
-						hasDepResources = FindResources.find(monitor, node, jDesign);
+						hasDepResources = FindResources.find(monitor, node, jDesign,
+								(IFile) jrConfig.get(FileUtils.KEY_FILE));
+
 						UIUtils.getDisplay().asyncExec(new Runnable() {
 							public void run() {
 								if (hasDepResources)

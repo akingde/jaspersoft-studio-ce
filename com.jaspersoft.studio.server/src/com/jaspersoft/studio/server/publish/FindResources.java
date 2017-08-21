@@ -35,9 +35,53 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class FindResources {
 
-	public static boolean find(IProgressMonitor monitor, AMJrxmlContainer mres, JasperDesign jd) throws Exception {
-		List<?> r = findResources(monitor, mres, jd);
-		return !Misc.isNullOrEmpty(r);
+	public static boolean find(IProgressMonitor monitor, AMJrxmlContainer n, JasperDesign jd, IFile file)
+			throws Exception {
+		List<?> rs = findResources(monitor, n, jd);
+		setupPublishOptions(monitor, n, file, rs);
+
+		return !Misc.isNullOrEmpty(rs);
+	}
+
+	public static boolean setupPublishOptions(IProgressMonitor monitor, AMJrxmlContainer n, IFile file, List<?> rs) {
+		boolean hasOverwrite = false;
+		if (rs != null) {
+			for (Object obj : rs) {
+				if (obj instanceof AMResource) {
+					AMResource mres = (AMResource) obj;
+					PublishOptions po = mres.getPublishOptions();
+					if (po == null || po.getOverwrite() == null)
+						continue;
+					if (mres instanceof AFileResource && PublishUtil.loadPreferences(monitor, file, mres)) {
+						po.setOverwrite(OverwriteEnum.ONLY_EXPRESSION);
+						continue;
+					}
+					if (po.getOverwrite().equals(OverwriteEnum.OVERWRITE)) {
+						if (n instanceof MReportUnit) {
+							ResourceDescriptor v = mres.getValue();
+							for (ResourceDescriptor r : ((MReportUnit) n).getValue().getChildren()) {
+								if (r.getWsType().equals(v.getWsType()) && r.getName().equals(v.getName())) {
+									v.setParentFolder(r.getParentFolder());
+									v.setUriString(r.getUriString());
+									if (r.getIsReference()) {
+										po.setPublishMethod(ResourcePublishMethod.REFERENCE);
+										ResourceDescriptor rd = new ResourceDescriptor();
+										rd.setUriString(r.getUriString());
+										rd.setWsType(r.getWsType());
+										po.setReferencedResource(rd);
+									}
+									po.setOverwrite(OverwriteEnum.IGNORE);
+									break;
+								}
+							}
+						}
+						if (po.getOverwrite().equals(OverwriteEnum.OVERWRITE))
+							hasOverwrite = true;
+					}
+				}
+			}
+		}
+		return hasOverwrite;
 	}
 
 	public static List<?> findResources(IProgressMonitor monitor, AMJrxmlContainer mres, JasperDesign jd)
@@ -119,7 +163,7 @@ public class FindResources {
 
 				if (prunit != null && srvURL != null && mserv.getValue().getUrl().equals(srvURL)) {
 					try {
-						WSClientHelper.connect(mserv, monitor);
+						// WSClientHelper.connect(mserv, monitor);
 						WSClientHelper.connectGetData(mserv, monitor);
 					} catch (Exception e) {
 						List<MServerProfile> m = ServerManager.getServerProfiles(jd, mserv.getJasperConfiguration(),
@@ -131,7 +175,7 @@ public class FindResources {
 								continue;
 							}
 							try {
-								WSClientHelper.connect(sp, monitor);
+								// WSClientHelper.connect(sp, monitor);
 								WSClientHelper.connectGetData(sp, monitor);
 								mserv = sp;
 								break;

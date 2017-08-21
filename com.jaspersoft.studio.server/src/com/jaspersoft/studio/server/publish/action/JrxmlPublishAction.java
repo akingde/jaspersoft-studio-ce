@@ -14,21 +14,17 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.AMResource;
-import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.FindResources;
 import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.Publish;
 import com.jaspersoft.studio.server.publish.PublishOptions;
-import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard;
 import com.jaspersoft.studio.utils.AContributorAction;
 
@@ -118,38 +114,8 @@ public class JrxmlPublishAction extends AContributorAction {
 					if (n != null && n instanceof AMJrxmlContainer) {
 						// let's check if there are new resources?
 						try {
-							boolean showdialog = false;
 							List<?> resources = FindResources.findResources(monitor, (AMJrxmlContainer) n, jd);
-							if (resources != null) {
-								for (Object obj : resources) {
-									if (obj instanceof AMResource) {
-										AMResource mres = (AMResource) obj;
-										PublishOptions po = mres.getPublishOptions();
-										if (po == null || po.getOverwrite() == null)
-											continue;
-										if (mres instanceof AFileResource
-												&& PublishUtil.loadPreferences(monitor, file, mres)) {
-											po.setOverwrite(OverwriteEnum.ONLY_EXPRESSION);
-											continue;
-										}
-										if (po.getOverwrite().equals(OverwriteEnum.OVERWRITE)) {
-											if (n instanceof MReportUnit) {
-												for (ResourceDescriptor r : ((MReportUnit) n).getValue()
-														.getChildren()) {
-													if (r.getWsType().equals(mres.getValue().getWsType())
-															&& r.getName().equals(mres.getValue().getName())) {
-														po.setOverwrite(OverwriteEnum.IGNORE);
-														break;
-													}
-												}
-											}
-											showdialog = true;
-											break;
-										}
-									}
-								}
-							}
-							if (!showdialog) {
+							if (!FindResources.setupPublishOptions(monitor, (AMJrxmlContainer) n, file, resources)) {
 								// publish
 								new Publish(jrConfig).publish((AMJrxmlContainer) n, jd, monitor);
 								return Status.OK_STATUS;
