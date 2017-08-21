@@ -24,6 +24,12 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -172,6 +178,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				}
 			}
 		});
+		addDragSupport(categoryContent);
 		
 		buttonsToolbar = new ToolBar(categoryContentCmp, SWT.FLAT);
 		buttonsToolbar.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, false));
@@ -492,6 +499,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				ft.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 				final TreeViewer tv = ft.getViewer();
 				ColumnViewerToolTipSupport.enableFor(tv);
+				addDragSupport(tv);
 				currentControl=cmp;
 				
 				List<String> methodFirms = getExpObjectMethodFirms((ExpObject)selItem);
@@ -499,9 +507,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				tv.setLabelProvider(new ObjectItemStyledLabelProvider());
 				Collections.sort(methodFirms);
 				tv.setInput(methodFirms.toArray());
-				
 				tv.addDoubleClickListener(new IDoubleClickListener() {
-					 
 					public void doubleClick(DoubleClickEvent event) {
 						Object selElement=((IStructuredSelection)tv.getSelection()).getFirstElement();
 						Object categoryContentSel=((IStructuredSelection)categoryContent.getSelection()).getFirstElement();
@@ -735,6 +741,78 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		else if(ExpressionEditorSupportUtil.isSortIncreaseItems(getExpObjectType(selItem))){
 			Collections.sort(items);
 		}
+	}
+	
+	/*
+	 * Add drag support to the specified tree widget
+	 */
+	private void addDragSupport(final TreeViewer tv){
+		DragSource dragSrc = new DragSource(tv.getTree(), DND.DROP_DEFAULT | DND.DROP_COPY);
+		dragSrc.setTransfer(new Transfer[]{TextTransfer.getInstance()});
+		dragSrc.addDragListener(new DragSourceListener() {
+			
+			private int textLength = -1;
+			private boolean moveNextParenthesis = false;
+			
+			@Override
+			public void dragStart(DragSourceEvent event) {
+				TreeItem[] selection = tv.getTree().getSelection();
+				if(selection!=null && selection.length==1){
+					event.doit = true;
+				}
+				editingAreaInfo.setUpdate(true);
+			}
+			
+			@Override
+			public void dragSetData(DragSourceEvent event) {
+				StringBuffer dataTxtSB = new StringBuffer();
+				// always add the first piece of the txt in the central panel
+				Object categoryContentSel=((IStructuredSelection)categoryContent.getSelection()).getFirstElement();
+				if(categoryContentSel instanceof ExpObject) {
+					dataTxtSB.append(((ExpObject)categoryContentSel).getExpression());
+				}
+				else if (categoryContentSel instanceof JRExprFunctionBean){
+					JRExprFunctionBean funct=(JRExprFunctionBean)categoryContentSel;
+					dataTxtSB.append(funct.getId()).append("()");
+					moveNextParenthesis = true;
+				}
+				else if (categoryContentSel instanceof String){
+					dataTxtSB.append(categoryContentSel);
+				}
+				else {
+					dataTxtSB.append("");
+				}
+				// possibly add the second piece of the txt using the right panel
+				if(tv!=categoryContent){
+					Object selElement=((IStructuredSelection)tv.getSelection()).getFirstElement();
+					if(selElement instanceof String){
+						String detailStr=(String)selElement;
+						dataTxtSB.append(".").append(detailStr.substring(0,detailStr.lastIndexOf(')')+1));
+					}
+				}
+				String text = dataTxtSB.toString();
+				textLength = text.length();
+				event.data = text;
+			}
+			
+			@Override
+			public void dragFinished(DragSourceEvent event) {
+				if(event.doit && textLength>0){
+					// drag finished correctly
+					if(moveNextParenthesis){
+						editingAreaInfo.moveCaretToNextParenthesis();
+					}
+					else {
+						editingAreaInfo.moveCaretAhead(textLength);
+					}
+				}
+				// reset info
+				moveNextParenthesis = false;
+				textLength = -1;
+				editingAreaInfo.setUpdate(false);
+			}
+		});
+
 	}
 	
 }

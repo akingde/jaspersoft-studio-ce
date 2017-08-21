@@ -481,6 +481,14 @@ public class EditingAreaHelper {
 			textArea.setSelection(newPosition, newPosition);
 		}
 	}
-	
-	
+
+	/**
+	 * Tries to move the caret position ahead of the specified number of chars.
+	 * 
+	 * @param positions the number of positions to move ahead
+	 */
+	public void moveCaretAhead(int positions) {
+		int newpos = textArea.getSelection().y + positions;
+		textArea.setSelection(newpos,newpos);
+	}
 }

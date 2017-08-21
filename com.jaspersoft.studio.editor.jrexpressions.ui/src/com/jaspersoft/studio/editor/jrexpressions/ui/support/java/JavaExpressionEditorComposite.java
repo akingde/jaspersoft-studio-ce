@@ -28,6 +28,12 @@ import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
@@ -123,6 +129,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	private ClassType valueType;
 	private SashForm mainSashForm;
 	private boolean hasFocus;
+	private boolean dragActive;
 
 	// Support data structures and classes
 	private static final int UPDATE_DELAY=300;
@@ -281,11 +288,36 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		editorArea.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
-				if(!hasFocus){
+				if(!hasFocus && !dragActive){
 					editingAreaInfo.drawFakeCursor();
 				}
 			}
 		});
+		DropTarget dropTarget = new DropTarget(editorArea, DND.DROP_DEFAULT | DND.DROP_COPY);
+		dropTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
+		dropTarget.addDropListener(new DropTargetAdapter(){
+			@Override
+			public void dragEnter(DropTargetEvent e) {
+				dragActive = true;
+				if (e.detail == DND.DROP_DEFAULT) {
+					e.detail = DND.DROP_COPY;
+				}
+				// triggering redraw for cleaning dirty cursor 
+				editorArea.redraw();
+			}
+
+			@Override
+			public void dragLeave(DropTargetEvent event) {
+				dragActive = false;
+			}
+
+			@Override
+			public void drop(DropTargetEvent event) {
+				editorArea.insert((String) event.data);
+				dragActive = false;
+			}
+		});
+		
 		
 		xtextAdapter = new StyledTextXtextAdapter2(getInjector());
 		xtextAdapter.adapt(editorArea, exprContext);
