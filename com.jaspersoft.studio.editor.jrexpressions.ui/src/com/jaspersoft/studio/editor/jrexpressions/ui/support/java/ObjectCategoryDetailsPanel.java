@@ -33,6 +33,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.dialogs.FilteredTree;
+import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.editor.expression.CrosstabTotalVariable;
@@ -116,10 +118,12 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		layout2.marginWidth=0;
 		layout2.marginHeight=0;
 		categoryContentCmp.setLayout(layout2);
-		categoryContent=new TreeViewer(categoryContentCmp, SWT.BORDER);
+		
+		FilteredTree ft = new FilteredTree(categoryContentCmp, SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.BORDER, new PatternFilter(), true);
+		categoryContent=ft.getViewer();
 		GridData catContentGD=new GridData(SWT.FILL, SWT.FILL, true, true);
 		catContentGD.heightHint=350;
-		categoryContent.getTree().setLayoutData(catContentGD);
+		ft.setLayoutData(catContentGD);
 		ColumnViewerToolTipSupport.enableFor(categoryContent);
 		categoryContentLblProvider = new ObjectItemStyledLabelProvider();
 		categoryContent.setLabelProvider(categoryContentLblProvider);
@@ -483,9 +487,11 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				gl.marginHeight=0;
 				gl.marginWidth=0;
 				cmp.setLayout(gl);
-				final TreeViewer tv=new TreeViewer(cmp, SWT.BORDER | SWT.BORDER_SOLID);
+				
+				FilteredTree ft = new FilteredTree(cmp, SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.BORDER | SWT.BORDER_SOLID, new PatternFilter(), true);
+				ft.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+				final TreeViewer tv = ft.getViewer();
 				ColumnViewerToolTipSupport.enableFor(tv);
-				tv.getTree().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 				currentControl=cmp;
 				
 				List<String> methodFirms = getExpObjectMethodFirms((ExpObject)selItem);

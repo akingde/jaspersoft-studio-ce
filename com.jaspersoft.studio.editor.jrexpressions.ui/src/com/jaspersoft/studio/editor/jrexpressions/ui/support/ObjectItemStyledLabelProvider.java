@@ -5,11 +5,13 @@
 package com.jaspersoft.studio.editor.jrexpressions.ui.support;
 
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.wb.swt.ResourceManager;
@@ -26,7 +28,7 @@ import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
+public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider implements ILabelProvider {
 	
 	/** Styler for the parameters */
 	public static final Styler PARAMETER_STYLER;
@@ -140,6 +142,28 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 
 	public void setCategory(Category currentCategory) {
 		this.currentCategory=currentCategory;
+	}
+
+	@Override
+	public Image getImage(Object element) {
+		return null;
+	}
+
+	@Override
+	public String getText(Object element) {
+		String finalText = "";
+		if(element instanceof ExpObject){
+			ExpObject obj=(ExpObject)element;
+			finalText = obj.getName();					
+		}
+		else if (element instanceof JRExprFunctionBean){
+			JRExprFunctionBean funct=(JRExprFunctionBean)element;
+			finalText = funct.getId();
+		}
+		else if (element instanceof String){
+			finalText = (String) element;
+		}
+		return finalText;
 	}
 	
 }
