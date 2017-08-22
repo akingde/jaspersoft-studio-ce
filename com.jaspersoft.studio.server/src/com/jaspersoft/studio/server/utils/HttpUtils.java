@@ -162,6 +162,8 @@ public class HttpUtils {
 	public static void setupProxy(ClientConfig clientConfig, URI uri) {
 		CredentialsProvider cp = (CredentialsProvider) clientConfig
 				.getProperty(ApacheClientProperties.CREDENTIALS_PROVIDER);
+		setupUriHost(uri, null);
+		
 		for (IProxyData d : net.sf.jasperreports.eclipse.util.HttpUtils.proxyService.select(uri)) {
 			Credentials c = net.sf.jasperreports.eclipse.util.HttpUtils.getCredentials(d);
 			if (c != null && cp != null)
