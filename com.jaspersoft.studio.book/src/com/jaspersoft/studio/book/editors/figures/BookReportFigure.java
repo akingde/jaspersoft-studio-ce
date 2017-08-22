@@ -10,6 +10,7 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.wb.swt.ResourceManager;
 
@@ -41,6 +42,10 @@ public class BookReportFigure extends RectangleFigure {
 	 * its content
 	 */
 	public void updateBounds(){
+		setBounds(calculateBounds());
+	}
+	
+	private Rectangle calculateBounds(){
 		Rectangle bounds = new Rectangle(super.getBounds());
 		int preferredHeight = 0;
 		for(Object child : getChildren()){
@@ -49,23 +54,26 @@ public class BookReportFigure extends RectangleFigure {
 		}
 		if (preferredHeight == 0) preferredHeight = 200;
 		bounds.setHeight(preferredHeight+20);
-		setBounds(bounds);
+		return bounds;
+	}
+	
+	
+	@Override
+	public Rectangle getBounds() {
+		return calculateBounds();
 	}
 	
 	@Override
 	public void add(IFigure figure, Object constraint, int index) {
-		GridData dataConstraint = new GridData(GridData.FILL_HORIZONTAL);
+		GridData dataConstraint = new GridData(SWT.FILL,SWT.FILL,true,false);
 		super.add(figure, dataConstraint, index);
-		updateBounds();
 	}
 	
 	@Override
 	protected void fillShape(Graphics graphics) {
 		Color oldBackColor = graphics.getBackgroundColor();
-		
 		graphics.setBackgroundColor(ResourceManager.getColor(255, 255, 255));
 		graphics.fillRectangle(getBounds());
-		
 		graphics.setBackgroundColor(oldBackColor);
 	}
 
