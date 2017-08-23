@@ -17,6 +17,7 @@ import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.ic.ICParameterContributor;
 import com.jaspersoft.studio.server.ic.ResourcePropertyDescription;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
+import com.jaspersoft.studio.server.utils.HttpUtils;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
@@ -47,6 +48,8 @@ public class Activator extends AbstractJRUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		HttpUtils.patchUri("lowMask", "L_DASH");
+		HttpUtils.patchUri("highMask", "H_DASH");
 	}
 
 	/*

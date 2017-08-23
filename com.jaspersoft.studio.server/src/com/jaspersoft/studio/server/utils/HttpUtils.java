@@ -28,6 +28,9 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
+import org.eclipse.core.internal.net.AbstractProxyProvider;
+import org.eclipse.core.internal.net.ProxyManager;
+import org.eclipse.core.internal.net.StringMatcher;
 import org.eclipse.core.net.proxy.IProxyChangeEvent;
 import org.eclipse.core.net.proxy.IProxyChangeListener;
 import org.eclipse.core.net.proxy.IProxyData;
@@ -44,6 +47,7 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2Connection;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 
 public class HttpUtils {
@@ -127,12 +131,7 @@ public class HttpUtils {
 		return req;
 	}
 
-	static {
-		patchUri("lowMask", "L_DASH");
-		patchUri("highMask", "H_DASH");
-	}
-
-	private static void patchUri(String mname, String fname) {
+	public static void patchUri(String mname, String fname) {
 		try {
 			Method mask = URI.class.getDeclaredMethod(mname, String.class);
 			mask.setAccessible(true);
@@ -163,17 +162,82 @@ public class HttpUtils {
 		CredentialsProvider cp = (CredentialsProvider) clientConfig
 				.getProperty(ApacheClientProperties.CREDENTIALS_PROVIDER);
 		setupUriHost(uri, null);
-		
-		for (IProxyData d : net.sf.jasperreports.eclipse.util.HttpUtils.proxyService.select(uri)) {
-			Credentials c = net.sf.jasperreports.eclipse.util.HttpUtils.getCredentials(d);
-			if (c != null && cp != null)
-				cp.setCredentials(new AuthScope(new HttpHost(d.getHost(), d.getPort())), c);
-			clientConfig.property(ClientProperties.PROXY_URI,
-					net.sf.jasperreports.eclipse.util.HttpUtils.getProxyProtocol(d) + "://" + d.getHost() + ":"
-							+ d.getPort());
-			break;
+
+		IProxyService proxyService = net.sf.jasperreports.eclipse.util.HttpUtils.proxyService;
+		if (proxyService.isProxiesEnabled()) {
+			if (uri.getHost().contains("_")) {
+				if (proxyService.hasSystemProxies() && proxyService.isSystemProxiesEnabled()) {
+					AbstractProxyProvider nativeProxyProvider = null;
+					if (proxyService instanceof ProxyManager) {
+						try {
+							Field f = ProxyManager.class.getDeclaredField("nativeProxyProvider");
+							f.setAccessible(true);
+							nativeProxyProvider = (AbstractProxyProvider) f.get(proxyService);
+						} catch (NoSuchFieldException e) {
+							e.printStackTrace();
+						} catch (SecurityException e) {
+							e.printStackTrace();
+						} catch (IllegalArgumentException e) {
+							e.printStackTrace();
+						} catch (IllegalAccessException e) {
+							e.printStackTrace();
+						}
+					}
+					if (nativeProxyProvider == null) {
+						try {
+							nativeProxyProvider = (AbstractProxyProvider) Class
+									.forName("org.eclipse.core.net.ProxyProvider").newInstance(); //$NON-NLS-1$
+						} catch (ClassNotFoundException e) {
+							// no class found
+						} catch (Exception e) {
+							UIUtils.showError(e);
+						}
+					}
+					if (nativeProxyProvider != null) {
+						IProxyData[] proxyDatas = nativeProxyProvider.select(uri);
+						if (proxyDatas.length > 0)
+							setupClientConfig(cp, clientConfig, proxyDatas[0]);
+					}
+				} else if (!isHostFiltered(proxyService, uri))
+					for (IProxyData d : proxyService.getProxyData()) {
+						if (d.getHost() == null)
+							continue;
+						if (!d.getHost().equals(uri.getHost()))
+							continue;
+						setupClientConfig(cp, clientConfig, d);
+						break;
+					}
+			} else
+				for (IProxyData d : proxyService.select(uri)) {
+					setupClientConfig(cp, clientConfig, d);
+					break;
+				}
 		}
 		clientConfigs.put(clientConfig, uri);
+	}
+
+	private static void setupClientConfig(CredentialsProvider cp, ClientConfig clientConfig, IProxyData d) {
+		Credentials c = net.sf.jasperreports.eclipse.util.HttpUtils.getCredentials(d);
+		if (c != null && cp != null)
+			cp.setCredentials(new AuthScope(new HttpHost(d.getHost(), d.getPort())), c);
+		clientConfig.property(ClientProperties.PROXY_URI,
+				net.sf.jasperreports.eclipse.util.HttpUtils.getProxyProtocol(d) + "://" + d.getHost() + ":"
+						+ d.getPort());
+	}
+
+	private static boolean isHostFiltered(IProxyService ps, URI uri) {
+		String[] filters = ps.getNonProxiedHosts();
+		for (int i = 0; i < filters.length; i++) {
+			String filter = filters[i];
+			if (matchesFilter(uri.getHost(), filter))
+				return true;
+		}
+		return false;
+	}
+
+	private static boolean matchesFilter(String host, String filter) {
+		StringMatcher matcher = new StringMatcher(filter, true, false);
+		return matcher.match(host);
 	}
 
 	public static Request setRequest(Request req, ServerProfile sp) {
