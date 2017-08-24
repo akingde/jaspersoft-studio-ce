@@ -188,7 +188,6 @@ public class OrderContributionItem extends CommonToolbarHandler{
 	}
 	
 	private boolean setSortButtonEnablement() {
-		if (sortElement == null) return false;
 		setSortElementStatus(false, Messages.OrderContributionItem_disabledtooltip, null);
 		if (areParameters()) {
 			setSortElementStatus(true, Messages.OrderContributionItem_paramTooltip, ORDER_TYPE.SORT_PARAMETERS);
