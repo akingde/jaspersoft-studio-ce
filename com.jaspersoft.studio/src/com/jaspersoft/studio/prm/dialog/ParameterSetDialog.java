@@ -237,6 +237,7 @@ public class ParameterSetDialog extends ATitledDialog {
 		createNameColumn();
 		createIsForPrompt();
 		createTypeColumn();
+		createNestedTypeColumn();
 		createDescriptionColumn();
 		createDefaultExpression();
 		createEvaluationTime();
@@ -279,6 +280,7 @@ public class ParameterSetDialog extends ATitledDialog {
 		TColumn c = new TColumn();
 		c.setPropertyName("name");
 		c.setLabel(Messages.ParametersTable_name);
+		c.setDescription(Messages.MParameterSystem_name_description);
 		c.setValue(mdataset);
 		tcolumns.add(c);
 	}
@@ -287,6 +289,7 @@ public class ParameterSetDialog extends ATitledDialog {
 		TColumn c = new TColumn();
 		c.setPropertyName("forPrompting");
 		c.setLabel(Messages.ParametersTable_isForPrompt);
+		c.setDescription(Messages.MParameter_is_for_prompting_description);
 		c.setPropertyType(boolean.class.getName());
 		tcolumns.add(c);
 	}
@@ -295,6 +298,16 @@ public class ParameterSetDialog extends ATitledDialog {
 		TColumn c = new TColumn();
 		c.setPropertyName("valueClassName");
 		c.setLabel(Messages.ParametersTable_class);
+		c.setDescription(Messages.MParameterSystem_class_description);
+		c.setPropertyType(Class.class.getName());
+		tcolumns.add(c);
+	}
+
+	private void createNestedTypeColumn() {
+		TColumn c = new TColumn();
+		c.setPropertyName("nestedTypeName");
+		c.setLabel(Messages.MParameter_nested_type_name);
+		c.setDescription(Messages.MParameter_nested_type_name_description);
 		c.setPropertyType(Class.class.getName());
 		tcolumns.add(c);
 	}
@@ -303,6 +316,7 @@ public class ParameterSetDialog extends ATitledDialog {
 		TColumn c = new TColumn();
 		c.setPropertyName("defaultValueExpression");
 		c.setLabel(Messages.MParameter_default_value_expression);
+		c.setDescription(Messages.MParameter_default_value_expression_description);
 		c.setPropertyType(JRDesignExpression.class.getName());
 		c.setValue(mdataset);
 		tcolumns.add(c);
@@ -312,6 +326,7 @@ public class ParameterSetDialog extends ATitledDialog {
 		TColumn c = new TColumn();
 		c.setPropertyName("description");
 		c.setLabel(Messages.ParametersTable_description);
+		c.setDescription(Messages.MParameter_description_description);
 		c.setValue(mdataset.getValue());
 		tcolumns.add(c);
 	}
@@ -320,6 +335,7 @@ public class ParameterSetDialog extends ATitledDialog {
 		TColumn c = new TColumn();
 		c.setPropertyName("evaluationTime");
 		c.setLabel(Messages.common_evaluation_time);
+		c.setDescription(Messages.MParameter_3);
 		c.setValue(mdataset.getValue());
 		c.setPropertyType(ParameterEvaluationTimeEnum.class.getName());
 		tcolumns.add(c);
@@ -329,6 +345,7 @@ public class ParameterSetDialog extends ATitledDialog {
 		TColumn c = new TColumn();
 		c.setPropertyName("properties");
 		c.setLabel(Messages.common_properties);
+		c.setDescription(Messages.MParameter_properties_description);
 		c.setPropertyType(JRPropertiesMap.class.getName());
 		c.setType("properties");
 		c.setValue(mdataset);

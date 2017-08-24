@@ -24,7 +24,9 @@ public class WText extends AWControl {
 	@Override
 	protected void createControl(Composite parent) {
 		txt = new Text(parent, SWT.BORDER);
-		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.widthHint = 200;
+		txt.setLayoutData(gd);
 		txt.addModifyListener(new ModifyListener() {
 
 			@Override

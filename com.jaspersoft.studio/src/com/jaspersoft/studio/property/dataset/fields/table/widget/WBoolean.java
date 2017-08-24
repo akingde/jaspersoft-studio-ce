@@ -29,7 +29,7 @@ public class WBoolean extends AWControl {
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		cmp.setLayout(layout);
-		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		cmb = new Combo(cmp, SWT.BORDER | SWT.READ_ONLY);
 		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

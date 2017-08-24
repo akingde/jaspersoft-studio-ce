@@ -34,7 +34,7 @@ public class WEnum extends AWControl {
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		cmb = new Combo(cmp, SWT.BORDER);
-		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Object[] obj = clazz.getEnumConstants();
 		for (Object item : obj) {

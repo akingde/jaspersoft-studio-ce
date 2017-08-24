@@ -117,7 +117,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		descriptionD.setDescription(Messages.MParameter_description_description);
 		desc.add(descriptionD);
 		descriptionD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameterDescription"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameterDescription")); //$NON-NLS-1$
 
 		CheckBoxPropertyDescriptor isForPromptingD = new CheckBoxPropertyDescriptor(
 				JRDesignParameter.PROPERTY_FOR_PROMPTING, Messages.MParameter_is_for_prompting, NullEnum.NOTNULL);
@@ -129,14 +129,14 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		defValueExprD.setDescription(Messages.MParameter_default_value_expression_description);
 		desc.add(defValueExprD);
 		defValueExprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#defaultValueExpression"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#defaultValueExpression")); //$NON-NLS-1$
 
 		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
 				Messages.common_properties, getJasperConfiguration(), getValue());
 		propertiesD.setDescription(Messages.MParameter_properties_description);
 		desc.add(propertiesD);
 		propertiesD.setHelpRefBuilder(
-				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property")); //$NON-NLS-1$
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(
 				JRDesignParameter.PROPERTY_NESTED_TYPE_NAME, Messages.MParameter_nested_type_name);
@@ -146,10 +146,10 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		evaluationTimeD = new NamedEnumPropertyDescriptor<ParameterEvaluationTimeEnum>(
 				JRDesignParameter.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time,
 				ParameterEvaluationTimeEnum.EARLY, NullEnum.NULL);
-		evaluationTimeD.setDescription(Messages.common_evaluation_time);
+		evaluationTimeD.setDescription(Messages.MParameter_3);
 		desc.add(evaluationTimeD);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter"); //$NON-NLS-1$
 	}
 
 	@Override
