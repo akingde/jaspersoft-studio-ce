@@ -1605,6 +1605,14 @@ public class Messages extends NLS {
 	public static String OpenEditorAction_actionName;
 	public static String OpenEditorAction_actionTooltip;
 	public static String OpenInDesignerToolAction_actionName;
+	public static String OrderContributionItem_confMessage;
+	public static String OrderContributionItem_confTitle;
+	public static String OrderContributionItem_disabledtooltip;
+	public static String OrderContributionItem_fieldstooltip;
+	public static String OrderContributionItem_paramName;
+	public static String OrderContributionItem_paramTooltip;
+	public static String OrderContributionItem_varName;
+	public static String OrderContributionItem_varTooltip;
 	public static String OrganizeAsTableAction_actionDescription;
 	public static String OrganizeAsTableAction_actionName;
 	public static String PaddingSection_all_padding_tool_tip;
