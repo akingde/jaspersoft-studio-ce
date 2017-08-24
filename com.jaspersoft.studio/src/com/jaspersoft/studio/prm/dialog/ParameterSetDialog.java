@@ -173,11 +173,6 @@ public class ParameterSetDialog extends ATitledDialog {
 				if (d.open() == Dialog.OK)
 					return d.getElement();
 				return null;
-
-				// ParameterDialog dialog = new ParameterDialog(UIUtils.getShell(), table);
-				// if (dialog.open() == Dialog.OK)
-				// return dialog.getPValue();
-				// return null;
 			}
 		});
 		new ListOrderButtons().createOrderButtons(cmp, viewer);
@@ -192,12 +187,6 @@ public class ParameterSetDialog extends ATitledDialog {
 						jrConfig);
 				if (d.open() == Dialog.OK)
 					input.set(pos, d.getElement());
-
-				//
-				// ParameterDialog dialog = new ParameterDialog(UIUtils.getShell(), pos,
-				// (JRDesignParameter) prm.clone(), table);
-				// if (dialog.open() == Dialog.OK)
-				// input.set(pos, dialog.getPValue());
 			}
 		});
 		new DeleteButton().createDeleteButton(cmp, viewer);
