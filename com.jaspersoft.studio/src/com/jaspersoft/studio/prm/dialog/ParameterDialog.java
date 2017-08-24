@@ -13,6 +13,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -34,6 +35,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.type.ParameterEvaluationTimeEnum;
 
 public class ParameterDialog extends ATitledDialog {
 	private int indx = -1;
@@ -47,6 +49,7 @@ public class ParameterDialog extends ATitledDialog {
 	private Button bnest;
 	private WTextExpression expr;
 	private Button bPrompt;
+	private Combo cEvalTime;
 
 	protected ParameterDialog(Shell parentShell, Table table) {
 		this(parentShell, -1, new JRDesignParameter(), table);
@@ -164,7 +167,25 @@ public class ParameterDialog extends ATitledDialog {
 		});
 
 		label = new Label(composite, SWT.NONE);
-		label.setText(Messages.PropertiesComponent_1);
+		label.setText(Messages.common_evaluation_time);
+		label.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+
+		cEvalTime = new Combo(composite, SWT.READ_ONLY | SWT.BORDER);
+		cEvalTime.setItems(new String[] { "", ParameterEvaluationTimeEnum.EARLY.getName(),
+				ParameterEvaluationTimeEnum.LATE.getName() });
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		cEvalTime.setLayoutData(gd);
+		cEvalTime.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				prm.setEvaluationTime(ParameterEvaluationTimeEnum.byName(cEvalTime.getText()));
+			}
+		});
+
+		label = new Label(composite, SWT.NONE);
+		label.setText(Messages.MParameter_default_value_expression);
 		label.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 		expr = new WTextExpression(composite, SWT.NONE, 1);
@@ -192,11 +213,12 @@ public class ParameterDialog extends ATitledDialog {
 			public void run() {
 				setName();
 				bPrompt.setSelection(prm.isForPrompting());
-				tname.setText(Misc.nvl(prm.getName())); //$NON-NLS-1$
-				tdesc.setText(Misc.nvl(prm.getDescription())); //$NON-NLS-1$
-				tclass.setText(Misc.nvl(prm.getValueClassName())); //$NON-NLS-1$
-				tnest.setText(Misc.nvl(prm.getNestedTypeName())); //$NON-NLS-1$ 
+				tname.setText(Misc.nvl(prm.getName())); // $NON-NLS-1$
+				tdesc.setText(Misc.nvl(prm.getDescription())); // $NON-NLS-1$
+				tclass.setText(Misc.nvl(prm.getValueClassName())); // $NON-NLS-1$
+				tnest.setText(Misc.nvl(prm.getNestedTypeName())); // $NON-NLS-1$
 				expr.setExpression((JRDesignExpression) prm.getDefaultValueExpression());
+				cEvalTime.setText(prm.getEvaluationTime() != null ? prm.getEvaluationTime().getName() : "");
 			}
 		});
 	}
