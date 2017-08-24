@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.prm.dialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -28,18 +29,31 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.MReportRoot;
+import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.prm.ParameterSet;
+import com.jaspersoft.studio.property.dataset.fields.PropertiesDialog;
+import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
 import com.jaspersoft.studio.swt.widgets.table.IEditElement;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.ParameterEvaluationTimeEnum;
 
 public class ParameterSetDialog extends ATitledDialog {
 	private int indx = -1;
@@ -62,6 +76,12 @@ public class ParameterSetDialog extends ATitledDialog {
 		setDefaultSize(600, 600);
 	}
 
+	@Override
+	public boolean close() {
+		jrConfig.dispose();
+		return super.close();
+	}
+
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2, false));
@@ -73,7 +93,7 @@ public class ParameterSetDialog extends ATitledDialog {
 			style = style | SWT.READ_ONLY;
 		text = new Text(composite, style);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.setText(Misc.nvl(prmSet.getName())); //$NON-NLS-1$
+		text.setText(Misc.nvl(prmSet.getName())); // $NON-NLS-1$
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
@@ -97,7 +117,7 @@ public class ParameterSetDialog extends ATitledDialog {
 		return composite;
 	}
 
-	protected void createTable(Composite parent) {
+	protected void createTable(final Composite parent) {
 		Composite cmp = new Composite(parent, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -110,8 +130,8 @@ public class ParameterSetDialog extends ATitledDialog {
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
 
-		final TableViewer viewer = new TableViewer(cmp, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION
-				| SWT.BORDER);
+		final TableViewer viewer = new TableViewer(cmp,
+				SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 
 		// create the columns
 		// not yet implemented
@@ -148,10 +168,16 @@ public class ParameterSetDialog extends ATitledDialog {
 
 			@Override
 			public Object newElement(List<?> input, int pos) {
-				ParameterDialog dialog = new ParameterDialog(UIUtils.getShell(), table);
-				if (dialog.open() == Dialog.OK)
-					return dialog.getPValue();
+				PropertiesDialog<JRDesignParameter> d = new PropertiesDialog<JRDesignParameter>(parent.getShell(),
+						new JRDesignParameter(), tcolumns, MParameter.getIconDescriptor().getDescription(), jrConfig);
+				if (d.open() == Dialog.OK)
+					return d.getElement();
 				return null;
+
+				// ParameterDialog dialog = new ParameterDialog(UIUtils.getShell(), table);
+				// if (dialog.open() == Dialog.OK)
+				// return dialog.getPValue();
+				// return null;
 			}
 		});
 		new ListOrderButtons().createOrderButtons(cmp, viewer);
@@ -161,9 +187,17 @@ public class ParameterSetDialog extends ATitledDialog {
 			@Override
 			public void editElement(List<JRDesignParameter> input, int pos) {
 				JRDesignParameter prm = input.get(pos);
-				ParameterDialog dialog = new ParameterDialog(UIUtils.getShell(), pos, (JRDesignParameter) prm.clone(), table);
-				if (dialog.open() == Dialog.OK)
-					input.set(pos, dialog.getPValue());
+				PropertiesDialog<JRDesignParameter> d = new PropertiesDialog<JRDesignParameter>(parent.getShell(),
+						(JRDesignParameter) prm.clone(), tcolumns, MParameter.getIconDescriptor().getDescription(),
+						jrConfig);
+				if (d.open() == Dialog.OK)
+					input.set(pos, d.getElement());
+
+				//
+				// ParameterDialog dialog = new ParameterDialog(UIUtils.getShell(), pos,
+				// (JRDesignParameter) prm.clone(), table);
+				// if (dialog.open() == Dialog.OK)
+				// input.set(pos, dialog.getPValue());
 			}
 		});
 		new DeleteButton().createDeleteButton(cmp, viewer);
@@ -191,6 +225,23 @@ public class ParameterSetDialog extends ATitledDialog {
 				return p.getDescription();
 			}
 		});
+
+		JasperDesign jd = new JasperDesign();
+		jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
+		jrConfig.setJasperDesign(jd);
+		ANode node = new MReportRoot(jrConfig, jd);
+		ANode report = new MReport(node, jrConfig);
+		mdataset = new MDataset(report, jd.getMainDesignDataset(), -1);
+		ReportFactory.createDataset(mdataset, jd.getMainDesignDataset(), true);
+
+		createNameColumn();
+		createIsForPrompt();
+		createTypeColumn();
+		createDescriptionColumn();
+		createDefaultExpression();
+		createEvaluationTime();
+		createPropertiesColumn();
+
 	}
 
 	private void setValidationError(String message) {
@@ -219,4 +270,68 @@ public class ParameterSetDialog extends ATitledDialog {
 		prmSet.setName(pname);
 	}
 
+	private MDataset mdataset;
+
+	private List<TColumn> tcolumns = new ArrayList<TColumn>();
+	private JasperReportsConfiguration jrConfig;
+
+	private void createNameColumn() {
+		TColumn c = new TColumn();
+		c.setPropertyName("name");
+		c.setLabel(Messages.ParametersTable_name);
+		c.setValue(mdataset);
+		tcolumns.add(c);
+	}
+
+	private void createIsForPrompt() {
+		TColumn c = new TColumn();
+		c.setPropertyName("forPrompting");
+		c.setLabel(Messages.ParametersTable_isForPrompt);
+		c.setPropertyType(boolean.class.getName());
+		tcolumns.add(c);
+	}
+
+	private void createTypeColumn() {
+		TColumn c = new TColumn();
+		c.setPropertyName("valueClassName");
+		c.setLabel(Messages.ParametersTable_class);
+		c.setPropertyType(Class.class.getName());
+		tcolumns.add(c);
+	}
+
+	private void createDefaultExpression() {
+		TColumn c = new TColumn();
+		c.setPropertyName("defaultValueExpression");
+		c.setLabel(Messages.MParameter_default_value_expression);
+		c.setPropertyType(JRDesignExpression.class.getName());
+		c.setValue(mdataset);
+		tcolumns.add(c);
+	}
+
+	private void createDescriptionColumn() {
+		TColumn c = new TColumn();
+		c.setPropertyName("description");
+		c.setLabel(Messages.ParametersTable_description);
+		c.setValue(mdataset.getValue());
+		tcolumns.add(c);
+	}
+
+	private void createEvaluationTime() {
+		TColumn c = new TColumn();
+		c.setPropertyName("evaluationTime");
+		c.setLabel(Messages.common_evaluation_time);
+		c.setValue(mdataset.getValue());
+		c.setPropertyType(ParameterEvaluationTimeEnum.class.getName());
+		tcolumns.add(c);
+	}
+
+	private void createPropertiesColumn() {
+		TColumn c = new TColumn();
+		c.setPropertyName("properties");
+		c.setLabel(Messages.common_properties);
+		c.setPropertyType(JRPropertiesMap.class.getName());
+		c.setType("properties");
+		c.setValue(mdataset);
+		tcolumns.add(c);
+	}
 }

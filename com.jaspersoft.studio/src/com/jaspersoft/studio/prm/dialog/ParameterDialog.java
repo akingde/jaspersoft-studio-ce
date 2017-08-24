@@ -71,8 +71,10 @@ public class ParameterDialog extends ATitledDialog {
 
 		Label label = new Label(composite, SWT.NONE);
 		label.setText(Messages.common_name);
+		label.setToolTipText(Messages.MParameterSystem_name_description);
 
 		tname = new Text(composite, SWT.BORDER);
+		tname.setToolTipText(Messages.MParameterSystem_name_description);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tname.setLayoutData(gd);
@@ -86,8 +88,10 @@ public class ParameterDialog extends ATitledDialog {
 
 		label = new Label(composite, SWT.NONE);
 		label.setText(Messages.common_description);
+		label.setToolTipText(Messages.MParameter_description_description);
 
 		tdesc = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.MULTI);
+		tdesc.setToolTipText(Messages.MParameter_description_description);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = 40;
 		gd.horizontalSpan = 2;
@@ -102,8 +106,10 @@ public class ParameterDialog extends ATitledDialog {
 
 		label = new Label(composite, SWT.NONE);
 		label.setText(Messages.common_type);
+		label.setToolTipText(Messages.MParameterSystem_class_description);
 
 		tclass = new Text(composite, SWT.BORDER);
+		tclass.setToolTipText(Messages.MParameterSystem_class_description);
 		tclass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tclass.addModifyListener(new ModifyListener() {
 
@@ -128,8 +134,10 @@ public class ParameterDialog extends ATitledDialog {
 
 		label = new Label(composite, SWT.NONE);
 		label.setText(Messages.MParameter_nested_type_name);
+		label.setToolTipText(Messages.MParameter_nested_type_name_description);
 
 		tnest = new Text(composite, SWT.BORDER);
+		tnest.setToolTipText(Messages.MParameter_nested_type_name_description);
 		tnest.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tnest.addModifyListener(new ModifyListener() {
 
@@ -156,6 +164,7 @@ public class ParameterDialog extends ATitledDialog {
 
 		bPrompt = new Button(composite, SWT.CHECK);
 		bPrompt.setText(Messages.MParameter_is_for_prompting);
+		bPrompt.setToolTipText(Messages.MParameter_is_for_prompting_description);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bPrompt.setLayoutData(gd);
@@ -169,8 +178,10 @@ public class ParameterDialog extends ATitledDialog {
 		label = new Label(composite, SWT.NONE);
 		label.setText(Messages.common_evaluation_time);
 		label.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		label.setToolTipText(Messages.common_evaluation_time);
 
 		cEvalTime = new Combo(composite, SWT.READ_ONLY | SWT.BORDER);
+		cEvalTime.setToolTipText(Messages.common_evaluation_time);
 		cEvalTime.setItems(new String[] { "", ParameterEvaluationTimeEnum.EARLY.getName(),
 				ParameterEvaluationTimeEnum.LATE.getName() });
 		gd = new GridData();
@@ -187,8 +198,10 @@ public class ParameterDialog extends ATitledDialog {
 		label = new Label(composite, SWT.NONE);
 		label.setText(Messages.MParameter_default_value_expression);
 		label.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		label.setToolTipText(Messages.MParameter_default_value_expression_description);
 
 		expr = new WTextExpression(composite, SWT.NONE, 1);
+		expr.setToolTipText(Messages.MParameter_default_value_expression_description);
 		expr.setExpressionContext(new ExpressionContext(JasperReportsConfiguration.getDefaultInstance()));
 		expr.addModifyListener(new ExpressionModifiedListener() {
 			@Override
