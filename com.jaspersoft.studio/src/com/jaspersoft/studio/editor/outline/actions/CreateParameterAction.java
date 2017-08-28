@@ -4,12 +4,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.actions;
 
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.gef.EditPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameters;
 
@@ -34,10 +40,23 @@ public class CreateParameterAction extends ACreateAndSelectAction {
 	
 	@Override
 	protected boolean calculateEnabled() {
-		if(!checkSingleSelectedObject(MParameters.class)){
+		if(!checkSingleSelectedObject(MParameters.class)  && !checkSingleSelectedObject(MParameter.class)){
 			return false;
 		}
 		return super.calculateEnabled();
+	}
+	
+	protected boolean setExtendedData(Map<Object, Object> map, List<?> objects) {
+		if (objects.size() == 1) {
+			EditPart part = (EditPart)objects.get(0);
+			if (part.getModel() instanceof MParameter) {
+				MParameter selectedField = (MParameter)part.getModel();
+				ANode parent = selectedField.getParent();
+				int index = parent.getChildren().indexOf(selectedField);
+				map.put(CreateRequestUtil.NEWINDEX, index + 1);
+			}
+		}
+		return true;
 	}
 
 	/**

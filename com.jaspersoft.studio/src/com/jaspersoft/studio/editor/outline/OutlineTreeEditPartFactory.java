@@ -21,6 +21,7 @@ import com.jaspersoft.studio.callout.command.DeleteCalloutCommand;
 import com.jaspersoft.studio.callout.pin.MPin;
 import com.jaspersoft.studio.callout.pin.command.DeletePinCommand;
 import com.jaspersoft.studio.editor.outline.part.ContainerTreeEditPart;
+import com.jaspersoft.studio.editor.outline.part.DatasetElementsTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
@@ -149,19 +150,23 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		if (model instanceof MCallout || model instanceof MPin)
 			return null;
 		if (model instanceof IDragable) {
-			if (model instanceof IContainerEditPart)
+			if (model instanceof IContainerEditPart) {
 				editPart = new ContainerTreeEditPart();
-			else if (model instanceof MGraphicElement)
+			} else if (model instanceof MGraphicElement) {
 				editPart = new ContainerTreeEditPart();
-			else
+			} else if (model instanceof MField || model instanceof MParameter || model instanceof MVariable) {
+				editPart = new DatasetElementsTreeEditPart();
+			} else {
 				editPart = new TreeEditPart();
+			}
 		} else {
-			if (model instanceof IContainerEditPart)
+			if (model instanceof IContainerEditPart) {
 				editPart = new NotDragableContainerTreeEditPart();
-			else if (model instanceof MGraphicElement)
+			} else if (model instanceof MGraphicElement) {
 				editPart = new NotDragableContainerTreeEditPart();
-			else
+			} else {
 				editPart = new NotDragableTreeEditPart();
+			}
 		}
 		if (editPart != null)
 			editPart.setModel(model);
@@ -396,9 +401,11 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			return new CreateCalloutCommand(parent, (MCallout) child, location, newIndex);
 
 		if (child instanceof MField) {
-			if (parent instanceof MFields)
+			if (parent instanceof MFields) {
 				return new CreateFieldCommand((MFields) parent, (MField) child, newIndex);
-			else if (child.getValue() != null
+			} else if (parent instanceof MField) {
+				return new CreateFieldCommand((MFields) parent.getParent(), (MField) child, newIndex);
+			} else if (child.getValue() != null
 					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand || parent instanceof MFrame)) {
 				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
@@ -406,8 +413,14 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (child instanceof MParameter) {
 				if (parent instanceof MParameters) {
 					JRDesignParameter p = (JRDesignParameter) child.getValue();
-					if (p == null || !p.isSystemDefined())
-						return new CreateParameterCommand((MParameters) parent, (MParameter) child, newIndex);
+					if (p == null || !p.isSystemDefined()) {
+						return new CreateParameterCommand((MParameters<?>) parent, (MParameter) child, newIndex);
+					}
+				} else if (parent instanceof MParameter) {
+					JRDesignParameter p = (JRDesignParameter) child.getValue();
+					if (p == null || !p.isSystemDefined()) {
+						return new CreateParameterCommand((MParameters<?>) parent.getParent(), (MParameter) child, newIndex);
+					}
 				}
 			}
 			if (child.getValue() != null
@@ -417,8 +430,14 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		} else if (child instanceof MVariableSystem) {
 			if (parent instanceof MVariables) {
 				JRDesignVariable p = (JRDesignVariable) child.getValue();
-				if (p == null || !p.isSystemDefined())
+				if (p == null || !p.isSystemDefined()) {
 					return new CreateVariableCommand((MVariables) parent, (MVariable) child, newIndex);
+				}
+			} else if (parent instanceof MVariable) {
+				JRDesignVariable p = (JRDesignVariable) child.getValue();
+				if (p == null || !p.isSystemDefined()) {
+					return new CreateVariableCommand((MVariables) parent.getParent(), (MVariable) child, newIndex);
+				}
 			}
 			if (child.getValue() != null
 					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand || parent instanceof MFrame)) {

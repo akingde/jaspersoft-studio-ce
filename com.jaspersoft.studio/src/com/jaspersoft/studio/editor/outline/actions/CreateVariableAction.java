@@ -4,13 +4,19 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.actions;
 
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariables;
 
@@ -39,10 +45,23 @@ public class CreateVariableAction extends ACreateAndSelectAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		if(!checkSingleSelectedObject(MVariables.class)){
+		if(!checkSingleSelectedObject(MVariables.class) && !checkSingleSelectedObject(MVariable.class)){
 			return false;
 		}
 		return super.calculateEnabled();
+	}
+	
+	protected boolean setExtendedData(Map<Object, Object> map, List<?> objects) {
+		if (objects.size() == 1) {
+			EditPart part = (EditPart)objects.get(0);
+			if (part.getModel() instanceof MVariable) {
+				MVariable selectedField = (MVariable)part.getModel();
+				ANode parent = selectedField.getParent();
+				int index = parent.getChildren().indexOf(selectedField);
+				map.put(CreateRequestUtil.NEWINDEX, index + 1);
+			}
+		}
+		return true;
 	}
 	
 	/**
