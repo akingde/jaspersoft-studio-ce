@@ -20,8 +20,6 @@ import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.property.section.report.util.Unit;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 /*
  * 
  */
