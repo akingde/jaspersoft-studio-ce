@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright (C) 2010 - 2016. TIBCO Software Inc. 
-  All Rights Reserved. Confidential & Proprietary.
--->
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sql" nsURI="http://www.com.jaspersoft.studio.data.Sql" nsPrefix="sql">
   <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wq" eType="#//WithQuery"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//SelectQuery"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WithQuery">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="w" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="wname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="withCols" eType="#//WithColumns"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//SelectQuery"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WithColumns"/>
   <eClassifiers xsi:type="ecore:EClass" name="FetchFirst">
     <eStructuralFeatures xsi:type="ecore:EReference" name="fetchFirst" eType="#//UnsignedValue"
         containment="true"/>
@@ -88,7 +95,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="useCols" eType="#//UsingCols"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="UsingCols">
+  <eClassifiers xsi:type="ecore:EClass" name="UsingCols" eSuperTypes="#//WithColumns">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//DbObjectName" containment="true"/>
   </eClassifiers>
@@ -243,6 +250,20 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="col" eType="#//Operands"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="prm" eType="#//Prms" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="XFunction">
+    <eLiterals name="xin" literal="{IN"/>
+    <eLiterals name="xnotin" value="1" literal="{NOTIN"/>
+    <eLiterals name="xeq" value="2" literal="{EQUAL"/>
+    <eLiterals name="xnoteq" value="3" literal="{NOTEQUAL"/>
+    <eLiterals name="xls" value="4" literal="{LESS"/>
+    <eLiterals name="xlsr" value="5" literal="{LESS]"/>
+    <eLiterals name="xgtl" value="6" literal="{[GREATER"/>
+    <eLiterals name="xgt" value="7" literal="{GREATER"/>
+    <eLiterals name="xbwn" value="8" literal="{BETWEEN"/>
+    <eLiterals name="xbwnc" value="9" literal="{[BETWEEN]"/>
+    <eLiterals name="xbwnl" value="10" literal="{[BETWEEN"/>
+    <eLiterals name="xbwnr" value="11" literal="{BETWEEN]"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Prms">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
@@ -425,6 +446,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="soint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SQLCaseOperand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wop" eType="#//Operands"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//OrExpr"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="when" eType="#//SQLCaseWhens"
@@ -432,6 +455,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SQLCaseWhens"/>
   <eClassifiers xsi:type="ecore:EClass" name="SqlCaseWhen" eSuperTypes="#//SQLCaseWhens">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wop" eType="#//Operands"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//OrExpr"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="texp" eType="#//Operands"
@@ -460,20 +485,6 @@
     <eLiterals name="daymin" value="17" literal="DAY_MINUTE"/>
     <eLiterals name="dayh" value="18" literal="DAY_HOUR"/>
     <eLiterals name="yearMonth" value="19" literal="YEAR_MONTH"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="XFunction">
-    <eLiterals name="xin" literal="IN"/>
-    <eLiterals name="xnotin" value="1" literal="NOTIN"/>
-    <eLiterals name="xeq" value="2" literal="EQUAL"/>
-    <eLiterals name="xnoteq" value="3" literal="NOTEQUAL"/>
-    <eLiterals name="xls" value="4" literal="LESS"/>
-    <eLiterals name="xgt" value="5" literal="GREATER"/>
-    <eLiterals name="xlsr" value="6" literal="LESS]"/>
-    <eLiterals name="xgtl" value="7" literal="[GREATER"/>
-    <eLiterals name="xbwn" value="8" literal="BETWEEN"/>
-    <eLiterals name="xbwnc" value="9" literal="[BETWEEN]"/>
-    <eLiterals name="xbwnl" value="10" literal="[BETWEEN"/>
-    <eLiterals name="xbwnr" value="11" literal="BETWEEN]"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IntegerValue">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="integer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>

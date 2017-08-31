@@ -1,7 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
- ******************************************************************************/
 /**
  */
 package com.jaspersoft.studio.data.sql.util;
@@ -80,6 +76,20 @@ public class SqlSwitch<T> extends Switch<T>
       {
         Model model = (Model)theEObject;
         T result = caseModel(model);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.WITH_QUERY:
+      {
+        WithQuery withQuery = (WithQuery)theEObject;
+        T result = caseWithQuery(withQuery);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.WITH_COLUMNS:
+      {
+        WithColumns withColumns = (WithColumns)theEObject;
+        T result = caseWithColumns(withColumns);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -184,6 +194,7 @@ public class SqlSwitch<T> extends Switch<T>
       {
         UsingCols usingCols = (UsingCols)theEObject;
         T result = caseUsingCols(usingCols);
+        if (result == null) result = caseWithColumns(usingCols);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -372,6 +383,7 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = casePivotCol(dbObjectName);
         if (result == null) result = caseTableFull(dbObjectName);
         if (result == null) result = casePivotForClause(dbObjectName);
+        if (result == null) result = caseWithColumns(dbObjectName);
         if (result == null) result = casePivotFunction(dbObjectName);
         if (result == null) result = casePivots(dbObjectName);
         if (result == null) result = casePivotColumns(dbObjectName);
@@ -893,6 +905,38 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseModel(Model object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>With Query</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>With Query</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWithQuery(WithQuery object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>With Columns</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>With Columns</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWithColumns(WithColumns object)
   {
     return null;
   }

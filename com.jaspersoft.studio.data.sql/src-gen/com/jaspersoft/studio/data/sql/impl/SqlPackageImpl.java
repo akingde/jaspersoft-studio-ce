@@ -1,7 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
- ******************************************************************************/
 /**
  */
 package com.jaspersoft.studio.data.sql.impl;
@@ -107,6 +103,8 @@ import com.jaspersoft.studio.data.sql.WindowingClause;
 import com.jaspersoft.studio.data.sql.WindowingClauseBetween;
 import com.jaspersoft.studio.data.sql.WindowingClauseOperandFollowing;
 import com.jaspersoft.studio.data.sql.WindowingClauseOperandPreceding;
+import com.jaspersoft.studio.data.sql.WithColumns;
+import com.jaspersoft.studio.data.sql.WithQuery;
 import com.jaspersoft.studio.data.sql.XExpr;
 import com.jaspersoft.studio.data.sql.XFunction;
 import com.jaspersoft.studio.data.sql.abc;
@@ -137,6 +135,20 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass modelEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass withQueryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass withColumnsEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -871,14 +883,14 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EEnum extracT_VALUESEEnum = null;
+  private EEnum xFunctionEEnum = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EEnum xFunctionEEnum = null;
+  private EEnum extracT_VALUESEEnum = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -958,9 +970,79 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getModel_Query()
+  public EReference getModel_Wq()
   {
     return (EReference)modelEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getModel_Query()
+  {
+    return (EReference)modelEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getWithQuery()
+  {
+    return withQueryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getWithQuery_W()
+  {
+    return (EAttribute)withQueryEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getWithQuery_Wname()
+  {
+    return (EAttribute)withQueryEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWithQuery_WithCols()
+  {
+    return (EReference)withQueryEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWithQuery_Query()
+  {
+    return (EReference)withQueryEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getWithColumns()
+  {
+    return withColumnsEClass;
   }
 
   /**
@@ -3408,7 +3490,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSQLCaseOperand_Expr()
+  public EReference getSQLCaseOperand_Wop()
   {
     return (EReference)sqlCaseOperandEClass.getEStructuralFeatures().get(0);
   }
@@ -3418,9 +3500,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSQLCaseOperand_When()
+  public EReference getSQLCaseOperand_Expr()
   {
     return (EReference)sqlCaseOperandEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSQLCaseOperand_When()
+  {
+    return (EReference)sqlCaseOperandEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -3448,7 +3540,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSqlCaseWhen_Expr()
+  public EReference getSqlCaseWhen_Wop()
   {
     return (EReference)sqlCaseWhenEClass.getEStructuralFeatures().get(0);
   }
@@ -3458,7 +3550,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSqlCaseWhen_Texp()
+  public EReference getSqlCaseWhen_Expr()
   {
     return (EReference)sqlCaseWhenEClass.getEStructuralFeatures().get(1);
   }
@@ -3468,9 +3560,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSqlCaseWhen_Eexp()
+  public EReference getSqlCaseWhen_Texp()
   {
     return (EReference)sqlCaseWhenEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSqlCaseWhen_Eexp()
+  {
+    return (EReference)sqlCaseWhenEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -3818,9 +3920,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EEnum getEXTRACT_VALUES()
+  public EEnum getXFunction()
   {
-    return extracT_VALUESEEnum;
+    return xFunctionEEnum;
   }
 
   /**
@@ -3828,9 +3930,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EEnum getXFunction()
+  public EEnum getEXTRACT_VALUES()
   {
-    return xFunctionEEnum;
+    return extracT_VALUESEEnum;
   }
 
   /**
@@ -3864,7 +3966,16 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     // Create classes and their features
     modelEClass = createEClass(MODEL);
+    createEReference(modelEClass, MODEL__WQ);
     createEReference(modelEClass, MODEL__QUERY);
+
+    withQueryEClass = createEClass(WITH_QUERY);
+    createEAttribute(withQueryEClass, WITH_QUERY__W);
+    createEAttribute(withQueryEClass, WITH_QUERY__WNAME);
+    createEReference(withQueryEClass, WITH_QUERY__WITH_COLS);
+    createEReference(withQueryEClass, WITH_QUERY__QUERY);
+
+    withColumnsEClass = createEClass(WITH_COLUMNS);
 
     fetchFirstEClass = createEClass(FETCH_FIRST);
     createEReference(fetchFirstEClass, FETCH_FIRST__FETCH_FIRST);
@@ -4192,12 +4303,14 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SOINT);
 
     sqlCaseOperandEClass = createEClass(SQL_CASE_OPERAND);
+    createEReference(sqlCaseOperandEClass, SQL_CASE_OPERAND__WOP);
     createEReference(sqlCaseOperandEClass, SQL_CASE_OPERAND__EXPR);
     createEReference(sqlCaseOperandEClass, SQL_CASE_OPERAND__WHEN);
 
     sqlCaseWhensEClass = createEClass(SQL_CASE_WHENS);
 
     sqlCaseWhenEClass = createEClass(SQL_CASE_WHEN);
+    createEReference(sqlCaseWhenEClass, SQL_CASE_WHEN__WOP);
     createEReference(sqlCaseWhenEClass, SQL_CASE_WHEN__EXPR);
     createEReference(sqlCaseWhenEClass, SQL_CASE_WHEN__TEXP);
     createEReference(sqlCaseWhenEClass, SQL_CASE_WHEN__EEXP);
@@ -4256,8 +4369,8 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEReference(whenListEClass, WHEN_LIST__ENTRIES);
 
     // Create enums
-    extracT_VALUESEEnum = createEEnum(EXTRACT_VALUES);
     xFunctionEEnum = createEEnum(XFUNCTION);
+    extracT_VALUESEEnum = createEEnum(EXTRACT_VALUES);
   }
 
   /**
@@ -4294,6 +4407,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     columnOrAliasEClass.getESuperTypes().add(this.getOrColumn());
     columnFullEClass.getESuperTypes().add(this.getPivotForClause());
     fromTableEClass.getESuperTypes().add(this.getOrTable());
+    usingColsEClass.getESuperTypes().add(this.getWithColumns());
     columnNamesEClass.getESuperTypes().add(this.getFromValuesColumnNames());
     rowEClass.getESuperTypes().add(this.getRows());
     rowValueEClass.getESuperTypes().add(this.getRowValues());
@@ -4340,7 +4454,16 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     // Initialize classes and features; add operations and parameters
     initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getModel_Wq(), this.getWithQuery(), null, "wq", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getModel_Query(), this.getSelectQuery(), null, "query", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(withQueryEClass, WithQuery.class, "WithQuery", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getWithQuery_W(), ecorePackage.getEString(), "w", null, 0, 1, WithQuery.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getWithQuery_Wname(), ecorePackage.getEString(), "wname", null, 0, 1, WithQuery.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getWithQuery_WithCols(), this.getWithColumns(), null, "withCols", null, 0, 1, WithQuery.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getWithQuery_Query(), this.getSelectQuery(), null, "query", null, 0, 1, WithQuery.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(withColumnsEClass, WithColumns.class, "WithColumns", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(fetchFirstEClass, FetchFirst.class, "FetchFirst", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFetchFirst_FetchFirst(), this.getUnsignedValue(), null, "fetchFirst", null, 0, 1, FetchFirst.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4668,12 +4791,14 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEAttribute(getScalarOperand_Soint(), ecorePackage.getELongObject(), "soint", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(sqlCaseOperandEClass, SQLCaseOperand.class, "SQLCaseOperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSQLCaseOperand_Wop(), this.getOperands(), null, "wop", null, 0, 1, SQLCaseOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSQLCaseOperand_Expr(), this.getOrExpr(), null, "expr", null, 0, 1, SQLCaseOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSQLCaseOperand_When(), this.getSQLCaseWhens(), null, "when", null, 0, 1, SQLCaseOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(sqlCaseWhensEClass, SQLCaseWhens.class, "SQLCaseWhens", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(sqlCaseWhenEClass, SqlCaseWhen.class, "SqlCaseWhen", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSqlCaseWhen_Wop(), this.getOperands(), null, "wop", null, 0, 1, SqlCaseWhen.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSqlCaseWhen_Expr(), this.getOrExpr(), null, "expr", null, 0, 1, SqlCaseWhen.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSqlCaseWhen_Texp(), this.getOperands(), null, "texp", null, 0, 1, SqlCaseWhen.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSqlCaseWhen_Eexp(), this.getOperands(), null, "eexp", null, 0, 1, SqlCaseWhen.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4732,6 +4857,20 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getWhenList_Entries(), this.getSqlCaseWhen(), null, "entries", null, 0, -1, WhenList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
+    initEEnum(xFunctionEEnum, XFunction.class, "XFunction");
+    addEEnumLiteral(xFunctionEEnum, XFunction.XIN);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XNOTIN);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XEQ);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XNOTEQ);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XLS);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XLSR);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XGTL);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XGT);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XBWN);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XBWNC);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XBWNL);
+    addEEnumLiteral(xFunctionEEnum, XFunction.XBWNR);
+
     initEEnum(extracT_VALUESEEnum, com.jaspersoft.studio.data.sql.EXTRACT_VALUES.class, "EXTRACT_VALUES");
     addEEnumLiteral(extracT_VALUESEEnum, com.jaspersoft.studio.data.sql.EXTRACT_VALUES.MS);
     addEEnumLiteral(extracT_VALUESEEnum, com.jaspersoft.studio.data.sql.EXTRACT_VALUES.S);
@@ -4753,20 +4892,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     addEEnumLiteral(extracT_VALUESEEnum, com.jaspersoft.studio.data.sql.EXTRACT_VALUES.DAYMIN);
     addEEnumLiteral(extracT_VALUESEEnum, com.jaspersoft.studio.data.sql.EXTRACT_VALUES.DAYH);
     addEEnumLiteral(extracT_VALUESEEnum, com.jaspersoft.studio.data.sql.EXTRACT_VALUES.YEAR_MONTH);
-
-    initEEnum(xFunctionEEnum, XFunction.class, "XFunction");
-    addEEnumLiteral(xFunctionEEnum, XFunction.XIN);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XNOTIN);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XEQ);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XNOTEQ);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XLS);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XGT);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XLSR);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XGTL);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XBWN);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XBWNC);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XBWNL);
-    addEEnumLiteral(xFunctionEEnum, XFunction.XBWNR);
 
     // Create resource
     createResource(eNS_URI);

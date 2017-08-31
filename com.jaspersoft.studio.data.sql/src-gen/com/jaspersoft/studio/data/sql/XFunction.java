@@ -1,7 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
- ******************************************************************************/
 /**
  */
 package com.jaspersoft.studio.data.sql;
@@ -31,7 +27,7 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XIN(0, "xin", "IN"),
+  XIN(0, "xin", "{IN"),
 
   /**
    * The '<em><b>Xnotin</b></em>' literal object.
@@ -41,7 +37,7 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XNOTIN(1, "xnotin", "NOTIN"),
+  XNOTIN(1, "xnotin", "{NOTIN"),
 
   /**
    * The '<em><b>Xeq</b></em>' literal object.
@@ -51,7 +47,7 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XEQ(2, "xeq", "EQUAL"),
+  XEQ(2, "xeq", "{EQUAL"),
 
   /**
    * The '<em><b>Xnoteq</b></em>' literal object.
@@ -61,7 +57,7 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XNOTEQ(3, "xnoteq", "NOTEQUAL"),
+  XNOTEQ(3, "xnoteq", "{NOTEQUAL"),
 
   /**
    * The '<em><b>Xls</b></em>' literal object.
@@ -71,17 +67,7 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XLS(4, "xls", "LESS"),
-
-  /**
-   * The '<em><b>Xgt</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #XGT_VALUE
-   * @generated
-   * @ordered
-   */
-  XGT(5, "xgt", "GREATER"),
+  XLS(4, "xls", "{LESS"),
 
   /**
    * The '<em><b>Xlsr</b></em>' literal object.
@@ -91,7 +77,7 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XLSR(6, "xlsr", "LESS]"),
+  XLSR(5, "xlsr", "{LESS]"),
 
   /**
    * The '<em><b>Xgtl</b></em>' literal object.
@@ -101,7 +87,17 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XGTL(7, "xgtl", "[GREATER"),
+  XGTL(6, "xgtl", "{[GREATER"),
+
+  /**
+   * The '<em><b>Xgt</b></em>' literal object.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #XGT_VALUE
+   * @generated
+   * @ordered
+   */
+  XGT(7, "xgt", "{GREATER"),
 
   /**
    * The '<em><b>Xbwn</b></em>' literal object.
@@ -111,7 +107,7 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XBWN(8, "xbwn", "BETWEEN"),
+  XBWN(8, "xbwn", "{BETWEEN"),
 
   /**
    * The '<em><b>Xbwnc</b></em>' literal object.
@@ -121,7 +117,7 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XBWNC(9, "xbwnc", "[BETWEEN]"),
+  XBWNC(9, "xbwnc", "{[BETWEEN]"),
 
   /**
    * The '<em><b>Xbwnl</b></em>' literal object.
@@ -131,7 +127,7 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XBWNL(10, "xbwnl", "[BETWEEN"),
+  XBWNL(10, "xbwnl", "{[BETWEEN"),
 
   /**
    * The '<em><b>Xbwnr</b></em>' literal object.
@@ -141,7 +137,7 @@ public enum XFunction implements Enumerator
    * @generated
    * @ordered
    */
-  XBWNR(11, "xbwnr", "BETWEEN]");
+  XBWNR(11, "xbwnr", "{BETWEEN]");
 
   /**
    * The '<em><b>Xin</b></em>' literal value.
@@ -152,7 +148,7 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XIN
-   * @model name="xin" literal="IN"
+   * @model name="xin" literal="{IN"
    * @generated
    * @ordered
    */
@@ -167,7 +163,7 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XNOTIN
-   * @model name="xnotin" literal="NOTIN"
+   * @model name="xnotin" literal="{NOTIN"
    * @generated
    * @ordered
    */
@@ -182,7 +178,7 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XEQ
-   * @model name="xeq" literal="EQUAL"
+   * @model name="xeq" literal="{EQUAL"
    * @generated
    * @ordered
    */
@@ -197,7 +193,7 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XNOTEQ
-   * @model name="xnoteq" literal="NOTEQUAL"
+   * @model name="xnoteq" literal="{NOTEQUAL"
    * @generated
    * @ordered
    */
@@ -212,26 +208,11 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XLS
-   * @model name="xls" literal="LESS"
+   * @model name="xls" literal="{LESS"
    * @generated
    * @ordered
    */
   public static final int XLS_VALUE = 4;
-
-  /**
-   * The '<em><b>Xgt</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Xgt</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @see #XGT
-   * @model name="xgt" literal="GREATER"
-   * @generated
-   * @ordered
-   */
-  public static final int XGT_VALUE = 5;
 
   /**
    * The '<em><b>Xlsr</b></em>' literal value.
@@ -242,11 +223,11 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XLSR
-   * @model name="xlsr" literal="LESS]"
+   * @model name="xlsr" literal="{LESS]"
    * @generated
    * @ordered
    */
-  public static final int XLSR_VALUE = 6;
+  public static final int XLSR_VALUE = 5;
 
   /**
    * The '<em><b>Xgtl</b></em>' literal value.
@@ -257,11 +238,26 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XGTL
-   * @model name="xgtl" literal="[GREATER"
+   * @model name="xgtl" literal="{[GREATER"
    * @generated
    * @ordered
    */
-  public static final int XGTL_VALUE = 7;
+  public static final int XGTL_VALUE = 6;
+
+  /**
+   * The '<em><b>Xgt</b></em>' literal value.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of '<em><b>Xgt</b></em>' literal object isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @see #XGT
+   * @model name="xgt" literal="{GREATER"
+   * @generated
+   * @ordered
+   */
+  public static final int XGT_VALUE = 7;
 
   /**
    * The '<em><b>Xbwn</b></em>' literal value.
@@ -272,7 +268,7 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XBWN
-   * @model name="xbwn" literal="BETWEEN"
+   * @model name="xbwn" literal="{BETWEEN"
    * @generated
    * @ordered
    */
@@ -287,7 +283,7 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XBWNC
-   * @model name="xbwnc" literal="[BETWEEN]"
+   * @model name="xbwnc" literal="{[BETWEEN]"
    * @generated
    * @ordered
    */
@@ -302,7 +298,7 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XBWNL
-   * @model name="xbwnl" literal="[BETWEEN"
+   * @model name="xbwnl" literal="{[BETWEEN"
    * @generated
    * @ordered
    */
@@ -317,7 +313,7 @@ public enum XFunction implements Enumerator
    * </p>
    * <!-- end-user-doc -->
    * @see #XBWNR
-   * @model name="xbwnr" literal="BETWEEN]"
+   * @model name="xbwnr" literal="{BETWEEN]"
    * @generated
    * @ordered
    */
@@ -337,9 +333,9 @@ public enum XFunction implements Enumerator
       XEQ,
       XNOTEQ,
       XLS,
-      XGT,
       XLSR,
       XGTL,
+      XGT,
       XBWN,
       XBWNC,
       XBWNL,
@@ -413,9 +409,9 @@ public enum XFunction implements Enumerator
       case XEQ_VALUE: return XEQ;
       case XNOTEQ_VALUE: return XNOTEQ;
       case XLS_VALUE: return XLS;
-      case XGT_VALUE: return XGT;
       case XLSR_VALUE: return XLSR;
       case XGTL_VALUE: return XGTL;
+      case XGT_VALUE: return XGT;
       case XBWN_VALUE: return XBWN;
       case XBWNC_VALUE: return XBWNC;
       case XBWNL_VALUE: return XBWNL;

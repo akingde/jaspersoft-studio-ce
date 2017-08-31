@@ -64,6 +64,7 @@ Workflow {
 			fragment = parser.antlr.ex.rt.AntlrGeneratorFragment {
 				options = {
 					ignoreCase = true
+					backtrack = true
 				}
 			}
 
@@ -112,6 +113,7 @@ Workflow {
 			fragment = parser.antlr.ex.ca.ContentAssistParserGeneratorFragment {
 				options = {
 					ignoreCase = true
+					backtrack = true
 				}
 			}
 

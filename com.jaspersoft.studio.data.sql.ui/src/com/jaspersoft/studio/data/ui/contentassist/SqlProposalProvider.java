@@ -51,12 +51,14 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 	}
 
 	@Override
-	public void complete_FromTableJoin(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void complete_FromTableJoin(EObject model, RuleCall ruleCall, ContentAssistContext context,
+			ICompletionProposalAcceptor acceptor) {
 		proposeTables(context, acceptor);
 	}
 
 	@Override
-	public void completeFromTable_Table(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void completeFromTable_Table(EObject model, Assignment assignment, ContentAssistContext context,
+			ICompletionProposalAcceptor acceptor) {
 		proposeTables(context, acceptor);
 	}
 
@@ -69,7 +71,8 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 			LinkedHashMap<String, MSqlTable> tables = d.getDbMetadata().getTables();
 			for (String s : tables.keySet()) {
 				String sp = tables.get(s).getDisplayText();
-				ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(sp, s, img, context);
+				ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(sp,
+						s, img, context);
 				if (proposal != null) {
 					if (tables.get(s).isCurrentSchema())
 						proposal.setReplacementString(s);
@@ -80,7 +83,8 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 			for (INode n : d.getDbMetadata().getRoot().getChildren()) {
 				if (n instanceof MSqlSchema && !((MSqlSchema) n).isNotInMetadata() && !((MSqlSchema) n).isCurrent()) {
 					String s = (String) n.getValue();
-					ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(n.getDisplayText(), s, img, context);
+					ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(
+							n.getDisplayText(), s, img, context);
 					if (proposal != null)
 						acceptor.accept(proposal);
 				}
@@ -89,22 +93,26 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 	}
 
 	@Override
-	public void completeOrderByColumnFull_ColOrder(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void completeOrderByColumnFull_ColOrder(EObject model, Assignment assignment, ContentAssistContext context,
+			ICompletionProposalAcceptor acceptor) {
 		proposeColumnOrAlias(context, acceptor);
 	}
 
 	@Override
-	public void completeGroupByColumnFull_ColGrBy(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void completeGroupByColumnFull_ColGrBy(EObject model, Assignment assignment, ContentAssistContext context,
+			ICompletionProposalAcceptor acceptor) {
 		proposeColumnOrAlias(context, acceptor);
 	}
 
 	@Override
-	public void completeColumnOperand_Cfull(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void completeColumnOperand_Cfull(EObject model, Assignment assignment, ContentAssistContext context,
+			ICompletionProposalAcceptor acceptor) {
 		proposeColumn(context, acceptor);
 	}
 
 	@Override
-	public void completeXExpression_Col(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void completeXExpression_Col(EObject model, Assignment assignment, ContentAssistContext context,
+			ICompletionProposalAcceptor acceptor) {
 		proposeColumnOrAlias(context, acceptor);
 	}
 
@@ -125,7 +133,8 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 							s = mft.getAlias() + "." + s;
 						else
 							s = mft.getValue().toSQLString() + "." + s;
-						ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(mc.getDisplayText(), s, null, context);
+						ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(
+								mc.getDisplayText(), s, null, context);
 						if (proposal != null) {
 							if (mft.getValue().isCurrentSchema())
 								proposal.setReplacementString(mc.getDisplayText());
@@ -144,7 +153,8 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 			MSelect msel = Util.getKeyword(qroot, MSelect.class);
 			for (INode n : msel.getChildren()) {
 				if (n instanceof AMQueryAliased && ((AMQueryAliased<?>) n).getAlias() != null) {
-					ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(((AMQueryAliased<?>) n).getAlias(), n.getStyledDisplayText(), null, context);
+					ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(
+							((AMQueryAliased<?>) n).getAlias(), n.getStyledDisplayText(), null, context);
 					if (proposal != null) {
 						acceptor.accept(proposal);
 					}
@@ -154,7 +164,8 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 	}
 
 	@Override
-	public void completeXExpression_Xf(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void completeXExpression_Xf(EObject model, Assignment assignment, ContentAssistContext context,
+			ICompletionProposalAcceptor acceptor) {
 		for (String s : MExpressionX.FUNCTIONS) {
 			ICompletionProposal proposal = createCompletionProposal(s, context);
 			if (proposal != null)
@@ -163,12 +174,14 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 	}
 
 	@Override
-	public void completeParameterOperand_Prm(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void completeParameterOperand_Prm(EObject model, Assignment assignment, ContentAssistContext context,
+			ICompletionProposalAcceptor acceptor) {
 		proposeJRParameter(context, acceptor);
 	}
 
 	@Override
-	public void completeExclamationParameterOperand_Prm(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void completeExclamationParameterOperand_Prm(EObject model, Assignment assignment,
+			ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		proposeJRParameter(context, acceptor);
 	}
 
@@ -179,7 +192,8 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 			JRDesignDataset ds = d.getjDataset();
 			if (ds != null) {
 				for (JRParameter p : ds.getParametersList()) {
-					if (Number.class.isAssignableFrom(p.getValueClass()) || String.class.isAssignableFrom(p.getValueClass())) {
+					if (Number.class.isAssignableFrom(p.getValueClass())
+							|| String.class.isAssignableFrom(p.getValueClass())) {
 						ICompletionProposal proposal = createCompletionProposal(p.getName(), context);
 						if (proposal != null)
 							acceptor.accept(proposal);

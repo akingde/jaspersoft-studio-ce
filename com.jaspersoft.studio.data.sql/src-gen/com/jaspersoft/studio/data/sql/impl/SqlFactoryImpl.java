@@ -1,7 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
- * All Rights Reserved. Confidential & Proprietary.
- ******************************************************************************/
 /**
  */
 package com.jaspersoft.studio.data.sql.impl;
@@ -70,6 +66,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
     switch (eClass.getClassifierID())
     {
       case SqlPackage.MODEL: return createModel();
+      case SqlPackage.WITH_QUERY: return createWithQuery();
+      case SqlPackage.WITH_COLUMNS: return createWithColumns();
       case SqlPackage.FETCH_FIRST: return createFetchFirst();
       case SqlPackage.OFFSET: return createOffset();
       case SqlPackage.LIMIT: return createLimit();
@@ -189,10 +187,10 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     switch (eDataType.getClassifierID())
     {
-      case SqlPackage.EXTRACT_VALUES:
-        return createEXTRACT_VALUESFromString(eDataType, initialValue);
       case SqlPackage.XFUNCTION:
         return createXFunctionFromString(eDataType, initialValue);
+      case SqlPackage.EXTRACT_VALUES:
+        return createEXTRACT_VALUESFromString(eDataType, initialValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -208,10 +206,10 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     switch (eDataType.getClassifierID())
     {
-      case SqlPackage.EXTRACT_VALUES:
-        return convertEXTRACT_VALUESToString(eDataType, instanceValue);
       case SqlPackage.XFUNCTION:
         return convertXFunctionToString(eDataType, instanceValue);
+      case SqlPackage.EXTRACT_VALUES:
+        return convertEXTRACT_VALUESToString(eDataType, instanceValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -226,6 +224,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     ModelImpl model = new ModelImpl();
     return model;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public WithQuery createWithQuery()
+  {
+    WithQueryImpl withQuery = new WithQueryImpl();
+    return withQuery;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public WithColumns createWithColumns()
+  {
+    WithColumnsImpl withColumns = new WithColumnsImpl();
+    return withColumns;
   }
 
   /**
@@ -1377,28 +1397,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public EXTRACT_VALUES createEXTRACT_VALUESFromString(EDataType eDataType, String initialValue)
-  {
-    EXTRACT_VALUES result = EXTRACT_VALUES.get(initialValue);
-    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-    return result;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String convertEXTRACT_VALUESToString(EDataType eDataType, Object instanceValue)
-  {
-    return instanceValue == null ? null : instanceValue.toString();
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public XFunction createXFunctionFromString(EDataType eDataType, String initialValue)
   {
     XFunction result = XFunction.get(initialValue);
@@ -1412,6 +1410,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * @generated
    */
   public String convertXFunctionToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EXTRACT_VALUES createEXTRACT_VALUESFromString(EDataType eDataType, String initialValue)
+  {
+    EXTRACT_VALUES result = EXTRACT_VALUES.get(initialValue);
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertEXTRACT_VALUESToString(EDataType eDataType, Object instanceValue)
   {
     return instanceValue == null ? null : instanceValue.toString();
   }

@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright (C) 2010 - 2016. TIBCO Software Inc. 
-  All Rights Reserved. Confidential & Proprietary.
--->
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.jaspersoft.studio.data.sql/src-gen" editDirectory="/com.jaspersoft.studio.data.sql.edit/src"
     editorDirectory="/com.jaspersoft.studio.data.sql.editor/src" modelPluginID="com.jaspersoft.studio.data.sql"
     forceOverwrite="true" modelName="Sql" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="6.0" copyrightFields="false" editPluginID="com.jaspersoft.studio.data.sql.edit"
-    editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.11">
+    editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.12">
   <genPackages prefix="Sql" basePackage="com.jaspersoft.studio.data" disposableProviderFactory="true"
       ecorePackage="Sql.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//XFunction">
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xin"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xnotin"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xeq"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xnoteq"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xls"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xlsr"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xgtl"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xgt"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xbwn"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xbwnc"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xbwnl"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xbwnr"/>
+    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//EXTRACT_VALUES">
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/ms"/>
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/s"/>
@@ -33,23 +43,17 @@
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/dayh"/>
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/yearMonth"/>
     </genEnums>
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//XFunction">
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xin"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xnotin"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xeq"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xnoteq"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xls"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xgt"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xlsr"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xgtl"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xbwn"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xbwnc"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xbwnl"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xbwnr"/>
-    </genEnums>
     <genClasses ecoreClass="Sql.ecore#//Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/wq"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/query"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//WithQuery">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//WithQuery/w"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//WithQuery/wname"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//WithQuery/withCols"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//WithQuery/query"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//WithColumns"/>
     <genClasses ecoreClass="Sql.ecore#//FetchFirst">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FetchFirst/fetchFirst"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//FetchFirst/row"/>
@@ -359,11 +363,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/soint"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//SQLCaseOperand">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SQLCaseOperand/wop"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SQLCaseOperand/expr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SQLCaseOperand/when"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//SQLCaseWhens"/>
     <genClasses ecoreClass="Sql.ecore#//SqlCaseWhen">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SqlCaseWhen/wop"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SqlCaseWhen/expr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SqlCaseWhen/texp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SqlCaseWhen/eexp"/>
