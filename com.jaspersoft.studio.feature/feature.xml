@@ -4,7 +4,7 @@
       label="Jaspersoft Studio feature"
       version="6.4.2.qualifier"
       provider-name="TIBCO Software Inc."
-      plugin="net.sf.jasperreports"
+      plugin="com.jaspersoft.studio"
       os="linux,macosx,win32"
       ws="cocoa,gtk,win32">
 

@@ -7,7 +7,7 @@
       <image path="../../../../com.jaspersoft.studio.rcp/icons/studio_logo_about.png"/>
       <text>
          TIBCO Jaspersoft&#xAE; Studio Professional - Visual Designer for JasperReports. 
-Copyright (C) 2005 - 2015 TIBCO Software Inc. All rights reserved. 
+Copyright (C) 2010 - 2017 TIBCO Software Inc. All rights reserved. 
 
 For more information, please visit 
 http://community.jaspersoft.com/project/jaspersoft-studio  
@@ -416,7 +416,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
-      <property name="eclipse.log.level" value="ALL"/>
+      <property name="eclipse.log.level" value="ALL" />
       <property name="org.eclipse.update.reconcile" value="false" />
       <!--
       	Apparently Tycho 0.18 does not respect this property.

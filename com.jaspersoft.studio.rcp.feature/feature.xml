@@ -4,7 +4,6 @@
       label="Jaspersoft Studio Community RCP Feature"
       version="6.4.2.qualifier"
       provider-name="TIBCO Software Inc."
-      plugin="net.sf.jasperreports"
       os="linux,macosx,win32"
       ws="cocoa,gtk,win32">
 
