@@ -107,9 +107,7 @@ public class FileSelector implements IFileSelection {
 						msp = wizard.getValue();
 						try {
 							jd.setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
-							jd.setProperty(AExporter.PROP_USER,
-									msp.getValue().getUser() + (msp.getValue().getOrganisation() != null
-											? "|" + msp.getValue().getOrganisation() : "")); //$NON-NLS-1$ //$NON-NLS-2$
+							jd.setProperty(AExporter.PROP_USER, AExporter.encodeUsr(msp.getValue()));
 						} catch (MalformedURLException e1) {
 							e1.printStackTrace();
 						} catch (URISyntaxException e1) {

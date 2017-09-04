@@ -42,6 +42,7 @@ import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.server.editor.JRSEditorContributor;
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
@@ -293,15 +294,8 @@ public class ServerManager {
 				if (v.getUrl().equals(url)) {
 					res = sp;
 					if (user != null) {
-						if (v.isUseSSO()) {
-							if (user.equals(v.getSsoUuid()))
-								return sp;
-						} else {
-							String u = v.getUser()
-									+ (!Misc.isNullOrEmpty(v.getOrganisation()) ? "|" + v.getOrganisation() : "");
-							if (u.equals(user))
-								return sp;
-						}
+						if (AExporter.encodeUsr(v).equals(user))
+							return sp;
 					} else
 						return sp;
 				}

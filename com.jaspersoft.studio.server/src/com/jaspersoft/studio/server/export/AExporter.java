@@ -105,7 +105,7 @@ public class AExporter {
 		spm.setScopes(scopes);
 		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
 		pm.add(spm);
-		
+
 		spm = new StandardPropertyMetadata();
 		spm.setName(COM_JASPERSOFT_STUDIO_REPORT_UNIT_DESCRIPTION);
 		spm.setLabel("Report Unit Description");
@@ -139,8 +139,7 @@ public class AExporter {
 				ServerProfile v = sp.getValue();
 				try {
 					f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_SERVERURL), v.getUrl());
-					f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_USER),
-							v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : ""));
+					f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_USER), encodeUsr(v));
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				} catch (URISyntaxException e) {
@@ -150,6 +149,17 @@ public class AExporter {
 			f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_REPORTRESOURCE),
 					res.getValue().getUriString());
 		}
+	}
+
+	public static String encodeUsr(ServerProfile v) {
+		String r = "";
+		if (v.isUseSSO())
+			r += v.getSsoUuid();
+		else
+			v.getUser();
+		if (v.getOrganisation() != null)
+			r += "|" + v.getOrganisation();
+		return r;
 	}
 
 	protected String getExtension(AMResource res) {

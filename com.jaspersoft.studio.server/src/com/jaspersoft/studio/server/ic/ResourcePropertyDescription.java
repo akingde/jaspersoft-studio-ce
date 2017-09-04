@@ -82,8 +82,8 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 	 * @param parent
 	 *            the parent of the button
 	 * @param wiProp
-	 *            the {@link IWItemProperty} to handle the setValue operation if
-	 *            the dialog is closed correctly
+	 *            the {@link IWItemProperty} to handle the setValue operation if the
+	 *            dialog is closed correctly
 	 */
 	protected void createToolbarButton(Composite parent, final IWItemProperty wiProp) {
 		ToolBar toolBar = new ToolBar(parent, SWT.NONE);
@@ -148,14 +148,14 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 						dto.addProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl(), false);
 						dto.addProperty(AExporter.PROP_USER,
 								msp.getValue().getUser() + (msp.getValue().getOrganisation() != null
-										? "|" + msp.getValue().getOrganisation() : ""),
+										? "|" + msp.getValue().getOrganisation()
+										: ""),
 								false);
 					} else {
 						if (ds != null) {
 							ds.getPropertiesMap().setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
-							ds.getPropertiesMap().setProperty(AExporter.PROP_USER,
-									msp.getValue().getUser() + (msp.getValue().getOrganisation() != null
-											? "|" + msp.getValue().getOrganisation() : "")); //$NON-NLS-1$ //$NON-NLS-2$
+							ds.getPropertiesMap().setProperty(AExporter.PROP_USER, AExporter.encodeUsr(msp.getValue())); // $NON-NLS-1$
+																															// //$NON-NLS-2$
 						}
 					}
 				} catch (MalformedURLException e1) {
@@ -167,14 +167,14 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 		}
 		return msp;
 	}
-	
+
 	/**
-	 * Override the method to add the contextual menu also on the expression control, this will remove
-	 * the button in expression mode
+	 * Override the method to add the contextual menu also on the expression
+	 * control, this will remove the button in expression mode
 	 */
 	@Override
 	protected void lazyCreateExpressionControl(IWItemProperty wiProp, DoubleControlComposite cmp) {
-		if (wiProp.isExpressionMode() && cmp.getFirstContainer().getChildren().length == 0){
+		if (wiProp.isExpressionMode() && cmp.getFirstContainer().getChildren().length == 0) {
 			cmp.getFirstContainer().setLayout(WidgetFactory.getNoPadLayout(1));
 			Control expressionControl = createExpressionControl(wiProp, cmp.getFirstContainer());
 			cmp.getFirstContainer().setData(expressionControl);

@@ -334,8 +334,7 @@ public class Publish {
 					} catch (URISyntaxException e) {
 						UIUtils.showError(e);
 					}
-					rpt.setProperty(AExporter.PROP_USER, v.getUser() + (v.getOrganisation() != null ? "|" //$NON-NLS-1$
-							+ v.getOrganisation() : "")); //$NON-NLS-1$
+					rpt.setProperty(AExporter.PROP_USER, AExporter.encodeUsr(v));
 				}
 				ResourceDescriptor rd = node.getValue();
 				if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {

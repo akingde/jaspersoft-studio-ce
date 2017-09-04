@@ -259,7 +259,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				target = target.queryParam("ticket", token); //$NON-NLS-1$
 			} else {
 				target = target.queryParam("j_username", sp.getUser()); //$NON-NLS-1$
-				target = target.queryParam("j_password", URLEncoder.encode(parent.getPassword(monitor), "UTF-8")); //$NON-NLS-1$
+				String pwd = parent.getPassword(monitor);
+				if (pwd != null)
+					target = target.queryParam("j_password", URLEncoder.encode(pwd, "UTF-8")); //$NON-NLS-1$
 				if (monitor.isCanceled())
 					return false;
 			}

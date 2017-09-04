@@ -275,8 +275,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 	 * 
 	 * @param event
 	 *            a not null key event
-	 * @return true if the current OS is mac and the pressed key is the delete
-	 *         one (BS)
+	 * @return true if the current OS is mac and the pressed key is the delete one
+	 *         (BS)
 	 */
 	private boolean isMacDelete(KeyEvent event) {
 		return Util.isMac() && event.character == SWT.BS;
@@ -476,7 +476,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 			String surl = jd.getProperty(AExporter.PROP_SERVERURL);
 			String suser = jd.getProperty(AExporter.PROP_USER);
 
-			String puser = v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : "");
+			String puser = AExporter.encodeUsr(v);
 
 			List<Command> cmds = new ArrayList<Command>();
 			if (surl == null || (!surl.equals(v.getUrlString()) || !suser.equals(puser))) {

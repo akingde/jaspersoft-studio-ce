@@ -83,8 +83,7 @@ public class JrxmlExporter extends AExporter {
 			ServerProfile v = server.getValue();
 			try {
 				jd.setProperty(AExporter.PROP_SERVERURL, v.getUrl());
-				jd.setProperty(AExporter.PROP_USER,
-						v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : ""));
+				jd.setProperty(AExporter.PROP_USER, AExporter.encodeUsr(v));
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			} catch (URISyntaxException e) {
