@@ -10,6 +10,7 @@ import java.util.Locale;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
@@ -43,6 +44,8 @@ import com.jaspersoft.studio.widgets.map.browserfunctions.UpdateMarkerPosition;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.Marker;
 import com.jaspersoft.studio.widgets.map.messages.Messages;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * This class implements the support for the Google Map component. The panel
@@ -85,7 +88,10 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 	@Override
 	protected void createContent(Composite parent, int style) {
 		createTop(parent);
-
+		if(Util.isLinux()){
+			Composite warningCmp = MapUIUtils.createLinuxWarningText(parent);
+			warningCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,2,1));
+		}
 		SashForm sash = new SashForm(parent, style | SWT.HORIZONTAL) {
 			@Override
 			public void setBounds(int x, int y, int width, int height) {

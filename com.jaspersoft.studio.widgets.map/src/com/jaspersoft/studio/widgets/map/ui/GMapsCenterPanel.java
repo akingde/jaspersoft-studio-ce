@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.map.ui;
 
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.FocusAdapter;
@@ -28,6 +29,7 @@ import com.jaspersoft.studio.widgets.map.support.BaseJavaMapSupport;
 import com.jaspersoft.studio.widgets.map.support.GMapUtils;
 import com.jaspersoft.studio.widgets.map.support.JavaMapSupport;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 
 /**
@@ -67,6 +69,11 @@ public class GMapsCenterPanel {
 
 	protected void createContent(Composite parent, int style) {
 		createTop(parent);
+		
+		if(Util.isLinux()){
+			Composite warningCmp = MapUIUtils.createLinuxWarningText(parent);
+			warningCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,1,1));
+		}
 
 		createMap(parent);
 
@@ -100,7 +107,7 @@ public class GMapsCenterPanel {
 			cmp.setLayoutData(gd);
 		}
 
-		final Text tadr = new Text(cmp, SWT.SEARCH | SWT.ICON_SEARCH);
+		final Text tadr = new Text(cmp, SWT.SEARCH | SWT.ICON_SEARCH | SWT.BORDER);
 		tadr.setMessage("Address");
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		tadr.setLayoutData(gd);
@@ -154,7 +161,7 @@ public class GMapsCenterPanel {
 		Label lbl = new Label(cmp, SWT.NONE);
 		lbl.setText("Latitude");
 
-		tlat = new Text(cmp, SWT.NONE);
+		tlat = new Text(cmp, SWT.BORDER);
 		gd = new GridData();
 		gd.widthHint = 100;
 		tlat.setLayoutData(gd);
@@ -191,7 +198,7 @@ public class GMapsCenterPanel {
 		lbl = new Label(cmp, SWT.NONE);
 		lbl.setText("Longitude");
 
-		tlon = new Text(cmp, SWT.NONE);
+		tlon = new Text(cmp, SWT.BORDER);
 		gd = new GridData();
 		gd.widthHint = 100;
 		tlon.setLayoutData(gd);

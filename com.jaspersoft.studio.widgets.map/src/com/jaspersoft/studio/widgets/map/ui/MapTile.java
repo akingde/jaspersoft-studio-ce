@@ -70,7 +70,7 @@ public class MapTile {
 	}
 
 	protected void createBrowser(Composite parent, int style) {
-		mapControl = new Browser(parent, style);
+		mapControl = new Browser(parent, style | SWT.BORDER);
 		mapControl.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
 				event.doit = false;
