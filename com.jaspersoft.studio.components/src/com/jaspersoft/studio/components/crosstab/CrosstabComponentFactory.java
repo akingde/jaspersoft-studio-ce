@@ -136,6 +136,7 @@ import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
@@ -144,6 +145,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.Pair;
 
 public class CrosstabComponentFactory implements IComponentFactory {
 	
@@ -257,7 +259,58 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			ReportFactory.createElementsForBand(mc, p.getCrosstabHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
+			JRDesignCrosstab crosstab = rg.getMCrosstab().getValue();
 			mc = new MColumnGroupTotalCell(rg, p.getTotalHeader(), p.getName());
+			
+			
+			// I need to add the extra cells...
+			Pair<String,String> cellKey = new Pair<String,String>(null, p.getName());
+			JRDesignCrosstabCell totalCell = (JRDesignCrosstabCell)crosstab.getCellsMap().get(cellKey);
+			if (totalCell == null) {
+				totalCell = new JRDesignCrosstabCell();
+				totalCell.setColumnTotalGroup(p.getName());
+				try {
+					crosstab.addCell(totalCell);
+					cellKey = new Pair<String,String>(null, null);
+					JRCrosstabCell detailCell = crosstab.getCellsMap().get(cellKey);
+					totalCell.setHeight(20);
+					if (detailCell == null) {
+						totalCell.setWidth(60);
+					} else {
+						totalCell.setHeight(detailCell.getHeight());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			// for each column, we need to add the total...
+			List<JRCrosstabRowGroup> rows = crosstab.getRowGroupsList();
+			if (rows != null) {
+				for (JRCrosstabRowGroup row : rows) {
+					cellKey = new Pair<String,String>(row.getName(), p.getName());
+					JRDesignCrosstabCell cell = (JRDesignCrosstabCell)crosstab.getCellsMap().get(cellKey);
+					if (cell == null) {
+						cell = new JRDesignCrosstabCell();
+						cell.setColumnTotalGroup(p.getName());
+						cell.setRowTotalGroup(row.getName());
+						try {
+							int height = 20;
+							for(JRCrosstabCell rowCell : crosstab.getCellsList()) {
+								if (ModelUtils.safeEquals(row.getName(), ((JRDesignCrosstabCell)rowCell).getRowTotalGroup())) {
+									height = rowCell.getHeight();
+									break;
+								}
+							}
+							crosstab.addCell(cell);
+							cell.setHeight(height);
+							cell.setWidth(60);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+					
+				}
+			}
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 
@@ -275,7 +328,60 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
+			JRDesignCrosstab crosstab = rg.getMCrosstab().getValue();
+			JRCrosstabRowGroup lastGroup = null; 
+			if (!crosstab.getRowGroupsList().isEmpty()){
+				lastGroup = crosstab.getRowGroupsList().get(crosstab.getRowGroupsList().size()-1);
+			}
+			
 			mc = new MRowGroupTotalCell(rg, p.getTotalHeader(), p.getName());
+			
+			Pair<String,String> cellKey = new Pair<String,String>(p.getName(), null);
+			JRDesignCrosstabCell totalCell = (JRDesignCrosstabCell)crosstab.getCellsMap().get(cellKey);
+			if (totalCell == null) {
+				totalCell = new JRDesignCrosstabCell();
+				totalCell.setRowTotalGroup(p.getName());
+				try {
+					crosstab.addCell(totalCell);
+					totalCell.setHeight(20);
+					if (lastGroup != null){
+						Pair<String, String> key = new Pair<String,String>(lastGroup.getName(), totalCell.getColumnTotalGroup());
+						JRCrosstabCell cell = crosstab.getCellsMap().get(key);
+						totalCell.setWidth(cell.getWidth());
+					} else {
+						totalCell.setWidth(p.getWidth());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			
+			JRCrosstabColumnGroup[] columns = crosstab.getColumnGroups();
+			if (columns != null) {
+				for(JRCrosstabColumnGroup column : columns) {
+					cellKey = new Pair<String,String>(p.getName(), column.getName());
+					JRDesignCrosstabCell cell = (JRDesignCrosstabCell)crosstab.getCellsMap().get(cellKey);
+					if (cell == null) {
+						cell = new JRDesignCrosstabCell();
+						cell.setRowTotalGroup(p.getName());
+						cell.setColumnTotalGroup(column.getName());
+						try {
+							crosstab.addCell(cell);
+							cell.setHeight(20);
+							
+							if (lastGroup != null){
+								Pair<String, String> key = new Pair<String,String>(lastGroup.getName(), column.getName());
+								JRCrosstabCell otherCell = crosstab.getCellsMap().get(key);
+								cell.setWidth(otherCell.getWidth());
+							} else {
+								cell.setWidth(p.getWidth());
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+			}
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}
