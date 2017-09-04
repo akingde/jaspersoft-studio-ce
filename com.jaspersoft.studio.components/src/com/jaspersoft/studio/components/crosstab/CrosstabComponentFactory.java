@@ -258,7 +258,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		if (p.getCrosstabHeader() != null)
 			ReportFactory.createElementsForBand(mc, p.getCrosstabHeader().getChildren());
 
-		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
+		if (p.getTotalPositionValue() != null &&  !p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
 			JRDesignCrosstab crosstab = rg.getMCrosstab().getValue();
 			mc = new MColumnGroupTotalCell(rg, p.getTotalHeader(), p.getName());
 			
@@ -327,7 +327,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		MCell mc = new MRowGroupHeaderCell(rg, p.getHeader(), p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
-		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
+		if (p.getTotalPositionValue() != null && !p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
 			JRDesignCrosstab crosstab = rg.getMCrosstab().getValue();
 			JRCrosstabRowGroup lastGroup = null; 
 			if (!crosstab.getRowGroupsList().isEmpty()){

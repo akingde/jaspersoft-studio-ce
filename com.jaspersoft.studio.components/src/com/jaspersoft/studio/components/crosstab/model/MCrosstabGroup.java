@@ -84,7 +84,7 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
-		totalPositionD = new NamedEnumPropertyDescriptor<CrosstabTotalPositionEnum>(
+		totalPositionD = new CrosstabtotalPropertyDescriptor(
 				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, Messages.common_total_position,
 				CrosstabTotalPositionEnum.NONE, NullEnum.NOTNULL);
 		totalPositionD.setDescription(Messages.MCrosstabGroup_total_position_description);

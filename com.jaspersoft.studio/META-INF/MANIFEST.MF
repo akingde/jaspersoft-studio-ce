@@ -257,6 +257,7 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.swt.widgets,
    org.eclipse.gef.ui.parts,
    org.eclipse.gef",
+ com.jaspersoft.studio.editor.gef.selection,
  com.jaspersoft.studio.editor.gef.texture,
  com.jaspersoft.studio.editor.gef.ui.actions;uses:="org.eclipse.gef.ui.actions,org.eclipse.ui,org.eclipse.swt.widgets",
  com.jaspersoft.studio.editor.gef.util,
