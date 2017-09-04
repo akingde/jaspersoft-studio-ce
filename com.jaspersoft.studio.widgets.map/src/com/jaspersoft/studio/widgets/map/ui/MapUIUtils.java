@@ -12,6 +12,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.widgets.map.messages.Messages;
+
 /**
  * Utility methods for UI related operations.
  * 
@@ -35,10 +37,8 @@ public class MapUIUtils {
 		warningIcon.setImage(JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_WARNING));
 		warningIcon.setLayoutData(new GridData(SWT.FILL, SWT.TOP,false,false));
 		Label warningText = new Label(warningCmp,SWT.WRAP);
-		warningText.setText("In Linux operating systems the map browser widget is not working properly: please set the properties manually.");
-		warningText.setToolTipText("The Eclipse platform has some limitations related to the Java-Javascript feature of the SWT browser widget. "
-				+ "It appears that the communication between the browser and the container interface is not working properly. "
-				+ "The current workaround is to set manually the properties for the map component.");
+		warningText.setText(Messages.MapUIUtils_MapLinuxWarningMsg);
+		warningText.setToolTipText(Messages.MapUIUtils_MapLinuxWarningTooltip);
 		warningText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
 		return warningCmp;
 	}

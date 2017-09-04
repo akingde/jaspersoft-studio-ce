@@ -31,6 +31,8 @@ public class Messages extends NLS {
 	public static String MapTile_JavascriptSupportAlreadyDefined;
 	public static String MapTile_JavaSupportAlreadyDefinedError;
 	public static String MapType_InvalidType;
+	public static String MapUIUtils_MapLinuxWarningMsg;
+	public static String MapUIUtils_MapLinuxWarningTooltip;
 	public static String MarkersPickupDialog_DeleteMarkersBtn;
 	public static String MarkersPickupDialog_MarkersLbl;
 	public static String MarkersPickupDialog_Title;
