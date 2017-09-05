@@ -282,7 +282,10 @@ public class SoapConnection implements IConnection {
 					mainDs = r;
 				if (r.isMainReport()
 						|| (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml"))) { //$NON-NLS-1$
-					if (r.getHasData() && r.getData() != null) {
+					if (r.getFile() != null) {
+						inputFile = r.getFile();
+						r.setData(null);
+					} else if (r.getHasData() && r.getData() != null) {
 						inputFile = writeToTemp(r.getData());
 						r.setData(null);
 					} else if (inputFile == null && !rd.getIsNew() && !r.getIsReference()) {
@@ -341,8 +344,8 @@ public class SoapConnection implements IConnection {
 					} else {
 						if (r.isMainReport())
 							continue;
-						File f = null;
-						if (r.getHasData() && r.getData() != null) {
+						File f = r.getFile();
+						if (f == null && r.getHasData() && r.getData() != null) {
 							f = writeToTemp(r.getData());
 							r.setData(null);
 							r.setHasData(true);
@@ -724,13 +727,11 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public void uploadJdbcDrivers(JdbcDriver driver, IProgressMonitor monitor) throws Exception {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public JdbcDriverInfo getJdbcDrivers(IProgressMonitor monitor) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

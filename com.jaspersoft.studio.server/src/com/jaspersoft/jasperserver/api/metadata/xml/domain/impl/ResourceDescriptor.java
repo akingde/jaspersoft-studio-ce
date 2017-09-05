@@ -13,6 +13,8 @@
 
 package com.jaspersoft.jasperserver.api.metadata.xml.domain.impl;
 
+import java.io.File;
+
 /**
  * @author tkavanagh
  * @version $Id: ResourceDescriptor.java 4307 2006-08-24 08:13:55Z giulio $
@@ -28,12 +30,12 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import net.sf.jasperreports.engine.JRConstants;
-
 import com.jaspersoft.jasperserver.api.metadata.common.domain.FileResource;
 import com.jaspersoft.jasperserver.api.metadata.common.domain.ResourceReference;
 import com.jaspersoft.studio.server.protocol.IConnection;
+
 import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JRConstants;
 
 public class ResourceDescriptor implements Serializable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -244,6 +246,15 @@ public class ResourceDescriptor implements Serializable {
 	private byte[] data;
 	private String fileType;
 	private String referenceType;
+	private File file;
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public File getFile() {
+		return file;
+	}
 
 	public byte[] getData() {
 		return data;
@@ -594,8 +605,11 @@ public class ResourceDescriptor implements Serializable {
 	}
 
 	public static boolean isFileType(String fileType) {
-		return CONTENT_TYPE_PDF.equals(fileType) || CONTENT_TYPE_HTML.equals(fileType) || CONTENT_TYPE_XLS.equals(fileType) || CONTENT_TYPE_RTF.equals(fileType) || CONTENT_TYPE_CSV.equals(fileType)
-				|| CONTENT_TYPE_IMAGE.equals(fileType) || TYPE_RESOURCE_BUNDLE.equals(fileType) || TYPE_FONT.equals(fileType) || TYPE_CLASS_JAR.equals(fileType) || TYPE_JRXML.equals(fileType)
+		return CONTENT_TYPE_PDF.equals(fileType) || CONTENT_TYPE_HTML.equals(fileType)
+				|| CONTENT_TYPE_XLS.equals(fileType) || CONTENT_TYPE_RTF.equals(fileType)
+				|| CONTENT_TYPE_CSV.equals(fileType) || CONTENT_TYPE_IMAGE.equals(fileType)
+				|| TYPE_RESOURCE_BUNDLE.equals(fileType) || TYPE_FONT.equals(fileType)
+				|| TYPE_CLASS_JAR.equals(fileType) || TYPE_JRXML.equals(fileType)
 				|| TYPE_STYLE_TEMPLATE.equals(fileType) || TYPE_XML_FILE.equals(fileType);
 	}
 
@@ -652,8 +666,7 @@ public class ResourceDescriptor implements Serializable {
 	 * looked for in the property PROP_LOV, name="LABEL" and value="value" i.e.
 	 * <resourceProperty name="PROP_LOV"> <resourceProperty name="1">
 	 * <value>test1</value> </resourceProperty> <resourceProperty name="2">
-	 * <value>test2</value> </resourceProperty> </resourceProperty> are in the
-	 * list.
+	 * <value>test2</value> </resourceProperty> </resourceProperty> are in the list.
 	 */
 	public List<ListItem> getListOfValues() {
 		if (listItems == null) {
@@ -778,8 +791,8 @@ public class ResourceDescriptor implements Serializable {
 
 	/**
 	 * Set the list of columns using a String array The result is a new
-	 * ResourceProperty (PROP_QUERY_VISIBLE_COLUMNS) filled with a set of
-	 * children, one per column.
+	 * ResourceProperty (PROP_QUERY_VISIBLE_COLUMNS) filled with a set of children,
+	 * one per column.
 	 */
 	public void setQueryVisibleColumns(String[] queryVisibleColumns) {
 
@@ -804,8 +817,8 @@ public class ResourceDescriptor implements Serializable {
 	 * Return the property PROP_QUERY_DATA as set of InputControlQueryDataRow the
 	 * structure is as follow: PROP_QUERY_DATA { PROP_QUERY_DATA_ROW {
 	 * PROP_QUERY_DATA_COLUMN_VALUE } } } This method is performed only once, and
-	 * the result is cached in queryDataCache. Subsequent calls to this method
-	 * will return always queryDataCache.
+	 * the result is cached in queryDataCache. Subsequent calls to this method will
+	 * return always queryDataCache.
 	 * 
 	 */
 	public java.util.List<InputControlQueryDataRow> getQueryData() {
@@ -842,8 +855,8 @@ public class ResourceDescriptor implements Serializable {
 	/**
 	 * Convenient way to create the PROP_QUERY_DATA properties from a set of
 	 * InputControlQueryDataRow the structure will be create as follow:
-	 * PROP_QUERY_DATA { PROP_QUERY_DATA_ROW { PROP_QUERY_DATA_COLUMN_VALUE } } }
-	 * A call to this method will set to null the queryDataCache
+	 * PROP_QUERY_DATA { PROP_QUERY_DATA_ROW { PROP_QUERY_DATA_COLUMN_VALUE } } } A
+	 * call to this method will set to null the queryDataCache
 	 * 
 	 */
 	public void setQueryData(java.util.List<InputControlQueryDataRow> queryData) {
@@ -912,9 +925,9 @@ public class ResourceDescriptor implements Serializable {
 	 * Set a boolean resource property value.
 	 * 
 	 * @param resourcePropertyName
-	 *          the property name
+	 *            the property name
 	 * @param value
-	 *          the value
+	 *            the value
 	 * @see #setResourceProperty(String, String)
 	 * @see #getResourcePropertyValueAsBoolean(String)
 	 */
@@ -926,9 +939,9 @@ public class ResourceDescriptor implements Serializable {
 	 * Set an integer resource property value.
 	 * 
 	 * @param resourcePropertyName
-	 *          the property name
+	 *            the property name
 	 * @param value
-	 *          the value
+	 *            the value
 	 * @see #setResourceProperty(String, String)
 	 * @see #getResourcePropertyValueAsInteger(String)
 	 */
@@ -984,8 +997,8 @@ public class ResourceDescriptor implements Serializable {
 	}
 
 	/**
-	 * Return the value of the property resourcePropertyName as Boolean Return
-	 * null if the property is not found
+	 * Return the value of the property resourcePropertyName as Boolean Return null
+	 * if the property is not found
 	 * 
 	 */
 	public Boolean getResourcePropertyValueAsBoolean(String resourcePropertyName) {
@@ -999,8 +1012,8 @@ public class ResourceDescriptor implements Serializable {
 	}
 
 	/**
-	 * Return the value of the property resourcePropertyName as Integer Return
-	 * null if the property is not found or is not an integer
+	 * Return the value of the property resourcePropertyName as Integer Return null
+	 * if the property is not found or is not an integer
 	 * 
 	 */
 	public Integer getResourcePropertyValueAsInteger(String resourcePropertyName) {

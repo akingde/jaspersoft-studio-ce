@@ -37,10 +37,8 @@ public abstract class AFileResource extends AMResource {
 		this.file = file;
 		if (file != null)
 			try {
-				getValue()
-						.setData(
-								Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
-										.getBytes(file)));
+				getValue().setFile(file);
+				getValue().setData(Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
 				getValue().setHasData(true);
 				return;
 			} catch (IOException e) {
@@ -69,8 +67,7 @@ public abstract class AFileResource extends AMResource {
 	@Override
 	public String getJRSUrl() throws UnsupportedEncodingException {
 		return "flow.html?_flowId=addFileResourceFlow&selectedResource="
-				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1")
-				+ "&ParentFolderUri="
+				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1") + "&ParentFolderUri="
 				+ URLEncoder.encode(getValue().getParentFolder(), "ISO-8859-1");
 	}
 }

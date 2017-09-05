@@ -404,6 +404,7 @@ public abstract class ASelector {
 		rnew.setLabel(rd.getLabel());
 		rnew.setDescription(rd.getDescription());
 
+		rnew.setFile(rd.getFile());
 		rnew.setData(rd.getData());
 		rnew.setHasData(rd.getHasData());
 		rnew.setSql(rd.getSql());

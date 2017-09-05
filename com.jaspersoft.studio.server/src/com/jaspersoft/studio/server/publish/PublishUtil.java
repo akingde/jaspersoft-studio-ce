@@ -215,28 +215,30 @@ public class PublishUtil {
 			if (ovw != null) {
 				exists = true;
 				popt.setOverwrite(OverwriteEnum.getByValue(ovw));
-			}
-			if (ovw.equals(OverwriteEnum.ONLY_EXPRESSION.getValue())) {
-				String exp = ifile
-						.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".expression"));
-				if (exp != null)
-					popt.setExpression(exp);
-			} else {
-				String ref = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"));
-				if (ref != null) {
-					exists = true;
-					popt.setPublishMethod(ResourcePublishMethod.valueOf(ref));
-					String path = ifile
-							.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"));
-					if (path != null) {
-						ResourceDescriptor rd = new ResourceDescriptor();
-						rd.setParentFolder(RDUtil.getParentFolder(path));
-						rd.setUriString(path);
-						rd.setWsType(f.getValue().getWsType());
-						popt.setReferencedResource(
-								WSClientHelper.getResource(monitor, f, rd, FileUtils.createTempFile("tmp", "")));
-					} else
-						popt.setPublishMethod(ResourcePublishMethod.LOCAL);
+
+				if (ovw.equals(OverwriteEnum.ONLY_EXPRESSION.getValue())) {
+					String exp = ifile
+							.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".expression"));
+					if (exp != null)
+						popt.setExpression(exp);
+				} else {
+					String ref = ifile
+							.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"));
+					if (ref != null) {
+						exists = true;
+						popt.setPublishMethod(ResourcePublishMethod.valueOf(ref));
+						String path = ifile
+								.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"));
+						if (path != null) {
+							ResourceDescriptor rd = new ResourceDescriptor();
+							rd.setParentFolder(RDUtil.getParentFolder(path));
+							rd.setUriString(path);
+							rd.setWsType(f.getValue().getWsType());
+							popt.setReferencedResource(
+									WSClientHelper.getResource(monitor, f, rd, FileUtils.createTempFile("tmp", "")));
+						} else
+							popt.setPublishMethod(ResourcePublishMethod.LOCAL);
+					}
 				}
 			}
 		} catch (Exception e) {
