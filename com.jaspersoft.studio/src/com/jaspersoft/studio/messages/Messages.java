@@ -2061,9 +2061,13 @@ public class Messages extends NLS {
 	public static String SortFieldPage_description;
 	public static String SortFieldPage_field;
 	public static String SortFieldPage_remove;
+	public static String SortFieldsAction_1;
 	public static String SortFieldSection_sort_field;
 	public static String SortFieldSection_sort_order;
 	public static String SortFieldWizard_Title;
+	public static String SortParametersAction_1;
+	public static String SortVariablesAction_2;
+	public static String SortVariablesAction_common_sortalphabetically;
 	public static String SourcePage_dialogText;
 	public static String SourcePage_errorFileError;
 	public static String SourcePage_errorFileNotSelected;

@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -28,7 +29,7 @@ public class SortFieldsAction extends AbstractFilePropertyAction {
 	/**
 	 * The id of the property set on the eclipse file resource
 	 */
-	private static final String SORT_PROPERTY_NAME = "com.jaspersoft.studio.sortFields"; 
+	private static final String SORT_PROPERTY_NAME = "com.jaspersoft.studio.sortFields";  //$NON-NLS-1$
 	
 	public SortFieldsAction(IWorkbenchPart part) {
 		super(part);
@@ -40,8 +41,8 @@ public class SortFieldsAction extends AbstractFilePropertyAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Sort Aphabetically");
-		setToolTipText("Sort the fields alphabetichally");
+		setText(Messages.SortVariablesAction_common_sortalphabetically);
+		setToolTipText(Messages.SortFieldsAction_1);
 		setId(ID);
 		setEnabled(false);
 	}

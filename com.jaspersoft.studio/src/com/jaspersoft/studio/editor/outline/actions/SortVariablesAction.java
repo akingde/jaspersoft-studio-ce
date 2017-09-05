@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.variable.MVariables;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -28,7 +29,7 @@ public class SortVariablesAction extends AbstractFilePropertyAction {
 	/**
 	 * The id of the property set on the eclipse file resource
 	 */
-	private static final String SORT_PROPERTY_NAME = "com.jaspersoft.studio.sortVariables"; 
+	private static final String SORT_PROPERTY_NAME = "com.jaspersoft.studio.sortVariables";  //$NON-NLS-1$
 	
 	public SortVariablesAction(IWorkbenchPart part) {
 		super(part);
@@ -40,8 +41,8 @@ public class SortVariablesAction extends AbstractFilePropertyAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Sort Aphabetically");
-		setToolTipText("Sort the variables alphabetichally");
+		setText(Messages.SortVariablesAction_common_sortalphabetically);
+		setToolTipText(Messages.SortVariablesAction_2);
 		setId(ID);
 		setEnabled(false);
 	}
