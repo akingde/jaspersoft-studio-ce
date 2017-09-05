@@ -57,17 +57,19 @@ public class CustomTerminalConverters extends DefaultTerminalConverters {
 			@Override
 			public Long toValue(String string, INode node)
 					throws ValueConverterException {
+				if(string.endsWith("l") || string.endsWith("L")){
+					string = string.substring(0, string.length()-1);
+				}
 				if(string.startsWith("0x") || string.startsWith("0X")){
-					String stripped = string.substring(2, string.length()-1);
+					String stripped = string.substring(2, string.length());
 					return Long.parseLong(stripped,RADIX_16);
 				}
 				else if(string.startsWith("0")){
-					String stripped = string.substring(0, string.length()-1);
+					String stripped = string.substring(0, string.length());
 					return Long.parseLong(stripped,RADIX_8);
 				}
 				else {
-					String stripped = string.substring(0, string.length()-1);
-					return Long.parseLong(stripped);
+					return Long.parseLong(string);
 				}
 			}
 
