@@ -37,6 +37,7 @@ import com.jaspersoft.studio.server.publish.JrxmlPublishContributor;
 import net.sf.jasperreports.annotations.properties.PropertyScope;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.properties.PropertyMetadata;
 import net.sf.jasperreports.properties.StandardPropertyMetadata;
 
@@ -156,8 +157,8 @@ public class AExporter {
 		if (v.isUseSSO())
 			r += v.getSsoUuid();
 		else
-			v.getUser();
-		if (v.getOrganisation() != null)
+			r += v.getUser();
+		if (!Misc.isNullOrEmpty(v.getOrganisation()))
 			r += "|" + v.getOrganisation();
 		return r;
 	}
