@@ -18,6 +18,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -84,6 +85,9 @@ public class LegendSettingsSection extends AbstractSection {
 	private void updateFillControl(){
 		if (strokeContainer != null && getElement() != null){
 			Object isFill = getElement().getPropertyValue(LegendSettings.PROPERTY_frame + PadUtil.FRAME_FILL);
+			if (isFill instanceof DefaultValue){
+				isFill = ((DefaultValue)isFill).getValue();
+			}
 			strokeContainer.setVisible(isFill != null? !((Boolean)isFill) : false);
 		}
 	}
