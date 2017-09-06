@@ -29,22 +29,22 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor implements 
 	/**
 	 * Flag used to set the widget to accept the null value
 	 */
-	private boolean isNullable = true;
+	protected boolean isNullable = true;
 
 	/**
 	 * The minimum value accepted
 	 */
-	private double minValue = 0;
+	protected double minValue = 0;
 
 	/**
 	 * The maximum value accepted
 	 */
-	private double maxValue = Double.MAX_VALUE;
+	protected double maxValue = Double.MAX_VALUE;
 	
 	/**
 	 * Number of decimal digits shwon and accepted
 	 */
-	private int digitsNumber = 6;
+	protected int digitsNumber = 6;
 	
 	/**
 	 * Instantiates a new float property descriptor.
