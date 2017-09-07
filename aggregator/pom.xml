@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<tycho-version>0.23.1</tycho-version>
+		<tycho-version>0.26.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- Force this property when producing official release -->
@@ -78,6 +78,7 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<useProjectSettings>false</useProjectSettings>
 				</configuration>
 			</plugin>
 

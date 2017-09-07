@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.jaspersoft.studio.foundation.bundles"
-      label="Jaspersoft Studio Required Additional Bundles"
+      label="Jaspersoft Studio Required Bundles Feature"
       version="1.0.8"
       provider-name="TIBCO Software Inc.">
 
    <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
-      Additional bundles needed in order to run Jaspersoft Studio
+      Required bundles to run correctly TIBCO Jaspersoft Studio
    </description>
 
-   <copyright url="http://www.jaspersoft.com/legal-notices">
-      Copyright © 2005 - 2015 TIBCO Software Inc.
+   <copyright>
+      Copyright (C) 2010 - 2017. TIBCO Software Inc.
    </copyright>
 
-   <license url="%licenseURL">
-      %license
-   </license>
+   <url>
+      <update label="TIBCO Jaspersoft Studio update site" url="http://jasperstudio.sf.net/updates"/>
+      <discovery label="TIBCO Jaspersoft Studio Community Edition" url="http://community.jaspersoft.com/project/jaspersoft-studio"/>
+   </url>
 
    <includes
          id="org.eclipse.nebula.widgets.cdatetime.feature"
