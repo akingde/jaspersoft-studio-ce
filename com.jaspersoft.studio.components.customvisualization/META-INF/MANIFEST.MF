@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
-Bundle-Name: %Bundle-Name
+Bundle-Name: Custom Visualization Component
 Bundle-SymbolicName: com.jaspersoft.studio.components.customvisualization;singleton:=true
 Bundle-Version: 6.4.2.qualifier
 Bundle-Activator: com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator
-Bundle-Vendor: %Bundle-Vendor
+Bundle-Vendor: TIBCO Software Inc.
 Bundle-Localization: plugin
 Require-Bundle: com.jaspersoft.studio;bundle-version="6.4.2",
  com.jaspersoft.studio.server;bundle-version="6.4.2"

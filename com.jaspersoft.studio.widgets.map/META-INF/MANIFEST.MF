@@ -5,7 +5,7 @@ Bundle-Name: Google Map Widget
 Bundle-SymbolicName: com.jaspersoft.studio.widgets.map
 Bundle-Version: 6.4.2.qualifier
 Bundle-Activator: com.jaspersoft.studio.widgets.map.MapActivator
-Bundle-Vendor: Buzzcoders.com
+Bundle-Vendor: TIBCO Software Inc.
 Require-Bundle: com.jaspersoft.studio;bundle-version="6.4.2",
  org.apache.commons.httpclient;bundle-version="3.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
