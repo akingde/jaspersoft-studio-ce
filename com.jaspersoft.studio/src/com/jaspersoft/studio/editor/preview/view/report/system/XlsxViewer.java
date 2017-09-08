@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsxAction;
-import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.viewer.ReportViewer;
@@ -36,6 +36,6 @@ public class XlsxViewer extends ASystemViewer {
 
 	@Override
 	public PreferencePage getPreferencePage() {
-		return new JRExporterPreferencePage();
+		return new ExcelExporterPreferencePage();
 	}
 }
