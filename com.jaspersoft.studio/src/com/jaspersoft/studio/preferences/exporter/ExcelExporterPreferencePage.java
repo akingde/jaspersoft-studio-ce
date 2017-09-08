@@ -11,7 +11,6 @@ import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -81,7 +80,6 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		createTabCommons(tabFolder);
 		createSheet(tabFolder);
 		createTabCells(tabFolder);
-		createJExcelAPI(tabFolder);
 
 		tabFolder.setSelection(0);
 
@@ -133,6 +131,12 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_IMAGE_BORDER_FIX_ENABLED,
 				Messages.ExcelExporterPreferencePage_35, sc);
+		addField(bf);
+		HelpSystem.setHelp(bf.getDescriptionControl(sc),
+				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+
+		bf = new BooleanFieldEditor(XlsExporterConfiguration.PROPERTY_CREATE_CUSTOM_PALETTE,
+				Messages.ExcelExporterPreferencePage_61, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc),
 				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
@@ -306,28 +310,6 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		ptab.setControl(sc);
-	}
-
-	private void createJExcelAPI(CTabFolder tabFolder) {
-		CTabItem ptab = new CTabItem(tabFolder, SWT.NONE);
-		ptab.setText(Messages.ExcelExporterPreferencePage_60);
-
-		ScrolledComposite scompo = new ScrolledComposite(tabFolder, SWT.V_SCROLL | SWT.H_SCROLL);
-		scompo.setExpandHorizontal(true);
-		scompo.setExpandVertical(true);
-
-		Composite sc = new Composite(scompo, SWT.NONE);
-		sc.setLayout(new GridLayout(3, false));
-
-		BooleanFieldEditor bf = new BooleanFieldEditor(XlsExporterConfiguration.PROPERTY_CREATE_CUSTOM_PALETTE,
-				Messages.ExcelExporterPreferencePage_61, sc);
-		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(sc),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
-
-		scompo.setMinSize(sc.getSize());
-		scompo.setContent(sc);
-		ptab.setControl(scompo);
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
