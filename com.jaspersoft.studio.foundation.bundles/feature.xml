@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.foundation.bundles"
       label="Jaspersoft Studio Required Bundles Feature"
-      version="1.0.8"
+      version="1.0.9"
       provider-name="TIBCO Software Inc.">
 
    <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
@@ -47,48 +47,41 @@
          id="com.jaspersoft.studio.bundles.barbecue"
          download-size="0"
          install-size="0"
-         version="1.5.0.beta1"
+         version="1.5.0.beta1_b02"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.bundles.beanshell"
          download-size="0"
          install-size="0"
-         version="2.0.0.b6"
+         version="2.0.0.b6_02"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.bundles.commons-beanutils"
          download-size="0"
          install-size="0"
-         version="1.9.3.201612121041"
+         version="1.9.3.201709071631"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.bundles.commons-digester"
          download-size="0"
          install-size="0"
-         version="2.1.0.201503161008"
+         version="2.1.0.201709071631"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.bundles.itext"
          download-size="0"
          install-size="0"
-         version="2.1.7.js6_b01"/>
-
-   <plugin
-         id="com.jaspersoft.studio.bundles.jxl"
-         download-size="0"
-         install-size="0"
-         version="2.6.10"
-         unpack="false"/>
+         version="2.1.7.js6_b02"/>
 
    <plugin
          id="com.jaspersoft.studio.bundles.poi"
          download-size="0"
          install-size="0"
-         version="3.15.0.b02"/>
+         version="3.15.0.b03"/>
 
    <plugin
          id="com.fasterxml.jackson.core.jackson-annotations"
@@ -157,14 +150,14 @@
          id="com.jaspersoft.studio.bundles.bouncycastle"
          download-size="0"
          install-size="0"
-         version="1.4.6"
+         version="1.4.6.b02"
          unpack="false"/>
 
    <plugin
          id="org.w3c.dom.svg.patch"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.1.0.b02"
          fragment="true"
          unpack="false"/>
 
@@ -172,7 +165,7 @@
          id="com.jaspersoft.studio.bundles.zxing"
          download-size="0"
          install-size="0"
-         version="3.2.1.b01"
+         version="3.2.1.b02"
          unpack="false"/>
 
    <plugin
@@ -207,6 +200,6 @@
          id="com.jaspersoft.studio.bundles.batik"
          download-size="0"
          install-size="0"
-         version="1.9.0.b01"/>
+         version="1.9.0.b02"/>
 
 </feature>
