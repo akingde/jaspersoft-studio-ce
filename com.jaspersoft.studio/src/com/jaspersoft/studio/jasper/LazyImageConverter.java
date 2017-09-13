@@ -459,6 +459,8 @@ public class LazyImageConverter extends ElementConverter {
 	 */
 	protected void refreshElements(KeyValue<JasperReportsContext, String> key) {
 		HashSet<MGraphicElement> resourceRequest = pendingRequests.get(key);
+		if(resourceRequest == null)
+			return;
 		synchronized (resourceRequest) {
 			if (resourceRequest != null) {
 				for (final MGraphicElement refreshElement : resourceRequest) {
