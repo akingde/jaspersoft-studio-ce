@@ -82,6 +82,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_CONTAINER_MARGIN_COLOR = "containerMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_MARGIN_COLOR = "pageMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_BACKGROUND = "pageBackground"; //$NON-NLS-1$
+	public static final String P_RESIZE_ON_PASTE = "resizeOnPaste"; //$NON-NLS-1$
 
 	public static final String P_ELEMENT_DESIGN_BORDER_COLOR = "elementDesignBorderColor"; //$NON-NLS-1$
 
@@ -128,8 +129,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 
 		addField(new ComboFieldEditor(P_DAFILTER, Messages.DesignerPreferencePage_3,
-				new String[][] { { Messages.DesignerPreferencePage_4, "all" }, // $NON-NLS-3$
-						{ Messages.DesignerPreferencePage_6, "lang" }, { Messages.DesignerPreferencePage_8, "da" } }, //$NON-NLS-2$ //$NON-NLS-4$
+				new String[][] { { Messages.DesignerPreferencePage_4, "all" }, // $NON-NLS-3$ //$NON-NLS-1$
+						{ Messages.DesignerPreferencePage_6, "lang" }, { Messages.DesignerPreferencePage_8, "da" } },  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-4$
 				getFieldEditorParent()));
 
 		Label separator = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -150,6 +151,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_RESIZE_CONTAINER, Messages.DesignerPreferencePage_autoresizeBand,
 				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_RESIZE_ON_PASTE, Messages.DesignerPreferencePage_resizeBandOption, getFieldEditorParent()));
 
 		// Eventually create the extensions for the page
 		super.createFieldEditors();
@@ -183,6 +185,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_CENTER_SELECTION, true);
 		store.setDefault(P_RESIZE_CONTAINER, true);
 		store.setDefault(P_SHOW_VARIABLES_DEFAULTS, true);
+		store.setDefault(P_RESIZE_ON_PASTE, true);
 		PreferenceConverter.setDefault(store, P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());
 	}
 

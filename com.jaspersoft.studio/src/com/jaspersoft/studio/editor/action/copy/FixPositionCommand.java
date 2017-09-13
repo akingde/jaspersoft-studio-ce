@@ -9,6 +9,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.engine.JRBand;
@@ -73,9 +74,10 @@ public class FixPositionCommand extends Command{
 			int yOffset = 5;
 			if (newParent.getValue() instanceof JRBand){
 				JRBand band = (JRBand)newParent.getValue();
+				Boolean resizeBandOnPaste = originalParent.getJasperConfiguration().getPropertyBoolean(DesignerPreferencePage.P_RESIZE_ON_PASTE, true);
 				boolean fixXaxes = false;
 				int height = de.getY() + yOffset+ de.getHeight();
-				if (band.getHeight() < height) {
+				if (band.getHeight() < height && !resizeBandOnPaste) {
 					fixXaxes = true;
 					yOffset = 0;
 				}
@@ -87,7 +89,7 @@ public class FixPositionCommand extends Command{
 						yOffset = overlappingElement.getY() + 5 - de.getY();
 					} else {
 						height = de.getY() + yOffset+ de.getHeight();
-						if (band.getHeight() < height) {
+						if (band.getHeight() < height && !resizeBandOnPaste) {
 							fixXaxes = true;
 							yOffset = 0;
 						}
@@ -95,15 +97,6 @@ public class FixPositionCommand extends Command{
 					startingLocation = new Rectangle(de.getX() + xOffset, de.getY() + yOffset, de.getWidth(), de.getHeight());
 					overlappingElement = getPerfectlyOverlappingChildren(de, band, startingLocation);
 				}
-				
-				/*int bandHeight = band.getHeight();
-				if (de.getY() + yOffset + de.getHeight() > bandHeight){
-					Rectangle newPoisition = getOverlappingChildren(band, de, originalParent.getJasperDesign());
-					if (newPoisition != null){
-						yOffset = 0;
-						xOffset = newPoisition.x - de.getX();
-					}
-				}*/
 				
 				//check if the band need and could be resized
 				height = de.getY() + yOffset+ de.getHeight();
@@ -115,8 +108,6 @@ public class FixPositionCommand extends Command{
 						parentBand.setHeight(height);
 					}
 				}
-				
-				
 			}
 			de.setX(de.getX() + xOffset);
 			de.setY(de.getY() + yOffset);

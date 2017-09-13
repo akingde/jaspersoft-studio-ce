@@ -590,6 +590,7 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_pagebackground;
 	public static String DesignerPreferencePage_pageprintmargincolor;
 	public static String DesignerPreferencePage_pixelMeasure;
+	public static String DesignerPreferencePage_resizeBandOption;
 	public static String DesignerPreferencePage_rulerMeasureLabel;
 	public static String DesignerPreferencePage_savereportonpreview;
 	public static String DesignerPreferencePage_show_band_names;
