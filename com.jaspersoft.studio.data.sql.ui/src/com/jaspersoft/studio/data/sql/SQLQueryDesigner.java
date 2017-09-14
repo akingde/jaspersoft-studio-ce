@@ -154,6 +154,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 		source = new SQLQuerySource(this);
 		bptab.setControl(source.createSource(tabFolder));
+		setupSourceEditorFont();
 	}
 
 	@Override
