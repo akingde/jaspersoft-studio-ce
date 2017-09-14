@@ -31,29 +31,31 @@ public class CreateParameterAction extends ACreateAndSelectAction {
 	 * Constructs a <code>CreateAction</code> using the specified part.
 	 * 
 	 * @param part
-	 *          The part for this action
+	 *            The part for this action
 	 */
 	public CreateParameterAction(IWorkbenchPart part) {
 		super(part);
 		setCreationFactory(new JDPaletteCreationFactory(MParameter.class));
 	}
-	
+
 	@Override
 	protected boolean calculateEnabled() {
-		if(!checkSingleSelectedObject(MParameters.class)  && !checkSingleSelectedObject(MParameter.class)){
+		if (!checkSingleSelectedObject(MParameters.class) && !checkSingleSelectedObject(MParameter.class)) {
 			return false;
 		}
 		return super.calculateEnabled();
 	}
-	
+
 	protected boolean setExtendedData(Map<Object, Object> map, List<?> objects) {
 		if (objects.size() == 1) {
-			EditPart part = (EditPart)objects.get(0);
+			EditPart part = (EditPart) objects.get(0);
 			if (part.getModel() instanceof MParameter) {
-				MParameter selectedField = (MParameter)part.getModel();
+				MParameter selectedField = (MParameter) part.getModel();
 				ANode parent = selectedField.getParent();
-				int index = parent.getChildren().indexOf(selectedField);
-				map.put(CreateRequestUtil.NEWINDEX, index + 1);
+				if (parent != null) {
+					int index = parent.getChildren().indexOf(selectedField);
+					map.put(CreateRequestUtil.NEWINDEX, index + 1);
+				}
 			}
 		}
 		return true;
