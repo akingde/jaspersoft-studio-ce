@@ -384,6 +384,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 									if (atep.understandsRequest(request)) {
 										atep.performRequest(request);
 									} else if (atep.getModel() instanceof ANode) {
+										// FIXME - See also EditableFigureEditPart#openEditor()
+										// We need to improve the check that allow to call the openEditor operation.
+										// Reference JIRA Jaspersoft #JSS-637
 										EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), (IEditorPart) editor,
 												(ANode) atep.getModel());
 									}
