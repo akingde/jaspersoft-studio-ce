@@ -368,6 +368,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 						Tree t = (Tree) e.getSource();
 						TreeItem[] ti = t.getSelection();
 						if (ti != null && ti.length > 0) {
+							if(ti.length==1 && ti[0].getItemCount()>0){
+								 ti[0].setExpanded(!ti[0].getExpanded());
+							}
 							Object obj = ti[0].getData();
 							if (obj instanceof TreeEditPart && editor instanceof AbstractVisualEditor) {
 
