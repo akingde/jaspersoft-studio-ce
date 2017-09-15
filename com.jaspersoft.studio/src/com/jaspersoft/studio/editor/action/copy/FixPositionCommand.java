@@ -86,12 +86,12 @@ public class FixPositionCommand extends Command{
 				while(overlappingElement != null){
 					xOffset = overlappingElement.getX() + 5 - de.getX();
 					if (!fixXaxes) {
-						yOffset = overlappingElement.getY() + 5 - de.getY();
-					} else {
+						int lastValidYOffset = yOffset;
+						yOffset = overlappingElement.getY() + 5 - de.getY();		
 						height = de.getY() + yOffset+ de.getHeight();
 						if (band.getHeight() < height && !resizeBandOnPaste) {
 							fixXaxes = true;
-							yOffset = 0;
+							yOffset = lastValidYOffset;
 						}
 					}
 					startingLocation = new Rectangle(de.getX() + xOffset, de.getY() + yOffset, de.getWidth(), de.getHeight());
