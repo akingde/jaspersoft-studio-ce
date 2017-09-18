@@ -78,7 +78,7 @@ public class MHyperLink extends APropertyNode {
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(prefix + JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS));
 
 		RComboBoxPropertyDescriptor linkTargetD = new RComboBoxPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_TARGET, Messages.MHyperLink_link_target, EnumHelper.getEnumNames(
+				JRDesignHyperlink.PROPERTY_LINK_TARGET, Messages.MHyperLink_link_target, EnumHelper.getEnumNames(
 						HyperlinkTargetEnum.values(), NullEnum.NULL));
 		linkTargetD.setDescription(Messages.MHyperLink_link_target_description);
 		desc.add(linkTargetD);
