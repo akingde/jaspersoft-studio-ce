@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.help.HelpSystem;
@@ -35,6 +36,7 @@ import com.jaspersoft.studio.property.section.graphic.ASHighlightControl;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.BackgroundHighlight;
 import com.jaspersoft.studio.property.section.widgets.SPHyperlinkParameter;
+import com.jaspersoft.studio.property.section.widgets.SPWidgetFactory;
 import com.jaspersoft.studio.swt.widgets.WHyperlink.UIElement;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -304,8 +306,9 @@ public class HyperlinkSection extends AbstractSection {
 		String selectedValue = typeCombo.getText();
 		if (!hideList.containsKey(selectedValue)) selectedValue = "Custom"; //$NON-NLS-1$
 		ElementHider[] actualHiders = hideList.get(selectedValue);
-		for(ElementHider hider : actualHiders)
-			hider.showAll();
+		for(ElementHider hider : actualHiders) {
+			if (hider != null) hider.showAll();
+		}
 		mainComposite.layout();
 	}
 	
@@ -349,10 +352,6 @@ public class HyperlinkSection extends AbstractSection {
 		}
 	}
 	
-	/**
-	 * Create the widget used for the when expression. This can be overridden since not every hyperlink 
-	 * support the when expression
-	 */
 	protected void createWhenWidget() {
 		Label whenLabel = createLabel(mainComposite, Messages.MHyperLink_whenexpr_desc, Messages.MHyperLink_whenexpr);
 		whenWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION,false); 
@@ -404,7 +403,15 @@ public class HyperlinkSection extends AbstractSection {
 		referenceWidget.getControl().setLayoutData(gridDataGenerator());		
 		reference = new ElementHider(new Control[]{referenceLabel, referenceWidget.getControl()});
 		
-		createWhenWidget();
+		//Some hyperlink doesn't support the when expression, for this reason check if the model support it
+		IPropertyDescriptor whenDescriptor = getPropertyDesriptor(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION);
+		if (whenDescriptor != null) {
+			Label whenLabel = createLabel(mainComposite, Messages.MHyperLink_whenexpr_desc, Messages.MHyperLink_whenexpr);
+			whenWidget = SPWidgetFactory.createWidget(mainComposite, this, whenDescriptor);
+			widgets.put(whenDescriptor.getId(), whenWidget);
+			whenWidget.getControl().setLayoutData(gridDataGenerator());		
+			when = new ElementHider(new Control[]{whenLabel, whenWidget.getControl()});
+		}
 		
 		Label tooltipLabel = createLabel(mainComposite, Messages.MHyperLink_hyperlink_tooltip_expression_description, Messages.MHyperLink_hyperlink_tooltip_expression);
 		tooltipWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION,false); 
