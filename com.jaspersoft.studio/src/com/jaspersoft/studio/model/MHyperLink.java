@@ -203,8 +203,6 @@ public class MHyperLink extends APropertyNode {
 		defaultsMap.put(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION, new DefaultValue(null, true));
 		defaultsMap.put(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, new DefaultValue(null, true));
 
-		defaultsMap.putAll(new MHyperLink(null).getDefaultsPropertiesMap());
-
 		return defaultsMap;
 	}
 
