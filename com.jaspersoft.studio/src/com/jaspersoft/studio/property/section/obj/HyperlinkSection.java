@@ -240,18 +240,18 @@ public class HyperlinkSection extends AbstractSection {
 		setRefreshing(true);
 		APropertyNode element = getElement();
 		if (element != null) {
-			anchorWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION));
-			referenceWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION));
-			whenWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION));
-			pageWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION));
-			tooltipWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION));
-			parametersWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS));
+			if (anchorWidget != null) anchorWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION));
+			if (referenceWidget != null) referenceWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION));
+			if (whenWidget != null) whenWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION));
+			if (pageWidget != null) pageWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION));
+			if (tooltipWidget != null) tooltipWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION));
+			if (parametersWidget != null) parametersWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS));
 			Object propertyValue = element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_LINK_TARGET);
-			targetCombo.setText(propertyValue != null ? propertyValue.toString() : linkTargetItems[0]);
+			if (targetCombo != null) targetCombo.setText(propertyValue != null ? propertyValue.toString() : linkTargetItems[0]);
 			propertyValue = element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_LINK_TYPE);
 			String typeValue = propertyValue != null ? propertyValue.toString() : linkTypeItems[0];
 			//I don't set the text on the combo if it has already the right value to avoid to raise the panel refresh
-			if (!typeValue.equals(typeCombo.getText())) typeCombo.setText(typeValue);	
+			if (typeCombo != null && !typeValue.equals(typeCombo.getText())) typeCombo.setText(typeValue);	
 		}
 		setRefreshing(false);
 	}
@@ -350,6 +350,17 @@ public class HyperlinkSection extends AbstractSection {
 	}
 	
 	/**
+	 * Create the widget used for the when expression. This can be overridden since not every hyperlink 
+	 * support the when expression
+	 */
+	protected void createWhenWidget() {
+		Label whenLabel = createLabel(mainComposite, Messages.MHyperLink_whenexpr_desc, Messages.MHyperLink_whenexpr);
+		whenWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION,false); 
+		whenWidget.getControl().setLayoutData(gridDataGenerator());		
+		when = new ElementHider(new Control[]{whenLabel, whenWidget.getControl()});
+	}
+	
+	/**
 	 * Create all the controls
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -393,10 +404,7 @@ public class HyperlinkSection extends AbstractSection {
 		referenceWidget.getControl().setLayoutData(gridDataGenerator());		
 		reference = new ElementHider(new Control[]{referenceLabel, referenceWidget.getControl()});
 		
-		Label whenLabel = createLabel(mainComposite, Messages.MHyperLink_whenexpr_desc, Messages.MHyperLink_whenexpr);
-		whenWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION,false); 
-		whenWidget.getControl().setLayoutData(gridDataGenerator());		
-		when = new ElementHider(new Control[]{whenLabel, whenWidget.getControl()});
+		createWhenWidget();
 		
 		Label tooltipLabel = createLabel(mainComposite, Messages.MHyperLink_hyperlink_tooltip_expression_description, Messages.MHyperLink_hyperlink_tooltip_expression);
 		tooltipWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION,false); 
