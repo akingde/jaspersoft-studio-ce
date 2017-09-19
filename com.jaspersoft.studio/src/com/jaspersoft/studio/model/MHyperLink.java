@@ -5,6 +5,7 @@
 package com.jaspersoft.studio.model;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -187,6 +188,24 @@ public class MHyperLink extends APropertyNode {
 
 	public ImageDescriptor getImagePath() {
 		return null;
+	}
+	
+	@Override
+	public Map<String, DefaultValue> getDefaultsPropertiesMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+
+		defaultsMap.put(JRDesignHyperlink.PROPERTY_LINK_TARGET, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHyperlink.PROPERTY_LINK_TYPE, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, new DefaultValue(null, true));
+
+		defaultsMap.putAll(new MHyperLink(null).getDefaultsPropertiesMap());
+
+		return defaultsMap;
 	}
 
 }
