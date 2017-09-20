@@ -73,6 +73,8 @@ public class ImageGraphics2D extends ACachedGraphics {
 		imageGraphics = (Graphics2D)image.createGraphics();
 		imageGraphics.scale(scaleX, scaleY);
 		imageGraphics.setRenderingHints(originalGrpahics.getRenderingHints());
+		//need to set the clip otherwise the getClip method can return null and some JR Drawer (ie frame) relay on not having a null clip
+		imageGraphics.setClip(new Rectangle(0, 0, image.getWidth(), image.getHeight()));
 	}
 	
 	public ImageGraphics2D(Graphics2D originalGrpahics, int width, int height) {
@@ -84,6 +86,8 @@ public class ImageGraphics2D extends ACachedGraphics {
 		double scaleX = originalGrpahics.getTransform().getScaleX();
 		double scaleY = originalGrpahics.getTransform().getScaleY();
 		imageGraphics.scale(scaleX, scaleY);
+		//need to set the clip otherwise the getClip method can return null and some JR Drawer (ie frame) relay on not having a null clip
+		imageGraphics.setClip(new Rectangle(0, 0, image.getWidth(), image.getHeight()));
 	}
 	
 	/**
