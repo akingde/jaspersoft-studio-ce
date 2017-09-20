@@ -19,8 +19,6 @@ import net.sf.jasperreports.engine.JRElement;
  */
 public class ChartFigure extends FrameFigure {
 	
-	private ACachedGraphics cachedGraphics = null;
-	
 	/**
 	 * Instantiates a new static text figure.
 	 */
