@@ -662,7 +662,7 @@ public class MGraphicElement extends APropertyNode
 			return Colors.getSWTRGB4AWTGBColor(forecolor);
 		}
 		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
-			return ModeEnum.TRANSPARENT.equals(resolver.getMode(jrElement, ModeEnum.OPAQUE));
+			return ModeEnum.TRANSPARENT.equals(resolver.getMode(jrElement, ModeEnum.TRANSPARENT));
 		}
 		return super.getPropertyActualValue(id);
 	}
