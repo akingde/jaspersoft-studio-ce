@@ -820,7 +820,7 @@ public class ParametersTable extends AbstractModifyTable {
 	}
 
 	public String getName() {
-		List<JRDesignParameter> list = (List<JRDesignParameter>) tviewer.getInput();
+		List<JRDesignParameter> list = (List<JRDesignParameter>) getParameters();
 		String name = "Parameter"; //$NON-NLS-1$
 		boolean match = false;
 		String tmp = name;
