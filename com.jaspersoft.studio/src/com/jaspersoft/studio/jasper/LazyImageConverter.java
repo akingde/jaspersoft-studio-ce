@@ -22,6 +22,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.KeyValue;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
@@ -49,6 +50,49 @@ import net.sf.jasperreports.renderers.util.RendererUtil;
  * 
  */
 public class LazyImageConverter extends ElementConverter {
+	
+	/**
+	 * Some resources are defined statically inside JasprerReports and this resources are cached 
+	 * the first time inside studio and returned directly when requested. In this way we will
+	 * avoid to load them in a lazy way, because it could broke JR
+	 */
+	protected static HashMap<String, Renderable> fixedImageCache;
+	
+	/**
+	 * Static initialization of the JR image resources
+	 */
+	static {
+		fixedImageCache = new HashMap<String, Renderable>();
+		loadFixedImage(JRImageLoader.PIXEL_IMAGE_RESOURCE);
+		loadFixedImage(JRImageLoader.NO_IMAGE_RESOURCE);
+		loadFixedImage(JRImageLoader.SUBREPORT_IMAGE_RESOURCE);
+		loadFixedImage(JRImageLoader.CHART_IMAGE_RESOURCE);
+		loadFixedImage(JRImageLoader.CROSSTAB_IMAGE_RESOURCE);
+		loadFixedImage(JRImageLoader.COMPONENT_IMAGE_RESOURCE);
+		 
+	}
+	
+	/**
+	 * Method called to load a single resource from JR into JSS internal fixed resources cache. The resource
+	 * is stored only if existing
+	 * 
+	 * @param path the path of the resource
+	 */
+	private static void loadFixedImage(String path) {
+		try {
+			
+			//Even if getNonLazyRenderable relay on the repository service it is still a very fast call because the first repository service
+			//is always the local one and it will find the resource immediately
+			//URL url = JRResourcesUtil.findClassLoaderResource(path, null);
+			//RendererUtil.getInstance(DefaultJasperReportsContext.getInstance()).getRenderable(url, OnErrorTypeEnum.BLANK);
+			Renderable renderable = RendererUtil.getInstance(DefaultJasperReportsContext.getInstance()).getNonLazyRenderable(path, OnErrorTypeEnum.BLANK);
+			if (renderable != null) {
+				fixedImageCache.put(path, renderable);
+			}
+		} catch (Exception ex) {
+			
+		}
+	}
 
 	/**
 	 * Timeout time after that an image in the cache is considered old and then
@@ -135,12 +179,6 @@ public class LazyImageConverter extends ElementConverter {
 		}
 
 	}
-
-	/**
-	 * the standard printable element when the image is not found, keep static
-	 * to avoid to reload it after the first time it is needed
-	 */
-	private static Renderable noImage;
 
 	/**
 	 * Cache where the actually loaded images are saved. The Key is composed by
@@ -429,7 +467,7 @@ public class LazyImageConverter extends ElementConverter {
 	 */
 	private void startLoadingJob(final TimedCache info, final String location, final JasperReportsContext jrContext,
 			final KeyValue<JasperReportsContext, String> key) {
-		Job job = new Job("load image") {
+ 		Job job = new Job("load image") {
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					if (location != null) {
@@ -493,15 +531,8 @@ public class LazyImageConverter extends ElementConverter {
 	 */
 	private Renderable getRenderableNoImage(JasperReportsContext jasperReportsContext, JRImage imageElement,
 			JRPrintImage printImage) {
-		try {
-			printImage.setScaleImage(ScaleImageEnum.CLIP);
-			if (noImage == null)
-				noImage = RendererUtil.getInstance(jasperReportsContext)
-						.getNonLazyRenderable(JRImageLoader.NO_IMAGE_RESOURCE, imageElement.getOnErrorTypeValue());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return noImage;
+		printImage.setScaleImage(ScaleImageEnum.CLIP);
+		return fixedImageCache.get(JRImageLoader.NO_IMAGE_RESOURCE);
 	}
 
 	/**
@@ -553,6 +584,43 @@ public class LazyImageConverter extends ElementConverter {
 	/**
 	 * Return a renderable of an Image in a synchronous way. The image is first
 	 * searched in the internal cache, if not found is loaded and cached then
+	 * returned. If the load fails it is return the error image. This call is blocking
+	 * and should be used outside a UI context
+	 * 
+	 * @param context
+	 *            the context of the report where the image is used
+	 * @param location
+	 *            the location of the image
+	 * @return a Renderable or null
+	 */
+	protected Renderable getNonLazyRenderable(JasperReportsContext context, String location) {
+		if (fixedImageCache.containsKey(location)) {
+			return fixedImageCache.get(location);
+		}
+		KeyValue<JasperReportsContext, String> key = getKey(context, location);
+		TimedCache imageInfo = getImageInfo(key);
+		
+		// If the image is expired (it is also expired when is empty), it is refreshed
+		if (imageInfo.isExpired()){
+			try {
+				Renderable r = RendererUtil.getInstance(context).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
+				imageInfo.update(r);
+			} catch (JRException e) {
+				try {
+					JaspersoftStudioPlugin.getInstance().logError(e);
+					Renderable errorImage = RendererUtil.getInstance(context).handleImageError(e, OnErrorTypeEnum.ERROR);
+					imageInfo.update(errorImage);
+				} catch (JRException e1) {
+					imageInfo.update(RendererUtil.NO_IMAGE_RENDERER);
+				}
+			}
+		}
+		return imageInfo.getImage();
+	}
+	
+	/**
+	 * Return a renderable of an Image in a synchronous way. The image is first
+	 * searched in the internal cache, if not found is loaded and cached then
 	 * returned. If the load fails it is return the error image
 	 * 
 	 * @param context
@@ -561,35 +629,18 @@ public class LazyImageConverter extends ElementConverter {
 	 *            the location of the image
 	 * @return a not null Renderable
 	 */
-	public Renderable getNonLazyRenderable(JasperReportsContext context, String location) {
+	public Renderable getLazyRenderable(JasperReportsContext context, String location) {
+		if (fixedImageCache.containsKey(location)) {
+			return fixedImageCache.get(location);
+		}
 		KeyValue<JasperReportsContext, String> key = getKey(context, location);
 		TimedCache imageInfo = getImageInfo(key);
 
 		// If the image is expired (it is also expired when is empty), it is
 		// refreshed
 		if (imageInfo.isExpired()) {
-			// try {
 			startLoadingJob(imageInfo, location, context, key);
-			imageInfo.update(RendererUtil.NO_IMAGE_RENDERER);
-
-			// if it's synchronous and image is not reachable on the server ...
-			// this blocks ui
-
-			// Renderable r =
-			// RendererUtil.getInstance(context).getNonLazyRenderable(location,
-			// OnErrorTypeEnum.ERROR);
-			// imageInfo.update(r);
-			// } catch (JRException e) {
-			// try {
-			// JaspersoftStudioPlugin.getInstance().logError(e);
-			// Renderable errorImage =
-			// RendererUtil.getInstance(context).handleImageError(e,
-			// OnErrorTypeEnum.ERROR);
-			// imageInfo.update(errorImage);
-			// } catch (JRException e1) {
-			// imageInfo.update(RendererUtil.NO_IMAGE_RENDERER);
-			// }
-			// }
+			imageInfo.update(fixedImageCache.get(JRImageLoader.NO_IMAGE_RESOURCE));
 		}
 		return imageInfo.getImage();
 	}

@@ -6,7 +6,6 @@ package com.jaspersoft.studio.jasper;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.util.JRImageLoader;
 import net.sf.jasperreports.renderers.Renderable;
 import net.sf.jasperreports.renderers.RenderersCache;
 import net.sf.jasperreports.renderers.ResourceRenderer;
@@ -36,12 +35,9 @@ public class JSSRenderersCache extends RenderersCache {
 	 */
 	public Renderable getLoadedRenderer(ResourceRenderer resourceRenderer) throws JRException
 	{
-		//Check for the special case where the requested renderable is not a resource but a subreport image
-		if (!JRImageLoader.SUBREPORT_IMAGE_RESOURCE.equals(resourceRenderer.getResourceLocation())) {
-			Renderable renderable = LazyImageConverter.getInstance().getNonLazyRenderable(context, resourceRenderer.getResourceLocation());
-			if (renderable != null){
-				return renderable;
-			}
+		Renderable renderable = LazyImageConverter.getInstance().getLazyRenderable(context, resourceRenderer.getResourceLocation());
+		if (renderable != null){
+			return renderable;
 		}
 		return super.getLoadedRenderer(resourceRenderer);
 	}
