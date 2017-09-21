@@ -171,7 +171,7 @@ public class ConvertExpression {
 						ConvertSelectColumns.operands2String(designer, qroot, parent, xexpr.getCol(), msel)));
 			else
 				me.getOperands().add(new FieldOperand(null, null, me));
-			me.setFunction(xexpr.getXf().getLiteral());
+			me.setFunction(xexpr.getXf().getLiteral().replace("{", ""));
 			if (xexpr.getPrm() != null) {
 				JRDesignDataset jrDataset = designer.getjDataset();
 				if (xexpr.getPrm() instanceof JRParameter)
