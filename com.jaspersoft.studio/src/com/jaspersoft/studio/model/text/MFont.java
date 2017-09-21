@@ -22,7 +22,6 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontSizeButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.RWFloatComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWFontSizePropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
