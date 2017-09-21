@@ -12,6 +12,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
@@ -48,7 +49,8 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 	protected ANode fixPosition(ANode destNode, ANode srcNode, Rectangle position) {
 		if (position == null) {
 			if (jrElement != null)
-				position = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
+				position = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(),
+						jrElement.getHeight());
 			else
 				position = new Rectangle(0, 0, 70, 30);
 		}
@@ -74,10 +76,20 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 		return band;
 	}
 
+	private boolean isSubdataset() {
+		INode p = child.getParent();
+		while (p != null) {
+			if (p instanceof MDataset)
+				return true;
+			p = p.getParent();
+		}
+		return false;
+	}
+
 	@Override
 	protected void createObject() {
 		try {
-			if (SelectionHelper.isMainEditorOpened() && child.getParent().getParent() instanceof MDataset) {
+			if (SelectionHelper.isMainEditorOpened() && isSubdataset()) {
 				operationCancelled = true;
 				UIUtils.showInformation(Messages.CreateE4ObjectCommand_subdataseterror);
 				return;
@@ -92,31 +104,31 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 				JRDesignBand b = (JRDesignBand) n.getValue();
 				BandTypeEnum btype = b.getOrigin().getBandTypeValue();
 				if (btype.equals(BandTypeEnum.DETAIL)) {
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
-							jasperDesign);
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), //$NON-NLS-1$
+							tag.classname, jasperDesign);
 				} else if (btype.equals(BandTypeEnum.COLUMN_FOOTER) || btype.equals(BandTypeEnum.COLUMN_HEADER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.COLUMN, null, jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
-							jasperDesign);
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), //$NON-NLS-1$
+							tag.classname, jasperDesign);
 				} else if (btype.equals(BandTypeEnum.GROUP_FOOTER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupFooter) n).getJrGroup(),
 							jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
-							jasperDesign);
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), //$NON-NLS-1$
+							tag.classname, jasperDesign);
 				} else if (btype.equals(BandTypeEnum.GROUP_HEADER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupHeader) n).getJrGroup(),
 							jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
-							jasperDesign);
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), //$NON-NLS-1$
+							tag.classname, jasperDesign);
 				} else if (btype.equals(BandTypeEnum.SUMMARY) || btype.equals(BandTypeEnum.TITLE)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null, jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
-							jasperDesign);
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), //$NON-NLS-1$
+							tag.classname, jasperDesign);
 				} else if (btype.equals(BandTypeEnum.PAGE_FOOTER) || btype.equals(BandTypeEnum.PAGE_HEADER)
 						|| btype.equals(BandTypeEnum.LAST_PAGE_FOOTER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.PAGE, null, jasperDesign.getMainDesignDataset());
-					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), tag.classname, //$NON-NLS-1$
-							jasperDesign);
+					srcNode = Tag.createTextField(tag.txt.replaceAll("%", Matcher.quoteReplacement(tag.name)), //$NON-NLS-1$
+							tag.classname, jasperDesign);
 				} else {
 					srcNode = Tag.createStaticText(tag.name, jasperDesign);
 				}

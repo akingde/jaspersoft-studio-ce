@@ -82,7 +82,8 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 	/** Property to save a default data adapter to select */
 	public static final String DEFAULT_DATAADAPTER = "com.jaspersoft.studio.data.defaultdataadapter"; //$NON-NLS-1$
-
+	public static final String FIELD_PATH = "com.jaspersoft.studio.field.tree.path";
+	public static final String FIELD_LABEL = "com.jaspersoft.studio.field.label";
 	private JRDesignDataset newdataset;
 
 	private JasperDesign jDesign;
@@ -114,6 +115,28 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
 		spm.setCategory("net.sf.jasperreports.metadata.property.category:data.snapshot"); //$NON-NLS-1$
+		pm.add(spm);
+
+		spm = new StandardPropertyMetadata();
+		spm.setName(FIELD_PATH);
+		spm.setLabel("Field Path");
+		spm.setDescription("Field path used to show fields as a tree.");
+		spm.setValueType(String.class.getName());
+		scopes = new ArrayList<PropertyScope>();
+		scopes.add(PropertyScope.FIELD);
+		spm.setScopes(scopes);
+		spm.setCategory("net.sf.jasperreports.metadata.property.category:field"); //$NON-NLS-1$
+		pm.add(spm);
+
+		spm = new StandardPropertyMetadata();
+		spm.setName(FIELD_LABEL);
+		spm.setLabel("Field Label");
+		spm.setDescription("Field label, can be used as column label.");
+		spm.setValueType(String.class.getName());
+		scopes = new ArrayList<PropertyScope>();
+		scopes.add(PropertyScope.FIELD);
+		spm.setScopes(scopes);
+		spm.setCategory("net.sf.jasperreports.metadata.property.category:field"); //$NON-NLS-1$
 		pm.add(spm);
 
 		PropertyMetadataRegistry.addMetadata(pm);

@@ -60,6 +60,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandActionOnDetail;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateFieldsContainerAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupFooterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupHeaderAction;
@@ -79,6 +80,7 @@ import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpressi
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.ShowFieldsTreeAction;
 import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
@@ -117,9 +119,9 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 	 * Instantiates a new app context menu provider.
 	 * 
 	 * @param viewer
-	 *          the viewer
+	 *            the viewer
 	 * @param registry
-	 *          the registry
+	 *            the registry
 	 */
 	public AppContextMenuProvider(EditPartViewer viewer, ActionRegistry registry) {
 		super(viewer, registry);
@@ -128,7 +130,9 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.ContextMenuProvider#buildContextMenu(org.eclipse.jface.action.IMenuManager)
+	 * @see
+	 * org.eclipse.gef.ContextMenuProvider#buildContextMenu(org.eclipse.jface.action
+	 * .IMenuManager)
 	 */
 	@Override
 	public void buildContextMenu(IMenuManager menu) {
@@ -143,7 +147,8 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			if (action != null && action.isEnabled())
 				menu.add(action);
 
-			MenuManager submenu = new MenuManager(Messages.MBackgrounImage_labelTransparency, null, "BackgroundTransparency");//$NON-NLS-1$
+			MenuManager submenu = new MenuManager(Messages.MBackgrounImage_labelTransparency, null,
+					"BackgroundTransparency");//$NON-NLS-1$
 
 			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_5);
 			if (action != null && action.isEnabled())
@@ -260,43 +265,58 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		// -----------------------------------------------------------
-		
-		//ADD THE SORT ACTIONS
-		
+
+		// ADD THE SORT ACTIONS
+
 		action = getActionRegistry().getAction(SortVariablesAction.ID);
-		if (action != null && action.isEnabled()){
-			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
-			
+		if (action != null && action.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD,
+					new DynamicActionContributionItem((ACachedSelectionAction) action));
+
 			action = getActionRegistry().getAction(HideDefaultVariablesAction.ID);
-			if (action != null && action.isEnabled()){
-				menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			if (action != null && action.isEnabled()) {
+				menu.appendToGroup(GEFActionConstants.GROUP_ADD,
+						new DynamicActionContributionItem((ACachedSelectionAction) action));
 			}
-			
+
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
 		}
-		
-		
+
 		action = getActionRegistry().getAction(SortParametersAction.ID);
-		if (action != null && action.isEnabled()){
-			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
-			
+		if (action != null && action.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD,
+					new DynamicActionContributionItem((ACachedSelectionAction) action));
+
 			action = getActionRegistry().getAction(HideDefaultsParametersAction.ID);
-			if (action != null && action.isEnabled()){
-				menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
+			if (action != null && action.isEnabled()) {
+				menu.appendToGroup(GEFActionConstants.GROUP_ADD,
+						new DynamicActionContributionItem((ACachedSelectionAction) action));
 			}
-			
+
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
 		}
-		
-		action = getActionRegistry().getAction(SortFieldsAction.ID);
-		if (action != null && action.isEnabled()){
-			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new DynamicActionContributionItem((ACachedSelectionAction)action));
-			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+
+		IAction actionF1 = getActionRegistry().getAction(SortFieldsAction.ID);
+		if (actionF1 != null && actionF1.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD,
+					new DynamicActionContributionItem((ACachedSelectionAction) actionF1));
 		}
-		
-		//ADD THE OTHER ACTIONS
-		
+
+		IAction actionF2 = getActionRegistry().getAction(ShowFieldsTreeAction.ID);
+		if (actionF2 != null && actionF2.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD,
+					new DynamicActionContributionItem((ACachedSelectionAction) actionF2));
+		}
+		if (actionF1 != null || actionF2 != null)
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+
+		// ADD THE OTHER ACTIONS
+
 		action = getActionRegistry().getAction(CreateFieldAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
+
+		action = getActionRegistry().getAction(CreateFieldsContainerAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
@@ -355,7 +375,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(CreateStyleTemplateAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
-		
+
 		action = getActionRegistry().getAction(RefreshImageAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);

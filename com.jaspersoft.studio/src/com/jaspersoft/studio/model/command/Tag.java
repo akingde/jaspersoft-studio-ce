@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.command;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRParameter;
@@ -28,6 +29,7 @@ import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -38,44 +40,55 @@ public class Tag {
 	public boolean isField = false;
 	public String name;
 	public String txt;
+	public String label;
 	public String classname;
 	public Class<?> clazz;
 
-	public Tag(String txt, String classname, String name, Class<?> clazz) {
+	public Tag(String txt, String classname, String name, Class<?> clazz, String label) {
 		this.txt = txt;
 		this.classname = classname;
 		this.clazz = clazz;
 		this.name = name;
+		this.label = label;
 	}
 
 	public static Tag getExpression(ANode n) {
 		if (n.getValue() != null)
 			if (n instanceof MField) {
 				JRField f = (JRField) n.getValue();
-				Tag tag = new Tag("$F{%}", f.getValueClassName(), f.getName(), resolveClass(n, f.getValueClassName()));//$NON-NLS-1$
+				String lbl = f.getName();
+				String plabel = f.getPropertiesMap().getProperty(DataQueryAdapters.FIELD_LABEL);
+				if (!Misc.isNullOrEmpty(plabel))
+					lbl = plabel;
+				Tag tag = new Tag("$F{%}", f.getValueClassName(), f.getName(), resolveClass(n, f.getValueClassName()), //$NON-NLS-1$
+						lbl);
 				tag.isField = true;
 				return tag;
 			} else if (n instanceof MParameterSystem) {
 				JRParameter f = (JRParameter) n.getValue();
-				Tag result = new Tag("$P{%}", f.getValueClassName(), f.getName(), resolveClass(n, f.getValueClassName()));//$NON-NLS-1$;
+				Tag result = new Tag("$P{%}", f.getValueClassName(), f.getName(), //$NON-NLS-1$
+						resolveClass(n, f.getValueClassName()), null);// ;
 				return result;
 			} else if (n instanceof MVariableSystem) {
 				JRVariable f = (JRVariable) n.getValue();
-				return new Tag("$V{%}", f.getValueClassName(), f.getName(), resolveClass(n, f.getValueClassName()));//$NON-NLS-1$ 
+				return new Tag("$V{%}", f.getValueClassName(), f.getName(), resolveClass(n, f.getValueClassName()), //$NON-NLS-1$
+						null);
 			}
-		return new Tag("", "", "", null);
+		return new Tag("", "", "", null, null);
 	}
-	
+
 	/**
 	 * Resolve the class fullname of a class using the Studio classloader
 	 * 
-	 * @param node the node from where the classloader is retrive  
-	 * @param classFullName the fullname of the class to resolve
+	 * @param node
+	 *            the node from where the classloader is retrive
+	 * @param classFullName
+	 *            the fullname of the class to resolve
 	 * @return the class, or null if it can't be resolved
 	 */
-	protected static Class<?> resolveClass(ANode node, String classFullName){
+	protected static Class<?> resolveClass(ANode node, String classFullName) {
 		JasperReportsConfiguration jConfig = node.getJasperConfiguration();
-		if (jConfig != null){
+		if (jConfig != null) {
 			try {
 				Class<?> clazz = jConfig.getClassLoader().loadClass(classFullName);
 				return clazz;
@@ -86,12 +99,14 @@ public class Tag {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Create a static text with a specific content 
+	 * Create a static text with a specific content
 	 * 
-	 * @param text the content of the text
-	 * @param the context of the static text
+	 * @param text
+	 *            the content of the text
+	 * @param the
+	 *            context of the static text
 	 * @return a not null MStaticText with a new {@link JRDesignStaticText} inside
 	 */
 	public static MStaticText createStaticText(String text, JasperDesign jd) {
@@ -101,13 +116,16 @@ public class Tag {
 		src.setValue(tf);
 		return src;
 	}
-	
+
 	/**
-	 * Create a static textfield with a specific content 
+	 * Create a static textfield with a specific content
 	 * 
-	 * @param txtExp the textual expression
-	 * @param classExp FIXME not used now, maybe to be removed
-	 * @param the context of the static text
+	 * @param txtExp
+	 *            the textual expression
+	 * @param classExp
+	 *            FIXME not used now, maybe to be removed
+	 * @param the
+	 *            context of the static text
 	 * @return a not null MTextField with a new {@link JRDesignTextField} inside
 	 */
 	public static MTextField createTextField(String txtExp, String classExp, JasperDesign jd) {
@@ -128,10 +146,9 @@ public class Tag {
 			String[] names = null;
 			if (Number.class.isAssignableFrom(tag.clazz)) {
 				names = EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL);
-			}
-			else {
-				names = EnumHelper.getEnumNames(new CalculationEnum[]{
-						CalculationEnum.NOTHING,CalculationEnum.COUNT,CalculationEnum.DISTINCT_COUNT}, NullEnum.NOTNULL);
+			} else {
+				names = EnumHelper.getEnumNames(new CalculationEnum[] { CalculationEnum.NOTHING, CalculationEnum.COUNT,
+						CalculationEnum.DISTINCT_COUNT }, NullEnum.NOTNULL);
 			}
 			Obj2TextWizard wizard = new Obj2TextWizard(names);
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);

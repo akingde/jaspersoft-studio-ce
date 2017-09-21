@@ -4,28 +4,28 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.actions;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.field.MField;
-import com.jaspersoft.studio.model.field.MFields;
+import com.jaspersoft.studio.model.field.MFieldsContainer;
+import com.jaspersoft.studio.model.field.command.CreateFieldsContainerCommand;
 
 /*
  * The Class CreateFieldAction.
  */
-public class CreateFieldAction extends ACreateAndSelectAction {
+public class CreateFieldsContainerAction extends ACreateAndSelectAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_field"; //$NON-NLS-1$
+	public static final String ID = "create_fieldscontainer"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -33,32 +33,33 @@ public class CreateFieldAction extends ACreateAndSelectAction {
 	 * @param part
 	 *            The part for this action
 	 */
-	public CreateFieldAction(IWorkbenchPart part) {
+	public CreateFieldsContainerAction(IWorkbenchPart part) {
 		super(part);
-		setCreationFactory(new JDPaletteCreationFactory(MField.class));
+		setCreationFactory(new JDPaletteCreationFactory(MFieldsContainer.class));
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
-		if (!checkSingleSelectedObject(MFields.class) && !checkSingleSelectedObject(MField.class)) {
-			return false;
-		}
-		return super.calculateEnabled();
+		if (checkAllSelectedObjects(MField.class, MFieldsContainer.class))
+			return super.calculateEnabled();
+		return false;
 	}
 
-	protected boolean setExtendedData(Map<Object, Object> map, List<?> objects) {
-		if (objects.size() == 1) {
-			EditPart part = (EditPart) objects.get(0);
-			if (part.getModel() instanceof MField) {
-				MField selectedField = (MField) part.getModel();
-				ANode parent = selectedField.getParent();
-				if (parent != null && parent.getChildren() != null) {
-					int index = parent.getChildren().indexOf(selectedField);
-					map.put(CreateRequestUtil.NEWINDEX, index + 1);
-				}
-			}
+	@Override
+	public Command createCommand() {
+		List<Object> objects = getSelectedObjects();
+		if (objects.isEmpty())
+			return null;
+		if (!(objects.get(0) instanceof EditPart))
+			return null;
+		if (objects.size() > 1) {
+			List<ANode> nodes = new ArrayList<ANode>();
+			for (Object obj : objects)
+				if (obj instanceof EditPart)
+					nodes.add((ANode) ((EditPart) obj).getModel());
+			return new CreateFieldsContainerCommand(nodes);
 		}
-		return true;
+		return super.createCommand();
 	}
 
 	/**
@@ -67,9 +68,9 @@ public class CreateFieldAction extends ACreateAndSelectAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText(Messages.CreateFieldAction_create_field);
-		setToolTipText(Messages.CreateFieldAction_create_field_tool_tip);
-		setId(CreateFieldAction.ID);
+		setText("Create Fields Group");
+		setToolTipText("Put fields under same group.");
+		setId(CreateFieldsContainerAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED));

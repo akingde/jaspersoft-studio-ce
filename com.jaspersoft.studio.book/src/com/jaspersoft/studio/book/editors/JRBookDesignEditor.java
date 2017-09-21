@@ -44,6 +44,7 @@ import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateFieldsContainerAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
@@ -51,6 +52,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
 import com.jaspersoft.studio.editor.outline.actions.HideDefaultsParametersAction;
+import com.jaspersoft.studio.editor.outline.actions.ShowFieldsTreeAction;
 import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
@@ -64,21 +66,21 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class JRBookDesignEditor extends AGraphicEditor {
 
 	/**
-	 * Listener to model change, used to set the dirty flag on the reprot
-	 * when something changes
+	 * Listener to model change, used to set the dirty flag on the reprot when
+	 * something changes
 	 */
 	private PropertyChangeListener modelChangesListener;
-	
+
 	/**
 	 * The extension manager for the plugin
 	 */
 	private ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
-	
+
 	/**
 	 * The toolbar inside the book editor
 	 */
 	private ToolBar additionalToolbar;
-	
+
 	public JRBookDesignEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
 		modelChangesListener = new PropertyChangeListener() {
@@ -91,10 +93,9 @@ public class JRBookDesignEditor extends AGraphicEditor {
 				});
 			}
 		};
-		
-		
+
 	}
-	
+
 	@Override
 	protected void createGraphicalViewer(Composite parent) {
 		ScrollingGraphicalViewer viewer = new JSSScrollingGraphicalViewer();
@@ -104,7 +105,7 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
 	}
-	
+
 	/**
 	 * Create the editor part, so the toolbar and graphical viewer
 	 */
@@ -115,59 +116,62 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		containerLayout.horizontalSpacing = 0;
 		containerLayout.marginWidth = 0;
 		containerLayout.marginHeight = 0;
-		
+
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(containerLayout);
-		
-		//Create the toolbar
+
+		// Create the toolbar
 		createToolBar(container);
-		
-		//Create the viewer
+
+		// Create the viewer
 		createGraphicalViewer(container);
-		
-		//Initialize the toolabar
+
+		// Initialize the toolabar
 		initializedToolBar();
 	}
-	
-	
+
 	/**
 	 * Create the editor toolbar control
 	 * 
-	 * @param container container where the toolbar is placed
+	 * @param container
+	 *            container where the toolbar is placed
 	 */
-	private void createToolBar(Composite container){
+	private void createToolBar(Composite container) {
 		additionalToolbar = new ToolBar(container, SWT.HORIZONTAL | SWT.FLAT);
 		GridData additionalToolbarGD = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		additionalToolbar.setLayoutData(additionalToolbarGD);
 	}
-	
+
 	/**
-	 * Insert the content inside the toolbar, it must be created beofre trough
-	 * the createToolBar method
+	 * Insert the content inside the toolbar, it must be created beofre trough the
+	 * createToolBar method
 	 */
-	private void initializedToolBar(){	
-		ActionRegistry registry = getActionRegistry();	
-		//FIXME: the toolbars in SWT take the height from the highest element, padding the image
-		//at runtime brings some graphical glitches, so for the first action an image of a specific size is
-		//used to allow to have the right size of the toolbar
+	private void initializedToolBar() {
+		ActionRegistry registry = getActionRegistry();
+		// FIXME: the toolbars in SWT take the height from the highest element, padding
+		// the image
+		// at runtime brings some graphical glitches, so for the first action an image
+		// of a specific size is
+		// used to allow to have the right size of the toolbar
 		createToolBarButton(registry.getAction(BookCompileAction.ID));
 		createToolBarButton(registry.getAction(BookDatasetAction.ID));
 		createToolBarButton(new Separator());
-		for(AContributorAction contAction : m.getActions()){
+		for (AContributorAction contAction : m.getActions()) {
 			createToolBarButton(contAction);
 			contAction.setJrConfig((JasperReportsConfiguration) getGraphicalViewer().getProperty("JRCONTEXT"));
 		}
 		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).grab(true, false).applyTo(additionalToolbar);
 	}
-	
+
 	/**
 	 * Create a toolbar button to execute an action
 	 * 
-	 * @param action the action to execute, must be not null
+	 * @param action
+	 *            the action to execute, must be not null
 	 */
-	private void createToolBarButton(final IAction action){
-		if (action instanceof Separator){
-			 new ToolItem(additionalToolbar, SWT.SEPARATOR);
+	private void createToolBarButton(final IAction action) {
+		if (action instanceof Separator) {
+			new ToolItem(additionalToolbar, SWT.SEPARATOR);
 		} else {
 			ResizableToolItem toolItem = new ResizableToolItem(additionalToolbar, SWT.PUSH | SWT.FLAT, action, 25);
 			toolItem.setToolTipText(action.getToolTipText());
@@ -179,10 +183,9 @@ public class JRBookDesignEditor extends AGraphicEditor {
 			});
 		}
 	}
-	
+
 	@Override
-	protected ContextMenuProvider createContextMenuProvider(
-			EditPartViewer graphicalViewer) {
+	protected ContextMenuProvider createContextMenuProvider(EditPartViewer graphicalViewer) {
 		return new BookEditorContextMenuProvider(graphicalViewer, getActionRegistry());
 	}
 
@@ -203,7 +206,7 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		};
 		return outlinePage;
 	}
-	
+
 	@Override
 	protected void createActions() {
 		super.createActions();
@@ -219,11 +222,11 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		IAction action = new CreateNewBookPartAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new DeleteBookPartAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new DeleteBookSectionAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -237,11 +240,11 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		IAction action = new BookCompileAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BookDatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new CreateNewGroupAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -250,6 +253,10 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		registry.registerAction(action);
 		selectionActions.add(CreateFieldAction.ID);
 
+		action = new CreateFieldsContainerAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateFieldsContainerAction.ID);
+
 		action = new CreateSortFieldAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateSortFieldAction.ID);
@@ -257,23 +264,27 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		action = new CreateVariableAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateVariableAction.ID);
-		
+
 		action = new SortVariablesAction(this);
 		registry.registerAction(action);
 		selectionActions.add(SortVariablesAction.ID);
-		
+
 		action = new SortParametersAction(this);
 		registry.registerAction(action);
 		selectionActions.add(SortParametersAction.ID);
-		
+
 		action = new SortFieldsAction(this);
 		registry.registerAction(action);
 		selectionActions.add(SortFieldsAction.ID);
-		
+
+		action = new ShowFieldsTreeAction(this);
+		registry.registerAction(action);
+		selectionActions.add(ShowFieldsTreeAction.ID);
+
 		action = new HideDefaultsParametersAction(this);
 		registry.registerAction(action);
 		selectionActions.add(HideDefaultsParametersAction.ID);
-		
+
 		action = new HideDefaultVariablesAction(this);
 		registry.registerAction(action);
 		selectionActions.add(HideDefaultVariablesAction.ID);
@@ -285,7 +296,7 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		action = new CreateParameterAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateParameterAction.ID);
-		
+
 		action = new CreateParameterSetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateParameterSetAction.ID);
@@ -302,22 +313,24 @@ public class JRBookDesignEditor extends AGraphicEditor {
 
 		// set rulers providers
 		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
-		
+
 		getGraphicalViewer().addDropTargetListener(new ResourceTransferDropTargetListener(getGraphicalViewer()));
 		getGraphicalViewer().setContextMenu(createContextMenuProvider(getGraphicalViewer()));
 		graphicalViewer.setProperty("JRCONTEXT", jrContext);
 	}
-	
+
 	@Override
 	public void setModel(INode model) {
 		INode currModel = getModel();
-		if(currModel!=null) {
-			((MBookReport)currModel.getChildren().get(0)).getPropertyChangeSupport().removePropertyChangeListener(modelChangesListener);
+		if (currModel != null) {
+			((MBookReport) currModel.getChildren().get(0)).getPropertyChangeSupport()
+					.removePropertyChangeListener(modelChangesListener);
 		}
 		super.setModel(model);
-		if(model!=null) {
-			((MBookReport)model.getChildren().get(0)).getPropertyChangeSupport().addPropertyChangeListener(modelChangesListener);
+		if (model != null) {
+			((MBookReport) model.getChildren().get(0)).getPropertyChangeSupport()
+					.addPropertyChangeListener(modelChangesListener);
 		}
 	}
-	
+
 }

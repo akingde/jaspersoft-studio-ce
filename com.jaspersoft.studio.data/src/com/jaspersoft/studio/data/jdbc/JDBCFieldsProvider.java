@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 import com.jaspersoft.studio.utils.parameter.SimpleValueParameter;
@@ -73,14 +74,17 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 					Set<String> colset = new HashSet<String>();
 					columns = new ArrayList<JRDesignField>(cc);
 					for (int i = 1; i <= cc; i++) {
+						JRDesignField field = new JRDesignField();
 						String name = metaData.getColumnLabel(i);
 						// System.out.println("name: " +
 						// metaData.getColumnName(i) +
 						// " Label: " + name);
+
+						field.getPropertiesMap().setProperty(DataQueryAdapters.FIELD_LABEL, name);
 						if (colset.contains(name))
 							name = JRResultSetDataSource.INDEXED_COLUMN_PREFIX + i;
 						colset.add(name);
-						JRDesignField field = new JRDesignField();
+
 						field.setName(StringUtils.xmlEncode(name, null));
 
 						field.setValueClassName(getJdbcTypeClass(metaData, i));
@@ -104,6 +108,10 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 						// } catch (SQLException se) {
 						// se.printStackTrace();
 						// }
+
+						String tbl = metaData.getTableName(i);
+						if (!Misc.isNullOrEmpty(tbl))
+							field.getPropertiesMap().setProperty(DataQueryAdapters.FIELD_PATH, tbl);
 						columns.add(field);
 					}
 				}

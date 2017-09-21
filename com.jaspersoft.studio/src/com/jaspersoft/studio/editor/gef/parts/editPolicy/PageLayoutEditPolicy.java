@@ -5,8 +5,7 @@
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
 import java.util.Collection;
-
-import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
+import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
@@ -22,6 +21,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
@@ -52,9 +52,13 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.field.FieldUtils;
 import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.variable.MVariable;
+
+import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 
 /*
  * The Class PageLayoutEditPolicy.
@@ -107,10 +111,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.XYLayoutEditPolicy#getConstraintFor(org.
-	 * eclipse.gef.requests.ChangeBoundsRequest,
-	 * org.eclipse.gef.GraphicalEditPart)
+	 * @see org.eclipse.gef.editpolicies.XYLayoutEditPolicy#getConstraintFor(org.
+	 * eclipse.gef.requests.ChangeBoundsRequest, org.eclipse.gef.GraphicalEditPart)
 	 */
 	@Override
 	protected Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {
@@ -251,9 +253,9 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	/**
-	 * Added the search of the container element in case the the parent node is
-	 * not a container. Doing this is necessary to permit to user to placing and
-	 * element up another even if the second is not a container.
+	 * Added the search of the container element in case the the parent node is not
+	 * a container. Doing this is necessary to permit to user to placing and element
+	 * up another even if the second is not a container.
 	 * 
 	 * @param parent
 	 * @param obj
@@ -298,15 +300,43 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 					}
 				}
 			} else if (aNode instanceof MField || aNode instanceof MParameter || aNode instanceof MVariable) {
-				if (parent.getChildren().isEmpty())
-					if (parent instanceof MGraphicElement)
-						constraint.y = ((MGraphicElement) parent).getBounds().y;
-					else if (parent instanceof MBand)
-						constraint.y = ((MBand) parent).getBounds().y;
+				adjustConstraints(parent, constraint);
+			} else if (aNode instanceof MFields) {
+				adjustConstraints(parent, constraint);
+				CompoundCommand c = new CompoundCommand();
+				List<MField> fields = FieldUtils.getFields((MFields) aNode);
+
+				Rectangle rparent = ((IGraphicElement) parent).getBounds();
+				int w = rparent.width / fields.size();
+				int rest = rparent.width - w * fields.size() - constraint.x;
+				constraint.width = w + rest;
+				for (MField f : fields) {
+					Command cmd = OutlineTreeEditPartFactory.getCreateCommand(parent, f, constraint.getCopy(), index);
+					if (cmd != null && cmd.canExecute()) {
+						c.add(cmd);
+						constraint.translate(w + rest, 0);
+						// Commented for back-compatibility in 3.6.
+						// Replaced with the following line.
+						// copyconstraint.setWidth(w);
+						constraint.width = w;
+						rest = 0;
+					}
+				}
+				if (!c.isEmpty())
+					return c;
+				return null;
 			}
 			return OutlineTreeEditPartFactory.getCreateCommand(parent, aNode, constraint, index);
 		}
 		return null;
+	}
+
+	private void adjustConstraints(ANode parent, Rectangle constraint) {
+		if (parent.getChildren().isEmpty())
+			if (parent instanceof MGraphicElement)
+				constraint.y = ((MGraphicElement) parent).getBounds().y;
+			else if (parent instanceof MBand)
+				constraint.y = ((MBand) parent).getBounds().y;
 	}
 
 	/*
@@ -417,12 +447,11 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	/**
 	 * Override of the method to avoid to add the standard edit policy on the
-	 * background elements, since it need its own policies to be handled
-	 * correctly, for example it has a drag behavior really different from the
-	 * other elements.
+	 * background elements, since it need its own policies to be handled correctly,
+	 * for example it has a drag behavior really different from the other elements.
 	 * 
-	 * Also add the policy only to the elements that doesn't already have a
-	 * specific EditPolicy.PRIMARY_DRAG_ROLE
+	 * Also add the policy only to the elements that doesn't already have a specific
+	 * EditPolicy.PRIMARY_DRAG_ROLE
 	 */
 	@Override
 	protected void decorateChild(EditPart child) {

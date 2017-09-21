@@ -11,6 +11,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.outline.actions.ShowFieldsTreeAction;
 import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -48,13 +49,17 @@ public class MFields extends ANode implements IPastable, IContainerEditPart {
 	/** The descriptors. */
 	protected static IPropertyDescriptor[] descriptors;
 
+	public MFields() {
+		super();
+	}
+
 	/**
 	 * Instantiates a new m fields.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrDataset
-	 *          the jr dataset
+	 *            the jr dataset
 	 */
 	public MFields(ANode parent, JRDesignDataset jrDataset) {
 		super(parent, -1);
@@ -81,16 +86,21 @@ public class MFields extends ANode implements IPastable, IContainerEditPart {
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
 	public ImageDescriptor getImagePath() {
-		if (SortFieldsAction.areFieldsSorted(getJasperConfiguration())){
-			return ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/fields_ordered-16.png");
+		if (SortFieldsAction.areFieldsSorted(getJasperConfiguration())) {
+			return ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID,
+					"/icons/resources/fields_ordered-16.png");
 		}
+		if (!(getParent() instanceof MFields) && ShowFieldsTreeAction.isFieldsTree(getJasperConfiguration()))
+			return ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID,
+					"/icons/resources/field-tree-16.png");
 		return getIconDescriptor().getIcon16();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.PropertyChangeEvent)
+	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -121,6 +131,8 @@ public class MFields extends ANode implements IPastable, IContainerEditPart {
 		}
 		if (!(evt.getSource() instanceof ANode))
 			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+		if (getParent() == null)
+			return;
 		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
 }

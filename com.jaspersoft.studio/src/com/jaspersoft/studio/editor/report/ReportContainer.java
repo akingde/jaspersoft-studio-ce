@@ -105,14 +105,14 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 	/**
 	 * Property used by an element to ask to the container to check if for that
 	 * element there is an editor opened and in that case refresh its name. The
-	 * property change event must have the source value set with the JRelement
-	 * that it is requesting the editor closing
+	 * property change event must have the source value set with the JRelement that
+	 * it is requesting the editor closing
 	 */
 	public static final String RENAME_EDITOR_PROPERTY = "renamedElementEditor";
 
 	/**
-	 * Flag used to know if in the current editor the background image is in
-	 * edit mode, if available
+	 * Flag used to know if in the current editor the background image is in edit
+	 * mode, if available
 	 */
 	private boolean editBackgroundImage = false;
 
@@ -127,8 +127,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 	private List<AbstractVisualEditor> editors = new ArrayList<AbstractVisualEditor>();
 
 	/**
-	 * Map of the subeditors opened, the key is the JRObject edited in the
-	 * subeditor the value it the subeditor used to edit it
+	 * Map of the subeditors opened, the key is the JRObject edited in the subeditor
+	 * the value it the subeditor used to edit it
 	 */
 	private Map<Object, AbstractVisualEditor> ccMap = new HashMap<Object, AbstractVisualEditor>();
 
@@ -138,11 +138,10 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 	private ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 
 	/**
-	 * The selection cache used by all the editors in this container (report
-	 * editor and eventually its subeditors) The selection cache is passed to
-	 * the subeditors trough the jasper configuration. The cached is stored when
-	 * this container is created and can be retrieved with the
-	 * SELECTION_CACHE_KEY
+	 * The selection cache used by all the editors in this container (report editor
+	 * and eventually its subeditors) The selection cache is passed to the
+	 * subeditors trough the jasper configuration. The cached is stored when this
+	 * container is created and can be retrieved with the SELECTION_CACHE_KEY
 	 */
 	private CommonSelectionCacheProvider selectionCache;
 
@@ -167,6 +166,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 		this.parent = parent;
 		this.jrContext = jrContext;
 		this.selectionCache = new CommonSelectionCacheProvider();
+		selectionCache.setAllowingDishomogeneousSelection(true);
 		// Store the selection cache
 		jrContext.put(SELECTION_CACHE_KEY, selectionCache);
 	}
@@ -466,9 +466,9 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 	}
 
 	/**
-	 * Create a fake command to force the refresh of the editor and outline
-	 * panels, this override the disable refresh flag, so calling this the
-	 * editor area is always updated
+	 * Create a fake command to force the refresh of the editor and outline panels,
+	 * this override the disable refresh flag, so calling this the editor area is
+	 * always updated
 	 */
 	protected void refreshVisuals(INode report) {
 		if (report != null) {
@@ -479,19 +479,18 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 	}
 
 	/**
-	 * Get the object that is modified by a subeditor. It calculated searching
-	 * the last node of the mpage of the subeditor (since the first are the
-	 * styles, the dataset...)
+	 * Get the object that is modified by a subeditor. It calculated searching the
+	 * last node of the mpage of the subeditor (since the first are the styles, the
+	 * dataset...)
 	 * 
 	 * @param searchNode
 	 *            the starting node
 	 * @return the node modified by the subeditor
 	 */
 	/*
-	 * private INode getInnerModel(INode searchNode){ INode actualNode =
-	 * searchNode; if (actualNode instanceof MRoot &&
-	 * actualNode.getChildren().size() >0){ return
-	 * getInnerModel(actualNode.getChildren().get(0)); } else if (actualNode
+	 * private INode getInnerModel(INode searchNode){ INode actualNode = searchNode;
+	 * if (actualNode instanceof MRoot && actualNode.getChildren().size() >0){
+	 * return getInnerModel(actualNode.getChildren().get(0)); } else if (actualNode
 	 * instanceof MPage && actualNode.getChildren().size()>0){ return
 	 * actualNode.getChildren().get(actualNode.getChildren().size()-1); } return
 	 * actualNode; }
@@ -611,23 +610,23 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 			setActivePage(0);
 		} else {
 			AbstractVisualEditor ave = ccMap.get(obj);
-			if (ave == null){
-				//need to create the new subeditor
+			if (ave == null) {
+				// need to create the new subeditor
 				ave = createEditorPage(obj);
 				/**
-				 * If was created another editor with inside an mpage the i save
-				 * the parent of the current node inside the page. Doing this it
-				 * is always possible from a node get its real parent and go
-				 * back into the hierarchy. This information need only to be
-				 * saved here since when an element change parent all the open
+				 * If was created another editor with inside an mpage the i save the parent of
+				 * the current node inside the page. Doing this it is always possible from a
+				 * node get its real parent and go back into the hierarchy. This information
+				 * need only to be saved here since when an element change parent all the open
 				 * editors for the element are closed
 				 */
-				if (ave != null && ave.getModel().getChildren().size() > 0 && ave.getModel().getChildren().get(0) instanceof MPage) {
+				if (ave != null && ave.getModel().getChildren().size() > 0
+						&& ave.getModel().getChildren().get(0) instanceof MPage) {
 					MPage pageElement = (MPage) ave.getModel().getChildren().get(0);
 					pageElement.setRealParent(node.getParent());
 				}
 			}
-			
+
 			if (ave != null) {
 				if (getActiveEditor() != ave) {
 					int index = editors.indexOf(ave);
@@ -678,8 +677,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 	}
 
 	/**
-	 * Set in the current editor the edit mode for the background image. However
-	 * it will be shown only if there is a background image defined
+	 * Set in the current editor the edit mode for the background image. However it
+	 * will be shown only if there is a background image defined
 	 * 
 	 * @param value
 	 *            true if the background should be editable, false otherwise
@@ -689,8 +688,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 	}
 
 	/**
-	 * Return as default selected page in the properties view the first page or
-	 * the last page (advanced page) considering what is set in the preferences
+	 * Return as default selected page in the properties view the first page or the
+	 * last page (advanced page) considering what is set in the preferences
 	 */
 	@Override
 	public int getDefaultSelectedPageIndex() {

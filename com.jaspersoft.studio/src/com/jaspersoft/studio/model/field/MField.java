@@ -20,6 +20,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeComboCellEditor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
@@ -36,6 +37,7 @@ import com.jaspersoft.studio.property.section.widgets.SPClassTypeCombo;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -124,7 +126,11 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	 */
 	@Override
 	public String getToolTip() {
-		return getIconDescriptor().getToolTip();
+		String tt = getIconDescriptor().getToolTip();
+		String plabel = getValue().getPropertiesMap().getProperty(DataQueryAdapters.FIELD_LABEL);
+		if (!Misc.isNullOrEmpty(plabel))
+			tt += "\nLabel: " + plabel;
+		return tt;
 	}
 
 	@Override
@@ -196,8 +202,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.
+	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.
 	 * lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
@@ -231,8 +236,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	 * @param jrField
 	 *            field for where the map is read
 	 * 
-	 * @return copy of the properties map, if the map was null then it retrun
-	 *         null
+	 * @return copy of the properties map, if the map was null then it retrun null
 	 */
 	public static JRPropertiesMap getPropertiesMapClone(JRDesignField jrField) {
 		JRPropertiesMap propertiesMap = jrField.getPropertiesMap();
@@ -257,8 +261,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.
+	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.
 	 * lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {

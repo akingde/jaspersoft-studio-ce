@@ -35,15 +35,14 @@ public class JDTreeContainerEditPolicy extends TreeContainerEditPolicy {
 	 *            the index
 	 * @return the command
 	 */
-	protected Command createCreateCommand(ANode child, int index) {
-		return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(), child, null, index);
+	protected Command createCreateCommand(ANode child, int index, boolean typeAdd) {
+		return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(), child, null, index, typeAdd);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.TreeContainerEditPolicy#getAddCommand(org.
+	 * @see org.eclipse.gef.editpolicies.TreeContainerEditPolicy#getAddCommand(org.
 	 * eclipse.gef.requests.ChangeBoundsRequest)
 	 */
 	@Override
@@ -58,7 +57,8 @@ public class JDTreeContainerEditPolicy extends TreeContainerEditPolicy {
 				command.add(UnexecutableCommand.INSTANCE);
 			} else {
 				ANode childModel = (ANode) child.getModel();
-				command.add(createCreateCommand(childModel, index));
+				// System.out.println(childModel.getDisplayText());
+				command.add(createCreateCommand(childModel, index, true));
 			}
 		}
 		return command;
@@ -80,7 +80,7 @@ public class JDTreeContainerEditPolicy extends TreeContainerEditPolicy {
 			index = CreateRequestUtil.getNewIndex(request);
 
 		if (request.getNewObject() instanceof ANode) {
-			return createCreateCommand((ANode) request.getNewObject(), index);
+			return createCreateCommand((ANode) request.getNewObject(), index, false);
 		} else if (request.getNewObject() instanceof CreateElementAction) {
 			CreateElementAction action = (CreateElementAction) request.getNewObject();
 			action.dropInto(getHost().getModel(), new Rectangle(), index);
