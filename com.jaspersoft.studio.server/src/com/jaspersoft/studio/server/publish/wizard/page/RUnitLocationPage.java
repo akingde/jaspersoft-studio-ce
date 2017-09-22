@@ -255,11 +255,24 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				if (isRefresh)
 					return;
 				isRefresh = true;
+				MReportUnit mru = getNewRunit();
 				String rtext = ruLabel.getText();
+				String id = IDStringValidator.safeChar(rtext);
 				String validationError = ValidationUtils.validateLabel(rtext);
+				if (validationError == null) {
+					ANode p = mru.getParent();
+					for (INode n : p.getChildren()) {
+						if (n instanceof AMResource && n != mru) {
+							if (((AMResource) n).getValue().getName().equals(id))
+								validationError = "This id is already used in this folder";
+							else if (((AMResource) n).getValue().getLabel().equals(rtext))
+								validationError = "This label is already used in this folder";
+						}
+					}
+				}
 				setErrorMessage(validationError);
 				if (validationError == null) {
-					ResourceDescriptor ru = getNewRunit().getValue();
+					ResourceDescriptor ru = mru.getValue();
 					ru.setLabel(rtext);
 					// suggest the ID
 					if (canSuggestID) {

@@ -92,6 +92,7 @@ public class Publish {
 			ServerManager.selectIfExists(monitor, node);
 		} catch (Exception e) {
 			UIUtils.showError(e);
+			return Status.CANCEL_STATUS;
 		}
 		return Status.OK_STATUS;
 	}
@@ -129,14 +130,17 @@ public class Publish {
 		if (mrunit != null && !jrxml.getValue().getIsReference()) {
 			ResourceDescriptor oldRU = mrunit.getValue();
 			ResourceDescriptor r = mrunit.getValue();
+			String oldType = r.getWsType();
 			try {
 				r = mrunit.getWsClient().get(monitor, mrunit.getValue(), null);
-				mrunit.setValue(r);
 			} catch (HttpResponseException e) {
 				if (e.getStatusCode() != 404)
 					throw e;
 			} catch (Exception e) {
 			}
+			if (!r.getWsType().equals(oldType))
+				throw new Exception("This Resource ID is already used by another resource type. Please rename it.");
+			mrunit.setValue(r);
 			// setup datasource
 			ResourceDescriptor ds = null;
 			for (ResourceDescriptor rd : oldRU.getChildren()) {

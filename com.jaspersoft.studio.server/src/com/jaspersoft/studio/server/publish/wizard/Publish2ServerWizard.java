@@ -11,7 +11,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -31,23 +33,16 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.editor.JRSEditorContributor;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
-import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.FindResources;
-import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.Publish;
-import com.jaspersoft.studio.server.publish.PublishOptions;
-import com.jaspersoft.studio.server.publish.PublishUtil;
-import com.jaspersoft.studio.server.publish.ResourcePublishMethod;
 import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionPage;
 import com.jaspersoft.studio.server.publish.wizard.page.FileSelectionPage;
 import com.jaspersoft.studio.server.publish.wizard.page.RUnitLocationPage;
@@ -317,7 +312,10 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 					try {
 						ANode node = getNode(monitor);
 						if (node instanceof AMJrxmlContainer)
-							new Publish(jrConfig).publish((AMJrxmlContainer) node, jDesign, monitor);
+							if (new Publish(jrConfig).publish((AMJrxmlContainer) node, jDesign,
+									monitor) == Status.CANCEL_STATUS)
+								throw new InterruptedException("Publishing canceled");
+
 					} finally {
 						monitor.done();
 					}
@@ -325,8 +323,12 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 			});
 		} catch (InvocationTargetException e) {
 			UIUtils.showError(e.getCause());
+			return false;
 		} catch (InterruptedException e) {
+			if (e.getMessage().equals("Publishing canceled"))
+				return false;
 			UIUtils.showError(e);
+			return false;
 		}
 
 		return true;

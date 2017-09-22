@@ -189,8 +189,8 @@ public class FindResources {
 					// usual.
 					AMResource selectedRepoUnit = WSClientHelper.findSelected(mserv.getChildren(), monitor, prunit,
 							mserv.getWsClient(monitor));
-					if (selectedRepoUnit != null) {
-						if (pres != null && !pres.equals(prunit) && selectedRepoUnit instanceof MReportUnit) {
+					if (selectedRepoUnit != null && selectedRepoUnit instanceof MReportUnit) {
+						if (pres != null && !pres.equals(prunit)) {
 							selectedRepoUnit.removeChildren();
 							ANode parent = selectedRepoUnit;
 							for (ResourceDescriptor r : selectedRepoUnit.getValue().getChildren()) {
