@@ -90,21 +90,33 @@ public class RWComboBoxCellEditor extends EditableComboBoxCellEditor {
 	 */
 	@Override
 	protected void doSetValue(Object value) {
-		if (comboBox != null && value instanceof String) {
-			String[] items = getItems();
-			for (int i = 0; i < items.length; i++) {
-				if (items[i].equals((String) value)) {
-					super.doSetValue(new Integer(i));
-					return;
+		if (comboBox != null) {
+			if (value instanceof String) {
+				String[] items = getItems();
+				for (int i = 0; i < items.length; i++) {
+					if (items[i].equals((String) value)) {
+						super.doSetValue(new Integer(i));
+						return;
+					}
 				}
+				// No element found
+				String[] newListItems = new String[items.length + 1];
+				System.arraycopy(items, 0, newListItems, 0, items.length);
+	
+				newListItems[items.length] = (String) value;
+				setItems(newListItems);
+				super.doSetValue(items.length);
+			} else if (value == null) {
+				String[] items = getItems();
+				// No element found
+				String[] newListItems = new String[items.length + 1];
+				System.arraycopy(items, 0, newListItems, 0, items.length);
+	
+				newListItems[items.length] = "";
+				setItems(newListItems);
+				super.doSetValue(items.length);
+				setItems(items);
 			}
-			// No element found
-			String[] newListItems = new String[items.length + 1];
-			System.arraycopy(items, 0, newListItems, 0, items.length);
-
-			newListItems[items.length] = (String) value;
-			setItems(newListItems);
-			super.doSetValue(items.length);
 		}
 
 	}
