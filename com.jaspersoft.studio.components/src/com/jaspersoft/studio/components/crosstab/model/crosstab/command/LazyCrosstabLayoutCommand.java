@@ -119,7 +119,7 @@ public class LazyCrosstabLayoutCommand extends Command{
 			}
 			ILayout parentLayout = LayoutManager.getLayout(str);
 			d = LayoutManager.getPaddedSize(jrElement, d);
-			c.add(new LayoutCommand(jrGroup, parentLayout, d));
+			c.add(new LayoutCommand(container.getJasperDesign(), jrGroup, parentLayout, d));
 		}
 	}
 	

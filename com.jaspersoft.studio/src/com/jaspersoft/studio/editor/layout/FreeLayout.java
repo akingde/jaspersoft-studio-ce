@@ -7,17 +7,19 @@ package com.jaspersoft.studio.editor.layout;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRElement;
-
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.messages.Messages;
 
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 public class FreeLayout extends AbstractLayout {
 
 	@Override
-	public Map<JRElement, Rectangle> layout(JRElement[] elements, Dimension c) {
+	public Map<JRElement, Rectangle> layout(JasperDesign jd, JRElementGroup container, JRElement[] elements, Dimension c) {
 		return new HashMap<JRElement, Rectangle>();
 	}
 
@@ -37,7 +39,7 @@ public class FreeLayout extends AbstractLayout {
 	}
 
 	@Override
-	public Map<JRElement, Rectangle> getLayoutPosition(JRElement[] elements, Dimension parentSize) {
+	public Map<Object, Rectangle> getLayoutPosition(Object[] elements, int insertPosition, Dimension parentSize) {
 		return null;
 	}
 }

@@ -94,7 +94,7 @@ public class TextDecorator implements IDecorator {
 				boolean leftUpperCorner = false;
 				boolean rightLowerCorner = false;
 				for (TextDecoratorInterface decorator : textDecorators) {
-					ArrayList<TextLocation> texts = decorator.getText(fig.getJrElement().getPropertiesMap());
+					ArrayList<TextLocation> texts = decorator.getText(fig);
 					g.setFont(decorator.getFont());
 					g.setColor(decorator.getColor());
 					for (TextLocation text : texts) {

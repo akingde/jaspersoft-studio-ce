@@ -58,8 +58,10 @@ public class LayoutAction extends SelectionAction {
 		setText(layout.getName());
 		setToolTipText(layout.getToolTip());
 		setId(type.getName());
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(layout.getIcon()));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(layout.getIcon()));
+		if (layout.getIcon() != null) {
+			setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(layout.getIcon()));
+			setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(layout.getIcon()));
+		}
 		setEnabled(false);
 	}
 
@@ -151,7 +153,7 @@ public class LayoutAction extends SelectionAction {
 						cc.add(c);
 					}
 				}
-				cc.add(new LayoutCommand(container, layout, size));
+				cc.add(new LayoutCommand(n.getJasperDesign(), container, layout, size));
 				return cc;
 			}
 		}

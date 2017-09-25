@@ -98,7 +98,7 @@ public class CreateElementCommand extends Command {
 		d = LayoutManager.getPaddedSize(jrCell, d);
 		if (lCmd == null) {
 			ILayout layout = LayoutManager.getLayout(pholder, jDesign, null);
-			lCmd = new LayoutCommand(jrCell, layout, d);
+			lCmd = new LayoutCommand(jDesign, jrCell, layout, d);
 		}
 		lCmd.execute();
 		LayoutManager.layoutContainer(destNode);

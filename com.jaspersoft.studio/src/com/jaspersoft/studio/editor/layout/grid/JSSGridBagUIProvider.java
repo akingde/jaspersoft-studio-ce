@@ -501,7 +501,7 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 				str = FreeLayout.class.getName();
 			}
 			ILayout parentLayout = LayoutManager.getLayout(str);		
-			return new LayoutCommand(jrGroup, parentLayout, d);
+			return new LayoutCommand(parent.getJasperDesign(), jrGroup, parentLayout, d);
 		}
 		return null;
 	}
@@ -810,5 +810,10 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 			
 			modifyGuard = false;
 		}
+	}
+
+	@Override
+	public void createLayoutControls(Composite parent) {
+	
 	}
 }

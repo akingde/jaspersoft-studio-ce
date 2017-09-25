@@ -139,8 +139,7 @@ public class CreateElementCommand extends Command {
 
 			ILayout layout = LayoutManager.getLayout(pholder, jDesign,
 					jrElement2.getUUID().toString());
-			map = layout.layout(dlist.getElements(),
-					new Dimension(jrElement.getWidth(), jrElement.getHeight()));
+			map = layout.layout(jDesign, dlist, dlist.getElements(), new Dimension(jrElement.getWidth(), jrElement.getHeight()));
 		}
 		if (firstTime) {
 			SelectionHelper.setSelection(jrElement, false);

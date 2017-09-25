@@ -32,13 +32,17 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class CrosstabManager {
 
 	private JRDesignCrosstab crosstab;
+	
+	private JasperDesign jDesign;
 
-	public CrosstabManager(JRDesignCrosstab crosstab) {
+	public CrosstabManager(JRDesignCrosstab crosstab, JasperDesign jd) {
 		this.crosstab = crosstab;
+		this.jDesign = jd;
 		init(crosstab);
 	}
 
@@ -507,7 +511,7 @@ public class CrosstabManager {
 		ILayout defaultLayout = new VerticalRowLayout();
 		for(JRCellContents cell : cellsToLayout){
 			ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell }, null, null, defaultLayout);
-			layout.layout(cell.getElements(), new Dimension(cell.getWidth(), cell.getHeight()));
+			layout.layout(jDesign, cell, cell.getElements(), new Dimension(cell.getWidth(), cell.getHeight()));
 		}
 	}
 	

@@ -128,7 +128,7 @@ public class ListEditPart extends EditableFigureEditPart {
 							action.run();
 							return action.getCommand();
 						} else if (request.getNewObject() instanceof MGraphicElement) {
-							return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(),(ANode) request.getNewObject(),constraint.getCopy(), -1);
+							return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(),(ANode) request.getNewObject(),constraint.getCopy(), -1, request, false);
 						} else if (request.getNewObject() instanceof Collection<?>) {
 							JSSCompoundCommand cmd = new JSSCompoundCommand(null);
 							Collection<?> c = (Collection<?>) request.getNewObject();
@@ -136,7 +136,7 @@ public class ListEditPart extends EditableFigureEditPart {
 								if (obj instanceof ANode) {
 									ANode aObj = (ANode) obj;
 									cmd.setReferenceNodeIfNull(aObj);
-									cmd.add(OutlineTreeEditPartFactory .getCreateCommand((ANode) getHost().getModel(), aObj, constraint.getCopy(), -1));
+									cmd.add(OutlineTreeEditPartFactory .getCreateCommand((ANode) getHost().getModel(), aObj, constraint.getCopy(), -1, request, false));
 								}
 							}
 							return cmd;

@@ -201,7 +201,8 @@ public class PDFDecorator implements IDecorator, TextDecoratorInterface {
 	}
 
 	@Override
-	public ArrayList<TextLocation> getText(JRPropertiesMap mapProperties) {
+	public ArrayList<TextLocation> getText(ComponentFigure fig) {
+		JRPropertiesMap mapProperties = fig.getJrElement().getPropertiesMap();
 		ArrayList<TextLocation> result = new ArrayList<TextLocation>();
 		String tagValue = "";
 		String startString = "";

@@ -7,8 +7,10 @@ package com.jaspersoft.studio.templates.engine;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.editor.layout.spreadsheet.SpreadsheetLayout;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -262,21 +264,27 @@ public class DefaultTemplateEngine implements TemplateEngine {
 						JRDesignField f = (JRDesignField) obj;
 						if (groupFields != null && groupFields.contains(f))
 							continue;
-						if (labelElement != null && columnHeaderBand != null) {
-							JRDesignStaticText newLabel = (JRDesignStaticText) labelElement.clone();
-							newLabel.setText(f.getName());
-							newLabel.setX(currentX);
-							newLabel.setWidth(width);
-							addElement(columnHeaderBand, newLabel);
-						}
+						JRDesignTextField newTextField = null;
 						if (fieldElement != null && detailBand != null) {
-							JRDesignTextField newTextField = (JRDesignTextField) fieldElement.clone();
+							newTextField = (JRDesignTextField) fieldElement.clone();
 							// Fix the class (the Textfield has a limited set of type options...)
 							newTextField.setExpression(ExprUtil.setValues(new JRDesignExpression(), "$F{" + f.getName() + "}", //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 									f.getValueClassName()));
 							newTextField.setX(currentX);
 							newTextField.setWidth(width);
 							addElement(detailBand, newTextField);
+						}
+						if (labelElement != null && columnHeaderBand != null) {
+							JRDesignStaticText newLabel = (JRDesignStaticText) labelElement.clone();
+							newLabel.setText(f.getName());
+							newLabel.setX(currentX);
+							newLabel.setWidth(width);
+							if (newTextField != null){
+								String uuid = UUID.randomUUID().toString();
+								newLabel.getPropertiesMap().setProperty(SpreadsheetLayout.PROPERTY_ID, uuid);
+								newTextField.getPropertiesMap().setProperty(SpreadsheetLayout.PROPERTY_ID, uuid);
+							}
+							addElement(columnHeaderBand, newLabel);
 						}
 
 						currentX += width;

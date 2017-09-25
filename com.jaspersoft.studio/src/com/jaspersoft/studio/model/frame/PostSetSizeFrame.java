@@ -35,7 +35,7 @@ public class PostSetSizeFrame implements IPostSetValue {
 		Dimension d = new Dimension(jrFrame.getWidth(), jrFrame.getHeight());
 		d = LayoutManager.getPaddedSize(jrFrame, d);
 		ILayout layout = LayoutManager.getLayout(frame.getPropertyHolder(), jDesign, null);
-		return new LayoutCommand(jrFrame, layout, d);
+		return new LayoutCommand(jDesign, jrFrame, layout, d);
 	}
 
 }

@@ -48,6 +48,7 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 
 public class CrosstabWizard extends JSSWizard {
@@ -78,10 +79,9 @@ public class CrosstabWizard extends JSSWizard {
 
 	@Override
 	public void addPages() {
-		JRDesignCrosstab jrCrosstab = (JRDesignCrosstab) new MCrosstab()
-				.createJRElement(getConfig().getJasperDesign());
-		crosstab = new MCrosstab(null, jrCrosstab, 1, new CrosstabManager(
-				jrCrosstab));
+		JasperDesign jd = getConfig().getJasperDesign();
+		JRDesignCrosstab jrCrosstab = (JRDesignCrosstab) new MCrosstab().createJRElement(jd);
+		crosstab = new MCrosstab(null, jrCrosstab, 1, new CrosstabManager(jrCrosstab, jd));
 		crosstab.setJasperConfiguration(getConfig());
 
 		step1 = new WizardDatasetPage("Crosstab"){

@@ -48,13 +48,13 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 	/**
 	 * Contains the last feedback calculated for the elements
 	 */
-	private Map<JRElement, Rectangle> positions = null;
+	private Map<Object, Rectangle> positions = null;
 	
 	/**
 	 * Cache list that contains all the element in nodes that can be converted to a JRElement (the value
 	 * of the {@link MGraphicElement} is extracted in this case)
 	 */
-	private List<JRElement> elements = new ArrayList<JRElement>();
+	private List<Object> elements = new ArrayList<Object>();
 	
 	/**
 	 * Flag used to know if the last attempt to get the layout feedback position was
@@ -69,6 +69,11 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 	private static HashMap<Class<?>, JRElement> newElementsCache = new HashMap<Class<?>, JRElement>();
 	
 	/**
+	 * The position where the new elements are inserted, -1 means at the end of the container
+	 */
+	private int insertPosition;
+	
+	/**
 	 * Crate the feedback provider for a drag and drop operation
 	 * 
 	 * @param borderColor the color used to highlight the border of the parent
@@ -78,9 +83,24 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 	 * even mixed. Types different from this, excluding the subtypes, are ignored 
 	 */
 	public ColoredLayoutPositionRectangle(Color borderColor, float borderWidth, ANode container, List<Object> nodes){
+		this(borderColor, borderWidth, container, nodes, -1);
+	}
+	
+	/**
+	 * Crate the feedback provider for a drag and drop operation
+	 * 
+	 * @param borderColor the color used to highlight the border of the parent
+	 * @param borderWidth the width of the highlight on the parent border
+	 * @param container the container where the drop will be done
+	 * @param nodes The list of nodes that are dropped, should be a list of {@link ANode} or {@link JRElement}, 
+	 * even mixed. Types different from this, excluding the subtypes, are ignored 
+	 * @param insertPosition the position where the elements will be inserted, -1 means at the end of the container
+	 */
+	public ColoredLayoutPositionRectangle(Color borderColor, float borderWidth, ANode container, List<Object> nodes, int insertPosition){
 		super(borderColor, borderWidth);
 		this.container = container;
 		this.nodes = nodes;
+		this.insertPosition = insertPosition;
 	}
 
 	/**
@@ -102,7 +122,7 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 	 * 
 	 * @return every dragged node plus every node inside the parent with its position after the  layout
 	 */
-	private Map<JRElement, Rectangle> getLayoutPosition(){
+	private Map<Object, Rectangle> getLayoutPosition(){
 		//Use the cache
 		if (!hasPosition) return null;
 		if (positions != null) return positions;
@@ -116,11 +136,13 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 					} else {
 						elements.add(getEmptyElement(pNode));
 					}
-				} else if (node instanceof JRElement){
-					elements.add((JRElement)node);
+				} else if (node instanceof ANode){
+					elements.add(((ANode) node).getValue());
+				} else {
+					elements.add(node);
 				}
 			}
-			positions = LayoutManager.createLayoutPosition(container, elements);
+			positions = LayoutManager.createLayoutPosition(container, insertPosition, elements);
 			if (positions == null) {
 				hasPosition = false;
 			}
@@ -131,7 +153,7 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 	protected void outlineShape(Graphics graphics) {
 		super.outlineShape(graphics);
 		
-		Map<JRElement, Rectangle> positions = getLayoutPosition();
+		Map<Object, Rectangle> positions = getLayoutPosition();
 		if (positions != null){
 			Graphics2D g = ComponentFigure.getG2D(graphics);
 			Rectangle r = Rectangle.SINGLETON.setBounds(getBounds());
@@ -145,9 +167,9 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 				if (elementPosition != null){
 					g.setStroke(new BasicStroke(borderWidth));
 					g.setColor(new Color(159, 159, 159));
-					int x1 = offset + r.x + elementPosition.x+3;
-					int y1 = r.y + elementPosition.y+3;
-					g.drawRect(x1, y1, elementPosition.width-6, elementPosition.height-6);
+					int x1 = elementPosition.x + offset + r.x;
+					int y1 = r.y + elementPosition.y;
+					g.drawRect(x1, y1, elementPosition.width, elementPosition.height);
 				}
 			}
 		}

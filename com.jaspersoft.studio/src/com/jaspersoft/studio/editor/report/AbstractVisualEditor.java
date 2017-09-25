@@ -76,6 +76,7 @@ import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.ZoomActualAction;
+import com.jaspersoft.studio.editor.action.BindElementsAction;
 import com.jaspersoft.studio.editor.action.CustomDeleteAction;
 import com.jaspersoft.studio.editor.action.EncloseIntoFrameAction;
 import com.jaspersoft.studio.editor.action.HideElementsAction;
@@ -85,6 +86,7 @@ import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
 import com.jaspersoft.studio.editor.action.MoveGroupUpAction;
 import com.jaspersoft.studio.editor.action.OpenEditorAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
+import com.jaspersoft.studio.editor.action.UnBindElementsAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.align.Align2Element;
 import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
@@ -1104,7 +1106,16 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new EncloseIntoFrameAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
+		
+		action = new BindElementsAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
 
+		action = new UnBindElementsAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
+		
 		action = new CreateCompositeElementAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());

@@ -4,14 +4,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.layout.grid;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -22,6 +19,13 @@ import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * GridBagLayout for the elements inside a container in JSS.
@@ -73,7 +77,7 @@ public class JSSGridBagLayout extends AbstractLayout {
 	/**
 	 * When the parent has a grid layout it always show additional controls
 	 */
-	public boolean showAdditionalControls(JRPropertiesMap elementProperties, JRPropertiesMap parentProperties) {
+	public boolean showAdditionalControlsOnChild(JRPropertiesMap elementProperties, JRPropertiesMap parentProperties) {
 		return true;
 	}
 	
@@ -95,7 +99,7 @@ public class JSSGridBagLayout extends AbstractLayout {
 	}
 	
 	@Override
-	public Map<JRElement, Rectangle> layout(JRElement[] elements, Dimension c) {
+	public Map<JRElement, Rectangle> layout(JasperDesign jd, JRElementGroup container, JRElement[] elements, Dimension c) {
 		GridBagLayoutUtil layout = new GridBagLayoutUtil();
 		Map<JRElement, Rectangle> result = layout.layoutContainer(c, elements);
 		Map<JRElement, Rectangle> oldValues = new HashMap<JRElement, Rectangle>();
@@ -109,7 +113,7 @@ public class JSSGridBagLayout extends AbstractLayout {
 			del.setWidth(placement.width);
 			del.setHeight(placement.height);	
 			if (relayoutChildren){
-				LayoutManager.layout(result, del);
+				LayoutManager.layout(jd, result, del);
 			}
 		}
 		return oldValues;
@@ -131,9 +135,17 @@ public class JSSGridBagLayout extends AbstractLayout {
 	}
 
 	@Override
-	public Map<JRElement, Rectangle> getLayoutPosition(JRElement[] elements, Dimension parentSize) {
+	public Map<Object, Rectangle> getLayoutPosition(Object[] elements, int insertPosition, Dimension parentSize) {
 		GridBagLayoutUtil layout = new GridBagLayoutUtil();
-		Map<JRElement, Rectangle> result = layout.layoutContainer(parentSize, elements);
-		return result;
+		List<JRElement> elementsToLayout = new ArrayList<JRElement>();
+		for(Object obj : elements){
+			if (obj instanceof JRElement){
+				elementsToLayout.add((JRElement)obj);
+			}
+		}
+		Map<JRElement, Rectangle> result = layout.layoutContainer(parentSize, elementsToLayout.toArray(new JRElement[elementsToLayout.size()]));
+		Map<Object, Rectangle> rawResult = new HashMap<Object, Rectangle>();
+		rawResult.putAll(result);
+		return rawResult;
 	}
 }

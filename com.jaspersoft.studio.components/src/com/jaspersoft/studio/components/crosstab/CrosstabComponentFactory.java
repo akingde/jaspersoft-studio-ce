@@ -170,7 +170,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		if (jrObject instanceof JRDesignCrosstab) {
 			JRDesignCrosstab ct = (JRDesignCrosstab) jrObject;
 			ct.preprocess();
-			CrosstabManager ctManager = new CrosstabManager(ct);
+			CrosstabManager ctManager = new CrosstabManager(ct, parent.getJasperDesign());
 			MCrosstab mCrosstab = new MCrosstab(parent, ct, newIndex, ctManager);
 			MCrosstabParameters mp = new MCrosstabParameters(mCrosstab, ct, JRDesignCrosstab.PROPERTY_PARAMETERS);
 			if (ct.getParameters() != null){

@@ -131,7 +131,8 @@ public class CrosstabTitleCellEditPart extends ACrosstabCellEditPart {
 				getLayoutTargetFeedback(request);
 			}
 
-			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
+			@Override
+			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index, Request request) {
 				if (parent instanceof MPage)
 					parent = getModel();
 				Rectangle b = getModel().getBounds();
@@ -139,7 +140,7 @@ public class CrosstabTitleCellEditPart extends ACrosstabCellEditPart {
 				int y = constraint.y - b.y - ReportPageFigure.PAGE_BORDER.top;
 				constraint = new Rectangle(x, y, constraint.width, constraint.height);
 
-				return super.getCreateCommand(parent, obj, constraint, index);
+				return super.getCreateCommand(parent, obj, constraint, index, request);
 			}
 
 			@Override

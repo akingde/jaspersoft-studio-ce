@@ -8,7 +8,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 
-import net.sf.jasperreports.engine.JRPropertiesMap;
+import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 
 /**
  * Interface that define a text contributor for the text decorator
@@ -19,10 +19,10 @@ public interface TextDecoratorInterface {
 	
 	/**
 	 * Used to get the elements that will be painted on the figure
-	 * @param mapProperties the property of the element related to the figure
+	 * @param fig the figure of the element
 	 * @return  an array of textual element that need to be painted on the figure
 	 */
-	public ArrayList<TextLocation> getText(JRPropertiesMap mapProperties);
+	public ArrayList<TextLocation> getText(ComponentFigure fig);
 	
 	/**
 	 * Color used to paint the textual elements

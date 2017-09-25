@@ -173,6 +173,9 @@ public class SetPageConstraintCommand extends Command {
 	 */
 	@Override
 	public boolean canExecute() {
+		if (oldBounds == null && jrElement != null){
+			oldBounds = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
+		}
 		return isOperationAllowed(oldBounds, newBounds);
 	}
 	

@@ -22,9 +22,16 @@ public interface ILayoutUIProvider {
 	 * Create the controls provided to configure the child element of the container that is using
 	 * as layout the implementation of this class
 	 * 
-	 * @param parent composite where to create the controls, it has a {@link GridLayout} with a single column
+	 * @param parent composite where to create the controls
 	 */
 	public void createControls(Composite parent);
+	
+	/**
+	 * Create the controls provided to configure the container where the layout is assigned 
+	 * 
+	 * @param parent composite where to create the controls, it has a {@link GridLayout} with a single column
+	 */
+	public void createLayoutControls(Composite parent);
 	
 	/**
 	 * If the layout provide graphical controls to configure the layout properties of an element,

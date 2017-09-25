@@ -33,6 +33,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
+import com.jaspersoft.studio.property.PostDeleteManager;
 import com.jaspersoft.studio.property.PostSetValueManager;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
@@ -301,6 +302,16 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 			postSetValueManager.init();
 		}
 		return postSetValueManager;
+	}
+	
+	private static PostDeleteManager postDeleteManager;
+
+	public static PostDeleteManager getPostDeleteManager() {
+		if (postDeleteManager == null) {
+			postDeleteManager = new PostDeleteManager();
+			postDeleteManager.init();
+		}
+		return postDeleteManager;
 	}
 
 	private static InputControlTypeManager inputControlTypeManager;

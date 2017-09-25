@@ -28,6 +28,7 @@ import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+import com.jaspersoft.studio.editor.action.BindElementsAction;
 import com.jaspersoft.studio.editor.action.EncloseIntoFrameAction;
 import com.jaspersoft.studio.editor.action.HideElementsAction;
 import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
@@ -36,6 +37,7 @@ import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
 import com.jaspersoft.studio.editor.action.MoveGroupUpAction;
 import com.jaspersoft.studio.editor.action.OpenEditorAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
+import com.jaspersoft.studio.editor.action.UnBindElementsAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
 import com.jaspersoft.studio.editor.action.band.StretchToContentAction;
@@ -253,7 +255,16 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(EncloseIntoFrameAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+		
+		action = getActionRegistry().getAction(BindElementsAction.ID);
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
+		action = getActionRegistry().getAction(UnBindElementsAction.ID);
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+
+		
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, new Separator());
 
 		action = getActionRegistry().getAction(CreateCompositeElementAction.ID);

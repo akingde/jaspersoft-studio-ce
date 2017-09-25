@@ -105,7 +105,7 @@ public class PostSetSizeCell implements IPostSetValue {
 			Rectangle r = ccell.getBounds();
 			Dimension d = new Dimension(r.width, r.height);
 			d = LayoutManager.getPaddedSize(ccell.cell.getLineBox(), d);
-			c.add(new LayoutCommand(ccell.cell, layout, d));
+			c.add(new LayoutCommand(jDesign, ccell.cell, layout, d));
 		}
 	}
 

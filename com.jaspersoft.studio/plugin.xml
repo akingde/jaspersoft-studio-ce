@@ -31,6 +31,7 @@
 
 <extension-point id="daQueryUI" name="Data Adapter Query UI" schema="schema/daQueryUI.exsd"/>
 <extension-point id="parameterIC" name="Input Control Parameter Contributor" schema="schema/parameterIC.exsd"/>
+<extension-point id="postDelete" name="postDelete" schema="schema/postDelete.exsd"/>
    <extension
   
          id="xmlProblem"
@@ -1576,6 +1577,9 @@
        <decorator
              ClassFactory="com.jaspersoft.studio.editor.gef.decorator.json.JSONElementDecorator">
        </decorator>
+       <decorator
+             ClassFactory="com.jaspersoft.studio.editor.gef.decorator.spreadsheet.SpreadSheetElementDecorator">
+       </decorator>
     </extension>
     <extension
           point="com.jaspersoft.studio.postsetvalue">
@@ -2225,5 +2229,11 @@
              widgetClass="com.jaspersoft.studio.widgets.framework.ui.JRDataAdapterPropertyDescription"
              widgetName="jrDataAdapter">
        </definition>
+    </extension>
+    <extension
+          point="com.jaspersoft.studio.postDelete">
+       <postdelete
+             class="com.jaspersoft.studio.editor.layout.spreadsheet.command.SpreadsheetPostDelete">
+       </postdelete>
     </extension>
 </plugin>

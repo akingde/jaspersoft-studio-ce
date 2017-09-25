@@ -17,6 +17,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.action.layout.LayoutAction;
 import com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout;
+import com.jaspersoft.studio.editor.layout.spreadsheet.SpreadsheetLayout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainerLayout;
@@ -170,7 +171,7 @@ public class LayoutManager {
 	}
 
 	private static final Class<?>[] layouts = new Class<?>[] { HorizontalRowLayout.class, VerticalRowLayout.class,
-			JSSGridBagLayout.class };
+			JSSGridBagLayout.class, SpreadsheetLayout.class};
 
 	private static ILayout[] LAYOUTNAMES;
 
@@ -203,7 +204,7 @@ public class LayoutManager {
 	public static ILayout[] getAllLayouts() {
 		if (LAYOUTNAMES == null) {
 			LAYOUTNAMES = new ILayout[] { new FreeLayout(), new HorizontalRowLayout(), new VerticalRowLayout(),
-					new JSSGridBagLayout() };
+					new JSSGridBagLayout(), new SpreadsheetLayout() };
 			layoutsMap = new HashMap<String, ILayout>();
 			for (ILayout layout : LAYOUTNAMES) {
 				layoutsMap.put(layout.getClass().getName(), layout);
@@ -217,7 +218,7 @@ public class LayoutManager {
 		return layoutsMap.get(className);
 	}
 
-	public static Map<JRElement, Rectangle> layout(Map<JRElement, Rectangle> map, JRElement el) {
+	public static Map<JRElement, Rectangle> layout(JasperDesign jd, Map<JRElement, Rectangle> map, JRElement el) {
 		if (el instanceof JRElementGroup && el instanceof JRPropertiesHolder) {
 			Dimension d = null;
 			if (el instanceof JRCommonElement) {
@@ -226,7 +227,7 @@ public class LayoutManager {
 			}
 			ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { el }, null, null);
 			JRElementGroup group = (JRElementGroup) el;
-			layout.layout(group.getElements(), d);
+			layout.layout(jd, group, group.getElements(), d);
 		}
 		return map;
 	}
@@ -459,7 +460,7 @@ public class LayoutManager {
 					str = FreeLayout.class.getName();
 			}
 			ILayout parentLayout = LayoutManager.getLayout(str);
-			return new LayoutCommand(jrGroup, parentLayout, d);
+			return new LayoutCommand(containerToLayout.getJasperDesign(), jrGroup, parentLayout, d);
 		}
 		return null;
 	}
@@ -485,13 +486,13 @@ public class LayoutManager {
 	 * 
 	 * @param containerToLayout
 	 *          the container to layout, if null this doesn't do anything
+	 * @param insertPosition the position where the elements will be inserted, -1 means at the end of the container
 	 * @param additionalElements
 	 *          elements that will be considered by the layout engine like additional children of the container
 	 * @return the map of every element inside the container, plus the additionalElements, which for every element show
 	 *         the position inside the container with its layout
 	 */
-	public static Map<JRElement, Rectangle> createLayoutPosition(ANode containerToLayout,
-			List<JRElement> additionalElements) {
+	public static Map<Object, Rectangle> createLayoutPosition(ANode containerToLayout, int insertPosition, List<Object> additionalElements) {
 		if (containerToLayout == null)
 			return null;
 		Object jrElement = containerToLayout.getValue();
@@ -544,14 +545,25 @@ public class LayoutManager {
 					str = FreeLayout.class.getName();
 			}
 			ILayout parentLayout = LayoutManager.getLayout(str);
-			List<JRElement> elements = new ArrayList<JRElement>();
-			for (JRElement element : jrGroup.getElements()) {
-				elements.add(element);
+			List<Object> elements = new ArrayList<Object>();
+			JRElement[] childElements = jrGroup.getElements();
+			if (insertPosition < 0 || insertPosition >= jrGroup.getElements().length){
+				for (JRElement element : childElements) {
+					elements.add(element);
+				}
+				elements.addAll(additionalElements);
+			} else {
+				for(int i = 0; i < childElements.length && i < insertPosition; i++){
+					elements.add(childElements[i]);
+				}
+				elements.addAll(additionalElements);
+				for(int i = insertPosition; i < childElements.length; i++){
+					elements.add(childElements[i]);
+				}		
 			}
-			elements.addAll(additionalElements);
 
-			Map<JRElement, Rectangle> result = parentLayout
-					.getLayoutPosition(elements.toArray(new JRElement[elements.size()]), d);
+
+			Map<Object, Rectangle> result = parentLayout.getLayoutPosition(elements.toArray(new Object[elements.size()]), insertPosition, d);
 			if (topPadding != 0 || leftPadding != 0) {
 				for (Rectangle rect : result.values()) {
 					rect.setX(rect.x + leftPadding);

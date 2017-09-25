@@ -171,7 +171,7 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 
 			@Override
 			protected Command getCreateCommand(ANode parent, Object obj,
-					Rectangle constraint, int index) {
+					Rectangle constraint, int index, Request request) {
 				if (parent instanceof MPage)
 					parent = getModel();
 				Rectangle b = getModel().getBounds();
@@ -180,7 +180,7 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 				constraint = new Rectangle(x, y, constraint.width,
 						constraint.height);
 
-				return super.getCreateCommand(parent, obj, constraint, index);
+				return super.getCreateCommand(parent, obj, constraint, index, request);
 			}
 			
 			/**

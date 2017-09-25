@@ -355,7 +355,7 @@ public class TableManager {
 							ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
 							Dimension baseSize = new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight());
 							Dimension paddedSize = LayoutManager.getPaddedSize(cell.getKey(), baseSize);
-							layout.layout(cell.getKey().getElements(), paddedSize);
+							layout.layout(jDesign, cell.getKey(), cell.getKey().getElements(), paddedSize);
 						}
 					}
 					index++;
@@ -375,7 +375,7 @@ public class TableManager {
 						setWidth((StandardBaseColumn)col, newColumnWidth);
 						for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
 							ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
-							layout.layout(cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
+							layout.layout(jDesign, cell.getKey(), cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
 						}
 					}
 				}
@@ -421,7 +421,7 @@ public class TableManager {
 				ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
 				Dimension size = new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight());
 				size = LayoutManager.getPaddedSize(cell.getKey(), size);
-				LayoutCommand layoutCommand = new LayoutCommand(cell.getKey(), layout, size);
+				LayoutCommand layoutCommand = new LayoutCommand(jDesign, cell.getKey(), layout, size);
 				layoutCommands.add(layoutCommand);
 			}
 		}

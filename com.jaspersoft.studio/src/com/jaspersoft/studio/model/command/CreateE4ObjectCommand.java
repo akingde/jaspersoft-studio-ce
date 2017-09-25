@@ -30,8 +30,12 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 public class CreateE4ObjectCommand extends CreateElementCommand {
+	
 	protected ANode child;
+	
 	protected ANode parent;
+	
+	private JRDesignVariable var;
 
 	public CreateE4ObjectCommand(ANode child, ANode parent, Rectangle location, int index) {
 		super();
@@ -45,7 +49,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 	public ANode getChild() {
 		return child;
 	}
-
+	
 	protected ANode fixPosition(ANode destNode, ANode srcNode, Rectangle position) {
 		if (position == null) {
 			if (jrElement != null)
@@ -155,14 +159,13 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 		return parent == null || parent.canAcceptChildren(child);
 	}
 
-	private JRDesignVariable var;
-
 	@Override
 	public void execute() {
 		super.execute();
 		try {
-			if (var != null)
+			if (var != null){
 				jasperDesign.addVariable((JRDesignVariable) var);
+			}
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
@@ -171,7 +174,9 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 	@Override
 	public void undo() {
 		super.undo();
-		if (var != null)
+		if (var != null){
 			jasperDesign.removeVariable(var);
+			var = null;
+		}
 	}
 }

@@ -69,10 +69,10 @@ public class PostSetSizeBand implements IPostSetValue {
 		Dimension d = new Dimension(w, band.getHeight());
 		ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { band }, jDesign, null);
 		if (cmd != null) {
-			cmd.add(new LayoutCommand(band, layout, d));
+			cmd.add(new LayoutCommand(jDesign, band, layout, d));
 			return cmd;
 		}
-		return new LayoutCommand(band, layout, d);
+		return new LayoutCommand(jDesign, band, layout, d);
 
 	}
 

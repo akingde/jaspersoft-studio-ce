@@ -28,6 +28,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -79,6 +81,7 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRPart;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
@@ -193,6 +196,29 @@ public class ModelUtils {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Get the index of the element edge near the passed point
+	 * 
+	 * @param parent the container of the nodes
+	 * @param point a not null point
+	 * @return the element index just before the dropped point with the edge near to 
+	 * it, the element is resolved by the layout since the disposition follow the layout
+	 * It can return -1 if the point is not near any edge
+	 */
+	public static int getBetweenIndex(ANode parent, Point point){
+		JRPropertiesHolder holder = LayoutManager.getPropertyHolder(parent);
+		if (holder != null){
+			String layoutClassName = holder.getPropertiesMap().getProperty(ILayout.KEY);
+			if (layoutClassName != null){
+				ILayout layout = LayoutManager.getLayout(layoutClassName);
+				if (layout != null){
+					return layout.getInsertPosition(parent, point);
+				}
+			}
+		}
+		return -1;
 	}
 
 	public static org.eclipse.swt.graphics.Color getSWTColorFromAWT(java.awt.Color awtColor) {

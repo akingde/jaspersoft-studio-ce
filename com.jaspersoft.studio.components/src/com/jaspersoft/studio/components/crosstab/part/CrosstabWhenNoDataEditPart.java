@@ -6,9 +6,6 @@ package com.jaspersoft.studio.components.crosstab.part;
 
 import java.util.List;
 
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -50,6 +47,9 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -120,7 +120,8 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 					getLayoutTargetFeedback(request);
 				}
 
-				protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
+				@Override
+				protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index, Request request) {
 					if (parent instanceof MPage)
 						parent = getModel();
 					Rectangle b = ((MCell) getModel()).getBounds();
@@ -128,7 +129,7 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 					int y = constraint.y - b.y;// - ReportPageFigure.PAGE_BORDER.top;
 					constraint = new Rectangle(x, y, constraint.width, constraint.height);
 
-					return super.getCreateCommand(parent, obj, constraint, index);
+					return super.getCreateCommand(parent, obj, constraint, index, request);
 				}
 
 				@Override

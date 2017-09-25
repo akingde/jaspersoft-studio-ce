@@ -16,6 +16,7 @@ import com.jaspersoft.studio.editor.action.json.JSONPathDataAction;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextDecoratorInterface;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation.Location;
+import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 
 /**
  * Decorator for the JSON action, it also provide an interface to became a text contributor
@@ -85,7 +86,8 @@ public class JSONDecorator implements TextDecoratorInterface {
 	 * Return an array of text element that will be printed on the element
 	 */
 	@Override
-	public ArrayList<TextLocation> getText(JRPropertiesMap mapProperties) {
+	public ArrayList<TextLocation> getText(ComponentFigure fig) {
+		JRPropertiesMap mapProperties = fig.getJrElement().getPropertiesMap();
 		ArrayList<TextLocation> result = new ArrayList<TextLocation>();
 		boolean hasValue = false;
 		String endString = ""; //$NON-NLS-1$
