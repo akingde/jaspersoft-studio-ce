@@ -261,14 +261,15 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				String validationError = ValidationUtils.validateLabel(rtext);
 				if (validationError == null) {
 					ANode p = mru.getParent();
-					for (INode n : p.getChildren()) {
-						if (n instanceof AMResource && n != mru) {
-							if (((AMResource) n).getValue().getName().equals(id))
-								validationError = "This id is already used in this folder";
-							else if (((AMResource) n).getValue().getLabel().equals(rtext))
-								validationError = "This label is already used in this folder";
+					if (p != null)
+						for (INode n : p.getChildren()) {
+							if (n instanceof AMResource && n != mru) {
+								if (((AMResource) n).getValue().getName().equals(id))
+									validationError = "This id is already used in this folder";
+								else if (((AMResource) n).getValue().getLabel().equals(rtext))
+									validationError = "This label is already used in this folder";
+							}
 						}
-					}
 				}
 				setErrorMessage(validationError);
 				if (validationError == null) {
