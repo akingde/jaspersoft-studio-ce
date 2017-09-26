@@ -46,9 +46,8 @@ public class RunWithProgressBar implements IRunnableContext {
 	public void run(boolean fork, boolean cancelable, IRunnableWithProgress runnable)
 			throws InvocationTargetException, InterruptedException {
 		IProgressMonitor monitor = getProgressMonitor(cancelable);
-
-		ModalContext.run(runnable, true, monitor, UIUtils.getDisplay());
-
+		if (pb != null && !pb.isDisposed())
+			ModalContext.run(runnable, true, monitor, UIUtils.getDisplay());
 	}
 
 	public IProgressMonitor getProgressMonitor(boolean cancelable) {
@@ -65,7 +64,7 @@ public class RunWithProgressBar implements IRunnableContext {
 		 * Create a new ProgressBarMonitor.
 		 * 
 		 * @param progressBar
-		 *          the ProgressBar control
+		 *            the ProgressBar control
 		 */
 		public ProgressBarMonitor(ProgressBar progressBar, boolean cancelable) {
 			this.progressBar = progressBar;
