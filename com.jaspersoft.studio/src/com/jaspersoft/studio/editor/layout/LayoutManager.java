@@ -564,7 +564,7 @@ public class LayoutManager {
 
 
 			Map<Object, Rectangle> result = parentLayout.getLayoutPosition(elements.toArray(new Object[elements.size()]), insertPosition, d);
-			if (topPadding != 0 || leftPadding != 0) {
+			if (result != null && (topPadding != 0 || leftPadding != 0)) {
 				for (Rectangle rect : result.values()) {
 					rect.setX(rect.x + leftPadding);
 					rect.setY(rect.y + topPadding);
