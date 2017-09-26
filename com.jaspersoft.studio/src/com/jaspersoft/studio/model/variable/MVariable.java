@@ -47,10 +47,13 @@ import net.sf.jasperreports.engine.type.ResetTypeEnum;
 public class MVariable extends MVariableSystem implements ICopyable {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-
+	private static NamedEnumPropertyDescriptor<CalculationEnum> calculationD;
+	private static NamedEnumPropertyDescriptor<ResetTypeEnum> resetTypeD;
+	private static NamedEnumPropertyDescriptor<IncrementTypeEnum> incrementTypeD;
+	private RWComboBoxPropertyDescriptor resetGroupD;
+	private RWComboBoxPropertyDescriptor incrementGroupD;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-
 	private IPropertyDescriptor[] descriptors;
 
 	/**
@@ -198,9 +201,6 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		return null;
 	}
 
-	private RWComboBoxPropertyDescriptor resetGroupD;
-	private RWComboBoxPropertyDescriptor incrementGroupD;
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -309,10 +309,6 @@ public class MVariable extends MVariableSystem implements ICopyable {
 			}
 		}
 	}
-
-	private static NamedEnumPropertyDescriptor<CalculationEnum> calculationD;
-	private static NamedEnumPropertyDescriptor<ResetTypeEnum> resetTypeD;
-	private static NamedEnumPropertyDescriptor<IncrementTypeEnum> incrementTypeD;
 
 	protected JRDesignDataset getDataSet() {
 		return ModelUtils.getDataset(this);

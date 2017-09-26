@@ -38,6 +38,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -58,9 +59,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-
 	private static IPropertyDescriptor[] descriptors;
-
 	private static FieldNameValidator validator;
 
 	/**
@@ -282,7 +281,12 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME)) {
 			jrField.setValueClassName((String) value);
 		} else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION)) {
-			jrField.setDescription((String) value);
+			if(StringUtils.isNullOrEmpty((String) value)){
+				jrField.setDescription(null);
+			}
+			else {
+				jrField.setDescription((String) value);				
+			}
 		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			if (value instanceof PropertyExpressionsDTO) {
 				PropertyExpressionsDTO dto = (PropertyExpressionsDTO) value;

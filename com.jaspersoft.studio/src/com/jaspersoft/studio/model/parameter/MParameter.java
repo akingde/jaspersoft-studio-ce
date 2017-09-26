@@ -32,6 +32,7 @@ import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -47,18 +48,12 @@ import net.sf.jasperreports.engine.type.ParameterEvaluationTimeEnum;
 public class MParameter extends MParameterSystem implements ICopyable {
 
 	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
-
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-
-	// Must use its own descriptors since they are different from the ones of the
-	// superclass
-
-	private IPropertyDescriptor[] descriptors;
-
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-
 	private static NamedEnumPropertyDescriptor<ParameterEvaluationTimeEnum> evaluationTimeD;
+	// Must use its own descriptors since they are different from the ones of the superclass
+	private IPropertyDescriptor[] descriptors;
 
 	/**
 	 * Gets the icon descriptor.
@@ -215,14 +210,23 @@ public class MParameter extends MParameterSystem implements ICopyable {
 			if (evaluationTimeD == null)
 				getPropertyDescriptors();
 			jrParameter.setEvaluationTime(evaluationTimeD.getEnumValue(value));
-		} else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION))
-			jrParameter.setDescription((String) value);
-		else if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING) && isMainDataset())
+		} else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION)){
+			if(StringUtils.isNullOrEmpty((String) value)){
+				jrParameter.setDescription(null);
+			}
+			else {
+				jrParameter.setDescription((String) value);				
+			}
+		}
+		else if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING) && isMainDataset()){
 			jrParameter.setForPrompting(((Boolean) value).booleanValue());
-		else if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME))
+		}
+		else if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME)){
 			jrParameter.setNestedTypeName((String) value);
-		else if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION))
+		}
+		else if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)){
 			jrParameter.setDefaultValueExpression(ExprUtil.setValues(jrParameter.getDefaultValueExpression(), value));
+		}
 		else if (id.equals(PROPERTY_MAP)) {
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrParameter.getPropertiesMap().getPropertyNames();
