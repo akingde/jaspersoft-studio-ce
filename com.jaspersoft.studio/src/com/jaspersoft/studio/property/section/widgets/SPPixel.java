@@ -672,7 +672,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 */
 	private Integer getIntegerValue(String valueText){
 		if (valueText != null && !valueText.trim().isEmpty()) {
-			return (int)Math.round(Double.parseDouble(valueText));
+			return (int)Math.round(Double.parseDouble(valueText)) - getPixelOffset();
 		} 
 		return null;
 	}
@@ -928,7 +928,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		if (pnode.getValue() instanceof JRPropertiesHolder){
 			localValue = PHolderUtil.getUnit((JRPropertiesHolder) pnode.getValue(), pDescriptor.getId().toString(),defaultValue);
 		}
-		Number n = (Number) value;
+		Number n = Integer.parseInt(value.toString()) + getPixelOffset();
 		setDataNumber(n);
 		String errorMessage = getErrorMessages();
 		setErrorStatus(errorMessage);
@@ -961,5 +961,14 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	@Override
 	public Control getControl() {
 		return insertField;
+	}
+	
+	/**
+	 * Sometime there is an offset in the value we want to hide at UI level and this offset
+	 * can be overridden to achieve the result. It is added when the value is shown at UI
+	 * level an subtracted when a value is inserted in the UI
+	 */
+	protected int getPixelOffset() {
+		return 0;
 	}
 }

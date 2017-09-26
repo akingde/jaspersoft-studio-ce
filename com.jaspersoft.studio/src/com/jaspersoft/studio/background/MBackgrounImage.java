@@ -10,16 +10,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -31,6 +27,14 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.TransparencyPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPPixel;
+
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * 
@@ -171,7 +175,16 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 
 		JSSBackgroundPixelLocationValidator xValidator = new JSSBackgroundPixelLocationValidator(PROPERTY_X);
 		xValidator.setTargetNode(this);
-		PixelPropertyDescriptor xD = new PixelPropertyDescriptor(PROPERTY_X, Messages.common_left);
+		PixelPropertyDescriptor xD = new PixelPropertyDescriptor(PROPERTY_X, Messages.common_left){
+			public ASPropertyWidget<PixelPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+				SPPixel spNumber = new SPPixel(parent, section, this) {
+					protected int getPixelOffset() {
+						return -10;
+					};
+				};
+				return spNumber;
+			};
+		};
 		xD.setCategory(Messages.MGraphicElement_location_category);
 		xD.setDescription(Messages.MGraphicElement_left_description);
 		xD.setValidator(xValidator);
@@ -179,7 +192,16 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 
 		JSSBackgroundPixelLocationValidator yValidator = new JSSBackgroundPixelLocationValidator(PROPERTY_Y);
 		yValidator.setTargetNode(this);
-		PixelPropertyDescriptor yD = new PixelPropertyDescriptor(PROPERTY_Y, Messages.common_top);
+		PixelPropertyDescriptor yD = new PixelPropertyDescriptor(PROPERTY_Y, Messages.common_top) {
+			public ASPropertyWidget<PixelPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+				SPPixel spNumber = new SPPixel(parent, section, this) {
+					protected int getPixelOffset() {
+						return -10;
+					};
+				};
+				return spNumber;
+			};
+		};
 		yD.setCategory(Messages.MGraphicElement_location_category);
 		yD.setDescription(Messages.MGraphicElement_top_description);
 		yD.setValidator(yValidator);
@@ -268,6 +290,7 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		} else if (id.equals(PROPERTY_KEEP_RATIO)){
 			jrObj.setProperty(PROPERTY_KEEP_RATIO, Boolean.toString((Boolean)value));
 		}
+		//firePropertyChange(new PropertyChangeEvent(this, arg1, arg2, arg3));
 	}
 	
 	/**
@@ -413,16 +436,13 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		//If the properties is for the image refresh it and propagate the event
-		if (evt.getPropertyName().equals(JRPropertiesMap.PROPERTY_VALUE)){
-			//The properties map was changed so i need to refresh the part.
-			//The event doesn't contains the property of the map changed so i'm not sure
-			//that the change regards the background image, so it must be always refreshed
-			EditPart figureEditPart = getFigureEditPart();
-			if (figureEditPart != null){
-				figureEditPart.refresh();
-			}
-			firePropertyChange(evt);
+		//The properties map was changed so i need to refresh the part.
+		//The event doesn't contains the property of the map changed so i'm not sure
+		//that the change regards the background image, so it must be always refreshed
+		EditPart figureEditPart = getFigureEditPart();
+		if (figureEditPart != null){
+			figureEditPart.refresh();
 		}
+		firePropertyChange(evt);
 	}
 }
