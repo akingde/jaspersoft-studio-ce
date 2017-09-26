@@ -163,7 +163,8 @@ public class DataPreviewTable implements DatasetReaderListener {
 					});
 				}
 				if (e.detail == SWT.ARROW) {
-					// Position the menu below and vertically aligned with the the drop down tool button.
+					// Position the menu below and vertically aligned with the the drop down tool
+					// button.
 					final ToolItem toolItem = (ToolItem) e.widget;
 					final ToolBar toolBar = toolItem.getParent();
 
@@ -178,8 +179,11 @@ public class DataPreviewTable implements DatasetReaderListener {
 			}
 
 			private boolean canRefreshDataPreview() {
+				if (composite.isDisposed())
+					return false;
 				// No data preview when no fields are selected.
-				if (previewInfoProvider.getFieldsForPreview() == null || previewInfoProvider.getFieldsForPreview().isEmpty()) {
+				if (previewInfoProvider.getFieldsForPreview() == null
+						|| previewInfoProvider.getFieldsForPreview().isEmpty()) {
 					MessageDialog.openError(composite.getShell(), Messages.DataPreviewTable_ErrorTitle,
 							Messages.DataPreviewTable_ErrorMsgNoFields);
 					return false;
@@ -275,7 +279,8 @@ public class DataPreviewTable implements DatasetReaderListener {
 	}
 
 	/*
-	 * Notifies the need of a table refresh due to information modification, i.e. table columns modification.
+	 * Notifies the need of a table refresh due to information modification, i.e.
+	 * table columns modification.
 	 */
 	private void refreshDataPreview() {
 		// Refresh layout for the table
@@ -339,9 +344,9 @@ public class DataPreviewTable implements DatasetReaderListener {
 			dataReader.stop();
 		}
 		// Remove all table items if any
-//		wtable.removeAll();
-//		tviewer.setInput(null);
-//		readItems = 0;
+		// wtable.removeAll();
+		// tviewer.setInput(null);
+		// readItems = 0;
 		infoMsg.setText(Messages.DataPreviewTable_Ready);
 		((GridData) progressBar.getLayoutData()).exclude = true;
 		progressBar.setVisible(false);
@@ -409,7 +414,8 @@ public class DataPreviewTable implements DatasetReaderListener {
 					TableViewerColumn tvc = new TableViewerColumn(tviewer, SWT.NONE);
 					tvc.getColumn().setText(f.getName());
 					tvc.setLabelProvider(new ColumnLabelProvider());
-					tColLayout.setColumnData(tvc.getColumn(), new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
+					tColLayout.setColumnData(tvc.getColumn(),
+							new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
 					tvc.setLabelProvider(new CellLabelProvider() {
 						@Override
 						public void update(ViewerCell cell) {
@@ -438,7 +444,9 @@ public class DataPreviewTable implements DatasetReaderListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.data.reader.DatasetReaderListener#newRecord(java.lang.Object[])
+	 * @see
+	 * com.jaspersoft.studio.data.reader.DatasetReaderListener#newRecord(java.lang.
+	 * Object[])
 	 */
 	public void newRecord(final Object[] values) {
 		previewItems.add(new DataPreviewBean(values));
@@ -464,7 +472,8 @@ public class DataPreviewTable implements DatasetReaderListener {
 				cancelPreviewBtn.setEnabled(false);
 				((GridData) progressBar.getLayoutData()).exclude = true;
 				if (isValidStatus()) {
-					infoMsg.setText(MessageFormat.format(Messages.DataPreviewTable_ReadyReadData, new Object[] { readItems }));
+					infoMsg.setText(
+							MessageFormat.format(Messages.DataPreviewTable_ReadyReadData, new Object[] { readItems }));
 				}
 				toolbar.setEnabled(true);
 				infoComposite.layout();
@@ -507,7 +516,8 @@ public class DataPreviewTable implements DatasetReaderListener {
 	}
 
 	/*
-	 * This thread is responsible to update the table with chunks of data read from the dataset.
+	 * This thread is responsible to update the table with chunks of data read from
+	 * the dataset.
 	 */
 	private class TableFillerThread extends Thread {
 		private boolean done = false;
