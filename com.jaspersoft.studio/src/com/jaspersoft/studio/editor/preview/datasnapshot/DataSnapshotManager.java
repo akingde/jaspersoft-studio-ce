@@ -78,6 +78,20 @@ public class DataSnapshotManager {
 		}
 	}
 
+	public static boolean isPopulatedSnapshotExists(Map<String, Object> parameters) {
+		if (parameters == null)
+			return false;
+		ReportContext context = (ReportContext) parameters.get(JRParameter.REPORT_CONTEXT);
+		if (context != null && context.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)
+				&& context.containsParameter(DataSnapshotManager.SAVE_SNAPSHOT)) {
+			DataCacheHandler ch = (DataCacheHandler) context
+					.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
+			if (ch != null && ch.isSnapshotPopulated())
+				return true;
+		}
+		return false;
+	}
+
 	public static boolean snapshotExists(Map<String, Object> parameters) {
 		ReportContext context = (ReportContext) parameters.get(JRParameter.REPORT_CONTEXT);
 		return context != null && context.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)

@@ -407,17 +407,17 @@ public class ReportController {
 						for (String key : toRemove)
 							jasperParameters.remove(key);
 
+						setupVirtualizer(jd);
+						setupRecordCounters();
+						setupDataSnapshot();
 						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE)) {
 							runJive(pcontainer, file, jasperReport);
 						} else {
-							setupVirtualizer(jd);
 							c.startMessage(Messages.ReportControler_msg_fillreports);
 
-							setupRecordCounters();
 							JaspersoftStudioPlugin.getExtensionManager().onRun(jrContext, jasperReport,
 									jasperParameters);
 
-							setupDataSnapshot();
 							// We create the fillHandle to run the report based
 							// on the type of data adapter....
 							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jrContext, jasperReport,
@@ -713,6 +713,8 @@ public class ReportController {
 				msg = "Yes";
 				if (dch instanceof JSSColumnDataCacheHandler)
 					creationTimestamp = ((JSSColumnDataCacheHandler) dch).getCreationTimestamp();
+				if (dch.isSnapshotPopulated())
+					jasperParameters.remove(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER);
 			}
 			if (rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT) != null)
 				stats.setValue(ST_SNAPSHOT_FILE, rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT));
