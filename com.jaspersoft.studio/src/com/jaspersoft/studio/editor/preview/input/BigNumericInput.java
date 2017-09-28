@@ -128,6 +128,8 @@ public class BigNumericInput extends ADataInput {
 
 				public void modifyText(ModifyEvent e) {
 					try {
+						if (refresh)
+							return;
 						updateModel(getNumber(num.getText()));
 					} catch (NumberFormatException ne) {
 					}
@@ -184,19 +186,30 @@ public class BigNumericInput extends ADataInput {
 		return null;
 	}
 
+	private boolean refresh = false;
+
 	public void updateInput() {
 		if (num.isDisposed())
 			return;
 		Object value = params.get(param.getName());
 		if (value != null && value instanceof String)
 			value = getNumber((String) value);
-		if (value != null && value instanceof Number) {
-			NumberFormat nformat = NumberFormat.getInstance(Locale.US);
-			nformat.setGroupingUsed(false);
-			nformat.setMaximumFractionDigits(Integer.MAX_VALUE);
-			num.setText(nformat.format(value));
-		} else
-			num.setText("");
+		try {
+			refresh = true;
+			if (value != null && value instanceof Number) {
+				String t = value.toString();
+				if (value instanceof BigDecimal) {
+					NumberFormat nformat = NumberFormat.getInstance(Locale.US);
+					nformat.setGroupingUsed(false);
+					nformat.setMaximumFractionDigits(Integer.MAX_VALUE);
+					t = nformat.format(value);
+				}
+				num.setText(t);
+			} else
+				num.setText("");
+		} finally {
+			refresh = false;
+		}
 		setDecoratorNullable(param);
 	}
 

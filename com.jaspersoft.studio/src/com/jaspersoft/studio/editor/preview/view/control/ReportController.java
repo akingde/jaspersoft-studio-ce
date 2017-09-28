@@ -161,7 +161,23 @@ public class ReportController {
 	}
 
 	public void resetParametersToDefault() {
-		ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
+		try {
+			Map<String, Object> prms = jrContext.getJRParameters();
+			if (prms == null) {
+				prms = new HashMap<String, Object>();
+				jrContext.setJRParameters(prms);
+			}
+			for (JRParameter p : jrContext.getJasperDesign().getParameters()) {
+				if (p.isSystemDefined())
+					continue;
+				prms.remove(p.getName());
+			}
+			ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
+		} catch (Throwable e) {
+			c.showConsole();
+			c.clearConsole();
+			c.addError(e, jrContext.getJasperDesign());
+		}
 		Set<String> toDel = new HashSet<String>();
 		for (String key : jasperParameters.keySet())
 			if (jasperParameters.get(key) == null)
@@ -175,6 +191,7 @@ public class ReportController {
 		//
 		// prmInput.setupDefaultValues();
 		// prmRepInput.setupDefaultValues();
+
 	}
 
 	private void setParameters() {
@@ -382,7 +399,13 @@ public class ReportController {
 					if (jasperReport != null) {
 						if (pcontainer.isRunDirty() || prmInput == null) {
 							Map<String, Object> oldm = new HashMap<String, Object>(jrContext.getJRParameters());
-							ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
+							try {
+								ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
+							} catch (Throwable e) {
+								c.showConsole();
+								c.clearConsole();
+								c.addError(e, jrContext.getJasperDesign());
+							}
 							Map<String, Object> pmap = jrContext.getJRParameters();
 							for (String key : oldm.keySet())
 								if (pmap.containsKey(key))

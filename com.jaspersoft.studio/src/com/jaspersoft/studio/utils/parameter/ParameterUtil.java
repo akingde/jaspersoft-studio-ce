@@ -16,13 +16,14 @@ import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 public class ParameterUtil {
 
-	public static void setParameters(JasperReportsConfiguration jConfig, JRDataset dataset, Map<String, Object> inmap) {
+	public static void setParameters(JasperReportsConfiguration jConfig, JRDataset dataset, Map<String, Object> inmap) throws JRException {
 		ExpressionUtil.initBuiltInParameters(jConfig, null);
 		Map<String, Object> map = jConfig.getJRParameters();
 		if (map == null) {
