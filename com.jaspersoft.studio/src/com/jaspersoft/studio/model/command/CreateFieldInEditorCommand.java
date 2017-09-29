@@ -72,17 +72,25 @@ public class CreateFieldInEditorCommand extends CreateE4ObjectCommand {
 		// get the column header
 		ANode dest = ModelUtils.getReport(destNode).getBand(BandTypeEnum.COLUMN_HEADER);
 		// It is a creation request, into the detail, with one or more commands encapsulated into a compound one
-		int mimiumHeaderHeight = 1; //new MStaticText().getDefaultHeight();
+		int staticTextHeight = new MStaticText().getDefaultHeight();
 		int defaultWidth = new MTextField().getDefaultWidth();
-		boolean placeinTheHedaer = true;
-		placeinTheHedaer = 	(dest != null) && (dest.getValue() != null) && (((MBand)dest).getValue().getHeight() >= mimiumHeaderHeight);
+		boolean placeinTheHedaer = false;
+		if ((dest != null) && (dest.getValue() != null)) {
+			int columnHeaderHeight = ((MBand)dest).getValue().getHeight();
+			if (columnHeaderHeight > 0) {
+				placeinTheHedaer = true;
+				if (columnHeaderHeight < staticTextHeight) {
+					staticTextHeight = columnHeaderHeight;
+				}
+			}
+		}
 	
 		if (!placeinTheHedaer) {
 			if (createdFields > 1) {
 				return null;
 			}
 			// If it is placed at the right of the textfield it has it same height
-			mimiumHeaderHeight = new MTextField().getDefaultHeight();
+			staticTextHeight = new MTextField().getDefaultHeight();
 			dest = destNode;
 		}
 		
@@ -111,7 +119,7 @@ public class CreateFieldInEditorCommand extends CreateE4ObjectCommand {
 			// There is enough space in the Column header, the static text will be placed into it
 			int x = srcNode.getValue().getX();
 			int actualWidth = getLocation().width != -1 ? getLocation().width : defaultWidth;
-			location = new Rectangle(x, 0, actualWidth, mimiumHeaderHeight);
+			location = new Rectangle(x, 0, actualWidth, staticTextHeight);
 			dragMessage = Messages.JSSTemplateTransferDropTargetListener_createLabelMessage2;
 		} else {
 			// There isn't enough space in the Column header, the static text will be placed into the detail if only one
@@ -119,7 +127,7 @@ public class CreateFieldInEditorCommand extends CreateE4ObjectCommand {
 			int actualWidth = getLocation().width != -1 ? getLocation().width : defaultWidth;
 			int x = srcNode.getValue().getX() - actualWidth;
 			int y = srcNode.getValue().getY();
-			location = new Rectangle(x, y, actualWidth, mimiumHeaderHeight);
+			location = new Rectangle(x, y, actualWidth, staticTextHeight);
 			dragMessage = Messages.JSSTemplateTransferDropTargetListener_createLabelMessage1;
 		}
 		// Check if was generated a command
