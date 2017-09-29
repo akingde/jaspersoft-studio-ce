@@ -11,14 +11,18 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 public class ParameterJasper implements IParameter {
-	
+
 	private JRDesignParameter param;
-	
+
 	private JasperReportsConfiguration jConfig;
 
 	public ParameterJasper(JRDesignParameter param, JasperReportsConfiguration jConfig) {
 		this.param = param;
 		this.jConfig = jConfig;
+	}
+
+	public JasperReportsConfiguration getjConfig() {
+		return jConfig;
 	}
 
 	public JRDesignParameter getParam() {
@@ -30,14 +34,14 @@ public class ParameterJasper implements IParameter {
 	}
 
 	public Class<?> getValueClass() {
-		//try first the jss classloader to resolve the parameter class
+		// try first the jss classloader to resolve the parameter class
 		try {
 			Class<?> clazz = jConfig.getClassLoader().loadClass(param.getValueClassName());
 			return clazz;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(e);
-			//unable to load with the JSS classloader, try the jr default one
+			// unable to load with the JSS classloader, try the jr default one
 			return param.getValueClass();
 		}
 	}

@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.nebula.widgets.cdatetime.CDT;
@@ -25,12 +24,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.control.VParameters;
 import com.jaspersoft.studio.preferences.execution.InputControlsPreferencePage;
 import com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage;
 import com.jaspersoft.studio.swt.widgets.DRDateTime;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRParameter;
@@ -100,14 +97,14 @@ public class DateInput extends ADataInput {
 			"Friday", "Saturday" };
 
 	private void setFormat(CDateTime cDateTime, String key) {
-		String f = JasperReportsConfiguration.getDefaultInstance().getProperty(key, "");
+		String f = Misc.nvl(getjConfig().getProperty(key));
 		if (!Misc.isNullOrEmpty(f))
 			cDateTime.setPattern(f);
 	}
 
 	/**
-	 * Called when the timezone changes, this force the parameter to be
-	 * recalculated with the current timezone
+	 * Called when the timezone changes, this force the parameter to be recalculated
+	 * with the current timezone
 	 */
 	private void refresh() {
 		if (date != null && !date.isDisposed()) {
@@ -139,14 +136,13 @@ public class DateInput extends ADataInput {
 	}
 
 	/**
-	 * Check if the flag to use the report timezone is enabled in the
-	 * preferences
+	 * Check if the flag to use the report timezone is enabled in the preferences
 	 * 
 	 * @return true if the flag is enabled, false otherwise
 	 */
 	private boolean useReportTimezone() {
-		IPreferenceStore jssPreferenceStore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-		return !jssPreferenceStore.getBoolean(ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE);
+		return !getjConfig().getPrefStore()
+				.getBoolean(ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE);
 	}
 
 	protected void handleDateRangeChange(Class<? extends Date> clazz) {
@@ -185,8 +181,7 @@ public class DateInput extends ADataInput {
 				// preferences when the parameter is not set
 				if (!timeZoneSet) {
 					// look in the preferences
-					IPreferenceStore jssPreferenceStore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-					String prefTimeZone = jssPreferenceStore
+					String prefTimeZone = getjConfig().getPrefStore()
 							.getString(ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE);
 					if (prefTimeZone != null) {
 						TimeZone timeZone = TimeZone.getTimeZone(prefTimeZone);
@@ -219,8 +214,7 @@ public class DateInput extends ADataInput {
 				}
 			}
 		};
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-				.addPropertyChangeListener(preferencesTimeZoneListener);
+		getjConfig().getPrefStore().addPropertyChangeListener(preferencesTimeZoneListener);
 		date = new DRDateTime(parent, CDT.BORDER | CDT.DATE_SHORT | CDT.TIME_MEDIUM | CDT.DROP_DOWN);
 		((DRDateTime) date).setSupportDateRange(supportDateRange);
 
@@ -243,8 +237,7 @@ public class DateInput extends ADataInput {
 
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
-				JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-						.removePropertyChangeListener(preferencesTimeZoneListener);
+				getjConfig().getPrefStore().removePropertyChangeListener(preferencesTimeZoneListener);
 			}
 		});
 		updateInput();
@@ -263,8 +256,7 @@ public class DateInput extends ADataInput {
 				}
 			}
 		};
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-				.addPropertyChangeListener(preferencesTimeZoneListener);
+		getjConfig().getPrefStore().addPropertyChangeListener(preferencesTimeZoneListener);
 		date = new DRDateTime(parent, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN);
 		((DRDateTime) date).setSupportDateRange(supportDateRange);
 
@@ -288,8 +280,7 @@ public class DateInput extends ADataInput {
 
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
-				JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-						.removePropertyChangeListener(preferencesTimeZoneListener);
+				getjConfig().getPrefStore().removePropertyChangeListener(preferencesTimeZoneListener);
 			}
 		});
 		updateInput();

@@ -14,6 +14,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFieldsContainer;
@@ -40,7 +41,8 @@ public class CreateFieldsContainerAction extends ACreateAndSelectAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		if (checkAllSelectedObjects(MField.class, MFieldsContainer.class))
+		if (checkAllSelectedObjects(MField.class, MFieldsContainer.class)
+				&& ShowFieldsTreeAction.isFieldsTree(getJrConfig()))
 			return super.calculateEnabled();
 		return false;
 	}
@@ -68,8 +70,8 @@ public class CreateFieldsContainerAction extends ACreateAndSelectAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Create Fields Group");
-		setToolTipText("Put fields under same group.");
+		setText(Messages.CreateFieldsContainerAction_0);
+		setToolTipText(Messages.CreateFieldsContainerAction_1);
 		setId(CreateFieldsContainerAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

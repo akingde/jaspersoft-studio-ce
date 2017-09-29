@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.jdt.internal.ui.actions.GenerateJavadocAction;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -40,7 +41,8 @@ public class CreateFieldAction extends ACreateAndSelectAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		if (!checkSingleSelectedObject(MFields.class) && !checkSingleSelectedObject(MField.class)) {
+		if (!checkSingleSelectedObject(MFields.class) && !checkSingleSelectedObject(MField.class)
+				&& !ShowFieldsTreeAction.isFieldsTree(getJrConfig())) {
 			return false;
 		}
 		return super.calculateEnabled();

@@ -353,6 +353,9 @@ public class Messages extends NLS {
 	public static String CreateFieldAction_create_field_tool_tip;
 	public static String CreateFieldCommand_field_name;
 	public static String CreateFieldCommand_field_name_text_dialog;
+	public static String CreateFieldsContainerAction_0;
+	public static String CreateFieldsContainerAction_1;
+	public static String CreateFieldsContainerCommand_1;
 	public static String CreateGroupAction_create_group;
 	public static String CreateGroupAction_create_group_tool_tip;
 	public static String CreateGroupCommand_group_name_dialog_text;

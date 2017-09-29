@@ -37,8 +37,10 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.UIUtil;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public abstract class ADataInput implements IDataInput {
 	protected Map<String, Object> params;
@@ -246,14 +248,13 @@ public abstract class ADataInput implements IDataInput {
 	}
 
 	/**
-	 * Method that should called when one of the parameter changed value to
-	 * allow the other parameters to update their value. This is used because
-	 * some parameters could depend from the others. The default implementation
-	 * does notthing
+	 * Method that should called when one of the parameter changed value to allow
+	 * the other parameters to update their value. This is used because some
+	 * parameters could depend from the others. The default implementation does
+	 * notthing
 	 * 
 	 * @param evt
-	 *            the event contains the name of the parameter that changed
-	 *            value
+	 *            the event contains the name of the parameter that changed value
 	 */
 	public void parameterChanged(PropertyChangeEvent evt) {
 
@@ -266,5 +267,11 @@ public abstract class ADataInput implements IDataInput {
 		if (defCharWidth < 0)
 			defCharWidth = UIUtil.getCharWidth(c);
 		return defCharWidth;
+	}
+
+	public JasperReportsConfiguration getjConfig() {
+		if (param instanceof ParameterJasper)
+			return ((ParameterJasper) param).getjConfig();
+		return JasperReportsConfiguration.getDefaultInstance();
 	}
 }

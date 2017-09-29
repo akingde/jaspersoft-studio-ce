@@ -11,10 +11,26 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 public abstract class ACreateAndSelectAction extends ACreateAction {
 
 	public ACreateAndSelectAction(IWorkbenchPart part) {
 		super(part);
+	}
+
+	protected JasperReportsConfiguration getJrConfig() {
+		ISelection s = getSelection();
+		if (s instanceof StructuredSelection) {
+			Object obj = ((StructuredSelection) s).getFirstElement();
+			if (obj instanceof EditPart) {
+				EditPart editPart = (EditPart) obj;
+				if (editPart.getModel() instanceof ANode)
+					return ((ANode) editPart.getModel()).getJasperConfiguration();
+			}
+		}
+		return null;
 	}
 
 	@Override

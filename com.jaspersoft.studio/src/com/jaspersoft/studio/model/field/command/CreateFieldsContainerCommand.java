@@ -14,6 +14,7 @@ import org.eclipse.jface.dialogs.Dialog;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.decorator.csv.NameDialog;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.field.FieldUtils;
 import com.jaspersoft.studio.model.field.MField;
@@ -65,11 +66,11 @@ public class CreateFieldsContainerCommand extends Command {
 			canceled = false;
 			String pkey = null;
 			if (typeAdd) {
-				pkey = "";
+				pkey = ""; //$NON-NLS-1$
 				if (parent instanceof MFieldsContainer)
 					pkey = ((MFieldsContainer) parent).getKey();
 			} else {
-				NameDialog d = new NameDialog(UIUtils.getShell(), "Group Name");
+				NameDialog d = new NameDialog(UIUtils.getShell(), Messages.CreateFieldsContainerCommand_1);
 				if (d.open() == Dialog.OK) {
 					pkey = d.getName();
 				} else {
@@ -91,7 +92,7 @@ public class CreateFieldsContainerCommand extends Command {
 					setupDataset((MFields) n);
 					if (path == null) {
 						path = ((MFieldsContainer) n).getKey();
-						int indx = path.lastIndexOf(".");
+						int indx = path.lastIndexOf("."); //$NON-NLS-1$
 						if (indx > 0)
 							path = path.substring(0, indx);
 					}
@@ -99,11 +100,11 @@ public class CreateFieldsContainerCommand extends Command {
 						setupMap(mf.getValue(), map);
 				}
 			}
-			String npath = typeAdd ? pkey : path + "." + pkey;
+			String npath = typeAdd || path.isEmpty() ? pkey : path + "." + pkey; //$NON-NLS-1$
 			for (String key : map.keySet()) {
 				String p = path;
 				if (!key.startsWith(path)) {
-					int indx = key.lastIndexOf(".");
+					int indx = key.lastIndexOf("."); //$NON-NLS-1$
 					if (indx > 0)
 						p = key.substring(0, indx);
 				}
