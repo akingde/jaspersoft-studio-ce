@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IPropertiesHolder;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -556,6 +557,14 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		return null;
 	}
 
+	private APropertyNode getPropertiesHolder(APropertyNode node) {
+		if (node.getValue() != null && node.getValue() instanceof JRPropertiesHolder)
+			return node;
+		if (node instanceof IPropertiesHolder)
+			return ((IPropertiesHolder) node).getPropertiesHolder();
+		return null;
+	}
+
 	/**
 	 * Read the value in the textfield and update it in the model, but before the
 	 * value is converted to pixel, and in the textbox is displayed as default type.
@@ -582,11 +591,12 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 				String convertedValue = unit.doConversionFromThis(unitsMap.get(Unit.PX), value);
 				// Generate the command to update the measure unit in the preferences
 				for (APropertyNode pnode : section.getElements()) {
-					if (pnode.getValue() != null && pnode.getValue() instanceof JRPropertiesHolder) {
-						JRPropertiesMap pmap = (JRPropertiesMap) pnode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+					APropertyNode pholder = getPropertiesHolder(pnode);
+					if (pholder != null) {
+						JRPropertiesMap pmap = (JRPropertiesMap) pholder.getPropertyValue(MGraphicElement.PROPERTY_MAP);
 						if (pmap != null && setLocalValue(pmap, unit.getUnitName())) {
 							SetValueCommand cmd = new SetValueCommand();
-							cmd.setTarget(pnode);
+							cmd.setTarget(pholder);
 							cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
 							cmd.setPropertyValue(pmap);
 							commands.add(cmd);
@@ -847,11 +857,13 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 */
 	private String getLocalValue() {
 		Object node = section.getElement().getValue();
-		if ((node instanceof JRPropertiesHolder) && isLocalPersistent()) {
-			return PHolderUtil.getUnit((JRPropertiesHolder) node, pDescriptor.getId().toString(), null);
-		} else {
-			return null;
+		if (node instanceof APropertyNode) {
+			APropertyNode pholder = getPropertiesHolder((APropertyNode) node);
+			if (pholder != null)
+				return PHolderUtil.getUnit((JRPropertiesHolder) pholder.getValue(), pDescriptor.getId().toString(),
+						null);
 		}
+		return null;
 	}
 
 	/**
@@ -865,10 +877,13 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 *         otherwise
 	 */
 	private boolean setLocalValue(String newLocal) {
-		Object node = section.getElement().getValue();
-		if ((node instanceof JRPropertiesHolder)) {
-			JRPropertiesMap nodeMap = ((JRPropertiesHolder) node).getPropertiesMap();
-			return setLocalValue(nodeMap, newLocal);
+		Object node = section.getElement();
+		if (node instanceof APropertyNode) {
+			APropertyNode pholder = getPropertiesHolder((APropertyNode) node);
+			if (pholder != null) {
+				JRPropertiesMap nodeMap = (JRPropertiesMap) pholder.getPropertyValue(APropertyNode.PROPERTY_MAP);
+				return setLocalValue(nodeMap, newLocal);
+			}
 		}
 		return false;
 	}
@@ -887,7 +902,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		// let's look at our units
 		if (isLocalPersistent()) {
 			String dunit = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
-			PHolderUtil.setProperty(false, nodeMap, pDescriptor.getId().toString(), newLocal, dunit);
+			return PHolderUtil.setProperty(false, nodeMap, pDescriptor.getId().toString(), newLocal, dunit);
 		}
 		return false;
 	}
@@ -910,6 +925,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 			});
 		}
 		insertField.addKeyListener(new KeyListener() {
+
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (e.keyCode == SWT.CR)
@@ -920,6 +936,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 			public void keyPressed(KeyEvent e) {
 
 			}
+
 		});
 		insertField.addMouseListener(new MouseClickListener());
 		insertField.setToolTipText(pDescriptor.getDescription());
@@ -948,10 +965,11 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		createContextualMenu(pnode);
 		insertField.setEnabled(pnode.isEditable());
 		defaultValue = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
-		if (pnode.getValue() instanceof JRPropertiesHolder) {
-			localValue = PHolderUtil.getUnit((JRPropertiesHolder) pnode.getValue(), pDescriptor.getId().toString(),
+		APropertyNode pholder = getPropertiesHolder(pnode);
+		if (pholder != null)
+			localValue = PHolderUtil.getUnit((JRPropertiesHolder) pholder.getValue(), pDescriptor.getId().toString(),
 					defaultValue);
-		}
+
 		Number n = Integer.parseInt(value.toString()) + getPixelOffset();
 		setDataNumber(n);
 		String errorMessage = getErrorMessages();
