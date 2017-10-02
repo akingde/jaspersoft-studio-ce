@@ -21,9 +21,11 @@ import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -97,7 +99,15 @@ public class CreateFieldInEditorCommand extends CreateE4ObjectCommand {
 		// Create the new element
 		MStaticText newText = new MStaticText();
 		JRDesignStaticText newTextElement = (JRDesignStaticText) newText.createJRElement(parent.getJasperDesign());
-		String labelText = child.getDisplayText();
+		String labelText = null;
+		
+		String plabel = ((MField)child).getValue().getPropertiesMap().getProperty(DataQueryAdapters.FIELD_LABEL);
+		if (!Misc.isNullOrEmpty(plabel)) {
+			labelText = plabel;
+		} else {
+			labelText = child.getDisplayText();
+		}
+		
 		Boolean useDescription = child.getJasperConfiguration().getPropertyBoolean(DesignerPreferencePage.P_USE_FIELD_DESCRIPTION, false);
 		if (useDescription) {
 			Object description = ((APropertyNode)child).getPropertyValue(JRDesignField.PROPERTY_DESCRIPTION);

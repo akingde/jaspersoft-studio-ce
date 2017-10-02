@@ -175,25 +175,36 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			if (request.getNewObject() instanceof Collection<?>) {
 				JSSCompoundCommand ccmd = new JSSCompoundCommand(parent);
 				Collection<?> objs = (Collection<?>) request.getNewObject();
-				if (parent instanceof IGraphicElement && !isGraphicObjects(objs) && objs.size() > 1) {
-					Rectangle rparent = ((IGraphicElement) parent).getBounds();
-					int w = rparent.width / objs.size();
-					int rest = rparent.width - w * objs.size();
-					copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left, copyconstraint.getLocation().y);
-					// Commented for back-compatibility in 3.6.
-					// Replaced with the following line.
-					// copyconstraint.setWidth(w + rest);
-					copyconstraint.width = w + rest;
-					for (Object it : objs) {
-						Command cmd = getCreateCommand(parent, it, copyconstraint.getCopy(), index, request);
-						if (cmd != null) {
-							ccmd.add(cmd);
-							copyconstraint.translate(w + rest, 0);
-							// Commented for back-compatibility in 3.6.
-							// Replaced with the following line.
-							// copyconstraint.setWidth(w);
-							copyconstraint.width = w;
-							rest = 0;
+				if (parent instanceof IGraphicElement && !isGraphicObjects(objs)) {
+					if (objs.size() > 1) {
+						Rectangle rparent = ((IGraphicElement) parent).getBounds();
+						int w = rparent.width / objs.size();
+						int rest = rparent.width - w * objs.size();
+						copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left, copyconstraint.getLocation().y);
+						// Commented for back-compatibility in 3.6.
+						// Replaced with the following line.
+						// copyconstraint.setWidth(w + rest);
+						copyconstraint.width = w + rest;
+						for (Object it : objs) {
+							Command cmd = getCreateCommand(parent, it, copyconstraint.getCopy(), index, request);
+							if (cmd != null) {
+								ccmd.add(cmd);
+								copyconstraint.translate(w + rest, 0);
+								// Commented for back-compatibility in 3.6.
+								// Replaced with the following line.
+								// copyconstraint.setWidth(w);
+								copyconstraint.width = w;
+								rest = 0;
+							}
+						}
+					} else {
+						if (objs.size() == 1) {
+							Rectangle rparent = ((IGraphicElement) parent).getBounds();
+							copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left, copyconstraint.getLocation().y);
+							Command cmd = getCreateCommand(parent, objs.iterator().next(), copyconstraint.getCopy(), index, request);
+							if (cmd != null) {
+								ccmd.add(cmd);
+							}	
 						}
 					}
 				} else {
