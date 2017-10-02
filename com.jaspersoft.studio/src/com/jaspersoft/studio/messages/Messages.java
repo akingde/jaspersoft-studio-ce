@@ -226,6 +226,7 @@ public class Messages extends NLS {
 	public static String BandGroupWizard_group_band;
 	public static String BandReturnValueDialog_0;
 	public static String BandSection_title;
+	public static String BindElementsAction_name;
 	public static String BookmarkSection_bookmarkSectionTitle;
 	public static String BooleanCellEditorValidator_value_is_not_instance_of_boolean;
 	public static String BordersSection_all_borders_tool_tip;
@@ -2423,6 +2424,7 @@ public class Messages extends NLS {
 	public static String QueryExecutorDataAdapterFactory_description;
 	public static String QueryExecutorDataAdapterFactory_label;
 
+	public static String UnBindElementsAction_name;
 	public static String Unit_errorTooBig;
 	public static String Unit_errorTooSmall;
 	public static String UsageManager_checkVersionJobName;

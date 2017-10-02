@@ -217,6 +217,7 @@ public class SpreadsheetLayout extends AbstractLayout {
 	
 	@Override
 	public boolean allowChildBoundChange(ANode resizedNode, Rectangle oldBounds, Rectangle newBounds) {
+		if (oldBounds == null || newBounds  == null) return false;
  		if (ModelUtils.safeEquals(oldBounds, newBounds)) return true;
 		JRPropertiesMap nodeMap = LayoutManager.getPropertyHolder(resizedNode).getPropertiesMap();
 		if (!nodeMap.containsProperty(PROPERTY_ID)) return true;

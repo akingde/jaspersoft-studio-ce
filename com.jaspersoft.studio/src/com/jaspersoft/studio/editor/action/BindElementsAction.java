@@ -16,6 +16,7 @@ import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.LazyLayoutCommand;
 import com.jaspersoft.studio.editor.layout.spreadsheet.SpreadsheetLayout;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
@@ -44,7 +45,7 @@ public class BindElementsAction extends ACachedSelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Add to column");
+		setText(Messages.BindElementsAction_name);
 		setId(ID);
 		setEnabled(false);
 	}
@@ -62,6 +63,16 @@ public class BindElementsAction extends ACachedSelectionAction {
 		for(Object rawNode : mGraphElements){
 			ANode currentNode = (ANode)rawNode;
 			ANode currentParent = currentNode.getParent();
+			
+			JRPropertiesHolder parentHolder = LayoutManager.getPropertyHolder(currentParent);
+			
+			if (parentHolder != null) {
+				String parentLayout = parentHolder.getPropertiesMap().getProperty(ILayout.KEY);
+				if (!SpreadsheetLayout.class.getName().equals(parentLayout)) {
+					return false;
+				}
+			}
+			
 			while(currentParent != null && !(currentParent instanceof MReport)){
 				if (foundAncestor.contains(currentParent)){
 					return false;

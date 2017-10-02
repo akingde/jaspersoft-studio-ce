@@ -10,8 +10,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.spreadsheet.SpreadsheetLayout;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetPropertyValueCommand;
@@ -37,7 +39,7 @@ public class UnBindElementsAction extends ACachedSelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Remove from column");
+		setText(Messages.UnBindElementsAction_name);
 		setId(ID);
 		setEnabled(false);
 	}
@@ -48,6 +50,17 @@ public class UnBindElementsAction extends ACachedSelectionAction {
 		if (mGraphElements.isEmpty()) return false;
 		for(Object rawNode : mGraphElements){
 			ANode currentNode = (ANode)rawNode;
+			
+			ANode parentNode = currentNode.getParent();
+			JRPropertiesHolder parentHolder = LayoutManager.getPropertyHolder(parentNode);
+	
+			if (parentHolder != null) {
+				String parentLayout = parentHolder.getPropertiesMap().getProperty(ILayout.KEY);
+				if (!SpreadsheetLayout.class.getName().equals(parentLayout)) {
+					return false;
+				}
+			}
+			
 			JRPropertiesHolder holder = LayoutManager.getPropertyHolder(currentNode);
 			if (!holder.getPropertiesMap().containsProperty(SpreadsheetLayout.PROPERTY_ID)){
 				return false;
