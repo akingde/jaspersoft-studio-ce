@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.layout.GridData;
@@ -75,44 +76,27 @@ public class ElementPreviewer {
 
 	private JasperDesign jd;
 
-	public String runReport(JasperReportsConfiguration jConf, JRElement element, boolean fromCache) {
+	public String runReport(JasperReportsConfiguration jConf, JRElement element, boolean fromCache,
+			IProgressMonitor monitor) {
 		if (jd == null)
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 				public void run() {
-					StringBuffer sb = new StringBuffer(); 
-					sb.append("<!DOCTYPE html>")
-				     .append("<html >")
-				     .append("<head>")
-				     .append("    <title>Highcharts loading page</title>  ")
-				     .append("    <style>")
-				     .append("        .container{")
-				     .append("            display: flex;")
-				     .append("            align-items: center;")
-				     .append("            justify-content: center;")
-				     .append("            height:95%;")
-				     .append("        }")
-				     .append("        body, html{")
-				     .append("            height:95%;")
-				     .append("        }        ")
-				     .append("        .loading { ")
-				     .append("          font-size: 1.2em; ")
-				     .append("          font-family: Georgia;")
-				     .append("        }        ")
-				     .append("    </style>")
-				     .append("    <script>")
-				     .append("        i = 0;")
-				     .append("        setInterval(function() {")
-				     .append("            i = ++i % 4;")
-				     .append("            document.querySelector('.loading').innerHTML = \"Loading HTML5 chart \" + Array(i+1).join(\".\");")
-				     .append("        }, 800);")
-				     .append("    </script>")
-				     .append("</head>")
-				     .append("<body>")
-				     .append("    <div class=\"container\">")
-				     .append("        <div class=\"loading\">Loading HTML5 chart</div>")
-				     .append("    </div>  ")
-				     .append("</body>")
-				     .append("</html>");
+					StringBuffer sb = new StringBuffer();
+					sb.append("<!DOCTYPE html>").append("<html >").append("<head>")
+							.append("    <title>Highcharts loading page</title>  ").append("    <style>")
+							.append("        .container{").append("            display: flex;")
+							.append("            align-items: center;").append("            justify-content: center;")
+							.append("            height:95%;").append("        }").append("        body, html{")
+							.append("            height:95%;").append("        }        ").append("        .loading { ")
+							.append("          font-size: 1.2em; ").append("          font-family: Georgia;")
+							.append("        }        ").append("    </style>").append("    <script>")
+							.append("        i = 0;").append("        setInterval(function() {")
+							.append("            i = ++i % 4;")
+							.append("            document.querySelector('.loading').innerHTML = \"Loading HTML5 chart \" + Array(i+1).join(\".\");")
+							.append("        }, 800);").append("    </script>").append("</head>").append("<body>")
+							.append("    <div class=\"container\">")
+							.append("        <div class=\"loading\">Loading HTML5 chart</div>").append("    </div>  ")
+							.append("</body>").append("</html>");
 					browser.setText(sb.toString());
 				}
 			});
@@ -142,7 +126,8 @@ public class ElementPreviewer {
 
 			da = prepareDataAdapter(jConf, jDesign, hm);
 			DataSnapshotManager.setDataSnapshot(hm, !fromCache);
-
+			if (monitor.isCanceled())
+				return null;
 			return doRunReport(jConf, hm, jDesign, jrobj, da);
 		} catch (DataSnapshotException e) {
 			DataSnapshotManager.setDataSnapshot(hm, true);
@@ -173,9 +158,19 @@ public class ElementPreviewer {
 		});
 	}
 
+	private DatasetReader dr;
+
+	public void cancel() {
+		if (dr != null)
+			dr.stop();
+	}
+
 	protected String doRunReport(JasperReportsConfiguration jConf, Map<String, Object> hm, JasperDesign jDesign,
 			JasperReport jrobj, DataAdapterDescriptor da) throws JRException, IOException {
-		JasperPrint jrPrint = DatasetReader.fillReport(jConf, jDesign.getMainDesignDataset(), da, jrobj, hm);
+		if (dr != null)
+			dr.stop();
+		dr = new DatasetReader();
+		JasperPrint jrPrint = dr.fillReport(jConf, jDesign.getMainDesignDataset(), da, jrobj, hm);
 
 		// create a temp dir and a temp file for html
 		File destDir = FileUtils.createTempDir();

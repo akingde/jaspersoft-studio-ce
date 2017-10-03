@@ -44,7 +44,6 @@ import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.ParameterContributorContext;
@@ -55,6 +54,8 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.fill.JRFiller;
+import net.sf.jasperreports.engine.fill.ReportFiller;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 /**
@@ -237,7 +238,9 @@ public class DatasetReader {
 		return hm;
 	}
 
-	public static JasperPrint fillReport(JasperReportsConfiguration jConfig, JRDesignDataset designDataset,
+	private ReportFiller rf;
+
+	public JasperPrint fillReport(JasperReportsConfiguration jConfig, JRDesignDataset designDataset,
 			DataAdapterDescriptor dataAdapterDesc, JasperReport jrobj, Map<String, Object> hm) throws JRException {
 		DataAdapterService das = null;
 		try {
@@ -257,7 +260,10 @@ public class DatasetReader {
 			JaspersoftStudioPlugin.getExtensionManager().onRun(jConfig, jrobj, hm);
 
 			// 9. Fill the report
-			return JasperFillManager.getInstance(jConfig).fill(jrobj, hm);
+
+			rf = JRFiller.createReportFiller(jConfig, jrobj);
+
+			return rf.fill(hm);
 		} finally {
 			if (das != null)
 				das.dispose();
@@ -275,8 +281,7 @@ public class DatasetReader {
 	 * <li>adding the standard parameters and custom ones</li>
 	 * <li>adding the fields</li>
 	 * <li>compiling the report obtaining a jasper report object</li>
-	 * <li>setting the parameters (including data adapter contributed ones)
-	 * map</li>
+	 * <li>setting the parameters (including data adapter contributed ones) map</li>
 	 * <li>filling the report</li>
 	 * </ol>
 	 * 
@@ -351,6 +356,12 @@ public class DatasetReader {
 	 */
 	public void stop() {
 		if (running) {
+			if (rf != null)
+				try {
+					rf.cancelFill();
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
 			for (DatasetReaderListener l : listeners) {
 				// Invalidating the listener will cause the running scriptlet
 				// to launch a JRScriptletException, that will abort the running
@@ -428,8 +439,8 @@ public class DatasetReader {
 	/* Listener methods */
 
 	/**
-	 * Adds a new {@link DatasetReaderListener} to the list of listeners that
-	 * will be notified when a read event on the dataset occurs.
+	 * Adds a new {@link DatasetReaderListener} to the list of listeners that will
+	 * be notified when a read event on the dataset occurs.
 	 * 
 	 * @param listener
 	 *            the listener to add
