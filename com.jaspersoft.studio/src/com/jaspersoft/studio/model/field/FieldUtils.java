@@ -139,6 +139,9 @@ public class FieldUtils {
 
 			@Override
 			public void run() {
+				if (treePart == null || treePart.getViewer() == null)
+					return;
+
 				List<EditPart> parts = new ArrayList<EditPart>();
 				new EditPartVisitor<Boolean>(treePart.getViewer().getContents()) {
 
