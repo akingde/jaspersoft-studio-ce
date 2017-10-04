@@ -412,21 +412,51 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		}
 	}
 
+	private boolean isRefreshing = false;
+	
+	private PropertyChangeEvent pendingRefreshRequestEvent = null;
+	
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent arg0) {
-		//Don't refresh is the refresh is disable and the event is not a forced refresh
-		if (JSSCompoundCommand.REFRESH_UI_EVENT.equals(arg0.getPropertyName()) || 
-				!JSSCompoundCommand.isRefreshEventsIgnored((ANode)getModel())){
-			refreshChildren();
-			//Avoid to repaint the children if the editor is not visible
-			IEditorPart refreshedEditor = ((DefaultEditDomain) getViewer().getEditDomain()).getEditorPart();
-			AbstractVisualEditor visualEditor = (AbstractVisualEditor)refreshedEditor;
-			if (visualEditor == null || visualEditor.isEditorVisible()){
-				refreshVisuals();
+		synchronized (this) {
+			if (isRefreshing) {
+				if (pendingRefreshRequestEvent == null) {
+					pendingRefreshRequestEvent = arg0;
+				} else if (JSSCompoundCommand.REFRESH_UI_EVENT.equals(arg0.getPropertyName())) {
+					pendingRefreshRequestEvent = arg0;
+				}
+				return;
+			} else {
+				isRefreshing = true;
+			}
+		}
+		
+		//at this point the isRefreshing flag was false and became true
+		try {
+			//Don't refresh is the refresh is disable and the event is not a forced refresh
+			if (JSSCompoundCommand.REFRESH_UI_EVENT.equals(arg0.getPropertyName()) || !JSSCompoundCommand.isRefreshEventsIgnored((ANode)getModel())){
+			
+				refreshChildren();
+				//Avoid to repaint the children if the editor is not visible
+				IEditorPart refreshedEditor = ((DefaultEditDomain) getViewer().getEditDomain()).getEditorPart();
+				AbstractVisualEditor visualEditor = (AbstractVisualEditor)refreshedEditor;
+				if (visualEditor == null || visualEditor.isEditorVisible()){
+					refreshVisuals();
+				}
+			}
+			
+		
+		} finally {
+			//close the is refreshing flag at the end of the refresh part
+			isRefreshing = false;
+			if (pendingRefreshRequestEvent != null) {
+				PropertyChangeEvent pendingRequest = pendingRefreshRequestEvent;
+				pendingRefreshRequestEvent = null;
+				propertyChange(pendingRequest);
 			}
 		}
 	}
