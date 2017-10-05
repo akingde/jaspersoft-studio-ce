@@ -18,6 +18,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -64,7 +65,7 @@ public class ImpSubreport extends AImpObject {
 
 	@Override
 	protected String doPath(String path) {
-		return path.replaceAll(FileExtension.PointJASPER, FileExtension.PointJRXML);
+		return StringUtils.replaceAllIns(path, FileExtension.PointJASPER + "$", FileExtension.PointJRXML);
 	}
 
 	protected ResourceDescriptor createResource(MReportUnit mrunit) {
@@ -74,7 +75,8 @@ public class ImpSubreport extends AImpObject {
 	protected JRDesignExpression getExpression(JRDesignElement img) {
 		JRDesignExpression exp = (JRDesignExpression) ((JRDesignSubreport) img).getExpression();
 		if (exp != null && !Misc.isNullOrEmpty(exp.getText())) {
-			exp.setText(exp.getText().replaceAll(FileExtension.PointJASPER, FileExtension.PointJRXML));
+			exp.setText(StringUtils.replaceAllIns(exp.getText(), FileExtension.PointJASPER + "$",
+					FileExtension.PointJRXML));
 			return exp;
 		}
 		return (JRDesignExpression) ((JRDesignSubreport) img).getExpression();

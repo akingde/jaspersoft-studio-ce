@@ -28,6 +28,7 @@ import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -64,7 +65,8 @@ public class ImpJRXML {
 	// }
 
 	protected File findFile(IFile file, String str) {
-		File f = FileUtils.findFile(file, str.replaceAll(FileExtension.PointJASPER, FileExtension.PointJRXML));
+		File f = FileUtils.findFile(file,
+				StringUtils.replaceAllIns(str, FileExtension.PointJASPER + "$", FileExtension.PointJRXML));
 		if (f == null) {
 			f = FileUtils.findFile(file, str);
 			if (f != null) {
