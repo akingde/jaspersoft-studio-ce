@@ -196,21 +196,27 @@ public class BigNumericInput extends ADataInput {
 			value = getNumber((String) value);
 		try {
 			refresh = true;
-			if (value != null && value instanceof Number) {
-				String t = value.toString();
-				if (value instanceof BigDecimal) {
-					NumberFormat nformat = NumberFormat.getInstance(Locale.US);
-					nformat.setGroupingUsed(false);
-					nformat.setMaximumFractionDigits(Integer.MAX_VALUE);
-					t = nformat.format(value);
-				}
-				num.setText(t);
-			} else
+			if (value != null && value instanceof Number)
+				num.setText(getNumber((Number) value));
+			else
 				num.setText("");
 		} finally {
 			refresh = false;
 		}
 		setDecoratorNullable(param);
+	}
+
+	public static String getNumber(Number value) {
+		if (value == null)
+			return "";
+		String t = value.toString();
+		if (value instanceof BigDecimal) {
+			NumberFormat nformat = NumberFormat.getInstance(Locale.US);
+			nformat.setGroupingUsed(false);
+			nformat.setMaximumFractionDigits(Integer.MAX_VALUE);
+			t = nformat.format(value);
+		}
+		return t;
 	}
 
 	public static Number getNumber(String number, String type) {
