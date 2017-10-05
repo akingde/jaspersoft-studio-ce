@@ -11,6 +11,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -45,7 +46,7 @@ public class SubreportsUtil {
 		if (expr == null || expr.isEmpty())
 			return;
 		if (expr.endsWith(FileExtension.PointJASPER))
-			expr = expr.replaceAll(FileExtension.PointJASPER + "$", FileExtension.PointJRXML);
+			expr = StringUtils.replaceAllIns(expr, FileExtension.PointJASPER + "$", FileExtension.PointJRXML);
 		expr = expr.replaceFirst("repo:", "");
 		File f = FileUtils.findFile(file, expr);
 		if (f == null)
@@ -66,7 +67,8 @@ public class SubreportsUtil {
 				IFile ifile = fs[0];
 				fmap.put(f, ifile);
 				try {
-					JasperDesign jd = JRXMLUtils.getJasperDesign(jConfig, ifile.getContents(), ifile.getFileExtension());
+					JasperDesign jd = JRXMLUtils.getJasperDesign(jConfig, ifile.getContents(),
+							ifile.getFileExtension());
 					if (jd != null) {
 						for (JRDesignElement el : ModelUtils.getAllElements(jd)) {
 							if (el instanceof JRDesignSubreport)
