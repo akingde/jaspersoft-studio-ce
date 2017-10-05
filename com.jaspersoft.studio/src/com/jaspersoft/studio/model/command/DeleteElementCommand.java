@@ -97,11 +97,30 @@ public class DeleteElementCommand extends Command {
 		if (jrGroup != null && jrGroup.getChildren() != null) {
 			elementPosition = jrGroup.getChildren().indexOf(jrElement);
 			if (elementPosition != -1){
+				//remove the elements
 				if (jrGroup instanceof JRDesignElementGroup) {
 					((JRDesignElementGroup) jrGroup).removeElement(jrElement);
 				} else if (jrGroup instanceof JRDesignFrame) {
 					((JRDesignFrame) jrGroup).removeElement(jrElement);
 				}
+				
+				//execute the post commands
+				if (commands == null){
+					List<Command> commandsList = JaspersoftStudioPlugin.getPostDeleteManager().postDelete(nodeElement, nodeParent);
+					ANode startingNode = null;
+					//Copy the contributed delete descriptors inside the jss compound command
+					if (commandsList != null && !commandsList.isEmpty()){
+						commands = new JSSCompoundCommand(JSSCompoundCommand.getMainNode(startingNode));
+						for(Command c : commandsList){
+							commands.add(c);
+						}
+					}
+				}
+				if (commands != null){
+					commands.execute();
+				}
+				
+				//do the layoutof the container
 				if (jrGroup instanceof JRPropertiesHolder) {
 					String uuid = null;
 					if (jrGroup instanceof JRBaseElement)
@@ -127,21 +146,6 @@ public class DeleteElementCommand extends Command {
 						lCmd = new LayoutCommand(jDesign, jrGroup, layout, d);
 						lCmd.execute();
 					}
-				}
-				
-				if (commands == null){
-					List<Command> commandsList = JaspersoftStudioPlugin.getPostDeleteManager().postDelete(nodeElement, nodeParent);
-					ANode startingNode = null;
-					//Copy the contributed delete descriptors inside the jss compound command
-					if (commandsList != null && !commandsList.isEmpty()){
-						commands = new JSSCompoundCommand(JSSCompoundCommand.getMainNode(startingNode));
-						for(Command c : commandsList){
-							commands.add(c);
-						}
-					}
-				}
-				if (commands != null){
-					commands.execute();
 				}
 			}
 		}

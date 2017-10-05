@@ -15,6 +15,7 @@ import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.spreadsheet.SpreadsheetLayout;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.IPostDelete;
 import com.jaspersoft.studio.property.SetPropertyValueCommand;
@@ -22,7 +23,6 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -46,7 +46,7 @@ public class SpreadsheetPostDelete implements IPostDelete {
 					JasperDesign jd = parent.getJasperDesign();
 					List<JRDesignElement> connectedElements = SpreadsheetLayout.getElementsForUUID(deleteElementUUID, jd, ModelUtils.getReport(parent));
 					if (connectedElements != null && !connectedElements.isEmpty()){
-						boolean shouldDelete = UIUtils.showConfirmation("Delete Confirmation", "Do you want to delete the elements associated to this one?");
+						boolean shouldDelete = UIUtils.showConfirmation(Messages.SpreadsheetPostDelete_title, Messages.SpreadsheetPostDelete_message);
 						
 						if (shouldDelete){
 							List<Command> deleteCommands = new ArrayList<Command>();
@@ -82,6 +82,7 @@ public class SpreadsheetPostDelete implements IPostDelete {
 									SetPropertyValueCommand setLayoutComd = new SetPropertyValueCommand(parentHolder.getPropertiesMap(), ILayout.KEY, SpreadsheetLayout.class.getName());
 									result.add(setLayoutComd);
 								}
+								//result.add(LayoutManager.createRelayoutCommand(parent));
 								return result;
 							}
 						}
