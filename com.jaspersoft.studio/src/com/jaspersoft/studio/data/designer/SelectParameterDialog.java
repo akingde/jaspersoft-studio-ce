@@ -226,6 +226,10 @@ public class SelectParameterDialog extends ATitledDialog {
 		return cmp;
 	}
 
+	protected String getNewParameterName() {
+		return "Parameter";
+	}
+
 	class ParameterDialog extends ATitledDialog {
 		private String pname;
 
@@ -239,7 +243,7 @@ public class SelectParameterDialog extends ATitledDialog {
 		}
 
 		protected Control createDialogArea(Composite parent) {
-			pname = "Parameter"; //$NON-NLS-1$
+			pname = getNewParameterName(); // $NON-NLS-1$
 			Composite cmp = (Composite) super.createDialogArea(parent);
 			cmp.setLayout(new GridLayout(2, false));
 
