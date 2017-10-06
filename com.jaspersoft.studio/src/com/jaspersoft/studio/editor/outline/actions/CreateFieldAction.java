@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.jdt.internal.ui.actions.GenerateJavadocAction;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -36,6 +35,7 @@ public class CreateFieldAction extends ACreateAndSelectAction {
 	 */
 	public CreateFieldAction(IWorkbenchPart part) {
 		super(part);
+		setLazyEnablementCalculation(true);
 		setCreationFactory(new JDPaletteCreationFactory(MField.class));
 	}
 
@@ -45,6 +45,10 @@ public class CreateFieldAction extends ACreateAndSelectAction {
 				&& !ShowFieldsTreeAction.isFieldsTree(getJrConfig())) {
 			return false;
 		}
+		// we don't know when fields tree change, we could listen for preference change,
+		// or in case we decide to store a property in dataset, we can optimize a bit
+		// that
+		fresh = false;
 		return super.calculateEnabled();
 	}
 
