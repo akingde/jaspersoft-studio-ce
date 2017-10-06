@@ -128,8 +128,22 @@ public class FieldUtils {
 					oldNodes.add(mfc);
 					parent = mfc;
 					mfc.removeChildren();
-				} else
+				} else {
+					String k = "";
+					if (parent instanceof MFieldsContainer)
+						k = ((MFieldsContainer) parent).getKey();
+					String[] parray = k.isEmpty() ? new String[0] : k.split("\\.");
+					String[] pkeyArray = key.split("\\.");
+					if (parray.length < pkeyArray.length - 1) {
+						for (int i = parray.length; i < pkeyArray.length - 1; i++) {
+							String ikey = pkeyArray[i];
+							parent = new MFieldsContainer(parent, parentNode.getValue(), pLabels, ikey);
+							parents.put(ikey, parent);
+						}
+					}
+
 					parent = new MFieldsContainer(parent, parentNode.getValue(), pLabels, key);
+				}
 			}
 			parents.put(key, parent);
 			for (MField f : map.get(key))

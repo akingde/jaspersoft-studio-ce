@@ -43,7 +43,7 @@ public class MFieldsContainer extends MFields implements IDragable {
 	@Override
 	public String getDisplayText() {
 		try {
-			return URLDecoder.decode(Misc.nvl(pLabels.get(key), super.getDisplayText()), "UTF-8");
+			return URLDecoder.decode(Misc.nvl(pLabels.get(key), Misc.nvl(key, super.getDisplayText())), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			return Misc.nvl(pLabels.get(key), super.getDisplayText());
 		}

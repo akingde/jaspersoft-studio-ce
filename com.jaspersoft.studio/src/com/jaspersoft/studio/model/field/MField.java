@@ -281,11 +281,10 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME)) {
 			jrField.setValueClassName((String) value);
 		} else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION)) {
-			if(StringUtils.isNullOrEmpty((String) value)){
+			if (StringUtils.isNullOrEmpty((String) value)) {
 				jrField.setDescription(null);
-			}
-			else {
-				jrField.setDescription((String) value);				
+			} else {
+				jrField.setDescription((String) value);
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			if (value instanceof PropertyExpressionsDTO) {
