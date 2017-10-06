@@ -113,6 +113,8 @@ public class ParameterPropertyWidget implements IWidget {
 		for (JRParameter p : dataset.getParameters())
 			if (!p.isSystemDefined() && p.getPropertiesMap().containsProperty(c.getPropertyName())) {
 				tvalue.setText(p.getName());
+				icon.setImage(
+						JaspersoftStudioPlugin.getInstance().getImage(MParameter.getIconDescriptor().getIcon16()));
 				return;
 			}
 		tvalue.setText(Misc.nvl(daValue, "< NULL >"));
