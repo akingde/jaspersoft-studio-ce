@@ -55,6 +55,8 @@ public class DeleteFieldsContainerCommand extends ADatasetObjectDeleteCommand {
 			int indx = path.lastIndexOf(".");
 			if (indx > 0)
 				pkey = path.substring(0, indx);
+			else
+				pkey = "";
 
 			DeleteFieldConfirmationDialog d = new DeleteFieldConfirmationDialog(UIUtils.getShell(), pkey);
 			if (d.open() == Dialog.OK) {
@@ -74,7 +76,8 @@ public class DeleteFieldsContainerCommand extends ADatasetObjectDeleteCommand {
 					case DeleteFieldConfirmationDialog.UNGROUP_TO_ROOT:
 						oldKey = f.getPropertiesMap().getProperty(DataQueryAdapters.FIELD_PATH);
 						c.add(new SetPropertyValueCommand(f.getPropertiesMap(), DataQueryAdapters.FIELD_PATH,
-								oldKey.replaceFirst(path, ""), ((JRDesignField) f).getEventSupport()));
+								oldKey.replaceFirst(path, "").replaceFirst(".", ""),
+								((JRDesignField) f).getEventSupport()));
 						break;
 					}
 				canceled = false;
