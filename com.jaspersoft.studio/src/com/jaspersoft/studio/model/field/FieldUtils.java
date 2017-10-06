@@ -136,7 +136,12 @@ public class FieldUtils {
 					String[] pkeyArray = key.split("\\.");
 					if (parray.length < pkeyArray.length - 1) {
 						for (int i = parray.length; i < pkeyArray.length - 1; i++) {
-							String ikey = pkeyArray[i];
+							String ikey = "";
+							String del = "";
+							for (int j = 0; j <= i; j++) {
+								ikey += del + pkeyArray[j];
+								del = ".";
+							}
 							parent = new MFieldsContainer(parent, parentNode.getValue(), pLabels, ikey);
 							parents.put(ikey, parent);
 						}

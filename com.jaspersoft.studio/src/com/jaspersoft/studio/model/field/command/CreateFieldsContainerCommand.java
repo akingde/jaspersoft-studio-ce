@@ -100,7 +100,16 @@ public class CreateFieldsContainerCommand extends Command {
 						setupMap(mf.getValue(), map);
 				}
 			}
-			String npath = typeAdd || path.isEmpty() ? pkey : path + "." + pkey; //$NON-NLS-1$
+			String npath = "";
+			if (typeAdd || path.isEmpty())
+				npath = pkey;
+			else {
+				if (path.contains("."))
+					npath = path + "." + pkey; //$NON-NLS-1$
+				else
+					npath = pkey + "." + path;
+			}
+
 			for (String key : map.keySet()) {
 				String p = path;
 				if (!key.startsWith(path)) {
