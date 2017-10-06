@@ -13,7 +13,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.editor.gef.decorator.csv.NameDialog;
+import com.jaspersoft.studio.jface.dialogs.NameDialog;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.field.FieldUtils;
