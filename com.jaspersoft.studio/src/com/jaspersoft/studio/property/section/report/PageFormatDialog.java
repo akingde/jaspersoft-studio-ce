@@ -203,7 +203,7 @@ public final class PageFormatDialog extends FormDialog {
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		cPrintOrder.setLayoutData(gd);
-		 
+
 		enablePrintOrder();
 	}
 
@@ -221,6 +221,7 @@ public final class PageFormatDialog extends FormDialog {
 		space.setMaxPixels(maxspace);
 
 		int cw = getMaxColumnsWidth();
+		setWdithMaximum();
 		cwidth.setValue(cw);
 
 		tmargin.setMaxPixels(pheigh.getValue() - bmargin.getValue());
@@ -452,13 +453,13 @@ public final class PageFormatDialog extends FormDialog {
 			cPrintOrder.select(0);
 		if (jd.getPrintOrderValue().equals(PrintOrderEnum.HORIZONTAL))
 			cPrintOrder.select(1);
-		
+
 		enablePrintOrder();
 	}
 
 	/**
-	 * Set the maximum number that can be set on the column width control. Used when the page width or its margin are
-	 * changed
+	 * Set the maximum number that can be set on the column width control. Used when
+	 * the page width or its margin are changed
 	 */
 	protected void setWdithMaximum() {
 		cwidth.setMaxPixels(Math.max(0, pwidth.getValue() - lmargin.getValue() - rmargin.getValue()));
@@ -478,9 +479,10 @@ public final class PageFormatDialog extends FormDialog {
 	 * Return the maximum number of columns that can be set.
 	 * 
 	 * @param realColWidth
-	 *          true if this is called when setting the column widht. Having this to true make the columns number
-	 *          depending on the current column widht. Otherwise will be the column width depending on the columns number
-	 *          (forcing the width to its minimum, 1)
+	 *            true if this is called when setting the column widht. Having this
+	 *            to true make the columns number depending on the current column
+	 *            widht. Otherwise will be the column width depending on the columns
+	 *            number (forcing the width to its minimum, 1)
 	 * @return the maximum number of columns
 	 */
 	protected int getMaxColumnsNumber(boolean realColWidth) {
@@ -493,7 +495,8 @@ public final class PageFormatDialog extends FormDialog {
 	/**
 	 * Return the maximum column width that can be set with the current values
 	 * 
-	 * @return the maximum columns witdh for the current space, page width and margins
+	 * @return the maximum columns witdh for the current space, page width and
+	 *         margins
 	 */
 	protected int getMaxColumnsWidth() {
 		int colNumber = Math.max(cols.getValueAsInteger(), 1);
@@ -525,8 +528,8 @@ public final class PageFormatDialog extends FormDialog {
 		if (jd.getColumnSpacing() != space.getValue())
 			command.add(createCommand(JasperDesign.PROPERTY_COLUMN_SPACING, space.getValue()));
 		if (jd.getPrintOrderValue() != PrintOrderEnum.getByName(cPrintOrder.getText()))
-			command.add(createCommand(JasperDesign.PROPERTY_PRINT_ORDER, NamedEnumPropertyDescriptor
-					.getIntValue(PrintOrderEnum.HORIZONTAL, NullEnum.NULL, PrintOrderEnum.getByName(cPrintOrder.getText()))));
+			command.add(createCommand(JasperDesign.PROPERTY_PRINT_ORDER, NamedEnumPropertyDescriptor.getIntValue(
+					PrintOrderEnum.HORIZONTAL, NullEnum.NULL, PrintOrderEnum.getByName(cPrintOrder.getText()))));
 
 		if (jd.getOrientationValue().equals(OrientationEnum.LANDSCAPE) && !landscape.getSelection())
 			command.add(createCommand(JasperDesign.PROPERTY_ORIENTATION, OrientationEnum.PORTRAIT));
@@ -542,12 +545,15 @@ public final class PageFormatDialog extends FormDialog {
 		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_PAGE_WIDTH, pwidth.getUnit(), defunit);
 
 		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_TOP_MARGIN, tmargin.getUnit(), defunit);
-		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_BOTTOM_MARGIN, bmargin.getUnit(), defunit);
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_BOTTOM_MARGIN, bmargin.getUnit(),
+				defunit);
 		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_LEFT_MARGIN, lmargin.getUnit(), defunit);
-		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_RIGHT_MARGIN, rmargin.getUnit(), defunit);
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_RIGHT_MARGIN, rmargin.getUnit(),
+				defunit);
 
 		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_COLUMN_WIDTH, cwidth.getUnit(), defunit);
-		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_COLUMN_SPACING, space.getUnit(), defunit);
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_COLUMN_SPACING, space.getUnit(),
+				defunit);
 		if (changes)
 			command.add(createCommand(MGraphicElement.PROPERTY_MAP, pmap));
 	}
