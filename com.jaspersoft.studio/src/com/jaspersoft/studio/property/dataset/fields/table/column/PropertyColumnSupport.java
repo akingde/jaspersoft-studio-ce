@@ -45,6 +45,9 @@ public class PropertyColumnSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 		if (element != null)
 			try {
+				if (value instanceof String && ((String) value).isEmpty()
+						&& !c.getPropertyType().equals(String.class.getName()))
+					value = null;
 				PropertyUtils.setProperty(element, c.getPropertyName(), value);
 				viewer.update(element, null);
 			} catch (Exception e) {
@@ -57,7 +60,7 @@ public class PropertyColumnSupport extends EditingSupport {
 		try {
 			if (element != null) {
 				if (!element.getClass().isArray())
-				return PropertyUtils.getProperty(element, c.getPropertyName());
+					return PropertyUtils.getProperty(element, c.getPropertyName());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

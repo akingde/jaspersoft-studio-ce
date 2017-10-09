@@ -54,6 +54,8 @@ import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
+import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
 import net.sf.jasperreports.engine.type.ParameterEvaluationTimeEnum;
 import net.sf.jasperreports.engine.util.JRClassLoader;
 
@@ -93,14 +95,23 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				for (JRParameter p : dataset.getParametersList()) {
-					((JRDesignParameter) p).getPropertiesMap().getEventSupport().removePropertyChangeListener(listener);
-					((JRDesignParameter) p).getPropertiesMap().getEventSupport().addPropertyChangeListener(listener);
+				if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
+					if (evt instanceof CollectionElementRemovedEvent) {
+						JRDesignParameter prm = (JRDesignParameter) evt.getOldValue();
+						prm.getEventSupport().removePropertyChangeListener(listener);
+						prm.getPropertiesMap().getEventSupport().removePropertyChangeListener(listener);
+					} else if (evt instanceof CollectionElementAddedEvent) {
+						JRDesignParameter prm = (JRDesignParameter) evt.getNewValue();
+						prm.getEventSupport().addPropertyChangeListener(listener);
+						prm.getPropertiesMap().getEventSupport().addPropertyChangeListener(listener);
+					}
+					listener.propertyChange(evt);
 				}
 			}
 		});
-		for (JRParameter p : dataset.getParametersList())
+		for (JRParameter p : dataset.getParametersList()) {
 			((JRDesignParameter) p).getPropertiesMap().getEventSupport().addPropertyChangeListener(listener);
+		}
 
 	}
 

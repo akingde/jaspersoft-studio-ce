@@ -198,7 +198,7 @@ public class ParametersTable extends AbstractModifyTable {
 			@Override
 			public void handleEvent(Event event) {
 				filter.setShowSystem(!bSystem.getSelection());
-//				bDA.setSelection(false);
+				// bDA.setSelection(false);
 				tviewer.refresh();
 				treeviewer.refresh();
 				// if (layout.topControl == treeCmp) {
