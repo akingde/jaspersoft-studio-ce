@@ -24,7 +24,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<Double>
 	public DoublePropertyDescription() {
 	}
 	
-	public DoublePropertyDescription(String name, String label, String description, boolean mandatory,  double defaultValue, double min, double max) {
+	public DoublePropertyDescription(String name, String label, String description, boolean mandatory,  Double defaultValue, double min, double max) {
 		super(name, label, description, mandatory, defaultValue, min, max);
 	}
 	
