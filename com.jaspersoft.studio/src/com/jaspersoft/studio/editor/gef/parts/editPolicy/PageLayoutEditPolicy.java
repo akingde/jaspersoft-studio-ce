@@ -174,9 +174,11 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			Rectangle copyconstraint = constraint.getCopy();
 			if (request.getNewObject() instanceof Collection<?>) {
 				JSSCompoundCommand ccmd = new JSSCompoundCommand(parent);
-				Collection<?> objs = (Collection<?>) request.getNewObject();
+				Collection<?> objs = (Collection<?>) request.getNewObject(); 
+				boolean positionModifiedCreation = false;
 				if (parent instanceof IGraphicElement && !isGraphicObjects(objs)) {
 					if (objs.size() > 1) {
+						positionModifiedCreation = true;
 						Rectangle rparent = ((IGraphicElement) parent).getBounds();
 						int w = rparent.width / objs.size();
 						int rest = rparent.width - w * objs.size();
@@ -197,17 +199,17 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 								rest = 0;
 							}
 						}
-					} else {
-						if (objs.size() == 1) {
-							Rectangle rparent = ((IGraphicElement) parent).getBounds();
-							copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left, copyconstraint.getLocation().y);
-							Command cmd = getCreateCommand(parent, objs.iterator().next(), copyconstraint.getCopy(), index, request);
-							if (cmd != null) {
-								ccmd.add(cmd);
-							}	
-						}
+					} else if (objs.size() == 1 && parent.getChildren().isEmpty()) {	
+						positionModifiedCreation = true;
+						Rectangle rparent = ((IGraphicElement) parent).getBounds();
+						copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left, copyconstraint.getLocation().y);
+						Command cmd = getCreateCommand(parent, objs.iterator().next(), copyconstraint.getCopy(), index, request);
+						if (cmd != null) {
+							ccmd.add(cmd);
+						}	
 					}
-				} else {
+				} 
+				if (!positionModifiedCreation) {
 					for (Object it : objs) {
 						Command cmd = getCreateCommand(parent, it, copyconstraint.getCopy(), index, request);
 						if (cmd != null) {
