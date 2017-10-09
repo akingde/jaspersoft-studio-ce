@@ -2484,6 +2484,9 @@ public class Messages extends NLS {
 	public static String SelectParameterDialog_7;
 
 	public static String SpreadsheetPostDelete_message;
+	public static String SpreadsheetPostDelete_messageDetail;
+	public static String SpreadsheetPostDelete_optionDeleteColumn;
+	public static String SpreadsheetPostDelete_optionDeleteSelected;
 	public static String SpreadsheetPostDelete_title;
 
 	private Messages() {
