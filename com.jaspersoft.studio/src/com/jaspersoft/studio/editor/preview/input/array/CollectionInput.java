@@ -112,7 +112,10 @@ public class CollectionInput extends ADataInput {
 					if (value.getClass().isArray())
 						value = s;
 					else if (value instanceof Collection) {
-						((Collection<?>) value).clear();
+						if (value instanceof List)
+							value = new ArrayList();
+						else
+							((Collection<?>) value).clear();
 						for (Object item : s)
 							((Collection) value).add(item);
 					}
