@@ -157,7 +157,8 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.EditPartFactory#createEditPart(org.eclipse.gef.EditPart, java.lang.Object)
+	 * @see org.eclipse.gef.EditPartFactory#createEditPart(org.eclipse.gef.EditPart,
+	 * java.lang.Object)
 	 */
 	public EditPart createEditPart(EditPart context, Object model) {
 		EditPart editPart = null;
@@ -191,9 +192,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 * Gets the delete command.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param child
-	 *          the child
+	 *            the child
 	 * @return the delete command
 	 */
 	public static Command getDeleteCommand(ANode parent, ANode child) {
@@ -219,16 +220,17 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new DeleteStyleTemplateCommand((MStyles) parent, (MStyleTemplate) child);
 		} else if (child instanceof MStyle) {
 			if (parent instanceof MStyles)
-				return new DeleteStyleCommand((MStyles) parent, (JRDesignStyle)child.getValue());
+				return new DeleteStyleCommand((MStyles) parent, (JRDesignStyle) child.getValue());
 		} else if (child instanceof MParameter) {
 			JRDesignParameter p = (JRDesignParameter) child.getValue();
-			if (!p.isSystemDefined()){
-				MParameter srcNode = (MParameter) child; 
+			if (!p.isSystemDefined()) {
+				MParameter srcNode = (MParameter) child;
 				JasperReportsConfiguration jConfig = srcNode.getJasperConfiguration();
-				return new DeleteParameterCommand(jConfig, (JRDesignDataset)parent.getValue(), srcNode.getValue(), false);
+				return new DeleteParameterCommand(jConfig, (JRDesignDataset) parent.getValue(), srcNode.getValue(),
+						false);
 			}
 		} else if (child instanceof MField) {
-			MField srcNode = (MField) child; 
+			MField srcNode = (MField) child;
 			JasperReportsConfiguration jConfig = srcNode.getJasperConfiguration();
 			return new DeleteFieldCommand(jConfig, (JRDesignDataset) parent.getValue(), srcNode.getValue(), false);
 		} else if (child instanceof MFieldsContainer) {
@@ -242,10 +244,11 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			return new DeleteGroupCommand((MGroups) parent, (MGroup) child);
 		} else if (child instanceof MVariable) {
 			JRDesignVariable p = (JRDesignVariable) child.getValue();
-			if (!p.isSystemDefined()){
-				MVariable srcNode = (MVariable) child; 
+			if (!p.isSystemDefined()) {
+				MVariable srcNode = (MVariable) child;
 				JasperReportsConfiguration jConfig = srcNode.getJasperConfiguration();
-				return new DeleteVariableCommand(jConfig, (JRDesignDataset) parent.getValue(), srcNode.getValue(), false);
+				return new DeleteVariableCommand(jConfig, (JRDesignDataset) parent.getValue(), srcNode.getValue(),
+						false);
 			}
 		} else if (child instanceof MScriptlet) {
 			return new DeleteScriptletCommand((MScriptlets) parent, (MScriptlet) child);
@@ -267,11 +270,11 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 * Gets the reorder command.
 	 * 
 	 * @param child
-	 *          the child
+	 *            the child
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 * @return the reorder command
 	 */
 	public static Command getReorderCommand(ANode child, ANode parent, int newIndex) {
@@ -297,7 +300,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					}
 				}
 				if (newIndex >= minIndex && newIndex <= maxIndex)
-					return new ReorderBandCommandByIndex((MBandGroupFooter) child,  newIndex - minIndex);
+					return new ReorderBandCommandByIndex((MBandGroupFooter) child, newIndex - minIndex);
 			}
 			if (child instanceof MBandGroupHeader) {
 				JRDesignGroup g = ((MBandGroupHeader) child).getJrGroup();
@@ -413,7 +416,8 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		return getCreateCommand(parent, child, location, newIndex, null, false);
 	}
 
-	public static Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex, Request request, boolean typeAdd) {
+	public static Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex, Request request,
+			boolean typeAdd) {
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		Command c = m.getCreateCommand(parent, child, location, newIndex);
 		if (c != null)
@@ -457,51 +461,55 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				}
 			}
 			if (parent instanceof MFields) {
-				if (SortFieldsAction.areFieldsSorted(parent.getJasperConfiguration()) || ShowFieldsTreeAction.isFieldsTree(parent.getJasperConfiguration())){
+				if (SortFieldsAction.areFieldsSorted(parent.getJasperConfiguration())
+						|| ShowFieldsTreeAction.isFieldsTree(parent.getJasperConfiguration())) {
 					return null;
 				}
 				return new CreateFieldCommand((MFields) parent, (MField) child, newIndex);
 			} else if (parent instanceof MField) {
-				if (SortFieldsAction.areFieldsSorted(parent.getJasperConfiguration()) || ShowFieldsTreeAction.isFieldsTree(parent.getJasperConfiguration())){
+				if (SortFieldsAction.areFieldsSorted(parent.getJasperConfiguration())
+						|| ShowFieldsTreeAction.isFieldsTree(parent.getJasperConfiguration())) {
 					return null;
 				}
 				return new CreateFieldCommand((MFields) parent.getParent(), (MField) child, newIndex);
-			} else if (child.getValue() != null){
-						ANode targetNode = null;
-						if (parent instanceof MReport || parent instanceof MBand || parent instanceof MFrame){
-							targetNode = parent;
-						} else if (parent instanceof MGraphicElement){
-							targetNode = parent.getParent();
-						}
-						if (targetNode != null) {
-							int index = newIndex;
-							int createdElements = 1;
-							if (request instanceof CreateRequest){
-								CreateRequest cRequest = (CreateRequest)request;
-								//System.out.println(cRequest.getLocation());
-								Object newObject = cRequest.getNewObject();
-								createdElements = 0;
-								if (newObject instanceof Collection<?>){
-									for(Object createdElement : ((Collection<?>)newObject)){
-										if (createdElement instanceof MField){
-											createdElements++;
-										}
-									}
-								}
-								EditPart targetEditPart = targetNode.getFigureEditPart();
-								if (targetEditPart instanceof FigureEditPart){
-									IFigure hostFigure2 = ((FigureEditPart)targetEditPart).getFigure();
-							        Point location2 = cRequest.getLocation().getCopy();
-							        hostFigure2.translateToRelative(location2);
-							        Dimension newLocation = location2.getDifference(hostFigure2.getBounds().getTopLeft());
-							        index = ModelUtils.getBetweenIndex(targetNode, new Point(newLocation.width, newLocation.height));
+			} else if (child.getValue() != null) {
+				ANode targetNode = null;
+				if (parent instanceof MReport || parent instanceof MBand || parent instanceof MFrame) {
+					targetNode = parent;
+				} else if (parent instanceof MGraphicElement) {
+					targetNode = parent.getParent();
+				}
+				if (targetNode != null) {
+					int index = newIndex;
+					int createdElements = 1;
+					if (request instanceof CreateRequest) {
+						CreateRequest cRequest = (CreateRequest) request;
+						// System.out.println(cRequest.getLocation());
+						Object newObject = cRequest.getNewObject();
+						createdElements = 0;
+						if (newObject instanceof Collection<?>) {
+							for (Object createdElement : ((Collection<?>) newObject)) {
+								if (createdElement instanceof MField) {
+									createdElements++;
 								}
 							}
-							CreateFieldInEditorCommand cmd = new CreateFieldInEditorCommand((MField)child, targetNode, location, index);
-							cmd.setCreatedFields(createdElements);
-							return cmd;
+						}
+						EditPart targetEditPart = targetNode.getFigureEditPart();
+						if (targetEditPart instanceof FigureEditPart) {
+							IFigure hostFigure2 = ((FigureEditPart) targetEditPart).getFigure();
+							Point location2 = cRequest.getLocation().getCopy();
+							hostFigure2.translateToRelative(location2);
+							Dimension newLocation = location2.getDifference(hostFigure2.getBounds().getTopLeft());
+							index = ModelUtils.getBetweenIndex(targetNode,
+									new Point(newLocation.width, newLocation.height));
 						}
 					}
+					CreateFieldInEditorCommand cmd = new CreateFieldInEditorCommand((MField) child, targetNode,
+							location, index);
+					cmd.setCreatedFields(createdElements);
+					return cmd;
+				}
+			}
 		} else if (child instanceof MParameterSystem) {
 			if (child instanceof MParameter) {
 				if (parent instanceof MParameters) {
@@ -511,7 +519,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					}
 				} else if (parent instanceof MParameter) {
 					JRDesignParameter p = (JRDesignParameter) child.getValue();
-					if (p == null || !p.isSystemDefined()) {
+					if ((p == null || !p.isSystemDefined()) && parent.getParent() != null) {
 						return new CreateParameterCommand((MParameters<?>) parent.getParent(), (MParameter) child,
 								newIndex);
 					}
@@ -676,9 +684,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 * Gets the orphan command.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param child
-	 *          the child
+	 *            the child
 	 * @return the orphan command
 	 */
 	public static Command getOrphanCommand(ANode parent, ANode child) {
@@ -702,8 +710,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			return new NoActionCommand();
 		if (child instanceof MVariableSystem)
 			return new NoActionCommand();
-		//This condition must be placed before the MStyle check, since MConditionalStyle is also
-		//an mstyle and so it will be catched in the mstyle branch
+		// This condition must be placed before the MStyle check, since
+		// MConditionalStyle is also
+		// an mstyle and so it will be catched in the mstyle branch
 		if (child instanceof MConditionalStyle)
 			if (parent instanceof MStyle)
 				return new OrphanConditionalStyleCommand((MStyle) parent, (MConditionalStyle) child);
