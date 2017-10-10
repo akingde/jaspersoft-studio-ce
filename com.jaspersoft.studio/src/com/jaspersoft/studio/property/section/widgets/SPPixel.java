@@ -966,17 +966,18 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		insertField.setEnabled(pnode.isEditable());
 		defaultValue = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
 		APropertyNode pholder = getPropertiesHolder(pnode);
-		if (pholder != null)
+		if (pholder != null) {
 			localValue = PHolderUtil.getUnit((JRPropertiesHolder) pholder.getValue(), pDescriptor.getId().toString(),
 					defaultValue);
-
-		Number n = Integer.parseInt(value.toString()) + getPixelOffset();
+		}
+		
+		Number n = value != null ? Integer.parseInt(value.toString()) + getPixelOffset() : null;
 		setDataNumber(n);
 		String errorMessage = getErrorMessages();
 		setErrorStatus(errorMessage);
 	}
 
-	/**
+	/** 
 	 * Change the text color if the attribute is overridden or not
 	 */
 	@Override
