@@ -31,37 +31,37 @@ public class PageSize {
 	public static final Point LEGAL = new Point(612, 1008);
 
 	/** This is the a0 format */
-	public static final Point A0 = new Point(2380, 3368);
+	public static final Point A0 = new Point(2384, 3370);
 
 	/** This is the a1 format */
-	public static final Point A1 = new Point(1684, 2380);
+	public static final Point A1 = new Point(1684 , 2384);
 
 	/** This is the a2 format */
-	public static final Point A2 = new Point(1190, 1684);
+	public static final Point A2 = new Point(1191 , 1684);
 
 	/** This is the a3 format */
-	public static final Point A3 = new Point(842, 1190);
+	public static final Point A3 = new Point(842 , 1191);
 
 	/** This is the a4 format */
 	public static final Point A4 = new Point(595, 842);
 
 	/** This is the a5 format */
-	public static final Point A5 = new Point(421, 595);
+	public static final Point A5 = new Point(420 , 595);
 
 	/** This is the a6 format */
-	public static final Point A6 = new Point(297, 421);
+	public static final Point A6 = new Point(298 , 420);
 
 	/** This is the a7 format */
-	public static final Point A7 = new Point(210, 297);
+	public static final Point A7 = new Point(210 , 298);
 
 	/** This is the a8 format */
-	public static final Point A8 = new Point(148, 210);
+	public static final Point A8 = new Point(147 , 210);
 
 	/** This is the a9 format */
-	public static final Point A9 = new Point(105, 148);
+	public static final Point A9 = new Point(105 , 147);
 
 	/** This is the a10 format */
-	public static final Point A10 = new Point(74, 105);
+	public static final Point A10 = new Point(74 , 105);
 
 	/** This is the b0 format */
 	public static final Point B0 = new Point(2836, 4008);
