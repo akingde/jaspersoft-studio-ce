@@ -219,9 +219,14 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 
 			ExpressionContext ec = ModelUtils.getExpressionContext(this);
 			JRDesignDataset d = ModelUtils.getDataset(this);
-			if (d != null)
-				ec.getJasperReportsConfiguration().put(HintsPropertiesList.COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE,
-						d.getQuery() != null ? d.getQuery().getLanguage() : null);
+			if (d != null) {
+				if (d.getQuery() != null)
+					ec.getJasperReportsConfiguration().put(HintsPropertiesList.COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE,
+							d.getQuery().getLanguage());
+				else
+					ec.getJasperReportsConfiguration()
+							.remove(HintsPropertiesList.COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE);
+			}
 			return new PropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrField), getValue(), ec);
 		}
 		if (id.equals(PROPERTY_MAP))
