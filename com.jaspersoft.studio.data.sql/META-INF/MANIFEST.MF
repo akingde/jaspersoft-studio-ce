@@ -3,7 +3,7 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: SQL Query Editor Grammar
 Bundle-Vendor: TIBCO Software Inc.
-Bundle-Version: 6.4.3.qualifier
+Bundle-Version: 6.4.3.final
 Bundle-SymbolicName: com.jaspersoft.studio.data.sql;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext.generator;bundle-version="2.8.4";resolution:=optional,
