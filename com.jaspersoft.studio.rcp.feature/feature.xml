@@ -15,10 +15,6 @@
       Copyright (C) 2010 - 2017. TIBCO Software Inc.
    </copyright>
 
-   <license url="%licenseURL">
-      %license
-   </license>
-
    <url>
       <update label="TIBCO Jaspersoft Studio update site" url="http://jasperstudio.sf.net/updates"/>
       <discovery label="TIBCO Jaspersoft Studio Community Edition" url="http://community.jaspersoft.com/project/jaspersoft-studio"/>
