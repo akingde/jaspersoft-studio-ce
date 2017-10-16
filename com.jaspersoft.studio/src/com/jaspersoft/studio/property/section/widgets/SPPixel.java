@@ -4,6 +4,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -371,13 +373,13 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		units[1] = new MeasureUnit(Unit.INCH, "inch", 2); //$NON-NLS-1$
 		unitsMap.put(Unit.INCH, units[1]);
 		// Adding the meausre unit for centimeter
-		units[2] = new MeasureUnit(Unit.CM, "cm", 2); //$NON-NLS-1$
+		units[2] = new MeasureUnit(Unit.CM, "cm", 3); //$NON-NLS-1$
 		unitsMap.put(Unit.CM, units[2]);
 		// Adding the measure unit for millimeters
 		units[3] = new MeasureUnit(Unit.MM, "mm", 2); //$NON-NLS-1$
 		unitsMap.put(Unit.MM, units[3]);
 		// Adding the measure unit for meters
-		units[4] = new MeasureUnit(Unit.METER, "m", 2); //$NON-NLS-1$
+		units[4] = new MeasureUnit(Unit.METER, "m", 5); //$NON-NLS-1$
 		unitsMap.put(Unit.METER, units[4]);
 
 		autocompleteValues = new String[] { "centimeters", "millimeters", "inches", "meters", "pixels" };// Unit.getAliasList(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
@@ -412,8 +414,9 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 *            number of decimal digits
 	 * @return cut double, represented as string
 	 */
-	private static String truncateDouble(double number, int numDigits) {
-		return String.format("%." + numDigits + "f", number);
+	private static String truncateDouble(double number, int numDigits ) {
+		return String.format("%." + numDigits + "f",
+				new BigDecimal(number).setScale(numDigits, RoundingMode.CEILING).doubleValue());
 
 		// String arg = Double.toString(number);
 		// int idx = arg.indexOf('.');
@@ -502,7 +505,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	protected void setNullValue() {
 		section.changeProperty(pDescriptor.getId(), null);
 		insertField.setBackground(null);
-		insertField.setToolTipText(pDescriptor.getDescription());
+		insertField.setToolTipText(getTooltip());
 	}
 
 	/**
@@ -665,7 +668,17 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		Object currentValue = section.getElement().getPropertyActualValue(pDescriptor.getId());
 		setData(section.getElement(), currentValue);
 		insertField.setBackground(null);
-		insertField.setToolTipText(pDescriptor.getDescription());
+		insertField.setToolTipText(getTooltip());
+	}
+
+	private String getTooltip() {
+		String t = pDescriptor.getDescription();
+		if (pnode != null) {
+			Object obj = pnode.getPropertyValue(pDescriptor.getId());
+			if (obj != null)
+				t = obj + " px\n" + t;
+		}
+		return t;
 	}
 
 	/**
@@ -683,7 +696,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 			insertField.setToolTipText(message);
 		} else {
 			insertField.setBackground(null);
-			insertField.setToolTipText(pDescriptor.getDescription());
+			insertField.setToolTipText(getTooltip());
 		}
 	}
 
@@ -773,9 +786,18 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 
 	private void setUUnit(String value, String u) {
 		if (uunit == null)
-			uunit = new Unit(Double.parseDouble(value), u, jConfig);
+			uunit = new Unit(parseDouble(value), u, jConfig);
 		else
-			uunit.setValue(Double.parseDouble(value), u);
+			uunit.setValue(parseDouble(value), u);
+	}
+
+	private static double parseDouble(String v) {
+		v = v.replaceAll("[^\\d,\\.]++", "");
+		if (v.matches(".+\\.\\d+,\\d+$"))
+			return Double.parseDouble(v.replaceAll("\\.", "").replaceAll(",", "."));
+		if (v.matches(".+,\\d+\\.\\d+$"))
+			return Double.parseDouble(v.replaceAll(",", ""));
+		return Double.parseDouble(v.replaceAll(",", "."));
 	}
 
 	/**
@@ -939,7 +961,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 
 		});
 		insertField.addMouseListener(new MouseClickListener());
-		insertField.setToolTipText(pDescriptor.getDescription());
+		insertField.setToolTipText(getTooltip());
 		new AutoCompleteField(insertField, new AutoCompleteMeasure(), autocompleteValues);
 		setWidth(parent, 10);
 	}
@@ -960,8 +982,11 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 			insertField.setText(""); //$NON-NLS-1$
 	}
 
+	private APropertyNode pnode;
+
 	@Override
 	public void setData(APropertyNode pnode, Object value) {
+		this.pnode = pnode;
 		createContextualMenu(pnode);
 		insertField.setEnabled(pnode.isEditable());
 		defaultValue = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
@@ -970,14 +995,14 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 			localValue = PHolderUtil.getUnit((JRPropertiesHolder) pholder.getValue(), pDescriptor.getId().toString(),
 					defaultValue);
 		}
-		
+
 		Number n = value != null ? Integer.parseInt(value.toString()) + getPixelOffset() : null;
 		setDataNumber(n);
 		String errorMessage = getErrorMessages();
 		setErrorStatus(errorMessage);
 	}
 
-	/** 
+	/**
 	 * Change the text color if the attribute is overridden or not
 	 */
 	@Override

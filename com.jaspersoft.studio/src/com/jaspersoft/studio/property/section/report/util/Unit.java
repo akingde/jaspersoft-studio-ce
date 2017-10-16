@@ -195,12 +195,12 @@ public class Unit {
 			return val;
 		BigDecimal c = units.get(unit);
 		if (c != null)
-			return c.multiply(new BigDecimal(val)).divide(new BigDecimal(dpi), 4, RoundingMode.CEILING).doubleValue();
+			return c.multiply(new BigDecimal(val)).divide(new BigDecimal(dpi), 6, RoundingMode.CEILING).doubleValue();
 		return val;
 	}
 
 	private double fromValue(BigDecimal c) {
-		double uval = c.multiply(new BigDecimal(value)).divide(new BigDecimal(dpi), 4, RoundingMode.CEILING).doubleValue();
+		double uval = c.multiply(new BigDecimal(value)).divide(new BigDecimal(dpi), 6, RoundingMode.CEILING).doubleValue();
 		// System.out.println("FROM -> Value: " + value + " C: " + c + " REZULT:" + uval + "[" + unit + "]");
 		return uval;
 	}
