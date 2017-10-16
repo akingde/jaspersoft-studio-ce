@@ -132,7 +132,7 @@ public class DeleteElementCommand extends Command {
 						// Replaced with the following line.
 						// d.setSize(jce.getWidth(), jce.getHeight());
 						//d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
-						d = LayoutManager.getPaddedSize((JRCommonElement)jrElement);
+						d = LayoutManager.getPaddedSize((JRCommonElement)jrGroup);
 					}
 					if (jrGroup instanceof JRDesignBand) {
 						int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
