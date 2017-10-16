@@ -398,7 +398,7 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 					String tt = "Default: " + (def == null ? "" : "null");
 					if (!Misc.isNullOrEmpty(p.getDescription()))
 						tt += "\n\n" + p.getDescription();
-					mi.setToolTipText(tt);
+					UIUtil.safeApplyMenuItemTooltip(mi, tt);
 					p.getPropertiesMap().getEventSupport();
 					mi.addSelectionListener(new SelectionAdapter() {
 

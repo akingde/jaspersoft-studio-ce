@@ -40,6 +40,7 @@ import com.jaspersoft.studio.editor.preview.datasnapshot.DataSnapshotManager;
 import com.jaspersoft.studio.editor.preview.datasnapshot.JSSColumnDataCacheHandler;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.cache.DataCacheHandler;
@@ -136,14 +137,14 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 				menu = new Menu(parent);
 				itemCache = new MenuItem(menu, SWT.CHECK);
 				itemCache.setText(Messages.PreviewTopToolBarManager_1);
-				itemCache.setToolTipText(
+				UIUtil.safeApplyMenuItemTooltip(itemCache, 
 						"Enable/disable caching data into memory. Cache will be reset if there are changes in the datasets.");
 
 				new MenuItem(menu, SWT.SEPARATOR);
 
 				itemSave = new MenuItem(menu, SWT.CHECK);
 				itemSave.setText(Messages.PreviewTopToolBarManager_2);
-				itemSave.setToolTipText("Setup file path where snapshot will be saved, when created.");
+				UIUtil.safeApplyMenuItemTooltip(itemSave, "Setup file path where snapshot will be saved, when created.");
 				itemSave.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
@@ -203,7 +204,7 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 
 				final MenuItem itemLoad = new MenuItem(menu, SWT.PUSH);
 				itemLoad.setText(Messages.PreviewTopToolBarManager_8);
-				itemLoad.setToolTipText("Load data snapshot from a file.");
+				UIUtil.safeApplyMenuItemTooltip(itemLoad, "Load data snapshot from a file.");
 				itemLoad.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
@@ -229,8 +230,7 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 
 				itemFilter = new MenuItem(menu, SWT.CHECK);
 				itemFilter.setText("Filter Data Adapters By Report Language");
-				itemFilter.setToolTipText(
-						"If true, show only data adapters meaningful for the main dataset query language.");
+				UIUtil.safeApplyMenuItemTooltip(itemFilter, "If true, show only data adapters meaningful for the main dataset query language.");
 				itemFilter.addSelectionListener(new SelectionAdapter() {
 
 					@Override

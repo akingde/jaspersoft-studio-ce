@@ -65,6 +65,7 @@ import com.jaspersoft.studio.swt.widgets.NullableSpinner;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
 
+import net.sf.jasperreports.eclipse.util.BundleCommonUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 
 public class UIUtil {
@@ -568,7 +569,7 @@ public class UIUtil {
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		final MenuItem cutItem = new MenuItem(menu, SWT.PUSH);
 		cutItem.setText(Messages.UIUtil_CutMenuItemText);
-		cutItem.setToolTipText(Messages.UIUtil_CutMenuItemTooltip);
+		safeApplyMenuItemTooltip(cutItem, Messages.UIUtil_CutMenuItemTooltip);
 		cutItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -580,7 +581,7 @@ public class UIUtil {
 
 		final MenuItem copyItem = new MenuItem(menu, SWT.PUSH);
 		copyItem.setText(Messages.UIUtil_CopyMenuItemText);
-		copyItem.setToolTipText(Messages.UIUtil_CopyMenuItemTooltip);
+		safeApplyMenuItemTooltip(copyItem, Messages.UIUtil_CopyMenuItemTooltip);
 		copyItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -592,7 +593,7 @@ public class UIUtil {
 		
 		final MenuItem pasteItem = new MenuItem(menu, SWT.PUSH);
 		pasteItem.setText(Messages.UIUtil_PasteMenuItemText);
-		pasteItem.setToolTipText(Messages.UIUtil_PasteMenuItemTooltip);
+		safeApplyMenuItemTooltip(pasteItem, Messages.UIUtil_PasteMenuItemTooltip);
 		pasteItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -624,4 +625,21 @@ public class UIUtil {
 		widget.setMenu(menu);
 	}
 	
+	/**
+	 * Checks if it is possible to apply the tooltip to the menu item using
+	 * the proper API introduced since SWT version 3.104.
+	 * <p>
+	 * 
+	 * Please check bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=62575 for more details
+	 * 
+	 * @param menuItem the menu item
+	 * @param tooltipTxt the tooltip text to set
+	 */
+	public static void safeApplyMenuItemTooltip(MenuItem menuItem, String tooltipTxt) {
+		String minSWTVersion = "3.104"; //$NON-NLS-1$
+		String currentSWTVersion = BundleCommonUtils.getBundleVersion("org.eclipse.swt"); //$NON-NLS-1$
+		if(currentSWTVersion!=null && currentSWTVersion.compareTo(minSWTVersion)>=0){
+			menuItem.setToolTipText(tooltipTxt);
+		}
+	}
 }

@@ -349,7 +349,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		new MenuItem(editorArea.getMenu(), SWT.SEPARATOR);
 		final MenuItem addUserDefinedExprItem = new MenuItem(editorArea.getMenu(), SWT.PUSH);
 		addUserDefinedExprItem.setText(Messages.JavaExpressionEditorComposite_AddCustomExpressionItemText);
-		addUserDefinedExprItem.setToolTipText(Messages.JavaExpressionEditorComposite_AddCustomExpressionItemTooltip);
+		UIUtil.safeApplyMenuItemTooltip(addUserDefinedExprItem, Messages.JavaExpressionEditorComposite_AddCustomExpressionItemTooltip);
 		addUserDefinedExprItem.setImage(ResourceManager.getImage(
 						BundleCommonUtils.getImageDescriptor(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/expression_obj.gif"))); //$NON-NLS-1$
 		addUserDefinedExprItem.addSelectionListener(new SelectionAdapter() {

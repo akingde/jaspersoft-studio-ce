@@ -25,6 +25,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.property.dataset.DatasetUtil;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
+import com.jaspersoft.studio.utils.UIUtil;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRParameter;
@@ -171,7 +172,7 @@ public class ParameterPropertyWidget implements IWidget {
 				String tt = "Default: " + (def == null ? "" : "null");
 				if (!Misc.isNullOrEmpty(p.getDescription()))
 					tt += "\n\n" + p.getDescription();
-				mi.setToolTipText(tt);
+				UIUtil.safeApplyMenuItemTooltip(mi, tt);
 				final JRPropertiesMap pmap = p.getPropertiesMap();
 				pmap.getEventSupport();
 				mi.addSelectionListener(new SelectionAdapter() {
