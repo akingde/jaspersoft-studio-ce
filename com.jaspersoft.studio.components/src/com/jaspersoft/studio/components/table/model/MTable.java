@@ -17,6 +17,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.callout.pin.IPinContainer;
 import com.jaspersoft.studio.components.section.name.NameSection;
+import com.jaspersoft.studio.components.table.DSListener;
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.TableDatasetRunProperyDescriptor;
 import com.jaspersoft.studio.components.table.TableManager;
@@ -448,8 +449,9 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		
-		if (evt.getPropertyName().equals(StandardTable.PROPERTY_DATASET_RUN)) {
+		if (evt.getPropertyName().equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
+			getStandardTable().getEventSupport().firePropertyChange(new PropertyChangeEvent(evt.getSource(), DSListener.REFRESH_DATASET, evt.getOldValue(), evt.getNewValue()));
+		} else if (evt.getPropertyName().equals(StandardTable.PROPERTY_DATASET_RUN)) {
 			addDatasetGroupListener();
 		} else if (evt.getPropertyName().equals(MGraphicElement.FORCE_GRAPHICAL_REFRESH)) {
 			ANode parent = getParent();

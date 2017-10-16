@@ -7,10 +7,10 @@ package com.jaspersoft.studio.components.table;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import com.jaspersoft.studio.model.ANode;
+
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.design.JasperDesign;
-
-import com.jaspersoft.studio.model.ANode;
 
 
 /**
@@ -21,6 +21,9 @@ import com.jaspersoft.studio.model.ANode;
  *
  */
 public class DSListener implements PropertyChangeListener {
+	
+	public static final String REFRESH_DATASET = "refreshSubeditorDataset";
+	
 	private ANode parent;
 	private JasperDesign jd;
 	private StandardTable st;
@@ -32,7 +35,7 @@ public class DSListener implements PropertyChangeListener {
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (StandardTable.PROPERTY_DATASET_RUN.equals(evt.getPropertyName())){
+		if (StandardTable.PROPERTY_DATASET_RUN.equals(evt.getPropertyName()) || REFRESH_DATASET.equals(evt.getPropertyName()) ){
 				TableComponentFactory.setDataset(parent, jd, st);
 		}
 	}

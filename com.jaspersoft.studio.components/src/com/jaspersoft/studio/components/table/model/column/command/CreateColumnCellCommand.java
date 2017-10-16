@@ -109,7 +109,7 @@ public class CreateColumnCellCommand extends Command {
 				} else if (rightNode instanceof MColumn){
 					style = (String)((APropertyNode)rightNode).getPropertyValue(DesignCell.PROPERTY_STYLE);
 				}
-				if (style != null) return style;
+				if (style != null && !style.isEmpty()) return style;
 				else {
 					rightIndex ++;
 				}
