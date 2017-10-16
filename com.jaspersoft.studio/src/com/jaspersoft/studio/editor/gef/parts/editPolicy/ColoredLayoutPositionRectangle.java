@@ -12,17 +12,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
+
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Rectangle figure with colored border, used show a color feedback on
@@ -74,21 +76,28 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 	private int insertPosition;
 	
 	/**
+	 * The edit part where the figure is set, used to retrieve the viewer and the zoom level for scaling
+	 */
+	private EditPart part;
+	
+	/**
 	 * Crate the feedback provider for a drag and drop operation
 	 * 
+	 * @param The edit part where the figure is set, used to retrieve the viewer and the zoom level for scaling
 	 * @param borderColor the color used to highlight the border of the parent
 	 * @param borderWidth the width of the highlight on the parent border
 	 * @param container the container where the drop will be done
 	 * @param nodes The list of nodes that are dropped, should be a list of {@link MGraphicElement} or {@link JRElement}, 
 	 * even mixed. Types different from this, excluding the subtypes, are ignored 
 	 */
-	public ColoredLayoutPositionRectangle(Color borderColor, float borderWidth, ANode container, List<Object> nodes){
-		this(borderColor, borderWidth, container, nodes, -1);
+	public ColoredLayoutPositionRectangle(EditPart part, Color borderColor, float borderWidth, ANode container, List<Object> nodes){
+		this(part, borderColor, borderWidth, container, nodes, -1);
 	}
 	
 	/**
 	 * Crate the feedback provider for a drag and drop operation
 	 * 
+	 * @param The edit part where the figure is set, used to retrieve the viewer and the zoom level for scaling
 	 * @param borderColor the color used to highlight the border of the parent
 	 * @param borderWidth the width of the highlight on the parent border
 	 * @param container the container where the drop will be done
@@ -96,11 +105,12 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 	 * even mixed. Types different from this, excluding the subtypes, are ignored 
 	 * @param insertPosition the position where the elements will be inserted, -1 means at the end of the container
 	 */
-	public ColoredLayoutPositionRectangle(Color borderColor, float borderWidth, ANode container, List<Object> nodes, int insertPosition){
+	public ColoredLayoutPositionRectangle(EditPart part, Color borderColor, float borderWidth, ANode container, List<Object> nodes, int insertPosition){
 		super(borderColor, borderWidth);
 		this.container = container;
 		this.nodes = nodes;
 		this.insertPosition = insertPosition;
+		this.part = part;
 	}
 
 	/**
@@ -152,7 +162,11 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 	
 	protected void outlineShape(Graphics graphics) {
 		super.outlineShape(graphics);
-		
+		ZoomManager zoomMgr = (ZoomManager) part.getViewer().getProperty(ZoomManager.class.toString());
+		double zoom = 1.0d;
+		if (zoomMgr != null) {
+			zoom = zoomMgr.getZoom();
+		}
 		Map<Object, Rectangle> positions = getLayoutPosition();
 		if (positions != null){
 			Graphics2D g = ComponentFigure.getG2D(graphics);
@@ -161,15 +175,17 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 			//In the band the draw should start from the page margin, so we add an offset
 			if (container instanceof MBand){
 				JasperDesign jd = container.getJasperDesign();
-				offset = jd.getLeftMargin();
+				offset = (int)Math.round(jd.getLeftMargin()*zoom);
 			}
 			for(Rectangle elementPosition : positions.values()){
 				if (elementPosition != null){
 					g.setStroke(new BasicStroke(borderWidth));
 					g.setColor(new Color(159, 159, 159));
-					int x1 = elementPosition.x + offset + r.x;
-					int y1 = r.y + elementPosition.y;
-					g.drawRect(x1, y1, elementPosition.width, elementPosition.height);
+					int x1 = (int)Math.round(elementPosition.x * zoom) + offset + r.x;
+					int y1 = r.y + (int)Math.round(elementPosition.y * zoom);
+					
+					Rectangle rect = new Rectangle(x1, y1, (int)Math.round(elementPosition.width * zoom), (int)Math.round(elementPosition.height * zoom));
+					g.drawRect( rect.x,  rect.y,  rect.width,  rect.height);
 				}
 			}
 		}

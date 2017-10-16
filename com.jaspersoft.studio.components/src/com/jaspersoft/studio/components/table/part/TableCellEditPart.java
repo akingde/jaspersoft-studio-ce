@@ -148,7 +148,7 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 					}
 				}
 				if (targetFeedback == null) {
-					targetFeedback = new ColoredLayoutPositionRectangle(FrameFigureEditPart.addElementColor, 2.0f, getModel(), nodes);
+					targetFeedback = new ColoredLayoutPositionRectangle(TableCellEditPart.this, FrameFigureEditPart.addElementColor, 2.0f, getModel(), nodes);
 					targetFeedback.setFill(false);
 					IFigure hostFigure = getHostFigure();
 					Rectangle bounds = hostFigure.getBounds();

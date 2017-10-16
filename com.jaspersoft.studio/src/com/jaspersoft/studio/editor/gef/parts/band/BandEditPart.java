@@ -30,6 +30,7 @@ import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
@@ -377,7 +378,7 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 				        Dimension newLocation = location.getDifference(bandFigure.getBounds().getTopLeft());
 				        index = ModelUtils.getBetweenIndex(getModel(), new Point(newLocation.width, newLocation.height));
 					}
-					targetFeedback = new ColoredLayoutPositionRectangle(FrameFigureEditPart.addElementColor, 2.0f, getModel(), nodes, index);
+					targetFeedback = new ColoredLayoutPositionRectangle(BandEditPart.this, FrameFigureEditPart.addElementColor, 2.0f, getModel(), nodes, index);
 					targetFeedback.setFill(false);						
 
 					IFigure hostFigure = getHostFigure();
@@ -385,7 +386,12 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 					if (hostFigure instanceof HandleBounds)
 						bounds = ((HandleBounds) hostFigure).getHandleBounds();
 					Rectangle rect = new PrecisionRectangle(bounds);
-
+					double zoom = 1.0d;
+					ZoomManager zoomMgr = (ZoomManager) getViewer().getProperty(ZoomManager.class.toString());
+					if (zoomMgr != null) {
+						zoom = zoomMgr.getZoom();
+					}
+					rect.scale(zoom);
 					targetFeedback.setBounds(rect);
 					addFeedback(targetFeedback);
 				}
