@@ -1,0 +1,26 @@
+[
+  {
+    "propertyName": "net.sf.jasperreports.sql.field.column.name",
+    "label": "DB Name",
+    "description": "Property specifying the result set column name for the dataset field.",
+    "weight": "100",
+    "type": "jrProperty",
+    "readOnly": "false"
+  },
+  {
+    "propertyName": "net.sf.jasperreports.sql.field.column.label",
+    "label": "Label",
+    "description": "Property specifying the result set column label for the dataset field.",
+    "weight": "100",
+    "type": "jrProperty",
+    "readOnly": "false"
+  },
+  {
+    "propertyName": "net.sf.jasperreports.sql.field.column.index",
+    "label": "Index",
+    "description": "Property specifying the result set column index for the dataset field.",
+    "weight": "100",
+    "type": "jrProperty",
+    "readOnly": "false"
+  }
+]

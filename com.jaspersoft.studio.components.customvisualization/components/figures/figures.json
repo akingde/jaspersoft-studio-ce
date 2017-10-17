@@ -1,0 +1,191 @@
+{
+    "label": "Figures", 
+    "description": "Display a list of figures",
+    "module":"figures",
+    "thumbnail": "figures.png",
+    "sections": [
+            {
+              "name": "Script",
+              "expandable" : "true",
+              "properties": [
+                {
+                  "name": "script",
+                  "label": "Script Path",
+                  "description": "Script path",
+                  "mandatory": "true",
+                  "type": "PATH",
+                  "defaultValue":"figures.min.js",
+                  "readOnly": "false"
+                },
+                {
+                  "name": "css",
+                  "label": "CSS Path",
+                  "description": "CSS path",
+                  "mandatory": "true",
+                  "defaultValue": "figures.css",
+                  "type": "PATH",
+                  "readOnly": "false"
+                },
+                {
+                  "name": "module",
+                  "label": "module",
+                  "description": "module",
+                  "mandatory": "true",
+                  "defaultValue": "figures",
+                  "type": "TEXT",
+                  "readOnly": "true"
+                }
+              ]
+            },
+            {
+              "name": "Data",
+              "expandable" : "true",
+              "properties": [
+                {
+                  "name": "itemsValue",
+                  "label": "Items Value",
+                  "description": "The number of selected values.",
+                  "mandatory": "false",
+                  "type": "double",
+                  "defaultValue":"1"
+                },
+                {
+                  "name": "itemsCount",
+                  "label": "Items Count",
+                  "description": "The number of phantom figures.",
+                  "mandatory": "false",
+                  "type": "double",
+                  "defaultValue":"1"
+                },
+                {
+                  "name": "figure",
+                  "label": "Figure",
+                  "description": "Male, Female, Custom",
+                  "mandatory": "true",
+                  "type": "combo",
+                  "options2": [["Male", "Male"],["Female", "Female"],["Custom", "Custom"]], 
+                  "defaultValue":"Male"
+                },
+                {
+                  "name": "customPath",
+                  "label": "Custom Path",
+                  "description": "An SVG Path Data to form the figure to display",
+                  "mandatory": "false",
+                  "type": "text",
+                  "defaultValue":""
+                },
+                {
+                  "name": "fgColor",
+                  "label": "Foreground Colour",
+                  "description": "The color used to plot the figures.",
+                  "mandatory": "false",
+                  "type": "color",
+                  "defaultValue":"#000000"
+                },
+                {
+                  "name": "fgOpacity",
+                  "label": "Foreground Opacity",
+                  "description": "Opacity of the foreground color. Opacity spans from 0 (transparent) to 1 (fully visible)",
+                  "mandatory": "false",
+                  "type": "float",
+                  "defaultValue":"1",
+                  "min":"0",
+                  "max":"1"
+                },
+                {
+                  "name": "showBackground",
+                  "label": "Show Background Figures",
+                  "description": "Show or hide the background figures",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["true","false"], 
+                  "defaultValue":"true"
+                },
+                {
+                  "name": "bgColor",
+                  "label": "Background Color",
+                  "description": "The background color used for the not selected figures.",
+                  "mandatory": "false",
+                  "type": "color",
+                  "defaultValue":"#0000000"
+                },
+                {
+                  "name": "bgOpacity",
+                  "label": "Background Opacity",
+                  "description": "Opacity of the background color. Opacity spans from 0 (transparent) to 1 (fully visible)",
+                  "mandatory": "false",
+                  "type": "float",
+                  "defaultValue":"0.2",
+                  "min":"0",
+                  "max":"1"
+                }
+              ]
+            },
+            {
+              "name": "Grid",
+              "expandable" : "true",
+              "properties": [
+                {
+                  "name": "rows",
+                  "label": "Rows (optional)",
+                  "description": "Layout the figures using this number of rows",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"0"
+                },
+                {
+                  "name": "columns",
+                  "label": "Columns (optional)",
+                  "description": "Layout the figures using this number of columns",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"0"
+                },
+                {
+                  "name": "maximizeColumnNumber",
+                  "label": "Maximize cols number",
+                  "description": "Fill the columns as many as fit the based the number of rows.",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["","true","false"], 
+                  "defaultValue":"true"
+                },
+                {
+                  "name": "vAlign",
+                  "label": "Verical Alignment",
+                  "description": "Vertical Alignment of the overall set of figures",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["top","middle","bottom"], 
+                  "defaultValue":"top"
+                },
+                {
+                  "name": "hAlign",
+                  "label": "Horizontal Alignment",
+                  "description": "Horizontal Alignment of the overall set of figures",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["left","center","right"], 
+                  "defaultValue":"left"
+                },
+                {
+                  "name": "hPadding",
+                  "label": "Horizontal Padding",
+                  "description": "The space between figures",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"10"
+                },
+                {
+                  "name": "vPadding",
+                  "label": "Vertical Padding",
+                  "description": "The space between figures",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"10"
+                }
+                  
+              ]
+            }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+    "label": "Radial Progress", 
+    "description": "Display a percentage with one or more rings",
+    "module":"radial_progress",
+    "thumbnail": "radial_progress.png",
+    "sections": [
+            {
+              "name": "Script",
+              "expandable" : "true",
+              "properties": [
+                {
+                  "name": "script",
+                  "label": "Script Path",
+                  "description": "Script path",
+                  "mandatory": "true",
+                  "type": "PATH",
+                  "defaultValue":"radial_progress.min.js",
+                  "readOnly": "false"
+                },
+                {
+                  "name": "css",
+                  "label": "CSS Path",
+                  "description": "CSS path",
+                  "mandatory": "true",
+                  "defaultValue": "radial_progress.css",
+                  "type": "PATH",
+                  "readOnly": "false"
+                },
+                {
+                  "name": "module",
+                  "label": "module",
+                  "description": "module",
+                  "mandatory": "true",
+                  "defaultValue": "radial_progress",
+                  "type": "TEXT",
+                  "readOnly": "true"
+                }
+              ]
+            },
+            {
+              "name": "Data",
+              "expandable" : "true",
+              "properties": [
+                {
+                  "name": "value",
+                  "label": "Value",
+                  "description": "The value use to calculate the percentage based on the target value",
+                  "mandatory": "false",
+                  "type": "double",
+                  "defaultValue":"90"
+                },
+                {
+                  "name": "target",
+                  "label": "Target Value",
+                  "description": "If not specified, it defaults to 1",
+                  "mandatory": "false",
+                  "type": "double",
+                  "defaultValue":"100"
+                },
+                {
+                  "name": "valueFormat",
+                  "label": "Value Format",
+                  "description": "How to format the value (D3js syntax)",
+                  "mandatory": "false",
+                  "type": "text",
+                  "defaultValue":".1%"
+                },
+                {
+                  "name": "autoFit",
+                  "label": "Auto fit",
+                  "description": "If true, the font size of the label is automatically calculated.",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["true","false"], 
+                  "defaultValue":"true"
+                },
+                {
+                  "name": "fgColor",
+                  "label": "Forground Color",
+                  "description": "The color used for the rings and the text",
+                  "mandatory": "false",
+                  "type": "color",
+                  "defaultValue":"#000000"
+                },
+                {
+                  "name": "fgOpacity",
+                  "label": "Foreground Opacity",
+                  "description": "The opacity of the foreground color.",
+                  "mandatory": "false",
+                  "type": "float",
+                  "defaultValue":"1",
+                  "min":"0",
+                  "max":"1"
+                },
+                {
+                  "name": "showBackground",
+                  "label": "Show Background",
+                  "description": "Shows the background rings",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["true","false"], 
+                  "defaultValue":"true"
+                },
+                {
+                  "name": "bgColor",
+                  "label": "Background Color",
+                  "description": "The color used for the rings and the text",
+                  "mandatory": "false",
+                  "type": "color",
+                  "defaultValue":"#000000"
+                },
+                {
+                  "name": "bgOpacity",
+                  "label": "Background Opacity",
+                  "description": "The opacity of the background color.",
+                  "mandatory": "false",
+                  "type": "float",
+                  "defaultValue":"0.2",
+                  "min":"0",
+                  "max":"1"
+                }
+              ]
+            },
+            {
+              "name": "Grid",
+              "expandable" : "true",
+              "properties": [
+                {
+                  "name": "ringThickness",
+                  "label": "Ring Thickness",
+                  "description": "The thickness of the rings",
+                  "mandatory": "false",
+                  "type": "float",
+                  "defaultValue":"4.0"
+                },
+                {
+                  "name": "ringPadding",
+                  "label": "Ring Padding",
+                  "description": "Distance between rings",
+                  "mandatory": "false",
+                  "type": "float",
+                  "defaultValue":"4.0"
+                },
+                {
+                  "name": "maxRings",
+                  "label": "Max number of rings",
+                  "description": "The maximum number of rings displayed",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"0"
+                },
+                {
+                  "name": "hPadding",
+                  "label": "Horizontal Padding",
+                  "description": "The space at left and right",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"10"
+                },
+                {
+                  "name": "vPadding",
+                  "label": "Vertical Padding",
+                  "description": "The space at top and bottom",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"10"
+                },
+                {
+                  "name": "animation",
+                  "label": "Use animation",
+                  "description": "Use an animation when displaying the component",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["true","false"], 
+                  "defaultValue":"true"
+                }
+                  
+              ]
+            }
+  ]
+}
