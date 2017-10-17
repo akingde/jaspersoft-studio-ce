@@ -622,6 +622,15 @@ public class ExtensionManager {
 		}
 		return null;
 	}
+	
+	public EditPart createTreeEditPart(EditPart context, Object model) {
+		for (IComponentFactory f : getPrioritizedFactoryList(model)) {
+			EditPart c = f.createTreeEditPart(context, model);
+			if (c != null)
+				return c;
+		}
+		return null;
+	}
 
 	public List<Action> getActions(WorkbenchPart part) {
 		List<Action> lst = new ArrayList<Action>();

@@ -15,9 +15,11 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.jface.window.Window;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -33,6 +35,8 @@ import com.jaspersoft.studio.editor.outline.part.ContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.DatasetElementsTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableTreeEditPart;
+import com.jaspersoft.studio.editor.outline.part.OpenableContainerTreeEditPart;
+import com.jaspersoft.studio.editor.outline.part.OpenableNotDraggableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.tools.CompositeElementManager;
 import com.jaspersoft.studio.editor.tools.MCompositeElement;
@@ -124,6 +128,8 @@ import com.jaspersoft.studio.model.style.command.ReorderStyleCommand;
 import com.jaspersoft.studio.model.style.command.ReorderStyleTemplateCommand;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.model.subreport.command.CreateSubreportCommand;
+import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.model.text.command.EditTextFieldExpressionCommand;
 import com.jaspersoft.studio.model.textfield.MPageXofY;
 import com.jaspersoft.studio.model.textfield.MPercentage;
 import com.jaspersoft.studio.model.textfield.command.CreatePageXofYCommand;
@@ -161,31 +167,69 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 * java.lang.Object)
 	 */
 	public EditPart createEditPart(EditPart context, Object model) {
-		EditPart editPart = null;
-		if (model instanceof MCallout || model instanceof MPin)
-			return null;
-		if (model instanceof IDragable) {
-			if (model instanceof IContainerEditPart) {
-				editPart = new ContainerTreeEditPart();
-			} else if (model instanceof MGraphicElement) {
-				editPart = new ContainerTreeEditPart();
-			} else if (model instanceof MField || model instanceof MParameter || model instanceof MVariable) {
-				editPart = new DatasetElementsTreeEditPart();
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		EditPart editPart = m.createTreeEditPart(context, model);
+		if (editPart == null) {
+			if (model instanceof MCallout || model instanceof MPin)
+				return null;
+			if (model instanceof IDragable) {
+				if (model instanceof IContainerEditPart) {
+					editPart = new ContainerTreeEditPart();
+				} else if (model instanceof MTextField) {
+					editPart = createTextFieldTreeEditPart();
+				} else if (model instanceof MSubreport) {
+					editPart = new OpenableContainerTreeEditPart();
+				} else if (model instanceof MGraphicElement) {
+					editPart = new ContainerTreeEditPart();
+				} else if (model instanceof MField || model instanceof MParameter || model instanceof MVariable) {
+					editPart = new DatasetElementsTreeEditPart();
+				} else {
+					editPart = new TreeEditPart();
+				}
 			} else {
-				editPart = new TreeEditPart();
-			}
-		} else {
-			if (model instanceof IContainerEditPart) {
-				editPart = new NotDragableContainerTreeEditPart();
-			} else if (model instanceof MGraphicElement) {
-				editPart = new NotDragableContainerTreeEditPart();
-			} else {
-				editPart = new NotDragableTreeEditPart();
+				if (model instanceof MStyleTemplate) {
+					editPart = new OpenableNotDraggableContainerTreeEditPart();
+				}  else if (model instanceof IContainerEditPart) {
+					editPart = new NotDragableContainerTreeEditPart();
+				} else if (model instanceof MGraphicElement) {
+					editPart = new NotDragableContainerTreeEditPart();
+				} else {
+					editPart = new NotDragableTreeEditPart();
+				}
 			}
 		}
 		if (editPart != null)
 			editPart.setModel(model);
 		return editPart;
+	}
+	
+	/**
+	 * Create the edit part for a text field element, allowing to open the expression editor
+	 * with a double click on the outline
+	 */
+	protected EditPart createTextFieldTreeEditPart() {
+		return new OpenableContainerTreeEditPart() {
+			
+			@Override
+			public void performRequest(Request req) {
+				if (RequestConstants.REQ_OPEN.equals(req.getType())) {
+					Command cmd = null;
+					MTextField textfield = (MTextField) getModel();
+					cmd = new EditTextFieldExpressionCommand(textfield) {
+						@Override
+						public boolean canExecute() {
+							return super.canExecute() && this.showDialog()==Window.OK;
+						}
+					};
+					getViewer().getEditDomain().getCommandStack().execute(cmd);
+				}
+			}
+			
+			@Override
+			public boolean understandsRequest(Request req) {
+				return RequestConstants.REQ_OPEN.equals(req.getType());
+			}
+		};
 	}
 
 	/**

@@ -89,6 +89,7 @@ import com.jaspersoft.studio.components.table.part.TablePageEditPart;
 import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.outline.part.OpenableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.tools.CompositeElementManager;
 import com.jaspersoft.studio.editor.tools.MCompositeElement;
@@ -919,6 +920,13 @@ public class TableComponentFactory implements IComponentFactory {
 			return new TableCellEditPart();
 		else if (model instanceof MColumn)
 			return new TableCellEditPart();
+		return null;
+	}
+	
+	@Override
+	public EditPart createTreeEditPart(EditPart context, Object model) {
+		if (model instanceof MTable)
+			return new OpenableContainerTreeEditPart();
 		return null;
 	}
 

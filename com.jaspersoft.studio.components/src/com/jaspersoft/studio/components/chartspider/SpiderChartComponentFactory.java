@@ -153,6 +153,11 @@ public class SpiderChartComponentFactory implements IComponentFactory {
 			return new SpiderChartEditPart();
 		return null;
 	}
+	
+	@Override
+	public EditPart createTreeEditPart(EditPart context, Object model) {
+		return null;
+	}
 
 	public Command getOrphanCommand(ANode parent, ANode child) {
 		return null;

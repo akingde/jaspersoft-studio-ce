@@ -50,7 +50,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
@@ -61,14 +60,13 @@ import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.dnd.ImageResourceDropTargetListener;
 import com.jaspersoft.studio.editor.dnd.ImageURLTransfer;
 import com.jaspersoft.studio.editor.dnd.JSSTemplateTransferDropTargetListener;
-import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.java2d.figure.JSSScrollableThumbnail;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
+import com.jaspersoft.studio.editor.outline.part.IOpenableTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
-import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -368,31 +366,18 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 						Tree t = (Tree) e.getSource();
 						TreeItem[] ti = t.getSelection();
 						if (ti != null && ti.length > 0) {
-							if(ti.length==1 && ti[0].getItemCount()>0){
-								 ti[0].setExpanded(!ti[0].getExpanded());
-							}
 							Object obj = ti[0].getData();
-							if (obj instanceof TreeEditPart && editor instanceof AbstractVisualEditor) {
-
-								EditPart part = (EditPart) ((AbstractVisualEditor) editor).getGraphicalViewer().getEditPartRegistry()
-										.get(((TreeEditPart) obj).getModel());
+							if (obj instanceof IOpenableTreeEditPart) {
+								//if the part is openable and understand the open request then perform the request
+								IOpenableTreeEditPart part = (IOpenableTreeEditPart) obj;
 								SelectionRequest request = new SelectionRequest();
 								request.setType(RequestConstants.REQ_OPEN);
-								if (part != null) {
+								if (part.understandsRequest(request)) {
 									part.performRequest(request);
-								} else {
-									TreeEditPart atep = (TreeEditPart) obj;
-									// If the part can understand the request perform it on the edit part
-									// otherwise use a general open editor method
-									if (atep.understandsRequest(request)) {
-										atep.performRequest(request);
-									} else if (atep.getModel() instanceof ANode) {
-										// FIXME - See also EditableFigureEditPart#openEditor()
-										// We need to improve the check that allow to call the openEditor operation.
-										// Reference JIRA Jaspersoft #JSS-637
-										EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), (IEditorPart) editor,
-												(ANode) atep.getModel());
-									}
+								}
+							} else {
+								if(ti.length==1 && ti[0].getItemCount()>0){
+									 ti[0].setExpanded(!ti[0].getExpanded());
 								}
 							}
 						}

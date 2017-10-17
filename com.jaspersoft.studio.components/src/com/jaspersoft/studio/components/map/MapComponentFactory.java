@@ -111,6 +111,11 @@ public class MapComponentFactory implements IComponentFactory {
 	public EditPart createEditPart(EditPart context, Object model) {
 		return null;
 	}
+	
+	@Override
+	public EditPart createTreeEditPart(EditPart context, Object model) {
+		return null;
+	}
 
 	public Command getOrphanCommand(ANode parent, ANode child) {
 		return null;

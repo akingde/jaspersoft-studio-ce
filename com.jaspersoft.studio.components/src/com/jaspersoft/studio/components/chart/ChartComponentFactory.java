@@ -7,32 +7,11 @@ package com.jaspersoft.studio.components.chart;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.charts.JRChartAxis;
-import net.sf.jasperreports.charts.JRMultiAxisPlot;
-import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
-import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
-import net.sf.jasperreports.charts.design.JRDesignChartAxis;
-import net.sf.jasperreports.charts.design.JRDesignGanttDataset;
-import net.sf.jasperreports.charts.design.JRDesignGanttSeries;
-import net.sf.jasperreports.charts.design.JRDesignMultiAxisPlot;
-import net.sf.jasperreports.charts.design.JRDesignPieDataset;
-import net.sf.jasperreports.charts.design.JRDesignPieSeries;
-import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
-import net.sf.jasperreports.charts.design.JRDesignTimePeriodSeries;
-import net.sf.jasperreports.charts.design.JRDesignTimeSeries;
-import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
-import net.sf.jasperreports.charts.design.JRDesignXyDataset;
-import net.sf.jasperreports.charts.design.JRDesignXySeries;
-import net.sf.jasperreports.charts.design.JRDesignXyzDataset;
-import net.sf.jasperreports.charts.design.JRDesignXyzSeries;
-import net.sf.jasperreports.engine.JRChart;
-import net.sf.jasperreports.engine.JRChartDataset;
-import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignChartDataset;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
@@ -45,6 +24,7 @@ import com.jaspersoft.studio.components.chart.model.chartAxis.command.CreateChar
 import com.jaspersoft.studio.components.chart.model.chartAxis.command.DeleteChartAxesCommand;
 import com.jaspersoft.studio.components.chart.model.chartAxis.command.ReorderChartAxesCommand;
 import com.jaspersoft.studio.components.chart.model.command.CreateChartCommand;
+import com.jaspersoft.studio.components.chart.model.command.EditChartCommand;
 import com.jaspersoft.studio.components.chart.model.dataset.ChartDatasetFactory;
 import com.jaspersoft.studio.components.chart.model.dataset.MChartCategoryDataset;
 import com.jaspersoft.studio.components.chart.model.dataset.MChartDataset;
@@ -92,10 +72,12 @@ import com.jaspersoft.studio.components.chart.model.series.xyzseries.command.Reo
 import com.jaspersoft.studio.components.chart.part.ChartEditPart;
 import com.jaspersoft.studio.components.chart.wizard.action.ChartWizardAction;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.outline.part.OpenableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
@@ -105,6 +87,29 @@ import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.charts.JRChartAxis;
+import net.sf.jasperreports.charts.JRMultiAxisPlot;
+import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
+import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
+import net.sf.jasperreports.charts.design.JRDesignChartAxis;
+import net.sf.jasperreports.charts.design.JRDesignGanttDataset;
+import net.sf.jasperreports.charts.design.JRDesignGanttSeries;
+import net.sf.jasperreports.charts.design.JRDesignMultiAxisPlot;
+import net.sf.jasperreports.charts.design.JRDesignPieDataset;
+import net.sf.jasperreports.charts.design.JRDesignPieSeries;
+import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
+import net.sf.jasperreports.charts.design.JRDesignTimePeriodSeries;
+import net.sf.jasperreports.charts.design.JRDesignTimeSeries;
+import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
+import net.sf.jasperreports.charts.design.JRDesignXyDataset;
+import net.sf.jasperreports.charts.design.JRDesignXySeries;
+import net.sf.jasperreports.charts.design.JRDesignXyzDataset;
+import net.sf.jasperreports.charts.design.JRDesignXyzSeries;
+import net.sf.jasperreports.engine.JRChart;
+import net.sf.jasperreports.engine.JRChartDataset;
+import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 
 public class ChartComponentFactory implements IComponentFactory {
 	
@@ -338,6 +343,37 @@ public class ChartComponentFactory implements IComponentFactory {
 	public EditPart createEditPart(EditPart context, Object model) {
 		if (model instanceof MChart)
 			return new ChartEditPart();
+		return null;
+	}
+	
+	@Override
+	public EditPart createTreeEditPart(EditPart context, Object model) {
+		//create the edit part to open the chart dialog
+		if (model instanceof MChart) {
+			return new OpenableContainerTreeEditPart() {
+				
+				@Override
+				public void performRequest(Request req) {
+					if (RequestConstants.REQ_OPEN.equals(req.getType())) {
+						Command cmd = null;
+						MChart mchart = (MChart) getModel();
+						if (mchart.getValue().getChartType() == JRChart.CHART_TYPE_MULTI_AXIS)
+							return;
+						INode parent = mchart.getParent();
+						if (parent instanceof MFrame)
+							cmd = new EditChartCommand((MFrame) parent, mchart);
+						if (parent instanceof MBand)
+							cmd = new EditChartCommand((MBand) parent, mchart);
+						if (parent instanceof MElementGroup)
+							cmd = new EditChartCommand((MElementGroup) parent, mchart);
+
+						getViewer().getEditDomain().getCommandStack().execute(cmd);
+					}  else {
+						super.performRequest(req);
+					}
+				}
+			};
+		}
 		return null;
 	}
 

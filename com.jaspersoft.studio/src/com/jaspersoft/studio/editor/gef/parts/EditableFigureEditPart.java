@@ -15,7 +15,6 @@ import org.eclipse.ui.part.MultiPageEditorSite;
 
 import com.jaspersoft.studio.editor.IJROBjectEditor;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.style.MStyles;
 
 public class EditableFigureEditPart extends FigureEditPart {
 	
@@ -30,12 +29,6 @@ public class EditableFigureEditPart extends FigureEditPart {
 	}
 
 	public static void openEditor(final Object val, IEditorPart editor, ANode node) {
-		// FIXME - temporary check for the problem related to the JDReportOutlineView
-		// We need to improve the way the open editor is invoked depending on the TreeEditPart type.
-		// To be removed once the JIRA Jaspersoft #JSS-637 is solved.
-		if(node instanceof MStyles){
-			return;
-		}
 		if (editor.getEditorSite() instanceof MultiPageEditorSite) {
 			final MultiPageEditorPart mpep = ((MultiPageEditorSite) editor.getEditorSite()).getMultiPageEditor();
 			if (mpep instanceof IJROBjectEditor)

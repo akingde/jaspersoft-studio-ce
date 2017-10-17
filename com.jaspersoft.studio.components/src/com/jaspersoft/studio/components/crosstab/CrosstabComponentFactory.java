@@ -96,6 +96,7 @@ import com.jaspersoft.studio.components.crosstab.part.CrosstabTitleCellEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabTitleEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabWhenNoDataEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.outline.part.OpenableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.tools.CompositeElementManager;
 import com.jaspersoft.studio.editor.tools.MCompositeElement;
@@ -794,6 +795,13 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			return new CrosstabWhenNoDataEditPart();
 		if (model instanceof MTitle)
 			return new CrosstabTitleEditPart();
+		return null;
+	}
+	
+	@Override
+	public EditPart createTreeEditPart(EditPart context, Object model) {
+		if (model instanceof MCrosstab)
+			return new OpenableContainerTreeEditPart();
 		return null;
 	}
 

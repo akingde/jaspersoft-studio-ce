@@ -39,6 +39,8 @@ public interface IComponentFactory {
 	public IFigure createFigure(final ANode node);
 
 	public EditPart createEditPart(EditPart context, Object model);
+	
+	public EditPart createTreeEditPart(EditPart context, Object model);
 
 	public Command getStretchToContent(ANode node);
 	
