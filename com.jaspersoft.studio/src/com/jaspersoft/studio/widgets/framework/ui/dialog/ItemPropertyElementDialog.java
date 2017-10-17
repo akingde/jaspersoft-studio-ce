@@ -46,7 +46,7 @@ public class ItemPropertyElementDialog extends PersistentLocationTitleAreaDialog
 	/**
 	 * The {@link ItemPropertyDescription} that define the widget created inside
 	 */
-	private ItemPropertyDescription<?> ipDesc;
+	protected ItemPropertyDescription<?> ipDesc;
 	
 	/**
 	 * The current static value

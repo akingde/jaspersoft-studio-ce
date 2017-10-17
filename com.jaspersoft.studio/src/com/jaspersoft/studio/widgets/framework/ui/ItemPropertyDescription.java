@@ -87,7 +87,7 @@ public interface ItemPropertyDescription<T> {
 	public Control createControl(IWItemProperty wiProp, Composite parent);
 
 	/**
-	 * Update the value iside the widget with the one inside the model element
+	 * Update the value inside the widget with the one inside the model element
 	 * 
 	 * @param c the current control
 	 * @param wiProp the {@link IWItemProperty} in which this widget is wrapped

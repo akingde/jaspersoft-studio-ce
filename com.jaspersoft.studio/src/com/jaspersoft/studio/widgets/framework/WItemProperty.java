@@ -69,6 +69,11 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 */
 	public static final int FORCE_EXPRESSION_DIALOG = 1 << 1;
 	
+	/**
+	 * Style bit: for only the simple mode on the advance dialog
+	 */
+	public static final int FORCE_SIMPLE_MODE = 1 << 2;
+	
 	/** 
 	 * Suffix for properties requiring a custom simple mode handling 
 	 */
@@ -215,9 +220,6 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			}
 
 		});
-
-		//Try to don't use a control listener and relying on SWT events
-		//configureWidgetsLayoutData();
 		
 		if (widgetDescriptor != null) {
 			String tt = widgetDescriptor.getToolTip();
@@ -413,7 +415,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 */
 	@Override
 	public boolean isExpressionMode() {
-		return getPropertyEditor().getPropertyValueExpression(ipDesc.getName()) != null;
+		return !hasForcedSimpleMode() && getPropertyEditor().getPropertyValueExpression(ipDesc.getName()) != null;
 	}
 
 	/**
@@ -552,6 +554,16 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 */
 	public boolean hasForcedExpression() {
 		return (getStyle() & FORCE_EXPRESSION_DIALOG) == FORCE_EXPRESSION_DIALOG;
+	}
+	
+	/**
+	 * Check if the elements has the flag to force only the simple mode editing
+	 * 
+	 * @return true if the {@link WItemProperty} was created with the force simple mode dialog stylebit
+	 * false otherwise
+	 */
+	public boolean hasForcedSimpleMode() {
+		return (getStyle() & FORCE_SIMPLE_MODE) == FORCE_SIMPLE_MODE;
 	}
 
 }

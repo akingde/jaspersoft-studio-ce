@@ -30,6 +30,7 @@ import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.model.SectionPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
+import com.jaspersoft.studio.widgets.framework.ui.ArrayPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.BigDecimalPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.CheckboxItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ClassItemPropertyDescription;
@@ -169,17 +170,39 @@ public class WidgetFactory {
 	 * @return the {@link ItemPropertyDescription} to handle the type defined by the WidgetPropertyDescription, or null if the type can not be resolved
 	 */
 	public static ItemPropertyDescription<?> createItemPropertyDescriptor(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
-		ItemPropertyDescription<?> hardcodedType = getHardcodedWidgets().get(cpd.getType().toLowerCase());	
+		String type = cpd.getType().toLowerCase().trim();
+		return createItemPropertyDescriptor(cd, cpd, jConfig, type);
+	}
+	
+	/**
+	 * Create a {@link ItemPropertyDescription} from a widget definition. If the widgets can not be resolved it log an error. This overload get the type of 
+	 * the widget explicitly instead to extract it from the widgets property descriptor, this allow to be used recursively to build nested array
+	 * 
+	 * @param cd the container of all the widgets, used for the localization
+	 * @param cpd the descriptor of the widget, the type and the other informations will be used to build the {@link ItemPropertyDescription}
+	 * @param jConfig the current {@link JasperReportsConfiguration}
+	 * @param editor a not null {@link IPropertyEditor} that will be used inside the widget to provide the read/write logic between the widget and the element
+	 * @return the type of the widget to create
+	 */
+	protected static ItemPropertyDescription<?> createItemPropertyDescriptor(WidgetsDescriptor cd, WidgetPropertyDescriptor cpd, JasperReportsConfiguration jConfig, String type) {
+		ItemPropertyDescription<?> hardcodedType = getHardcodedWidgets().get(type);	
 		ItemPropertyDescription<?> desc = null;
 		if (hardcodedType != null){
 			 desc = hardcodedType.getInstance(cd, cpd, jConfig);
 		} else {
 			//Build the contributed widget if any
-			ItemPropertyDescription<?> contribuitedType = getContributedWidgets().get(cpd.getType().toLowerCase());
+			ItemPropertyDescription<?> contribuitedType = getContributedWidgets().get(type);
 			if (contribuitedType == null){
-				String errorString = "Invalid widget type {0}, valid types are: {1}";
-				String errorMessage = MessageFormat.format(errorString, new Object[]{cpd.getType().toLowerCase(), getValidTypes()});
-				JaspersoftStudioPlugin.getInstance().logError(errorMessage, new Exception(errorMessage));
+				//check if the type is an array
+				if (type.startsWith("[") && type.endsWith("]")) {
+					desc = new ArrayPropertyDescription().getInstance(cd, cpd, jConfig);
+					String newType = type.substring(1, type.length()-1);
+					((ArrayPropertyDescription)desc).setInnterType(createItemPropertyDescriptor(cd, cpd, jConfig, newType));
+				} else {
+					String errorString = "Invalid widget type {0}, valid types are: {1}";
+					String errorMessage = MessageFormat.format(errorString, new Object[]{type, getValidTypes()});
+					JaspersoftStudioPlugin.getInstance().logError(errorMessage, new Exception(errorMessage));
+				}
 			} else { 	
 				desc = contribuitedType.getInstance(cd, cpd, jConfig);
 			}
