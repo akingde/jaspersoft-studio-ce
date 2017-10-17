@@ -214,21 +214,23 @@ public class WColorPicker extends Composite {
 	 * @return an Alfa RGB color. If the color is provided as hex or as RGB the alpha is 255
 	 */
 	public static AlfaRGB decodeColor(String text, boolean htmlColorNamesSupported){
-		try {
-			if(htmlColorNamesSupported && StringUtils.isAlpha(text)) {
-				String htmlColorHex = Colors.getHtmlColorHex(text);
-				if(!StringUtils.isEmpty(htmlColorHex)){
-					return AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(htmlColorHex.substring(1, 3), 16), Integer.valueOf(htmlColorHex.substring(3, 5), 16), Integer.valueOf(htmlColorHex.substring(5, 7), 16)));
+		if (text != null) {
+			try {
+				if(htmlColorNamesSupported && StringUtils.isAlpha(text)) {
+					String htmlColorHex = Colors.getHtmlColorHex(text);
+					if(!StringUtils.isEmpty(htmlColorHex)){
+						return AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(htmlColorHex.substring(1, 3), 16), Integer.valueOf(htmlColorHex.substring(3, 5), 16), Integer.valueOf(htmlColorHex.substring(5, 7), 16)));
+					}
 				}
+				if ((text.startsWith("#") && text.length() == 7)) { //$NON-NLS-1$
+					AlfaRGB newColor = AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(text.substring(1, 3), 16), Integer.valueOf(text.substring(3, 5), 16), Integer.valueOf(text.substring(5, 7), 16)));
+					return newColor;
+				} else if ( text.length() == 6){
+					AlfaRGB newColor = AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(text.substring(0, 2), 16), Integer.valueOf(text.substring(2, 4), 16), Integer.valueOf(text.substring(4, 6), 16)));
+					return newColor;
+				}
+			} catch (Exception ex) {
 			}
-			if ((text.startsWith("#") && text.length() == 7)) { //$NON-NLS-1$
-				AlfaRGB newColor = AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(text.substring(1, 3), 16), Integer.valueOf(text.substring(3, 5), 16), Integer.valueOf(text.substring(5, 7), 16)));
-				return newColor;
-			} else if ( text.length() == 6){
-				AlfaRGB newColor = AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(text.substring(0, 2), 16), Integer.valueOf(text.substring(2, 4), 16), Integer.valueOf(text.substring(4, 6), 16)));
-				return newColor;
-			}
-		} catch (Exception ex) {
 		}
 		return null;
 	}
