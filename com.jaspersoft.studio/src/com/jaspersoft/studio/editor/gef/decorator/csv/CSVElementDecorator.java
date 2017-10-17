@@ -22,8 +22,8 @@ import com.jaspersoft.studio.editor.action.csv.CSVAction;
 import com.jaspersoft.studio.editor.action.csv.CSVColDataAction;
 import com.jaspersoft.studio.editor.action.csv.CSVColSettingAction;
 import com.jaspersoft.studio.editor.action.csv.CSVRootAction;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.ChainableDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.ChainableElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
@@ -38,7 +38,7 @@ import com.jaspersoft.studio.model.text.MTextElement;
  * @author Orlandin Marco
  * 
  */
-public class CSVElementDecorator extends TextElementDecorator {
+public class CSVElementDecorator extends ChainableElementDecorator {
 
 	/**
 	 * The XSL contributor for the text decoration
@@ -53,7 +53,7 @@ public class CSVElementDecorator extends TextElementDecorator {
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
-		TextDecorator textDecorator = getDecorator(fig);
+		ChainableDecorator textDecorator = getDecorator(fig);
 		textDecorator.removeDecorator(decorator);
 		if (editPart.getjConfig().getPropertyBooleanDef(ShowCSVTagsAction.ID, false)) {
 			textDecorator.addDecorator(decorator);

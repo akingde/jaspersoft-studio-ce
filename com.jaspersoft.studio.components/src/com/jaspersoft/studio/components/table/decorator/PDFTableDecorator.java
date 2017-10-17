@@ -10,13 +10,14 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-import net.sf.jasperreports.engine.JRPropertiesMap;
-
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextDecoratorInterface;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.AbstractPainter;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.AbstractPainter.Location;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.IDecoratorInterface;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation.Location;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 /**
  * Decorator for the PDF table action, it also provide an interface to became a text 
@@ -25,7 +26,7 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
  * @author Orlandin Marco
  *
  */
-public class PDFTableDecorator implements TextDecoratorInterface {
+public class PDFTableDecorator implements IDecoratorInterface {
 
 	/**
 	 * Left upper corner image
@@ -83,9 +84,9 @@ public class PDFTableDecorator implements TextDecoratorInterface {
 	 * Return an array of text element that will be printed on the element
 	 */
 	@Override
-	public ArrayList<TextLocation> getText(ComponentFigure fig) {
+	public ArrayList<AbstractPainter> getDecoratorPainter(ComponentFigure fig) {
 		JRPropertiesMap mapProperties = fig.getJrElement().getPropertiesMap();
-		ArrayList<TextLocation> result = new ArrayList<TextLocation>();
+		ArrayList<AbstractPainter> result = new ArrayList<AbstractPainter>();
 		String endString = ""; //$NON-NLS-1$
 		Object value = mapProperties.getProperty(PdfActionTable.JR_PROPERTY);
 		if (value != null) {
@@ -95,18 +96,7 @@ public class PDFTableDecorator implements TextDecoratorInterface {
 				endString += "PDF OFF";
 			}
 		}
-		result.add(new TextLocation(Location.TopLeft, endString));
+		result.add(new TextLocation(Location.TopLeft, endString, JSS_TEXT_FONT, JSS_TEXT_COLOR));
 		return result;
 	}
-
-	@Override
-	public Color getColor() {
-		return JSS_TEXT_COLOR;
-	}
-
-	@Override
-	public Font getFont() {
-		return JSS_TEXT_FONT;
-	}
-
 }

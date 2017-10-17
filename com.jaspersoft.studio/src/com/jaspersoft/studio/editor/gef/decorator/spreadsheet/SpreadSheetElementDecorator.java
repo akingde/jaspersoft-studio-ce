@@ -16,20 +16,20 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.RetargetAction;
 
-import com.jaspersoft.studio.editor.gef.decorator.text.TextDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.ChainableDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.ChainableElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 
-public class SpreadSheetElementDecorator extends TextElementDecorator{
+public class SpreadSheetElementDecorator extends ChainableElementDecorator{
 
 	private SpreadsheetDecorator decorator = new SpreadsheetDecorator();
 	
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
-		TextDecorator textDecorator = getDecorator(fig);
+		ChainableDecorator textDecorator = getDecorator(fig);
 		textDecorator.removeDecorator(decorator);
 		textDecorator.addDecorator(decorator);
 	}

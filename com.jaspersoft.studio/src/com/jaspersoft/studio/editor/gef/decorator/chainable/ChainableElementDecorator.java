@@ -2,19 +2,19 @@
  * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
  * All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
-package com.jaspersoft.studio.editor.gef.decorator.text;
+package com.jaspersoft.studio.editor.gef.decorator.chainable;
 
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 
 /**
- * An element decorator that instances one and only one TextDecorator, that will be 
- * used to paint strings on the figures
+ * An element decorator that instances one and only one ChainableElementDecorator, that will be 
+ * used to paint more decorators one after another
  * @author Orlandin Marco
  *
  */
-public abstract class TextElementDecorator implements IElementDecorator {
+public abstract class ChainableElementDecorator implements IElementDecorator {
 
 	/**
 	 * Return the text decorator for the current figure if it was created before.
@@ -25,10 +25,10 @@ public abstract class TextElementDecorator implements IElementDecorator {
 	 * @return a not null text decorator. It will a previously created old one
 	 * if available, otherwise a new one.
 	 */
-	protected TextDecorator getDecorator(ComponentFigure figure){
-		TextDecorator decorator = (TextDecorator)figure.getDecorator(TextDecorator.class);
+	protected ChainableDecorator getDecorator(ComponentFigure figure){
+		ChainableDecorator decorator = (ChainableDecorator)figure.getDecorator(ChainableDecorator.class);
 		if (decorator == null) {
-			decorator = new TextDecorator();
+			decorator = new ChainableDecorator();
 			figure.addDecoratorOnce(decorator);
 		}
 		return decorator;

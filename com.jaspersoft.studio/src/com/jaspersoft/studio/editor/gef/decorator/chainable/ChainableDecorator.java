@@ -2,35 +2,37 @@
  * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
  * All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
-package com.jaspersoft.studio.editor.gef.decorator.text;
+package com.jaspersoft.studio.editor.gef.decorator.chainable;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.pdf.PDFDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 
+import net.sf.jasperreports.engine.design.JRDesignElement;
+
 /**
- * This decorator is used to print one or more lines of text into an element.
- * The text is given by contributor modules, so to print new text it is sufficient to 
- * add a new module. A contributor must implement the TextDecoratorInterface interface.
+ * This decorator is used to print one or more decorators into an element, one after another.
+ * The decorator is given by contributor modules, so to print a decorator it is sufficient to 
+ * add a new module. A contributor must implement the {@link IDecoratorInterface} interface.
  * @author Orlandin Marco
  *
  */
-public class TextDecorator implements IDecorator {
+public class ChainableDecorator implements IDecorator {
 
 	/**
 	 * Left upper corner image
@@ -45,10 +47,10 @@ public class TextDecorator implements IDecorator {
 	/**
 	 * List of text contributor
 	 */
-	private ArrayList<TextDecoratorInterface> textDecorators;
+	private ArrayList<IDecoratorInterface> textDecorators;
 	
-	public TextDecorator(){
-		textDecorators = new ArrayList<TextDecoratorInterface>();
+	public ChainableDecorator(){
+		textDecorators = new ArrayList<IDecoratorInterface>();
 		if (startImageAwt == null || endImageAwt == null) {
 			startImageAwt = new javax.swing.ImageIcon(PDFDecorator.class.getResource("/icons/resources/corner1.png"));
 			endImageAwt = new javax.swing.ImageIcon(PDFDecorator.class.getResource("/icons/resources/corner2.png"));
@@ -59,7 +61,7 @@ public class TextDecorator implements IDecorator {
 	 * Add a new text contributor to the decorator
 	 * @param newDecorator the new contributor
 	 */
-	public void addDecorator(TextDecoratorInterface newDecorator){
+	public void addDecorator(IDecoratorInterface newDecorator){
 		textDecorators.add(newDecorator);
 	}
 	
@@ -67,7 +69,7 @@ public class TextDecorator implements IDecorator {
 	 * Remove a previous added contributor to the decorator
 	 * @param toRemove element to remove
 	 */
-	public void removeDecorator(TextDecoratorInterface toRemove){
+	public void removeDecorator(IDecoratorInterface toRemove){
 		textDecorators.remove(toRemove);
 	}
 	
@@ -76,7 +78,7 @@ public class TextDecorator implements IDecorator {
 	 * @param element element to search
 	 * @return true if the contributor is already present, false otherwise
 	 */
-	public boolean contains(TextDecoratorInterface element){
+	public boolean contains(IDecoratorInterface element){
 		return textDecorators.contains(element);
 	}
 
@@ -93,12 +95,11 @@ public class TextDecorator implements IDecorator {
 				g.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, graphics.getAbsoluteScale()));
 				boolean leftUpperCorner = false;
 				boolean rightLowerCorner = false;
-				for (TextDecoratorInterface decorator : textDecorators) {
-					ArrayList<TextLocation> texts = decorator.getText(fig);
-					g.setFont(decorator.getFont());
-					g.setColor(decorator.getColor());
-					for (TextLocation text : texts) {
-						if (text.hasValue()) {
+				for (IDecoratorInterface decorator : textDecorators) {
+					ArrayList<AbstractPainter> texts = decorator.getDecoratorPainter(fig);
+					for (AbstractPainter text : texts) {
+						Point elementSize = text.getElementSize(g);
+						if (elementSize.x != 0 && elementSize.y != 0) {
 							Integer strWidth;
 							if (!textMap.containsKey(text.getLocation())) {
 								textMap.put(text.getLocation(), 0);
@@ -107,22 +108,21 @@ public class TextDecorator implements IDecorator {
 								strWidth = textMap.get(text.getLocation());
 							switch (text.getLocation()) {
 							case TopLeft:
-								g.drawString(text.getValue().getIterator(), r.x + strWidth + 4, r.y + 11);
-							
-								strWidth += g.getFontMetrics().stringWidth(text.getText())+(text.getLenght());
+								text.paint(g, r.x + strWidth + 4, r.y + 11);
+								strWidth += text.getElementSize(g).x;
 								leftUpperCorner = true;
 								break;
 							case TopRight:
-								strWidth += g.getFontMetrics().stringWidth(text.getText())+text.getLenght();
-								g.drawString(text.getValue().getIterator(), r.x + r.width - strWidth - 6, r.y + 11);
+								strWidth += text.getElementSize(g).x;
+								text.paint(g, r.x + r.width - strWidth - 6, r.y + 11);
 								break;
 							case BottomLeft:
-								g.drawString(text.getValue().getIterator(), r.x + strWidth + 4, r.y + r.height - 6);
-								strWidth += g.getFontMetrics().stringWidth(text.getText())+text.getLenght();
+								text.paint(g, r.x + strWidth + 4, r.y + r.height - text.getElementSize(g).y);
+								strWidth += text.getElementSize(g).x;
 								break;
 							case BottomRight:
-								strWidth += g.getFontMetrics().stringWidth(text.getText())+text.getLenght();
-								g.drawString(text.getValue().getIterator(), r.x + r.width - strWidth - 6, r.y + r.height - 6);
+								strWidth += text.getElementSize(g).x;
+								text.paint(g, r.x + r.width - strWidth - 6, r.y + r.height - text.getElementSize(g).y);
 								rightLowerCorner = true;
 								break;
 							}

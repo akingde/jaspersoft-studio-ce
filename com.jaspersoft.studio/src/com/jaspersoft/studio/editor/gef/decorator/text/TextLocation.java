@@ -4,7 +4,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.text;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.text.AttributedCharacterIterator.Attribute;
+
+import com.jaspersoft.studio.editor.gef.decorator.chainable.AbstractPainter;
+
 import java.text.AttributedString;
 
 /**
@@ -12,19 +19,7 @@ import java.text.AttributedString;
  * @author Orlandin Marco
  *
  */
-public class TextLocation {
-	
-	/**
-	 * Enumaration that define the possible location of the text on the figure
-	 * @author Orlandin Marco
-	 *
-	 */
-	public static enum Location{TopLeft, TopRight, BottomLeft, BottomRight};
-	
-	/**
-	 * Location of the text on the figure
-	 */
-	private Location loc;
+public class TextLocation extends AbstractPainter {	
 	
 	/**
 	 * The string to paint, it can have various attributes
@@ -37,14 +32,26 @@ public class TextLocation {
 	private String stringValue;
 	
 	/**
+	 * the font to paint the text
+	 */
+	private Font font;
+	
+	/**
+	 * the color to paint the text
+	 */
+	private Color color;
+	
+	/**
 	 * 
 	 * @param loc location of the string
 	 * @param value value of the string to print
 	 */
-	public TextLocation(Location loc, String value){
-		this.loc = loc;
+	public TextLocation(Location loc, String value, Font font, Color color){
+		super(loc);
 		this.value = new AttributedString(value);
 		this.stringValue = value;
+		this.font = font;
+		this.color = color;
 	}
 	
 	/**
@@ -54,14 +61,6 @@ public class TextLocation {
 	 */
 	public void addAttribute(Attribute attribute, Object value){
 		this.value.addAttribute(attribute, value);
-	}
-	
-	/**
-	 * Return the location for the string
-	 * @return a location
-	 */
-	public Location getLocation(){
-		return loc;
 	}
 	
 	/**
@@ -95,5 +94,30 @@ public class TextLocation {
 	 */
 	public boolean hasValue(){
 		return value != null && stringValue.length()>0;
+	}
+
+	@Override
+	public void paint(Graphics2D g, int x, int y) {
+		if (hasValue()) {
+			Font oldFont = g.getFont();
+			Color oldColor = g.getColor();
+			if (font != null) {
+				g.setFont(font);
+			}
+			if (color != null) {
+				g.setColor(color);
+			}
+			g.drawString(getValue().getIterator(), x, y);
+			g.setFont(oldFont);
+			g.setColor(oldColor);
+		} 
+	}
+
+	@Override
+	public Point getElementSize(Graphics2D g) {
+		if (hasValue()) {
+			return new Point(g.getFontMetrics().stringWidth(getText())+(getLenght()), 7);
+		}
+		return new Point(0,0);
 	}
 }

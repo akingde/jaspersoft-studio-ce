@@ -23,8 +23,8 @@ import org.eclipse.ui.actions.RetargetAction;
 import com.jaspersoft.studio.editor.action.xls.XLSAction;
 import com.jaspersoft.studio.editor.action.xls.XLSActionList;
 import com.jaspersoft.studio.editor.action.xls.XLSPathDataAction;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.ChainableDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.ChainableElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
@@ -38,7 +38,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
  * @author Orlandin Marco
  * 
  */
-public class XLSElementDecorator extends TextElementDecorator {
+public class XLSElementDecorator extends ChainableElementDecorator {
 
 	/**
 	 * The XSL contributor for the text decoration
@@ -53,7 +53,7 @@ public class XLSElementDecorator extends TextElementDecorator {
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
-		TextDecorator dec = getDecorator(fig);
+		ChainableDecorator dec = getDecorator(fig);
 		dec.removeDecorator(decorator);
 		if (editPart.getjConfig().getPropertyBooleanDef(ShowXLSTagsAction.ID, false))
 			dec.addDecorator(decorator);

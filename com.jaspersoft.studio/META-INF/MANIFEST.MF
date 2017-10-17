@@ -186,6 +186,7 @@ Export-Package: com.jaspersoft.studio;
    com.jaspersoft.studio.model,
    org.eclipse.gef",
  com.jaspersoft.studio.editor.gef.decorator,
+ com.jaspersoft.studio.editor.gef.decorator.chainable,
  com.jaspersoft.studio.editor.gef.decorator.pdf,
  com.jaspersoft.studio.editor.gef.decorator.text,
  com.jaspersoft.studio.editor.gef.figures;

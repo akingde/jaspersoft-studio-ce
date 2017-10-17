@@ -32,15 +32,15 @@ import com.jaspersoft.studio.editor.action.pdf.PdfActionTableDetail;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTableHeader;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTableRow;
 import com.jaspersoft.studio.editor.action.pdf.Position;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.ChainableDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.ChainableElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 
-public class PDF508ElementDecorator extends TextElementDecorator{
+public class PDF508ElementDecorator extends ChainableElementDecorator{
 
 	private PDFDecorator decorator = new PDFDecorator();
 	
@@ -51,7 +51,7 @@ public class PDF508ElementDecorator extends TextElementDecorator{
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
-		TextDecorator textDecorator = getDecorator(fig);
+		ChainableDecorator textDecorator = getDecorator(fig);
 		textDecorator.removeDecorator(decorator);
 		if (editPart.getjConfig().getPropertyBooleanDef(ShowPDFTagsAction.ID, false)) {
 			textDecorator.addDecorator(decorator);

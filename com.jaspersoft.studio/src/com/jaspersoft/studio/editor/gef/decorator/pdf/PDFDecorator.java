@@ -14,18 +14,19 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextDecoratorInterface;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.AbstractPainter;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.IDecoratorInterface;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.AbstractPainter.Location;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation.Location;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
+
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
  * Draw the selected PDF 508 attributes on an element. it also provide an interface to became a text 
@@ -34,7 +35,7 @@ import com.jaspersoft.studio.editor.java2d.J2DUtils;
  * @author Orlandin Marco
  * 
  */
-public class PDFDecorator implements IDecorator, TextDecoratorInterface {
+public class PDFDecorator implements IDecorator, IDecoratorInterface {
 
 	/**
 	 * Left upper corner image
@@ -201,9 +202,9 @@ public class PDFDecorator implements IDecorator, TextDecoratorInterface {
 	}
 
 	@Override
-	public ArrayList<TextLocation> getText(ComponentFigure fig) {
+	public ArrayList<AbstractPainter> getDecoratorPainter(ComponentFigure fig) {
 		JRPropertiesMap mapProperties = fig.getJrElement().getPropertiesMap();
-		ArrayList<TextLocation> result = new ArrayList<TextLocation>();
+		ArrayList<AbstractPainter> result = new ArrayList<AbstractPainter>();
 		String tagValue = "";
 		String startString = "";
 		String fullString = "";
@@ -237,30 +238,20 @@ public class PDFDecorator implements IDecorator, TextDecoratorInterface {
 		fullString = fullString.trim();
 
 		if (startString.length() > 0) {
-			result.add(new TextLocation(Location.TopLeft, startString));
+			result.add(new TextLocation(Location.TopLeft, startString, JSS_TEXT_FONT, JSS_TEXT_COLOR));
 		}
 
 		if (endString.length() > 0) {
-			result.add(new TextLocation(Location.BottomRight, endString));
+			result.add(new TextLocation(Location.BottomRight, endString, JSS_TEXT_FONT, JSS_TEXT_COLOR));
 		}
 
 		if (fullString.length() > 0) {
-			TextLocation as = new TextLocation(Location.TopLeft, fullString);
+			TextLocation as = new TextLocation(Location.TopLeft, fullString, JSS_TEXT_FONT, JSS_TEXT_COLOR);
 			as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 			result.add(as);
 		}
 		
 		return result;
-	}
-
-	@Override
-	public Color getColor() {
-		return JSS_TEXT_COLOR;
-	}
-
-	@Override
-	public Font getFont() {
-		return JSS_TEXT_FONT;
 	}
 
 }

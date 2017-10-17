@@ -10,13 +10,14 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-import net.sf.jasperreports.engine.JRPropertiesMap;
-
 import com.jaspersoft.studio.editor.action.json.JSONPathDataAction;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextDecoratorInterface;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.AbstractPainter;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.IDecoratorInterface;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.AbstractPainter.Location;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation.Location;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 /**
  * Decorator for the JSON action, it also provide an interface to became a text contributor
@@ -24,7 +25,7 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
  * @author Veaceslav Chicu
  * 
  */
-public class JSONDecorator implements TextDecoratorInterface {
+public class JSONDecorator implements IDecoratorInterface {
 
 	/**
 	 * Left upper corner image
@@ -86,9 +87,9 @@ public class JSONDecorator implements TextDecoratorInterface {
 	 * Return an array of text element that will be printed on the element
 	 */
 	@Override
-	public ArrayList<TextLocation> getText(ComponentFigure fig) {
+	public ArrayList<AbstractPainter> getDecoratorPainter(ComponentFigure fig) {
 		JRPropertiesMap mapProperties = fig.getJrElement().getPropertiesMap();
-		ArrayList<TextLocation> result = new ArrayList<TextLocation>();
+		ArrayList<AbstractPainter> result = new ArrayList<AbstractPainter>();
 		boolean hasValue = false;
 		String endString = ""; //$NON-NLS-1$
 		for (int i = 0; i < tags.length; i += 2) {
@@ -102,20 +103,9 @@ public class JSONDecorator implements TextDecoratorInterface {
 		endString = endString.trim();
 
 		if (endString.length() > 0) {
-			result.add(new TextLocation(Location.BottomRight, endString));
+			result.add(new TextLocation(Location.BottomRight, endString, JSS_TEXT_FONT, JSS_TEXT_COLOR));
 		}
 
 		return result;
 	}
-
-	@Override
-	public Color getColor() {
-		return JSS_TEXT_COLOR;
-	}
-
-	@Override
-	public Font getFont() {
-		return JSS_TEXT_FONT;
-	}
-
 }

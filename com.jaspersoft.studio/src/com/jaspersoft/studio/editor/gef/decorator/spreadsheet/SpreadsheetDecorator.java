@@ -4,23 +4,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.spreadsheet;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.font.TextAttribute;
-import java.text.AttributedString;
 import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextDecoratorInterface;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation;
-import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation.Location;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.AbstractPainter;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.IDecoratorInterface;
+import com.jaspersoft.studio.editor.gef.decorator.chainable.AbstractPainter.Location;
+import com.jaspersoft.studio.editor.gef.decorator.image.ImageLocation;
 import com.jaspersoft.studio.editor.gef.figures.AHandleBoundsFigure;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
@@ -38,37 +33,12 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
  * @author Orlandin Marco
  * 
  */
-public class SpreadsheetDecorator implements IDecorator, TextDecoratorInterface {
-
+public class SpreadsheetDecorator implements IDecorator, IDecoratorInterface {
+	
 	/**
-	 * Left upper corner image
+	 * The definition of the image displayed when the element is binded
 	 */
-	private static ImageIcon startImageAwt = null;
-
-	/**
-	 * right lower corner image
-	 */
-	private static ImageIcon endImageAwt = null;
-
-	/**
-	 * Font of the text
-	 */
-	private static Font JSS_TEXT_FONT = new Font("SansSerif", 0, 10);
-
-	/**
-	 * Color of the text
-	 */
-	private static Color JSS_TEXT_COLOR = new Color(195, 47, 193);
-
-	/**
-	 * Constructor, load the images if the weren't loaded before
-	 */
-	public SpreadsheetDecorator() {
-		if (startImageAwt == null || endImageAwt == null) {
-			startImageAwt = new javax.swing.ImageIcon(SpreadsheetDecorator.class.getResource("/icons/resources/corner1.png"));
-			endImageAwt = new javax.swing.ImageIcon(SpreadsheetDecorator.class.getResource("/icons/resources/corner2.png"));
-		}
-	}
+	private ImageLocation bindedImage = new ImageLocation(Location.BottomLeft, "icons/resources/bindedElementsDecorator.png");
 
 	/**
 	 * Print on the element it's selected pdf tags
@@ -90,90 +60,28 @@ public class SpreadsheetDecorator implements IDecorator, TextDecoratorInterface 
 					JRPropertiesMap parentMap = LayoutManager.getPropertyMap(model.getParent());
 					String ssName = SpreadsheetLayout.class.getName();	
 					if (parentMap != null && ssName.equals(parentMap.getProperty(ILayout.KEY))) {
-						drawEnd(g, r); 
-			
-						Font f = g.getFont();
-	
-						Color color = g.getColor();
-	
-						g.setFont(JSS_TEXT_FONT);
-						g.setColor(JSS_TEXT_COLOR);
-						int strWidth = g.getFontMetrics().stringWidth("COL");
-						AttributedString as = new AttributedString("COL");
-						as.addAttribute(TextAttribute.FONT, g.getFont());
-						as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-						g.drawString(as.getIterator(), r.x + r.width - strWidth - 6, r.y + r.height - 6);
-						
-						g.setFont(f);
-						g.setColor(color);
+						bindedImage.paint(g, r.x + 4, r.y + r.height - bindedImage.getElementSize(g).y);
 					}
 				}
 			}
 		}
 	}
 
-	/**
-	 * Set the font of the displayed text
-	 * 
-	 * @param newFont
-	 *          the new font
-	 */
-	public void setTextFont(Font newFont) {
-		JSS_TEXT_FONT = newFont;
-	}
-
-	/**
-	 * Set the color of the displayed text
-	 * 
-	 * @param newColor
-	 *          the new color
-	 */
-	public void setTextColor(Color newColor) {
-		JSS_TEXT_COLOR = newColor;
-	}
-
-	/**
-	 * Draw the image on the right lower corner
-	 * 
-	 * @param gr
-	 *          object used to draw the image
-	 * @param r
-	 *          item where the image will be drawn
-	 */
-	private void drawEnd(Graphics2D gr, Rectangle r) {
-		gr.drawImage(endImageAwt.getImage(), r.x + r.width - endImageAwt.getIconWidth() - 2,
-				r.y + r.height - endImageAwt.getIconHeight() - 2, null);
-	}
-
 	@Override
-	public ArrayList<TextLocation> getText(ComponentFigure fig) {
+	public ArrayList<AbstractPainter> getDecoratorPainter(ComponentFigure fig) {
 		JRPropertiesMap mapProperties = fig.getJrElement().getPropertiesMap();
-		ArrayList<TextLocation> result = new ArrayList<TextLocation>();
+		ArrayList<AbstractPainter> result = new ArrayList<AbstractPainter>();
 
 		if (mapProperties.containsProperty(SpreadsheetLayout.PROPERTY_ID) && fig instanceof AHandleBoundsFigure){
 			MGraphicElement model = ((AHandleBoundsFigure)fig).getModel();
 			JRPropertiesMap parentMap = LayoutManager.getPropertyMap(model.getParent());
 			String ssName = SpreadsheetLayout.class.getName();	
 			if (parentMap != null && ssName.equals(parentMap.getProperty(ILayout.KEY))) {
-				String fullString = "COL";
-				TextLocation as = new TextLocation(Location.BottomRight, fullString);
-				as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-				result.add(as);
+				result.add(bindedImage);
 			}
 		}
 
 		
 		return result;
 	}
-
-	@Override
-	public Color getColor() {
-		return JSS_TEXT_COLOR;
-	}
-
-	@Override
-	public Font getFont() {
-		return JSS_TEXT_FONT;
-	}
-
 }
