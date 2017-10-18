@@ -379,6 +379,12 @@
             id="com.jaspersoft.studio.backward.JRVersionPreferencesPages"
             name="%jrversion">
       </page>
+      <page
+            category="com.jaspersoft.studio.preferences.templates"
+            class="com.jaspersoft.studio.preferences.customadapters.CustomDataAdaptersPreferencePage"
+            id="com.jaspersoft.studio.preferences.customadapters.CustomDataAdaptersPreferencePage"
+            name="%dataAdapterDefinitionLocation">
+      </page>
    </extension>
    <extension
          id=""

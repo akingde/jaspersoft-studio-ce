@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -124,11 +123,10 @@ public class ImpDataAdapter extends AImpObject {
 		List<AMResource> resourses = PublishUtil.getResources(mrunit, monitor, jrConfig);
 		resourses.add(mres);
 		if (true) {
-			IProject prj = ((IFile) jrConfig.get(FileUtils.KEY_FILE)).getProject();
 			FileInputStream is = null;
 			try {
 				is = new FileInputStream(f);
-				final DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(is, prj);
+				final DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(is, (IFile) jrConfig.get(FileUtils.KEY_FILE));
 				if (dad != null) {
 					final DataAdapter da = dad.getDataAdapter();
 					String fname = getFileName(da);

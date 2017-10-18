@@ -7,11 +7,13 @@ package com.jaspersoft.studio.widgets.framework.ui;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
@@ -84,6 +86,12 @@ public class CheckboxItemPropertyDescription extends AbstractExpressionPropertyD
 			super.update(txt, wip);
 			cmp.switchToFirstContainer();
 		} else {
+			//the checkbox has a lot of free space and in some case we need to refresh the background
+			if (cmp.getParent().getBackground() != null) {
+				RGB rgb = cmp.getParent().getBackground().getRGB();
+				cmp.getSecondContainer().setBackground(ResourceManager.getColor(rgb));
+			}
+			
 			Button button = (Button) cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
 			if (v == null && wip.getFallbackValue() != null){

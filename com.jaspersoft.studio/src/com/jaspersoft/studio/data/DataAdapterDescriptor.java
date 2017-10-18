@@ -6,17 +6,18 @@ package com.jaspersoft.studio.data;
 
 import java.io.Serializable;
 
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.util.CastorUtil;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.data.customadapters.JSSCastorUtil;
 import com.jaspersoft.studio.data.ui.DefaultDataAdapterEditor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 /*
  * 
@@ -30,6 +31,16 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor, Serializ
 	 *
 	 */
 	public abstract DataAdapter getDataAdapter();
+	
+	/**
+	 * Get a data adapter using a specific {@link JasperReportsConfiguration} to load it.
+	 * The default implementation, to be backward compatible simple call the default getDataAdapter(),
+	 * but can be overridden by the descriptor of the data adapters that need a specific context to be 
+	 * loaded
+	 */
+	public DataAdapter getDataAdapter(JasperReportsConfiguration jConfig) {
+		return getDataAdapter();
+	}
 
 	/**
 	 * FIXME consider remove
@@ -89,7 +100,8 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor, Serializ
 	 * export this data adapter too. FIXME consider remove
 	 */
 	public final String toXml(JasperReportsContext jrContext) {
-		return CastorUtil.getInstance(jrContext).writeToString(getDataAdapter());
+		JasperReportsConfiguration jConfig = (JasperReportsConfiguration)jrContext;
+		return JSSCastorUtil.getInstance(jConfig).writeToString(getDataAdapter(jConfig));
 	}
 
 	@Override

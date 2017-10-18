@@ -7,10 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
-import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -63,6 +59,10 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextData;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
+
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 
 public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implements INewWizard, SelectionListener {
 	/** The wizard ID */
@@ -207,9 +207,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == step1) {
 			IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(step1.getContainerFullPath());
-
-			IFile file = r.getProject()
-					.getFile(step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName());
+			IFile file = r.getProject().getFile(step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName());
 			getConfig().init(file);
 		}
 		if (page == dataAdapterListPage) {// && event.getTargetPage() == dataAdapterEditorPage) {
@@ -219,15 +217,19 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 
 			java.text.MessageFormat fm = new java.text.MessageFormat(Messages.DataAdapterWizard_newdataadaptername);
 			// 1. instance a new dataAdapter using the factory
-			DataAdapterDescriptor newDataAdapter = factory.createDataAdapter();
-			newDataAdapter.getDataAdapter().setName(fm.format(new Object[] { 1 }));
+			try {
+				DataAdapterDescriptor newDataAdapter = factory.createDataAdapter();
+				newDataAdapter.getDataAdapter(getConfig()).setName(fm.format(new Object[] { 1 }));
 
-			// 2. set in the wizard page the data adapter to edit
-			if (selectedFactory != factory) {
-				dataAdapterEditorPage.setJrContext(getConfig());
-				dataAdapterEditorPage.setDataAdapter(newDataAdapter);
+				// 2. set in the wizard page the data adapter to edit
+				if (selectedFactory != factory) {
+					dataAdapterEditorPage.setJrContext(getConfig());
+					dataAdapterEditorPage.setDataAdapter(newDataAdapter);
 
-				selectedFactory = factory;
+					selectedFactory = factory;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return super.getNextPage(page);

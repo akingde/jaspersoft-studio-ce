@@ -97,7 +97,7 @@ public class DataAdapterLocationResolver {
 			if (!wasAlreadySearched(location)){
 				InputStream datasetStream = getJRDataAdapterStream(location);
 				if (datasetStream != null){
-					loadedAdapter = FileDataAdapterStorage.readDataADapter(datasetStream, report.getProject());
+					loadedAdapter = FileDataAdapterStorage.readDataADapter(datasetStream, report, jConfig);
 					FileUtils.closeStream(datasetStream);
 					//update the date of last modified
 					String absolutePath = getAbsoluteLocation(location);

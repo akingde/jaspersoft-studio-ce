@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.JavaCore;
 import org.exolab.castor.mapping.Mapping;
 import org.xml.sax.InputSource;
 
@@ -39,21 +38,22 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.DefaultDataAdapterDescriptor;
+import com.jaspersoft.studio.data.customadapters.JSSCastorUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.XMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.CastorHelper;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
-import net.sf.jasperreports.util.CastorUtil;
 
 public class FileDataAdapterStorage extends ADataAdapterStorage {
 	
 	private IProject project;
+	
+	private static XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 	
 	private final class ResourceVisitor implements IResourceProxyVisitor {
 		public boolean visit(IResourceProxy proxy) throws CoreException {
@@ -156,7 +156,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 																	FileDataAdapterStorage.super.removeDataAdapter(das);
 																	try {
 																		IFile file = (IFile) res;
-																		das = readDataADapter(file.getContents(), file.getProject());
+																		das = readDataADapter(file.getContents(), file);
 																		das.setName(file.getProjectRelativePath().toOSString());
 																		FileDataAdapterStorage.super.addDataAdapter(das);
 																	} catch (CoreException e) {
@@ -227,7 +227,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 			return;
 		String ext = file.getFileExtension();
 		if (ext.equals("xml")) { //$NON-NLS-1$
-			final DataAdapterDescriptor das = readDataADapter(file.getContents(), file.getProject());
+			final DataAdapterDescriptor das = readDataADapter(file.getContents(), file);
 			if (das != null) {
 				das.setName(file.getProjectRelativePath().toOSString());
 				UIUtils.getDisplay().asyncExec(new Runnable() {
@@ -241,8 +241,6 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 		}
 	}
 
-	private static XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-
 	private static String readXML(InputStream in) {
 		try {
 			XMLStreamReader streamReader = inputFactory.createXMLStreamReader(in);
@@ -255,8 +253,8 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 		}
 		return null;
 	}
-
-	public static DataAdapterDescriptor readDataADapter(InputStream in, IProject project) {
+	
+	public static DataAdapterDescriptor readDataADapter(InputStream in, IFile file, JasperReportsConfiguration jrConfig) {
 		DataAdapterDescriptor dad = null;
 		try {
 			in = new BufferedInputStream(in);
@@ -266,20 +264,18 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 				in.reset();
 				DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(className);
 				if (factory == null) {
+					IProject project = file.getProject();
 					if (project != null) {
 						DefaultDataAdapterDescriptor ddad = new DefaultDataAdapterDescriptor();
-						ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(project), project.getClass()
-								.getClassLoader());
-						Class<?> clazz = cl.loadClass(className);
+						Class<?> clazz = jrConfig.getClassLoader().loadClass(className);
 						if (clazz != null) {
-							InputStream mis = cl.getResourceAsStream(clazz.getName().replace(".", "/") + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							InputStream mis = jrConfig.getClassLoader().getResourceAsStream(clazz.getName().replace(".", "/") + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 							if (mis != null) {
 								try {
-									Mapping mapping = new Mapping(cl);
+									Mapping mapping = new Mapping(jrConfig.getClassLoader());
 									mapping.loadMapping(new InputSource(mis));
 
-									DataAdapter dataAdapter = (DataAdapter) CastorHelper.read(XMLUtils.parseNoValidation(in)
-											.getDocumentElement(), mapping);
+									DataAdapter dataAdapter = (DataAdapter) CastorHelper.read(XMLUtils.parseNoValidation(in).getDocumentElement(), mapping);
 									if (dataAdapter != null) {
 										ddad.setDataAdapter(dataAdapter);
 										dad = ddad;
@@ -299,8 +295,8 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 												Messages.DataAdapterManager_nodataadapterfound + className, null));
 				} else {
 					DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
-					DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
-					dataAdapter = (DataAdapter) CastorUtil.getInstance(JasperReportsConfiguration.getDefaultInstance()).read(in);
+					DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter(jrConfig);
+					dataAdapter = (DataAdapter) JSSCastorUtil.getInstance(jrConfig).read(in);
 					dataAdapterDescriptor.setDataAdapter(dataAdapter);
 					dad = dataAdapterDescriptor;
 				}
@@ -311,6 +307,10 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 			FileUtils.closeStream(in);
 		}
 		return dad;
+	}
+	
+	public static DataAdapterDescriptor readDataADapter(InputStream in, IFile file) {
+		return readDataADapter(in, file, JasperReportsConfiguration.getDefaultJRConfig(file));
 	}
 
 	public IProject getProject() {

@@ -81,7 +81,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 			in = file.getContents(true);
 
-			descriptor = FileDataAdapterStorage.readDataADapter(in, file.getProject());
+			descriptor = FileDataAdapterStorage.readDataADapter(in, file, jrContext);
 			if (descriptor == null)
 				throw new PartInitException("Can't find DataAdapter mapping."); //$NON-NLS-1$
 		} catch (CoreException e) {

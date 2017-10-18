@@ -38,6 +38,7 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.data.customadapters.JSSCastorUtil;
 import com.jaspersoft.studio.jasper.JSSReportConverter;
 import com.jaspersoft.studio.jasper.LazyImageConverter;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -88,6 +89,7 @@ import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
 import net.sf.jasperreports.repo.FileRepositoryService;
 import net.sf.jasperreports.repo.PersistenceServiceFactory;
 import net.sf.jasperreports.repo.RepositoryService;
+import net.sf.jasperreports.util.CastorMapping;
 import net.sf.jasperreports.utils.JRExtensionsUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext implements JasperReportsContext {
@@ -199,6 +201,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			fontList = null;
 			ExpressionUtil.removeAllReportInterpreters(JasperReportsConfiguration.this);
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "classpath", null, arg0));
+			
+			castorBundles = null;
+			//trigger the reload of mappings
+			getExtensions(CastorMapping.class);
 			// try {
 			// DefaultExtensionsRegistry extensionsRegistry = new
 			// DefaultExtensionsRegistry();
@@ -234,6 +240,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	private JavaProjectClassLoader javaclassloader;
 	private List<ComponentsBundle> bundles;
 	private List<FunctionsBundle> functionsBundles;
+	private List<CastorMapping> castorBundles;
 	private MessageProviderFactory messageProviderFactory;
 	private static JasperReportsConfiguration instance;
 	private List<RepositoryService> repositoryServices;
@@ -782,6 +789,22 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		return functionsBundles;
 	}
 
+	/**
+	 * Return the castor extension both by resolving the property of the current
+	 * project and from the commons extension. If it is available instead of request
+	 * the extension from the superclass it search it in the common cache
+	 * 
+	 * @return a not null functions extension
+	 */
+	private List<CastorMapping> getExtensionCastors() {
+		if (castorBundles == null ) {
+			JSSCastorUtil.clearCache(this);
+			Set<CastorMapping> fBundlesSet = new LinkedHashSet<CastorMapping>(JRExtensionsUtils.getReloadedExtensions(CastorMapping.class, "castor.mapping"));
+			castorBundles = (List<CastorMapping>)new ArrayList<CastorMapping>(fBundlesSet);
+		}
+		return castorBundles;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getExtensions(Class<T> extensionType) {
@@ -796,6 +819,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				result = (List<T>) getExtensionFonts();
 			} else if (extensionType == FontSet.class) {
 				result = (List<T>) getExtensionFontSets();
+			} else if (extensionType == CastorMapping.class) {
+				result = (List<T>) getExtensionCastors();
 			} else if (extensionType == ComponentsBundle.class) {
 				result = (List<T>) getExtensionComponents();
 			} else if (extensionType == FunctionsBundle.class) {

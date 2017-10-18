@@ -6,15 +6,6 @@ package com.jaspersoft.studio.data.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
-import net.sf.jasperreports.engine.ParameterContributorContext;
-import net.sf.jasperreports.engine.util.CompositeClassloader;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,6 +27,15 @@ import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jobs.CheckedRunnableWithProgress;
 import com.jaspersoft.studio.wizards.JSSWizard;
+
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
+import net.sf.jasperreports.engine.ParameterContributorContext;
+import net.sf.jasperreports.engine.util.CompositeClassloader;
 
 /**
  * Abstract superclass for data adapter wizards. It maintains a list of shared fields and methods, plus the behavior of
@@ -85,8 +85,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 							String name = fm.format(new Object[] { (i > 1) ? "(" + i + ")" : "" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 							if (storage.isDataAdapterNameValid(name)) {
-
-								newDataAdapter.getDataAdapter().setName(name);
+								newDataAdapter.getDataAdapter(getConfig()).setName(name);
 								break;
 							}
 						}

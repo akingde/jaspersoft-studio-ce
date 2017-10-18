@@ -4,22 +4,33 @@
 package com.jaspersoft.studio.data;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.data.customadapters.ConfigurableDataAdapterFactory;
+import com.jaspersoft.studio.data.customadapters.ui.AdapterWidgetsDescriptor;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
 import com.jaspersoft.studio.data.storage.PreferencesDataAdapterStorage;
+import com.jaspersoft.studio.preferences.customadapters.CustomDataAdaptersPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.widgets.framework.manager.StandardJSONWidgetsDescriptorResolver;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.eclipse.util.Misc;
@@ -35,8 +46,49 @@ import net.sf.jasperreports.util.CastorUtil;
 public class DataAdapterManager {
 
 	private static Map<String, DataAdapterFactory> dataAdapterFactories = new HashMap<String, DataAdapterFactory>();
+	
+	private static Map<String, DataAdapterFactory> customFactories = new HashMap<String, DataAdapterFactory>();
 
 	private static Map<Object, ADataAdapterStorage> storages = new HashMap<Object, ADataAdapterStorage>();
+	
+	static {
+		//Listener used to clear the cache when something about the data adapters definition change in the preferences
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(new IPropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				if (event.getProperty().equals(CustomDataAdaptersPreferencePage.CUSTOMDATAADAPTERS)){
+					customFactories.clear();
+					loadCustomFactories();
+				}
+			}
+		});
+		loadCustomFactories();
+	}
+	
+	/**
+	 * Load the definitions of all the custom configurable data adapters
+	 */
+	protected static void loadCustomFactories() {		
+		String definitions = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(CustomDataAdaptersPreferencePage.CUSTOMDATAADAPTERS);
+		StringTokenizer st = new StringTokenizer(definitions, File.pathSeparator + "\n\r"); //$NON-NLS-1$
+		Set<String> pathsList = new LinkedHashSet<String>();
+		while (st.hasMoreTokens())
+			pathsList.add(st.nextToken());
+		if (!pathsList.isEmpty()) {
+			StandardJSONWidgetsDescriptorResolver resolver = new StandardJSONWidgetsDescriptorResolver(AdapterWidgetsDescriptor.class);
+			for (String definition : pathsList) {
+				File file = new File(definition);
+				if (file.exists()) {
+					AdapterWidgetsDescriptor loadedDecriptor = (AdapterWidgetsDescriptor)resolver.loadDescriptor(JasperReportsConfiguration.getDefaultInstance(), file.getAbsolutePath());
+					if (loadedDecriptor != null) {
+						ConfigurableDataAdapterFactory factory = new ConfigurableDataAdapterFactory(loadedDecriptor);
+						customFactories.put(loadedDecriptor.getAdapterClass(), factory);
+					}
+				}
+			}
+		}
+	}
 
 	/*******************************
 	 ** Data Adapter Factories Part **
@@ -89,6 +141,7 @@ public class DataAdapterManager {
 
 		List<DataAdapterFactory> listOfDataAdapterFactories = new ArrayList<DataAdapterFactory>();
 		listOfDataAdapterFactories.addAll(Arrays.asList(factories));
+		listOfDataAdapterFactories.addAll(customFactories.values());
 
 		return listOfDataAdapterFactories;
 	}
@@ -101,7 +154,9 @@ public class DataAdapterManager {
 	public static DataAdapterFactory findFactoryByDataAdapterClass(String adapterClassName) {
 		if (Misc.isNullOrEmpty(adapterClassName))
 			return null;
-		return dataAdapterFactories.get(adapterClassName);
+		DataAdapterFactory factory = dataAdapterFactories.get(adapterClassName);
+		if (factory != null) return factory;
+		else return customFactories.get(adapterClassName);
 	}
 
 	public static ADataAdapterStorage[] getDataAdapter(IFile file, IProject project, JasperReportsConfiguration jConfig) {
