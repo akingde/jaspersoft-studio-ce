@@ -41,7 +41,7 @@
 		</figure>
         <para>In the next window insert the name of the new data adapter, for example &quot;XMLAdapter&quot;, then hit the button
         &quot;Browse&quot; and select the XML file containing the data, select the option &quot;Use the report Xpath expression
-        when filling the report&quot; to use an expression directlly inside the reprot. The difference from this two options is
+        when filling the report&quot; to use an expression directlly inside the report. The difference from this two options is
         that the first use an expression defined into the report, so every report could use its own expression to retrive the data,
         the second one define an expression into the data adapter, so every report that will use that data adapter will is also its
         expression. When configuring an XML data source is possible to specify in which mode the data source must operate or to use

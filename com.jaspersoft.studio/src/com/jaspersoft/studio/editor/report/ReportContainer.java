@@ -89,7 +89,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 		implements ITabbedPropertySheetPageContributor, IJROBjectEditor, CachedSelectionProvider {
 
 	/**
-	 * Key used to save, retrieve the selection cache from the jasper reprots
+	 * Key used to save, retrieve the selection cache from the jasper reports
 	 * configuration
 	 */
 	public static final String SELECTION_CACHE_KEY = "SELECTION_CACHE_PROVIDER";

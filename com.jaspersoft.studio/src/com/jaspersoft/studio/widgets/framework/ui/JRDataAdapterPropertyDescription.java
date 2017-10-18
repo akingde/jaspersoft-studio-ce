@@ -41,7 +41,7 @@ import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 /**
- * Widget descriptor used to select the path of a JasperReprots data adapter. It provide a combo 
+ * Widget descriptor used to select the path of a JasperReports data adapter. It provide a combo 
  * to select a local data adapter and a button to select a data adapter from a path. It also 
  * allow direct typing of the path
  * 

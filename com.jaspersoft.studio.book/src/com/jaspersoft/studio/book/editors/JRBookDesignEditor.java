@@ -66,7 +66,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class JRBookDesignEditor extends AGraphicEditor {
 
 	/**
-	 * Listener to model change, used to set the dirty flag on the reprot when
+	 * Listener to model change, used to set the dirty flag on the report when
 	 * something changes
 	 */
 	private PropertyChangeListener modelChangesListener;
