@@ -65,7 +65,6 @@ import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.java2d.figure.JSSScrollableThumbnail;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
-import com.jaspersoft.studio.editor.outline.part.IOpenableTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.messages.Messages;
@@ -367,18 +366,18 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 						TreeItem[] ti = t.getSelection();
 						if (ti != null && ti.length > 0) {
 							Object obj = ti[0].getData();
-							if (obj instanceof IOpenableTreeEditPart) {
+							if (obj instanceof EditPart) {
 								//if the part is openable and understand the open request then perform the request
-								IOpenableTreeEditPart part = (IOpenableTreeEditPart) obj;
+								EditPart part = (EditPart) obj;
 								SelectionRequest request = new SelectionRequest();
 								request.setType(RequestConstants.REQ_OPEN);
 								if (part.understandsRequest(request)) {
 									part.performRequest(request);
+									return;
 								}
-							} else {
-								if(ti.length==1 && ti[0].getItemCount()>0){
-									 ti[0].setExpanded(!ti[0].getExpanded());
-								}
+							}
+							if(ti.length==1 && ti[0].getItemCount()>0){
+								 ti[0].setExpanded(!ti[0].getExpanded());
 							}
 						}
 					}

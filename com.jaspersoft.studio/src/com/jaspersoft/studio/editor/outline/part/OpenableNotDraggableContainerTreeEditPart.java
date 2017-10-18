@@ -15,7 +15,7 @@ import com.jaspersoft.studio.model.ANode;
 /**
  * Tree edit part used for elements that can be opened into a subeditor 
  */
-public class OpenableNotDraggableContainerTreeEditPart extends NotDragableContainerTreeEditPart implements IOpenableTreeEditPart {
+public class OpenableNotDraggableContainerTreeEditPart extends NotDragableContainerTreeEditPart {
 
 	@Override
 	public void performRequest(Request req) {

@@ -179,7 +179,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					editPart = createTextFieldTreeEditPart();
 				} else if (model instanceof MSubreport) {
 					editPart = new OpenableContainerTreeEditPart();
-				} else if (model instanceof MGraphicElement) {
+				} else if (model instanceof MImage) {
+					editPart = new OpenableContainerTreeEditPart();
+				}else if (model instanceof MGraphicElement) {
 					editPart = new ContainerTreeEditPart();
 				} else if (model instanceof MField || model instanceof MParameter || model instanceof MVariable) {
 					editPart = new DatasetElementsTreeEditPart();
