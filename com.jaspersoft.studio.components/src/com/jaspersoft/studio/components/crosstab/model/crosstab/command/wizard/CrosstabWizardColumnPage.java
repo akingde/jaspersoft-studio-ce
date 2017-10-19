@@ -5,7 +5,6 @@
 package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -176,10 +175,7 @@ public class CrosstabWizardColumnPage extends StaticWizardFieldsPage {
 				if (property.equals(F_TOTALPOSITION)) // $NON-NLS-1$
 					return true;
 				if (property.equals(F_CALCULATION)) { // $NON-NLS-1$
-					Wrapper w = (Wrapper) element;
-					JRDesignCrosstabColumnGroup rg = (JRDesignCrosstabColumnGroup) w.getValue();
-					if (Date.class.isAssignableFrom(rg.getBucket().getValueClass()))
-						return true;
+					return true;
 				}
 				return false;
 			}
