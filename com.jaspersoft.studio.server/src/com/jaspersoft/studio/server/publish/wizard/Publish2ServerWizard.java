@@ -11,7 +11,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.gef.EditPart;
@@ -47,16 +46,14 @@ import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionPage;
 import com.jaspersoft.studio.server.publish.wizard.page.FileSelectionPage;
 import com.jaspersoft.studio.server.publish.wizard.page.RUnitLocationPage;
 import com.jaspersoft.studio.server.publish.wizard.page.ResourcesPage;
+import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	private JasperDesign jDesign;
@@ -131,11 +128,8 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 					jrConfig = JasperReportsConfiguration.getDefaultJRConfig(file);
 				else
 					jrConfig.init(file);
-				String fext = file.getFileExtension();
-				if (jDesign == null && fext.equalsIgnoreCase(FileExtension.JRXML)
-						|| fext.equalsIgnoreCase(FileExtension.JASPER)) {
-					jDesign = new JRXmlLoader(jrConfig, JRXmlDigesterFactory.createDigester(jrConfig))
-							.loadXML(file.getContents());
+				if (jDesign == null) {
+					jDesign = JRXMLUtils.getJasperDesign(jrConfig, file.getContents(), null);
 					jrConfig.setJasperDesign(jDesign);
 				}
 			}

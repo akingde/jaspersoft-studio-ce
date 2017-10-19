@@ -33,7 +33,6 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.PersistentLocationWizardDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileExtension;
 
 public class PublishHandler extends AbstractHandler {
 	private static IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -63,44 +62,44 @@ public class PublishHandler extends AbstractHandler {
 			IEditorInput ei = com.jaspersoft.studio.utils.compatibility.HandlerUtil.getActiveEditorInput(event);
 			if (ei instanceof IFileEditorInput) {
 				file = ((IFileEditorInput) ei).getFile();
-				String ext = file.getFileExtension();
-				if (ext.equals(FileExtension.JRXML) || ext.equals(FileExtension.JASPER)) {
-					IEditorPart ep = HandlerUtil.getActiveEditor(event);
-					if (ep instanceof AbstractJRXMLEditor)
-						try {
-							jContext = ((AbstractJRXMLEditor) ep).getJrContext(file);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-				}
+				// String ext = file.getFileExtension();
+				// if (ext.equals(FileExtension.JRXML) || ext.equals(FileExtension.JASPER)) {
+				IEditorPart ep = HandlerUtil.getActiveEditor(event);
+				if (ep instanceof AbstractJRXMLEditor)
+					try {
+						jContext = ((AbstractJRXMLEditor) ep).getJrContext(file);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				// }
 			}
 		}
 		if (file == null)
 			UIUtils.showInformation(Messages.PublishHandler_0);
-		String ext = file.getFileExtension();
-		if (ext.equals(FileExtension.JRXML) || ext.equals(FileExtension.JASPER)) {
-			if (jContext == null) {
-				jContext = JasperReportsConfiguration.getDefaultJRConfig(file);
-				disposeJrContext = true;
-				try {
-					jContext.setJasperDesign(JRXMLUtils.getJasperDesign(jContext, file.getContents(), ext));
-				} catch (Exception e) {
-					e.printStackTrace();
-					jContext.dispose();
-					jContext = null;
-				}
-			}
-			if (jContext != null) {
-				JrxmlPublishAction publishAction = new JrxmlPublishAction(1, null);
-				publishAction.setJrConfig(jContext);
-				publishAction.run();
-				//Check if the context was created internally and must be disposed
-				if (disposeJrContext){
-					jContext.dispose();
-				}
-				return null;
+		// String ext = file.getFileExtension();
+		// if (ext.equals(FileExtension.JRXML) || ext.equals(FileExtension.JASPER)) {
+		if (jContext == null) {
+			jContext = JasperReportsConfiguration.getDefaultJRConfig(file);
+			disposeJrContext = true;
+			try {
+				jContext.setJasperDesign(JRXMLUtils.getJasperDesign(jContext, file.getContents(), null));
+			} catch (Exception e) {
+				e.printStackTrace();
+				jContext.dispose();
+				jContext = null;
 			}
 		}
+		if (jContext != null) {
+			JrxmlPublishAction publishAction = new JrxmlPublishAction(1, null);
+			publishAction.setJrConfig(jContext);
+			publishAction.run();
+			// Check if the context was created internally and must be disposed
+			if (disposeJrContext) {
+				jContext.dispose();
+			}
+			return null;
+		}
+		// }
 		PublishFile2ServerWizard wizard = new PublishFile2ServerWizard(file, 1);
 		WizardDialog dialog = new PersistentLocationWizardDialog(UIUtils.getShell(), wizard);
 		if (dialog.open() == Dialog.OK) {
