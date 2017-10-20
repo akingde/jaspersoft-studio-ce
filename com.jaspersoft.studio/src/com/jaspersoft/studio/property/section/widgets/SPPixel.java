@@ -365,7 +365,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 */
 	private void CreateDefaultUnits() {
 		unitsMap = new HashMap<String, MeasureUnit>();
-		units = new MeasureUnit[5];
+		units = new MeasureUnit[4];
 		// Adding the measure unit for pixel
 		units[0] = new MeasureUnit(Unit.PX, "px", 0); //$NON-NLS-1$
 		unitsMap.put(Unit.PX, units[0]);
@@ -378,11 +378,8 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		// Adding the measure unit for millimeters
 		units[3] = new MeasureUnit(Unit.MM, "mm", 2); //$NON-NLS-1$
 		unitsMap.put(Unit.MM, units[3]);
-		// Adding the measure unit for meters
-		units[4] = new MeasureUnit(Unit.METER, "m", 5); //$NON-NLS-1$
-		unitsMap.put(Unit.METER, units[4]);
 
-		autocompleteValues = new String[] { "centimeters", "millimeters", "inches", "meters", "pixels" };// Unit.getAliasList(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		autocompleteValues = new String[] { "centimeters", "millimeters", "inches", "pixels" };// Unit.getAliasList(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	/**
@@ -414,7 +411,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 *            number of decimal digits
 	 * @return cut double, represented as string
 	 */
-	private static String truncateDouble(double number, int numDigits ) {
+	private static String truncateDouble(double number, int numDigits) {
 		return String.format("%." + numDigits + "f",
 				new BigDecimal(number).setScale(numDigits, RoundingMode.CEILING).doubleValue());
 
