@@ -2236,10 +2236,4 @@
              widgetName="jrDataAdapter">
        </definition>
     </extension>
-    <extension
-          point="com.jaspersoft.studio.postDelete">
-       <postdelete
-             class="com.jaspersoft.studio.editor.layout.spreadsheet.command.SpreadsheetPostDelete">
-       </postdelete>
-    </extension>
 </plugin>

@@ -7,10 +7,11 @@ package com.jaspersoft.studio.editor.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
@@ -18,6 +19,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 
 /**
@@ -30,6 +33,18 @@ import com.jaspersoft.studio.model.ANode;
  *
  */
 public class CustomDeleteAction extends DeleteAction{
+	
+	/**
+	 * Key that is used in the extended data map of the request to abort an operation while generating 
+	 * commands
+	 */
+	public static final String CANCEL_OPERATION_KEY = "cancelOperation";
+
+	/**
+	 * Key that is used in the extended data map of the request to mark that is generating the commands 
+	 * for a calculateEnabled operation
+	 */
+	public static final String IS_CALCULATING_ENABLE = "calculatingEnable";
 
 	public CustomDeleteAction(IWorkbenchPart part) {
 		super(part);
@@ -109,32 +124,85 @@ public class CustomDeleteAction extends DeleteAction{
 		return selectedParts;
 	}
 	
-	@Override
-	public void run() {
-		CompoundCommand deleteCommandds = (CompoundCommand)createDeleteCommand(getOrderedSelectedObjects());
-		JSSCompoundCommand compCommand = new JSSCompoundCommand(deleteCommandds, getModel());
-		StringBuilder messages = new StringBuilder();
-		messages.append(Messages.CustomDeleteAction_messageListStart+"\n"); //$NON-NLS-1$
-		boolean messageFound = false;
-		for(Object oCommand : compCommand.getCommands()){
-			if (oCommand instanceof MessageProviderCommand){
-				MessageProviderCommand messageCommand = (MessageProviderCommand)oCommand;
-				CommandMessage message = messageCommand.getMessage();
-				if (message != null) {
-					messages.append(message.getMessage()+"\n"); //$NON-NLS-1$
-					messageFound = true;
-				}
+	/**
+	 * Create a command to remove the selected objects. It sets the key of the request to abort
+	 * the operation and for the calculating enabled
+	 * 
+	 * @param objects
+	 *            The objects to be deleted.
+	 * @param isCalculatingEnabled true if the delete commands are generated for the calculateEnabled
+	 * 			false if they are generated for the execution
+	 * @return The command to remove the selected objects.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public CompoundCommand createDeleteCommand(List objects, boolean isCalculatingEnabled) {
+		if (objects.isEmpty())
+			return null;
+		if (!(objects.get(0) instanceof EditPart))
+			return null;
+
+		GroupRequest deleteReq = new GroupRequest(RequestConstants.REQ_DELETE);
+		deleteReq.setEditParts(objects);
+		
+		deleteReq.getExtendedData().put(CANCEL_OPERATION_KEY, false);
+		deleteReq.getExtendedData().put(IS_CALCULATING_ENABLE, isCalculatingEnabled);
+		
+		CompoundCommand compoundCmd = new CompoundCommand();
+		for (int i = 0; i < objects.size(); i++) {
+			EditPart object = (EditPart) objects.get(i);
+			Command cmd = object.getCommand(deleteReq);
+			if (Boolean.TRUE.equals(deleteReq.getExtendedData().get(CANCEL_OPERATION_KEY))) {
+				return null;
+			} else if (cmd != null) {
+				compoundCmd.add(cmd);
 			}
 		}
-		messages.append(Messages.CustomDeleteAction_messageListEnd);
-		if (messageFound){
-			if (UIUtils.showConfirmation(Messages.ADatasetObjectDeleteCommand_confirmationtitle,messages.toString())){
+		return compoundCmd;
+	}
+	
+	
+	/**
+	 * Returns <code>true</code> if the selected objects can be deleted. Returns
+	 * <code>false</code> if there are no objects selected or the selected
+	 * objects are not {@link EditPart}s.
+	 * 
+	 * @return <code>true</code> if the command should be enabled
+	 */
+	protected boolean calculateEnabled() {
+		Command cmd = createDeleteCommand(getSelectedObjects(), true);
+		if (cmd == null)
+			return false;
+		return cmd.canExecute();
+	}
+	
+	@Override
+	public void run() {
+		CompoundCommand deleteCommandds = createDeleteCommand(getOrderedSelectedObjects(), false);
+		if (deleteCommandds != null) {
+			JSSCompoundCommand compCommand = new JSSCompoundCommand(deleteCommandds, getModel());
+			StringBuilder messages = new StringBuilder();
+			messages.append(Messages.CustomDeleteAction_messageListStart+"\n"); //$NON-NLS-1$
+			boolean messageFound = false;
+			for(Object oCommand : compCommand.getCommands()){
+				if (oCommand instanceof MessageProviderCommand){
+					MessageProviderCommand messageCommand = (MessageProviderCommand)oCommand;
+					CommandMessage message = messageCommand.getMessage();
+					if (message != null) {
+						messages.append(message.getMessage()+"\n"); //$NON-NLS-1$
+						messageFound = true;
+					}
+				}
+			}
+			messages.append(Messages.CustomDeleteAction_messageListEnd);
+			if (messageFound){
+				if (UIUtils.showConfirmation(Messages.ADatasetObjectDeleteCommand_confirmationtitle,messages.toString())){
+					execute(compCommand);
+					setSelection(StructuredSelection.EMPTY);
+				}
+			} else {
 				execute(compCommand);
 				setSelection(StructuredSelection.EMPTY);
 			}
-		} else {
-			execute(compCommand);
-			setSelection(StructuredSelection.EMPTY);
 		}
 	}
 	
