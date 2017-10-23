@@ -137,14 +137,15 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 				menu = new Menu(parent);
 				itemCache = new MenuItem(menu, SWT.CHECK);
 				itemCache.setText(Messages.PreviewTopToolBarManager_1);
-				UIUtil.safeApplyMenuItemTooltip(itemCache, 
+				UIUtil.safeApplyMenuItemTooltip(itemCache,
 						"Enable/disable caching data into memory. Cache will be reset if there are changes in the datasets.");
 
 				new MenuItem(menu, SWT.SEPARATOR);
 
 				itemSave = new MenuItem(menu, SWT.CHECK);
 				itemSave.setText(Messages.PreviewTopToolBarManager_2);
-				UIUtil.safeApplyMenuItemTooltip(itemSave, "Setup file path where snapshot will be saved, when created.");
+				UIUtil.safeApplyMenuItemTooltip(itemSave,
+						"Setup file path where snapshot will be saved, when created.");
 				itemSave.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
@@ -230,13 +231,15 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 
 				itemFilter = new MenuItem(menu, SWT.CHECK);
 				itemFilter.setText("Filter Data Adapters By Report Language");
-				UIUtil.safeApplyMenuItemTooltip(itemFilter, "If true, show only data adapters meaningful for the main dataset query language.");
+				UIUtil.safeApplyMenuItemTooltip(itemFilter,
+						"If true, show only data adapters meaningful for the main dataset query language.");
 				itemFilter.addSelectionListener(new SelectionAdapter() {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						try {
 							JasperReportsConfiguration jrContext = container.getJrContext();
+							jrContext.getPrefStore().setDefault(DesignerPreferencePage.P_DAFILTER, "");
 							jrContext.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER,
 									itemFilter.getSelection() ? "da" : "all");
 							jrContext.getPrefStore().save();

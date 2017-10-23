@@ -626,6 +626,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 					public void widgetSelected(SelectionEvent e) {
 						try {
 							if (itemFilterAll.getSelection()) {
+								jConfig.getPrefStore().setDefault(DesignerPreferencePage.P_DAFILTER, "");
 								jConfig.getPrefStore().setValue(DesignerPreferencePage.P_DAFILTER, "all"); //$NON-NLS-1$
 								jConfig.getPrefStore().save();
 								refreshLangCombo(dscombo.getSelected());
@@ -696,7 +697,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				});
 
 			}
-			String daFilter = jConfig.getPrefStore().getString(DesignerPreferencePage.P_DAFILTER);
+			String daFilter = Misc.nvl(jConfig.getPrefStore().getString(DesignerPreferencePage.P_DAFILTER), "all");
 			itemFilterAll.setSelection(daFilter != null && daFilter.equals("all")); //$NON-NLS-1$
 			itemFilterDA.setSelection(daFilter != null && daFilter.equals("lang")); //$NON-NLS-1$
 			itemFilterLang.setSelection(daFilter != null && daFilter.equals("da")); //$NON-NLS-1$
