@@ -4,22 +4,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
-import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
-import net.sf.jasperreports.engine.analytics.dataset.BucketOrder;
-import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -34,8 +28,16 @@ import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.combo.EditableComboBoxCellEditor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.wizards.JSSWizard;
+
+import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
+import net.sf.jasperreports.engine.analytics.dataset.BucketOrder;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 	private static final String F_CALCULATION = "CALCULATION";
@@ -78,7 +80,7 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 			case 2:
 				return m.getTotalPositionValue().getName();
 			case 3:
-				return w.getCalculation().getName();
+				return w.getCalculation() != null ? w.getCalculation().getName() : "";
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -121,12 +123,7 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 				if (property.equals(F_TOTALPOSITION)) //$NON-NLS-1$
 					return true;
 				if (property.equals(F_CALCULATION)) { //$NON-NLS-1$
-					Wrapper w = (Wrapper) element;
-					JRDesignCrosstabRowGroup rg = (JRDesignCrosstabRowGroup) w
-							.getValue();
-					if (Date.class.isAssignableFrom(rg.getBucket()
-							.getValueClass()))
-						return true;
+					return AgregationFunctionEnum.isEditable(((Wrapper)element).getDatasetItemClassName());
 				}
 				return false;
 			}
@@ -146,7 +143,7 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 					return EnumHelper.getEnumIndexByTranslatedName(crosstabTotalPositionEnumNames, prop.getTotalPositionValue());
 				}
 				if (F_CALCULATION.equals(property)) //$NON-NLS-1$
-					return w.getCalculation().getValue();
+					return w.getCalculation() != null ? w.getCalculation() : "";
 
 				return ""; //$NON-NLS-1$
 			}
@@ -156,31 +153,54 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 				setErrorMessage(null);
 				setMessage(getDescription());
 				Wrapper w = (Wrapper) tableItem.getData();
-				JRDesignCrosstabRowGroup data = (JRDesignCrosstabRowGroup) w
-						.getValue();
-				JRDesignCrosstabBucket bucket = (JRDesignCrosstabBucket) data
-						.getBucket();
+				JRDesignCrosstabRowGroup data = (JRDesignCrosstabRowGroup) w.getValue();
+				JRDesignCrosstabBucket bucket = (JRDesignCrosstabBucket) data.getBucket();
 				if (F_ORDER.equals(property)) { //$NON-NLS-1$
 					bucket.setOrder(EnumHelper.getEnumByObjectValue(BucketOrder.values(),value));
 				} else if (F_TOTALPOSITION.equals(property)) { //$NON-NLS-1$
 					data.setTotalPosition(EnumHelper.getEnumByObjectValue(CrosstabTotalPositionEnum.values(), value));
 				} else if (F_CALCULATION.equals(property)) { //$NON-NLS-1$
-					AgregationFunctionEnum function = AgregationFunctionEnum
-							.getByValue((Integer) value);
+					AgregationFunctionEnum function = (AgregationFunctionEnum)value;
 					w.setCalculation(function);
-					CrosstabWizard.setBucketExpression(bucket,
-							w.getOldExpText(), function);
+					CrosstabWizard.setBucketExpression(bucket, w.getOldExpText(), function);
 				}
 				viewer.update(element, new String[] { property });
 				viewer.refresh();
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] {
-				new TextCellEditor(parent),
-				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL), SWT.READ_ONLY),
-				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL), SWT.READ_ONLY),
-				new ComboBoxCellEditor(parent, AgregationFunctionEnum.getStringValues(), SWT.READ_ONLY) });
+		//create the cell editors
+		TextCellEditor nameEditor = new TextCellEditor(parent);
+		ComboBoxCellEditor sortEditor = new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL), SWT.READ_ONLY);
+		ComboBoxCellEditor totalEditor = new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL), SWT.READ_ONLY);
+		EditableComboBoxCellEditor aggregationEditor = new EditableComboBoxCellEditor(parent, new String[]{}, SWT.READ_ONLY) {
+			
+			protected void doSetValue(Object value) {
+				StructuredSelection sel = (StructuredSelection)rightTView.getSelection();
+				if (!sel.isEmpty()) {
+					Wrapper selected = (Wrapper)sel.getFirstElement();
+					String className = selected.getDatasetItemClassName();
+					AgregationFunctionEnum[] values = AgregationFunctionEnum.getStringValues(className);
+					String[] names = AgregationFunctionEnum.getValuesNames(values);
+					comboBox.setItems(names);
+					comboBox.setData(values);
+				}
+				AgregationFunctionEnum[] values = (AgregationFunctionEnum[])comboBox.getData();
+				int index = Arrays.asList(values).indexOf(value);
+				if (index >= 0 && index < comboBox.getItemCount()) super.doSetValue(index);
+				else doSetValue(0);
+			};
+			
+			@Override
+			protected Object doGetValue() {
+				int index = (Integer)super.doGetValue();
+				AgregationFunctionEnum[] values = (AgregationFunctionEnum[]) comboBox.getData();
+				return values[index];
+			}
+			
+		};
+		
+		viewer.setCellEditors(new CellEditor[] {nameEditor, sortEditor, totalEditor, aggregationEditor});
 		viewer.setColumnProperties(new String[] { F_NAME, F_ORDER,
 				F_TOTALPOSITION, F_CALCULATION });
 	}

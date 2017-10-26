@@ -455,18 +455,45 @@ public class CrosstabWizard extends JSSWizard {
 					+ ")");
 			bucket.setValueClassName(String.class.getName());
 		} else if (function == AgregationFunctionEnum.MONTH) {
-			exp.setText("new SimpleDateFormat(\"yyyy-MM\").format("
+			exp.setText("new SimpleDateFormat(\"MM\").format("
 					+ oldExpText + ")");
 			bucket.setValueClassName(String.class.getName());
 		} else if (function == AgregationFunctionEnum.WEEK) {
-			exp.setText("new SimpleDateFormat(\"yyyy-ww\").format("
+			exp.setText("new SimpleDateFormat(\"ww\").format("
 					+ oldExpText + ")");
 			bucket.setValueClassName(String.class.getName());
 		} else if (function == AgregationFunctionEnum.DAY) {
-			exp.setText("new SimpleDateFormat(\"yyyy-MM-dd\").format("
+			exp.setText("new SimpleDateFormat(\"dd\").format("
 					+ oldExpText + ")");
 			bucket.setValueClassName(String.class.getName());
+		} else if (function == AgregationFunctionEnum.DAY_OF_THE_WEEK) {
+			exp.setText("new SimpleDateFormat(\"u\").format("
+					+ oldExpText + ")");
+			bucket.setValueClassName(String.class.getName());
+		} else if (function == AgregationFunctionEnum.HOUR) {
+			exp.setText("new SimpleDateFormat(\"HH\").format("
+					+ oldExpText + ")");
+			bucket.setValueClassName(String.class.getName());
+		} else if (function == AgregationFunctionEnum.MINUTE) {
+			exp.setText("new SimpleDateFormat(\"mm\").format("
+					+ oldExpText + ")");
+			bucket.setValueClassName(String.class.getName());
+		} else if (function == AgregationFunctionEnum.SECOND) {
+			exp.setText("new SimpleDateFormat(\"ss\").format("
+					+ oldExpText + ")");
+			bucket.setValueClassName(String.class.getName());
+		} else if (function == AgregationFunctionEnum.MILLISECOND) {
+			exp.setText("new SimpleDateFormat(\"SSSS\").format("
+					+ oldExpText + ")");
+			bucket.setValueClassName(String.class.getName());
+		} else if (function == AgregationFunctionEnum.QUARTER) {
+			exp.setText("(Integer.parseInt(new SimpleDateFormat(\"MM\").format(" + oldExpText + "))/4)+1");
+			bucket.setValueClassName(String.class.getName());
+		} else if (function == AgregationFunctionEnum.SEMESTER) {
+			exp.setText("(Integer.parseInt(new SimpleDateFormat(\"MM\").format(" + oldExpText + "))/6)+1");
+			bucket.setValueClassName(String.class.getName());
 		}
+
 		bucket.setExpression(exp);
 	}
 
