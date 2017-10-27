@@ -28,6 +28,8 @@ public class NameDialog extends ATitledDialog {
 
 	private Text tname;
 	private String name;
+	private int style = SWT.BORDER;
+	private boolean emptyAllowed = false;
 
 	public NameDialog(Shell parentShell, String dialogName) {
 		super(parentShell);
@@ -46,6 +48,20 @@ public class NameDialog extends ATitledDialog {
 		this.name = name;
 	}
 
+	/**
+	 * Build the dialog with a title and an initial value for the text field
+	 * 
+	 * @param parentShell
+	 * @param dialogName
+	 * @param textInitialValue
+	 */
+	public NameDialog(Shell parentShell, String dialogName, String name, int style, boolean emptyAllowed) {
+		this(parentShell, dialogName);
+		this.name = name;
+		this.style = style;
+		this.emptyAllowed = emptyAllowed;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -62,7 +78,7 @@ public class NameDialog extends ATitledDialog {
 		container.setLayout(new GridLayout(1, true));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		tname = new Text(container, SWT.BORDER);
+		tname = new Text(container, style);
 		tname.setText(Misc.nvl(name));
 		GridData textData = new GridData(GridData.FILL_HORIZONTAL);
 		textData.widthHint = 200;
@@ -86,7 +102,7 @@ public class NameDialog extends ATitledDialog {
 	}
 
 	private void fillValue(String newValue) {
-		if (newValue.trim().isEmpty()) {
+		if (!emptyAllowed && newValue.trim().isEmpty()) {
 			setError("Fill a non empty value");
 			canFinish(NameDialog.this, false);
 		} else {

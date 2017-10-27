@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.Socket;
 import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.text.ParseException;
@@ -46,6 +47,8 @@ import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
+import org.apache.http.conn.ssl.PrivateKeyDetails;
+import org.apache.http.conn.ssl.PrivateKeyStrategy;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContextBuilder;
 import org.apache.http.conn.ssl.SSLContexts;
@@ -112,6 +115,7 @@ import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.utils.HttpUtils;
+import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
@@ -150,6 +154,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		final KeyStore trustStore = CertChainValidator.getDefaultTrustStore();
 
 		builder.loadTrustMaterial(trustStore, new JSSTrustStrategy(trustStore));
+		builder.loadKeyMaterial(CertChainValidator.getDefaultKeyStore(), CertChainValidator.kpass);
 		SSLContext sslContext = builder.build();
 
 		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,

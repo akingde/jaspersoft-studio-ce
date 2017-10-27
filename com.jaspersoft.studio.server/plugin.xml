@@ -238,7 +238,13 @@
            category="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
            class="com.jaspersoft.studio.server.preferences.TrustStorePreferencePage"
            id="com.jaspersoft.studio.server.preferences.TrustStorePreferencePage"
-           name="Trust Store">
+           name="%truststore">
+     </page>
+     <page
+           category="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
+           class="com.jaspersoft.studio.server.preferences.KeyStorePreferencePage"
+           id="com.jaspersoft.studio.server.preferences.KeyStorePreferencePage"
+           name="%keystore">
      </page>
   </extension>
   <extension
