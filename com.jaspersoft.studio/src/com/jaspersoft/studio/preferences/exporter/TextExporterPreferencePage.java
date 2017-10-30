@@ -4,12 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
-import java.lang.reflect.Field;
-
-import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -102,26 +97,6 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(TextReportConfiguration.PROPERTY_PAGE_WIDTH), "0")); //$NON-NLS-1$
 
 		store.setDefault(TextExporterConfiguration.PROPERTY_LINE_SEPARATOR, "\n"); //$NON-NLS-1$
-	}
-
-	@Override
-	public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-		super.propertyChange(event);
-		try {
-			Field f = FieldEditorPreferencePage.class.getDeclaredField("invalidFieldEditor");
-			f.setAccessible(true);
-			FieldEditor feditor = (FieldEditor) f.get(this);
-			if (feditor instanceof StringFieldEditor)
-				setErrorMessage(((StringFieldEditor) feditor).getErrorMessage());
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/*
