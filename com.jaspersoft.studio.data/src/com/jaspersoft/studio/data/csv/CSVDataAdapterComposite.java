@@ -857,8 +857,8 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	}
 
 	/**
-	 * This set selection to the table's item represented by the given index.
-	 * Any index out of table's range will select the last item.
+	 * This set selection to the table's item represented by the given index. Any
+	 * index out of table's range will select the last item.
 	 * 
 	 * @param index
 	 */
@@ -877,8 +877,8 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	}
 
 	/**
-	 * Because the radio button "Other" is not in the same component as the
-	 * other radio buttons, we need to manually make the switch.
+	 * Because the radio button "Other" is not in the same component as the other
+	 * radio buttons, we need to manually make the switch.
 	 * 
 	 * @param Button
 	 */
@@ -996,11 +996,12 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		btnDelete.setEnabled(true);
 		btnCheckSkipFirstLine.setSelection(true);
 		pchangesuport.firePropertyChange("dirty", false, true);
+		ds.close();
 	}
 
 	/**
-	 * Check the validity of the column name. It is valid only if it is not
-	 * null, not empty and not already existed.
+	 * Check the validity of the column name. It is valid only if it is not null,
+	 * not empty and not already existed.
 	 * 
 	 * @param string
 	 * @return true or false

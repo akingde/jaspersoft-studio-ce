@@ -201,9 +201,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			fontList = null;
 			ExpressionUtil.removeAllReportInterpreters(JasperReportsConfiguration.this);
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "classpath", null, arg0));
-			
+
 			castorBundles = null;
-			//trigger the reload of mappings
+			// trigger the reload of mappings
 			getExtensions(CastorMapping.class);
 			// try {
 			// DefaultExtensionsRegistry extensionsRegistry = new
@@ -797,14 +797,15 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * @return a not null functions extension
 	 */
 	private List<CastorMapping> getExtensionCastors() {
-		if (castorBundles == null ) {
+		if (castorBundles == null) {
 			JSSCastorUtil.clearCache(this);
-			Set<CastorMapping> fBundlesSet = new LinkedHashSet<CastorMapping>(JRExtensionsUtils.getReloadedExtensions(CastorMapping.class, "castor.mapping"));
-			castorBundles = (List<CastorMapping>)new ArrayList<CastorMapping>(fBundlesSet);
+			Set<CastorMapping> fBundlesSet = new LinkedHashSet<CastorMapping>(
+					JRExtensionsUtils.getReloadedExtensions(CastorMapping.class, "castor.mapping"));
+			castorBundles = (List<CastorMapping>) new ArrayList<CastorMapping>(fBundlesSet);
 		}
 		return castorBundles;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getExtensions(Class<T> extensionType) {
@@ -860,6 +861,15 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			}
 		} finally {
 			Thread.currentThread().setContextClassLoader(oldCL);
+		}
+		if (result != null && result.indexOf(null) >= 0) {
+			// this theoretically should not happen, but practically, we have it sometimes
+			try {
+				result.removeAll(Collections.singleton(null));
+			} catch (UnsupportedOperationException e) {
+				result = new ArrayList<T>(result);
+				result.removeAll(Collections.singleton(null));
+			}
 		}
 		return result;
 	}
