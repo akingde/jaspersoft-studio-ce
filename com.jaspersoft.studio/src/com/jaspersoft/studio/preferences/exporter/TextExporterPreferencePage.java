@@ -4,8 +4,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
+import java.lang.reflect.Field;
+
+import org.eclipse.jface.preference.FieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -13,6 +17,7 @@ import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.editor.number.FloatFieldEditor;
+import com.jaspersoft.studio.preferences.editor.number.JSSIntegerFieldEditor;
 import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
 import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
@@ -39,26 +44,28 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 	public void createFieldEditors() {
 		FloatFieldEditor ffe = new FloatFieldEditor(TextReportConfiguration.PROPERTY_CHARACTER_WIDTH,
 				Messages.TextExporterPreferencePage_7, getFieldEditorParent());
-		ffe.setErrorMessage("Invalid float value");
+		ffe.setErrorMessage("Invalid float value for field: " + Messages.TextExporterPreferencePage_7);
 		addField(ffe);
 		HelpSystem.setHelp(ffe.getTextControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + ffe.getPreferenceName());
 
 		ffe = new FloatFieldEditor(TextReportConfiguration.PROPERTY_CHARACTER_HEIGHT,
 				Messages.TextExporterPreferencePage_8, getFieldEditorParent());
-		ffe.setErrorMessage("Invalid float value");
+		ffe.setErrorMessage("Invalid float value for field: " + Messages.TextExporterPreferencePage_8);
 		addField(ffe);
 		HelpSystem.setHelp(ffe.getTextControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + ffe.getPreferenceName());
 
-		IntegerFieldEditor ife = new IntegerFieldEditor(TextReportConfiguration.PROPERTY_PAGE_WIDTH,
+		JSSIntegerFieldEditor ife = new JSSIntegerFieldEditor(TextReportConfiguration.PROPERTY_PAGE_WIDTH,
 				Messages.TextExporterPreferencePage_9, getFieldEditorParent());
+		ife.setErrorMessage("Invalid integer value for field: " + Messages.TextExporterPreferencePage_9);
 		addField(ife);
 		HelpSystem.setHelp(ife.getTextControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + ife.getPreferenceName());
 
-		ife = new IntegerFieldEditor(TextReportConfiguration.PROPERTY_PAGE_HEIGHT,
+		ife = new JSSIntegerFieldEditor(TextReportConfiguration.PROPERTY_PAGE_HEIGHT,
 				Messages.TextExporterPreferencePage_10, getFieldEditorParent());
+		ife.setErrorMessage("Invalid integer value for field: " + Messages.TextExporterPreferencePage_10);
 		addField(ife);
 		HelpSystem.setHelp(ife.getTextControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + ife.getPreferenceName());
@@ -95,6 +102,26 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(TextReportConfiguration.PROPERTY_PAGE_WIDTH), "0")); //$NON-NLS-1$
 
 		store.setDefault(TextExporterConfiguration.PROPERTY_LINE_SEPARATOR, "\n"); //$NON-NLS-1$
+	}
+
+	@Override
+	public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+		super.propertyChange(event);
+		try {
+			Field f = FieldEditorPreferencePage.class.getDeclaredField("invalidFieldEditor");
+			f.setAccessible(true);
+			FieldEditor feditor = (FieldEditor) f.get(this);
+			if (feditor instanceof StringFieldEditor)
+				setErrorMessage(((StringFieldEditor) feditor).getErrorMessage());
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*

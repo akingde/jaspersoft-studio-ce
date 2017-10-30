@@ -26,11 +26,11 @@ public class FloatFieldEditor extends StringFieldEditor {
 	 * Creates an integer field editor.
 	 * 
 	 * @param name
-	 *          the name of the preference this field editor works on
+	 *            the name of the preference this field editor works on
 	 * @param labelText
-	 *          the label text of the field editor
+	 *            the label text of the field editor
 	 * @param parent
-	 *          the parent of the field editor's control
+	 *            the parent of the field editor's control
 	 */
 	public FloatFieldEditor(String name, String labelText, Composite parent) {
 		this(name, labelText, parent, DEFAULT_TEXT_LIMIT);
@@ -40,13 +40,13 @@ public class FloatFieldEditor extends StringFieldEditor {
 	 * Creates an integer field editor.
 	 * 
 	 * @param name
-	 *          the name of the preference this field editor works on
+	 *            the name of the preference this field editor works on
 	 * @param labelText
-	 *          the label text of the field editor
+	 *            the label text of the field editor
 	 * @param parent
-	 *          the parent of the field editor's control
+	 *            the parent of the field editor's control
 	 * @param textLimit
-	 *          the maximum number of characters in the text.
+	 *            the maximum number of characters in the text.
 	 */
 	public FloatFieldEditor(String name, String labelText, Composite parent, int textLimit) {
 		init(name, labelText);
@@ -60,9 +60,9 @@ public class FloatFieldEditor extends StringFieldEditor {
 	 * Sets the range of valid values for this field.
 	 * 
 	 * @param min
-	 *          the minimum allowed value (inclusive)
+	 *            the minimum allowed value (inclusive)
 	 * @param max
-	 *          the maximum allowed value (inclusive)
+	 *            the maximum allowed value (inclusive)
 	 */
 	public void setValidRange(float min, float max) {
 		minValidValue = min;
@@ -72,7 +72,8 @@ public class FloatFieldEditor extends StringFieldEditor {
 	}
 
 	/*
-	 * (non-Javadoc) Method declared on StringFieldEditor. Checks whether the entered String is a valid integer or not.
+	 * (non-Javadoc) Method declared on StringFieldEditor. Checks whether the
+	 * entered String is a valid integer or not.
 	 */
 	protected boolean checkState() {
 
@@ -83,6 +84,9 @@ public class FloatFieldEditor extends StringFieldEditor {
 		}
 
 		String numberString = text.getText();
+		if (numberString.isEmpty() && isEmptyStringAllowed()) {
+			return false;
+		}
 		try {
 			int number = Float.valueOf(numberString).intValue();
 			if (number >= minValidValue && number <= maxValidValue) {
@@ -141,7 +145,7 @@ public class FloatFieldEditor extends StringFieldEditor {
 	 * 
 	 * @return the value
 	 * @exception NumberFormatException
-	 *              if the <code>String</code> does not contain a parsable integer
+	 *                if the <code>String</code> does not contain a parsable integer
 	 */
 	public float getFloatValue() throws NumberFormatException {
 		return new Float(getStringValue()).floatValue();
