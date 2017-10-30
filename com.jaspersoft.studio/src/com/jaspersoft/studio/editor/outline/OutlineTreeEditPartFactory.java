@@ -181,7 +181,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					editPart = new OpenableContainerTreeEditPart();
 				} else if (model instanceof MImage) {
 					editPart = new OpenableContainerTreeEditPart();
-				}else if (model instanceof MGraphicElement) {
+				} else if (model instanceof MGraphicElement) {
 					editPart = new ContainerTreeEditPart();
 				} else if (model instanceof MField || model instanceof MParameter || model instanceof MVariable) {
 					editPart = new DatasetElementsTreeEditPart();
@@ -191,7 +191,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			} else {
 				if (model instanceof MStyleTemplate) {
 					editPart = new OpenableNotDraggableContainerTreeEditPart();
-				}  else if (model instanceof IContainerEditPart) {
+				} else if (model instanceof IContainerEditPart) {
 					editPart = new NotDragableContainerTreeEditPart();
 				} else if (model instanceof MGraphicElement) {
 					editPart = new NotDragableContainerTreeEditPart();
@@ -204,14 +204,14 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			editPart.setModel(model);
 		return editPart;
 	}
-	
+
 	/**
-	 * Create the edit part for a text field element, allowing to open the expression editor
-	 * with a double click on the outline
+	 * Create the edit part for a text field element, allowing to open the
+	 * expression editor with a double click on the outline
 	 */
 	protected EditPart createTextFieldTreeEditPart() {
 		return new OpenableContainerTreeEditPart() {
-			
+
 			@Override
 			public void performRequest(Request req) {
 				if (RequestConstants.REQ_OPEN.equals(req.getType())) {
@@ -220,13 +220,13 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					cmd = new EditTextFieldExpressionCommand(textfield) {
 						@Override
 						public boolean canExecute() {
-							return super.canExecute() && this.showDialog()==Window.OK;
+							return super.canExecute() && this.showDialog() == Window.OK;
 						}
 					};
 					getViewer().getEditDomain().getCommandStack().execute(cmd);
 				}
 			}
-			
+
 			@Override
 			public boolean understandsRequest(Request req) {
 				return RequestConstants.REQ_OPEN.equals(req.getType());
@@ -471,7 +471,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		if (child instanceof MCallout)
 			return new CreateCalloutCommand(parent, (MCallout) child, location, newIndex);
 		if (child instanceof MFieldsContainer) {
-			if (typeAdd) {
+			if (typeAdd && ShowFieldsTreeAction.isFieldsTree(parent.getJasperConfiguration())) {
 				if (parent instanceof MField)
 					parent = parent.getParent();
 				if (parent instanceof MFields) {
@@ -497,7 +497,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			}
 			return null;
 		} else if (child instanceof MField) {
-			if (typeAdd) {
+			if (typeAdd && ShowFieldsTreeAction.isFieldsTree(parent.getJasperConfiguration())) {
 				if (parent instanceof MField)
 					parent = parent.getParent();
 				if (parent instanceof MFields) {
@@ -517,6 +517,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 						|| ShowFieldsTreeAction.isFieldsTree(parent.getJasperConfiguration())) {
 					return null;
 				}
+				newIndex = parent.getParent().getChildren().indexOf(parent);
 				return new CreateFieldCommand((MFields) parent.getParent(), (MField) child, newIndex);
 			} else if (child.getValue() != null) {
 				ANode targetNode = null;
@@ -566,6 +567,8 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				} else if (parent instanceof MParameter) {
 					JRDesignParameter p = (JRDesignParameter) child.getValue();
 					if ((p == null || !p.isSystemDefined()) && parent.getParent() != null) {
+						newIndex = parent.getParent().getChildren().indexOf(parent);
+
 						return new CreateParameterCommand((MParameters<?>) parent.getParent(), (MParameter) child,
 								newIndex);
 					}
@@ -584,6 +587,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			} else if (parent instanceof MVariable) {
 				JRDesignVariable p = (JRDesignVariable) child.getValue();
 				if (p == null || !p.isSystemDefined()) {
+					newIndex = parent.getParent().getChildren().indexOf(parent);
 					return new CreateVariableCommand((MVariables) parent.getParent(), (MVariable) child, newIndex);
 				}
 			}
@@ -754,6 +758,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			return new DoNothingCommand();
 		if (child instanceof MParameterSystem)
 			return new NoActionCommand();
+		// return new OrphanParameterCommand(parent, (MParameter) child);
 		if (child instanceof MVariableSystem)
 			return new NoActionCommand();
 		// This condition must be placed before the MStyle check, since

@@ -37,11 +37,11 @@ public class ReorderParameterCommand extends Command {
 	 * Instantiates a new reorder parameter command.
 	 * 
 	 * @param child
-	 *          the child
+	 *            the child
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public ReorderParameterCommand(MParameter child, MParameters<?> parent, int newIndex) {
 		super(Messages.common_reorder_elements);
@@ -51,6 +51,15 @@ public class ReorderParameterCommand extends Command {
 		this.jrParameter = (JRDesignParameter) child.getValue();
 	}
 
+	public ReorderParameterCommand(JRDesignParameter child, JRDesignDataset jrDataset,
+			JasperReportsConfiguration jrContext, int newIndex) {
+		super(Messages.common_reorder_elements);
+		this.jrContext = jrContext;
+		this.newIndex = Math.max(0, newIndex);
+		this.jrDataset = jrDataset;
+		this.jrParameter = child;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -58,7 +67,7 @@ public class ReorderParameterCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldIndex = jrDataset.getParametersList().indexOf(jrParameter); 
+		oldIndex = jrDataset.getParametersList().indexOf(jrParameter);
 		try {
 			int i = 0;
 			for (JRParameter v : jrDataset.getParametersList()) {
@@ -67,8 +76,9 @@ public class ReorderParameterCommand extends Command {
 				else
 					break;
 			}
-			boolean showDefaults = jrContext != null ? jrContext.getPropertyBoolean(
-					DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
+			boolean showDefaults = jrContext != null
+					? jrContext.getPropertyBoolean(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE)
+					: true;
 			showDefaults = showDefaults && !HideDefaultsParametersAction.areDefaultParametersHidden(jrContext);
 			if (!showDefaults)
 				newIndex += i;
@@ -82,7 +92,7 @@ public class ReorderParameterCommand extends Command {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		int i = 0;
@@ -92,10 +102,11 @@ public class ReorderParameterCommand extends Command {
 			else
 				break;
 		}
-		boolean showDefaults = jrContext != null ? jrContext.getPropertyBoolean(
-				DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
+		boolean showDefaults = jrContext != null
+				? jrContext.getPropertyBoolean(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE)
+				: true;
 		showDefaults = showDefaults && !HideDefaultsParametersAction.areDefaultParametersHidden(jrContext);
-		if (showDefaults){
+		if (showDefaults) {
 			return newIndex >= i;
 		}
 		return newIndex >= 0 && newIndex <= jrDataset.getParametersList().size();

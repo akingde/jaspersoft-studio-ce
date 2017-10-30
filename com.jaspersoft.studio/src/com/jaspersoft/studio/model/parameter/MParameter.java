@@ -52,7 +52,8 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 	private static NamedEnumPropertyDescriptor<ParameterEvaluationTimeEnum> evaluationTimeD;
-	// Must use its own descriptors since they are different from the ones of the superclass
+	// Must use its own descriptors since they are different from the ones of the
+	// superclass
 	private IPropertyDescriptor[] descriptors;
 
 	/**
@@ -210,24 +211,19 @@ public class MParameter extends MParameterSystem implements ICopyable {
 			if (evaluationTimeD == null)
 				getPropertyDescriptors();
 			jrParameter.setEvaluationTime(evaluationTimeD.getEnumValue(value));
-		} else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION)){
-			if(StringUtils.isNullOrEmpty((String) value)){
+		} else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION)) {
+			if (StringUtils.isNullOrEmpty((String) value)) {
 				jrParameter.setDescription(null);
+			} else {
+				jrParameter.setDescription((String) value);
 			}
-			else {
-				jrParameter.setDescription((String) value);				
-			}
-		}
-		else if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING) && isMainDataset()){
+		} else if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING) && isMainDataset()) {
 			jrParameter.setForPrompting(((Boolean) value).booleanValue());
-		}
-		else if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME)){
+		} else if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME)) {
 			jrParameter.setNestedTypeName((String) value);
-		}
-		else if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)){
+		} else if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)) {
 			jrParameter.setDefaultValueExpression(ExprUtil.setValues(jrParameter.getDefaultValueExpression(), value));
-		}
-		else if (id.equals(PROPERTY_MAP)) {
+		} else if (id.equals(PROPERTY_MAP)) {
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrParameter.getPropertiesMap().getPropertyNames();
 			for (int i = 0; i < names.length; i++) {
@@ -274,6 +270,10 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		if (parent instanceof MParameters)
 			return ICopyable.RESULT.COPYABLE;
 		return ICopyable.RESULT.CHECK_PARENT;
+	}
+
+	public JRDesignDataset getDataset() {
+		return ModelUtils.getDataset(this);
 	}
 
 	public ExpressionContext getExpressionContext() {

@@ -6,10 +6,6 @@ package com.jaspersoft.studio.editor.outline.actions;
 
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.ISharedImages;
@@ -31,6 +27,10 @@ import com.jaspersoft.studio.prm.wizard.ParameterSetWizard;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+
 /*
  * The Class CreateParameterAction.
  */
@@ -43,7 +43,7 @@ public class CreateParameterSetAction extends ACachedSelectionAction {
 	 * Constructs a <code>CreateAction</code> using the specified part.
 	 * 
 	 * @param part
-	 *          The part for this action
+	 *            The part for this action
 	 */
 	public CreateParameterSetAction(IWorkbenchPart part) {
 		super(part);
@@ -137,7 +137,7 @@ public class CreateParameterSetAction extends ACachedSelectionAction {
 							c.setPropertyValue(p.isForPrompting());
 							cmd.add(c);
 						} else
-							cmd.add(new CreateParameterCommand(ds, p, -1));
+							cmd.add(new CreateParameterCommand(ds, p, jConfig, -1));
 					}
 					command = cmd;
 				} else

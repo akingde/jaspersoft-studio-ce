@@ -598,7 +598,7 @@ public class DatasetDialog extends PersistentLocationFormDialog implements IFiel
 					break;
 			}
 			if (notexists)
-				command.add(new CreateParameterCommand(ds, newf, -1));
+				command.add(new CreateParameterCommand(ds, newf, jConfig, -1));
 		}
 
 		// handle parameters for a possible reorder

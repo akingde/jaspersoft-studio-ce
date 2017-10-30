@@ -17,6 +17,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * link nodes & together.
@@ -33,18 +34,19 @@ public class CreateParameterCommand extends Command {
 
 	/** The index. */
 	private int index;
+	private JasperReportsConfiguration jrContext;
 
 	/**
 	 * Instantiates a new creates the parameter command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param position
-	 *          the position
+	 *            the position
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	public CreateParameterCommand(MParameters<?> destNode, MParameter srcNode, int index) {
 		super();
@@ -52,14 +54,19 @@ public class CreateParameterCommand extends Command {
 		this.index = index;
 		if (srcNode != null && srcNode.getValue() != null)
 			this.jrParameter = (JRDesignParameter) srcNode.getValue();
+		jrContext = destNode.getJasperConfiguration();
 	}
 
-	public CreateParameterCommand(JRDesignDataset jDataset, JRParameter jParam, int index) {
+	public CreateParameterCommand(JRDesignDataset jDataset, JRParameter jParam, JasperReportsConfiguration jrContext,
+			int index) {
 		super();
+		this.jrContext = jrContext;
 		this.jrDataset = jDataset;
 		this.index = index;
 		this.jrParameter = (JRDesignParameter) jParam;
 	}
+
+	private ReorderParameterCommand rc;
 
 	/*
 	 * (non-Javadoc)
@@ -68,11 +75,21 @@ public class CreateParameterCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		if (rc != null) {
+			rc.execute();
+			return;
+		}
 		if (jrParameter == null) {
 			this.jrParameter = MParameter.createJRParameter(jrDataset);
 		}
 		if (jrParameter != null) {
 			try {
+				if (jrDataset.getParametersList().contains(jrParameter)) {
+					rc = new ReorderParameterCommand(jrParameter, jrDataset, jrContext, index);
+					rc.execute();
+					return;
+				}
+
 				if (index < 0 || index > jrDataset.getParametersList().size())
 					jrDataset.addParameter(jrParameter);
 				else
@@ -110,6 +127,9 @@ public class CreateParameterCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		jrDataset.removeParameter(jrParameter);
+		if (rc != null)
+			rc.undo();
+		else
+			jrDataset.removeParameter(jrParameter);
 	}
 }
