@@ -104,7 +104,8 @@ public class CreateParameterCommand extends Command {
 					if (dlg.open() == InputDialog.OK) {
 						jrParameter.setName(dlg.getValue());
 						execute();
-					}
+					} else
+						return;
 				}
 			}
 		}

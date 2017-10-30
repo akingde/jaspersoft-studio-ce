@@ -104,7 +104,8 @@ public class CreateFieldCommand extends Command {
 					if (dlg.open() == InputDialog.OK) {
 						jrField.setName(dlg.getValue());
 						execute();
-					}
+					} else
+						return;
 				}
 			}
 		}
