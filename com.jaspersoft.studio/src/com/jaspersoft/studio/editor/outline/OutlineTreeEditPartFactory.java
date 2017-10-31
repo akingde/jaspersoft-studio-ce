@@ -29,8 +29,8 @@ import com.jaspersoft.studio.callout.command.DeleteCalloutCommand;
 import com.jaspersoft.studio.callout.pin.MPin;
 import com.jaspersoft.studio.callout.pin.command.DeletePinCommand;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
-import com.jaspersoft.studio.editor.outline.actions.ShowFieldsTreeAction;
-import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
+import com.jaspersoft.studio.editor.outline.actions.field.ShowFieldsTreeAction;
+import com.jaspersoft.studio.editor.outline.actions.field.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.part.ContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.DatasetElementsTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
@@ -283,7 +283,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			MFieldsContainer srcNode = (MFieldsContainer) child;
 			JasperReportsConfiguration jConfig = srcNode.getJasperConfiguration();
 			return new DeleteFieldsContainerCommand(jConfig, (JRDesignDataset) parent.getValue(), srcNode.getKey(),
-					parent);
+					parent, DeleteFieldsContainerCommand.DELETE);
 		} else if (child instanceof MSortField) {
 			return new DeleteSortFieldCommand((MSortFields) parent, (MSortField) child);
 		} else if (child instanceof MGroup) {

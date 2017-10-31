@@ -22,8 +22,6 @@ import com.jaspersoft.studio.editor.AContextMenuProvider;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.ActionUtils;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldsContainerAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
@@ -32,10 +30,14 @@ import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DynamicActionContributionItem;
 import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
 import com.jaspersoft.studio.editor.outline.actions.HideDefaultsParametersAction;
-import com.jaspersoft.studio.editor.outline.actions.ShowFieldsTreeAction;
-import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
+import com.jaspersoft.studio.editor.outline.actions.field.CreateFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.field.CreateFieldsContainerAction;
+import com.jaspersoft.studio.editor.outline.actions.field.DeleteFieldsAllGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.field.DeleteFieldsGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.field.ShowFieldsTreeAction;
+import com.jaspersoft.studio.editor.outline.actions.field.SortFieldsAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 
 public class BookEditorContextMenuProvider extends AContextMenuProvider {
@@ -95,6 +97,14 @@ public class BookEditorContextMenuProvider extends AContextMenuProvider {
 		}
 		if (actionF1 != null || actionF2 != null)
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+
+		action = getActionRegistry().getAction(DeleteFieldsGroupAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+		action = getActionRegistry().getAction(DeleteFieldsAllGroupAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 		ActionUtils.appendActionToGroup(menu,
 				Arrays.asList(new String[] { CreateNewGroupAction.ID, CreateNewBookPartAction.ID,

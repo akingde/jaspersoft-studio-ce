@@ -61,8 +61,6 @@ import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandActionOnDetail;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldsContainerAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupFooterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupHeaderAction;
@@ -82,10 +80,14 @@ import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpressi
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
-import com.jaspersoft.studio.editor.outline.actions.ShowFieldsTreeAction;
-import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
+import com.jaspersoft.studio.editor.outline.actions.field.CreateFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.field.CreateFieldsContainerAction;
+import com.jaspersoft.studio.editor.outline.actions.field.DeleteFieldsAllGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.field.DeleteFieldsGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.field.ShowFieldsTreeAction;
+import com.jaspersoft.studio.editor.outline.actions.field.SortFieldsAction;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.tools.CreateCompositeElementAction;
 import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
@@ -255,7 +257,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(EncloseIntoFrameAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-		
+
 		action = getActionRegistry().getAction(BindElementsAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
@@ -264,7 +266,6 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
-		
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, new Separator());
 
 		action = getActionRegistry().getAction(CreateCompositeElementAction.ID);
@@ -317,9 +318,18 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (actionF2 != null && actionF2.isEnabled()) {
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD,
 					new DynamicActionContributionItem((ACachedSelectionAction) actionF2));
+
 		}
 		if (actionF1 != null || actionF2 != null)
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+
+		action = getActionRegistry().getAction(DeleteFieldsGroupAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+		action = getActionRegistry().getAction(DeleteFieldsAllGroupAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 		// ADD THE OTHER ACTIONS
 

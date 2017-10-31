@@ -288,6 +288,7 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.gef.commands,
    org.eclipse.ui,
    org.eclipse.gef.requests",
+ com.jaspersoft.studio.editor.outline.actions.field,
  com.jaspersoft.studio.editor.outline.editpolicy;
   uses:="org.eclipse.gef.commands,
    org.eclipse.gef.requests,

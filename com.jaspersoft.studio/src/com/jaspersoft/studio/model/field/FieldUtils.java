@@ -18,7 +18,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
+import com.jaspersoft.studio.editor.outline.actions.field.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;

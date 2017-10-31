@@ -43,8 +43,6 @@ import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldsContainerAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
@@ -52,10 +50,14 @@ import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
 import com.jaspersoft.studio.editor.outline.actions.HideDefaultsParametersAction;
-import com.jaspersoft.studio.editor.outline.actions.ShowFieldsTreeAction;
-import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
+import com.jaspersoft.studio.editor.outline.actions.field.CreateFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.field.CreateFieldsContainerAction;
+import com.jaspersoft.studio.editor.outline.actions.field.DeleteFieldsAllGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.field.DeleteFieldsGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.field.ShowFieldsTreeAction;
+import com.jaspersoft.studio.editor.outline.actions.field.SortFieldsAction;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.repository.actions.Separator;
@@ -280,6 +282,14 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		action = new ShowFieldsTreeAction(this);
 		registry.registerAction(action);
 		selectionActions.add(ShowFieldsTreeAction.ID);
+
+		action = new DeleteFieldsGroupAction(this);
+		registry.registerAction(action);
+		selectionActions.add(DeleteFieldsGroupAction.ID);
+
+		action = new DeleteFieldsAllGroupAction(this);
+		registry.registerAction(action);
+		selectionActions.add(DeleteFieldsAllGroupAction.ID);
 
 		action = new HideDefaultsParametersAction(this);
 		registry.registerAction(action);

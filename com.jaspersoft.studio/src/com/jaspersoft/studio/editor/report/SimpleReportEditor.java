@@ -36,8 +36,6 @@ import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.editor.gef.ui.actions.ViewSettingsDropDownAction;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldsContainerAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
@@ -45,10 +43,14 @@ import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
 import com.jaspersoft.studio.editor.outline.actions.HideDefaultsParametersAction;
-import com.jaspersoft.studio.editor.outline.actions.ShowFieldsTreeAction;
-import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
+import com.jaspersoft.studio.editor.outline.actions.field.CreateFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.field.CreateFieldsContainerAction;
+import com.jaspersoft.studio.editor.outline.actions.field.DeleteFieldsAllGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.field.DeleteFieldsGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.field.ShowFieldsTreeAction;
+import com.jaspersoft.studio.editor.outline.actions.field.SortFieldsAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.IContainer;
@@ -155,6 +157,12 @@ public class SimpleReportEditor extends ReportEditor {
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 
 					id = ShowFieldsTreeAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = DeleteFieldsGroupAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = DeleteFieldsAllGroupAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 
 					id = HideDefaultsParametersAction.ID;

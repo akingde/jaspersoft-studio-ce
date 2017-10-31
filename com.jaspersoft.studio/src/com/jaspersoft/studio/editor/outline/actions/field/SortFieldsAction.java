@@ -2,35 +2,38 @@
  * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
  * All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
-package com.jaspersoft.studio.editor.outline.actions;
+package com.jaspersoft.studio.editor.outline.actions.field;
 
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.outline.actions.AbstractFilePropertyAction;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Action to sort the fields on the outline
  * 
- * @author Veaceslav Chicu
+ * @author Orlandin Marco
  *
  */
-public class ShowFieldsTreeAction extends AbstractFilePropertyAction {
+public class SortFieldsAction extends AbstractFilePropertyAction {
 
 	/**
 	 * The Constant ID.
 	 */
-	public static final String ID = "showfieldstree"; //$NON-NLS-1$
+	public static final String ID = "sort_fields"; //$NON-NLS-1$
 
 	/**
 	 * The id of the property set on the eclipse file resource
 	 */
-	private static final String TREE_PROPERTY_NAME = "com.jaspersoft.studio.showFieldsTree"; //$NON-NLS-1$
+	private static final String SORT_PROPERTY_NAME = "com.jaspersoft.studio.sortFields"; //$NON-NLS-1$
 
-	public ShowFieldsTreeAction(IWorkbenchPart part) {
+	public SortFieldsAction(IWorkbenchPart part) {
 		super(part);
 	}
 
@@ -40,9 +43,10 @@ public class ShowFieldsTreeAction extends AbstractFilePropertyAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Show Fields Tree");
-		setToolTipText("Show fields as a tree");
+		setText(Messages.SortVariablesAction_common_sortalphabetically);
+		setToolTipText(Messages.SortFieldsAction_1);
 		setId(ID);
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/transparent_icon.png"));
 		setEnabled(false);
 	}
 
@@ -53,8 +57,8 @@ public class ShowFieldsTreeAction extends AbstractFilePropertyAction {
 	 *            the {@link JasperReportsConfiguration} of the report
 	 * @return true if they are sorted, false in any other case
 	 */
-	public static boolean isFieldsTree(JasperReportsConfiguration jConfig) {
-		return isPropertySet(jConfig, TREE_PROPERTY_NAME);
+	public static boolean areFieldsSorted(JasperReportsConfiguration jConfig) {
+		return isPropertySet(jConfig, SORT_PROPERTY_NAME);
 	}
 
 	/**
@@ -62,15 +66,15 @@ public class ShowFieldsTreeAction extends AbstractFilePropertyAction {
 	 */
 	@Override
 	protected String getPersistentPropertyName() {
-		return TREE_PROPERTY_NAME;
+		return SORT_PROPERTY_NAME;
 	}
 
 	@Override
 	protected Command createCommand() {
 		List<Object> selection = editor.getSelectionCache().getSelectionModelForType(MFields.class);
 		if (selection.size() == 1 && selection.get(0).getClass().equals(MFields.class)) {
-			MFields fields = (MFields) selection.get(0);
-			return generateCommand(fields);
+			final MFields selectedVariables = (MFields) selection.get(0);
+			return generateCommand(selectedVariables);
 		}
 		return null;
 	}

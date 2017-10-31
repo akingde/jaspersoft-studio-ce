@@ -130,8 +130,6 @@ import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.outline.actions.ConnectToDatasetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldsContainerAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
@@ -147,10 +145,14 @@ import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpressi
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
-import com.jaspersoft.studio.editor.outline.actions.ShowFieldsTreeAction;
-import com.jaspersoft.studio.editor.outline.actions.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.actions.SortParametersAction;
 import com.jaspersoft.studio.editor.outline.actions.SortVariablesAction;
+import com.jaspersoft.studio.editor.outline.actions.field.CreateFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.field.CreateFieldsContainerAction;
+import com.jaspersoft.studio.editor.outline.actions.field.DeleteFieldsAllGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.field.DeleteFieldsGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.field.ShowFieldsTreeAction;
+import com.jaspersoft.studio.editor.outline.actions.field.SortFieldsAction;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.editor.palette.JSSPaletteContextMenuProvider;
@@ -718,6 +720,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(ShowFieldsTreeAction.ID);
 
+		action = new DeleteFieldsGroupAction(this);
+		registry.registerAction(action);
+		selectionActions.add(DeleteFieldsGroupAction.ID);
+
+		action = new DeleteFieldsAllGroupAction(this);
+		registry.registerAction(action);
+		selectionActions.add(DeleteFieldsAllGroupAction.ID);
+
 		action = new HideDefaultsParametersAction(this);
 		registry.registerAction(action);
 		selectionActions.add(HideDefaultsParametersAction.ID);
@@ -1106,7 +1116,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new EncloseIntoFrameAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BindElementsAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -1115,7 +1125,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		
 		action = new CreateCompositeElementAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
