@@ -32,6 +32,8 @@ public class Messages extends NLS {
 	public static String ShowErrorsAction_tooltip;
 	public static String ShowExportableWizardPage_labelText;
 	public static String ShowExportableWizardPage_pageDescription;
+	public static String ShowFieldsTreeAction_0;
+	public static String ShowFieldsTreeAction_1;
 	public static String common_add;
 	public static String common_backcolor;
 	public static String common_band;
@@ -558,6 +560,12 @@ public class Messages extends NLS {
 	public static String DeleteDatasetCommand_noOption;
 	public static String DeleteDatasetCommand_title;
 	public static String DeleteDatasetCommand_yesOption;
+	public static String DeleteFieldsAllGroupAction_0;
+	public static String DeleteFieldsAllGroupAction_1;
+	public static String DeleteFieldsAllGroupAction_2;
+	public static String DeleteFieldsGroupAction_0;
+	public static String DeleteFieldsGroupAction_1;
+	public static String DeleteFieldsGroupAction_2;
 	public static String DeleteGroupReportAction_delete_group;
 	public static String DeleteGroupReportAction_delete_group_tool_tip;
 	public static String DeleteGuideCommand_delete_guide;

@@ -11,6 +11,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.model.field.MFieldsContainer;
 import com.jaspersoft.studio.model.field.command.DeleteFieldsContainerCommand;
@@ -38,10 +39,10 @@ public class DeleteFieldsAllGroupAction extends ACachedSelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Ungroup All To Parent");
-		setToolTipText("Ungroup all from group to parent recursively.");
+		setText(Messages.DeleteFieldsAllGroupAction_0);
+		setToolTipText(Messages.DeleteFieldsAllGroupAction_1);
 		setId(ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/transparent_icon.png"));
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(Messages.DeleteFieldsAllGroupAction_2));
 		setEnabled(false);
 	}
 

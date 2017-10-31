@@ -11,6 +11,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.outline.actions.AbstractFilePropertyAction;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -42,10 +43,10 @@ public class ShowFieldsTreeAction extends AbstractFilePropertyAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Show Fields Tree");
-		setToolTipText("Show fields as a tree");
+		setText(Messages.ShowFieldsTreeAction_0);
+		setToolTipText(Messages.ShowFieldsTreeAction_1);
 		setId(ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/transparent_icon.png"));
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/transparent_icon.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 
