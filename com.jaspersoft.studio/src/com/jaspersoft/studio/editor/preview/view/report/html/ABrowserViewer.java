@@ -17,7 +17,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.APreview;
@@ -26,6 +25,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.util.HttpUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 
@@ -83,8 +83,8 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 
 	/**
 	 * Return the suggested width for the url control, considering also other
-	 * controls palced after the url. In this way it is possible to attribute
-	 * always at the url the maximum size available
+	 * controls palced after the url. In this way it is possible to attribute always
+	 * at the url the maximum size available
 	 * 
 	 * @param control
 	 *            the control of the url
@@ -110,7 +110,8 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 				Browser.clearSessions();
 				if (urlcookie != null && scookie != null) {
 					Browser.setCookie(scookie, urlcookie);
-					browser.setUrl(url, null, new String[] { "Accept-Timezone" + TimeZone.getDefault().getID() });
+					browser.setUrl(url, null, new String[] { "Accept-Timezone: " + TimeZone.getDefault().getID(),
+							"User-Agent: " + HttpUtils.USER_AGENT_JASPERSOFT_STUDIO });
 				} else
 					browser.setUrl(url);
 			}
@@ -177,7 +178,7 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 		}
 	}
 
-	private boolean useExternalBrowser() {
+	public static boolean useExternalBrowser() {
 		return JaspersoftStudioPlugin.getInstance().getPreferenceStore()
 				.getBoolean(GlobalPreferencePage.JSS_USE_ALWAYS_EXTERNAL_BROWSER);
 	}

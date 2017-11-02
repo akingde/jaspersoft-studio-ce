@@ -39,6 +39,7 @@ import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.statistics.UsageManager;
 import com.jaspersoft.studio.utils.BrandingInfo;
+import com.jaspersoft.studio.utils.browser.BrowserInfo;
 import com.jaspersoft.studio.utils.jasper.DriversManager;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
@@ -46,6 +47,7 @@ import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
+import net.sf.jasperreports.eclipse.util.HttpUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -78,7 +80,8 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	private static JaspersoftStudioPlugin plugin;
 
 	/**
-	 * The update manager used to handle the usage statistics for the current instance
+	 * The update manager used to handle the usage statistics for the current
+	 * instance
 	 */
 	private UsageManager manager;
 
@@ -120,13 +123,14 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	 * This method is called when the plug-in is stopped.
 	 * 
 	 * @param context
-	 *          the context
+	 *            the context
 	 * @throws Exception
-	 *           the exception
+	 *             the exception
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		// Must stop the manager of the statistics before to set the plugin instance to null
+		// Must stop the manager of the statistics before to set the plugin instance to
+		// null
 		// since the usage manager uses the plugin instance to write on the logger
 		if (manager != null) {
 			manager.stop();
@@ -158,6 +162,8 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		key = "net.sf.jasperreports.default.font.size"; //$NON-NLS-1$
 		JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, c.getProperty(key));
 
+		BrowserInfo.initUserAgent(c);
+
 		// Fix some JasperReports properties installation related.
 		// See Bugzilla #42275.
 		String defJRProperty = DefaultJasperReportsContext.getInstance()
@@ -181,7 +187,8 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		precacheImagesJob.schedule();
 
 		// Force the initialization of some JR extensions
-		// Job extensionsPreloadingJob = new Job(Messages.JaspersoftStudioPlugin_CachingJRExtensionsJob) {
+		// Job extensionsPreloadingJob = new
+		// Job(Messages.JaspersoftStudioPlugin_CachingJRExtensionsJob) {
 		// @Override
 		// protected IStatus run(IProgressMonitor monitor) {
 		// ExtensionLoader.initializeJRExtensions(monitor);
@@ -200,8 +207,10 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 						installJSSConsole();
 						return Status.OK_STATUS;
 					} catch (Exception e) {
-						// something went wrong while trying to re-assign the standard output and error streams.
-						return new Status(IStatus.ERROR, PLUGIN_ID, Messages.JaspersoftStudioPlugin_ConsoleInstallationError, e);
+						// something went wrong while trying to re-assign the standard output and error
+						// streams.
+						return new Status(IStatus.ERROR, PLUGIN_ID,
+								Messages.JaspersoftStudioPlugin_ConsoleInstallationError, e);
 					}
 				}
 			};
@@ -303,7 +312,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		}
 		return postSetValueManager;
 	}
-	
+
 	private static PostDeleteManager postDeleteManager;
 
 	public static PostDeleteManager getPostDeleteManager() {
@@ -337,11 +346,11 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	}
 
 	/**
-	 * Sets the branding information that will helps identify the product, for example in case of debug, diagnostics or
-	 * statistics.
+	 * Sets the branding information that will helps identify the product, for
+	 * example in case of debug, diagnostics or statistics.
 	 * 
 	 * @param info
-	 *          branding information
+	 *            branding information
 	 */
 	public void setBrandingInformation(BrandingInfo info) {
 		getPreferenceStore().putValue(BrandingInfo.BRANDING_PRODUCT_NAME, info.getProductName());
@@ -350,7 +359,8 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	}
 
 	/**
-	 * @return the branding information that identify the currently running product (plugin/product)
+	 * @return the branding information that identify the currently running product
+	 *         (plugin/product)
 	 * 
 	 */
 	public BrandingInfo getBrandingInformation() {
@@ -362,15 +372,17 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	}
 
 	/**
-	 * @return <code>true</code> if we should use the Eclipse Secure Storage feature,<code>false</code> otherwise
+	 * @return <code>true</code> if we should use the Eclipse Secure Storage
+	 *         feature,<code>false</code> otherwise
 	 */
 	public static boolean shouldUseSecureStorage() {
 		return getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_USE_SECURE_STORAGE);
 	}
 
 	/**
-	 * Creates an additional Console for the Console view. Once installed, all the messages printed on the System.out and
-	 * System.err streams will be redirected here.
+	 * Creates an additional Console for the Console view. Once installed, all the
+	 * messages printed on the System.out and System.err streams will be redirected
+	 * here.
 	 */
 	private static void installJSSConsole() {
 		MessageConsole jssConsole = new MessageConsole(Messages.JaspersoftStudioPlugin_JSSConsoleTitle, null);
@@ -382,8 +394,9 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	}
 
 	/**
-	 * Check if the running JSS is a RCP or plugin version. This is done looking for the plugins com.jaspersoft.studio.rcp
-	 * or com.jaspersoft.studio.pro.rcp that are available only on the RCP version
+	 * Check if the running JSS is a RCP or plugin version. This is done looking for
+	 * the plugins com.jaspersoft.studio.rcp or com.jaspersoft.studio.pro.rcp that
+	 * are available only on the RCP version
 	 * 
 	 * @return true if the current running JSS is an RCP version, false otherwise
 	 */

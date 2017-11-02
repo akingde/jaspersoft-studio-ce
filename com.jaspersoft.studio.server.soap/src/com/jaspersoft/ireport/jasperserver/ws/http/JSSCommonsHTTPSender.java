@@ -88,8 +88,8 @@ public class JSSCommonsHTTPSender extends BasicHandler {
 	}
 
 	/**
-	 * invoke creates a socket connection, sends the request SOAP message and
-	 * then reads the response SOAP message back from the SOAP server
+	 * invoke creates a socket connection, sends the request SOAP message and then
+	 * reads the response SOAP message back from the SOAP server
 	 *
 	 * @param msgContext
 	 *            the messsage context
@@ -217,7 +217,6 @@ public class JSSCommonsHTTPSender extends BasicHandler {
 					req.viaProxy(proxy);
 				addContextInfo(req, msgContext, targetURL);
 			}
-
 			response = exec.execute(req);
 			response.handleResponse(new ResponseHandler<String>() {
 
@@ -327,7 +326,7 @@ public class JSSCommonsHTTPSender extends BasicHandler {
 		if (msg != null)
 			req.addHeader(HTTPConstants.HEADER_CONTENT_TYPE, msg.getContentType(msgContext.getSOAPConstants()));
 		req.addHeader(HTTPConstants.HEADER_SOAP_ACTION, "\"" + action + "\"");
-		req.addHeader(HTTPConstants.HEADER_USER_AGENT, Messages.getMessage("axisUserAgent"));
+		req.addHeader(HTTPConstants.HEADER_USER_AGENT, HttpUtils.USER_AGENT_JASPERSOFT_STUDIO);
 
 		// add compression headers if needed
 		if (msgContext.isPropertyTrue(HTTPConstants.MC_ACCEPT_GZIP))
