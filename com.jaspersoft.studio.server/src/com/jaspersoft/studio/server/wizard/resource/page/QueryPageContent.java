@@ -59,7 +59,8 @@ public class QueryPageContent extends APageContent {
 		return createContentComposite;
 	}
 
-	public static Control createContentComposite(Composite parent, DataBindingContext bindingContext, ResourceDescriptor r, AMResource res, boolean showLangs) {
+	public static Control createContentComposite(Composite parent, DataBindingContext bindingContext,
+			ResourceDescriptor r, AMResource res, boolean showLangs) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
@@ -74,7 +75,7 @@ public class QueryPageContent extends APageContent {
 		}
 		UIUtil.createLabel(composite, Messages.RDQueryPage_query);
 
-		tsql = new Text(composite, SWT.BORDER | SWT.WRAP);
+		tsql = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
 		gd.widthHint = 400;
@@ -87,7 +88,8 @@ public class QueryPageContent extends APageContent {
 	protected void rebind() {
 		ResourceDescriptor r = res.getValue();
 		if (clang != null && !clang.isDisposed())
-			bindingContext.bindValue(SWTObservables.observeText(clang), PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeText(clang),
+					PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tsql, SWT.Modify), PojoObservables.observeValue(r, "sql")); //$NON-NLS-1$
 	}
 
