@@ -203,6 +203,9 @@ public final class PageFormatDialog extends FormDialog {
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		cPrintOrder.setLayoutData(gd);
+		cPrintOrder.setToolTipText(
+				"Vertical - the filling process run first from top to bottom and then from left to right; the first column is entirely filled, then the second one, the third, etc.\n"
+						+ "Horizontal - the filling process run first from left to right and then from top to bottom; the first row is filled in any column, then the second row, etc.");
 
 		enablePrintOrder();
 	}
@@ -568,6 +571,6 @@ public final class PageFormatDialog extends FormDialog {
 
 	protected void enablePrintOrder() {
 		int c = cols.getValueAsInteger();
-		cPrintOrder.setEnabled(c > 1);
+		cPrintOrder.setEnabled(c >= 1);
 	}
 }
