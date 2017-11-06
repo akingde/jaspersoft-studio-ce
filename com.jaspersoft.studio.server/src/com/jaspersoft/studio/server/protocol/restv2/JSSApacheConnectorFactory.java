@@ -53,13 +53,13 @@ public class JSSApacheConnectorFactory extends ApacheConnectorProvider {
 
 	public Response delete(Builder builder, IProgressMonitor monitor) throws Exception {
 		builder.header("Accept-Timezone", TimeZone.getDefault().getID());
-		builder.header("User-Agent", HttpUtils.USER_AGENT_JASPERSOFT_STUDIO);
+		// builder.header("User-Agent", HttpUtils.USER_AGENT_JASPERSOFT_STUDIO);
 		return doWait(builder.async().delete(), monitor);
 	}
 
 	public Response post(Builder builder, Entity<?> entity, IProgressMonitor monitor) throws Exception {
 		builder.header("Accept-Timezone", TimeZone.getDefault().getID());
-		builder.header("User-Agent", HttpUtils.USER_AGENT_JASPERSOFT_STUDIO);
+		// builder.header("User-Agent", HttpUtils.USER_AGENT_JASPERSOFT_STUDIO);
 		return doWait(builder.async().post(entity), monitor);
 	}
 
@@ -67,7 +67,7 @@ public class JSSApacheConnectorFactory extends ApacheConnectorProvider {
 		// builder.header("Content-Lenght", 0);
 		builder.header("Accept-Timezone", TimeZone.getDefault().getID());
 		builder.header("X-HTTP-Method-Override", "PUT");
-		builder.header("User-Agent", HttpUtils.USER_AGENT_JASPERSOFT_STUDIO);
+		// builder.header("User-Agent", HttpUtils.USER_AGENT_JASPERSOFT_STUDIO);
 		return doWait(builder.async().post(entity), monitor);
 	}
 }
