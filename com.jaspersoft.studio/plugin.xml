@@ -2195,6 +2195,13 @@
              name="%disableSnapName"
              sequence="ALT">
        </item>
+       <item
+             context="Elements Selected"
+             description="%groupSelectionDescription"
+             id="com.jaspersoft.studio.editor.groupselection"
+             name="%groupSelectionName"
+             sequence="G">
+       </item>
     </extension>
     <extension
           point="com.jaspersoft.studio.resourceExporter">
