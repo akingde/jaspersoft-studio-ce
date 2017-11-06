@@ -72,7 +72,7 @@ public class HttpUtils {
 	}
 
 	private static void setupUriHost(URI uri, String host) {
-		if (uri.getHost() == null) {
+		if (uri.getHost() == null && uri.getAuthority() != null) {
 			try {
 				String[] s = uri.getAuthority().split(":");
 				if (s.length > 0) {
