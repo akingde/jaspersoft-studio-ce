@@ -34,23 +34,24 @@ import net.sf.jasperreports.eclipse.util.Misc;
 public class TextFieldEditor extends FieldEditor {
 
 	/**
-	 * Validation strategy constant (value <code>0</code>) indicating that the editor should perform validation after
-	 * every key stroke.
+	 * Validation strategy constant (value <code>0</code>) indicating that the
+	 * editor should perform validation after every key stroke.
 	 * 
 	 * @see #setValidateStrategy
 	 */
 	public static final int VALIDATE_ON_KEY_STROKE = 0;
 
 	/**
-	 * Validation strategy constant (value <code>1</code>) indicating that the editor should perform validation only when
-	 * the text widget loses focus.
+	 * Validation strategy constant (value <code>1</code>) indicating that the
+	 * editor should perform validation only when the text widget loses focus.
 	 * 
 	 * @see #setValidateStrategy
 	 */
 	public static final int VALIDATE_ON_FOCUS_LOST = 1;
 
 	/**
-	 * Text limit constant (value <code>-1</code>) indicating unlimited text limit and width.
+	 * Text limit constant (value <code>-1</code>) indicating unlimited text limit
+	 * and width.
 	 */
 	public static int UNLIMITED = -1;
 
@@ -100,22 +101,26 @@ public class TextFieldEditor extends FieldEditor {
 	private Button bIsNull;
 
 	/**
-	 * Creates a string field editor. Use the method <code>setTextLimit</code> to limit the text.
+	 * Creates a string field editor. Use the method <code>setTextLimit</code> to
+	 * limit the text.
 	 * 
 	 * @param name
-	 *          the name of the preference this field editor works on
+	 *            the name of the preference this field editor works on
 	 * @param labelText
-	 *          the label text of the field editor
+	 *            the label text of the field editor
 	 * @param width
-	 *          the width of the text input field in characters, or <code>UNLIMITED</code> for no limit
+	 *            the width of the text input field in characters, or
+	 *            <code>UNLIMITED</code> for no limit
 	 * @param strategy
-	 *          either <code>VALIDATE_ON_KEY_STROKE</code> to perform on the fly checking (the default), or
-	 *          <code>VALIDATE_ON_FOCUS_LOST</code> to perform validation only after the text has been typed in
+	 *            either <code>VALIDATE_ON_KEY_STROKE</code> to perform on the fly
+	 *            checking (the default), or <code>VALIDATE_ON_FOCUS_LOST</code> to
+	 *            perform validation only after the text has been typed in
 	 * @param parent
-	 *          the parent of the field editor's control
+	 *            the parent of the field editor's control
 	 * @since 2.0
 	 */
-	public TextFieldEditor(String name, String labelText, int width, int strategy, boolean isNullAllowed, Composite parent) {
+	public TextFieldEditor(String name, String labelText, int width, int strategy, boolean isNullAllowed,
+			Composite parent) {
 		init(name, labelText);
 		this.isNullAllowed = isNullAllowed;
 		// widthInChars = width;
@@ -126,44 +131,48 @@ public class TextFieldEditor extends FieldEditor {
 	}
 
 	/**
-	 * Creates a string field editor. Use the method <code>setTextLimit</code> to limit the text.
+	 * Creates a string field editor. Use the method <code>setTextLimit</code> to
+	 * limit the text.
 	 * 
 	 * @param name
-	 *          the name of the preference this field editor works on
+	 *            the name of the preference this field editor works on
 	 * @param labelText
-	 *          the label text of the field editor
+	 *            the label text of the field editor
 	 * @param width
-	 *          the width of the text input field in characters, or <code>UNLIMITED</code> for no limit
+	 *            the width of the text input field in characters, or
+	 *            <code>UNLIMITED</code> for no limit
 	 * @param parent
-	 *          the parent of the field editor's control
+	 *            the parent of the field editor's control
 	 */
 	public TextFieldEditor(String name, String labelText, int width, Composite parent) {
 		this(name, labelText, width, VALIDATE_ON_KEY_STROKE, false, parent);
 	}
 
 	/**
-	 * Creates a string field editor of unlimited width. Use the method <code>setTextLimit</code> to limit the text.
+	 * Creates a string field editor of unlimited width. Use the method
+	 * <code>setTextLimit</code> to limit the text.
 	 * 
 	 * @param name
-	 *          the name of the preference this field editor works on
+	 *            the name of the preference this field editor works on
 	 * @param labelText
-	 *          the label text of the field editor
+	 *            the label text of the field editor
 	 * @param parent
-	 *          the parent of the field editor's control
+	 *            the parent of the field editor's control
 	 */
 	public TextFieldEditor(String name, String labelText, Composite parent) {
 		this(name, labelText, UNLIMITED, parent);
 	}
 
 	/**
-	 * Creates a string field editor of unlimited width. Use the method <code>setTextLimit</code> to limit the text.
+	 * Creates a string field editor of unlimited width. Use the method
+	 * <code>setTextLimit</code> to limit the text.
 	 * 
 	 * @param name
-	 *          the name of the preference this field editor works on
+	 *            the name of the preference this field editor works on
 	 * @param labelText
-	 *          the label text of the field editor
+	 *            the label text of the field editor
 	 * @param parent
-	 *          the parent of the field editor's control
+	 *            the parent of the field editor's control
 	 */
 	public TextFieldEditor(String name, String labelText, boolean isNullAllowed, Composite parent) {
 		this(name, labelText, UNLIMITED, VALIDATE_ON_KEY_STROKE, isNullAllowed, parent);
@@ -184,7 +193,8 @@ public class TextFieldEditor extends FieldEditor {
 	/**
 	 * Checks whether the text input field contains a valid value or not.
 	 * 
-	 * @return <code>true</code> if the field value is valid, and <code>false</code> if invalid
+	 * @return <code>true</code> if the field value is valid, and <code>false</code>
+	 *         if invalid
 	 */
 	protected boolean checkState() {
 		boolean result = false;
@@ -218,11 +228,13 @@ public class TextFieldEditor extends FieldEditor {
 	/**
 	 * Hook for subclasses to do specific state checks.
 	 * <p>
-	 * The default implementation of this framework method does nothing and returns <code>true</code>. Subclasses should
-	 * override this method to specific state checks.
+	 * The default implementation of this framework method does nothing and returns
+	 * <code>true</code>. Subclasses should override this method to specific state
+	 * checks.
 	 * </p>
 	 * 
-	 * @return <code>true</code> if the field value is valid, and <code>false</code> if invalid
+	 * @return <code>true</code> if the field value is valid, and <code>false</code>
+	 *         if invalid
 	 */
 	protected boolean doCheckState() {
 		return true;
@@ -231,8 +243,9 @@ public class TextFieldEditor extends FieldEditor {
 	/**
 	 * Fills this field editor's basic controls into the given parent.
 	 * <p>
-	 * The string field implementation of this <code>FieldEditor</code> framework method contributes the text field.
-	 * Subclasses may override but must call <code>super.doFillIntoGrid</code>.
+	 * The string field implementation of this <code>FieldEditor</code> framework
+	 * method contributes the text field. Subclasses may override but must call
+	 * <code>super.doFillIntoGrid</code>.
 	 * </p>
 	 */
 	protected void doFillIntoGrid(Composite parent, int numColumns) {
@@ -386,9 +399,10 @@ public class TextFieldEditor extends FieldEditor {
 	/**
 	 * Returns this field editor's text control.
 	 * 
-	 * @return the text control, or <code>null</code> if no text field is created yet
+	 * @return the text control, or <code>null</code> if no text field is created
+	 *         yet
 	 */
-	protected Text getTextControl() {
+	public Text getTextControl() {
 		return textField;
 	}
 
@@ -399,7 +413,7 @@ public class TextFieldEditor extends FieldEditor {
 	 * </p>
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @return the text control
 	 */
 	public Text getTextControl(Composite parent) {
@@ -425,7 +439,8 @@ public class TextFieldEditor extends FieldEditor {
 					/*
 					 * (non-Javadoc)
 					 * 
-					 * @see org.eclipse.swt.events.KeyAdapter#keyReleased(org.eclipse.swt.events.KeyEvent)
+					 * @see org.eclipse.swt.events.KeyAdapter#keyReleased(org.eclipse.swt.events.
+					 * KeyEvent)
 					 */
 					public void keyReleased(KeyEvent e) {
 						valueChanged();
@@ -478,7 +493,8 @@ public class TextFieldEditor extends FieldEditor {
 	/**
 	 * Returns whether an empty string is a valid value.
 	 * 
-	 * @return <code>true</code> if an empty string is a valid value, and <code>false</code> if an empty string is invalid
+	 * @return <code>true</code> if an empty string is a valid value, and
+	 *         <code>false</code> if an empty string is invalid
 	 * @see #setEmptyStringAllowed
 	 */
 	public boolean isEmptyStringAllowed() {
@@ -503,7 +519,8 @@ public class TextFieldEditor extends FieldEditor {
 	 * Sets whether the empty string is a valid value or not.
 	 * 
 	 * @param b
-	 *          <code>true</code> if the empty string is allowed, and <code>false</code> if it is considered invalid
+	 *            <code>true</code> if the empty string is allowed, and
+	 *            <code>false</code> if it is considered invalid
 	 */
 	public void setEmptyStringAllowed(boolean b) {
 		emptyStringAllowed = b;
@@ -513,7 +530,7 @@ public class TextFieldEditor extends FieldEditor {
 	 * Sets the error message that will be displayed when and if an error occurs.
 	 * 
 	 * @param message
-	 *          the error message
+	 *            the error message
 	 */
 	public void setErrorMessage(String message) {
 		errorMessage = message;
@@ -532,7 +549,7 @@ public class TextFieldEditor extends FieldEditor {
 	 * Sets this field editor's value.
 	 * 
 	 * @param value
-	 *          the new value, or <code>null</code> meaning the empty string
+	 *            the new value, or <code>null</code> meaning the empty string
 	 */
 	public void setStringValue(String value) {
 		if (textField != null) {
@@ -551,7 +568,8 @@ public class TextFieldEditor extends FieldEditor {
 	 * Sets this text field's text limit.
 	 * 
 	 * @param limit
-	 *          the limit on the number of character in the text input field, or <code>UNLIMITED</code> for no limit
+	 *            the limit on the number of character in the text input field, or
+	 *            <code>UNLIMITED</code> for no limit
 	 */
 	public void setTextLimit(int limit) {
 		textLimit = limit;
@@ -563,13 +581,16 @@ public class TextFieldEditor extends FieldEditor {
 	/**
 	 * Sets the strategy for validating the text.
 	 * <p>
-	 * Calling this method has no effect after <code>createPartControl</code> is called. Thus this method is really only
-	 * useful for subclasses to call in their constructor. However, it has public visibility for backward compatibility.
+	 * Calling this method has no effect after <code>createPartControl</code> is
+	 * called. Thus this method is really only useful for subclasses to call in
+	 * their constructor. However, it has public visibility for backward
+	 * compatibility.
 	 * </p>
 	 * 
 	 * @param value
-	 *          either <code>VALIDATE_ON_KEY_STROKE</code> to perform on the fly checking (the default), or
-	 *          <code>VALIDATE_ON_FOCUS_LOST</code> to perform validation only after the text has been typed in
+	 *            either <code>VALIDATE_ON_KEY_STROKE</code> to perform on the fly
+	 *            checking (the default), or <code>VALIDATE_ON_FOCUS_LOST</code> to
+	 *            perform validation only after the text has been typed in
 	 */
 	public void setValidateStrategy(int value) {
 		Assert.isTrue(value == VALIDATE_ON_FOCUS_LOST || value == VALIDATE_ON_KEY_STROKE);
@@ -584,11 +605,12 @@ public class TextFieldEditor extends FieldEditor {
 	}
 
 	/**
-	 * Informs this field editor's listener, if it has one, about a change to the value (<code>VALUE</code> property)
-	 * provided that the old and new values are different.
+	 * Informs this field editor's listener, if it has one, about a change to the
+	 * value (<code>VALUE</code> property) provided that the old and new values are
+	 * different.
 	 * <p>
-	 * This hook is <em>not</em> called when the text is initialized (or reset to the default value) from the preference
-	 * store.
+	 * This hook is <em>not</em> called when the text is initialized (or reset to
+	 * the default value) from the preference store.
 	 * </p>
 	 */
 	protected void valueChanged() {

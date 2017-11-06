@@ -18,11 +18,12 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
+import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.utils.Callback;
@@ -54,15 +55,25 @@ public class JRSPreferencesPage extends FieldEditorOverlayPage {
 	public void createFieldEditors() {
 		addField(new BooleanFieldEditor(PUBLISH_REPORT_TOJRSONSAVE,
 				com.jaspersoft.studio.server.messages.Messages.JRSPreferencesPage_1, getFieldEditorParent()));
+
+		new Label(getFieldEditorParent(), SWT.NONE);
+
 		addField(new ComboFieldEditor(PUBLISH_REPORT_OVERRIDEBYDEFAULT, Messages.JRSPreferencesPage_2,
 				new String[][] { { Messages.JRSPreferencesPage_3, "overwrite" }, // $NON-NLS-2$
 						{ Messages.JRSPreferencesPage_5, "true" }, { Messages.JRSPreferencesPage_7, "ignore" } }, //$NON-NLS-2$ //$NON-NLS-4$
-				getFieldEditorParent()));
+				getFieldEditorParent()) {
+			@Override
+			public int getNumberOfControls() {
+				return 1;
+			}
+		});
 
-		NStringFieldEditor tf = new NStringFieldEditor(HttpUtils.USER_AGENT, Messages.JRSPreferencesPage_9,
+		new Label(getFieldEditorParent(), SWT.NONE);
+
+		TextFieldEditor tf = new TextFieldEditor(HttpUtils.USER_AGENT, Messages.JRSPreferencesPage_9,
 				getFieldEditorParent());
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.widthHint = 400;
+		gd.widthHint = 300;
 		final Text txt = tf.getTextControl();
 		txt.setLayoutData(gd);
 		txt.setToolTipText(Messages.JRSPreferencesPage_10);
@@ -70,7 +81,7 @@ public class JRSPreferencesPage extends FieldEditorOverlayPage {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				txt.setToolTipText(Messages.JRSPreferencesPage_13 + "\n\n" + txt.getText()); //$NON-NLS-1$
+				txt.setToolTipText(Messages.JRSPreferencesPage_10 + "\n\n" + txt.getText()); //$NON-NLS-1$
 			}
 		});
 		addField(tf);
@@ -79,7 +90,6 @@ public class JRSPreferencesPage extends FieldEditorOverlayPage {
 		b.setText(Messages.JRSPreferencesPage_12);
 		b.setToolTipText(Messages.JRSPreferencesPage_13);
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
-		gd.horizontalSpan = 2;
 		b.setLayoutData(gd);
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -106,8 +116,6 @@ public class JRSPreferencesPage extends FieldEditorOverlayPage {
 				job.schedule();
 			}
 		});
-
-		// Eventually create the extensions for the page
 		super.createFieldEditors();
 	}
 

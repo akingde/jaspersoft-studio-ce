@@ -15,8 +15,12 @@ import org.eclipse.jdt.launching.SocketUtil;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.utils.Callback;
@@ -73,13 +77,7 @@ public class BrowserInfo {
 				}
 			});
 			server.start();
-
-			UIUtils.getDisplay().syncExec(() -> {
-				if (ABrowserViewer.useExternalBrowser())
-					BrowserUtils.openExternalBrowser("http://localhost:" + port + "/index.html");
-				else
-					BrowserUtils.openLink("http://localhost:" + port + "/index.html");
-			});
+			UIUtils.getDisplay().syncExec(() -> runBrowser("http://localhost:" + port + "/index.html"));
 		} catch (Exception e) {
 			throw new JRRuntimeException(e);
 		} finally {
@@ -91,6 +89,30 @@ public class BrowserInfo {
 				UIUtils.showError(e);
 			}
 		}
+	}
+
+	protected static void runBrowser(String url) {
+		Dialog d = new Dialog(UIUtils.getShell()) {
+
+			@Override
+			protected Control createDialogArea(Composite parent) {
+				try {
+					BrowserUtils.getSWTBrowserWidget(parent, SWT.NONE).setUrl(url);
+					UIUtils.getDisplay().asyncExec(() -> {
+						close();
+					});
+				} catch (Throwable e) {
+					UIUtils.getDisplay().syncExec(() -> {
+						if (ABrowserViewer.useExternalBrowser())
+							BrowserUtils.openExternalBrowser(url);
+						else
+							BrowserUtils.openLink(url);
+					});
+				}
+				return super.createDialogArea(parent);
+			}
+		};
+		d.open();
 	}
 
 }
