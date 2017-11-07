@@ -22,7 +22,7 @@ public class CloseSubeditorDeletePolicy extends ElementEditPolicy{
 	
 	protected Command createDeleteCommand(GroupRequest request) {
 		if (getHost() != null && getHost().getParent() != null) {
-			Object parent = getHost().getParent().getModel();
+			Object parent = ((ANode)getHost().getModel()).getParent();
 			Command deleteCommand = null;
 			if (parent != null && parent instanceof ANode) {
 				deleteCommand = OutlineTreeEditPartFactory.getDeleteCommand((ANode) parent, (ANode) getHost().getModel());
