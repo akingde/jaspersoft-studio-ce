@@ -452,11 +452,12 @@ public final class PageFormatDialog extends FormDialog {
 		cwidth.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_COLUMN_WIDTH, defunit));
 		space.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_COLUMN_SPACING, defunit));
 
-		if (jd.getPrintOrderValue().equals(PrintOrderEnum.VERTICAL))
-			cPrintOrder.select(0);
-		if (jd.getPrintOrderValue().equals(PrintOrderEnum.HORIZONTAL))
-			cPrintOrder.select(1);
-
+		if (jd.getPrintOrderValue() != null) {
+			if (jd.getPrintOrderValue().equals(PrintOrderEnum.VERTICAL))
+				cPrintOrder.select(0);
+			if (jd.getPrintOrderValue().equals(PrintOrderEnum.HORIZONTAL))
+				cPrintOrder.select(1);
+		}
 		enablePrintOrder();
 	}
 
