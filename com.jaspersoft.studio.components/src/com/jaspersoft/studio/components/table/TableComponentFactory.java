@@ -89,6 +89,10 @@ import com.jaspersoft.studio.components.table.part.TablePageEditPart;
 import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.layout.FreeLayout;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.editor.outline.part.OpenableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.tools.CompositeElementManager;
@@ -453,8 +457,15 @@ public class TableComponentFactory implements IComponentFactory {
 		
 		//Avoid to generate create command in the main editor
 		if (parent instanceof MTable && !(parent.getParent() instanceof MPage)){
+			ANode ancestor = parent.getParent();
+			Class<? extends ILayout> ancestorLayout = LayoutManager.getContainerLayout(ancestor);
+			if (!(ancestor instanceof MTable) && !(FreeLayout.class.equals(ancestorLayout))) {
+				return OutlineTreeEditPartFactory.getCreateCommand(ancestor, child, location, newIndex);
+			}
 			return UnexecutableCommand.INSTANCE;
 		}
+		
+		
 		
 		if (child instanceof MField && (child.getValue() != null && parent instanceof MCell))
 			return new CreateE4ObjectCommand(child, (MCell) parent, location,newIndex);

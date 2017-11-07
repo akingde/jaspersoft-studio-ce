@@ -12,6 +12,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -26,6 +27,10 @@ import com.jaspersoft.studio.components.list.model.command.CreateListCommand;
 import com.jaspersoft.studio.components.list.part.ListEditPart;
 import com.jaspersoft.studio.components.list.part.ListPageEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.layout.FreeLayout;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.editor.outline.part.OpenableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.tools.CompositeElementManager;
@@ -160,6 +165,17 @@ public class ListComponentFactory implements IComponentFactory {
 				}
 			}
 		}
+		
+		//Avoid to generate create command in the main editor
+		if (parent instanceof MList && !(parent.getParent() instanceof MPage)){
+			ANode ancestor = parent.getParent();
+			Class<? extends ILayout> ancestorLayout = LayoutManager.getContainerLayout(ancestor);
+			if (!(ancestor instanceof MList) && !(FreeLayout.class.equals(ancestorLayout))) {
+				return OutlineTreeEditPartFactory.getCreateCommand(ancestor, child, location, newIndex);
+			}
+			return UnexecutableCommand.INSTANCE;
+		}
+		
 		if (child instanceof MStyle && (child.getValue() != null && parent instanceof MList)) {
 			SetValueCommand cmd = new SetValueCommand();
 			cmd.setTarget((MList) parent);

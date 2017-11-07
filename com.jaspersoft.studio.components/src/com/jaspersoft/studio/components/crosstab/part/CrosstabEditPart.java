@@ -7,6 +7,7 @@ package com.jaspersoft.studio.components.crosstab.part;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 
@@ -53,5 +54,14 @@ public class CrosstabEditPart extends EditableFigureEditPart {
 	public DragTracker getDragTracker(Request request) {
 		if (ToolUtilitiesCompatibility.isSubeditorMainElement(this)) return new SubEditorEditPartTracker(this);
 		else return new SearchParentDragTracker(this);
+	}
+	
+	@Override
+	public EditPart getDropContainer() {
+		if (getModel().getParent() instanceof MPage) {
+			return this;
+		} else {
+			return getParentEditPart(this);
+		}
 	}
 }

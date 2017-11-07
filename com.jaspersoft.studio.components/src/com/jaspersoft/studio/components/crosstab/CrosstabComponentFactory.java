@@ -96,6 +96,10 @@ import com.jaspersoft.studio.components.crosstab.part.CrosstabTitleCellEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabTitleEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabWhenNoDataEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.layout.FreeLayout;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.editor.outline.part.OpenableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.tools.CompositeElementManager;
@@ -529,8 +533,14 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		
 		//Avoid to generate create command in the main editor
 		if (parent instanceof MCrosstab && !(parent.getParent() instanceof MPage)){
+			ANode ancestor = parent.getParent();
+			Class<? extends ILayout> ancestorLayout = LayoutManager.getContainerLayout(ancestor);
+			if (!(ancestor instanceof MCrosstab) && !(FreeLayout.class.equals(ancestorLayout))) {
+				return OutlineTreeEditPartFactory.getCreateCommand(ancestor, child, location, newIndex);
+			}
 			return UnexecutableCommand.INSTANCE;
 		}
+		
 		
 		if (child instanceof MStyle && (child.getValue() != null && parent instanceof MCell)) {
 			SetValueCommand cmd = new SetValueCommand();

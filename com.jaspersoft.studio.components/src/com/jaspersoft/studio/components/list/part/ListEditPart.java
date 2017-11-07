@@ -47,6 +47,7 @@ import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 
@@ -250,6 +251,15 @@ public class ListEditPart extends EditableFigureEditPart {
 	public DragTracker getDragTracker(Request request) {
 		if (ToolUtilitiesCompatibility.isSubeditorMainElement(this)) return new SubEditorEditPartTracker(this);
 		else return new SearchParentDragTracker(this);
+	}
+	
+	@Override
+	public EditPart getDropContainer() {
+		if (getModel().getParent() instanceof MPage) {
+			return this;
+		} else {
+			return getParentEditPart(this);
+		}
 	}
 
 }

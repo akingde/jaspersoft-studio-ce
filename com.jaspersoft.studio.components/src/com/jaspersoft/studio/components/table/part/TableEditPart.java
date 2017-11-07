@@ -7,6 +7,7 @@ package com.jaspersoft.studio.components.table.part;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
@@ -71,5 +72,14 @@ public class TableEditPart extends EditableFigureEditPart implements IContainer 
 	public DragTracker getDragTracker(Request request) {
 		if (ToolUtilitiesCompatibility.isSubeditorMainElement(this)) return new SubEditorEditPartTracker(this);
 		else return new SearchParentDragTracker(this);
+	}
+	
+	@Override
+	public EditPart getDropContainer() {
+		if (getModel().getParent() instanceof MPage) {
+			return this;
+		} else {
+			return getParentEditPart(this);
+		}
 	}
 }

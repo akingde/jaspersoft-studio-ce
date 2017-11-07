@@ -12,6 +12,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -37,6 +38,7 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.SearchParentDragTracker
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.properties.view.ErrorsDialog;
@@ -270,6 +272,43 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 				getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN, new Point(x, y));
 			}
 		}
+	}
+	
+	/**
+	 * Return the edit part of the parent model of the parameter model
+	 * 
+	 * @param childEditPart not null edit part from where the model is read
+	 * @return the editpart that contains the model of the parent of the passed model
+	 */
+	public static EditPart getParentEditPart(EditPart childEditPart) {
+		ANode child = (ANode)childEditPart.getModel();
+		ANode parentModel = child.getParent();
+		// This use the model for the search because every EditPart in the report has the same father.
+		for (Object actualChild : childEditPart.getParent().getChildren()) {
+			EditPart actualChildPart = (EditPart) actualChild;
+			if (parentModel == actualChildPart.getModel())
+				return actualChildPart;
+		}
+		return null;
+	}
+	
+	/**
+	 * Return the editpart target of a drop operation when an element is released on this edit part
+	 * some elements doesn't support direct drop (like table..) because the must be edited in a subeditor
+	 * So the drop container is not always the real editpart where an element is dropped. This is 
+	 * mostly used to show the drop feedback since the generation of the commands with the correct
+	 * container is handled from the EdtiPartFactory of the element where the drop was done
+	 * 
+	 * @return a not null edit part
+	 */
+	public EditPart getDropContainer() {
+		if (!(this instanceof IContainer)) {
+			EditPart parentEditPart = getParentEditPart(this);
+			if (parentEditPart != null) {
+				return parentEditPart;
+			}
+		} 
+		return this;
 	}
 
 }

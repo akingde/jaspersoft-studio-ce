@@ -30,6 +30,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
@@ -54,12 +55,20 @@ import com.jaspersoft.studio.components.barcode.model.barcode4j.MRoyalMail;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCA;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCE;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUSPSIntelligent;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.list.model.MList;
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.layout.FreeLayout;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.frame.MFrame;
@@ -191,6 +200,15 @@ public class BarcodeComponentFactory implements IComponentFactory {
 				return new CreateBarcodeCommand(parent,
 						(MGraphicElement) child, location, newIndex);
 
+			if ((parent instanceof MTable || parent instanceof MList || parent instanceof MCrosstab) && !(parent.getParent() instanceof MPage)) {
+				ANode ancestor = parent.getParent();
+				Class<? extends ILayout> ancestorLayout = LayoutManager.getContainerLayout(ancestor);
+				if (!(ancestor instanceof MList) && !(FreeLayout.class.equals(ancestorLayout))) {
+					return OutlineTreeEditPartFactory.getCreateCommand(ancestor, child, location, newIndex);
+				}
+				return UnexecutableCommand.INSTANCE;
+			}
+			
 			if (parent instanceof IGroupElement) {
 				return new CreateBarcodeCommand(parent,
 						(MGraphicElement) child, location, newIndex);

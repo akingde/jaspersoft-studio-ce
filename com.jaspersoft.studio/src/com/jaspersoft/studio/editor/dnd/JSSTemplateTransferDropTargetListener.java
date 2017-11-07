@@ -8,14 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.Misc;
-import net.sf.jasperreports.engine.JRBand;
-import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.design.JRDesignStaticText;
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
@@ -40,6 +32,7 @@ import org.eclipse.swt.widgets.TreeItem;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.java2d.J2DScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
@@ -60,7 +53,6 @@ import com.jaspersoft.studio.model.image.command.dialog.ImageCreationDialog;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
-import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRBand;
@@ -390,16 +382,13 @@ public class JSSTemplateTransferDropTargetListener extends AbstractTransferDropT
 	 */
 	private EditPart getContainer() {
 		EditPart target = getTargetEditPart();
-		if (!(target instanceof IContainer)) {
-			ANode parentModel = ((ANode) target.getModel()).getParent();
-			// This use the model for the search because every EditPart in the report has the same father.
-			for (Object actualChild : target.getParent().getChildren()) {
-				EditPart actualChildPart = (EditPart) actualChild;
-				if (parentModel == actualChildPart.getModel())
-					return actualChildPart;
-			}
+		if (target instanceof FigureEditPart) {
+			return ((FigureEditPart)target).getDropContainer();
+		} else if (target instanceof IContainer) {
+			return target;
+		} else {
+			return FigureEditPart.getParentEditPart(target);
 		}
-		return target;
 	}
 	
 	/**
