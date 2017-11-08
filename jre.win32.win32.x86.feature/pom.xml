@@ -12,7 +12,7 @@
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>jre.win32.win32.x86.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
-	<version>1.8.0.u144</version>
+	<version>1.8.0.u151</version>
 
 	<build>
 		<plugins>
