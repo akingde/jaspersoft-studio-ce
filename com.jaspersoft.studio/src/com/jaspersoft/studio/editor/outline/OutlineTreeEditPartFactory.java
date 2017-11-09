@@ -517,8 +517,10 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 						|| ShowFieldsTreeAction.isFieldsTree(parent.getJasperConfiguration())) {
 					return null;
 				}
-				newIndex = parent.getParent().getChildren().indexOf(parent);
-				return new CreateFieldCommand((MFields) parent.getParent(), (MField) child, newIndex);
+				if (parent.getParent() != null) {
+					newIndex = parent.getParent().getChildren().indexOf(parent);
+					return new CreateFieldCommand((MFields) parent.getParent(), (MField) child, newIndex);
+				}
 			} else if (child.getValue() != null) {
 				ANode targetNode = null;
 				if (parent instanceof MReport || parent instanceof MBand || parent instanceof MFrame) {
@@ -568,7 +570,6 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					JRDesignParameter p = (JRDesignParameter) child.getValue();
 					if ((p == null || !p.isSystemDefined()) && parent.getParent() != null) {
 						newIndex = parent.getParent().getChildren().indexOf(parent);
-
 						return new CreateParameterCommand((MParameters<?>) parent.getParent(), (MParameter) child,
 								newIndex);
 					}
@@ -586,7 +587,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				}
 			} else if (parent instanceof MVariable) {
 				JRDesignVariable p = (JRDesignVariable) child.getValue();
-				if (p == null || !p.isSystemDefined()) {
+				if ((p == null || !p.isSystemDefined()) && parent.getParent() != null) {
 					newIndex = parent.getParent().getChildren().indexOf(parent);
 					return new CreateVariableCommand((MVariables) parent.getParent(), (MVariable) child, newIndex);
 				}
