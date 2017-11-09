@@ -261,7 +261,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					new UpdateValueStrategy().setAfterConvertValidator(new URLValidator() {
 						@Override
 						public IStatus validate(Object value) {
-							IStatus status = super.validate(value);
+							IStatus status = super.validate(Misc.nvl(value, "").trim());
 							((ServerProfileWizardDialog) getContainer()).setTestButtonEnabled(status.isOK());
 							return status;
 						}
