@@ -220,7 +220,13 @@ public class JDRulerComposite extends Composite {
 		editorSize.y = topHeight;
 		editorSize.width -= leftWidth;
 		editorSize.height -= topHeight;
-		if (parentEditor.isEditorVisible()) editor.setBounds(editorSize);
+		//force the editor to set the bounds even when not visible if the current bounds are not correct
+		//this prevent some bugs on mac where the isEditorVisible has a delay when switching the editor, 
+		//because isEditorVisible relay on the SelectionUtil method to get the editor from the workbanch
+		//but the workbanch active editor is updated differently on different OS
+		if (parentEditor.isEditorVisible() || !editor.getBounds().equals(editorSize)) {
+			editor.setBounds(editorSize);
+		}
 
 		/*
 		 * Fix for Bug# 67554 Take trim into account. Some platforms (such as MacOS and Motif) leave some trimming around
