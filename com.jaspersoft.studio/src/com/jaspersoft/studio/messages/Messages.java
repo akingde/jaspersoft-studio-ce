@@ -536,6 +536,11 @@ public class Messages extends NLS {
 	public static String DatasetRunRVPropertyPage_pageTitle;
 	public static String DatasetSection_defaultAdapter;
 	public static String DatasetSection_nameNotValidTitle;
+	public static String DatasnapshotDialog_0;
+	public static String DatasnapshotDialog_1;
+	public static String DatasnapshotDialog_2;
+	public static String DatasnapshotDialog_3;
+	public static String DatasnapshotDialog_4;
 	public static String DatasourceComboItem_select_a_datasource;
 	public static String DatePattern_description;
 	public static String DatePattern_template_formats;
