@@ -60,7 +60,7 @@ public class WInputControlPathSelector extends WText {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				JasperDesign jDesign = ((JasperReportsConfiguration) aw.getTColumn().getValue()).getJasperDesign();
+				JasperDesign jDesign = ((JasperReportsConfiguration) aw.getjConfig()).getJasperDesign();
 				String servURL = jDesign.getProperty(AExporter.PROP_SERVERURL);
 				String servUser = jDesign.getProperty(AExporter.PROP_USER);
 
