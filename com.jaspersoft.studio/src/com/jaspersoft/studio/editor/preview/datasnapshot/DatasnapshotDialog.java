@@ -113,16 +113,17 @@ public class DatasnapshotDialog extends ATitledDialog {
 			}
 		});
 
-		Label lbl = new Label(cmp, SWT.NONE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		lbl.setLayoutData(gd);
+		// Label lbl = new Label(cmp, SWT.NONE);
+		// gd = new GridData(GridData.FILL_HORIZONTAL);
+		// gd.horizontalSpan = 2;
+		// lbl.setLayoutData(gd);
 
 		lfile = new Label(cmp, SWT.NONE);
 		lfile.setText(Messages.DatasnapshotDialog_3);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.horizontalIndent = 18;
+		gd.verticalIndent = 10;
 		lfile.setLayoutData(gd);
 
 		tFile = new Text(cmp, SWT.BORDER);
