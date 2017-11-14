@@ -53,6 +53,7 @@ public class BringForwardAction extends ACachedSelectionAction implements IGloba
 		OrderUtil.reorderReverseElements(graphicalElements);
 
 		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Bring Forward", null); //$NON-NLS-1$
+		compoundCmd.enableSelectionRestore(true);
 		for (Object model : graphicalElements) {
 			Command cmd = null;
 			ANode parent = (ANode) ((MGraphicElement) model).getParent();

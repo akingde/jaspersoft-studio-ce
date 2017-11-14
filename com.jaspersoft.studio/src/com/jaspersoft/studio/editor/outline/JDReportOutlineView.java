@@ -41,8 +41,10 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -57,6 +59,8 @@ import org.eclipse.ui.part.ResourceTransfer;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
+import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
+import com.jaspersoft.studio.editor.action.order.BringForwardAction;
 import com.jaspersoft.studio.editor.dnd.ImageResourceDropTargetListener;
 import com.jaspersoft.studio.editor.dnd.ImageURLTransfer;
 import com.jaspersoft.studio.editor.dnd.JSSTemplateTransferDropTargetListener;
@@ -66,6 +70,7 @@ import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.java2d.figure.JSSScrollableThumbnail;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -76,6 +81,7 @@ import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.util.EditPartVisitor;
 import com.jaspersoft.studio.model.variable.MVariables;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.preferences.bindings.BindingsPreferencePersistence;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
@@ -351,14 +357,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 				}
 			});
 
-			tree.addMouseListener(new MouseListener() {
-
-				public void mouseUp(MouseEvent e) {
-				}
-
-				public void mouseDown(MouseEvent e) {
-
-				}
+			tree.addMouseListener(new MouseAdapter() {
 
 				public void mouseDoubleClick(MouseEvent e) {
 					if (e.getSource() instanceof Tree) {
@@ -381,6 +380,32 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 							}
 						}
 					}
+				}
+			});
+			
+			//listener to move the selected elements up and down on keypress
+			tree.addKeyListener(new KeyAdapter() {
+				
+				private static final String ACTION_UP_BINDING = "com.jaspersoft.studio.editor.action.order.BringForwardAction" ;
+				
+				private static final String ACTION_DOWN_BINDING = "com.jaspersoft.studio.editor.action.order.BringBackwardAction" ;
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (BindingsPreferencePersistence.isPressed(ACTION_DOWN_BINDING)) {
+						BringForwardAction action = new BringForwardAction((AbstractVisualEditor)getEditor());
+						action.setLazyEnablementCalculation(true);
+						if (action.isEnabled()) {
+							action.run();
+						}
+					} else if (BindingsPreferencePersistence.isPressed(ACTION_UP_BINDING)) {
+						BringBackwardAction action = new BringBackwardAction((AbstractVisualEditor)getEditor());
+						action.setLazyEnablementCalculation(true);
+						if (action.isEnabled()) {
+							action.run();
+						}
+					}
+					
 				}
 			});
 

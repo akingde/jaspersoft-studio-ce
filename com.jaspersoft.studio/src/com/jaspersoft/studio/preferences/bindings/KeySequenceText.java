@@ -83,10 +83,24 @@ public final class KeySequenceText {
 				deleteSelection(keyStrokes, true, deletedKeyStrokes);
 				return deletedKeyStrokes[0];
 			}
-
+			
+			//try to get where the stroke is
+			int caretPosition = text.getCaretPosition();
+			String[] strokes = text.getText().split(" ");
+			int index = keyStrokes.length - 1;
+			int parsedText = 0;
+			for(String stroke : strokes) {
+				parsedText += stroke.length() + 1;
+				if (caretPosition < parsedText) {
+					index = caretPosition;
+					break;
+				}
+				caretPosition++;
+			}
+			
 			// Remove the last key stroke.
-			if (keyStrokes.length > 0) {
-				final int newKeyStrokesLength = keyStrokes.length - 1;
+			if (keyStrokes.length > 0 && keyStrokes.length < index) {
+				final int newKeyStrokesLength = index;
 				final JSSKeyStroke[] newKeyStrokes = new JSSKeyStroke[newKeyStrokesLength];
 				System.arraycopy(keyStrokes, 0, newKeyStrokes, 0,
 						newKeyStrokesLength);
@@ -106,10 +120,10 @@ public final class KeySequenceText {
 		@Override
 		public void handleEvent(Event event) {
 			
-			if (event.keyCode == SWT.ARROW_LEFT || event.keyCode == SWT.ARROW_RIGHT 
-					|| event.keyCode == SWT.ARROW_DOWN || event.keyCode == SWT.ARROW_UP){
-				return;
-			}
+			//if (event.keyCode == SWT.ARROW_LEFT || event.keyCode == SWT.ARROW_RIGHT 
+				//	|| event.keyCode == SWT.ARROW_DOWN || event.keyCode == SWT.ARROW_UP){
+			//	return;
+		//	}
 			
 			JSSKeyStroke[] keyStrokes = getKeySequence().getKeyStrokes();
 

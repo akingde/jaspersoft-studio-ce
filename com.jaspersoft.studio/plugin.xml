@@ -2202,6 +2202,20 @@
              name="%groupSelectionName"
              sequence="G">
        </item>
+       <item
+             context="Selecting"
+             description="%bringForwardDescription"
+             id="com.jaspersoft.studio.editor.action.order.BringForwardAction"
+             name="%bringForwardName"
+             sequence="CTRL ARROW_UP">
+       </item>
+       <item
+             context="com.jaspersoft.studio.item2"
+             description="%bringBackwardDescription"
+             id="com.jaspersoft.studio.editor.action.order.BringBackwardAction"
+             name="%bringBackwardName"
+             sequence="CTRL ARROW_DOWN">
+       </item>
     </extension>
     <extension
           point="com.jaspersoft.studio.resourceExporter">

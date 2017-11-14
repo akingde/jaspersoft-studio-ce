@@ -52,6 +52,7 @@ public class BringBackwardAction extends ACachedSelectionAction implements IGlob
 
 		OrderUtil.reorderElements(graphicalElements);
 		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Bring Backward", null); //$NON-NLS-1$
+		compoundCmd.enableSelectionRestore(true);
 		for (Object model : graphicalElements) {
 			Command cmd = null;
 			ANode parent = (ANode) ((MGraphicElement) model).getParent();
