@@ -225,6 +225,21 @@ public class WidgetFactory {
 	}
 	
 	/**
+	 * Creates a label widget for the specified property. Will try also to localize the text using the passed WidgetsDescriptor
+	 * 
+	 * @param parent the parent composite
+	 * @param pDescriptor the property descriptor
+	 * @param descriptor the descriptor used to localize the text, must be not null
+	 * @return the label
+	 */
+	public static Label createLabelForProperty(Composite parent, WidgetPropertyDescriptor pDescriptor, WidgetsDescriptor descriptor) {
+		Label lbl = new Label(parent, SWT.NONE);
+		lbl.setText(descriptor.getLocalizedString(pDescriptor.getLabel()));
+		lbl.setToolTipText(descriptor.getLocalizedString(pDescriptor.getDescription()));
+		return lbl;
+	}
+	
+	/**
 	 * Creates a section widget for the specified property.
 	 * 
 	 * @param parent the parent composite
