@@ -104,7 +104,8 @@ public abstract class ARestV2Connection implements IConnection {
 		if (obj instanceof Date)
 			return timestampFormat.format(obj);
 		if (obj instanceof Number)
-			return numberFormat.format(obj);
+			return obj.toString();
+//			return numberFormat.format(obj);
 		return obj.toString();
 	}
 
