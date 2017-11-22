@@ -111,9 +111,9 @@ public class DynamicColumnLayout extends Layout{
 		Point[] sizes = new Point[children.length];
 
 		int ncolumns = calculateColumnsNumber();
-
+		int width = page.getTabbedPropertyComposite().getPropertiesArea().width;
 		for (int i = 0; i < children.length; i++) {
-			sizes[i] = computeControlSize(children[i]);
+			sizes[i] = computeControlSize(children[i], width/ncolumns);
 			cwidth = Math.max(cwidth, sizes[i].x);
 			cheight += sizes[i].y;
 		}
@@ -153,8 +153,8 @@ public class DynamicColumnLayout extends Layout{
 		return size;
 	}
 
-	private Point computeControlSize(Control c) {
-		return c.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+	private Point computeControlSize(Control c, int suggestedWidth) {
+		return c.computeSize(suggestedWidth, SWT.DEFAULT);
 	}
 
 	private int findShortestColumn(int[] heights) {
@@ -202,12 +202,14 @@ public class DynamicColumnLayout extends Layout{
 		int cwidth = 0;
 		int cheight = 0;
 		Point[] sizes = new Point[children.length];
+		int ncolumns = calculateColumnsNumber();
+		int width = page.getTabbedPropertyComposite().getPropertiesArea().width;
 		for (int i = 0; i < children.length; i++) {
-			sizes[i] = computeControlSize(children[i]);
+			sizes[i] = computeControlSize(children[i], width / ncolumns);
 			cwidth = Math.max(cwidth, sizes[i].x);
 			cheight += sizes[i].y;
 		}
-		int ncolumns = calculateColumnsNumber();
+	
 		int realWidth = (carea.width - leftMargin - rightMargin + horizontalSpacing) / ncolumns - horizontalSpacing;
 
 		int fillWidth = Math.max(cwidth, realWidth);

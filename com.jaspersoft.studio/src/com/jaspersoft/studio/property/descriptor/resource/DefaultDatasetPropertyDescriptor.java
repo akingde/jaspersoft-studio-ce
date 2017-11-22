@@ -44,7 +44,7 @@ public class DefaultDatasetPropertyDescriptor extends NTextPropertyDescriptor {
 		public SPDatasetWidget(Composite parent, AbstractSection section, DefaultDatasetPropertyDescriptor pDescriptor) {
 			super(parent, section, pDescriptor);
 		}
-
+		
 		@Override
 		protected SelectionAdapter buttonPressed() {
 			return new SelectionAdapter() {

@@ -10,6 +10,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
@@ -29,7 +30,29 @@ import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import net.sf.jasperreports.eclipse.util.Misc;
 
 public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidget<T> {
-	protected Text ftext;
+	
+	protected class CustomText extends Text {
+		
+		public CustomText(Composite parent, int style) {
+			super(parent, style);
+		}
+
+		@Override
+		public Point computeSize(int wHint, int hHint, boolean changed) {
+			return computeTextSize(wHint, hHint, changed);
+		}
+		
+		public Point standardComputeSize(int wHint, int hHint, boolean changed) {
+			return super.computeSize(wHint, hHint, changed);
+		}
+		
+		@Override
+		protected void checkSubclass() {
+		}
+		
+	}
+	
+	protected CustomText ftext;
 	protected APropertyNode pnode;
 	protected String savedValue;
 	// Flag used to overcome the problem of focus events in Mac OS X
@@ -58,12 +81,21 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 	protected Text getTextControl() {
 		return ftext;
 	}
-
-	protected void createComponent(Composite parent) {
+	
+	protected int getStyle() {
 		int style = SWT.NONE;
 		if (pDescriptor instanceof JSSTextPropertyDescriptor)
 			style = ((JSSTextPropertyDescriptor) pDescriptor).getStyle();
-		ftext = section.getWidgetFactory().createText(parent, "", style);
+		return style;
+	}
+	
+	protected Point computeTextSize(int wHint, int hHint, boolean changed) {
+		return ftext.standardComputeSize(wHint, hHint, changed);
+	}
+
+	protected void createComponent(Composite parent) {
+		
+		ftext = new CustomText(parent, getStyle());
 		autocomplete = new CustomAutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
 		if (UIUtil.isMacAndEclipse4()) {
 			ftext.addModifyListener(new ModifyListener() {
@@ -100,9 +132,9 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 		setWidth(parent, 15);
 	}
 
-	protected void setWidth(Composite parent, int chars) {
+	private void setWidth(Composite parent, int chars) {
 		int w = getCharWidth(ftext) * chars;
-		if (w > 100) w = 100;
+		if (w > 50) w = 50;
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			rd.width = w;

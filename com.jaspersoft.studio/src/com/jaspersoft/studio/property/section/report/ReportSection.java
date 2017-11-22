@@ -34,20 +34,16 @@ public class ReportSection extends AbstractSection {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.grabExcessHorizontalSpace = true;
 		Composite firstSection = getWidgetFactory().createComposite(parent);
-		firstSection.setLayout(new GridLayout(3, false));
+		firstSection.setLayout(new GridLayout(2, false));
 		firstSection.setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_NAME).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(firstSection, PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION).getControl()
-				.setLayoutData(gd);
+		createWidget4Property(firstSection, PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION).getControl().setLayoutData(gd);
 
 		gd = new GridData();
-		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_LANGUAGE).getControl().setLayoutData(gd);
 
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_IMPORTS);
@@ -55,33 +51,32 @@ public class ReportSection extends AbstractSection {
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS);
 
 		gd = new GridData();
-		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_TITLE_NEW_PAGE, false).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_SUMMARY_NEW_PAGE, false).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, false).getControl()
 				.setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER, false).getControl()
 				.setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_IGNORE_PAGINATION, false).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		gd.horizontalSpan = 2;
 		createWidget4Property(firstSection, MReport.PROPERY_CREATE_BOOKMARKS, false).getControl().setLayoutData(gd);
 
 	}

@@ -9,8 +9,11 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
@@ -35,10 +38,24 @@ public class SPClassType<T extends IPropertyDescriptor> extends SPText<T> {
 		super.setReadOnly(readonly);
 		btn.setEnabled(!readonly);
 	}
+	
+	@Override
+	protected int getStyle() {
+		return SWT.BORDER;
+	}
 
 	protected void createComponent(Composite parent) {
-		super.createComponent(parent);
-		btn = section.getWidgetFactory().createButton(parent, "...", SWT.PUSH);
+		Composite container = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout(2, false);
+		layout.verticalSpacing = 0;
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		container.setLayout(layout);
+		super.createComponent(container);
+		GridData textData = new GridData(GridData.FILL_HORIZONTAL);
+		textData.minimumWidth = 50;
+		ftext.setLayoutData(textData);
+		btn = section.getWidgetFactory().createButton(container, "...", SWT.PUSH);
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -48,6 +65,11 @@ public class SPClassType<T extends IPropertyDescriptor> extends SPText<T> {
 			}
 		});
 
+	}
+	
+	@Override
+	public Control getControl() {
+		return btn.getParent();
 	}
 
 	protected void handleTextChanged(final AbstractSection section, final Object property, String text) {
