@@ -12,6 +12,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -20,6 +21,8 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPImport extends SPText<IPropertyDescriptor> {
 
+	private Composite container;
+	
 	public SPImport(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -30,7 +33,7 @@ public class SPImport extends SPText<IPropertyDescriptor> {
 	}
 
 	protected void createComponent(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
+		container = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(2, false);
 		layout.verticalSpacing = 0;
 		layout.marginWidth = 0;
@@ -50,6 +53,11 @@ public class SPImport extends SPText<IPropertyDescriptor> {
 					handleTextChanged(section, pDescriptor.getId(), dialog.getImports());
 			}
 		});
+	}
+	
+	@Override
+	public Control getControl() {
+		return container;
 	}
 
 }

@@ -46,9 +46,11 @@ public class ReportSection extends AbstractSection {
 		gd = new GridData();
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_LANGUAGE).getControl().setLayoutData(gd);
 
-		createWidget4Property(firstSection, JasperDesign.PROPERTY_IMPORTS);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		createWidget4Property(firstSection, JasperDesign.PROPERTY_IMPORTS).getControl().setLayoutData(gd);
 
-		createWidget4Property(firstSection, JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		createWidget4Property(firstSection, JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS).getControl().setLayoutData(gd);
 
 		gd = new GridData();
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE).getControl().setLayoutData(gd);

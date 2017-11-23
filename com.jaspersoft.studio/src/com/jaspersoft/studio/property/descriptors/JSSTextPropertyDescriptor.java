@@ -27,7 +27,7 @@ public class JSSTextPropertyDescriptor extends TextPropertyDescriptor implements
 	 */
 	protected boolean readOnly;
 
-	private int style = SWT.NONE;
+	private int style = SWT.BORDER;
 
 	public JSSTextPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);

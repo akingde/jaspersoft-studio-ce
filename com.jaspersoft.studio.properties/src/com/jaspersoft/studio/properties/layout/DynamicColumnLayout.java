@@ -113,7 +113,7 @@ public class DynamicColumnLayout extends Layout{
 		int ncolumns = calculateColumnsNumber();
 		int width = page.getTabbedPropertyComposite().getPropertiesArea().width;
 		for (int i = 0; i < children.length; i++) {
-			sizes[i] = computeControlSize(children[i], width/ncolumns);
+			sizes[i] = computeControlSize(children[i], SWT.DEFAULT);
 			cwidth = Math.max(cwidth, sizes[i].x);
 			cheight += sizes[i].y;
 		}
@@ -205,7 +205,7 @@ public class DynamicColumnLayout extends Layout{
 		int ncolumns = calculateColumnsNumber();
 		int width = page.getTabbedPropertyComposite().getPropertiesArea().width;
 		for (int i = 0; i < children.length; i++) {
-			sizes[i] = computeControlSize(children[i], width / ncolumns);
+			sizes[i] = computeControlSize(children[i],  SWT.DEFAULT);
 			cwidth = Math.max(cwidth, sizes[i].x);
 			cheight += sizes[i].y;
 		}

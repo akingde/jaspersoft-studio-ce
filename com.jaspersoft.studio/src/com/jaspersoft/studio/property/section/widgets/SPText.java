@@ -94,7 +94,6 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 	}
 
 	protected void createComponent(Composite parent) {
-		
 		ftext = new CustomText(parent, getStyle());
 		autocomplete = new CustomAutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
 		if (UIUtil.isMacAndEclipse4()) {
