@@ -173,7 +173,7 @@ public class JRRuntimeDialog extends ATitledDialog {
 				super.setEnabled(enable);
 			};
 
-			protected void afterElementModified(Object element, java.util.List<JRDefinition> inlist, int ind) {
+			protected void afterElementModified(JRDefinition element, java.util.List<JRDefinition> inlist, int ind) {
 				save();
 			}
 		};
@@ -228,7 +228,8 @@ public class JRRuntimeDialog extends ATitledDialog {
 
 	private void fill() {
 		List<JRDefinition> values = new ArrayList<JRDefinition>();
-		values.add(new JRDefinition(Messages.JRVersionPage_5, JasperDesign.class.getPackage().getImplementationVersion()));
+		values.add(
+				new JRDefinition(Messages.JRVersionPage_5, JasperDesign.class.getPackage().getImplementationVersion()));
 		values.addAll(getJRDefinitions());
 		viewer.setInput(values);
 	}

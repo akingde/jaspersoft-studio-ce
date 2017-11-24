@@ -63,10 +63,10 @@ public class SelectParameterDialog extends ATitledDialog {
 			this.pname = prm.getName();
 	}
 
-	protected Map<String, JRDesignParameter> parameters = new HashMap<String, JRDesignParameter>();
+	protected Map<String, JRDesignParameter> parameters = new HashMap<>();
 	protected WTextExpression wdef;
 	protected Combo cmb;
-	protected Set<JRDesignParameter> dirty = new HashSet<JRDesignParameter>();
+	protected Set<JRDesignParameter> dirty = new HashSet<>();
 
 	protected void addParameter() {
 		if (!dataset.getParametersMap().containsValue(prm)) {
@@ -106,7 +106,7 @@ public class SelectParameterDialog extends ATitledDialog {
 
 	protected void getCompatibleParameters() {
 		if (dataset != null) {
-			List<String> prms = new ArrayList<String>();
+			List<String> prms = new ArrayList<>();
 			for (JRParameter p : dataset.getParameters()) {
 				if (p.getName().equals(pname)) {
 					prm = (JRDesignParameter) p;
@@ -123,7 +123,8 @@ public class SelectParameterDialog extends ATitledDialog {
 		if (Misc.isNullOrEmpty(pname)) {
 			cmb.select(0);
 			pname = cmb.getText();
-			prm = (JRDesignParameter) dataset.getParametersMap().get(pname);
+			if (dataset != null)
+				prm = (JRDesignParameter) dataset.getParametersMap().get(pname);
 		} else
 			cmb.setText(Misc.nvl(pname));
 	}
@@ -195,13 +196,9 @@ public class SelectParameterDialog extends ATitledDialog {
 		if (prm != null)
 			wdef.setExpression((JRDesignExpression) prm.getDefaultValueExpression());
 		ExpressionContext exprContext = new ExpressionContext(dataset, designer.getjConfig());
-		wdef.addModifyListener(new ExpressionModifiedListener() {
-
-			@Override
-			public void expressionModified(ExpressionModifiedEvent event) {
-				prm.setDefaultValueExpression(wdef.getExpression());
-				dirty.add(prm);
-			}
+		wdef.addModifyListener(event -> {
+			prm.setDefaultValueExpression(wdef.getExpression());
+			dirty.add(prm);
 		});
 		wdef.setExpressionContext(exprContext);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -212,13 +209,9 @@ public class SelectParameterDialog extends ATitledDialog {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		sep.setLayoutData(gd);
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (prm == null)
-					getButton(IDialogConstants.OK_ID).setEnabled(false);
-			}
+		UIUtils.getDisplay().asyncExec(() -> {
+			if (prm == null)
+				getButton(IDialogConstants.OK_ID).setEnabled(false);
 		});
 
 		JaspersoftStudioPlugin.getExtensionManager().createParameterICUI(cmp, prm, designer);
@@ -242,6 +235,7 @@ public class SelectParameterDialog extends ATitledDialog {
 			return pname;
 		}
 
+		@Override
 		protected Control createDialogArea(Composite parent) {
 			pname = getNewParameterName(); // $NON-NLS-1$
 			Composite cmp = (Composite) super.createDialogArea(parent);
@@ -254,35 +248,29 @@ public class SelectParameterDialog extends ATitledDialog {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.widthHint = 300;
 			txt.setLayoutData(gd);
-			txt.addModifyListener(new ModifyListener() {
-
-				@Override
-				public void modifyText(ModifyEvent e) {
-					String t = txt.getText();
-					if (t.isEmpty()) {
-						setError(Messages.SelectParameterDialog_6);
+			txt.addModifyListener(e -> {
+				String t = txt.getText();
+				if (t.isEmpty()) {
+					setError(Messages.SelectParameterDialog_6);
+					getButton(IDialogConstants.OK_ID).setEnabled(false);
+					return;
+				}
+				for (JRParameter item : dataset.getParametersList())
+					if (t.equals(item.getName())) {
+						setError(Messages.SelectParameterDialog_7);
 						getButton(IDialogConstants.OK_ID).setEnabled(false);
 						return;
 					}
-					for (JRParameter item : dataset.getParametersList())
-						if (t.equals(item.getName())) {
-							setError(Messages.SelectParameterDialog_7);
-							getButton(IDialogConstants.OK_ID).setEnabled(false);
-							return;
-						}
-					setError(null);
-					getButton(IDialogConstants.OK_ID).setEnabled(true);
-					pname = t;
-				}
+				setError(null);
+				getButton(IDialogConstants.OK_ID).setEnabled(true);
+				pname = t;
 			});
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					for (JRParameter item : dataset.getParametersList())
-						if (txt.getText().equals(item.getName())) {
-							setError(Messages.SelectParameterDialog_7);
-							getButton(IDialogConstants.OK_ID).setEnabled(false);
-						}
-				}
+			UIUtils.getDisplay().asyncExec(() -> {
+				for (JRParameter item : dataset.getParametersList())
+					if (txt.getText().equals(item.getName())) {
+						setError(Messages.SelectParameterDialog_7);
+						getButton(IDialogConstants.OK_ID).setEnabled(false);
+					}
 			});
 			return cmp;
 		}

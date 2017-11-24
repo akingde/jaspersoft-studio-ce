@@ -13,7 +13,7 @@ public abstract class ModelVisitor<T> {
 	public ModelVisitor(INode model) {
 		try {
 			iterate(model);
-		} catch (StopException e) {
+		} catch (StopException e) {// nosonar
 		}
 	}
 

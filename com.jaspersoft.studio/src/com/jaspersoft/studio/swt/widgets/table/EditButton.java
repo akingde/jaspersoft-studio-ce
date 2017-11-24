@@ -54,7 +54,7 @@ public class EditButton<T> {
 				else
 					return;
 				editElement.editElement(inlist, index);
-				afterElementModified(s.getFirstElement(), inlist, index);
+				afterElementModified((T) s.getFirstElement(), inlist, index);
 				tableViewer.refresh();
 				tableViewer.setSelection(new StructuredSelection(inlist.get(index)));
 				tableViewer.reveal(s.getFirstElement());
@@ -111,11 +111,11 @@ public class EditButton<T> {
 	 * 
 	 * @param object
 	 * @param inlist
-	 *          list of elements from the table
+	 *            list of elements from the table
 	 * @param ind
-	 *          index of the changed element in the table
+	 *            index of the changed element in the table
 	 */
-	protected void afterElementModified(Object element, List<T> inlist, int ind) {
+	protected void afterElementModified(T element, List<T> inlist, int ind) {
 		// empty...
 	}
 }

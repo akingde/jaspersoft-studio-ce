@@ -42,7 +42,7 @@ import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class TableItemDialog extends AItemDialog {
-	
+
 	private EditButton<StandardItemProperty> bpropEdit;
 	private TableViewer tviewer;
 	private Composite vcmp;
@@ -57,7 +57,7 @@ public class TableItemDialog extends AItemDialog {
 		bptab.setText(Messages.ItemDialog_0);
 
 		createValue(tabFolder);
-		
+
 		bptab.setControl(vcmp);
 	}
 
@@ -142,7 +142,8 @@ public class TableItemDialog extends AItemDialog {
 
 		bpropEdit = new EditButton<StandardItemProperty>() {
 			@Override
-			protected void afterElementModified(Object element, List<StandardItemProperty> inlist, int ind) {
+			protected void afterElementModified(StandardItemProperty element, List<StandardItemProperty> inlist,
+					int ind) {
 				validateForm();
 			}
 		};
@@ -163,7 +164,8 @@ public class TableItemDialog extends AItemDialog {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see com.jaspersoft.studio.swt.widgets.table.DeleteButton# afterElementDeleted(java.lang.Object)
+			 * @see com.jaspersoft.studio.swt.widgets.table.DeleteButton#
+			 * afterElementDeleted(java.lang.Object)
 			 */
 			@Override
 			protected void afterElementDeleted(Object element) {
@@ -174,7 +176,7 @@ public class TableItemDialog extends AItemDialog {
 			protected boolean confirmDelete(Object obj) {
 				StandardItemProperty p = (StandardItemProperty) obj;
 				ItemPropertyDescription<?> ipd = descriptor.getDescription(p.getName());
-				if (ipd != null && ipd.isMandatory()){
+				if (ipd != null && ipd.isMandatory()) {
 					if (!UIUtils.showConfirmation(Messages.ItemDialog_3, Messages.ItemDialog_4))
 						return false;
 				}
