@@ -38,6 +38,13 @@ public class KeysPreferencePage extends FieldEditorOverlayPage {
 		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
 				"net.sf.jasperreports.doc/docs/components.schema.reference.html#" + tf.getPreferenceName());
 
+		tf = new NStringFieldEditor(MapComponent.PROPERTY_KEY, Messages.MMap_ApiKeyText, getFieldEditorParent());
+		tf.setEmptyStringAllowed(true);
+		tf.setTextLimit(1000);
+		addField(tf);
+		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
+				"net.sf.jasperreports.doc/docs/components.schema.reference.html#" + tf.getPreferenceName());
+
 		tf = new NStringFieldEditor(MapComponent.PROPERTY_SIGNATURE, Messages.MMap_SignatureText,
 				getFieldEditorParent());
 		tf.setEmptyStringAllowed(true);
@@ -52,22 +59,22 @@ public class KeysPreferencePage extends FieldEditorOverlayPage {
 		addField(tf);
 		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
 				"net.sf.jasperreports.doc/docs/components.schema.reference.html#" + tf.getPreferenceName());
-		
-		//Eventually create the extensions for the page
+
+		// Eventually create the extensions for the page
 		super.createFieldEditors();
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(MapComponent.PROPERTY_CLIENT_ID, "");
 		store.setDefault(MapComponent.PROPERTY_SIGNATURE, "");
+		store.setDefault(MapComponent.PROPERTY_KEY, "");
 		store.setDefault(MapComponent.PROPERTY_VERSION, "");
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
 	}
