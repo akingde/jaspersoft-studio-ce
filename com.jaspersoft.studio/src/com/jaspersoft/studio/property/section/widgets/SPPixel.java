@@ -931,7 +931,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		if (unitsMap == null) {
 			CreateDefaultUnits();
 		}
-		int style = SWT.NONE;
+		int style = SWT.BORDER;
 		if (pDescriptor instanceof PixelPropertyDescriptor && ((PixelPropertyDescriptor) pDescriptor).isReadOnly())
 			style = style | SWT.READ_ONLY;
 		insertField = section.getWidgetFactory().createText(parent, "", style); //$NON-NLS-1$
