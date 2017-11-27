@@ -75,12 +75,12 @@ public class TColumnFactory {
 		return addColumn(c, tviewer, getEditingSupport(c, tviewer));
 	}
 
-	public static TreeViewerColumn addColumn(final TColumn c, final TreeViewer tviewer, final PropertyColumnSupport cs) {
+	public static TreeViewerColumn addColumn(final TColumn c, final TreeViewer tviewer,
+			final PropertyColumnSupport cs) {
 		TreeViewerColumn tcol = new TreeViewerColumn(tviewer, SWT.NONE);
 		tcol.getColumn().setText(c.getLabel());
 		tcol.getColumn().setWidth(200);
 
-		// tcol.setEditingSupport(cs);
 		tcol.setLabelProvider(new AColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -142,7 +142,7 @@ public class TColumnFactory {
 		}
 	}
 
-	private static Map<String, Class<? extends AWidget>> wmap = new HashMap<String, Class<? extends AWidget>>();
+	private static Map<String, Class<? extends AWidget>> wmap = new HashMap<>();
 	static {
 		wmap.put("property", WProperty.class);
 		wmap.put("checkbox", WProperty.class);
@@ -158,13 +158,13 @@ public class TColumnFactory {
 		wmap.put(key, wcnt);
 	}
 
-	public static ParameterPropertyWidget createParameterPropertyWidget(String p, Composite parent, Image icon, String da,
-			JRDesignDataset dataset, JasperReportsConfiguration jConfig) {
+	public static ParameterPropertyWidget createParameterPropertyWidget(String p, Composite parent, Image icon,
+			String da, JRDesignDataset dataset, JasperReportsConfiguration jConfig) {
 		return createParameterPropertyWidget(p, parent, icon, da, dataset, -1, jConfig);
 	}
 
-	public static ParameterPropertyWidget createParameterPropertyWidget(String p, Composite parent, Image icon, String da,
-			JRDesignDataset dataset, int width, JasperReportsConfiguration jConfig) {
+	public static ParameterPropertyWidget createParameterPropertyWidget(String p, Composite parent, Image icon,
+			String da, JRDesignDataset dataset, int width, JasperReportsConfiguration jConfig) {
 		PropertyMetadata pm = DatasetUtil.getPmap(jConfig).get(p);
 		if (pm != null) {
 			TColumn c = TColumnFactory.getTColumn(pm);

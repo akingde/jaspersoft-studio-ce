@@ -13,7 +13,8 @@ public abstract class ModelVisitor<T> {
 	public ModelVisitor(INode model) {
 		try {
 			iterate(model);
-		} catch (StopException e) {// nosonar
+		} catch (StopException e) {
+			// nothing to do here, is just a way to stop the visitor
 		}
 	}
 

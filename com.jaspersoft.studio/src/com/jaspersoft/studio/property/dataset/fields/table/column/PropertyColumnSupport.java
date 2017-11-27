@@ -58,10 +58,8 @@ public class PropertyColumnSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 		try {
-			if (element != null) {
-				if (!element.getClass().isArray())
-					return PropertyUtils.getProperty(element, c.getPropertyName());
-			}
+			if (element != null && !element.getClass().isArray())
+				return PropertyUtils.getProperty(element, c.getPropertyName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

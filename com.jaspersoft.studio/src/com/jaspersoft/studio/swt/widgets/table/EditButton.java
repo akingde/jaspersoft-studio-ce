@@ -7,10 +7,6 @@ package com.jaspersoft.studio.swt.widgets.table;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -45,7 +41,7 @@ public class EditButton<T> {
 
 				List<T> inlist = (List<T>) tableViewer.getInput();
 				if (inlist == null) {
-					inlist = new ArrayList<T>();
+					inlist = new ArrayList<>();
 					tableViewer.setInput(inlist);
 				}
 				int index = -1;
@@ -73,24 +69,14 @@ public class EditButton<T> {
 		editB.addSelectionListener(listener);
 
 		editB.setEnabled(!tableViewer.getSelection().isEmpty());
-		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
-				setEnabled(!s.isEmpty() && s.size() == 1);
-			}
+		tableViewer.addSelectionChangedListener(event -> {
+			StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
+			setEnabled(!s.isEmpty() && s.size() == 1);
 		});
 	}
 
 	public void editOnDoubleClick() {
-		listener.tableViewer.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				push();
-			}
-		});
+		listener.tableViewer.addDoubleClickListener(event -> push());
 	}
 
 	public void push() {

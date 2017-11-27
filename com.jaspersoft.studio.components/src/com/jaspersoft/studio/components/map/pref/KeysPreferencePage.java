@@ -20,45 +20,41 @@ import net.sf.jasperreports.components.map.MapComponent;
  */
 public class KeysPreferencePage extends FieldEditorOverlayPage {
 
+	private static final String DOCS_REFERENCE_HTML = "net.sf.jasperreports.doc/docs/components.schema.reference.html#";
+
 	public KeysPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
 		setDescription(Messages.MMap_ApiKeyDescription);
 	}
 
-	/**
-	 *
-	 */
+	@Override
 	public void createFieldEditors() {
 		NStringFieldEditor tf = new NStringFieldEditor(MapComponent.PROPERTY_CLIENT_ID, Messages.MMap_ClientIdText,
 				getFieldEditorParent());
 		tf.setEmptyStringAllowed(true);
 		tf.setTextLimit(1000);
 		addField(tf);
-		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
-				"net.sf.jasperreports.doc/docs/components.schema.reference.html#" + tf.getPreferenceName());
+		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()), DOCS_REFERENCE_HTML + tf.getPreferenceName());
 
 		tf = new NStringFieldEditor(MapComponent.PROPERTY_KEY, Messages.MMap_ApiKeyText, getFieldEditorParent());
 		tf.setEmptyStringAllowed(true);
 		tf.setTextLimit(1000);
 		addField(tf);
-		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
-				"net.sf.jasperreports.doc/docs/components.schema.reference.html#" + tf.getPreferenceName());
+		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()), DOCS_REFERENCE_HTML + tf.getPreferenceName());
 
 		tf = new NStringFieldEditor(MapComponent.PROPERTY_SIGNATURE, Messages.MMap_SignatureText,
 				getFieldEditorParent());
 		tf.setEmptyStringAllowed(true);
 		tf.setTextLimit(1000);
 		addField(tf);
-		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
-				"net.sf.jasperreports.doc/docs/components.schema.reference.html#" + tf.getPreferenceName());
+		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()), DOCS_REFERENCE_HTML + tf.getPreferenceName());
 
 		tf = new NStringFieldEditor(MapComponent.PROPERTY_VERSION, Messages.MMap_VersionText, getFieldEditorParent());
 		tf.setEmptyStringAllowed(true);
 		tf.setTextLimit(1000);
 		addField(tf);
-		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
-				"net.sf.jasperreports.doc/docs/components.schema.reference.html#" + tf.getPreferenceName());
+		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()), DOCS_REFERENCE_HTML + tf.getPreferenceName());
 
 		// Eventually create the extensions for the page
 		super.createFieldEditors();
@@ -76,7 +72,9 @@ public class KeysPreferencePage extends FieldEditorOverlayPage {
 	 * 
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
+		// noting to init here
 	}
 
 	public static final String PAGE_ID = "com.jaspersoft.studio.components.map.pref.KeysPreferencePage.property"; //$NON-NLS-1$
