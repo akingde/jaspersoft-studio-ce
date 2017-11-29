@@ -24,8 +24,7 @@ public class CrosstabRowGroupSection extends AbstractSection {
 
 		parent = getWidgetFactory().createSection(parent, "Row", false, 2);
 
-		createWidget4Property(parent,
-				JRDesignCrosstabRowGroup.PROPERTY_POSITION);
+		createWidget4Property(parent,JRDesignCrosstabRowGroup.PROPERTY_POSITION);
 		createWidget4Property(parent, JRDesignCrosstabRowGroup.PROPERTY_WIDTH);
 	}
 	

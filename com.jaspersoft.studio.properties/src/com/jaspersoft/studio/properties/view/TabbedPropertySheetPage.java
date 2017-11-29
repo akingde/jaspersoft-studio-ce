@@ -424,7 +424,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(tabbedPropertyComposite,
 				"com.jaspersoft.studio.doc.view_properties");
 
-		widgetFactory.paintBordersFor(tabbedPropertyComposite);
 		tabbedPropertyComposite.setLayout(new FormLayout());
 		FormData formData = new FormData();
 		formData.left = new FormAttachment(0, 0);

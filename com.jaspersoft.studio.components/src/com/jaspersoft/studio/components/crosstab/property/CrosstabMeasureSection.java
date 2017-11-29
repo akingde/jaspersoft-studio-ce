@@ -24,40 +24,28 @@ public class CrosstabMeasureSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent.setLayout(new GridLayout(3, false));
+		parent.setLayout(new GridLayout(2, false));
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignCrosstabMeasure.PROPERTY_NAME)
-				.getControl().setLayoutData(gd);
+		createWidget4Property(parent, JRDesignCrosstabMeasure.PROPERTY_NAME).getControl().setLayoutData(gd);
 
 		gd = new GridData();
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent,
-				JRDesignCrosstabMeasure.PROPERTY_CALCULATION).getControl()
-				.setLayoutData(gd);
+		createWidget4Property(parent,JRDesignCrosstabMeasure.PROPERTY_CALCULATION).getControl().setLayoutData(gd);
 
 		gd = new GridData();
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent,
-				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE)
-				.getControl().setLayoutData(gd);
+		createWidget4Property(parent,JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent,
-				JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION).getControl()
-				.setLayoutData(gd);
+		createWidget4Property(parent,JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION).getControl().setLayoutData(gd);
 
-		createWidget4Property(parent,
-				JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		createWidget4Property(parent,JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS).getControl().setLayoutData(gd);
 
-		createWidget4Property(parent,
-				JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		createWidget4Property(parent, JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME).getControl().setLayoutData(gd);
 
-		createWidget4Property(
-				parent,
-				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		createWidget4Property(parent, JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME).getControl().setLayoutData(gd);
 	}
 	
 	@Override
