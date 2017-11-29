@@ -4,7 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +22,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -202,9 +200,9 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				@Override
 				public void switchView(Statistics stats, APreview view) {
 					super.switchView(stats, view);
-					for (String key : pmap.keySet()) {
-						if (pmap.get(key) == view) {
-							leftToolbar.setLabelText(MessagesByKeys.getString(key));
+					for (Map.Entry<String, APreview> entry : pmap.entrySet()) {
+						if (entry.getValue() == view) {
+							leftToolbar.setLabelText(MessagesByKeys.getString(entry.getKey()));
 							break;
 						}
 					}
@@ -256,7 +254,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 			@Override
 			protected void layout(Composite composite, boolean flushCache) {
-				Control children[] = composite.getChildren();
+				Control[] children = composite.getChildren();
 				int spacing = 5;
 				Point daToolbarSize = children[0].computeSize(SWT.DEFAULT, SWT.DEFAULT, flushCache);
 				Point buttonSize = children[2].computeSize(SWT.DEFAULT, SWT.DEFAULT, flushCache);
@@ -277,7 +275,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 			@Override
 			protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
-				Control children[] = composite.getChildren();
+				Control[] children = composite.getChildren();
 				Point daToolbarSize = children[0].computeSize(SWT.DEFAULT, SWT.DEFAULT, flushCache);
 				Point buttonSize = children[2].computeSize(SWT.DEFAULT, SWT.DEFAULT, flushCache);
 				Rectangle parentSize = composite.getClientArea();
@@ -317,9 +315,11 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return (PreviewTopToolBarManager) dataDapterToolBarManager;
 	}
 
+	@Override
 	protected TopToolBarManagerJRPrint getActionToolBarManager(Composite container) {
 		if (actionToolBarManager == null) {
 			actionToolBarManager = new TopToolBarManagerJRPrint(this, container) {
+				@Override
 				protected void fillToolbar(IToolBarManager tbManager) {
 					if (runMode.equals(RunStopAction.MODERUN_LOCAL)) {
 						if (pvModeAction == null)
@@ -377,16 +377,13 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		ToolItem toolItem = tireset.getToolItem();
 		toolItem.setText(Messages.PreviewContainer_resetactiontitle);
 		toolItem.setToolTipText(Messages.PreviewContainer_resetactiontooltip);
-		toolItem.addSelectionListener(new SelectionListener() {
+		toolItem.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				reportControler.resetParametersToDefault();
 			}
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
 		});
 		tbm.update(true);
 
@@ -481,14 +478,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	}
 
 	protected void refreshToolbars(final APreview view) {
-		Display.getDefault().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (actionToolBarManager != null)
-					actionToolBarManager.contributeItems(view);
-				actionToolBarManager.getTopToolBar().getParent().layout(true, true);
-			}
+		Display.getDefault().syncExec(() -> {
+			if (actionToolBarManager != null)
+				actionToolBarManager.contributeItems(view);
+			actionToolBarManager.getTopToolBar().getParent().layout(true, true);
 		});
 	}
 
@@ -530,47 +523,44 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	private PropertyChangeListener propChangeListener;
 
 	public void setJasperDesign(final JasperReportsConfiguration jConfig) {
-		UIUtils.getDisplay().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(() -> {
+			ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+			try {
+				Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
+				getReportControler().setJrContext(jConfig);
+				setupDataAdapter();
 
-			@Override
-			public void run() {
-				ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
-				try {
-					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
-					getReportControler().setJrContext(jConfig);
-					setupDataAdapter();
-
-					if ((isRunDirty || getJasperPrint() == null) && runWhenInitilizing) {
-						runReport(dataAdapterDesc);
-					}
-					propChangeListener = new PropertyChangeListener() {
-
-						@Override
-						public void propertyChange(PropertyChangeEvent evt) {
-							String pname = evt.getPropertyName();
-							if (pname.equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
-								if (evt instanceof CollectionElementAddedEvent)
-									((JRDesignParameter) ((CollectionElementAddedEvent) evt).getAddedValue())
-											.getEventSupport().addPropertyChangeListener(propChangeListener);
-								else if (evt instanceof CollectionElementRemovedEvent)
-									((JRDesignParameter) ((CollectionElementRemovedEvent) evt).getRemovedValue())
-											.getEventSupport().removePropertyChangeListener(propChangeListener);
-							}
-							if (evt.getSource() instanceof JRParameter)
-								isParameterDirty = true;
-							else if (pname.equals(JRDesignDataset.PROPERTY_PARAMETERS)
-									|| pname.equals(JRDesignDataset.PROPERTY_SCRIPTLETS))
-								isParameterDirty = true;
+				if ((isRunDirty || getJasperPrint() == null) && runWhenInitilizing)
+					runReport(dataAdapterDesc);
+				if (propChangeListener == null)
+					propChangeListener = evt -> {
+						String pname = evt.getPropertyName();
+						if (pname.equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
+							if (evt instanceof CollectionElementAddedEvent)
+								((JRDesignParameter) ((CollectionElementAddedEvent) evt).getAddedValue())
+										.getEventSupport().addPropertyChangeListener(propChangeListener);
+							else if (evt instanceof CollectionElementRemovedEvent)
+								((JRDesignParameter) ((CollectionElementRemovedEvent) evt).getRemovedValue())
+										.getEventSupport().removePropertyChangeListener(propChangeListener);
 						}
+						if (evt.getSource() instanceof JRParameter)
+							jConfig.getJRParameters().remove(((JRParameter) evt.getSource()).getName());
+						if (isParameterDirty)
+							return;
+						if (evt.getSource() instanceof JRParameter || pname.equals(JRDesignDataset.PROPERTY_PARAMETERS)
+								|| pname.equals(JRDesignDataset.PROPERTY_SCRIPTLETS))
+							isParameterDirty = true;
 					};
-					JRDesignDataset mds = jrContext.getJasperDesign().getMainDesignDataset();
-					mds.getEventSupport().addPropertyChangeListener(propChangeListener);
+				JRDesignDataset mds = jrContext.getJasperDesign().getMainDesignDataset();
+				mds.getEventSupport().removePropertyChangeListener(propChangeListener);
+				mds.getEventSupport().addPropertyChangeListener(propChangeListener);
 
-					for (JRParameter p : mds.getParametersList())
-						((JRDesignParameter) p).getEventSupport().addPropertyChangeListener(propChangeListener);
-				} finally {
-					Thread.currentThread().setContextClassLoader(oldCL);
+				for (JRParameter p : mds.getParametersList()) {
+					((JRDesignParameter) p).getEventSupport().removePropertyChangeListener(propChangeListener);
+					((JRDesignParameter) p).getEventSupport().addPropertyChangeListener(propChangeListener);
 				}
+			} finally {
+				Thread.currentThread().setContextClassLoader(oldCL);
 			}
 		});
 	}

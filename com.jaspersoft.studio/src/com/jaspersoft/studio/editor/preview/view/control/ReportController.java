@@ -3,8 +3,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,7 +112,7 @@ public class ReportController {
 	public static final String FORM_REPORT_PARAMETERS = "report_configuration_reportParameters"; //$NON-NLS-1$
 	public static final String FORM_PARAMETERS = "report_configuration_inputParameters"; //$NON-NLS-1$
 
-	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
+	public static final List<IDataInput> inputs = new ArrayList<>();
 
 	static {
 		inputs.add(new BooleanInput());
@@ -155,16 +153,13 @@ public class ReportController {
 		if (jrContext.getJasperDesign() != null)
 			prompts = jrContext.getJasperDesign().getParametersList();
 		setParameters();
-		// ExpressionUtil.initBuiltInParameters(jrContext);
-		// if (viewmap != null)
-		// fillForms();
 	}
 
 	public void resetParametersToDefault() {
 		try {
 			Map<String, Object> prms = jrContext.getJRParameters();
 			if (prms == null) {
-				prms = new HashMap<String, Object>();
+				prms = new HashMap<>();
 				jrContext.setJRParameters(prms);
 			}
 			for (JRParameter p : jrContext.getJasperDesign().getParameters()) {
@@ -178,20 +173,15 @@ public class ReportController {
 			c.clearConsole();
 			c.addError(e, jrContext.getJasperDesign());
 		}
-		Set<String> toDel = new HashSet<String>();
-		for (String key : jasperParameters.keySet())
-			if (jasperParameters.get(key) == null)
-				toDel.add(key);
+		Set<String> toDel = new HashSet<>();
+		for (Map.Entry<String, Object> entry : jasperParameters.entrySet())
+			if (entry.getValue() == null)
+				toDel.add(entry.getKey());
 		for (String key : toDel)
 			jasperParameters.remove(key);
 
 		prmInput.update();
 		prmRepInput.update();
-		//
-		//
-		// prmInput.setupDefaultValues();
-		// prmRepInput.setupDefaultValues();
-
 	}
 
 	private void setParameters() {
@@ -202,10 +192,10 @@ public class ReportController {
 			JasperReportsConfiguration jrContext) {
 		jasperParameters = jrContext.getJRParameters();
 		if (jasperParameters == null) {
-			jasperParameters = new HashMap<String, Object>();
+			jasperParameters = new HashMap<>();
 			setDefaultParameterValues(jasperParameters, jrContext);
 		} else {
-			Map<String, Object> map = new HashMap<String, Object>();
+			Map<String, Object> map = new HashMap<>();
 			if (jrContext.getJasperDesign() != null) {
 				List<JRParameter> prm = jrContext.getJasperDesign().getParametersList();
 				for (JRParameter p : prm) {
@@ -247,7 +237,7 @@ public class ReportController {
 	}
 
 	public LinkedHashMap<String, APreview> createControls(Composite composite) {
-		viewmap = new LinkedHashMap<String, APreview>();
+		viewmap = new LinkedHashMap<>();
 		// pass the parameter tabs the shared property change notifier
 		PropertyChangeNotifier sharedNotifier = new PropertyChangeNotifier();
 		VParameters vprm = new VParameters(composite, jrContext, sharedNotifier);
@@ -266,29 +256,20 @@ public class ReportController {
 	private VReportParameters prmRepInput;
 
 	private void fillForms() {
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				prmInput = (VParameters) viewmap.get(FORM_PARAMETERS);
-				prmInput.createInputControls(prompts, jasperParameters);
-			}
+		UIUtils.getDisplay().syncExec(() -> {
+			prmInput = (VParameters) viewmap.get(FORM_PARAMETERS);
+			prmInput.createInputControls(prompts, jasperParameters);
 		});
 		prmInput.setDirty(false);
 
-		UIUtils.getDisplay().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(() -> {
+			prmRepInput = (VReportParameters) viewmap.get(FORM_REPORT_PARAMETERS);
+			prmRepInput.createInputControls(prompts, jasperParameters);
+			prmRepInput.setDirty(false);
 
-			@Override
-			public void run() {
-				prmRepInput = (VReportParameters) viewmap.get(FORM_REPORT_PARAMETERS);
-				prmRepInput.createInputControls(prompts, jasperParameters);
-				prmRepInput.setDirty(false);
-
-				VSorting vs = (VSorting) viewmap.get(FORM_SORTING);
-				vs.setJasperReports(jrContext.getJasperDesign(), prompts, jasperParameters);
-			}
+			VSorting vs = (VSorting) viewmap.get(FORM_SORTING);
+			vs.setJasperReports(jrContext.getJasperDesign(), prompts, jasperParameters);
 		});
-
 	}
 
 	public void viewerChanged(APreview view) {
@@ -307,7 +288,6 @@ public class ReportController {
 		c.clearConsole();
 		if (pcontainer.getMode().equals(RunStopAction.MODERUN_LOCAL))
 			pcontainer.setJasperPrint(null, null);
-		// jasperParameters.clear();
 		fillError = null;
 		jasperReport = null;
 		stats = new Statistics();
@@ -326,20 +306,17 @@ public class ReportController {
 	}
 
 	private void finishNotCompiledReport() {
-		UIUtils.getDisplay().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(() -> {
+			pcontainer.setNotRunning(true);
+			if (pcontainer.getSite() instanceof MultiPageEditorSite) {
+				MultiPageEditorPart mpe = ((MultiPageEditorSite) pcontainer.getSite()).getMultiPageEditor();
+				IEditorPart[] editors = mpe.findEditors(mpe.getEditorInput());
+				if (editors != null && editors.length > 0) {
+					// Dialog, if not ..., it's not clear for the user that
+					// error happened
+					UIUtils.showInformation(Messages.ReportControler_compilationerrors);
 
-			public void run() {
-				pcontainer.setNotRunning(true);
-				if (pcontainer.getSite() instanceof MultiPageEditorSite) {
-					MultiPageEditorPart mpe = ((MultiPageEditorSite) pcontainer.getSite()).getMultiPageEditor();
-					IEditorPart[] editors = mpe.findEditors(mpe.getEditorInput());
-					if (editors != null && editors.length > 0) {
-						// Dialog, if not ..., it's not clear for the user that
-						// error happened
-						UIUtils.showInformation(Messages.ReportControler_compilationerrors);
-
-						mpe.setActiveEditor(editors[0]);
-					}
+					mpe.setActiveEditor(editors[0]);
 				}
 			}
 		});
@@ -347,23 +324,19 @@ public class ReportController {
 
 	public static void finishCompiledReport(final Console c, final AVParameters prmInput,
 			final PreviewJRPrint pcontainer) {
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			public void run() {
-				c.addMessage(Messages.ReportControler_msg_reportfinished);
-				pcontainer.setNotRunning(true);
-				boolean notprmfiled = prmInput != null && !prmInput.checkFieldsFilled();
-				if (notprmfiled) {
-					c.addMessage(Messages.ReportControler_msg_fillparameters);
-					VSimpleErrorPreview errorView = showErrorView(pcontainer);
-					errorView.setMessage(Messages.ReportControler_msg_fillparameters);
-					// UIUtils.showWarning(Messages.ReportControler_msg_fillparameters);
-					prmInput.setFocus();
-					prmInput.setDirty(true);
-				}
-				if (pcontainer.isHideParameters() && pcontainer instanceof IParametrable)
-					((IParametrable) pcontainer).showParameters(notprmfiled);
+		UIUtils.getDisplay().syncExec(() -> {
+			c.addMessage(Messages.ReportControler_msg_reportfinished);
+			pcontainer.setNotRunning(true);
+			boolean notprmfiled = prmInput != null && !prmInput.checkFieldsFilled();
+			if (notprmfiled) {
+				c.addMessage(Messages.ReportControler_msg_fillparameters);
+				VSimpleErrorPreview errorView = showErrorView(pcontainer);
+				errorView.setMessage(Messages.ReportControler_msg_fillparameters);
+				prmInput.setFocus();
+				prmInput.setDirty(true);
 			}
+			if (pcontainer.isHideParameters() && pcontainer instanceof IParametrable)
+				((IParametrable) pcontainer).showParameters(notprmfiled);
 		});
 		DataSnapshotManager.saveSnapshotIfExists(pcontainer.getJrContext().getJRParameters());
 	}
@@ -383,8 +356,6 @@ public class ReportController {
 				try {
 					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 
-					// setParameters();
-
 					IEditorInput editorInput = pcontainer.getEditorInput();
 					IFile file = null;
 					if (editorInput instanceof IFileEditorInput) {
@@ -398,7 +369,7 @@ public class ReportController {
 						jasperReport = compileJasperDesign(file, jd, monitor);
 					if (jasperReport != null) {
 						if (pcontainer.isRunDirty() || prmInput == null) {
-							Map<String, Object> oldm = new HashMap<String, Object>(jrContext.getJRParameters());
+							Map<String, Object> oldm = new HashMap<>(jrContext.getJRParameters());
 							try {
 								ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
 							} catch (Throwable e) {
@@ -421,7 +392,7 @@ public class ReportController {
 						setupDataAdapter(pcontainer);
 
 						// remove parameters that are not for prompting
-						Set<String> toRemove = new HashSet<String>();
+						Set<String> toRemove = new HashSet<>();
 						for (String key : jasperParameters.keySet()) {
 							JRParameter p = jd.getParametersMap().get(key);
 							if (p != null && !p.isSystemDefined() && !p.isForPrompting())
@@ -471,35 +442,29 @@ public class ReportController {
 
 	protected void runJive(final PreviewContainer pcontainer, final IFile file, final JasperReport jasperReport) {
 		JettyUtil.startJetty(file.getProject(), jrContext);
-		UIUtils.getDisplay().syncExec(new Runnable() {
+		UIUtils.getDisplay().syncExec(() -> {
+			try {
+				Map<String, Object> prm = new HashMap<>();
 
-			public void run() {
-				try {
-					Map<String, Object> prm = new HashMap<String, Object>();
+				prm.put(JettyUtil.PRM_JRPARAMETERS, jasperParameters);
+				prm.put(JettyUtil.PRM_JASPERREPORT, jasperReport);
 
-					prm.put(JettyUtil.PRM_JRPARAMETERS, jasperParameters);
-					prm.put(JettyUtil.PRM_JASPERREPORT, jasperReport);
+				UUID randomUUID = UUID.randomUUID();
+				Context.putContext(randomUUID.toString(), prm);
 
-					UUID randomUUID = UUID.randomUUID();
-					Context.putContext(randomUUID.toString(), prm);
+				String url = JettyUtil.getURL(file, randomUUID.toString(), jrContext);
+				ABrowserViewer jiveViewer = pcontainer.getJiveViewer();
+				jiveViewer.setURL(url);
+				pcontainer.getRightContainer().switchView(null, jiveViewer);
 
-					String url = JettyUtil.getURL(file, randomUUID.toString(), jrContext);
-					ABrowserViewer jiveViewer = pcontainer.getJiveViewer();
-					jiveViewer.setURL(url);
-					pcontainer.getRightContainer().switchView(null, jiveViewer);
-
-				} catch (Throwable e) {
-					UIUtils.showError(e);
-				}
+			} catch (Throwable e) {
+				UIUtils.showError(e);
 			}
 		});
 	}
 
 	private JasperReport compileJasperDesign(IFile file, JasperDesign jd, IProgressMonitor monitor)
 			throws CoreException {
-		// stats.startCount(ST_COMPILATIONTIMESUBREPORT);
-		// CompileAction.doRun(jrContext, monitor, false);
-		// stats.endCount(ST_COMPILATIONTIMESUBREPORT);
 		stats.startCount(ST_COMPILATIONTIME);
 		c.startMessage(Messages.ReportControler_msg_compiling);
 		if (compiler == null) {
@@ -510,30 +475,19 @@ public class ReportController {
 				project = file.getProject();
 			}
 			compiler.setProject(project);
-			jrContext.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
-
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					compiler.clean();
-				}
-			});
+			jrContext.getPropertyChangeSupport().addPropertyChangeListener(evt -> compiler.clean());
 		} else
 			((JRErrorHandler) compiler.getErrorHandler()).reset();
-		JasperReport jasperReport = compiler.compileReport(jrContext, jd);// JasperCompileManager.getInstance(jrContext).compile(jd);
+		JasperReport jr = compiler.compileReport(jrContext, jd);
 		stats.endCount(ST_COMPILATIONTIME);
 		if (((JRErrorHandler) compiler.getErrorHandler()).hasErrors()) {
-			UIUtils.getDisplay().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					VSimpleErrorPreview errorView = showErrorView(pcontainer);
-					errorView.setMessage(Messages.ReportControler_compilationerrors);
-				}
-
+			UIUtils.getDisplay().syncExec(() -> {
+				VSimpleErrorPreview errorView = showErrorView(pcontainer);
+				errorView.setMessage(Messages.ReportControler_compilationerrors);
 			});
 		}
 		doneMessage();
-		return jasperReport;
+		return jr;
 	}
 
 	public void cancelMessage() {
@@ -614,46 +568,36 @@ public class ReportController {
 
 		@Override
 		public void pageUpdated(JasperPrint arg0, int page) {
+			// do nothing
 		}
 
 		@Override
 		public void pageGenerated(final JasperPrint arg0, final int page) {
 			this.jrPrint = arg0;
 			if (page == 0) {
-				UIUtils.getDisplay().syncExec(new Runnable() {
-					public void run() {
-						pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewer());
-						viewerset = true;
-					}
+				UIUtils.getDisplay().syncExec(() -> {
+					pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewer());
+					viewerset = true;
 				});
 			}
-			// pcontainer.setJasperPrint(stats, arg0);
 			if (refresh)
 				return;
 			refresh = true;
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					stats.endCount(ST_FILLINGTIME);
-					stats.setValue(ST_PAGECOUNT, page);
-					if (scfactory != null)
-						stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
-					stats.endCount(ST_REPORTEXECUTIONTIME);
-					c.setStatistics(stats);
-					refresh = false;
-				}
+			UIUtils.getDisplay().asyncExec(() -> {
+				stats.endCount(ST_FILLINGTIME);
+				stats.setValue(ST_PAGECOUNT, page);
+				if (scfactory != null)
+					stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
+				stats.endCount(ST_REPORTEXECUTIONTIME);
+				c.setStatistics(stats);
+				refresh = false;
 			});
-
 		}
 
 		public void reportFinished(final JasperPrint jPrint) {
 			if (!viewerset)
-				UIUtils.getDisplay().syncExec(new Runnable() {
-					public void run() {
-						pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewer());
-					}
-				});
+				UIUtils.getDisplay().syncExec(
+						() -> pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewer()));
 			this.jrPrint = jPrint;
 			finishUpdateViewer(pcontainer, jPrint);
 		}
@@ -693,36 +637,31 @@ public class ReportController {
 	}
 
 	private void finishUpdateViewer(final PreviewContainer pcontainer, final JasperPrint jPrint) {
-		UIUtils.getDisplay().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(() -> {
+			stats.endCount(ST_FILLINGTIME);
+			if (jPrint != null)
+				stats.setValue(ST_PAGECOUNT, jPrint.getPages().size());
+			if (scfactory != null)
+				stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
+			stats.endCount(ST_REPORTEXECUTIONTIME);
+			APreview pv = getDefaultViewer();
+			if (pv instanceof IJRPrintable)
+				try {
+					((IJRPrintable) pv).setJRPRint(stats, jPrint, true);
+					VBookmarks vs = (VBookmarks) viewmap.get(FORM_BOOKMARKS);
+					vs.setJasperPrint(jPrint);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
-			@Override
-			public void run() {
-				stats.endCount(ST_FILLINGTIME);
-				if (jPrint != null)
-					stats.setValue(ST_PAGECOUNT, jPrint.getPages().size());
-				if (scfactory != null)
-					stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
-				stats.endCount(ST_REPORTEXECUTIONTIME);
-				APreview pv = getDefaultViewer();
-				if (pv instanceof IJRPrintable)
-					try {
-						((IJRPrintable) pv).setJRPRint(stats, jPrint, true);
-						VBookmarks vs = (VBookmarks) viewmap.get(FORM_BOOKMARKS);
-						vs.setJasperPrint(jPrint);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-				pcontainer.setJasperPrint(stats, jPrint);
-				c.setStatistics(stats);
-				finished = false;
-			}
+			pcontainer.setJasperPrint(stats, jPrint);
+			c.setStatistics(stats);
+			finished = false;
 		});
 	}
 
 	protected APreview getDefaultViewer() {
-		APreview pv = pcontainer.getDefaultViewer();
-		return pv;
+		return pcontainer.getDefaultViewer();
 	}
 
 	protected void setupDataSnapshot() {
@@ -769,12 +708,9 @@ public class ReportController {
 	public static void showRunReport(Console c, final PreviewJRPrint pcontainer, final Throwable e,
 			final JasperDesign design) {
 		c.addError(e, design);
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			public void run() {
-				VSimpleErrorPreview errorView = showErrorView(pcontainer);
-				errorView.setMessage(Messages.ReportControler_generatingerror);
-			}
+		UIUtils.getDisplay().syncExec(() -> {
+			VSimpleErrorPreview errorView = showErrorView(pcontainer);
+			errorView.setMessage(Messages.ReportControler_generatingerror);
 		});
 	}
 
@@ -783,9 +719,4 @@ public class ReportController {
 		pcontainer.getRightContainer().switchView(null, errorView);
 		return errorView;
 	}
-
-	// private void refreshRightView() {
-	// pcontainer.switchRightView(pcontainer.getDefaultViewer(), stats,
-	// pcontainer.getRightContainer());
-	// }
 }

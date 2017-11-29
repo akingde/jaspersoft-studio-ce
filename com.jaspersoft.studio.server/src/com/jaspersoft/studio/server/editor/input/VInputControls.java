@@ -29,13 +29,13 @@ import net.sf.jasperreports.eclipse.util.Misc;
 
 public class VInputControls extends AVParameters {
 
-	public List<IDataInput> inputs = new ArrayList<IDataInput>();
+	private List<IDataInput> inputs = new ArrayList<>();
 
 	private InputControlsManager icm;
 	private ResourceDescriptor rdrepunit;
 	private String type = ResourceDescriptor.TYPE_REPORTUNIT;
 	private String uri;
-	private Set<Control> toIgnore = new HashSet<Control>();
+	private Set<Control> toIgnore = new HashSet<>();
 
 	public VInputControls(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
@@ -67,7 +67,8 @@ public class VInputControls extends AVParameters {
 		return key;
 	}
 
-	public void setReportUnit(InputControlsManager icm, ResourceDescriptor rdrepunit, IProgressMonitor monitor, String key) {
+	public void setReportUnit(InputControlsManager icm, ResourceDescriptor rdrepunit, IProgressMonitor monitor,
+			String key) {
 		if (this.rdrepunit == rdrepunit)
 			return;
 		this.rdrepunit = rdrepunit;
@@ -109,7 +110,6 @@ public class VInputControls extends AVParameters {
 			}
 
 		if (showEmptyParametersWarning) {
-			// setupDefaultValues();
 			setDirty(false);
 		}
 		showEmptyParametersWarning = false;
@@ -121,18 +121,14 @@ public class VInputControls extends AVParameters {
 		rdrepunit = icm.getWsClient().initInputControls(uri, type, monitor);
 		setReportUnit(icm, rdrepunit, monitor, key);
 		icm.initInputControls(rdrepunit);
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				createInputControls(icm, monitor);
-			}
-		});
+		UIUtils.getDisplay().syncExec(() -> createInputControls(icm, monitor));
 	}
 
 	public boolean checkFieldsFilled() {
 		if (icm.isAnyVisible()) {
-			Boolean rAlwaysPrompt = Misc.nvl(rdrepunit.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS), false);
+			Boolean rAlwaysPrompt = Misc.nvl(
+					rdrepunit.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS),
+					false);
 
 			boolean hasDirty = false;
 			for (ResourceDescriptor p : icm.getInputControls()) {
@@ -150,7 +146,8 @@ public class VInputControls extends AVParameters {
 		return true;
 	}
 
-	protected boolean createInput(Composite sectionClient, ResourceDescriptor p, InputControlsManager icm, boolean first) {
+	protected boolean createInput(Composite sectionClient, ResourceDescriptor p, InputControlsManager icm,
+			boolean first) {
 		PResourceDescriptor pres = new PResourceDescriptor(p, icm);
 		Class<?> vclass = pres.getValueClass();
 		if (vclass != null)
@@ -189,13 +186,7 @@ public class VInputControls extends AVParameters {
 		rd = icm.getWsClient().initInputControls(rd.getUriString(), rd.getWsType(), monitor);
 		icm.initInputControls(rd);
 		icm.getDefaults();
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				createInputControls(icm, monitor);
-			}
-		});
+		UIUtils.getDisplay().syncExec(() -> createInputControls(icm, monitor));
 
 	}
 
