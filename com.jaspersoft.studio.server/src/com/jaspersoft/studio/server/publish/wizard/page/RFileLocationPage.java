@@ -12,20 +12,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeViewerListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -149,10 +141,10 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 		treeViewer.setContentProvider(new ReportTreeContetProvider() {
 			@Override
 			public Object[] getChildren(Object parentElement) {
-				if (parentElement instanceof MFolder && fileRes != null && fileRes.getValue().getIsNew() == true) {
+				if (parentElement instanceof MFolder && fileRes != null && fileRes.getValue().getIsNew()) {
 					MFolder node = (MFolder) parentElement;
-					if (node.getChildren() != null && node.getChildren().size() > 0) {
-						List<INode> children = new ArrayList<INode>();
+					if (node.getChildren() != null && !node.getChildren().isEmpty()) {
+						List<INode> children = new ArrayList<>();
 						for (INode n : node.getChildren()) {
 							if (n != fileRes)
 								children.add(n);
@@ -172,27 +164,24 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 		lblRepoUnitName.setText(Messages.AResourcePage_name);
 		ruLabel = new Text(composite, SWT.BORDER);
 		ruLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		ruLabel.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				if (isRefresh)
-					return;
-				isRefresh = true;
-				String rtext = ruLabel.getText();
-				String validationError = ValidationUtils.validateLabel(rtext);
-				setErrorMessage(validationError);
-				if (validationError == null) {
-					ResourceDescriptor ru = getNewRunit().getValue();
-					ru.setLabel(rtext);
-					// suggest the ID
-					if (canSuggestID) {
-						ruID.setText(rtext);
-						ru.setName(IDStringValidator.safeChar(rtext));
-						ru.setUriString(ru.getParentFolder() + "/" + ru.getName()); //$NON-NLS-1$
-					}
+		ruLabel.addModifyListener(e -> {
+			if (isRefresh)
+				return;
+			isRefresh = true;
+			String rtext = ruLabel.getText();
+			String validationError = ValidationUtils.validateLabel(rtext);
+			setErrorMessage(validationError);
+			if (validationError == null) {
+				ResourceDescriptor ru = getNewRunit().getValue();
+				ru.setLabel(rtext);
+				// suggest the ID
+				if (canSuggestID) {
+					ruID.setText(rtext);
+					ru.setName(IDStringValidator.safeChar(rtext));
+					ru.setUriString(ru.getParentFolder() + "/" + ru.getName()); //$NON-NLS-1$
 				}
-				isRefresh = false;
 			}
+			isRefresh = false;
 		});
 
 		// Report Unit ID (resource descriptor name)
@@ -201,36 +190,28 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 		lblRepoUnitID.setText(Messages.AResourcePage_id);
 		ruID = new Text(composite, SWT.BORDER);
 		ruID.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		ruID.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				if (isRefresh)
-					return;
-				isRefresh = true;
-				String rtext = ruID.getText();
-				String validationError = ValidationUtils.validateName(rtext);
-				setErrorMessage(validationError);
-				if (validationError == null) {
-					ResourceDescriptor ru = getNewRunit().getValue();
-					ru.setName(rtext);
-					ru.setUriString(ru.getParentFolder() + "/" + ru.getName()); //$NON-NLS-1$
-				}
-				if (!isFillingInput && validationError == null) {
-					canSuggestID = false;
-				} else {
-					canSuggestID = true;
-				}
-				isRefresh = false;
+		ruID.addModifyListener(e -> {
+			if (isRefresh)
+				return;
+			isRefresh = true;
+			String rtext = ruID.getText();
+			String validationError = ValidationUtils.validateName(rtext);
+			setErrorMessage(validationError);
+			if (validationError == null) {
+				ResourceDescriptor ru = getNewRunit().getValue();
+				ru.setName(rtext);
+				ru.setUriString(ru.getParentFolder() + "/" + ru.getName()); //$NON-NLS-1$
 			}
-		});
-		ruID.addVerifyListener(new VerifyListener() {
-			@Override
-			public void verifyText(VerifyEvent e) {
-				// sanitize the text for the id attribute (name)
-				// of the repository resource
-				e.text = IDStringValidator.safeChar(e.text);
+			if (!isFillingInput && validationError == null) {
+				canSuggestID = false;
+			} else {
+				canSuggestID = true;
 			}
+			isRefresh = false;
 		});
+		// sanitize the text for the id attribute (name)
+		// of the repository resource
+		ruID.addVerifyListener(e -> e.text = IDStringValidator.safeChar(e.text));
 
 		// Report Unit description
 		Label lblRepoUnitDescription = new Label(composite, SWT.NONE);
@@ -241,43 +222,32 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 		GridData descGD = new GridData(SWT.FILL, SWT.TOP, true, true);
 		descGD.minimumHeight = 50;
 		ruDescription.setLayoutData(descGD);
-		ruDescription.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				if (isRefresh)
-					return;
-				String rtext = ruDescription.getText();
-				ResourceDescriptor ru = getNewRunit().getValue();
-				ru.setDescription(rtext);
-				setErrorMessage(ValidationUtils.validateDesc(rtext));
-			}
+		ruDescription.addModifyListener(e -> {
+			if (isRefresh)
+				return;
+			String rtext = ruDescription.getText();
+			ResourceDescriptor ru = getNewRunit().getValue();
+			ru.setDescription(rtext);
+			setErrorMessage(ValidationUtils.validateDesc(rtext));
 		});
 
-		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			public void selectionChanged(SelectionChangedEvent event) {
-				TreeSelection ts = (TreeSelection) event.getSelection();
-				Object obj = ts.getFirstElement();
-				handleSelectionChanged(obj);
-			}
-
+		treeViewer.addSelectionChangedListener(event -> {
+			TreeSelection ts = (TreeSelection) event.getSelection();
+			Object obj = ts.getFirstElement();
+			handleSelectionChanged(obj);
 		});
-		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
-				Object el = ts.getFirstElement();
-				if (el instanceof MFolder || el instanceof MServerProfile || el instanceof MReportUnit) {
-					if (treeViewer.getExpandedState(el))
-						treeViewer.collapseToLevel(el, 1);
-					else {
-						if (refreshAction == null)
-							refreshAction = new RefreshResourcesAction(treeViewer);
-						if (refreshAction.isEnabled())
-							refreshAction.run();
-						treeViewer.expandToLevel(el, 1);
-					}
+		treeViewer.addDoubleClickListener(event -> {
+			TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+			Object el = ts.getFirstElement();
+			if (el instanceof MFolder || el instanceof MServerProfile || el instanceof MReportUnit) {
+				if (treeViewer.getExpandedState(el))
+					treeViewer.collapseToLevel(el, 1);
+				else {
+					if (refreshAction == null)
+						refreshAction = new RefreshResourcesAction(treeViewer);
+					if (refreshAction.isEnabled())
+						refreshAction.run();
+					treeViewer.expandToLevel(el, 1);
 				}
 			}
 		});
@@ -297,10 +267,7 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 										serverProvider = new ServerProvider();
 									serverProvider.handleTreeEvent(event, monitor);
 								} catch (Exception e) {
-									if (e instanceof InterruptedException)
-										throw (InterruptedException) e;
-									else
-										UIUtils.showError(e);
+									UIUtils.showError(e);
 								} finally {
 									monitor.done();
 								}
@@ -315,7 +282,7 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 			}
 
 			public void treeCollapsed(TreeExpansionEvent event) {
-
+				// noting to do
 			}
 		});
 		fillInput();
@@ -375,17 +342,13 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 	private MServers servers;
 
 	public void fillInput() {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				isFillingInput = true;
-				servers = new MServers(null);
-				ServerManager.loadServerProfilesCopy(servers);
-				treeViewer.setInput(servers);
-				refreshFile();
-				isFillingInput = false;
-			}
+		Display.getDefault().asyncExec(() -> {
+			isFillingInput = true;
+			servers = new MServers(null);
+			ServerManager.loadServerProfilesCopy(servers);
+			treeViewer.setInput(servers);
+			refreshFile();
+			isFillingInput = false;
 		});
 	}
 
@@ -445,15 +408,11 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 					final AMResource mres = WSClientHelper.findSelected(monitor, rd, msp);
 					if (mres == null)
 						return false;
-					UIUtils.getDisplay().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							skipEvents = true;
-							treeViewer.refresh();
-							treeViewer.setSelection(new StructuredSelection(mres), true);
-							skipEvents = false;
-						}
+					UIUtils.getDisplay().asyncExec(() -> {
+						skipEvents = true;
+						treeViewer.refresh();
+						treeViewer.setSelection(new StructuredSelection(mres), true);
+						skipEvents = false;
 					});
 
 					return true;
