@@ -178,7 +178,6 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 	public Composite createPlainComposite(Composite parent, int style) {
 		Composite c = super.createComposite(parent, style);
 		c.setBackground(parent.getBackground());
-		paintBordersFor(c);
 		return c;
 	}
 
@@ -269,7 +268,6 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 		Group group = new Group(parent, SWT.SHADOW_NONE);
 		group.setText(text);
 		group.setForeground(getColors().getForeground());
-		paintBordersFor(group);
 		return group;
 	}
 

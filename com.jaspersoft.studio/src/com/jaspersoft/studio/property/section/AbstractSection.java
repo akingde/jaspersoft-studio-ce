@@ -244,7 +244,6 @@ public abstract class AbstractSection extends AbstractPropertySection
 	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		super.createControls(parent, aTabbedPropertySheetPage);
 		this.parent = parent;
-		getWidgetFactory().paintBordersFor(parent);
 	}
 
 	public boolean isDisposed() {
