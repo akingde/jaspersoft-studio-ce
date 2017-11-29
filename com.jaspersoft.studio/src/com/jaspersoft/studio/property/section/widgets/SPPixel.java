@@ -335,7 +335,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 			 * requested return value; }
 			 */
 			return String
-					.valueOf((new Unit(Double.parseDouble(value), keyName, jConfig)).getValue(targetUnit.getKeyName()));
+					.valueOf((new Unit(parseDouble(value), keyName, jConfig)).getValue(targetUnit.getKeyName()));
 		}
 	}
 
