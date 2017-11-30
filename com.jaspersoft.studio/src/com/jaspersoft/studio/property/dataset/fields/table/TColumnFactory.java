@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
@@ -48,17 +49,30 @@ public class TColumnFactory {
 			final PropertyColumnSupport cs) {
 		TableViewerColumn tcol = new TableViewerColumn(tviewer, SWT.NONE);
 		tcol.getColumn().setText(c.getLabel());
-
-		tcol.setEditingSupport(cs);
+		if (cs != null)
+			tcol.setEditingSupport(cs);
 		tcol.setLabelProvider(new AColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return cs.getText(element);
+				if (cs != null)
+					return cs.getText(element);
+				try {
+					if (element != null && !element.getClass().isArray()) {
+						Object obj = PropertyUtils.getProperty(element, c.getPropertyName());
+						if (obj != null)
+							return obj.toString();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return "";
 			}
 
 			@Override
 			public Image getImage(Object element) {
-				return cs.getImage(element);
+				if (cs != null)
+					return cs.getImage(element);
+				return null;
 			}
 
 			@Override
@@ -84,12 +98,25 @@ public class TColumnFactory {
 		tcol.setLabelProvider(new AColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return cs.getText(element);
+				if (cs != null)
+					return cs.getText(element);
+				try {
+					if (element != null && !element.getClass().isArray()) {
+						Object obj = PropertyUtils.getProperty(element, c.getPropertyName());
+						if (obj != null)
+							return obj.toString();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return "";
 			}
 
 			@Override
 			public Image getImage(Object element) {
-				return cs.getImage(element);
+				if (cs != null)
+					return cs.getImage(element);
+				return null;
 			}
 
 			@Override

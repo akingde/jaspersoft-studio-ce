@@ -134,21 +134,13 @@ public class ParametersTable extends AbstractModifyTable {
 		});
 		if (dataset.getQuery() != null)
 			((JRDesignQuery) dataset.getQuery()).getEventSupport()
-					.addPropertyChangeListener(JRDesignQuery.PROPERTY_LANGUAGE, new PropertyChangeListener() {
-
-						@Override
-						public void propertyChange(PropertyChangeEvent evt) {
-							UIUtils.getDisplay().asyncExec(new Runnable() {
-
-								@Override
-								public void run() {
-									List<JRParameter> fields = dataset.getParametersList();
-									if (fields == null)
-										fields = new ArrayList<JRParameter>();
-									setFields(fields);
-								}
-							});
-						}
+					.addPropertyChangeListener(JRDesignQuery.PROPERTY_LANGUAGE, evt -> {
+						UIUtils.getDisplay().asyncExec(() -> {
+							List<JRParameter> fields = dataset.getParametersList();
+							if (fields == null)
+								fields = new ArrayList<>();
+							setFields(fields);
+						});
 					});
 	}
 
@@ -800,7 +792,7 @@ public class ParametersTable extends AbstractModifyTable {
 
 		List<JRParameter> fields = dataset.getParametersList();
 		if (fields == null)
-			fields = new ArrayList<JRParameter>();
+			fields = new ArrayList<>();
 		setFields(fields);
 
 		tviewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -858,7 +850,7 @@ public class ParametersTable extends AbstractModifyTable {
 		}
 	}
 
-	private List<TableViewerColumn> columns = new ArrayList<TableViewerColumn>();
+	private List<TableViewerColumn> columns = new ArrayList<>();
 
 	private void createNameColumn() {
 		TColumn c = new TColumn();
@@ -965,7 +957,7 @@ public class ParametersTable extends AbstractModifyTable {
 		c.setDescription(Messages.MParameter_3);
 		c.setValue(dataset);
 		c.setPropertyType(ParameterEvaluationTimeEnum.class.getName());
-		columns.add(TColumnFactory.addColumn(c, tviewer));
+		columns.add(TColumnFactory.addColumn(c, tviewer, null));
 		tcolumns.add(c);
 	}
 
