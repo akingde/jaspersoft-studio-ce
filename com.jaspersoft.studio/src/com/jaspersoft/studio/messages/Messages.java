@@ -2399,6 +2399,8 @@ public class Messages extends NLS {
 	public static String WColorsPalette_PickNewColor;
 	public static String WColorsPalette_Remove;
 	public static String WColorsPalette_Up;
+	public static String WEnum_0;
+	public static String WEnum_2;
 	public static String WizardDataSourcePage_lblNewLabel_text;
 	public static String WizardDataSourcePage_btnNew_text;
 	public static String WizardDataSourcePage_lblThisDataAdapter_text;

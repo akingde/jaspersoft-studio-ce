@@ -762,9 +762,9 @@ public class ParametersTable extends AbstractModifyTable {
 			@Override
 			public void editElement(List<JRDesignParameter> input, int pos) {
 				JRDesignParameter oldF = input.get(pos);
-				PropertiesDialog<JRDesignParameter> d = new PropertiesDialog<JRDesignParameter>(
-						tviewer.getTable().getShell(), (JRDesignParameter) oldF.clone(), tcolumns,
-						MParameter.getIconDescriptor().getDescription(), mdataset.getJasperConfiguration());
+				PropertiesDialog<JRDesignParameter> d = new PropertiesDialog<>(tviewer.getTable().getShell(),
+						(JRDesignParameter) oldF.clone(), tcolumns, MParameter.getIconDescriptor().getDescription(),
+						mdataset.getJasperConfiguration());
 				if (d.open() == Dialog.OK) {
 					dataset.removeParameter(oldF);
 					try {
@@ -1004,7 +1004,7 @@ public class ParametersTable extends AbstractModifyTable {
 
 	protected void refreshTree() {
 		if (treeviewer != null) {
-			params = new ArrayList<JRDesignParameter>();
+			params = new ArrayList<>();
 			if (dataset.getParametersList() != null)
 				fillTree();
 			treeviewer.setInput(params);
@@ -1014,10 +1014,10 @@ public class ParametersTable extends AbstractModifyTable {
 	}
 
 	public List<JRDesignParameter> getParameters() {
-		List<JRDesignParameter> t = new ArrayList<JRDesignParameter>();
+		List<JRDesignParameter> t = new ArrayList<>();
 		for (JRParameter p : dataset.getParametersList())
 			t.add((JRDesignParameter) p);
-		return t;// (List<JRDesignParameter>) tviewer.getInput();
+		return t;
 	}
 
 	private PropertyChangeSupport propertyChangeSupport;
@@ -1033,7 +1033,7 @@ public class ParametersTable extends AbstractModifyTable {
 		return propertyChangeSupport;
 	}
 
-	private List<TColumn> tcolumns = new ArrayList<TColumn>();
+	private List<TColumn> tcolumns = new ArrayList<>();
 	private List<JRDesignParameter> params;
 
 	private void refreshProperties(DataAdapter da) {

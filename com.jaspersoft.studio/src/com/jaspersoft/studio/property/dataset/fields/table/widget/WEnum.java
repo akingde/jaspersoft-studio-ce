@@ -5,12 +5,12 @@ package com.jaspersoft.studio.property.dataset.fields.table.widget;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+
+import com.jaspersoft.studio.messages.Messages;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.type.JREnum;
@@ -34,11 +34,10 @@ public class WEnum extends AWControl {
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		cmb = new Combo(cmp, SWT.BORDER);
-//		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+		cmb.add(Messages.WEnum_0);
 		Object[] obj = clazz.getEnumConstants();
 		for (Object item : obj) {
-			String eval = item.toString();
+			String eval = ""; //$NON-NLS-1$
 			if (item instanceof JREnum)
 				eval = ((JREnum) item).getName();
 			else if (item instanceof NamedValueEnum)
@@ -48,24 +47,24 @@ public class WEnum extends AWControl {
 
 			Deprecated dep = obj.getClass().getAnnotation(Deprecated.class);
 			if (dep != null)
-				eval += " (deprecated)";
+				eval += Messages.WEnum_2;
 
 			cmb.add(eval);
 		}
 
-		cmb.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (refresh)
-					return;
-				String v = cmb.getText();
-				if (v.endsWith(" (deprecated)"))
-					v = v.substring(0, v.indexOf(" (deprecated)"));
+		cmb.addModifyListener(e -> {
+			if (refresh)
+				return;
+			String v = cmb.getText();
+			if (Misc.isNullOrEmpty(v))
+				aw.setValue(null);
+			else {
+				if (v.endsWith(Messages.WEnum_2))
+					v = v.substring(0, v.indexOf(Messages.WEnum_2));
 
 				aw.setValue(Enum.valueOf((Class) clazz, v));
-				cmb.setToolTipText(aw.getToolTipText());
 			}
+			cmb.setToolTipText(aw.getToolTipText());
 		});
 	}
 
@@ -75,7 +74,7 @@ public class WEnum extends AWControl {
 		String v = getText();
 		try {
 			refresh = true;
-			cmb.setText(Misc.nvl(v, ""));
+			cmb.setText(Misc.nvl(v, "")); //$NON-NLS-1$
 		} finally {
 			refresh = false;
 		}
