@@ -6,6 +6,8 @@ package com.jaspersoft.studio.model.field.command;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.command.ADatasetObjectDeleteCommand;
@@ -52,12 +54,8 @@ public class DeleteFieldsContainerCommand extends ADatasetObjectDeleteCommand {
 	@Override
 	public void execute() {
 		if (c == null) {
-			String pkey = path;
-			int indx = path.lastIndexOf(".");
-			if (indx > 0)
-				pkey = path.substring(0, indx);
-			else
-				pkey = "";
+			int indx = path.lastIndexOf('.');
+			String pkey = indx > 0 ? path.substring(0, indx) : "";
 
 			c = new JSSCompoundCommand(pnode);
 			c.enableSelectionRestore(true);
@@ -70,12 +68,13 @@ public class DeleteFieldsContainerCommand extends ADatasetObjectDeleteCommand {
 				case UNGROUP_TO_PARENT:
 					String oldKey = f.getPropertiesMap().getProperty(DataQueryAdapters.FIELD_PATH);
 					c.add(new SetPropertyValueCommand(f.getPropertiesMap(), DataQueryAdapters.FIELD_PATH,
-							oldKey.replaceFirst(path, pkey), ((JRDesignField) f).getEventSupport()));
+							StringUtils.removeStart(oldKey.replaceFirst(path, pkey), "."),
+							((JRDesignField) f).getEventSupport()));
 					break;
 				case UNGROUP_TO_ROOT:
 					oldKey = f.getPropertiesMap().getProperty(DataQueryAdapters.FIELD_PATH);
 					c.add(new SetPropertyValueCommand(f.getPropertiesMap(), DataQueryAdapters.FIELD_PATH,
-							oldKey.replaceFirst(path, "").replaceFirst(".", ""),
+							StringUtils.removeStart(oldKey.replaceFirst(path, ""), "."),
 							((JRDesignField) f).getEventSupport()));
 					break;
 				case UNGROUP_TO_PARENT_ALL:

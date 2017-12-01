@@ -71,14 +71,14 @@ public class CreateFieldsContainerCommand extends Command {
 					pkey = ((MFieldsContainer) parent).getKey();
 			} else {
 				NameDialog d = new NameDialog(UIUtils.getShell(), Messages.CreateFieldsContainerCommand_1);
-				if (d.open() == Dialog.OK) {
+				if (d.open() == Dialog.OK)
 					pkey = d.getName();
-				} else {
+				else {
 					canceled = true;
 					return;
 				}
 			}
-			Map<String, List<JRField>> map = new HashMap<String, List<JRField>>();
+			Map<String, List<JRField>> map = new HashMap<>();
 			String path = null;
 			c = new JSSCompoundCommand(null);
 			c.enableSelectionRestore(true);
@@ -92,7 +92,7 @@ public class CreateFieldsContainerCommand extends Command {
 					setupDataset((MFields) n);
 					if (path == null) {
 						path = ((MFieldsContainer) n).getKey();
-						int indx = path.lastIndexOf("."); //$NON-NLS-1$
+						int indx = path.lastIndexOf('.');
 						if (indx > 0)
 							path = path.substring(0, indx);
 					}
@@ -104,21 +104,21 @@ public class CreateFieldsContainerCommand extends Command {
 			if (typeAdd || path.isEmpty())
 				npath = pkey;
 			else {
-				if (path.contains("."))
-					npath = path + "." + pkey; //$NON-NLS-1$
+				if (Misc.isNullOrEmpty(path))
+					npath = pkey;
 				else
-					npath = pkey + "." + path;
+					npath = path + "." + pkey; //$NON-NLS-1$
 			}
 
-			for (String key : map.keySet()) {
+			for (Map.Entry<String, List<JRField>> entry : map.entrySet()) {
 				String p = path;
-				if (!key.startsWith(path)) {
-					int indx = key.lastIndexOf("."); //$NON-NLS-1$
+				if (!entry.getKey().startsWith(path)) {
+					int indx = entry.getKey().lastIndexOf('.');
 					if (indx > 0)
-						p = key.substring(0, indx);
+						p = entry.getKey().substring(0, indx);
 				}
-				for (JRField f : map.get(key)) {
-					String k = key.replaceFirst(p, npath);
+				for (JRField f : entry.getValue()) {
+					String k = entry.getKey().replaceFirst(p, npath);
 
 					c.add(new SetPropertyValueCommand(f.getPropertiesMap(), DataQueryAdapters.FIELD_PATH, k,
 							((JRDesignField) f).getEventSupport()));
@@ -133,7 +133,7 @@ public class CreateFieldsContainerCommand extends Command {
 		String fpath = Misc.nvl(f.getPropertiesMap().getProperty(DataQueryAdapters.FIELD_PATH));
 		List<JRField> fields = map.get(fpath);
 		if (fields == null)
-			fields = new ArrayList<JRField>();
+			fields = new ArrayList<>();
 		fields.add(f);
 		map.put(fpath, fields);
 		return fpath;

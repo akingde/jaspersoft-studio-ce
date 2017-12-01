@@ -53,6 +53,7 @@ public class CreateFieldAction extends ACreateAndSelectAction {
 		return super.calculateEnabled();
 	}
 
+	@Override
 	protected boolean setExtendedData(Map<Object, Object> map, List<?> objects) {
 		if (objects.size() == 1) {
 			EditPart part = (EditPart) objects.get(0);

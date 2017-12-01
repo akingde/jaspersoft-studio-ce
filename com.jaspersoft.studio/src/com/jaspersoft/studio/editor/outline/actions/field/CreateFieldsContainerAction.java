@@ -56,7 +56,7 @@ public class CreateFieldsContainerAction extends ACreateAndSelectAction {
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 		if (objects.size() > 1) {
-			List<ANode> nodes = new ArrayList<ANode>();
+			List<ANode> nodes = new ArrayList<>();
 			for (Object obj : objects)
 				if (obj instanceof EditPart)
 					nodes.add((ANode) ((EditPart) obj).getModel());
