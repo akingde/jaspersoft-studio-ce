@@ -12,7 +12,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
@@ -74,18 +73,13 @@ public class ParameterPropertyWidget implements IWidget {
 		button = new ToolItem(buttons, SWT.PUSH);
 		button.setText("...");
 
-		Listener l = new Listener() {
+		Listener l = event -> {
+			Menu menu = createMenu(parent);
 
-			@Override
-			public void handleEvent(Event event) {
-				Menu menu = createMenu(parent);
-
-				Rectangle bounds = tvalue.getBounds();
-				Point point = tvalue.toDisplay(bounds.x, bounds.y + bounds.height + 5);
-				menu.setLocation(point);
-				menu.setVisible(true);
-			}
-
+			Rectangle bounds = tvalue.getBounds();
+			Point point = tvalue.toDisplay(bounds.x, bounds.y + bounds.height + 5);
+			menu.setLocation(point);
+			menu.setVisible(true);
 		};
 		button.addListener(SWT.Selection, l);
 		tvalue.addListener(SWT.MouseDown, l);
@@ -107,7 +101,7 @@ public class ParameterPropertyWidget implements IWidget {
 	private boolean refresh = false;
 
 	public void refresh() {
-		if (refresh)
+		if (refresh || tvalue.isDisposed())
 			return;
 		setupToolTip(null);
 

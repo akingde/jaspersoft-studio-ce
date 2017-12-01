@@ -3,7 +3,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.da;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +40,6 @@ import com.jaspersoft.studio.property.dataset.fields.table.TColumnFactory;
 import com.jaspersoft.studio.property.dataset.fields.table.column.PropertyColumnSupport;
 import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
-import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -70,13 +68,13 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 		this.refresh = refresh;
 	}
 
-	protected List<PropertiesTable> pTables = new ArrayList<PropertiesTable>();
-	protected List<ParameterPropertyWidget> ppwTable = new ArrayList<ParameterPropertyWidget>();
+	protected List<PropertiesTable> pTables = new ArrayList<>();
+	protected List<ParameterPropertyWidget> ppwTable = new ArrayList<>();
 
 	public Composite createPropertiesTable(Composite parent, List<HttpLocationParameter> lparams, String pname) {
 		PropertiesTable pt = new PropertiesTable();
 		pTables.add(pt);
-		List<HttpLocationParameter> prms = new ArrayList<HttpLocationParameter>();
+		List<HttpLocationParameter> prms = new ArrayList<>();
 		if (lparams != null)
 			prms.addAll(lparams);
 		return pt.create(parent, prms, pname);
@@ -91,41 +89,31 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 	}
 
 	public void listenDataset(final JRDesignDataset dataset) {
-		dataset.getEventSupport().addPropertyChangeListener(new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
-					if (evt instanceof CollectionElementRemovedEvent) {
-						JRDesignParameter prm = (JRDesignParameter) evt.getOldValue();
-						prm.getEventSupport().removePropertyChangeListener(listener);
-						prm.getPropertiesMap().getEventSupport().removePropertyChangeListener(listener);
-					} else if (evt instanceof CollectionElementAddedEvent) {
-						JRDesignParameter prm = (JRDesignParameter) evt.getNewValue();
-						prm.getEventSupport().addPropertyChangeListener(listener);
-						prm.getPropertiesMap().getEventSupport().addPropertyChangeListener(listener);
-					}
-					listener.propertyChange(evt);
+		dataset.getEventSupport().addPropertyChangeListener(evt -> {
+			if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
+				if (evt instanceof CollectionElementRemovedEvent) {
+					JRDesignParameter prm = (JRDesignParameter) evt.getOldValue();
+					prm.getEventSupport().removePropertyChangeListener(listener);
+					prm.getPropertiesMap().getEventSupport().removePropertyChangeListener(listener);
+				} else if (evt instanceof CollectionElementAddedEvent) {
+					JRDesignParameter prm = (JRDesignParameter) evt.getNewValue();
+					prm.getEventSupport().addPropertyChangeListener(listener);
+					prm.getPropertiesMap().getEventSupport().addPropertyChangeListener(listener);
 				}
+				listener.propertyChange(evt);
 			}
 		});
-		for (JRParameter p : dataset.getParametersList()) {
+		for (JRParameter p : dataset.getParametersList())
 			((JRDesignParameter) p).getPropertiesMap().getEventSupport().addPropertyChangeListener(listener);
-		}
-
 	}
 
-	private PropertyChangeListener listener = new PropertyChangeListener() {
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (refresh)
-				return;
-			for (PropertiesTable pt : pTables)
-				pt.refresh();
-			for (ParameterPropertyWidget ppw : ppwTable)
-				ppw.refresh();
-		}
+	private PropertyChangeListener listener = evt -> {
+		if (refresh)
+			return;
+		for (PropertiesTable pt : pTables)
+			pt.refresh();
+		for (ParameterPropertyWidget ppw : ppwTable)
+			ppw.refresh();
 	};
 	protected JRDesignDataset dataset;
 	protected HttpDataLocation dloc;
@@ -225,6 +213,7 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 					return element;
 				}
 
+				@Override
 				public String getText(Object element) {
 					HttpLocationParameter hlp = (HttpLocationParameter) element;
 					JRParameter prm = fParam.get(hlp.getName());
@@ -255,24 +244,20 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 			bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 			bGroup.setBackgroundMode(SWT.INHERIT_FORCE);
 
-			new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
-
-				public Object newElement(List<?> input, int pos) {
-					HttpParameterDialog d = new HttpParameterDialog(parent.getShell(), dataset,
-							PropertiesTable.this.input, pname);
-					if (d.open() == Dialog.OK) {
-						fParam.put(d.getName(), d.getPrm());
-						try {
-							refresh = true;
-							d.getPrm().getPropertiesMap().setProperty(pname, d.getName());
-						} finally {
-							refresh = false;
-						}
-						return new HttpLocationParameter(d.getName(), null);
+			new NewButton().createNewButtons(bGroup, tviewer, (in, pos) -> {
+				HttpParameterDialog d = new HttpParameterDialog(parent.getShell(), dataset, PropertiesTable.this.input,
+						pname);
+				if (d.open() == Dialog.OK) {
+					fParam.put(d.getName(), d.getPrm());
+					try {
+						refresh = true;
+						d.getPrm().getPropertiesMap().setProperty(pname, d.getName());
+					} finally {
+						refresh = false;
 					}
-					return null;
+					return new HttpLocationParameter(d.getName(), null);
 				}
-
+				return null;
 			});
 			new DeleteButton() {
 				@Override
@@ -301,8 +286,8 @@ public abstract class ADataAdapterQueryEditorUI implements IDataAdapterQueryEdit
 		}
 
 		public void refresh() {
-			input = new ArrayList<HttpLocationParameter>(lparams);
-			fParam = new HashMap<String, JRParameter>();
+			input = new ArrayList<>(lparams);
+			fParam = new HashMap<>();
 			for (JRParameter p : dataset.getParametersList()) {
 				if (!p.isSystemDefined() && p.getPropertiesMap().containsProperty(pname)) {
 					String pp = p.getPropertiesMap().getProperty(pname);
