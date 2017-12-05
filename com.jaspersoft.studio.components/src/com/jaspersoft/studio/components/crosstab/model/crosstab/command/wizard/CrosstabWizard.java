@@ -554,11 +554,11 @@ public class CrosstabWizard extends JSSWizard {
 
 		if (rowGroups != null) {
 			//Get the columns selected in the step2 and avoid to propose them as rows too
-			List<Object> selectedColumns = step2.getSelectedFields();
+			List<Wrapper> selectedColumns = step2.getSelectedFieldWrappers();
 			HashSet<String> selectedColExpressions = new HashSet<String>();
-			for(Object obj : selectedColumns){
-				JRDesignCrosstabColumnGroup col = (JRDesignCrosstabColumnGroup)obj;
-				selectedColExpressions.add(col.getBucket().getExpression().getText());
+			for(Wrapper wrapper : selectedColumns){
+				String usedObject = wrapper.getBaseObjectExpression();
+				selectedColExpressions.add(usedObject);
 			}
 			JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
 			for (Object f : rowGroups.getReportObects()) {

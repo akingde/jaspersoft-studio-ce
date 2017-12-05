@@ -59,7 +59,7 @@ public class CrosstabWizardColumnPage extends StaticWizardFieldsPage {
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			Wrapper w = (Wrapper) element;
-			String oldExpText = w.getOldExpText();
+			String oldExpText = w.getBaseObjectExpression();
 			switch (columnIndex) {
 			case 0:
 				if (oldExpText.startsWith("$F{")) //$NON-NLS-1$
@@ -136,6 +136,17 @@ public class CrosstabWizardColumnPage extends StaticWizardFieldsPage {
 		}
 		return null;
 	}
+	
+	public List<Wrapper> getSelectedFieldWrappers() {
+		List<Object> wlist = super.getSelectedFields();
+		if (wlist != null) {
+			List<Wrapper> out = new ArrayList<Wrapper>(wlist.size());
+			for (Object w : wlist)
+				out.add((Wrapper) w);
+			return out;
+		}
+		return null;
+	}
 
 	@Override
 	protected void setLabelProvider(TableViewer tableViewer) {
@@ -178,7 +189,7 @@ public class CrosstabWizardColumnPage extends StaticWizardFieldsPage {
 				if (property.equals(F_TOTALPOSITION)) // $NON-NLS-1$
 					return true;
 				if (property.equals(F_CALCULATION)) { // $NON-NLS-1$
-					return AgregationFunctionEnum.isEditable(((Wrapper)element).getDatasetItemClassName());
+					return AgregationFunctionEnum.isEditable(((Wrapper)element).getBaseObjectType());
 				}
 				return false;
 			}
@@ -216,7 +227,7 @@ public class CrosstabWizardColumnPage extends StaticWizardFieldsPage {
 				} else if (F_CALCULATION.equals(property)) { // $NON-NLS-1$
 					AgregationFunctionEnum function = (AgregationFunctionEnum)value;
 					w.setCalculation(function);
-					CrosstabWizard.setBucketExpression(bucket, w.getOldExpText(), function);
+					CrosstabWizard.setBucketExpression(bucket, w.getBaseObjectExpression(), function);
 				}
 				viewer.update(element, new String[] { property });
 				viewer.refresh();
@@ -233,7 +244,7 @@ public class CrosstabWizardColumnPage extends StaticWizardFieldsPage {
 				StructuredSelection sel = (StructuredSelection)rightTView.getSelection();
 				if (!sel.isEmpty()) {
 					Wrapper selected = (Wrapper)sel.getFirstElement();
-					String className = selected.getDatasetItemClassName();
+					String className = selected.getBaseObjectType();
 					AgregationFunctionEnum[] values = AgregationFunctionEnum.getStringValues(className);
 					String[] names = AgregationFunctionEnum.getValuesNames(values);
 					comboBox.setItems(names);
