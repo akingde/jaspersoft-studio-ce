@@ -66,7 +66,8 @@ public class DeleteButton {
 	}
 
 	protected boolean confirmDelete(Object obj) {
-		if (confirm && !UIUtils.showDeleteConfirmation(delB.getShell(), net.sf.jasperreports.eclipse.messages.Messages.UIUtils_3))
+		if (confirm && !UIUtils.showDeleteConfirmation(delB.getShell(),
+				net.sf.jasperreports.eclipse.messages.Messages.UIUtils_3))
 			return false;
 		return canRemove(obj);
 	}
@@ -106,10 +107,17 @@ public class DeleteButton {
 		delB.setEnabled(enabled);
 	}
 
+	private int minSize = 0;
+
+	public void setMinSize(int minSize) {
+		this.minSize = minSize;
+	}
+
 	private void setEnabledState(final TableViewer tableViewer) {
 		boolean enable = true;
 		StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
-		if (!s.isEmpty()) {
+		List<?> inlist = (List<?>) tableViewer.getInput();
+		if (inlist != null && inlist.size() > minSize && !s.isEmpty()) {
 			for (Object obj : s.toArray()) {
 				if (!canRemove(obj)) {
 					enable = false;
