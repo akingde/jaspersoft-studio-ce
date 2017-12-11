@@ -6,13 +6,13 @@ package com.jaspersoft.studio.book.descriptors;
 
 import java.text.MessageFormat;
 
+import com.jaspersoft.studio.book.model.MGroupReportPartContainer;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.descriptors.AbstractJSSCellEditorValidator;
+
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
-
-import com.jaspersoft.studio.book.model.MReportPartContainer;
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptors.AbstractJSSCellEditorValidator;
 
 /**
  * Validator to check if a name for a group is valid. It is valid essentially if it 
@@ -29,7 +29,7 @@ public class GroupNameValidator extends AbstractJSSCellEditorValidator {
 	 */
 	@Override
 	public String isValid(Object value) {
-		MReportPartContainer section = (MReportPartContainer)getTarget(); 
+		MGroupReportPartContainer section = (MGroupReportPartContainer)getTarget(); 
 		if (section.getJrgroup() == null) return null;
 		String selectedName = section.getJrgroup().getName();
 		if (value.equals(selectedName)) return null;

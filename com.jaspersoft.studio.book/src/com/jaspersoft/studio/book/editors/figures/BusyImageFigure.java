@@ -18,6 +18,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.ImageFigure;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Image;
@@ -99,41 +100,49 @@ public class BusyImageFigure extends ImageFigure {
 		this.busy = busy;
 	}
 
-	public BusyImageFigure(Image image)
-	{
+	public BusyImageFigure(Image image){
 		super(image);
 	}
 
-	
-
 	@Override
 	public void paint(Graphics g) {
-		// TODO Auto-generated method stub
-		super.paint(g);
-		
-		if(this.busy)
-		{
-			//if (busyIcon != null)
-			{
-				Rectangle area = getBounds().getShrinked(getInsets());
-				Image icon = createBusyIcon();
-				
-				if (icon != null)
-				{
-					g.drawImage(icon, new Point(area.x + area.width/2 - icon.getImageData().width/2,
-												area.y + area.height/2 - icon.getImageData().height/2));
+		Rectangle area = getBounds().getShrinked(getInsets());
+
+		if(this.busy){
+			Image icon = createBusyIcon();
 			
-					icon.dispose();
-				}
-				else
-				{
-					System.out.println("Icon is null!!");
-				}
+			if (icon != null)
+			{
+				g.drawImage(icon, new Point(area.x + area.width/2 - icon.getImageData().width/2,
+											area.y + area.height/2 - icon.getImageData().height/2));
+		
+				icon.dispose();
 			}
+			else
+			{
+				System.out.println("Icon is null!!");
+			}
+		} else if (getImage() != null){
+			g.pushState();
+			try {
+				Image image = getImage();
+				int scaledX = (area.width - (int)Math.round(image.getImageData().width/g.getAbsoluteScale())) / 2 + area.x;
+				int scaledY = (area.height - (int)Math.round(image.getImageData().height/g.getAbsoluteScale())) / 2 + area.y;
+				int scaledHeight = (int)Math.round(image.getImageData().height/g.getAbsoluteScale());
+				int scaledWidth = (int)Math.round(image.getImageData().width/g.getAbsoluteScale());
+				g.drawImage(image, 0, 0, image.getImageData().width, image.getImageData().height, scaledX , scaledY, scaledWidth, scaledHeight);
+				g.restoreState();
+			} finally {
+				g.popState();
+			}	
 		}
 	}
-
 	
+	public Dimension getPreferredSize(int wHint, int hHint) {
+		//Decrees the preferred size of the lable height
+		return new Dimension(BookPagesFigure.PREFERRED_WIDTH, BookPagesFigure.PREFERRED_HEIGHT - BookPagesFigure.PREFERRED_LABEL_HEIGHT);
+	}
+
 	/**
 	 * 
 	 * fadeLimit = 15;

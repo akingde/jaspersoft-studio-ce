@@ -56,7 +56,7 @@
                 id="com.jaspersoft.studio.book.sections.sectionPart"
                 tab="com.jaspersoft.studio.book.sectionpart">
              <input
-                   type="com.jaspersoft.studio.book.model.MReportPartContainer">
+                   type="com.jaspersoft.studio.book.model.MGroupReportPartContainer">
              </input>
           </propertySection>
           <propertySection

@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.PositionConstants;
@@ -41,6 +42,11 @@ public class BookPagesFigure extends RectangleFigure {
 	public static final int PREFERRED_WIDTH = 150;
 	
 	/**
+	 * Height of the label
+	 */
+	public static final int PREFERRED_LABEL_HEIGHT = 20;
+	
+	/**
 	 * Model of the report
 	 */
 	private MReportPart model;
@@ -64,7 +70,11 @@ public class BookPagesFigure extends RectangleFigure {
 	 * The textual image of the figure
 	 */
 	private Label textFigure;
+	
+	private double lastScaleValue = 1.0d;
 
+	private boolean loadingJobRunning = false;
+	
 	/**
 	 * Create the figure
 	 * 
@@ -121,23 +131,17 @@ public class BookPagesFigure extends RectangleFigure {
 		}
 		
 		textFigure = new Label(text);
-		textFigure.setPreferredSize(180, 20);
+		textFigure.setPreferredSize(180, PREFERRED_LABEL_HEIGHT);
 		textFigure.setTextAlignment(PositionConstants.CENTER);
 		add(textFigure);
 		toolTipFigure = new TooltipFigure();
 		toolTipFigure.setMessage(model.getDisplayText());
 		setToolTip(toolTipFigure);
-		
-		// If the previre image has not been provided yet...let's load it.
-		// Attention, during startup, this operation may hang...
-		if (this.previewImage == null)
-		{
-			loadPreviewImage();
-		}
 	}
 	
-	protected void loadPreviewImage()
+	protected void loadPreviewImage(int size)
 	{
+		loadingJobRunning = true;
 		imageFigure.setBusy(true);
 		UIJob j = new UIJob("Loading preview image") {
 			@Override
@@ -145,7 +149,7 @@ public class BookPagesFigure extends RectangleFigure {
 				try {
 					String reportFileName = ReportThumbnailsManager.getLocation(model);
 					if (reportFileName != null){
-						final Image sourceImage = ReportThumbnailsManager.produceImage((String) reportFileName,model.getJasperConfiguration());
+						final Image sourceImage = ReportThumbnailsManager.produceImage((String) reportFileName,model.getJasperConfiguration(), size, true, false);
 						if (sourceImage != null) {
 							updateFigure(sourceImage);
 						}
@@ -156,6 +160,7 @@ public class BookPagesFigure extends RectangleFigure {
 				} finally {
 					imageFigure.setBusy(false);
 				}
+				loadingJobRunning = false;
 				return Status.OK_STATUS;
 			}
 		};
@@ -232,6 +237,19 @@ public class BookPagesFigure extends RectangleFigure {
 		if (previewImage != null && !previewImage.isDisposed()){
 			previewImage.dispose();
 		}
+	}
+	
+	@Override
+	public void paint(Graphics graphics) {
+		// If the preview image has not been provided yet...let's load it.
+		// Attention, during startup, this operation may hang...
+		if ((this.previewImage == null || graphics.getAbsoluteScale() != lastScaleValue) && !loadingJobRunning){
+			lastScaleValue = graphics.getAbsoluteScale();
+			int width = (int)Math.round(imageFigure.getPreferredSize().width * lastScaleValue);
+			int height = (int)Math.round(imageFigure.getPreferredSize().height * lastScaleValue);
+			loadPreviewImage(Math.max(width, height));
+		}
+		super.paint(graphics);
 	}
 	
 	

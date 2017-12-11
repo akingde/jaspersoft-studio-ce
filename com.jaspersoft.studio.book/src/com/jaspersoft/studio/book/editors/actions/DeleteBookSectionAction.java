@@ -6,17 +6,18 @@ package com.jaspersoft.studio.book.editors.actions;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.book.JRBookActivator;
 import com.jaspersoft.studio.book.messages.Messages;
+import com.jaspersoft.studio.book.model.MGroupReportPartContainer;
 import com.jaspersoft.studio.book.model.MReportPartContainer;
 import com.jaspersoft.studio.book.model.commands.RemoveSectionCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 public class DeleteBookSectionAction extends ACachedSelectionAction {
 
@@ -38,10 +39,10 @@ public class DeleteBookSectionAction extends ACachedSelectionAction {
 	
 	@Override
 	protected Command createCommand() {
-		List<Object> parts = editor.getSelectionCache().getSelectionModelForType(MReportPartContainer.class);
+		List<Object> parts = editor.getSelectionCache().getSelectionModelForType(MGroupReportPartContainer.class);
 		CompoundCommand cc = new CompoundCommand();
 		for(Object rawPart : parts){
-			MReportPartContainer part = (MReportPartContainer)rawPart;
+			MGroupReportPartContainer part = (MGroupReportPartContainer)rawPart;
 			BandTypeEnum bandType = (BandTypeEnum)part.getPropertyValue(MReportPartContainer.PROPERTY_CONTAINER_TYPE);
 			if (!BandTypeEnum.DETAIL.equals(bandType)){
 				RemoveSectionCommand removeCommand = new RemoveSectionCommand(part);

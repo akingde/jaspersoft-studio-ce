@@ -4,13 +4,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.book.editors.figures;
 
-import org.eclipse.draw2d.FlowLayout;
+import org.eclipse.draw2d.AbstractLayout;
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -18,6 +20,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.book.editparts.BookPagesEditPart;
 import com.jaspersoft.studio.book.editparts.BookSectionEditPart;
+import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 
@@ -63,7 +66,40 @@ public class BookSectionFigure extends RectangleFigure {
 	
 	public BookSectionFigure(BookSectionEditPart parentPart){
 		this.parentPart = parentPart;
-		setLayoutManager(new FlowLayout());
+		setLayoutManager(new AbstractLayout() {
+			
+			@Override
+			public void layout(IFigure container) {
+				//int pageWidth = ((MainDesignerRootEditPart)parentPart.getViewer().getRootEditPart()).getFigure().getBounds().width -15;
+				int pageWidth = getParent().getClientArea().width - 15;
+				int figureWidth = (int)Math.round(BookPagesFigure.PREFERRED_WIDTH);
+				int numberForLine = Math.max(pageWidth / (figureWidth + 5), 1);
+				int placedOnCurrentLine = 0;
+				int x = 10;
+				int y = getBounds().y + 10;
+				int maxRowHeight = 0;
+				for(Object child : getChildren()) {
+					IFigure childFigure = (IFigure)child;
+					Dimension figureSize = childFigure.getPreferredSize();
+					maxRowHeight = Math.max(maxRowHeight, figureSize.height);
+					childFigure.setBounds(new Rectangle(x, y, figureSize.width, figureSize.height));
+					placedOnCurrentLine++;
+					if (placedOnCurrentLine >= numberForLine) {
+						placedOnCurrentLine = 0;
+						y += maxRowHeight;
+						x = 10;
+						maxRowHeight = 0;
+					} else {
+						x += figureSize.width;
+					}
+				}
+			}
+			
+			@Override
+			protected Dimension calculatePreferredSize(IFigure container, int wHint, int hHint) {
+				return BookSectionFigure.this.getPreferredSize(wHint, hHint);
+			}
+		});
 	}
 	
 	/**
@@ -71,18 +107,18 @@ public class BookSectionFigure extends RectangleFigure {
 	 */
 	@Override
 	public Dimension getPreferredSize(int wHint, int hHint) {
-		Rectangle currentBounds = getBounds();
 		int preferredHeight = BookPagesFigure.PREFERRED_HEIGHT;
-		//FALLBACK: if the parent figure has width 0 because it was still not
-		//calculated use it's default width
-		int pageWidth = BookReportFigure.FIGURE_WIDTH;
-		if (currentBounds.width > 0) pageWidth = currentBounds.width;
-		int numberForLine = pageWidth / (BookPagesFigure.PREFERRED_WIDTH + 5);
-		int numberOfLines = (parentPart.getChildren().size() / numberForLine);
-		if (parentPart.getChildren().size() % numberForLine >0) numberOfLines++;
+		int pageWidth = wHint > 0 ? wHint : getParent().getClientArea().width - 15;
+		int figureWidth = BookPagesFigure.PREFERRED_WIDTH;
+		int numberForLine = Math.max(pageWidth / (figureWidth + 5), 1);
+		int numberOfPages = parentPart.getChildren().size(); 
+		int numberOfLines = (numberOfPages / numberForLine);
+		if (numberOfPages % numberForLine >0) numberOfLines++;
 		if (numberOfLines == 0 ) numberOfLines++;
 		preferredHeight = (preferredHeight+4) * numberOfLines;
-		return new Dimension(-1, preferredHeight+HORIZONTAL_LINE_OFFSET+16);
+		int preferredWidth = (numberOfLines == 1) ? BookPagesFigure.PREFERRED_WIDTH * numberOfPages : BookPagesFigure.PREFERRED_WIDTH*numberForLine;
+		if (preferredWidth == 0) preferredWidth = BookPagesFigure.PREFERRED_WIDTH;
+		return new Dimension(preferredWidth, preferredHeight+HORIZONTAL_LINE_OFFSET+16);
 	}
 	
 	@Override
@@ -123,7 +159,9 @@ public class BookSectionFigure extends RectangleFigure {
 		
 		HORIZONTAL_LINE_OFFSET = graphics.getFontMetrics().getHeight() + 2;
 		graphics.setLineWidth(HORIZONTAL_LINE_WIDTH);
-		graphics.drawLine(figureBounds.x+10, figureBounds.y + HORIZONTAL_LINE_OFFSET, figureBounds.x+figureBounds.width, figureBounds.y + HORIZONTAL_LINE_OFFSET);
+		ZoomManager zoomManager = (ZoomManager) parentPart.getViewer().getProperty(ZoomManager.class.toString());
+		int pageWidth = (int)(((MainDesignerRootEditPart)parentPart.getViewer().getRootEditPart()).getFigure().getBounds().width/zoomManager.getZoom());
+		graphics.drawLine(figureBounds.x+10, figureBounds.y + HORIZONTAL_LINE_OFFSET, figureBounds.x + pageWidth, figureBounds.y + HORIZONTAL_LINE_OFFSET);
 		
 		// Restore graphics properties
 		graphics.setLineWidth(oldLineWidth);
@@ -136,7 +174,12 @@ public class BookSectionFigure extends RectangleFigure {
 	protected void paintClientArea(Graphics graphics) {
 		if (getChildren().isEmpty())
 			return;
-		paintChildren(graphics);
+		for (int i = 0; i < getChildren().size(); i++) {
+			IFigure child = (IFigure) getChildren().get(i);
+			if (child.isVisible()) {
+				child.paint(graphics);
+			}
+		}
 		paintDropFeedBack(graphics);
 	}
 
@@ -156,6 +199,14 @@ public class BookSectionFigure extends RectangleFigure {
 				graphics.drawLine(x, figureBound.y, x, figureBound.y+figureBound.height);
 			}
 		}
+	}
+	
+	public void validate() {
+		for(Object figure : getChildren()) {
+			Figure child = (Figure)figure;
+			child.setValid(false);
+		}
+		super.validate();
 	}
 	
 	@Override

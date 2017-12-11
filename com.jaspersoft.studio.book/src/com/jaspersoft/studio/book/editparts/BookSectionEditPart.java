@@ -19,6 +19,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
@@ -32,6 +33,7 @@ import com.jaspersoft.studio.book.ReportThumbnailsManager;
 import com.jaspersoft.studio.book.dnd.PageEditPartTracker;
 import com.jaspersoft.studio.book.editors.figures.BookPagesFigure;
 import com.jaspersoft.studio.book.editors.figures.BookSectionFigure;
+import com.jaspersoft.studio.book.model.MGroupReportPartContainer;
 import com.jaspersoft.studio.book.model.MReportPart;
 import com.jaspersoft.studio.book.model.MReportPartContainer;
 import com.jaspersoft.studio.book.model.commands.CreatePartAfterCommand;
@@ -53,8 +55,6 @@ public class BookSectionEditPart extends AbstractGraphicalEditPart {
 		public void propertyChange(PropertyChangeEvent arg0) {
 			figure.repaint();
 			refresh();
-			BookReportEditPart parent = (BookReportEditPart)getParent();
-			parent.updateBounds();
 		}
 	};
 	
@@ -177,7 +177,9 @@ public class BookSectionEditPart extends AbstractGraphicalEditPart {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE,new ComponentEditPolicy() {
 			@Override
 			protected Command createDeleteCommand(GroupRequest deleteRequest) {
-				return new RemoveSectionCommand(getBookModel());
+				if (getModel() instanceof MGroupReportPartContainer)
+					return new RemoveSectionCommand((MGroupReportPartContainer)getBookModel());
+				return UnexecutableCommand.INSTANCE;
 			}
 		});
 

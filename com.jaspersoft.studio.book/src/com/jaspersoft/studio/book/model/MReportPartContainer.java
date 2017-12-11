@@ -10,27 +10,18 @@ import java.util.List;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.book.descriptors.GroupNameValidator;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRPart;
 import net.sf.jasperreports.engine.JRSection;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
@@ -48,29 +39,10 @@ public class MReportPartContainer extends APropertyNode {
 	private static IIconDescriptor iconDescriptor;
 	// Array of property descriptors
 	private static IPropertyDescriptor[] descriptors;
-
-	private JRDesignGroup jrgroup;
 	
-	private static GroupNameValidator validator;
-
 	public MReportPartContainer(ANode parent, JRSection jrsection, int newIndex){
 		super(parent,newIndex);
 		setValue(jrsection);
-	}
-	
-	/**
-	 * Update the reference into the static validator when the actual group is 
-	 * edited
-	 */
-	public void updateValidator(){
-		validator.setTargetNode(this);
-	}
-
-	@Override
-	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
-		super.postDescriptors(descriptors);
-		//Set into the validator the actual reference
-		updateValidator();
 	}
 	
 	/**
@@ -100,13 +72,9 @@ public class MReportPartContainer extends APropertyNode {
 					//	- DETAIL
 					return origin.getBandTypeValue();
 				}
-				else{
+				else {
 					return BandTypeEnum.UNKNOWN;
 				}
-			} else if(JRDesignGroup.PROPERTY_NAME.equals(id) && getJrgroup() != null){
-				return getJrgroup().getName();
-			} else if (JRDesignGroup.PROPERTY_EXPRESSION.equals(id) && getJrgroup() != null){
-				return getJrgroup().getExpression();
 			}
 		}
 		return null;
@@ -132,12 +100,6 @@ public class MReportPartContainer extends APropertyNode {
 				for(JRPart p : newParts){
 					jrsection.addPart(p);
 				}
-			} else if(JRDesignGroup.PROPERTY_NAME.equals(id) && getJrgroup() != null){
-				getJrgroup().setName((String)value);
-				this.getPropertyChangeSupport().firePropertyChange(JRDesignGroup.PROPERTY_NAME, false, true);
-			} else if (JRDesignGroup.PROPERTY_EXPRESSION.equals(id) && getJrgroup() != null){
-				getJrgroup().setExpression((JRExpression)value);
-				this.getPropertyChangeSupport().firePropertyChange(JRDesignGroup.PROPERTY_EXPRESSION, false, true);
 			}
 		}
 	}
@@ -147,16 +109,6 @@ public class MReportPartContainer extends APropertyNode {
 		return getIconDescriptor().getIcon16();
 	}
 
-	public boolean isGroupHeader() {
-		BandTypeEnum type = (BandTypeEnum) getPropertyValue(PROPERTY_CONTAINER_TYPE);
-		return BandTypeEnum.GROUP_HEADER.equals(type) && jrgroup!=null;
-	}
-	
-	public boolean isGroupFooter() {
-		BandTypeEnum type = (BandTypeEnum) getPropertyValue(PROPERTY_CONTAINER_TYPE);
-		return BandTypeEnum.GROUP_FOOTER.equals(type) && jrgroup!=null;
-	}
-	
 	public boolean isDetail() {
 		BandTypeEnum type = (BandTypeEnum) getPropertyValue(PROPERTY_CONTAINER_TYPE);
 		return BandTypeEnum.DETAIL.equals(type);
@@ -172,20 +124,6 @@ public class MReportPartContainer extends APropertyNode {
 		if(isDetail()){
 			return "Content";
 		}
-		else if(isGroupFooter()){
-			String grpName = jrgroup.getName();
-			return ModelUtils.getReportPropertyValue(
-					getJasperDesign(), 
-					JSSPROPERTY_GROUPLABEL_PREFIX+grpName+JSSPROPERTY_GROUPLABEL_FOOTER_POSTFIX,
-					jrgroup.getName());
-		}
-		else if(isGroupHeader()){
-			String grpName = jrgroup.getName();
-			return ModelUtils.getReportPropertyValue(
-					getJasperDesign(), 
-					JSSPROPERTY_GROUPLABEL_PREFIX+grpName+JSSPROPERTY_GROUPLABEL_HEADER_POSTFIX,
-					jrgroup.getName());			
-		}
 		return "<UNDEFINED>";
 	}
 
@@ -199,31 +137,6 @@ public class MReportPartContainer extends APropertyNode {
 		return descriptors;
 	}
 
-	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
-		validator = new GroupNameValidator();
-		validator.setTargetNode(this);
-		
-		if(!isDetail()) {
-			JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, Messages.common_name, validator);
-			nameD.setDescription(Messages.MGroup_name_description);
-			desc.add(nameD);
-	
-			JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(JRDesignGroup.PROPERTY_EXPRESSION,Messages.common_expression);
-			expressionD.setDescription(Messages.MGroup_expression_description);
-			desc.add(expressionD);
-		}
-	}
-	
-	
-	public void setJRGroup(JRGroup group){
-		this.jrgroup = (JRDesignGroup)group;
-	}
-	
-	public JRDesignGroup getJrgroup() {
-		return jrgroup;
-	}
-	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(JRDesignSection.PROPERTY_PARTS)){
@@ -252,4 +165,8 @@ public class MReportPartContainer extends APropertyNode {
 		return super.getAdapter(adapter);
 	}
 
+	@Override
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		//this node has no proprerties
+	}
 }

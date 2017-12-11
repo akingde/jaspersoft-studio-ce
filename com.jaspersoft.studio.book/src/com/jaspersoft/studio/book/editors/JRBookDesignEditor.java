@@ -9,11 +9,21 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.MouseWheelHandler;
+import org.eclipse.gef.MouseWheelZoomHandler;
+import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.gef.tools.SelectionTool;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.GEFActionConstants;
+import org.eclipse.gef.ui.actions.ZoomInAction;
+import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
@@ -37,10 +47,13 @@ import com.jaspersoft.studio.book.editors.actions.CreateNewBookPartAction;
 import com.jaspersoft.studio.book.editors.actions.CreateNewGroupAction;
 import com.jaspersoft.studio.book.editors.actions.DeleteBookPartAction;
 import com.jaspersoft.studio.book.editors.actions.DeleteBookSectionAction;
+import com.jaspersoft.studio.book.editparts.BookSectionEditPart;
 import com.jaspersoft.studio.book.model.MBookReport;
 import com.jaspersoft.studio.editor.AGraphicEditor;
+import com.jaspersoft.studio.editor.ZoomActualAction;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
+import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
@@ -77,6 +90,11 @@ public class JRBookDesignEditor extends AGraphicEditor {
 	 * The extension manager for the plugin
 	 */
 	private ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+	
+	/**
+	 * The zoom toolbar control
+	 */
+	protected RZoomComboContributionItem zoomItem = null;
 
 	/**
 	 * The toolbar inside the book editor
@@ -139,9 +157,37 @@ public class JRBookDesignEditor extends AGraphicEditor {
 	 *            container where the toolbar is placed
 	 */
 	private void createToolBar(Composite container) {
-		additionalToolbar = new ToolBar(container, SWT.HORIZONTAL | SWT.FLAT);
+		additionalToolbar = new ToolBar(container, SWT.HORIZONTAL | SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 		GridData additionalToolbarGD = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		additionalToolbar.setLayoutData(additionalToolbarGD);
+		/*additionalToolbar.setLayout(new Layout() {
+			
+			@Override
+			protected void layout(Composite composite, boolean flushCache) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			protected org.eclipse.swt.graphics.Point computeSize(Composite composite, int wHint, int hHint,
+					boolean flushCache) {
+				
+				int height = 0;
+				int width = 0;
+				for(ToolItem item : additionalToolbar.getItems()) {
+					if (item.getImage() != null) {
+						ImageData data = item.getImage().getImageData();
+						width += data.width;
+						height = Math.max(height, data.height);
+					} else if (item.getControl() != null) {
+						org.eclipse.swt.graphics.Point size = item.getControl().computeSize(wHint, hHint);
+						width += size.x;
+						height = Math.max(height, size.y);
+					}
+				}
+				return new org.eclipse.swt.graphics.Point(width, height);
+			}
+		});*/
 	}
 
 	/**
@@ -158,10 +204,28 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		createToolBarButton(registry.getAction(BookCompileAction.ID));
 		createToolBarButton(registry.getAction(BookDatasetAction.ID));
 		createToolBarButton(new Separator());
+		
+		if (zoomItem != null) {
+			zoomItem.dispose();
+			zoomItem = null;
+		}
+		ZoomManager property = (ZoomManager) getGraphicalViewer().getProperty(ZoomManager.class.toString());
+		if (property != null) {
+
+			createToolBarButton(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
+			createToolBarButton(getActionRegistry().getAction(GEFActionConstants.ZOOM_OUT));
+			
+			zoomItem = new RZoomComboContributionItem(property);
+			
+			zoomItem.fill(additionalToolbar, 5);
+		}
+		
+		createToolBarButton(new Separator());
 		for (AContributorAction contAction : m.getActions()) {
 			createToolBarButton(contAction);
 			contAction.setJrConfig((JasperReportsConfiguration) getGraphicalViewer().getProperty("JRCONTEXT"));
 		}
+		additionalToolbar.pack();
 		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).grab(true, false).applyTo(additionalToolbar);
 	}
 
@@ -314,9 +378,41 @@ public class JRBookDesignEditor extends AGraphicEditor {
 
 	@Override
 	protected void configureGraphicalViewer() {
-		getGraphicalViewer().getControl().setBackground(ColorConstants.white);
-
+		JSSScrollingGraphicalViewer viewer = (JSSScrollingGraphicalViewer)getGraphicalViewer();
+		viewer.getControl().setBackground(ColorConstants.white);
+		//This custom selection tool allow to select the book section even when clicking on an x outsize id but 
+		//on and y inside 
+		viewer.getEditDomain().setDefaultTool(new SelectionTool() {
+			
+			@Override
+			protected boolean updateTargetUnderMouse() {
+				if (!isTargetLocked()) {
+					EditPart editPart = null;
+					if (getCurrentViewer() != null) {
+						editPart = getCurrentViewer().findObjectAtExcluding(getLocation(), getExclusionSet(),getTargetingConditional());
+						if (editPart instanceof MainDesignerRootEditPart) {
+							getCurrentViewer().getEditPartRegistry();
+							EditPart bookSectionPart = getCurrentViewer().findObjectAtExcluding(
+									new Point(6,getLocation().y), getExclusionSet(),
+									getTargetingConditional());
+							if (bookSectionPart != null && bookSectionPart instanceof BookSectionEditPart) {
+								editPart = bookSectionPart;
+							}
+							boolean changed = getTargetEditPart() != editPart;
+							setTargetEditPart(editPart);
+							return changed;
+						} else return super.updateTargetUnderMouse();
+					} else return super.updateTargetUnderMouse();
+					
+				} else
+					return false;
+			}
+			
+		});
+		viewer.getEditDomain().loadDefaultTool();
+		
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
+		((FigureCanvas)graphicalViewer.getControl()).setHorizontalScrollBarVisibility(FigureCanvas.NEVER);
 		graphicalViewer.setEditPartFactory(createEditParFactory());
 		MainDesignerRootEditPart rootEditPart = new MainDesignerRootEditPart();
 		graphicalViewer.setRootEditPart(rootEditPart);
@@ -324,9 +420,16 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		// set rulers providers
 		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
 
-		getGraphicalViewer().addDropTargetListener(new ResourceTransferDropTargetListener(getGraphicalViewer()));
-		getGraphicalViewer().setContextMenu(createContextMenuProvider(getGraphicalViewer()));
+		graphicalViewer.addDropTargetListener(new ResourceTransferDropTargetListener(getGraphicalViewer()));
+		graphicalViewer.setContextMenu(createContextMenuProvider(getGraphicalViewer()));
 		graphicalViewer.setProperty("JRCONTEXT", jrContext);
+		
+		ZoomManager zoomManager = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());
+
+		getActionRegistry().registerAction(new ZoomInAction(zoomManager));
+		getActionRegistry().registerAction(new ZoomOutAction(zoomManager));
+		getActionRegistry().registerAction(new ZoomActualAction(zoomManager));
+		graphicalViewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 	}
 
 	@Override

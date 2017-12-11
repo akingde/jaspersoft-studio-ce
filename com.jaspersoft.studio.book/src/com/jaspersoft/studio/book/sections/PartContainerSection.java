@@ -6,17 +6,13 @@
 
 import java.text.MessageFormat;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.book.model.MReportPartContainer;
+import com.jaspersoft.studio.book.model.MGroupReportPartContainer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.group.MGroup;
@@ -26,13 +22,17 @@ import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 public class PartContainerSection extends AbstractSection {
 	
 	private ASPropertyWidget<?> nameWidget;
 	
 	private Composite container;
 	
-	private MReportPartContainer groupContainer;
+	private MGroupReportPartContainer groupContainer;
 	
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		
@@ -59,24 +59,6 @@ public class PartContainerSection extends AbstractSection {
 	}
 	
 	@Override
-	public void refresh() {
-		if (hasGroup()) {
-			container.setVisible(true);
-			super.refresh();
-		} else {
-			container.setVisible(false);
-		}
-		
-	}
-	
-	protected boolean hasGroup(){
-		if (groupContainer != null){
-			return ((MReportPartContainer) groupContainer).getJrgroup() != null;
-		}
-		return false;
-	}
-	
-	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
 		addProvidedProperties(JRDesignGroup.PROPERTY_NAME, Messages.common_name);
@@ -86,15 +68,12 @@ public class PartContainerSection extends AbstractSection {
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode md = super.getModelFromEditPart(item);
-		if (md instanceof MReportPartContainer){
-			groupContainer = (MReportPartContainer) md;
-			JRDesignGroup group = groupContainer.getJrgroup();
-			MGroup groupModel = new MGroup();
-			groupModel.setValue(group);
-			groupModel.setJasperConfiguration(groupContainer.getJasperConfiguration());
-			return groupModel;
-		}
-		return md;
+		groupContainer = (MGroupReportPartContainer) md;
+		JRDesignGroup group = groupContainer.getJrgroup();
+		MGroup groupModel = new MGroup();
+		groupModel.setValue(group);
+		groupModel.setJasperConfiguration(groupContainer.getJasperConfiguration());
+		return groupModel;
 	}
 	
 	/**
