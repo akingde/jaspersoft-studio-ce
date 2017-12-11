@@ -1103,6 +1103,13 @@ public class Messages extends NLS {
 	public static String JRPropertyDialog_shellTitle;
 	public static String JRPropertyDialog_spacialProperties;
 	public static String JRPropertyDialog_valuePlaceHolder;
+	public static String JRPropertyExpressionPage_0;
+	public static String JRPropertyExpressionPage_12;
+	public static String JRPropertyExpressionPage_13;
+	public static String JRPropertyExpressionPage_14;
+	public static String JRPropertyExpressionPage_21;
+	public static String JRPropertyExpressionPage_6;
+	public static String JRPropertyExpressionPage_8;
 	public static String JRPropertyPage_description;
 	public static String JRPropertyPage_value;
 	public static String JRQueryPage_description;

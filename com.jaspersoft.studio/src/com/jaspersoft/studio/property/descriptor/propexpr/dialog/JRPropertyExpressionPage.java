@@ -3,6 +3,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,6 +19,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.gef.ui.actions.Clipboard;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
@@ -48,6 +50,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -60,6 +63,7 @@ import com.jaspersoft.studio.model.CopyElementProperty;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionDTO;
 import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionsDTO;
+import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumnFactory;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
@@ -91,7 +95,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	private final class EditElement implements IEditElement<PropertyDTO> {
 		@Override
 		public void editElement(List<PropertyDTO> input, int pos) {
-			PropertyDTO v = (PropertyDTO) input.get(pos);
+			PropertyDTO v = input.get(pos);
 			if (v == null)
 				return;
 			JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(UIUtils.getShell());
@@ -153,7 +157,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 		txt = new Text(composite, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		txt.setMessage("Search property");
+		txt.setMessage(Messages.JRPropertyExpressionPage_0);
 		txt.addModifyListener(new ModifyListener() {
 
 			@Override
@@ -164,6 +168,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			}
 		});
 		txt.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				if (!Misc.isNullOrEmpty(search) && txt.getText().trim().equalsIgnoreCase(search.trim()))
 					return;
@@ -181,6 +186,15 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		gd.heightHint = 500;
 		propCmp.setLayoutData(gd);
 
+		if (tableView) {
+			buildTable(propCmp);
+			propCmpLayout.topControl = tblCmp;
+			UIUtils.getDisplay().asyncExec(this::fillTable);
+		} else
+			buildForm(propCmp);
+	}
+
+	protected void buildForm(Composite propCmp) {
 		sc = new ScrolledComposite(propCmp, SWT.H_SCROLL | SWT.V_SCROLL);
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
@@ -215,14 +229,14 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		buttons = new ToolBar(parent, SWT.FLAT);
 
 		badd = new ToolItem(buttons, SWT.PUSH);
-		badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/plus.png"));
+		badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/plus.png")); //$NON-NLS-1$
 		badd.addListener(SWT.Selection, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
 				PropertyExpressionDTO v = value instanceof DatasetPropertyExpressionsDTO
-						? new DatasetPropertyExpressionDTO(false, "property.name", "value", null)
-						: new PropertyExpressionDTO(false, "property.name", "value");
+						? new DatasetPropertyExpressionDTO(false, "property.name", "value", null) //$NON-NLS-1$ //$NON-NLS-2$
+						: new PropertyExpressionDTO(false, "property.name", "value"); //$NON-NLS-1$ //$NON-NLS-2$
 				v.seteContext(value.geteContext());
 				v.setJrElement(value.getJrElement());
 				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(UIUtils.getShell());
@@ -235,56 +249,78 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			}
 
 		});
-		badd.setToolTipText("Add property.");
+		badd.setToolTipText(Messages.JRPropertyExpressionPage_6);
 
 		bSystem = new ToolItem(buttons, SWT.CHECK);
-		bSystem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/jrxml_icon.png"));
+		bSystem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/jrxml_icon.png")); //$NON-NLS-1$
+		IPreferenceStore pstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
 		bSystem.addListener(SWT.Selection, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
 				showExisting = bSystem.getSelection();
 				refreshWidgets();
+				try {
+					pstore.setValue(GlobalPreferencePage.JSS_PROPERTIES_SHOW_SET, showExisting);
+					((ScopedPreferenceStore) pstore).save();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 		});
-		bSystem.setToolTipText("Show only existing properties in the report template.");
-		bSystem.setSelection(false);
+		bSystem.setToolTipText(Messages.JRPropertyExpressionPage_8);
+		showExisting = pstore.getBoolean(GlobalPreferencePage.JSS_PROPERTIES_SHOW_SET);
+		bSystem.setSelection(showExisting);
 	}
+
+	private boolean tableView = false;
 
 	private void createButtonsTable(Composite parent) {
 		buttons = new ToolBar(parent, SWT.FLAT);
 
 		final ToolItem bTbl = new ToolItem(buttons, SWT.PUSH);
-		bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif"));
+		IPreferenceStore pstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+		tableView = pstore.getBoolean(GlobalPreferencePage.JSS_PROPERTIES_VIEW_MODE);
+		if (!tableView)
+			bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
+		else
+			bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/ui-scroll-pane-form.png")); //$NON-NLS-1$
 		bTbl.addListener(SWT.Selection, new Listener() {
-			private boolean table = false;
 
 			@Override
 			public void handleEvent(Event event) {
-				if (!table) {
-					// create table if not created
+				if (!tableView) {
+					bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/ui-scroll-pane-form.png")); //$NON-NLS-1$
 					if (tblCmp == null)
 						buildTable(propCmp);
 					propCmpLayout.topControl = tblCmp;
 					propCmp.layout(true);
-					// switch layout
-					bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/ui-scroll-pane-form.png"));
 					fillTable();
 				} else {
-					bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif"));
+					bTbl.setImage(JaspersoftStudioPlugin.getInstance()
+							.getImage("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
+					if (sc == null)
+						buildForm(propCmp);
 					propCmpLayout.topControl = sc;
 					propCmp.layout(true);
 					refreshWidgets();
 				}
-				badd.setEnabled(table);
-				bSystem.setEnabled(table);
-				txt.setEnabled(table);
-				table = !table;
+				badd.setEnabled(tableView);
+				bSystem.setEnabled(tableView);
+				txt.setEnabled(tableView);
+				tableView = !tableView;
+
+				try {
+					pstore.setValue(GlobalPreferencePage.JSS_PROPERTIES_VIEW_MODE, tableView);
+					((ScopedPreferenceStore) pstore).save();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 		});
-		bTbl.setToolTipText("Show properties as table or form.");
+		bTbl.setToolTipText(Messages.JRPropertyExpressionPage_12);
 	}
 
 	private boolean showExisting = false;
@@ -294,7 +330,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	private Composite cmp;
 	private List<PropertyMetadata> eds;
 	private List<PropertyMetadata> sortedEDS;
-	private Map<String, PropertyMetadata> props = new HashMap<String, PropertyMetadata>();
+	private Map<String, PropertyMetadata> props = new HashMap<>();
 
 	private void createFormWidgets(Composite cmp, final ScrolledComposite sc) {
 		eds = HintsPropertiesList.getPropertiesMetadata(value.getJrElement(), value.geteContext());
@@ -318,7 +354,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				added = true;
 			}
 		if (added) {
-			sortedEDS = new ArrayList<PropertyMetadata>(props.values());
+			sortedEDS = new ArrayList<>(props.values());
 			Collections.sort(sortedEDS, new Comparator<PropertyMetadata>() {
 				private NullComparator nc = new NullComparator(true);
 
@@ -343,14 +379,13 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				return;
 			if (cmp.isDisposed())
 				return;
-			// if key contains {}
 			if (showExisting && !value.hasProperty(pm.getName()))
 				continue;
 			String c = pm.getCategory();
-			if (c != null && c.indexOf(":") >= 0)
-				c = c.substring(c.indexOf(":") + 1);
+			if (c != null && c.indexOf(':') >= 0)
+				c = c.substring(c.indexOf(':') + 1);
 			if (c == null)
-				c = "Miscellaneous";
+				c = Messages.JRPropertyExpressionPage_13;
 			if (!Misc.isNullOrEmpty(search) && !(pm.getName().toLowerCase().trim().contains(search)
 					|| (pm.getLabel() != null && pm.getLabel().toLowerCase().trim().contains(search))
 					|| c.toLowerCase().trim().contains(search)))
@@ -365,7 +400,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			boolean custom = !eds.contains(props.get(pm.getName()));
 			if (custom && !value.hasProperty(pm.getName()))
 				continue;
-			col.setLabelEditable(custom);// showExisting && custom);
+			col.setLabelEditable(custom);
 			UIUtils.getDisplay().syncExec(new Runnable() {
 
 				@Override
@@ -380,7 +415,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			public void run() {
 				if (cmp.getChildren().length == 0) {
 					Label lbl = new Label(cmp, SWT.CENTER);
-					lbl.setText("Search result is empty");
+					lbl.setText(Messages.JRPropertyExpressionPage_14);
 					GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.FILL_HORIZONTAL);
 					gd.horizontalSpan = 2;
 					lbl.setLayoutData(gd);
@@ -423,8 +458,8 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				scmp.setLayoutData(gd);
 
 				Label lbl = new Label(scmp, SWT.NONE);
-				String gn = WordUtils.capitalizeFully(cat.replace(".", " "));
-				gn = gn.replaceAll("Jasperreports", "JasperReports");
+				String gn = WordUtils.capitalizeFully(cat.replace(".", " ")); //$NON-NLS-1$ //$NON-NLS-2$
+				gn = gn.replaceAll("Jasperreports", "JasperReports"); //$NON-NLS-1$ //$NON-NLS-2$
 				lbl.setText(gn);
 				lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
 				gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -496,7 +531,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				while (getName(input, name, i) == null)
 					i++;
 				name += "_" + i; //$NON-NLS-1$
-				String defValue = "NEW_VALUE";
+				String defValue = "NEW_VALUE"; //$NON-NLS-1$
 				PropertyExpressionDTO v = value instanceof DatasetPropertyExpressionsDTO
 						? new DatasetPropertyExpressionDTO(false, name, defValue, null)
 						: new PropertyExpressionDTO(false, name, defValue);
@@ -511,7 +546,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			}
 
 			private String getName(List<?> input, String name, int i) {
-				name += "_" + i;
+				name += "_" + i; //$NON-NLS-1$
 				for (Object dto : input) {
 					PropertyDTO prm = (PropertyDTO) dto;
 					if (prm.getName() != null && prm.getName().trim().equals(name)) {
@@ -522,7 +557,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			}
 		});
 
-		editButton = new EditButton<PropertyDTO>();
+		editButton = new EditButton<>();
 		editButton.createEditButtons(bGroup, tableViewer, new EditElement());
 		new DeleteButton().createDeleteButton(bGroup, tableViewer);
 		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
@@ -537,7 +572,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
-				List<ICopyable> copyList = new ArrayList<ICopyable>();
+				List<ICopyable> copyList = new ArrayList<>();
 				for (Object selected : selection.toList()) {
 					PropertyDTO prop = (PropertyDTO) selected;
 					if (prop.isExpression()) {
@@ -591,6 +626,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 			@Override
 			public void menuHidden(MenuEvent e) {
+				// do nothing
 			}
 		});
 
@@ -598,11 +634,13 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	}
 
 	/**
-	 * Check if at least one of the copied properties can be pasted on the current element
+	 * Check if at least one of the copied properties can be pasted on the current
+	 * element
 	 * 
 	 * @param copiedProperties
-	 *          the copied properties
-	 * @return true if at least one of the copied properties can be pasted, false otherwise
+	 *            the copied properties
+	 * @return true if at least one of the copied properties can be pasted, false
+	 *         otherwise
 	 */
 	private boolean canPaste(List<CopyElementExpressionProperty> copiedProperties) {
 		return copiedProperties != null && !copiedProperties.isEmpty();
@@ -629,7 +667,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		}
 		refreshing = true;
 
-		Job job = new Job("refresh widgets") {
+		Job job = new Job(Messages.JRPropertyExpressionPage_21) {
 
 			protected IStatus run(IProgressMonitor monitor) {
 				final boolean ex = showExisting;
