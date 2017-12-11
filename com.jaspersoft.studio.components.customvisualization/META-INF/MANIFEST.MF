@@ -3,12 +3,12 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Custom Visualization Component
 Bundle-SymbolicName: com.jaspersoft.studio.components.customvisualization;singleton:=true
-Bundle-Version: 6.4.4.qualifier
+Bundle-Version: 6.5.0.final
 Bundle-Activator: com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator
 Bundle-Vendor: TIBCO Software Inc.
 Bundle-Localization: plugin
-Require-Bundle: com.jaspersoft.studio;bundle-version="6.4.4",
- com.jaspersoft.studio.server;bundle-version="6.4.4"
+Require-Bundle: com.jaspersoft.studio;bundle-version="6.5.0",
+ com.jaspersoft.studio.server;bundle-version="6.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: net.sf.jasperreports, com.jaspersoft.studio
