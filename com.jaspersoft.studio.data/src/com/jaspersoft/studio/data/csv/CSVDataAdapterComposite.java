@@ -105,7 +105,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		setLayout(new GridLayout(1, false));
 
 		// data model init
-		rows = new ArrayList<String>();
+		rows = new ArrayList<>();
 
 		Composite composite = new Composite(this, SWT.NONE);
 		GridLayout gl_composite = new GridLayout(3, false);
@@ -204,32 +204,6 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 			}
 
 		});
-
-		// tableViewer.setCellModifier(new ICellModifier() {
-		// public boolean canModify(Object element, String property) {
-		// return true;
-		// }
-		//
-		// public Object getValue(Object element, String property) {
-		// String prop = (String) element;
-		// if ("NAME".equals(property)) //$NON-NLS-1$
-		// return prop;
-		// return ""; //$NON-NLS-1$
-		// }
-		//
-		// public void modify(Object element, String property, Object value) {
-		// TableItem tableItem = (TableItem) element;
-		// tableItem.setText((String) value);
-		//
-		// tableViewer.update(element, new String[] { property });
-		// tableViewer.refresh();
-		// }
-		// });
-		//
-		// tableViewer
-		// .setCellEditors(new CellEditor[] { new TextCellEditor(table) });
-		// tableViewer.setColumnProperties(new String[] { "NAME" });
-		// //$NON-NLS-1$ //$NON-NLS-2$
 
 		tableViewer.setInput(rows);
 
@@ -758,69 +732,6 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		return dataAdapterDesc;
 	}
 
-	// /**
-	// * Content provider for CSVDataAdapterComposite TableViewer
-	// *
-	// * @author czhu
-	// *
-	// */
-	// private class CSVContentProvider implements IStructuredContentProvider {
-	//
-	// public void dispose() {
-	// // nothing
-	// }
-	//
-	// public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
-	// {
-	// // nothing
-	// }
-	//
-	// public Object[] getElements(Object inputElement) {
-	// if (inputElement != null && inputElement instanceof List)
-	// return ((List<?>) inputElement).toArray();
-	// return new Object[0];
-	// }
-	// }
-
-	//
-	// /**
-	// * Extended EditingSupport for the specific column Name
-	// *
-	// * @author czhu
-	// *
-	// */
-	// private class NameEditingSupport extends EditingSupport {
-	//
-	// private final TableViewer viewer;
-	//
-	// public NameEditingSupport(TableViewer viewer) {
-	// super(viewer);
-	// this.viewer = viewer;
-	// }
-	//
-	// @Override
-	// protected CellEditor getCellEditor(Object element) {
-	// return new TextCellEditor(viewer.getTable());
-	// }
-	//
-	// @Override
-	// protected boolean canEdit(Object element) {
-	// return true;
-	// }
-	//
-	// @Override
-	// protected Object getValue(Object element) {
-	// return new StringBuffer((String) element);
-	// }
-	//
-	// @Override
-	// protected void setValue(Object element, Object value) {
-	// ((StringBuffer) element).setLength(0);
-	// ((StringBuffer) element).append((String.valueOf(value)));
-	// viewer.refresh();
-	// }
-	// }
-
 	/**
 	 * This creates and returns a new entry for the data model
 	 * 
@@ -846,7 +757,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	private void removeEntries() {
 		int[] indices = table.getSelectionIndices();
 		if (indices.length > 0) {
-			List<String> toDel = new ArrayList<String>();
+			List<String> toDel = new ArrayList<>();
 			for (int i = 0; i < indices.length; i++)
 				toDel.add(rows.get(indices[i]));
 			rows.removeAll(toDel);
@@ -984,11 +895,11 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		ds.next();
 		Map<String, Integer> names = ds.getColumnNames();
 		if (names != null) {
-			SortedMap<Integer, String> map = new TreeMap<Integer, String>();
-			for (String key : names.keySet())
-				map.put(names.get(key), key);
-			for (Integer key : map.keySet())
-				rows.add(map.get(key));
+			SortedMap<Integer, String> map = new TreeMap<>();
+			for (Map.Entry<String, Integer> entry : names.entrySet())
+				map.put(entry.getValue(), entry.getKey());
+			for (Map.Entry<Integer, String> entry : map.entrySet())
+				rows.add(entry.getValue());
 		}
 
 		tableViewer.refresh();

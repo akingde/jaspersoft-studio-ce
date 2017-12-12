@@ -7,6 +7,9 @@ package com.jaspersoft.studio.data.excel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -40,26 +43,19 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.data.AFileDataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DateNumberFormatWidget;
-import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.swt.events.ChangeEvent;
 import com.jaspersoft.studio.swt.events.ChangeListener;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.data.excel.ExcelDataAdapter;
 import net.sf.jasperreports.data.excel.ExcelDataAdapterImpl;
 import net.sf.jasperreports.data.excel.ExcelFormatEnum;
-import net.sf.jasperreports.data.xls.XlsDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.data.ExcelDataSource;
 
 public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
@@ -79,8 +75,8 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 	private java.util.List<String[]> rows;
 
 	/**
-	 * Temp. JR configuration used only to get the fields from a fake design. It
-	 * is disposed at the end
+	 * Temp. JR configuration used only to get the fields from a fake design. It is
+	 * disposed at the end
 	 */
 	private JasperReportsConfiguration jConfig;
 
@@ -101,7 +97,7 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		setLayout(new GridLayout(1, false));
 
 		// data model init
-		rows = new ArrayList<String[]>();
+		rows = new ArrayList<>();
 
 		Composite composite = new Composite(this, SWT.NONE);
 		GridLayout gl_composite = new GridLayout(3, false);
@@ -124,8 +120,8 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		new Label(cmp, SWT.NONE).setText("Excel Format");
 
 		format = new Combo(cmp, SWT.READ_ONLY);
-		format.setItems(new String[] { ExcelFormatEnum.AUTODETECT.getName(), ExcelFormatEnum.XLS.getName(),
-				ExcelFormatEnum.XLSX.getName() });
+		format.setItems(ExcelFormatEnum.AUTODETECT.getName(), ExcelFormatEnum.XLS.getName(),
+				ExcelFormatEnum.XLSX.getName());
 
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayout(new FillLayout(SWT.VERTICAL));
@@ -155,22 +151,10 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		table.setLayoutData(gd);
 		table.setHeaderVisible(true);
 
-		// TableLayout tlayout = new TableLayout();
-		// tlayout.addColumnData(new ColumnWeightData(100, false));
-		// table.setLayout(tlayout);
-
 		tableViewer = new TableViewer(table);
 
-		// tableViewer = new TableViewer(composite_3,
-		// SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL |
-		// SWT.H_SCROLL);
 		tableViewer.setContentProvider(new XLSContentProvider());
 		tableViewer.setInput(rows);
-
-		// table = tableViewer.getTable();
-		// table.setLayoutData(new GridData(GridData.FILL_BOTH));
-		// table.setLinesVisible(true);
-		// table.setHeaderVisible(true);
 
 		tableViewerColumnName = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnColumnName = tableViewerColumnName.getColumn();
@@ -187,10 +171,6 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		tblclmnColumnIndex.setText(Messages.XLSDataAdapterComposite_6);
 		tableViewerColumnIndex.setLabelProvider(new ColumnNameIndexLabelProvider(1));
 		tableViewerColumnIndex.setEditingSupport(new NameIndexEditingSupport(tableViewer, 1));
-
-		// for (int i = 0, n = table.getColumnCount(); i < n; i++) {
-		// table.getColumn(i).pack();
-		// }
 
 		Composite composite_4 = new Composite(composite_3, SWT.NONE);
 		composite_4.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
@@ -397,8 +377,8 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 		dataAdapter.setQueryExecuterMode(btnCheckQEMode.getSelection());
 
-		List<String> listColumnNames = new ArrayList<String>();
-		List<Integer> listColumnIndexes = new ArrayList<Integer>();
+		List<String> listColumnNames = new ArrayList<>();
+		List<Integer> listColumnIndexes = new ArrayList<>();
 		for (String[] row : rows) {
 			listColumnNames.add(row[0]);
 			listColumnIndexes.add(Integer.valueOf(row[1]));
@@ -435,11 +415,12 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 	 * 
 	 */
 	private class XLSContentProvider implements IStructuredContentProvider {
-
+		@Override
 		public void dispose() {
 			// nothing
 		}
 
+		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			// nothing
 		}
@@ -533,9 +514,8 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 		String digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //$NON-NLS-1$
 
-		if (index != null && index instanceof Integer) {
-			int val = ((Integer) index).intValue();
-
+		if (index != null) {
+			int val = index.intValue();
 			String number = "" + digits.charAt(val % 26); //$NON-NLS-1$
 			while (val > 0) {
 				val = val / 26;
@@ -576,8 +556,8 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 	}
 
 	/**
-	 * This set selection to the table's item represented by the given index.
-	 * Any index out of table's range will select the last item.
+	 * This set selection to the table's item represented by the given index. Any
+	 * index out of table's range will select the last item.
 	 * 
 	 * @param index
 	 */
@@ -615,41 +595,20 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 	 * @throws Exception
 	 */
 	private void getExcelColumns() throws Exception {
-
 		if (textFileName.getText().length() > 0) {
-			DataAdapterDescriptor da = getDataAdapter();
-			if (jConfig == null) {
-				jConfig = JasperReportsConfiguration.getDefaultJRConfig();
-			}
-			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
-			((AbstractDataAdapterService) das).getDataAdapter();
-			JasperDesign jd = new JasperDesign();
-			jd.setJasperReportsContext(jConfig);
-			jConfig.setJasperDesign(jd);
-
-			// The get fields method call once a next on the data adapter to get
-			// the
-			// first line and from that is read the
-			// fields name. But is useFirstRowAsHeader flag is set to false than
-			// the
-			// next call will skip the first line
-			// that is the only one read to get the fields, so it will return an
-			// empty
-			// set of column names. For this
-			// reason this flag must be force to true if the data adapter is
-			// used to
-			// get the column names
-			XlsDataAdapter xlsAdapter = (XlsDataAdapter) da.getDataAdapter();
-			boolean useRowHeader = xlsAdapter.isUseFirstRowAsHeader();
-			xlsAdapter.setUseFirstRowAsHeader(true);
-			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig,
-					new JRDesignDataset(jConfig, false));
-			xlsAdapter.setUseFirstRowAsHeader(useRowHeader);
+			ExcelDataSource ds = new ExcelDataSource(getJrContext(), textFileName.getText());
+			ds.setUseFirstRowAsHeader(true);
 
 			rows.clear();
-			int columnIndex = 0;
-			for (JRDesignField f : fields) {
-				rows.add(new String[] { f.getName(), String.valueOf(columnIndex++) });
+			ds.next();
+
+			Map<String, Integer> names = ds.getColumnNames();
+			if (names != null) {
+				SortedMap<Integer, String> map = new TreeMap<>();
+				for (Map.Entry<String, Integer> entry : names.entrySet())
+					map.put(entry.getValue(), entry.getKey());
+				for (Map.Entry<Integer, String> entry : map.entrySet())
+					rows.add(new String[] { entry.getValue(), String.valueOf(entry.getKey()) });
 			}
 			tableViewer.setInput(rows);
 
@@ -695,8 +654,8 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 	}
 
 	/**
-	 * Check the validity of the column name. It is valid only if it is not
-	 * null, not empty and not already existed.
+	 * Check the validity of the column name. It is valid only if it is not null,
+	 * not empty and not already existed.
 	 * 
 	 * @param string
 	 * @return true or false
