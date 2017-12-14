@@ -56,8 +56,7 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.plugin.ExtensionManager;
-import com.jaspersoft.studio.properties.Activator;
-import com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.properties.view.ITabbedPropertySheetPageContributor;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
@@ -698,8 +697,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart
 			if (getModel().getChildren().size() > 0) {
 				JasperReportsConfiguration jConfig = ((ANode) getModel().getChildren().get(0)).getJasperConfiguration();
 				if (jConfig != null) {
-					boolean defaultValue = Activator.getDefault().getPreferenceStore().getBoolean(PropertiesPreferencePage.P_DEFAULT_ADVANCED_TAB);
-					boolean advancedDefault = jConfig.getPropertyBoolean(PropertiesPreferencePage.P_DEFAULT_ADVANCED_TAB, defaultValue);
+					boolean advancedDefault = jConfig.getPropertyBoolean(DesignerPreferencePage.P_DEFAULT_ADVANCED_TAB,
+							Boolean.FALSE);
 					if (advancedDefault) {
 						return propertySheetPage.getCurrentTabs().size() - 1;
 					}

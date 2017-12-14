@@ -587,6 +587,7 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_4;
 	public static String DesignerPreferencePage_6;
 	public static String DesignerPreferencePage_8;
+	public static String DesignerPreferencePage_advancedDefault;
 	public static String DesignerPreferencePage_autoresizeBand;
 	public static String DesignerPreferencePage_centerEditorOption;
 	public static String DesignerPreferencePage_centimeterMeasure;

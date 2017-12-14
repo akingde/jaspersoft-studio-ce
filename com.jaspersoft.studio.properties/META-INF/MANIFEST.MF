@@ -26,7 +26,6 @@ Export-Package: com.jaspersoft.studio.properties;uses:="org.eclipse.ui.plugin,or
    org.eclipse.swt.widgets",
  com.jaspersoft.studio.properties.layout,
  com.jaspersoft.studio.properties.messages;uses:="org.eclipse.osgi.util",
- com.jaspersoft.studio.properties.preferences,
  com.jaspersoft.studio.properties.view;
   uses:="org.eclipse.ui,
    org.eclipse.swt.custom,
