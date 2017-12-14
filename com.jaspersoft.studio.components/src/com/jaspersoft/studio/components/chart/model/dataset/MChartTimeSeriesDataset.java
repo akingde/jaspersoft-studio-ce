@@ -85,10 +85,9 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignTimeSeriesDataset jrElement = (JRDesignTimeSeriesDataset) getValue();
-		if (jrElement != null)
+		if (jrElement != null) {
 			if (id.equals(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD)) {
-				return timePeriodD.getIntValue(TimePeriodEnum
-						.getByValue(jrElement.getTimePeriod()));
+				return NamedEnumPropertyDescriptor.getIntValue(TimePeriodEnum.DAY, NullEnum.NULL, TimePeriodEnum.getByValue(jrElement.getTimePeriod()));
 
 				// if (jrElement.getTimePeriod() == null)
 				// return 0;
@@ -105,6 +104,7 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 				// return null;
 			}
 
+		}
 		return super.getPropertyValue(id);
 	}
 
