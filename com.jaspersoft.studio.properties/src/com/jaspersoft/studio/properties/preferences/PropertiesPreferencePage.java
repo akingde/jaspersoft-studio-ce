@@ -19,7 +19,7 @@ import net.sf.jasperreports.eclipse.preferences.IPreferencePageExtension;
 
 /**
  * Preference page used to show a flag to decide if in the properties view we should force to show
- * only one column
+ * only one column and to show the advanced tab as default
  * 
  * @author Orlandin Marco
  *
@@ -32,6 +32,12 @@ public class PropertiesPreferencePage implements IPreferencePageExtension {
 	public static final String SINGLE_COLUMN_ID = "com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage.single_column"; //$NON-NLS-1$
 
 	/**
+	 * Key for the property to set the advanced tab always as default in the
+	 * properties view
+	 */
+	public static final String P_DEFAULT_ADVANCED_TAB = "defaultAdvanced"; //$NON-NLS-1$
+	
+	/**
 	 * Initialize the default values of the store, by default the single column property
 	 * is disable
 	 * 
@@ -40,6 +46,7 @@ public class PropertiesPreferencePage implements IPreferencePageExtension {
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(SINGLE_COLUMN_ID, false);
 	}
+	
 
 	@Override
 	public void createContributedFields(Composite parent, IPreferenceExtendablePage page) {
@@ -49,7 +56,22 @@ public class PropertiesPreferencePage implements IPreferencePageExtension {
 		gd.horizontalSpan = 3;
 		separator.setLayoutData(gd);
 		
-		BooleanFieldEditor be = new BooleanFieldEditor(SINGLE_COLUMN_ID, Messages.PropertiesPreferencePage_singleColumnProperty, parent){
+		BooleanFieldEditor be =new BooleanFieldEditor(P_DEFAULT_ADVANCED_TAB, Messages.DesignerPreferencePage_advancedDefault, parent) {
+			
+			/**
+			 * Force to use the storage of the Preferences plugin to store this property, otherwise it will
+			 * be used the storage of the host page
+			 */
+			@Override
+			public IPreferenceStore getPreferenceStore() {
+				return Activator.getDefault().getPreferenceStore();
+			}
+		};
+		
+		be.getDescriptionControl(parent).setToolTipText(Messages.PropertiesPreferencePage_advancedDefaultTooltip);
+		page.addField(be);
+		
+		be = new BooleanFieldEditor(SINGLE_COLUMN_ID, Messages.PropertiesPreferencePage_singleColumnProperty, parent){
 			
 			/**
 			 * Force to use the storage of the Preferences plugin to store this property, otherwise it will
@@ -75,5 +97,8 @@ public class PropertiesPreferencePage implements IPreferencePageExtension {
 
 	@Override
 	public void performDefaults() {		
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setDefault(SINGLE_COLUMN_ID, false);
+		store.setDefault(P_DEFAULT_ADVANCED_TAB, false);
 	}
 }

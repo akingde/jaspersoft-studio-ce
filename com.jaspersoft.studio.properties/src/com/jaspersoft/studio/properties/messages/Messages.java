@@ -29,6 +29,8 @@ public final class Messages extends NLS {
 
 	public static String CustomDefaultsAction_restoreDefaultChildrenName;
 
+	public static String PropertiesPreferencePage_advancedDefaultTooltip;
+
 	public static String PropertiesPreferencePage_preferenceDescription;
 
 	public static String PropertiesPreferencePage_preferenceTitle;
@@ -36,6 +38,8 @@ public final class Messages extends NLS {
 	public static String PropertiesPreferencePage_singleColumnProperty;
 
 	public static String PropertiesPreferencePage_singleColumnTooltip;
+	
+	public static String DesignerPreferencePage_advancedDefault;
 
 	/**
 	 * Message when a property section extension is in error.
