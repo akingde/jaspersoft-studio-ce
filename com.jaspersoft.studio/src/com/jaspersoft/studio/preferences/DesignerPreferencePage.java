@@ -92,6 +92,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	// the detail band
 	public static final String P_USE_FIELD_DESCRIPTION = "useDescriptionOnFieldDrop"; //$NON-NLS-1$
 
+	public static final String JSS_UNIT_KEEP_UNIT = "com.jaspersoft.studio.unit.keep.unit"; //$NON-NLS-1$
+
 	public DesignerPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
@@ -115,6 +117,9 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
 		addField(new ComboFieldEditor(P_PAGE_DEFAULT_UNITS, Messages.DesignerPreferencePage_unit, Unit.getUnits2(),
 				getFieldEditorParent()));
+		addField(
+				new BooleanFieldEditor(JSS_UNIT_KEEP_UNIT, Messages.KeepUnitsInReportAction_1, getFieldEditorParent()));
+
 		addField(new FontFieldEditor(P_INTERNAL_EDITORS_FONT, Messages.DesignerPreferencePage_InternalEditorsFont,
 				getFieldEditorParent()));
 

@@ -2483,6 +2483,8 @@ public class Messages extends NLS {
 	public static String ItemLabelProvider_7;
 	public static String ItemListCellEditor_0;
 	public static String ItemListCellEditor_1;
+	public static String KeepUnitsInReportAction_0;
+	public static String KeepUnitsInReportAction_1;
 	public static String SPItemdDataList_0;
 	public static String SPItemDataList_0;
 	public static String SPItemDataList_1;

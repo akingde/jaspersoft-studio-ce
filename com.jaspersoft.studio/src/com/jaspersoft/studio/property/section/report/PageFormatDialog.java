@@ -148,10 +148,10 @@ public final class PageFormatDialog extends FormDialog {
 		gd.horizontalSpan = 2;
 		cols.setLayoutData(gd);
 
-		cwidth = new ValueUnitsWidget(jConfig);
+		cwidth = new ValueUnitsWidget();
 		cwidth.createComponent(bright, Messages.PageFormatDialog_5, Messages.PageFormatDialog_6);
 
-		space = new ValueUnitsWidget(jConfig);
+		space = new ValueUnitsWidget();
 		space.createComponent(bright, Messages.PageFormatDialog_7, Messages.PageFormatDialog_8);
 
 		uvWidgets.add(cwidth);
@@ -239,16 +239,16 @@ public final class PageFormatDialog extends FormDialog {
 		bleft.setLayout(new GridLayout(3, false));
 		bleft.setBackgroundMode(SWT.INHERIT_FORCE);
 
-		tmargin = new ValueUnitsWidget(jConfig);
+		tmargin = new ValueUnitsWidget();
 		tmargin.createComponent(bleft, Messages.PageFormatDialog_10, Messages.PageFormatDialog_11);
 
-		bmargin = new ValueUnitsWidget(jConfig);
+		bmargin = new ValueUnitsWidget();
 		bmargin.createComponent(bleft, Messages.PageFormatDialog_12, Messages.PageFormatDialog_13);
 
-		lmargin = new ValueUnitsWidget(jConfig);
+		lmargin = new ValueUnitsWidget();
 		lmargin.createComponent(bleft, Messages.PageFormatDialog_14, Messages.PageFormatDialog_15);
 
-		rmargin = new ValueUnitsWidget(jConfig);
+		rmargin = new ValueUnitsWidget();
 		rmargin.createComponent(bleft, Messages.PageFormatDialog_16, Messages.PageFormatDialog_17);
 
 		uvWidgets.add(tmargin);
@@ -340,11 +340,11 @@ public final class PageFormatDialog extends FormDialog {
 		gd.horizontalSpan = 2;
 		pformat.setLayoutData(gd);
 
-		pwidth = new ValueUnitsWidget(jConfig);
+		pwidth = new ValueUnitsWidget();
 		pwidth.createComponent(tleft, Messages.PageFormatDialog_22, Messages.PageFormatDialog_23);
 		pwidth.setMaxPixels(5000);
 
-		pheigh = new ValueUnitsWidget(jConfig);
+		pheigh = new ValueUnitsWidget();
 		pheigh.createComponent(tleft, Messages.PageFormatDialog_24, Messages.PageFormatDialog_25);
 		pheigh.setMaxPixels(5000);
 

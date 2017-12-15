@@ -73,7 +73,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 
 	/** The zoom combo. */
 	private RZoomComboContributionItem zoomCombo;
-	
+
 	/**
 	 * The selection listener that will update the toolbar when a selection change
 	 */
@@ -90,7 +90,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * Initialization.
 	 * 
 	 * @param bars
-	 *          the bars
+	 *            the bars
 	 */
 	public void init(IActionBars bars) {
 		buildActions(bars);
@@ -110,19 +110,19 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		addRetargetAction(new UndoRetargetAction());
 		addRetargetAction(new RedoRetargetAction());
 		addRetargetAction(new DeleteRetargetAction());
-		// addRetargetAction(new PrintAction());
 
 		addRetargetAction(new ZoomInRetargetAction());
 		addRetargetAction(new ZoomOutRetargetAction());
 
 		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY,
 				Messages.JrxmlEditorContributor_show_ruler, IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID, Messages.common_snap_to_guides, IAction.AS_CHECK_BOX));
+		addRetargetAction(
+				new RetargetAction(SnapToGuidesAction.ID, Messages.common_snap_to_guides, IAction.AS_CHECK_BOX));
 
 		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY, Messages.common_show_grid,
 				IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, Messages.common_snap_to_geometry,
-				IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY,
+				Messages.common_snap_to_geometry, IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SnapToGridAction.ID, Messages.common_snap_to_grid, IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SizeGridAction.ID, Messages.JrxmlEditorContributor_grid_size));
 
@@ -135,7 +135,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * Adds the retarded actions.
 	 * 
 	 * @param action
-	 *          The action to add
+	 *            The action to add
 	 */
 	public void addRetargetAction(RetargetAction action) {
 		addAction(action);
@@ -144,7 +144,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		addGlobalActionKey(action.getId());
 	}
 
-	private List<String> glRetargetAction = new ArrayList<String>();
+	private List<String> glRetargetAction = new ArrayList<>();
 
 	protected void addGlobaRetargetAction(RetargetAction action) {
 		addRetargetAction(action);
@@ -155,7 +155,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * Adds global action key.
 	 * 
 	 * @param key
-	 *          The key to add
+	 *            The key to add
 	 */
 	protected void addGlobalActionKey(String key) {
 		globalActionKeys.add(key);
@@ -165,7 +165,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * Adds to action registry an action.
 	 * 
 	 * @param action
-	 *          The action to add
+	 *            The action to add
 	 */
 	protected void addAction(IAction action) {
 		getActionRegistry().registerAction(action);
@@ -198,7 +198,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * Gets the action.
 	 * 
 	 * @param id
-	 *          the id
+	 *            the id
 	 * @return the action
 	 */
 	protected IAction getAction(String id) {
@@ -213,19 +213,20 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * Sets the page to active status.
 	 * 
 	 * @param activeEditor
-	 *          The active editor
+	 *            The active editor
 	 */
 	public void setActivePage(IEditorPart activeEditor) {
-		//Need to check if the editor is the ReportContainer, otherwise the clear
-		//would clear the toolbar also when giving focus to the properties view.
+		// Need to check if the editor is the ReportContainer, otherwise the clear
+		// would clear the toolbar also when giving focus to the properties view.
 		if (!(activeEditor instanceof ReportContainer)) {
 			CommonToolbarHandler.clearToolbars(getActionBars());
 		} else {
-			//will refresh the toolbar when switching back from preview/code to report editor
+			// will refresh the toolbar when switching back from preview/code to report
+			// editor
 			CommonToolbarHandler.updateSelection(activeEditor, getActionBars());
 		}
 		if (lastEditor instanceof CachedSelectionProvider && selectionListener != null) {
-			((CachedSelectionProvider)lastEditor).getSelectionCache().removeSelectionChangeListener(selectionListener);
+			((CachedSelectionProvider) lastEditor).getSelectionCache().removeSelectionChangeListener(selectionListener);
 		}
 		IActionBars bars = getActionBars();
 		removeZoom(bars.getToolBarManager());
@@ -250,7 +251,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			}
 			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
 			if (registry != null) {
-				for (String id : globalActionKeys){
+				for (String id : globalActionKeys) {
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 				}
 				@SuppressWarnings("unchecked")
@@ -261,7 +262,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 						bars.setGlobalActionHandler(action.getId(), action);
 				}
 			}
-			((CachedSelectionProvider)lastEditor).getSelectionCache().addSelectionChangeListener(getSelectionChangeListener(registry));
+			((CachedSelectionProvider) lastEditor).getSelectionCache()
+					.addSelectionChangeListener(getSelectionChangeListener(registry));
 		} else if (activeEditor instanceof PreviewJRPrint) {
 			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
 			if (registry != null) {
@@ -285,19 +287,19 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	}
 
 	/**
-	 * Return a selection listener that will request the update of the toolbar
-	 * when the selection changes
+	 * Return a selection listener that will request the update of the toolbar when
+	 * the selection changes
 	 */
 	private SelectionChangedListener getSelectionChangeListener(ActionRegistry registry) {
-		if (selectionListener == null){
-			selectionListener = new SelectionChangedListener() {	
+		if (selectionListener == null) {
+			selectionListener = new SelectionChangedListener() {
 				@Override
 				public void selectionChanged() {
 					UIUtils.getDisplay().asyncExec(new Runnable() {
-						
+
 						@Override
 						public void run() {
-							if (getPage() != null && getPage().getActiveEditor() != null){
+							if (getPage() != null && getPage().getActiveEditor() != null) {
 								CommonToolbarHandler.updateSelection(getPage().getActiveEditor(), getActionBars());
 							}
 						}
@@ -319,13 +321,14 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		}
 
 		@Override
-		public void partBroughtToTop(IWorkbenchPartReference partRef) {;
+		public void partBroughtToTop(IWorkbenchPartReference partRef) {
+			;
 		}
 
 		@Override
 		public void partClosed(IWorkbenchPartReference partRef) {
 			if (lastEditor instanceof CachedSelectionProvider && selectionListener != null) {
-				((CachedSelectionProvider)lastEditor).getSelectionCache().selectionChanged(StructuredSelection.EMPTY);
+				((CachedSelectionProvider) lastEditor).getSelectionCache().selectionChanged(StructuredSelection.EMPTY);
 			}
 		}
 
@@ -354,9 +357,9 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * Returns the action registed with the given text editor.
 	 * 
 	 * @param editor
-	 *          the editor
+	 *            the editor
 	 * @param actionID
-	 *          the action id
+	 *            the action id
 	 * @return IAction or null if editor is null.
 	 */
 	protected IAction getAction(ITextEditor editor, String actionID) {
@@ -367,7 +370,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * Adds the undo and redo items to the toolbar.
 	 * 
 	 * @param tbm
-	 *          The IToolBarManager
+	 *            The IToolBarManager
 	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToToolBar(IToolBarManager)
 	 */
 	public void contributeToToolBar(IToolBarManager tbm) {
@@ -409,7 +412,9 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(org.eclipse.jface.action.IMenuManager)
+	 * @see
+	 * org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(org.eclipse.
+	 * jface.action.IMenuManager)
 	 */
 	public void contributeToMenu(IMenuManager manager) {
 		super.contributeToMenu(manager);
@@ -439,7 +444,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.eclipse.ui.part.EditorActionBarContributor#contributeToStatusLine(org.eclipse.jface.action.IStatusLineManager)
+	 * org.eclipse.ui.part.EditorActionBarContributor#contributeToStatusLine(org.
+	 * eclipse.jface.action.IStatusLineManager)
 	 */
 	@Override
 	public void contributeToStatusLine(IStatusLineManager statusLineManager) {
@@ -451,13 +457,16 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	}
 
 	/**
-	 * Disposes the contributor. Removes all {@link RetargetAction}s that were {@link org.eclipse.ui.IPartListener}s on
-	 * the {@link org.eclipse.ui.IWorkbenchPage} and disposes them. Also disposes the action registry.
+	 * Disposes the contributor. Removes all {@link RetargetAction}s that were
+	 * {@link org.eclipse.ui.IPartListener}s on the
+	 * {@link org.eclipse.ui.IWorkbenchPage} and disposes them. Also disposes the
+	 * action registry.
 	 * <P>
 	 * Subclasses may extend this method to perform additional cleanup.
 	 * 
 	 * @see org.eclipse.ui.part.EditorActionBarContributor#dispose()
 	 */
+	@Override
 	public void dispose() {
 		getPage().removePartListener(partListener);
 		for (RetargetAction action : retargetActions) {

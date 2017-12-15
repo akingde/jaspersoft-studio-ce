@@ -104,6 +104,7 @@ import com.jaspersoft.studio.editor.action.order.BringToBackAction;
 import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
+import com.jaspersoft.studio.editor.action.snap.KeepUnitsInReportAction;
 import com.jaspersoft.studio.editor.action.snap.ShowGridAction;
 import com.jaspersoft.studio.editor.action.snap.ShowRullersAction;
 import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
@@ -841,6 +842,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		createCutAction(registry);
 		createPasteAction(registry);
 		createCopyAction(registry);
+
+		action = new KeepUnitsInReportAction(jrContext);
+		registry.registerAction(action);
 
 		action = new HideElementsAction(this, true);
 		registry.registerAction(action);

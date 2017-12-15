@@ -55,25 +55,25 @@ import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import net.sf.jasperreports.eclipse.ui.WritableComboButton;
 
 public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements IHighlightPropertyWidget {
-	
+
 	protected T pDescriptor;
-	
+
 	protected AbstractSection section;
-	
+
 	private CLabel label;
-	
+
 	/**
-	 * On MacOS seems the contextual menu is not opened on combo, this
-	 * lister will force it to open when a right click is found
+	 * On MacOS seems the contextual menu is not opened on combo, this lister will
+	 * force it to open when a right click is found
 	 */
 	protected static MouseAdapter macComboMenuOpener = new MouseAdapter() {
-		
+
 		@Override
-		public void mouseUp(MouseEvent e) {	
-			if (e.button == 3 && ((Control)e.widget).getMenu() != null){
-				Menu menu = ((Control)e.widget).getMenu();
-				if (!menu.isDisposed() && !menu.isVisible()){
-	        		Point location = e.widget.getDisplay().getCursorLocation();
+		public void mouseUp(MouseEvent e) {
+			if (e.button == 3 && ((Control) e.widget).getMenu() != null) {
+				Menu menu = ((Control) e.widget).getMenu();
+				if (!menu.isDisposed() && !menu.isVisible()) {
+					Point location = e.widget.getDisplay().getCursorLocation();
 					menu.setLocation(location.x, location.y);
 					menu.setVisible(true);
 				}
@@ -110,58 +110,70 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 
 	public abstract void setData(APropertyNode pnode, Object value);
 
+	protected void refresh() {
+		setData(section.getElement(), section.getElement().getPropertyValue(getId()));
+	}
+
 	/**
-	 * Set the data of the widget with a flag also indicating if the set value is inherited or not. If not reimplemented
-	 * this is the same of setData with two parameters
+	 * Set the data of the widget with a flag also indicating if the set value is
+	 * inherited or not. If not reimplemented this is the same of setData with two
+	 * parameters
 	 * 
 	 * @param pnode
-	 *          the current node
+	 *            the current node
 	 * @param resolvedValue
-	 *          the current value of the property used by the node, resolved by JR
+	 *            the current value of the property used by the node, resolved by JR
 	 * @param elementValue
-	 *          the value of the property own by the elements, when this is different from null probably it will be the
-	 *          same of the resolvedValue, otherwise if this is null then the resolvedValue was inherited
+	 *            the value of the property own by the elements, when this is
+	 *            different from null probably it will be the same of the
+	 *            resolvedValue, otherwise if this is null then the resolvedValue
+	 *            was inherited
 	 */
 	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
 		setData(pnode, resolvedValue);
 	}
-	
-	protected void createContextualMenu(final APropertyNode node){
+
+	protected void createContextualMenu(final APropertyNode node) {
 		Control control = getControl();
 		createContextualMenu(node, control, pDescriptor.getId().toString());
 	}
-	
+
 	/**
-	 * Create a contextual menu for the current control. This contextual menu
-	 * will contains the action to reset the value of a property if the property
-	 * has default value inside the node. Also it will contain the action to set the
+	 * Create a contextual menu for the current control. This contextual menu will
+	 * contains the action to reset the value of a property if the property has
+	 * default value inside the node. Also it will contain the action to set the
 	 * value to null if the operation is allowed.
 	 * 
-	 * Since on mac the combo item doens't have a contextual menu it add a special listneer
-	 * for them as workaround to the problem
+	 * Since on mac the combo item doens't have a contextual menu it add a special
+	 * listneer for them as workaround to the problem
 	 * 
-	 * @param node node where the the command will be executed and from where the default map is extracted
-	 * @param control control where the contextual menu will be set
-	 * @param propertyID id of the property to set
+	 * @param node
+	 *            node where the the command will be executed and from where the
+	 *            default map is extracted
+	 * @param control
+	 *            control where the contextual menu will be set
+	 * @param propertyID
+	 *            id of the property to set
 	 */
-	protected void createContextualMenu(final APropertyNode node, final Control control, final String propertyID){
-		if (node != null && control != null && !control.isDisposed()){
-		
-			//MacOS fix, the combo on MacOS doesn't have a contextual menu, so we need to handle this listener manually
+	protected void createContextualMenu(final APropertyNode node, final Control control, final String propertyID) {
+		if (node != null && control != null && !control.isDisposed()) {
+
+			// MacOS fix, the combo on MacOS doesn't have a contextual menu, so we need to
+			// handle this listener manually
 			boolean handleComboListener = Util.isMac() && control.getClass() == Combo.class;
-			if (handleComboListener){
+			if (handleComboListener) {
 				control.removeMouseListener(macComboMenuOpener);
 			}
-			
+
 			boolean entryCreated = false;
 			Map<String, DefaultValue> defaultMap = node.getDefaultsPropertiesMap();
-			if (defaultMap != null){
+			if (defaultMap != null) {
 				DefaultValue defaultEntry = defaultMap.get(propertyID);
-				if (defaultEntry != null && (defaultEntry.isNullable() || defaultEntry.hasDefault())){
+				if (defaultEntry != null && (defaultEntry.isNullable() || defaultEntry.hasDefault())) {
 					Menu controlMenu = new Menu(control);
-					
-					//Create the reset entry if necessary
-					if (defaultEntry.hasDefault()){
+
+					// Create the reset entry if necessary
+					if (defaultEntry.hasDefault()) {
 						MenuItem resetItem = new MenuItem(controlMenu, SWT.NONE);
 						entryCreated = true;
 						resetItem.addSelectionListener(new SelectionAdapter() {
@@ -174,11 +186,11 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 								focusControl(control);
 							}
 						});
-				    resetItem.setText(Messages.ASPropertyWidget_0);
+						resetItem.setText(Messages.ASPropertyWidget_0);
 					}
-					
-					//Create the null entry if necessary
-					if (defaultEntry.isNullable()){
+
+					// Create the null entry if necessary
+					if (defaultEntry.isNullable()) {
 						MenuItem nullItem = new MenuItem(controlMenu, SWT.NONE);
 						entryCreated = true;
 						nullItem.addSelectionListener(new SelectionAdapter() {
@@ -192,41 +204,42 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 								focusControl(control);
 							}
 						});
-				    nullItem.setText(Messages.ASPropertyWidget_1);
+						nullItem.setText(Messages.ASPropertyWidget_1);
 					}
-					
-					//if the control already have a menu dispose it first, since it is a swt widget
-					//it is not disposed automatically by the garbage collector
-					if (control.getMenu() != null){
+
+					// if the control already have a menu dispose it first, since it is a swt widget
+					// it is not disposed automatically by the garbage collector
+					if (control.getMenu() != null) {
 						control.getMenu().dispose();
 					}
-					
-					//set the new menu
+
+					// set the new menu
 					control.setMenu(controlMenu);
-					if (handleComboListener){
+					if (handleComboListener) {
 						control.addMouseListener(macComboMenuOpener);
 					}
 				}
 			}
 			if (!entryCreated) {
-				//if no entry was created remove the contextual menu, but first dispose
-				//the old one
-				if (control.getMenu() != null){
+				// if no entry was created remove the contextual menu, but first dispose
+				// the old one
+				if (control.getMenu() != null) {
 					control.getMenu().dispose();
 				}
 				control.setMenu(null);
 			}
 		}
 	}
-	
+
 	/**
-	 * Focus the passed control, this is typically called when a contextual reset
-	 * is used, can be overridden by the widget that doesn't handle very well the 
-	 * set focus
+	 * Focus the passed control, this is typically called when a contextual reset is
+	 * used, can be overridden by the widget that doesn't handle very well the set
+	 * focus
 	 * 
-	 * @param control the control to focus
+	 * @param control
+	 *            the control to focus
 	 */
-	protected void focusControl(Control control){
+	protected void focusControl(Control control) {
 		if (control != null) {
 			UIUtil.updateFocus(control);
 		}
@@ -296,8 +309,8 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	public abstract Control getControl();
 
 	/**
-	 * Since a property widget can have many controls inside it, this method return the control to which a border will be
-	 * added to highlight the widget
+	 * Since a property widget can have many controls inside it, this method return
+	 * the control to which a border will be added to highlight the widget
 	 * 
 	 * @return control to border
 	 */
@@ -306,8 +319,9 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	}
 
 	/**
-	 * According to the type of the control to highlight will be returned an object that offer the functionality to put a
-	 * border on the widget or to set its background, to highlight it
+	 * According to the type of the control to highlight will be returned an object
+	 * that offer the functionality to put a border on the widget or to set its
+	 * background, to highlight it
 	 * 
 	 * @return An object that offer the functionality to highlight the widget
 	 */
@@ -329,7 +343,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 		if (control.getClass().equals(WritableComboButton.class))
 			return new BackgroundHighlight(control);
 		if (control instanceof DoubleControlComposite)
-			return new DoubleControlHighlight((DoubleControlComposite)control);
+			return new DoubleControlHighlight((DoubleControlComposite) control);
 		if (control instanceof Composite)
 			return new BorderHightLight(control);
 		if (control instanceof Button)
@@ -338,8 +352,8 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	}
 
 	/**
-	 * highlight the widget by changing its background or by drawing a border around it for a fixed (depending from the
-	 * widget) amount of time
+	 * highlight the widget by changing its background or by drawing a border around
+	 * it for a fixed (depending from the widget) amount of time
 	 * 
 	 */
 	@Override

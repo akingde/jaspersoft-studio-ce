@@ -16,13 +16,16 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.snap.KeepUnitsInReportAction;
 import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 
 /**
- * Dropdown action to contribute a settings menu with the menu items taken from the global View menu.
+ * Dropdown action to contribute a settings menu with the menu items taken from
+ * the global View menu.
  * <p>
  * 
  * The following items currently compose the menu:
@@ -67,6 +70,8 @@ public class ViewSettingsDropDownAction extends Action implements IMenuCreator {
 			menu.dispose();
 		}
 		menu = new Menu(parent);
+		addActionToMenu(menu, actionRegistry.getAction(DesignerPreferencePage.JSS_UNIT_KEEP_UNIT));
+		new MenuItem(menu, SWT.SEPARATOR);
 		addActionToMenu(menu, actionRegistry.getAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY));
 		addActionToMenu(menu, actionRegistry.getAction(SnapToGuidesAction.ID));
 		new MenuItem(menu, SWT.SEPARATOR);
@@ -87,8 +92,8 @@ public class ViewSettingsDropDownAction extends Action implements IMenuCreator {
 	 * Adds an item to the existing menu using, using the contributed action.
 	 */
 	private void addActionToMenu(Menu parent, IAction action) {
-		//If the action is a menu creator the create it as submenu
-		if (action instanceof IMenuCreator){
+		// If the action is a menu creator the create it as submenu
+		if (action instanceof IMenuCreator) {
 			IMenuCreator creator = (IMenuCreator) action;
 			creator.getMenu(parent);
 		} else {

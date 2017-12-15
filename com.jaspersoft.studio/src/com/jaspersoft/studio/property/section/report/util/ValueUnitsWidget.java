@@ -14,34 +14,33 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.swt.widgets.NullableSpinner;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 /**
- * Couple of widget composed from a nullable spinner to set a numeric value
- * and a combo to select a measure unit
+ * Couple of widget composed from a nullable spinner to set a numeric value and
+ * a combo to select a measure unit
  */
 public class ValueUnitsWidget {
 
 	private Unit unit;
-	
+
 	private Unit maxPixels;
-	
+
 	private Combo unitc;
-	
+
 	private NullableSpinner val;
-	
-	private SpinerSelectionListener spinerSelection;
-	
-	public ValidatedMeasureUnitFormat spinnerValidator = new ValidatedMeasureUnitFormat(Unit.PX);
-	
+
+	private ValidatedMeasureUnitFormat spinnerValidator = new ValidatedMeasureUnitFormat(Unit.PX);
+
 	private final class SpinerSelectionListener extends SelectionAdapter {
+		@Override
 		public void widgetSelected(SelectionEvent e) {
 			unit.setValue(val.getValueAsFloat(), Unit.getUnits()[unitc.getSelectionIndex()]);
 		}
 	}
 
-	public ValueUnitsWidget(JasperReportsConfiguration jConfig) {
-		unit = new Unit(0, Unit.PX, jConfig);
-		maxPixels = new Unit(Integer.MAX_VALUE, Unit.PX, jConfig);
+	public ValueUnitsWidget() {
+		unit = new Unit(0, Unit.PX);
+		maxPixels = new Unit(Integer.MAX_VALUE, Unit.PX);
 	}
 
 	public void createComponent(Composite parent, String label, String toolTip) {
@@ -58,7 +57,7 @@ public class ValueUnitsWidget {
 		unitc = new Combo(parent, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
 		unitc.setItems(Unit.getUnits());
 		unitc.addSelectionListener(new SelectionAdapter() {
-
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String u = Unit.getUnits()[unitc.getSelectionIndex()];
 				if (unit.setUnit(u)) {
@@ -67,8 +66,7 @@ public class ValueUnitsWidget {
 			}
 		});
 
-		spinerSelection = new SpinerSelectionListener();
-		val.addSelectionListener(spinerSelection);
+		val.addSelectionListener(new SpinerSelectionListener());
 
 		unitc.select(0);
 		setSpinerValue(unit.getUnit());
