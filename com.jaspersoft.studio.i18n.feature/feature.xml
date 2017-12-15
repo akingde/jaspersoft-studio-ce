@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.jaspersoft.studio.i18n.feature"
+      label="Internationalization Support for TIBCO Jasperosoft Studio"
+      version="1.0.0.nl"
+      provider-name="TIBCO Software Inc.">
+
+   <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
+      Internationalization support for TIBCO Jaspersoft Studio
+   </description>
+
+   <copyright>
+      Copyright (C) 2010 - 2017. TIBCO Software Inc.
+   </copyright>
+
+   <url>
+      <update label="TIBCO Jaspersoft Studio update site" url="http://jasperstudio.sf.net/updates"/>
+      <discovery label="TIBCO Jaspersoft Studio Community Edition" url="http://community.jaspersoft.com/project/jaspersoft-studio"/>
+   </url>
+
+</feature>

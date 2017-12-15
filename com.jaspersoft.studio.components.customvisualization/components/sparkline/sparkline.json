@@ -1,0 +1,138 @@
+{
+    "label": "Sparkline",
+    "description": "A set of tools to draw sparklines",
+    "module": "sparkline",
+    "thumbnail": "sparkline.png",
+    "sections": [
+        {
+            "name": "Script",
+            "expandable": false,
+            "properties": [
+                {
+                    "name": "module",
+                    "label": "Module",
+                    "description": "Module name",
+                    "mandatory": true,
+                    "defaultValue": "sparkline",
+                    "readOnly": true,
+                    "type": "text"
+                },
+                {
+                    "name": "script",
+                    "label": "Script Path",
+                    "description": "Script path",
+                    "mandatory": true,
+                    "defaultValue": "sparkline.min.js",
+                    "readOnly": false,
+                    "type": "path"
+                }
+            ]
+        },
+        {
+            "name": "Formatting",
+            "expandable": "true",
+            "properties": [
+                {
+                    "name": "lineColor",
+                    "label": "Line Color",
+                    "description": "The color used to plot the line",
+                    "mandatory": "false",
+                    "type": "color",
+                    "defaultValue": "#000000"
+                },
+                {
+                    "name": "lineOpacity",
+                    "label": "Line Opacity",
+                    "description": "The opacity of the line color.",
+                    "mandatory": "false",
+                    "type": "float",
+                    "defaultValue": "1",
+                    "min": "0",
+                    "max": "1"
+                },
+                {
+                    "name": "lineStroke",
+                    "label": "Line Width",
+                    "description": "Line width (in pixels)",
+                    "mandatory": "false",
+                    "type": "double",
+                    "defaultValue": "0.1"
+                },
+                {
+                  "name": "interpolation",
+                  "label": "Interpolation type",
+                  "description": "The typo of interpolation used to plot the line",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["linear","step-before", "step-after", "basis", "cardinal", "monotone"], 
+                  "defaultValue":"basis"
+                },
+                {
+                    "name": "fillColor",
+                    "label": "Fill Color",
+                    "description": "The color used to fill the line area",
+                    "mandatory": "false",
+                    "type": "color",
+                    "defaultValue": "#0000FF"
+                },
+                {
+                    "name": "fillOpacity",
+                    "label": "Fill Opacity",
+                    "description": "The opacity of the line area",
+                    "mandatory": "false",
+                    "type": "float",
+                    "defaultValue": "0.1",
+                    "min": "0",
+                    "max": "1"
+                },
+                {
+                    "name": "circleColor",
+                    "label": "Circe Color",
+                    "description": "The color used to plot the circle on the last point",
+                    "mandatory": "false",
+                    "type": "color",
+                    "defaultValue": "#FF0000"
+                },
+                {
+                    "name": "circleOpacity",
+                    "label": "Circle Opacity",
+                    "description": "The opacity of the circle on the last point.",
+                    "mandatory": "false",
+                    "type": "float",
+                    "defaultValue": "1",
+                    "min": "0",
+                    "max": "1"
+                },
+                {
+                    "name": "circleRadius",
+                    "label": "Circle Radius",
+                    "description": "The radius (in pixels) of the circle on the last point.",
+                    "mandatory": "false",
+                    "type": "double",
+                    "defaultValue": "2"
+                }
+            ]
+        }
+    ],
+    "datasets": [
+        {
+            "label": "Data",
+            "cardinality": 1,
+            "sections": [
+                {
+                    "name": "Values",
+                    "properties": [
+                        {
+                            "name": "value",
+                            "label": "Value",
+                            "description": "An item value",
+                            "mandatory": "true",
+                            "type": "double",
+                            "defaultValue": "0"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

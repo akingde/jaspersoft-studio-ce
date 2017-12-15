@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section version="5.0" xsi:schemaLocation="http://docbook.org/ns/docbook http://www.docbook.org/xml/5.0/xsd/docbook.xsd http://www.w3.org/1999/xlink http://www.docbook.org/xml/5.0/xsd/xlink.xsd"
+	xml:base="../" xmlns="http://docbook.org/ns/docbook" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:ns="http://docbook.org/ns/docbook">
+<title>Import projects and settings from a previous version of Jaspersoft Studio</title>
+<section>
+	  <formalpara><title>Import Projects</title>
+      <para>
+      	Once you have started working on a new blank workspace (i.e. "Switch Workspace" operation was performed) you might want to import all or 
+      	some of the projects you previously had in the old workspace. Performing this operation is quite straightforward and you simply need to 
+      	open the dedicated wizard through the menu "File > Import ... ". You should choose the item "Existing Projects into Workspace" from the 
+      	category "General". 
+	  </para>
+	  <figure>
+		<title>Select Project and Workspace</title>
+		<screenshot>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="1.png" format="PNG" contentwidth="400px"/>
+				</imageobject>
+			</mediaobject>
+		</screenshot>
+	  </figure>
+	  <para>
+		You should browse and find the workspace you want to import the projects from. Once done, it is advisable to check the option 
+		"Copy projects into workspace" so you will be able to work on the projects being sure to not modify the original ones.
+		Please note that you could see the common "MyReports" project not checkable. As you know it is the default project created when a 
+		new workspace is created and where usually people create their reports. So if you want to import also the MyReports project be sure, prior to launching the wizard, to delete the empty one you already have in your brand new workspace.
+	  </para>
+	  <para>
+	  	Just hit the "Finish" button to complete the import operation. And you are set up with your old reports.
+ 	  </para>
+  	  <figure>
+		<title>Imported Projects</title>
+		<screenshot>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="2.png" format="PNG" contentwidth="400" />
+				</imageobject>
+			</mediaobject>
+		</screenshot>
+	  </figure>
+	  </formalpara>
+	  <formalpara><title>Import Server Connections, Data Adapters and settings</title>
+      <para>
+		Similarly you can choose to import the existing Server Connections, Data Adapters and preference settings you had in the old workspace. 
+		In order to do so, you need again to go through the dedicated wizards that you will find once selected the menu "File > Import ...".
+	 </para>
+	 <para>
+		For JasperReports Server Connections you need to choose the item "External JasperReports Server Connections" under the category "Jaspersoft Studio". 
+		The first thing to do is again select the workspace location maintaining the information.
+      </para>
+      <figure>
+		<title>Select the workspace</title>
+		<screenshot>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="3.png" format="PNG" contentwidth="400px" />
+				</imageobject>
+			</mediaobject>
+		</screenshot>
+	  </figure>
+	  <para>
+	  	In the following wizard page you can choose which connections you are interested in. 
+	  </para>
+	  <figure>
+		<title>Select the connections</title>
+		<screenshot>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="4.png" format="PNG" contentwidth="400px" />
+				</imageobject>
+			</mediaobject>
+		</screenshot>
+	  </figure>
+	  <para>
+		Let's move now to the Data Adapters and Preference Settings. This information can be imported using the 
+		dedicated wizard. Again select "File > Import ..." and choose the item "External Properties and Data Adapters", still category 
+		"Jaspersoft Studio". Once the workspace of interest has been selected choose which data adapters and properties you are interested in.
+	  </para>
+	  <figure>
+		<title>Select the data adapters</title>
+		<screenshot>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="5.png" format="PNG" contentwidth="400px" />
+				</imageobject>
+			</mediaobject>
+		</screenshot>
+	  </figure>
+	  <figure>
+		<title>Select the JasperReports Properties</title>
+		<screenshot>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="6.png" format="PNG" contentwidth="400px" />
+				</imageobject>
+			</mediaobject>
+		</screenshot>
+	  </figure>
+	  <para>
+	  	Again once hit the "Finish" button you will be able to see the new details imported in your current workspace.
+	  </para>
+	  <figure>
+		<title>Import Finished</title>
+		<screenshot>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="7.png" format="PNG" contentwidth="400px" />
+				</imageobject>
+			</mediaobject>
+		</screenshot>
+	  </figure>
+	  <para>As you saw in this short tutorial, it's quick and easy to import part or all the previous data into a newly-created workspace.</para>
+      </formalpara>
+      </section>
+</section>
