@@ -13,10 +13,13 @@ import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MElementDataset;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabDataset;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class MCrosstabDataset extends MElementDataset {
@@ -53,7 +56,40 @@ public class MCrosstabDataset extends MElementDataset {
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstabDataset");
 	}
+	
+	/**
+	 * Return the dataset used by the element
+	 * 
+	 * @return the dataset nearest to this element
+	 */
+	public JRDataset getElementDataset() {
+		JRDataset dataset = ModelUtils.getDataset(this);
+		if (dataset == null && getJasperDesign() != null) {
+			dataset = getJasperDesign().getMainDataset();
+		}
+		return dataset;
+	}
 
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		// initialize style
+		JasperDesign jd = getJasperDesign();
+		if (jd != null && getValue() != null) {
+			JRDataset dataset = getElementDataset();
+			// Calculate the groups list for the current element
+			if (dataset != null) {
+				JRGroup[] groups = dataset.getGroups();
+				String[] items = new String[groups.length + 1];
+				items[0] = ""; // always add empty for <NULL>
+				for (int j = 0; j < groups.length; j++) {
+					items[j + 1] = groups[j].getName();
+				}
+				setGroupItems(items);
+			}
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

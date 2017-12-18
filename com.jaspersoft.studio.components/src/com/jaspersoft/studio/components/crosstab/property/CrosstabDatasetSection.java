@@ -19,7 +19,7 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 
 public class CrosstabDatasetSection extends DatasetSection {
 	
-	APropertyNode selectedCrosstab;
+	private APropertyNode selectedCrosstab;
 	
 	@Override
 	public void createControls(Composite parent,
