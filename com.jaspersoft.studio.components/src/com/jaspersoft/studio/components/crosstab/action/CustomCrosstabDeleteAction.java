@@ -12,6 +12,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.components.crosstab.model.MDatasetGroupNode;
+import com.jaspersoft.studio.components.crosstab.model.cell.MColumnGroupHeaderCell;
+import com.jaspersoft.studio.components.crosstab.model.cell.MColumnGroupTotalCell;
+import com.jaspersoft.studio.components.crosstab.model.cell.MRowGroupHeaderCell;
+import com.jaspersoft.studio.components.crosstab.model.cell.MRowGroupTotalCell;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
 import com.jaspersoft.studio.editor.action.CustomDeleteAction;
@@ -19,7 +23,8 @@ import com.jaspersoft.studio.model.ANode;
 
 /**
  * Custom crosstab delete action, it is disabled when every elements in a crosstab group is
- * selected, this because a row group/column group/measure can not be empty
+ * selected, this because a row group/column group/measure can not be empty. This is not do in 
+ * the component factory or in the action itself to avoid to show the delete action with multiple selections
  */
 public class CustomCrosstabDeleteAction extends CustomDeleteAction {
 
@@ -69,6 +74,16 @@ public class CustomCrosstabDeleteAction extends CustomDeleteAction {
 					if (measuresNode == null){
 						measuresNode = ((ANode)model).getParent();
 					}
+				} 
+			} else if (model instanceof MColumnGroupTotalCell || model instanceof MColumnGroupHeaderCell) {
+				selectedColumnGrops.add((MColumnGroup)((ANode)model).getParent());
+				if (columnGroupsNode == null){
+					columnGroupsNode = ((ANode)model).getParent().getParent();
+				}
+			} else if (model instanceof MRowGroupTotalCell || model instanceof MRowGroupHeaderCell) {
+				selectedRowGroups.add((MRowGroup)((ANode)model).getParent());
+				if (rowGroupsNode == null){
+					rowGroupsNode = ((ANode)model).getParent().getParent();
 				}
 			}
 			if (rowGroupsNode != null && rowGroupsNode.getChildren().size() == selectedRowGroups.size()) return false;

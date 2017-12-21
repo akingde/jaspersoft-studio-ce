@@ -5,8 +5,10 @@
 package com.jaspersoft.studio.components.crosstab.model.columngroup;
 
 import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRConstants;
 
+import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,6 +60,17 @@ public class MColumnGroups extends MCollection {
 	 */
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// PropertyChangeEvent newEvent = evt;
+		if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS) && evt.getSource() == getValue()) {
+			if (evt.getOldValue() == null && evt.getNewValue() != null) {
+				return;
+			}
+		}
+		super.propertyChange(evt);
 	}
 	
 	@Override

@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.rowgroup;
 
+import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.jaspersoft.studio.model.MCollection;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRConstants;
 
 public class MRowGroups extends MCollection {
@@ -58,6 +60,22 @@ public class MRowGroups extends MCollection {
 	 */
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.PropertyChangeEvent)
+	 */
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// PropertyChangeEvent newEvent = evt;
+		if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_ROW_GROUPS) && evt.getSource() == getValue()) {
+			if (evt.getOldValue() == null && evt.getNewValue() != null) {
+				return;
+			}
+		}
+		super.propertyChange(evt);
 	}
 	
 	@Override
