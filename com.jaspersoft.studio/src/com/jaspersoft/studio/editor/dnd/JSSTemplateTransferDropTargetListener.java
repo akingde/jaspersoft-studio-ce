@@ -401,7 +401,9 @@ public class JSSTemplateTransferDropTargetListener extends AbstractTransferDropT
 	  eraseTargetFeedback();
 	  if (req != null && RequestConstants.REQ_CREATE.equals(req.getType())){
 	  	feedBackContaienr = getContainer();
-	  	feedBackContaienr.showTargetFeedback(req);
+	  	if (feedBackContaienr != null) {
+	  		feedBackContaienr.showTargetFeedback(req);
+	  	}
 	  } else {
 	  	super.showTargetFeedback();
 	  }
