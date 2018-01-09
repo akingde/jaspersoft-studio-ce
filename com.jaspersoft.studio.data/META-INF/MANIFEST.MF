@@ -3,7 +3,7 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Data Adapters
 Bundle-SymbolicName: com.jaspersoft.studio.data;singleton:=true
-Bundle-Version: 6.5.1.qualifier
+Bundle-Version: 6.5.1.final
 Bundle-Activator: com.jaspersoft.studio.data.Activator
 Bundle-Vendor: TIBCO Software Inc.
 Require-Bundle: com.jaspersoft.studio;bundle-version="6.5.1";visibility:=reexport,
