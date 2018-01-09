@@ -32,7 +32,8 @@ public class GroupSection extends AbstractSection {
 		nameWidget = createWidget4Property(parent, JRDesignGroup.PROPERTY_NAME);
 
 		createWidget4Property(parent, JRDesignGroup.PROPERTY_EXPRESSION);
-
+		createWidget4Property(parent, JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, false);
+		createWidget4Property(parent, JRDesignGroup.PROPERTY_KEEP_TOGETHER, false);
 	}
 
 	@Override
@@ -40,7 +41,8 @@ public class GroupSection extends AbstractSection {
 		super.initializeProvidedProperties();
 		addProvidedProperties(JRDesignGroup.PROPERTY_NAME, Messages.common_name);
 		addProvidedProperties(JRDesignGroup.PROPERTY_EXPRESSION, Messages.common_expression);
-
+		addProvidedProperties(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, Messages.MGroup_reprintTitle);
+		addProvidedProperties(JRDesignGroup.PROPERTY_KEEP_TOGETHER, Messages.MGroup_keepTitle);
 	}
 
 	@Override
@@ -54,10 +56,9 @@ public class GroupSection extends AbstractSection {
 	}
 
 	/**
-	 * Check if the property changed is the name and in this case check that the
-	 * new name is different from any existing group. If it is different the
-	 * change is done, otherwise a warning message is shown and the original
-	 * name is restored
+	 * Check if the property changed is the name and in this case check that the new
+	 * name is different from any existing group. If it is different the change is
+	 * done, otherwise a warning message is shown and the original name is restored
 	 */
 	@Override
 	public boolean changeProperty(Object property, Object newValue) {

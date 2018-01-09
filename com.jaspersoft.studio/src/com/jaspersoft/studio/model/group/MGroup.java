@@ -205,7 +205,7 @@ public class MGroup extends APropertyNode implements ICopyable, IDragable {
 		keepToD.setDescription(Messages.MGroup_keepDescription);
 		desc.add(keepToD);
 
-		positionD = new NamedEnumPropertyDescriptor<FooterPositionEnum>(JRBaseGroup.PROPERTY_FOOTER_POSITION,
+		positionD = new NamedEnumPropertyDescriptor<>(JRBaseGroup.PROPERTY_FOOTER_POSITION,
 				Messages.MGroup_footerPosTitle, FooterPositionEnum.COLLATE_AT_BOTTOM, NullEnum.NOTNULL);
 		positionD.setDescription(Messages.MGroup_footerPosDescription);
 		desc.add(positionD);
@@ -236,8 +236,7 @@ public class MGroup extends APropertyNode implements ICopyable, IDragable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.
+	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.
 	 * lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
@@ -295,8 +294,7 @@ public class MGroup extends APropertyNode implements ICopyable, IDragable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.
+	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.
 	 * lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
