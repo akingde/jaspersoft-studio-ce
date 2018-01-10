@@ -19,6 +19,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.DataAdapterServiceFactoryImpl;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.data.customadapters.ui.AdapterWidgetsDescriptor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -26,6 +27,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterContributorFactory;
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataAdapterServiceFactory;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -72,6 +74,7 @@ public class ConfigurableDataAdapterFactory implements DataAdapterFactory {
 	 * Return the data adapter service, first the service is found among the JasperReports contribution and if it 
 	 * can't be found the a default dummy service is returned, since this method should not return null+
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public DataAdapterService createDataAdapterService(JasperReportsContext jasperReportsContext, DataAdapter dataAdapter) {
 		//Search among the JR Extensions
@@ -84,6 +87,19 @@ public class ConfigurableDataAdapterFactory implements DataAdapterFactory {
 			if (service != null)
 			{
 				return service;
+			}
+		}
+		//Look in the data adapter service factory, DataAdapterServiceFactory is deprecated but somw old data adapters may still use it
+		List<DataAdapterServiceFactory> oldBundles = jasperReportsContext.getExtensions(DataAdapterServiceFactory.class);
+		for (Iterator<DataAdapterServiceFactory> it = oldBundles.iterator(); it.hasNext();)
+		{
+			DataAdapterServiceFactory factory = it.next();
+			if (!(factory instanceof DataAdapterServiceFactoryImpl)) {
+				DataAdapterService service = factory.getDataAdapterService(jasperReportsContext, dataAdapter);
+				if (service != null)
+				{
+					return service;
+				}
 			}
 		}
 		
@@ -140,20 +156,23 @@ public class ConfigurableDataAdapterFactory implements DataAdapterFactory {
 	 */
 	@Override
 	public Image getIcon(int size) {
-		String key = "DA_IMAGE_" + descriptor.getIconPath() + size;
-		Image image = ResourceManager.getImage(key);
-		if (image == null) {
-			ImageDescriptor desc = ResourceManager.getImageDescriptor(descriptor.getIconPath());
-			if (desc != null) {
-				ImageData data = desc.getImageData();
-				if (data != null) {
-					data = resizeImage(data, 0, 0, size, size);
-					image = new Image(UIUtils.getDisplay(), data);
-					ResourceManager.addImage(key, image);
+		if (descriptor.getIconPath() != null) {
+			String key = "DA_IMAGE_" + descriptor.getIconPath() + size;
+			Image image = ResourceManager.getImage(key);
+			if (image == null) {
+				ImageDescriptor desc = ResourceManager.getImageDescriptor(descriptor.getIconPath());
+				if (desc != null) {
+					ImageData data = desc.getImageData();
+					if (data != null) {
+						data = resizeImage(data, 0, 0, size, size);
+						image = new Image(UIUtils.getDisplay(), data);
+						ResourceManager.addImage(key, image);
+					}
 				}
-			}
-		}  
-		return image;
+			}  
+			return image;
+		}
+		return null;
 	}
 	
 	/**
