@@ -1,0 +1,183 @@
+{
+    "label": "Category Marker",
+    "description": "A chart customizer for Category Charts",
+    "customizerClass": "net.sf.jasperreports.customizers.marker.CategoryMarkerCustomizer",
+    "supportedPlot": ["1","2","3","7","8","11","12","20","21"],
+    "sections": [
+        {
+            "name": "Customizer configuration",
+            "expandable": false,
+            "properties": [
+                {
+                    "name": "category",
+                    "label": "Category",
+                    "description": "The key of the category",
+                    "mandatory": true,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "text"
+                },
+                {
+                    "name": "drawAsLine",
+                    "label": "Draw as a Line",
+                    "description": "The type of drawing used for the marker",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "checkbox_selector"
+                },
+                {
+                    "name": "label",
+                    "label": "Label",
+                    "description": "The content of the label",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "text"
+                },
+                {
+                    "name": "labelAnchor",
+                    "label": "Label Anchor",
+                    "description": "The anchor of the label",
+                    "mandatory": false,
+                    "defaultValue": "top-left",
+                    "readOnly": false,
+                    "type": "selectable_combo",
+                    "comboOptions": [["top","Top"],["topLeft","Top Left"],["topRight", "Top Right"],["bottom","Bottom"],["bottomLeft","Bottom Left"],["bottomRight","Bottom Right"],["center","Center"],["left","Left"],["right","Right"]]
+                },
+                {
+                    "name": "labelTextAnchor",
+                    "label": "Label Text Anchor",
+                    "description": "Sets the label text anchor and sends a MarkerChangeEvent to all registered listeners",
+                    "mandatory": false,
+                    "defaultValue": "center",
+                    "readOnly": false,
+                    "type": "selectable_combo",
+                    "comboOptions": [["baselineCenter","Baseline"],["baselineLeft","Baseline Left"],["baselineRight", "Baseline Right"],["bottomCenter","Bottom"],["bottomLeft","Bottom Left"],["bottomRight","Bottom Right"],["center","Center"],["centerLeft","Center Left"],["centerRight","Center Right"],["halfAscentCenter","Half Ascent"],["halfAscentLeft","Half Ascent Left"],["halfAscentRight", "Half Ascent Right"],["topCenter","Top"],["topLeft","Top Left"],["topRight", "Top Right"]]
+                },
+                {
+                    "name": "labelOffsetTop",
+                    "label": "Label Position Offset Top",
+                    "description": "The top offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "labelOffsetLeft",
+                    "label": "Label Position Offset Left",
+                    "description": "The left offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "labelOffsetBottom",
+                    "label": "Label Position Offset Bottom",
+                    "description": "The bottom offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "labelOffsetRight",
+                    "label": "Label Position Offset Right",
+                    "description": "The right offset of the label",
+                    "mandatory": false,
+                    "defaultValue": "3.0d",
+                    "readOnly": false,
+                    "type": "double"
+                },
+                {
+                    "name": "color",
+                    "label": "Color",
+                    "description": "The marker color",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "color"
+                },
+                {
+                    "name": "alpha",
+                    "label": "Alpha",
+                    "description": "The marker transparency, must be between 0 and 1",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "float",
+                    "max": "1",
+                    "min": "0"
+                },
+                {
+                    "name": "strokeWidth",
+                    "label": "Stroke Width",
+                    "description": "The width of the stroke",
+                    "mandatory": false,
+                    "defaultValue": "0",
+                    "readOnly": false,
+                    "type": "float",
+                    "min": "0"
+                },
+                {
+                    "name": "strokeStyle",
+                    "label": "Stroke Style",
+                    "description": "The width of the stroke",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "selectable_combo",
+                    "comboOptions": [["solid","Solid"],["dotted", "Dotted"],["dashed","Dashed"]]
+                },
+                {
+                    "name": "layer",
+                    "label": "Layer",
+                    "description": "The layer where the marker is painted",
+                    "mandatory": false,
+                    "defaultValue": "",
+                    "readOnly": false,
+                    "type": "selectable_combo",
+                    "comboOptions": [["background","Background"],["foreground", "Foreground"]]
+                },
+                {
+                    "name": "fontName",
+                    "label": "Font Name",
+                    "description": "The font used",
+                    "mandatory": false,
+                    "defaultValue": "SansSerif",
+                    "readOnly": false,
+                    "type": "fontfamily_combo"
+                },
+                {
+                    "name": "fontSize",
+                    "label": "Font Size",
+                    "description": "The size of the font",
+                    "mandatory": false,
+                    "defaultValue": "9",
+                    "readOnly": false,
+                    "type": "float"
+                },
+                {
+                    "name": "isBold",
+                    "label": "Bold",
+                    "description": "Check if the font should be bold",
+                    "mandatory": false,
+                    "defaultValue": "false",
+                    "readOnly": false,
+                    "type": "checkbox_selector"
+                },
+                {
+                    "name": "isItalic",
+                    "label": "Italic",
+                    "description": "Check if the font should be italic",
+                    "mandatory": false,
+                    "defaultValue": "false",
+                    "readOnly": false,
+                    "type": "checkbox_selector"
+                }
+            ]
+        }
+    ]
+}
