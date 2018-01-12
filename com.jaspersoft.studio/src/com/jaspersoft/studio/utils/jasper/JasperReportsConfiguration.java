@@ -850,8 +850,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 					if (result != null) {
 						List<T> toDel = new ArrayList<T>();
 						for (T item : result)
-							if (item.getClass().getName().equals(BuiltinDataFileServiceFactory.class.getName())
-									|| item instanceof DataAdapterParameterContributorFactory)
+							if (item != null
+									&& (item.getClass().getName().equals(BuiltinDataFileServiceFactory.class.getName())
+											|| item instanceof DataAdapterParameterContributorFactory))
 								toDel.add(item);
 						result.removeAll(toDel);
 					}
