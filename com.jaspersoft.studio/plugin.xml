@@ -1670,6 +1670,11 @@
          id="com.jaspersoft.studio.background.commands.DeleteBackgroundHandler"
          name="%deleteBackground">
    </command>
+   <command
+         defaultHandler="com.jaspersoft.studio.refactor.ResetUuidCommand"
+         id="com.jaspersoft.studio.refactor.uuid"
+         name="Reset UUIDs">
+   </command>
 	</extension>
     <extension
           point="org.eclipse.core.contenttype.contentTypes">
@@ -1917,6 +1922,33 @@
            icon="icons/eclipseicons/save.gif"
            label="%ExportFiles"
            style="push">
+     </command>
+  </menuContribution>
+  <menuContribution
+        allPopups="false"
+        locationURI="popup:org.eclipse.ui.popup.any?before=import">
+     <menu
+           id="com.jaspersoft.studio.refactor"
+           label="Refactor">
+     </menu>
+  </menuContribution>
+  <menuContribution
+        allPopups="false"
+        locationURI="popup:com.jaspersoft.studio.refactor">
+     <command
+           commandId="com.jaspersoft.studio.refactor.uuid"
+           label="Reset UUIDs"
+           mode="FORCE_TEXT"
+           style="push">
+        <visibleWhen
+              checkEnabled="false">
+           <and>
+              <test
+                    forcePluginActivation="true"
+                    property="com.jaspersoft.studio.outline.action.compile.checkNature">
+              </test>
+           </and>
+        </visibleWhen>
      </command>
   </menuContribution>
 	</extension>
