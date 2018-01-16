@@ -120,7 +120,7 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 	private JRElement getEmptyElement(MGraphicElement node){
 		JRElement value = newElementsCache.get(node.getClass());
 		if(value == null){
-			value = node.createJRElement(container.getJasperDesign(), true);
+			value = node.createJRElement(container.getJasperDesign(), false);
 			newElementsCache.put(node.getClass(), value);
 		}
 		return value;
