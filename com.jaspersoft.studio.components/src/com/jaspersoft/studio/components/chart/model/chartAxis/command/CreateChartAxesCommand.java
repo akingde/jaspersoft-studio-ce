@@ -74,7 +74,7 @@ public class CreateChartAxesCommand extends Command {
 			}
 			if(selectedAxes!=null) {
 				jrElement = new JRDesignChartAxis(this.chart);
-				JRDesignChart c = MChart.createJRElement(jDesign, selectedAxes);
+				JRDesignChart c = MChart.createJRElement(jDesign, selectedAxes, true);
 				jrElement.setChart(c);
 			}
 		}

@@ -176,11 +176,13 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
 	@Override
-	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+	public JRDesignElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
 		JRDesignElement jrDesignElement = new JRDesignFrame(jasperDesign);
 
-		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignElement);
-
+		if (applyDefault) {
+			DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignElement);
+		}
+			
 		jrDesignElement.setWidth(getDefaultWidth());
 		jrDesignElement.setHeight(getDefaultHeight());
 		return jrDesignElement;

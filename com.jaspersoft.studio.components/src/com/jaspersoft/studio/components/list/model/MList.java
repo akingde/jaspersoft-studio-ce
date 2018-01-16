@@ -290,7 +290,7 @@ public class MList extends MGraphicElement implements IPastable,
 	 * jasperreports.engine.design.JasperDesign)
 	 */
 	@Override
-	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
+	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
 		JRDesignComponentElement component = new JRDesignComponentElement();
 		component.setHeight(getDefaultHeight());
 		component.setWidth(getDefaultWidth());
@@ -309,7 +309,9 @@ public class MList extends MGraphicElement implements IPastable,
 		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
 		componentImpl.setDatasetRun(datasetRun);
 
-		DefaultManager.INSTANCE.applyDefault(this.getClass(), component);
+		if (applyDefault) {
+			DefaultManager.INSTANCE.applyDefault(this.getClass(), component);
+		}
 
 		return component;
 	}

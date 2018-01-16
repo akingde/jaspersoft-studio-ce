@@ -157,10 +157,12 @@ public class MLine extends MGraphicElementLinePen {
 	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
 	@Override
-	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+	public JRDesignElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
 		JRDesignLine jrDesignLine = new JRDesignLine(jasperDesign);
 
-		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignLine);
+		if (applyDefault) {
+			DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignLine);
+		}
 
 		jrDesignLine.setWidth(getDefaultWidth());
 		jrDesignLine.setHeight(getDefaultHeight());

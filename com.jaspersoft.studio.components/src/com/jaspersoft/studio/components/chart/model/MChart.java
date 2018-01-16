@@ -636,11 +636,13 @@ public class MChart extends MGraphicElementLineBox
 		return defaultValue != null ? (Integer) defaultValue : 200;
 	}
 
-	public static JRDesignChart createJRElement(JasperDesign jasperDesign, byte chartType) {
+	public static JRDesignChart createJRElement(JasperDesign jasperDesign, byte chartType, boolean applyDefault) {
 		JRDesignChart jrChart = new JRDesignChart(jasperDesign, chartType);
 		setupChart(jrChart);
 
-		DefaultManager.INSTANCE.applyDefault(MChart.class, jrChart);
+		if (applyDefault) {
+			DefaultManager.INSTANCE.applyDefault(MChart.class, jrChart);
+		}
 
 		return jrChart;
 	}

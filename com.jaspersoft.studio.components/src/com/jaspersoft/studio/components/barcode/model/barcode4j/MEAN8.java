@@ -37,7 +37,7 @@ public class MEAN8 extends MBarcode4j {
 	}
 
 	@Override
-	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
+	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		EAN8Component component = new EAN8Component();
 		JRDesignExpression exp = new JRDesignExpression();
@@ -46,7 +46,9 @@ public class MEAN8 extends MBarcode4j {
 		el.setComponent(component);
 		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "EAN8")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
-		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		if (applyDefault) {
+			DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		}
 		
 		return el;
 	}

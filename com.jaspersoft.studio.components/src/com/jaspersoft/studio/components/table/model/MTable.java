@@ -393,7 +393,7 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	}
 
 	@Override
-	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+	public JRDesignElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
 		JRDesignComponentElement jrElement = new JRDesignComponentElement(jasperDesign);
 		StandardTable component = new StandardTable();
 
@@ -404,7 +404,10 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
 		component.setDatasetRun(datasetRun);
 
-		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrElement);
+		if (applyDefault) {
+			DefaultManager.INSTANCE.applyDefault(this.getClass(), jrElement);
+		}
+		
 		jrElement.getPropertiesMap().setProperty(ILayout.KEY,
 				VerticalRowLayout.class.getName());
 

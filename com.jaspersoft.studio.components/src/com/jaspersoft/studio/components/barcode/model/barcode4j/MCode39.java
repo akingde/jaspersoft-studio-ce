@@ -41,7 +41,7 @@ public class MCode39 extends MBarcode4j {
 	}
 
 	@Override
-	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
+	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		Code39Component component = new Code39Component();
 		JRDesignExpression exp = new JRDesignExpression();
@@ -51,7 +51,9 @@ public class MCode39 extends MBarcode4j {
 		el.setComponentKey(
 				new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "Code39")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		if (applyDefault) {
+			DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		}
 
 		return el;
 	}

@@ -38,7 +38,7 @@ public class MCodabar extends MBarcode4j {
 	}
 
 	@Override
-	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
+	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		CodabarComponent component = new CodabarComponent();
 		JRDesignExpression exp = new JRDesignExpression();
@@ -48,8 +48,9 @@ public class MCodabar extends MBarcode4j {
 		el.setComponentKey(
 				new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "Codabar")); //$NON-NLS-1$
 
-		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
-
+		if (applyDefault) {
+			DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		}
 		return el;
 	}
 

@@ -47,7 +47,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
  * 
  */
 public class CreateElementCommand extends Command {
-	
+
 	/**
 	 * The JasperDesign of the current Report
 	 */
@@ -111,6 +111,13 @@ public class CreateElementCommand extends Command {
 	 */
 	protected boolean operationCancelled = false;
 
+	/**
+	 * This flag defines if upon the creation of the new element the default template (if any) should
+	 * be applied. This is by default true but can be disabled when the command is used to create an 
+	 * element after a movement into another parent or a paste operation
+	 */
+	private boolean applyDefault = true;
+	
 	protected CreateElementCommand() {
 		super();
 	}
@@ -318,7 +325,9 @@ public class CreateElementCommand extends Command {
 			}
 		}
 		
-    	applayDefaultAttributes(srcNode.getClass(), jrElement);
+    	if (applyDefault) {
+    		applayDefaultAttributes(srcNode.getClass(), jrElement);
+    	}
 	}
 	
 	/**
@@ -412,6 +421,18 @@ public class CreateElementCommand extends Command {
 				
 			}
 		}
+	}
+	
+	/**
+	 * This method defines if upon the creation of the new element the default template (if any) should
+	 * be applied. This is by default true but can be disabled when the command is used to create an 
+	 * element after a movement into another parent or a paste operation
+	 * 
+	 * @param applyDefault true if the default should be checked and applied if present, false if it should
+	 * not be applied in any case
+	 */
+	public void setApplyDefault(boolean applyDefault) {
+		this.applyDefault = applyDefault;
 	}
 	
 	/*

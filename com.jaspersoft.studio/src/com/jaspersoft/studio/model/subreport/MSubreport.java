@@ -275,11 +275,13 @@ public class MSubreport extends MGraphicElement {
 	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
 	@Override
-	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+	public JRDesignElement createJRElement(JasperDesign jasperDesign, boolean applayDefault) {
 		JRDesignSubreport subreport = new JRDesignSubreport(jasperDesign);
 
-		DefaultManager.INSTANCE.applyDefault(this.getClass(), subreport);
-
+		if (applayDefault) {
+			DefaultManager.INSTANCE.applyDefault(this.getClass(), subreport);
+		}
+			
 		return subreport;
 	}
 

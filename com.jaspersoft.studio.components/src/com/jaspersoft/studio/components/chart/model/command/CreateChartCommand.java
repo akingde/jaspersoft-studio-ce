@@ -95,7 +95,7 @@ public class CreateChartCommand extends CreateElementCommand {
 	@Override
 	protected void createObject() {
 		if (jrElement == null) {
-			JRDesignChart newchart = MChart.createJRElement(jasperDesign, JRDesignChart.CHART_TYPE_AREA);
+			JRDesignChart newchart = MChart.createJRElement(jasperDesign, JRDesignChart.CHART_TYPE_AREA, true);
 
 			ChartWizard wizard = new ChartWizard(new MChart(null, newchart, -1), (JRDesignElementDataset) newchart.getDataset());
 			wizard.setConfig(jConfig, false);

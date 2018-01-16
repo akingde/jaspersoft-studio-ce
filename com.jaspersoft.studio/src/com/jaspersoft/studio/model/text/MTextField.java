@@ -479,14 +479,16 @@ public class MTextField extends MTextElement {
 	 * .engine.design.JasperDesign)
 	 */
 	@Override
-	public JRDesignTextField createJRElement(JasperDesign jasperDesign) {
+	public JRDesignTextField createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
 		JRDesignTextField jrDesignTextField = new JRDesignTextField(jasperDesign);
 		jrDesignTextField.setX(0);
 		jrDesignTextField.setY(0);
 		jrDesignTextField
 				.setExpression(new JRDesignExpression("\"".concat(Messages.MTextField_common_text_field).concat("\""))); //$NON-NLS-1$
 
-		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignTextField);
+		if (applyDefault) {
+			DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignTextField);
+		}
 		return jrDesignTextField;
 	}
 

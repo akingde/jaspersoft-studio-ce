@@ -151,7 +151,9 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 						// Without this an element it's one point up when placed into a frame
 						rect.y++;
 						c.add(OutlineTreeEditPartFactory.getOrphanCommand(cmodel.getParent(), cmodel));
-						c.add(new CreateElementCommand(getModel(), cmodel, rect, -1));
+						CreateElementCommand createCommand = new CreateElementCommand(getModel(), cmodel, rect, -1);
+						createCommand.setApplyDefault(false);
+						c.add(createCommand);
 						return c;
 					}
 				} else {

@@ -25,6 +25,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.command.CloseSubeditorsCommand;
+import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.command.CopyDatasetCommand;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
@@ -151,10 +152,17 @@ public class PasteCommand extends Command {
 						Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, rect, -1);
 						if (cmdc == null){
 							cmdc = StyleTreeEditPartFactory.getCreateCommand((ANode)parent, n, rect, -1);
-						}  else if (n instanceof MGraphicElement){
-							MGraphicElement mge = (MGraphicElement) n;
-							fixPositionCommand = new FixPositionCommand(mge, node.getParent(), (ANode)parent);	
-						}
+						} else {
+							//if it is a CreateElement command avoid to apply the default after a paste oepration
+							if (cmdc instanceof CreateElementCommand) {
+								CreateElementCommand createCommand = (CreateElementCommand)cmdc;
+								createCommand.setApplyDefault(false);
+							}
+							if (n instanceof MGraphicElement){
+								MGraphicElement mge = (MGraphicElement) n;
+								fixPositionCommand = new FixPositionCommand(mge, node.getParent(), (ANode)parent);	
+							}
+						}	
 						if (cmdc != null) {
 							createdElements.add(n);
 							cmd.add(cmdc);

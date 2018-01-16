@@ -100,7 +100,7 @@ public class CreateMeasureFieldCommand extends Command {
 	@Override
 	public void execute() {
 		MTextField mElement = new MTextField();
-		JRDesignTextField textElement =  mElement.createJRElement(parent.getJasperDesign());
+		JRDesignTextField textElement =  mElement.createJRElement(parent.getJasperDesign(), true);
 		String measureName = "$V{"+(String)child.getPropertyActualValue(JRDesignCrosstabMeasure.PROPERTY_NAME)+"}";
 		textElement.setExpression(new JRDesignExpression(measureName));
 		newElement = textElement;
