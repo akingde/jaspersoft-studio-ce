@@ -61,12 +61,6 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	 */
 	public static final String DEFAULT_BEHAVIOR = BEHAVIOR_CREATE_LABEL; // $NON-NLS-1$
 
-	/**
-	 * Key for the property to set the advanced tab always as default in the
-	 * properties view
-	 */
-	public static final String P_DEFAULT_ADVANCED_TAB = "defaultAdvanced"; //$NON-NLS-1$
-
 	public static final String DEFAULT_ELEMENT_DESIGN_BORDER_COLOR = "0,0,0"; //$NON-NLS-1$
 	public static final String PAGEID = "com.jaspersoft.studio.preferences.DesignerPreferencePage"; //$NON-NLS-1$
 	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.DesignerPreferencePage.property"; //$NON-NLS-1$
@@ -127,8 +121,6 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_SHOW_VARIABLES_DEFAULTS,
 				Messages.DesignerPreferencePage_showDefaultsVariablesParameters, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_DEFAULT_ADVANCED_TAB, Messages.DesignerPreferencePage_advancedDefault,
-				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_TITLEICON, Messages.DesignerPreferencePage_2, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_SAVE_ON_PREVIEW, Messages.DesignerPreferencePage_savereportonpreview,
 				getFieldEditorParent()));
@@ -185,7 +177,6 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		// store.setDefault(P_PAGE_BACKGROUND, DEFAULT_PAGE_BACKGROUND);
 		store.setDefault(BEHAVIOR_ON_FIELD_DROP, DEFAULT_BEHAVIOR);
 		store.setDefault(P_USE_FIELD_DESCRIPTION, false);
-		store.setDefault(P_DEFAULT_ADVANCED_TAB, false);
 		store.setDefault(P_SAVE_ON_PREVIEW, false);
 		store.setDefault(P_CENTER_SELECTION, true);
 		store.setDefault(P_RESIZE_CONTAINER, true);
