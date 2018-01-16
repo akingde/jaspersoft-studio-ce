@@ -4,10 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.book.gallery.commands;
 
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignPart;
-import net.sf.jasperreports.engine.design.JRDesignSection;
-
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
@@ -22,6 +18,10 @@ import com.jaspersoft.studio.book.model.IReportPartContainer;
 import com.jaspersoft.studio.book.model.MReportPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.ReportFactory;
+
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignPart;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 
 /**
  * Command to create an element inside the gallery, can be undone
