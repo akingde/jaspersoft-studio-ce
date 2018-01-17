@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -28,9 +30,10 @@ import com.jaspersoft.studio.server.utils.Pass;
 
 public abstract class ARestV2Connection implements IConnection {
 	public static final String SUFFIX = "rest_v2/";
-	public static final String FORMAT = "xml";
+	public static final String FORMAT = "json";
 	protected ServerProfile sp;
 	protected IConnection parent;
+	protected final Logger logger = java.util.logging.Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	@Override
 	public void setParent(IConnection parent) {
@@ -105,7 +108,6 @@ public abstract class ARestV2Connection implements IConnection {
 			return timestampFormat.format(obj);
 		if (obj instanceof Number)
 			return obj.toString();
-//			return numberFormat.format(obj);
 		return obj.toString();
 	}
 
@@ -120,10 +122,8 @@ public abstract class ARestV2Connection implements IConnection {
 	public String getWebservicesUri() {
 		try {
 			return sp.getUrl();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+		} catch (MalformedURLException | URISyntaxException e) {
+			logger.log(Level.FINE, e.getMessage(), e);
 		}
 		return null;
 	}
