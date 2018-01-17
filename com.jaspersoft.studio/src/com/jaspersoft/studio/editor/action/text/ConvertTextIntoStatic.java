@@ -66,11 +66,14 @@ public class ConvertTextIntoStatic extends ACachedSelectionAction {
 		 */
 		private MTextField elementToCopy;
 		
+		private int oldIndex;
+		
 		public LazyCreateStaticTextCommand(MTextField elementToCopy){
 			this.elementToCopy = elementToCopy;
 			//Need to store some values because if the copied node is deleted
 			//its parent is no longer reachable
 			this.parent = elementToCopy.getParent();
+			this.oldIndex = ModelUtils.getChildrenPosition(elementToCopy);
 		}
 		
 		@Override
@@ -86,7 +89,6 @@ public class ConvertTextIntoStatic extends ACachedSelectionAction {
 			modelText.setValue(labelObject);
 			Rectangle position = new Rectangle(textObject.getX(),textObject.getY(),textObject.getWidth(),textObject.getHeight());
 
-			int oldIndex = ModelUtils.getChildrenPosition(elementToCopy);
 			cmd = new CreateElementCommand(parent, modelText, position, oldIndex);
 			cmd.setJasperDesign(parent.getJasperDesign());
 			cmd.execute();
