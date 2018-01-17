@@ -28,6 +28,7 @@ import com.jaspersoft.studio.callout.command.CreateCalloutCommand;
 import com.jaspersoft.studio.callout.command.DeleteCalloutCommand;
 import com.jaspersoft.studio.callout.pin.MPin;
 import com.jaspersoft.studio.callout.pin.command.DeletePinCommand;
+import com.jaspersoft.studio.editor.expression.EditElementExpressionCommand;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.outline.actions.field.ShowFieldsTreeAction;
 import com.jaspersoft.studio.editor.outline.actions.field.SortFieldsAction;
@@ -129,7 +130,6 @@ import com.jaspersoft.studio.model.style.command.ReorderStyleTemplateCommand;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.model.subreport.command.CreateSubreportCommand;
 import com.jaspersoft.studio.model.text.MTextField;
-import com.jaspersoft.studio.model.text.command.EditTextFieldExpressionCommand;
 import com.jaspersoft.studio.model.textfield.MPageXofY;
 import com.jaspersoft.studio.model.textfield.MPercentage;
 import com.jaspersoft.studio.model.textfield.command.CreatePageXofYCommand;
@@ -152,6 +152,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
@@ -217,7 +218,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 					Command cmd = null;
 					MTextField textfield = (MTextField) getModel();
-					cmd = new EditTextFieldExpressionCommand(textfield) {
+					cmd = new EditElementExpressionCommand(textfield, JRDesignTextField.PROPERTY_EXPRESSION) {
 						@Override
 						public boolean canExecute() {
 							return super.canExecute() && this.showDialog() == Window.OK;

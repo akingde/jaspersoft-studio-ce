@@ -9,9 +9,11 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.window.Window;
 
+import com.jaspersoft.studio.editor.expression.EditElementExpressionCommand;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.text.MTextField;
-import com.jaspersoft.studio.model.text.command.EditTextFieldExpressionCommand;
+
+import net.sf.jasperreports.engine.design.JRDesignTextField;
 
 /*
  * The Class FigureEditPart.
@@ -23,7 +25,7 @@ public class TextFieldFigureEditPart extends FigureEditPart {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			Command cmd = null;
 			MTextField textfield = (MTextField) getModel();
-			cmd = new EditTextFieldExpressionCommand(textfield) {
+			cmd = new EditElementExpressionCommand(textfield, JRDesignTextField.PROPERTY_EXPRESSION) {
 				@Override
 				public boolean canExecute() {
 					return super.canExecute() && this.showDialog()==Window.OK;
