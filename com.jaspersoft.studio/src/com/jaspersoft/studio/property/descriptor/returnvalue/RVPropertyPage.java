@@ -368,7 +368,7 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	 * 
 	 * @return not null hashset of variables already used as a to variable
 	 */
-	private HashSet<String> getAlreadyUsedToVariables() {
+	protected HashSet<String> getAlreadyUsedToVariables() {
 		HashSet<String> result = new HashSet<String>();
 		for (ReturnValueContainer value : values) {
 			result.add(value.getToVariable());

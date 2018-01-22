@@ -8,15 +8,6 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRReport;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignSubreport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
 import org.eclipse.core.resources.IFile;
 
 import com.jaspersoft.studio.model.subreport.MSubreport;
@@ -25,6 +16,15 @@ import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterPage;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRReport;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 public class SubreportParameterEditor extends ParameterEditor {
 	
@@ -42,17 +42,22 @@ public class SubreportParameterEditor extends ParameterEditor {
 	 * The jasper design of the current report
 	 */
 	private JasperDesign jd;
+	
+	/**
+	 * the model of the edited subreport
+	 */
+	private MSubreport subReport;
 
 	public SubreportParameterEditor(MSubreport subReport) {
 		super();
 		this.jd = subReport.getJasperDesign();
+		this.subReport = subReport;
 		preloadReport(subReport);
 	}
 	
 	@Override
 	protected ParameterPage getEditingPage() {
-		SubreportParameterPage page = new SubreportParameterPage(this);
-		page.setJasperDesign(jd);
+		SubreportParameterPage page = new SubreportParameterPage(subReport, jd);
 		return page;
 	}
 	

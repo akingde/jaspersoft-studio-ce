@@ -22,7 +22,7 @@ public class SubreportRVPropertyEditor extends Wizard {
 		if (v != null) {
 			JReportsDTO vclone = new JReportsDTO();
 			vclone.setjConfig(v.getjConfig());
-			vclone.setSubreport(v.getSubreport());
+			vclone.setSubreport(v.getSubreport(), v.getDataset());
 			vclone.setValue(v.getValue());
 			return vclone;
 		}

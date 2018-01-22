@@ -6,6 +6,7 @@ package com.jaspersoft.studio.model;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRSubreportReturnValue;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 
@@ -15,7 +16,8 @@ public class JReportsDTO {
 	private JasperReportsConfiguration jConfig;
 	private List<JRSubreportReturnValue> value;
 	private JRDesignSubreport subreport;
-
+	private JRDataset subreportDataset;
+	
 	public void setjConfig(JasperReportsConfiguration jConfig) {
 		this.jConfig = jConfig;
 	}
@@ -27,9 +29,14 @@ public class JReportsDTO {
 	public JRDesignSubreport getSubreport() {
 		return subreport;
 	}
+	
+	public JRDataset getDataset() {
+		return subreportDataset;
+	}
 
-	public void setSubreport(JRDesignSubreport subreport) {
+	public void setSubreport(JRDesignSubreport subreport, JRDataset dataset) {
 		this.subreport = subreport;
+		this.subreportDataset = dataset;
 	}
 
 	public List<JRSubreportReturnValue> getValue() {

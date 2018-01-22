@@ -6,6 +6,8 @@ package com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -13,6 +15,7 @@ import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.base.JRBaseReport;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -77,6 +80,34 @@ public class SubreportRVPropertyPage extends RVPropertyPage {
 	public JRVariable[] getDatasetVariables() {
 		List<JRVariable> vlist = dto.getjConfig().getJasperDesign().getVariablesList();
 		return vlist.toArray(new JRVariable[vlist.size()]);
+	}
+	
+	/**
+	 * Get an array of all the variables that can be used as to variable. These are variables defined for the element on
+	 * its dataset that aren't already used as to variable. The context of the variable is the neares dataset in the 
+	 * hierarchy 
+	 * 
+	 * @return a not null array of variable names that can be used as to variables
+	 */
+	@Override
+	protected String[] getToVariablesNames() {
+		if (toVariables == null) {
+			List<String> res = new ArrayList<String>();
+			HashSet<String> usedVariables = getAlreadyUsedToVariables();
+			JRVariable[] vlist = null;
+			if (dto.getDataset() != null && dto.getDataset().getVariables() != null) {
+				vlist = dto.getDataset().getVariables();
+			} else {
+				vlist = getMainDatasetVariables();
+			}
+			for (JRVariable o : vlist) {
+				JRDesignVariable jdVar = (JRDesignVariable) o;
+				if (!jdVar.isSystemDefined() && !usedVariables.contains(jdVar.getName()))
+					res.add(jdVar.getName());
+			}
+			return res.toArray(new String[res.size()]);
+		}
+		return toVariables;
 	}
 
 

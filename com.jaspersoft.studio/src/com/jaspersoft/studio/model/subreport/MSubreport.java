@@ -24,6 +24,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.SubreportPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
@@ -196,7 +197,7 @@ public class MSubreport extends MGraphicElement {
 			if (returnValuesDTO == null) {
 				returnValuesDTO = new JReportsDTO();
 				returnValuesDTO.setjConfig(getJasperConfiguration());
-				returnValuesDTO.setSubreport(jrElement);
+				returnValuesDTO.setSubreport(jrElement, ModelUtils.getFirstDatasetInHierarchy(this));
 			}
 			returnValuesDTO.setValue(JRCloneUtils.cloneList(jrElement.getReturnValuesList()));
 			return returnValuesDTO;

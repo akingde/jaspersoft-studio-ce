@@ -75,7 +75,7 @@ public class SPSubreportReturnValuesButton<T extends IPropertyDescriptor> extend
 				SubreportRVPropertyEditor wizard = new SubreportRVPropertyEditor();
 				JReportsDTO value = new JReportsDTO();
 				value.setjConfig(dto.getjConfig());
-				value.setSubreport(dto.getSubreport());
+				value.setSubreport(dto.getSubreport(), dto.getDataset());
 				value.setValue(dto.getValue());
 				wizard.setValue(value);
 				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
