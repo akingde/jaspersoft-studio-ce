@@ -38,6 +38,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -212,8 +213,11 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 			EditPart clickedPart = viewer.findObjectAt(new Point(me.x, me.y));
 			if (clickedPart instanceof BandEditPart) {
 				viewer.select(clickedPart);
-			} else
-				viewer.deselectAll();
+			} else if (clickedPart instanceof MainDesignerRootEditPart) {
+				//when the user click on the external of the page, since it has no properties
+				//show instead the page
+				viewer.select((EditPart)clickedPart.getChildren().get(0));
+			} else viewer.deselectAll();
 		} else
 			super.mouseUp(me, viewer);
 	};

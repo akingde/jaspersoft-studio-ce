@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
+import com.jaspersoft.studio.editor.java2d.J2DScrollingGraphicalViewer;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.bindings.BindingsPreferencePersistence;
 
@@ -293,5 +294,24 @@ public class JSelectionManager extends SelectionManager {
 		}else {
 			super.deselectAll();
 		}
+	}
+	
+	/**
+	 *  Tipically the getSelection method when the current selection is empty it returns a 
+	 *   new StructuredSelection(viewer.getContents()); . If the viewer is the graphical editor
+	 *   (J2DScrollingGraphicalViewer) the contents is the page of the report, this trigger a series
+	 *   of problems. One example is the deselect all will select the page of the report in some case.
+	 *   One of this case is when changing order to a graphical editpart from the outline. This will trigger
+	 *   a deselectall for the edit parts, the selection synchronizer will then try to synchronize the selection
+	 *   (now empty) between the outline and graphical editor. But the graphical editor will instead try to select
+	 *   the page element. Doing this will also trigger another selection in the outline (due to the selection synchronizer) and
+	 *   this can also move the scroll area of the outline. It is necessary in this case avoid to return the page as default
+	 *   element when the selection is empty
+	 */
+	public ISelection getSelection() {
+		if (selection.isEmpty() && getViewer() instanceof J2DScrollingGraphicalViewer) {
+			return StructuredSelection.EMPTY;
+		}
+		return super.getSelection();
 	}
 }
