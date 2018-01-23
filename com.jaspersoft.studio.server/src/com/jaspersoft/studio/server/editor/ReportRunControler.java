@@ -90,12 +90,10 @@ public class ReportRunControler {
 
 							// TODO search all the repository
 							icm.getDefaults();
-							UIUtils.getDisplay().syncExec(new Runnable() {
-								public void run() {
-									if (viewmap != null)
-										fillForms(monitor);
-									runReport();
-								}
+							UIUtils.getDisplay().syncExec(() -> {
+								if (viewmap != null)
+									fillForms(monitor);
+								runReport();
 							});
 						} catch (Throwable e) {
 							throw new InvocationTargetException(e);
@@ -118,7 +116,7 @@ public class ReportRunControler {
 	}
 
 	public LinkedHashMap<String, APreview> createControls(Composite composite, JasperReportsConfiguration jContext) {
-		viewmap = new LinkedHashMap<String, APreview>();
+		viewmap = new LinkedHashMap<>();
 		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, jContext));
 		viewmap.put(ReportController.FORM_BOOKMARKS, new VBookmarks(composite, jContext, pcontainer));
 		viewmap.put(ReportController.FORM_EXPORTER, new VExporter(composite, jContext));
@@ -171,7 +169,7 @@ public class ReportRunControler {
 					prmInput.setReportUnit(icm, icm.getReportUnit(), monitor, reportUnit);
 					if (!prmInput.checkFieldsFilled())
 						return Status.CANCEL_STATUS;
-					Map<String, Object> prmcopy = new HashMap<String, Object>();
+					Map<String, Object> prmcopy = new HashMap<>();
 					for (ResourceDescriptor p : icm.getInputControls()) {
 						if (p.isVisible() && !p.isReadOnly()) {
 							if (p.isMandatory())
@@ -181,7 +179,7 @@ public class ReportRunControler {
 						}
 					}
 
-					List<Argument> args = new ArrayList<Argument>();
+					List<Argument> args = new ArrayList<>();
 					String reptype = pcontainer.getCurrentViewer();
 					args.add(new Argument(Argument.RUN_OUTPUT_FORMAT, reptype));
 					args.add(new Argument(Argument.RUN_OUTPUT_IMAGES_URI, "")); //$NON-NLS-1$
@@ -202,8 +200,8 @@ public class ReportRunControler {
 								Map<String, FileContent> files = repExec.getFiles();
 								if (files.isEmpty())
 									showReport(null);
-								for (String key : files.keySet()) {
-									FileContent fc = (FileContent) files.get(key);
+								for (Map.Entry<String, FileContent> entry : files.entrySet()) {
+									FileContent fc = entry.getValue();
 									stats.setValue(ReportController.ST_REPORTSIZE, fc.getData().length);
 									if (reptype.equals(Argument.RUN_OUTPUT_FORMAT_JRPRINT)) { // $NON-NLS-1$
 										Object obj = JRLoader.loadObject(new ByteArrayInputStream(fc.getData()));
@@ -211,8 +209,6 @@ public class ReportRunControler {
 											showReport((JasperPrint) obj);
 										break;
 									} else {
-										// System.out.println(new
-										// String(fc.getMimeType()));
 										File f = null;
 										if (fc.getName().contains("/")) //$NON-NLS-1$
 											f = new File(FilenameUtils.getFullPath(fc.getName()),
@@ -223,14 +219,14 @@ public class ReportRunControler {
 											f.deleteOnExit();
 											f.createNewFile();
 										}
-										if (!key.equals("report")) { //$NON-NLS-1$
-											if (!f.getName().equals(key)) {
-												File dest = new File(tempDir, key);
+										if (!entry.getKey().equals("report")) { //$NON-NLS-1$
+											if (!f.getName().equals(entry.getKey())) {
+												File dest = new File(tempDir, entry.getKey());
 												f.renameTo(dest);
 												f = dest;
 											}
 										} else if (f.getName().endsWith(".att")) { //$NON-NLS-1$
-											int ind = fc.getMimeType().indexOf("/"); //$NON-NLS-1$
+											int ind = fc.getMimeType().indexOf('/'); // $NON-NLS-1$
 											if (ind >= 0) {
 												String str = fc.getMimeType().substring(ind + 1);
 												File dest = new File(
@@ -239,21 +235,11 @@ public class ReportRunControler {
 												f = dest;
 											}
 										}
-										FileOutputStream htmlFile = new FileOutputStream(f);
-										htmlFile.write(fc.getData());
-										htmlFile.close();
-										if (key.equals("report")) //$NON-NLS-1$
-											showURL(f.toURI().toASCIIString());
-										// UIUtils.getDisplay().asyncExec(new
-										// Runnable() {
-										//
-										// @Override
-										// public void run() {
-										// errorView.setMessage("This file will
-										// be opened in an external editor");
-										// SelectionHelper.openEditor(f);
-										// }
-										// });
+										try (FileOutputStream htmlFile = new FileOutputStream(f);) {
+											htmlFile.write(fc.getData());
+											if (entry.getKey().equals("report")) //$NON-NLS-1$
+												showURL(f.toURI().toASCIIString());
+										}
 									}
 								}
 							}
@@ -280,69 +266,56 @@ public class ReportRunControler {
 			}
 
 			private void showReport(final JasperPrint obj) {
-				UIUtils.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						stats.setValue(ReportController.ST_PAGECOUNT, obj == null ? 0 : obj.getPages().size());
-						APreview pv = pcontainer.getDefaultViewer();
-						if (pv instanceof IJRPrintable)
-							try {
-								((IJRPrintable) pv).setJRPRint(stats, obj, true);
-								VBookmarks vs = (VBookmarks) viewmap.get(ReportController.FORM_BOOKMARKS);
-								vs.setJasperPrint(obj);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						pcontainer.setJasperPrint(stats, obj);
-						pcontainer.setCurrentViewer(pcontainer.getDefaultViewerKey(), true);
-						if (obj == null)
-							errorView.setMessage(com.jaspersoft.studio.messages.Messages.ReportRunControler_22);
-					}
+				UIUtils.getDisplay().asyncExec(() -> {
+					stats.setValue(ReportController.ST_PAGECOUNT, obj == null ? 0 : obj.getPages().size());
+					APreview pv = pcontainer.getDefaultViewer();
+					if (pv instanceof IJRPrintable)
+						try {
+							((IJRPrintable) pv).setJRPRint(stats, obj, true);
+							VBookmarks vs = (VBookmarks) viewmap.get(ReportController.FORM_BOOKMARKS);
+							vs.setJasperPrint(obj);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					pcontainer.setJasperPrint(stats, obj);
+					pcontainer.setCurrentViewer(pcontainer.getDefaultViewerKey(), true);
+					if (obj == null)
+						errorView.setMessage(com.jaspersoft.studio.messages.Messages.ReportRunControler_22);
 				});
 			}
 
 			private void showURL(final String url) {
-				UIUtils.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						APreview pv = pcontainer.getDefaultViewer();
-						if (pv instanceof IURLViewable)
-							try {
-								((IURLViewable) pv).setURL(url);
-								pcontainer.setCurrentViewer(pcontainer.getDefaultViewerKey(), true);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-					}
+				UIUtils.getDisplay().asyncExec(() -> {
+					APreview pv = pcontainer.getDefaultViewer();
+					if (pv instanceof IURLViewable)
+						try {
+							((IURLViewable) pv).setURL(url);
+							pcontainer.setCurrentViewer(pcontainer.getDefaultViewerKey(), true);
+						} catch (Exception e) {
+							UIUtils.showError(e);
+						}
 				});
 			}
 
 			private void showURL(final ReportExecution re) {
 				if (re.getReportOutputURL() != null) {
-					UIUtils.getDisplay().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							APreview pv = pcontainer.getDefaultViewer();
-							if (pv instanceof ABrowserViewer)
-								try {
-									String urlcookie = re.getBaseUrl();
-									String scookie = null;
-									for (Cookie c : re.getReportOutputCookie()) {
-										if (c.getName().equals("JSESSIONID")) { //$NON-NLS-1$
-											scookie = c.getName() + "=" + c.getValue(); //$NON-NLS-1$
-											break;
-										}
-									}
-									((ABrowserViewer) pv).setURL(re.getReportOutputURL(), urlcookie, scookie);
-
-									pcontainer.setCurrentViewer(pcontainer.getDefaultViewerKey(), true);
-								} catch (Exception e) {
-									e.printStackTrace();
+					UIUtils.getDisplay().asyncExec(() -> {
+						APreview pv = pcontainer.getDefaultViewer();
+						if (pv instanceof ABrowserViewer)
+							try {
+								String urlcookie = re.getBaseUrl();
+								StringBuilder scookie = new StringBuilder();
+								String del = "";
+								for (Cookie co : re.getReportOutputCookie()) {
+									scookie.append(del).append(co.getName()).append("=").append(co.getValue()); //$NON-NLS-1$
+									del = ";";
 								}
-						}
+								((ABrowserViewer) pv).setURL(re.getReportOutputURL(), urlcookie, scookie.toString());
+
+								pcontainer.setCurrentViewer(pcontainer.getDefaultViewerKey(), true);
+							} catch (Exception e) {
+								UIUtils.showError(e);
+							}
 					});
 				}
 			}
