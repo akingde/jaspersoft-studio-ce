@@ -75,6 +75,13 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 * never change parent
 	 */
 	protected static final String MOVE_CHILD_KEY_ID = "com.jaspersoft.studio.editor.enforcechangeparent";
+	
+	/**
+	 * This is the modifier key (A button) that is used to modify the drag and drop
+	 * operation behavior. When this key is pressed during a drag and drop the children will
+	 * never change parent
+	 */
+	protected static final String KEEP_PARENT_KEY_ID = "com.jaspersoft.studio.editor.enforcekeepparent";
 
 	/**
 	 * This variable contains all the hierarchy of the elements dragged, to avoid that an element is placed inside
@@ -521,17 +528,21 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 * Create the command for the drag and drop operation. If the 
 	 * drag modifier key is pressed then the operation is considered a drag
 	 * where every element change parent so the move commands are generated
-	 * by the standard command. Otherwise if there is a multidrag in progress
-	 * the command are generated in a way to dosen't change the parent of the element
+	 * by the standard command. Otherwise if there is a multidrag  in progress or the modifier 
+	 * to never change the perent is active the command are generated in a way 
+	 * to dosen't change the parent of the element
 	 */
 	protected Command getCommand() {
 		boolean useOldBheavior = BindingsPreferencePersistence.isPressed(MOVE_CHILD_KEY_ID);
 		if (useOldBheavior){
 			return super.getCommand();
-		} else if (keepParentDrag){
-			return getKeepParentCommand();
-		} else {
-			return super.getCommand();
+		} else { 
+			boolean forceKeepParent = BindingsPreferencePersistence.isPressed(KEEP_PARENT_KEY_ID);
+			if (keepParentDrag || forceKeepParent){
+				return getKeepParentCommand();
+			} else {
+				return super.getCommand();
+			}
 		}
 	}
 	
@@ -567,7 +578,8 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		Command command = getCurrentCommand();
 		if (command != null && command.canExecute()){
 			boolean useOldBheavior = BindingsPreferencePersistence.isPressed(MOVE_CHILD_KEY_ID);
-			if (useOldBheavior || !keepParentDrag){
+			boolean forceKeepParent = BindingsPreferencePersistence.isPressed(KEEP_PARENT_KEY_ID);
+			if (!(forceKeepParent || keepParentDrag) || useOldBheavior){
 				super.showTargetFeedback();
 			}
 		}

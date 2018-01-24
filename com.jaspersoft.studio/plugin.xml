@@ -2242,11 +2242,18 @@
              sequence="CTRL ARROW_UP">
        </item>
        <item
-             context="com.jaspersoft.studio.item2"
+             context="Selecting"
              description="%bringBackwardDescription"
              id="com.jaspersoft.studio.editor.action.order.BringBackwardAction"
              name="%bringBackwardName"
              sequence="CTRL ARROW_DOWN">
+       </item>
+       <item
+             context="Dragging"
+             description="%forceParentKeepDescription"
+             id="com.jaspersoft.studio.editor.enforcekeepparent"
+             name="%forceParentKeepName"
+             sequence="SHIFT A">
        </item>
     </extension>
     <extension

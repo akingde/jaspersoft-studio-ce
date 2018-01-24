@@ -177,23 +177,39 @@ public class BindingsPreferencePersistence {
 	}
 	
 	/**
-	 * Check if the keys associated to a specific binding id are pressed or not
+	 * Check if the keys associated to a specific binding id are pressed or not. It will does
+	 * a perfect match to be sure the key of the binding are all pressed
 	 * 
 	 * @param a not null binding id
 	 * @return true if the keys associated with the binding id are pressed, false otherwise
 	 */
 	public static boolean isPressed(String bindingID){
+		return isPressed(bindingID, true);
+	}
+	
+	/**
+	 * Check if the keys associated to a specific binding id are pressed or not
+	 * 
+	 * @param a not null binding id
+	 * @return true if the keys associated with the binding id are pressed, false otherwise
+	 */
+	public static boolean isPressed(String bindingID, boolean perfectMatch){
 		JSSKeySequence keySequence = getBinding(bindingID);
 		if (keySequence == null) return false;
 		//the sequence start as matched if there is at least an element.
 		//so in the case the sequence is empty the cycle will and and false
 		//will be returned
 		boolean sequenceMatched = (keySequence.getSize() > 0);
-		for(JSSKeyStroke keyStroke : keySequence.getKeyStrokes()){
-			int key = Character.toLowerCase(keyStroke.getNaturalKey());
-			if (key != JSSKeyStroke.NO_KEY && !JasperReportsPlugin.isPressed(key)){
-				sequenceMatched = false;
-				break;
+		if (perfectMatch) {
+			sequenceMatched = keySequence.getSize() == JasperReportsPlugin.getPressedKeysNumber();
+		}
+		if (sequenceMatched) {
+			for(JSSKeyStroke keyStroke : keySequence.getKeyStrokes()){
+				int key = Character.toLowerCase(keyStroke.getNaturalKey());
+				if (key != JSSKeyStroke.NO_KEY && !JasperReportsPlugin.isPressed(key)){
+					sequenceMatched = false;
+					break;
+				}
 			}
 		}
 		return sequenceMatched;
