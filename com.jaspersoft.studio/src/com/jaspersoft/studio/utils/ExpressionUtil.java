@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRValidationException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.fill.JRExpressionEvalException;
@@ -368,8 +369,26 @@ public class ExpressionUtil {
 
 	public static void initBuiltInParameters(JasperReportsConfiguration jrConfig, JasperReport jr) throws JRException {
 		Map<String, Object> prms = null;
-		if (jr == null)
-			jr = JasperCompileManager.getInstance(jrConfig).compile(jrConfig.getJasperDesign());
+		if (jr == null) {
+			try {
+				jr = JasperCompileManager.getInstance(jrConfig).compile(jrConfig.getJasperDesign());
+			} catch (JRValidationException ex) {
+				//The original report doesn't compile. Try to create a dummy report with the parameters of the original, used only
+				//for the compilation and initialization of the parameters
+				JasperDesign jd = new JasperDesign();
+				jd.setName(jrConfig.getJasperDesign().getName());
+				for (JRParameter prm : jrConfig.getJasperDesign().getParameters()) {
+					if (!jd.getParametersMap().containsKey(prm.getName())) {
+						JRDesignParameter np = new JRDesignParameter();
+						np.setName(prm.getName());
+						np.setDefaultValueExpression(prm.getDefaultValueExpression());
+						np.setValueClass(prm.getValueClass());
+						jd.addParameter(np);
+					}
+				}
+				jr = JasperCompileManager.getInstance(jrConfig).compile(jd);
+			}
+		}
 
 		prms = jrConfig.getJRParameters();
 		if (prms == null) {
