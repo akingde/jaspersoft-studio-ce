@@ -28,10 +28,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.MenuAdapter;
 import org.eclipse.swt.events.MenuEvent;
-import org.eclipse.swt.events.MenuListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -40,9 +38,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
@@ -139,11 +135,9 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	}
 
 	public void createControl(final Composite parent) {
-		getShell().addListener(SWT.Traverse, new Listener() {
-			public void handleEvent(Event e) {
-				if (e.detail == SWT.TRAVERSE_RETURN)
-					e.doit = false;
-			}
+		getShell().addListener(SWT.Traverse, e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN)
+				e.doit = false;
 		});
 
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -158,14 +152,10 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		txt = new Text(composite, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txt.setMessage(Messages.JRPropertyExpressionPage_0);
-		txt.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (!Misc.isNullOrEmpty(search) && txt.getText().trim().equalsIgnoreCase(search.trim()))
-					return;
-				refreshWidgets();
-			}
+		txt.addModifyListener((e) -> {
+			if (!Misc.isNullOrEmpty(search) && txt.getText().trim().equalsIgnoreCase(search.trim()))
+				return;
+			refreshWidgets();
 		});
 		txt.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -206,22 +196,12 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		cmp.setBackgroundMode(SWT.INHERIT_FORCE);
 
 		sc.setContent(cmp);
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				txt.setFocus();
-				createFormWidgets(cmp, sc);
-			}
+		UIUtils.getDisplay().asyncExec(() -> {
+			txt.setFocus();
+			createFormWidgets(cmp, sc);
 		});
 
-		sc.addListener(SWT.Resize, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
-			}
-		});
+		sc.addListener(SWT.Resize, event -> sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT)));
 		propCmpLayout.topControl = sc;
 	}
 
@@ -230,44 +210,34 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 
 		badd = new ToolItem(buttons, SWT.PUSH);
 		badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/plus.png")); //$NON-NLS-1$
-		badd.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				PropertyExpressionDTO v = value instanceof DatasetPropertyExpressionsDTO
-						? new DatasetPropertyExpressionDTO(false, "property.name", "value", null) //$NON-NLS-1$ //$NON-NLS-2$
-						: new PropertyExpressionDTO(false, "property.name", "value"); //$NON-NLS-1$ //$NON-NLS-2$
-				v.seteContext(value.geteContext());
-				v.setJrElement(value.getJrElement());
-				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(UIUtils.getShell());
-				dialog.setShowExpression(showExpression);
-				dialog.setValue(v);
-				if (dialog.open() == Window.OK) {
-					value.addProperty(v.getName(), v.getValue(), v.isExpression());
-					refreshWidgets();
-				}
+		badd.addListener(SWT.Selection, (event) -> {
+			PropertyExpressionDTO v = value instanceof DatasetPropertyExpressionsDTO
+					? new DatasetPropertyExpressionDTO(false, "property.name", "value", null) //$NON-NLS-1$ //$NON-NLS-2$
+					: new PropertyExpressionDTO(false, "property.name", "value"); //$NON-NLS-1$ //$NON-NLS-2$
+			v.seteContext(value.geteContext());
+			v.setJrElement(value.getJrElement());
+			JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(UIUtils.getShell());
+			dialog.setShowExpression(showExpression);
+			dialog.setValue(v);
+			if (dialog.open() == Window.OK) {
+				value.addProperty(v.getName(), v.getValue(), v.isExpression());
+				refreshWidgets();
 			}
-
 		});
 		badd.setToolTipText(Messages.JRPropertyExpressionPage_6);
 
 		bSystem = new ToolItem(buttons, SWT.CHECK);
 		bSystem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/jrxml_icon.png")); //$NON-NLS-1$
 		IPreferenceStore pstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-		bSystem.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				showExisting = bSystem.getSelection();
-				refreshWidgets();
-				try {
-					pstore.setValue(GlobalPreferencePage.JSS_PROPERTIES_SHOW_SET, showExisting);
-					((ScopedPreferenceStore) pstore).save();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+		bSystem.addListener(SWT.Selection, event -> {
+			showExisting = bSystem.getSelection();
+			refreshWidgets();
+			try {
+				pstore.setValue(GlobalPreferencePage.JSS_PROPERTIES_SHOW_SET, showExisting);
+				((ScopedPreferenceStore) pstore).save();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
 		});
 		bSystem.setToolTipText(Messages.JRPropertyExpressionPage_8);
 		showExisting = pstore.getBoolean(GlobalPreferencePage.JSS_PROPERTIES_SHOW_SET);
@@ -286,39 +256,34 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
 		else
 			bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/ui-scroll-pane-form.png")); //$NON-NLS-1$
-		bTbl.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				if (!tableView) {
-					bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/ui-scroll-pane-form.png")); //$NON-NLS-1$
-					if (tblCmp == null)
-						buildTable(propCmp);
-					propCmpLayout.topControl = tblCmp;
-					propCmp.layout(true);
-					fillTable();
-				} else {
-					bTbl.setImage(JaspersoftStudioPlugin.getInstance()
-							.getImage("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
-					if (sc == null)
-						buildForm(propCmp);
-					propCmpLayout.topControl = sc;
-					propCmp.layout(true);
-					refreshWidgets();
-				}
-				badd.setEnabled(tableView);
-				bSystem.setEnabled(tableView);
-				txt.setEnabled(tableView);
-				tableView = !tableView;
-
-				try {
-					pstore.setValue(GlobalPreferencePage.JSS_PROPERTIES_VIEW_MODE, tableView);
-					((ScopedPreferenceStore) pstore).save();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+		bTbl.addListener(SWT.Selection, event -> {
+			if (!tableView) {
+				bTbl.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/ui-scroll-pane-form.png")); //$NON-NLS-1$
+				if (tblCmp == null)
+					buildTable(propCmp);
+				propCmpLayout.topControl = tblCmp;
+				propCmp.layout(true);
+				fillTable();
+			} else {
+				bTbl.setImage(
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
+				if (sc == null)
+					buildForm(propCmp);
+				propCmpLayout.topControl = sc;
+				propCmp.layout(true);
+				refreshWidgets();
 			}
+			badd.setEnabled(tableView);
+			bSystem.setEnabled(tableView);
+			txt.setEnabled(tableView);
+			tableView = !tableView;
 
+			try {
+				pstore.setValue(GlobalPreferencePage.JSS_PROPERTIES_VIEW_MODE, tableView);
+				((ScopedPreferenceStore) pstore).save();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		});
 		bTbl.setToolTipText(Messages.JRPropertyExpressionPage_12);
 	}
@@ -401,25 +366,16 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			if (custom && !value.hasProperty(pm.getName()))
 				continue;
 			col.setLabelEditable(custom);
-			UIUtils.getDisplay().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					TColumnFactory.addWidget(col, scmp, value, value.geteContext().getJasperReportsConfiguration());
-				}
-			});
+			UIUtils.getDisplay().syncExec(() -> TColumnFactory.addWidget(col, scmp, value,
+					value.geteContext().getJasperReportsConfiguration()));
 		}
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (cmp.getChildren().length == 0) {
-					Label lbl = new Label(cmp, SWT.CENTER);
-					lbl.setText(Messages.JRPropertyExpressionPage_14);
-					GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.FILL_HORIZONTAL);
-					gd.horizontalSpan = 2;
-					lbl.setLayoutData(gd);
-				}
+		UIUtils.getDisplay().syncExec(() -> {
+			if (cmp.getChildren().length == 0) {
+				Label lbl = new Label(cmp, SWT.CENTER);
+				lbl.setText(Messages.JRPropertyExpressionPage_14);
+				GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.FILL_HORIZONTAL);
+				gd.horizontalSpan = 2;
+				lbl.setLayoutData(gd);
 			}
 		});
 	}
@@ -427,50 +383,42 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	private Composite scmp;
 
 	private void buildSectionComposite() {
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				scmp = new Composite(cmp, SWT.NONE);
-				scmp.setLayout(new GridLayout(2, false));
-				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.horizontalSpan = 2;
-				scmp.setLayoutData(gd);
-			}
+		UIUtils.getDisplay().syncExec(() -> {
+			scmp = new Composite(cmp, SWT.NONE);
+			scmp.setLayout(new GridLayout(2, false));
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			scmp.setLayoutData(gd);
 		});
 	}
 
 	private void buildSection(final String cat) {
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (cmp.isDisposed())
-					return;
-				if (scmp != null) {
-					cmp.layout(true);
-					sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
-				}
-				scmp = new Composite(cmp, SWT.NONE);
-				scmp.setLayout(new GridLayout(2, false));
-				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.horizontalSpan = 2;
-				scmp.setLayoutData(gd);
-
-				Label lbl = new Label(scmp, SWT.NONE);
-				String gn = WordUtils.capitalizeFully(cat.replace(".", " ")); //$NON-NLS-1$ //$NON-NLS-2$
-				gn = gn.replaceAll("Jasperreports", "JasperReports"); //$NON-NLS-1$ //$NON-NLS-2$
-				lbl.setText(gn);
-				lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
-				gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.horizontalSpan = 2;
-				lbl.setLayoutData(gd);
-
-				lbl = new Label(scmp, SWT.SEPARATOR | SWT.HORIZONTAL);
-				gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.horizontalSpan = 2;
-				lbl.setLayoutData(gd);
+		UIUtils.getDisplay().syncExec(() -> {
+			if (cmp.isDisposed())
+				return;
+			if (scmp != null) {
+				cmp.layout(true);
+				sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
 			}
+			scmp = new Composite(cmp, SWT.NONE);
+			scmp.setLayout(new GridLayout(2, false));
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			scmp.setLayoutData(gd);
+
+			Label lbl = new Label(scmp, SWT.NONE);
+			String gn = WordUtils.capitalizeFully(cat.replace(".", " ")); //$NON-NLS-1$ //$NON-NLS-2$
+			gn = gn.replaceAll("Jasperreports", "JasperReports"); //$NON-NLS-1$ //$NON-NLS-2$
+			lbl.setText(gn);
+			lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			lbl.setLayoutData(gd);
+
+			lbl = new Label(scmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			lbl.setLayoutData(gd);
 		});
 	}
 
@@ -575,11 +523,10 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				List<ICopyable> copyList = new ArrayList<>();
 				for (Object selected : selection.toList()) {
 					PropertyDTO prop = (PropertyDTO) selected;
-					if (prop.isExpression()) {
+					if (prop.isExpression())
 						copyList.add(new CopyElementExpressionProperty(prop.getName(), prop.getValue()));
-					} else {
+					else
 						copyList.add(new CopyElementProperty(prop.getName(), prop.getValue()));
-					}
 				}
 				// set the container inside the clipboard
 				if (!copyList.isEmpty()) {
@@ -599,18 +546,17 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				PastableProperties pasteContainer = (PastableProperties) Clipboard.getDefault().getContents();
 				List<CopyElementExpressionProperty> copiedProperties = pasteContainer.getCopiedProperties();
 				for (CopyElementExpressionProperty property : copiedProperties) {
-					if (!value.hasProperty(property.getPropertyName(), property.isExpression())) {
+					if (!value.hasProperty(property.getPropertyName(), property.isExpression()))
 						value.addProperty(property.getPropertyName(), property.getValue(), property.isExpression());
-					} else {
+					else
 						value.setProperty(property.getPropertyName(), property.getValue(), property.isExpression());
-					}
 				}
 				tableViewer.setInput(value.getProperties());
 			}
 
 		});
 
-		tableMenu.addMenuListener(new MenuListener() {
+		tableMenu.addMenuListener(new MenuAdapter() {
 
 			@Override
 			public void menuShown(MenuEvent e) {
@@ -622,11 +568,6 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 					pasteEnabled = canPaste(copiedProperties);
 				}
 				pasteItem.setEnabled(pasteEnabled);
-			}
-
-			@Override
-			public void menuHidden(MenuEvent e) {
-				// do nothing
 			}
 		});
 
@@ -672,44 +613,30 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			protected IStatus run(IProgressMonitor monitor) {
 				final boolean ex = showExisting;
 				try {
-					UIUtils.getDisplay().syncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							search = txt.getText();
-							for (Control c : cmp.getChildren()) {
-								if (c == txt || c == buttons)
-									continue;
-								c.dispose();
-							}
+					UIUtils.getDisplay().syncExec(() -> {
+						search = txt.getText();
+						for (Control c : cmp.getChildren()) {
+							if (c == txt || c == buttons)
+								continue;
+							c.dispose();
 						}
 					});
 
 					canceled = false;
 					createProperties(search.trim().toLowerCase());
 					if (!canceled) {
-						UIUtils.getDisplay().syncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								if (cmp.isDisposed())
-									return;
-								sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
-								cmp.layout(true);
-							}
+						UIUtils.getDisplay().syncExec(() -> {
+							if (cmp.isDisposed())
+								return;
+							sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
+							cmp.layout(true);
 						});
 					}
 				} finally {
 					refreshing = false;
-					UIUtils.getDisplay().syncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							if (txt.isDisposed())
-								return;
-							if (!search.equals(txt.getText()) || ex != showExisting)
-								refreshWidgets();
-						}
+					UIUtils.getDisplay().syncExec(() -> {
+						if (!txt.isDisposed() && !search.equals(txt.getText()) || ex != showExisting)
+							refreshWidgets();
 					});
 				}
 				return Status.OK_STATUS;

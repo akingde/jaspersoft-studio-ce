@@ -20,10 +20,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -31,10 +27,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.MenuAdapter;
 import org.eclipse.swt.events.MenuEvent;
-import org.eclipse.swt.events.MenuListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -82,8 +76,8 @@ import net.sf.jasperreports.properties.StandardPropertyMetadata;
 public class JRPropertyPage extends JSSHelpWizardPage {
 
 	private JRPropertiesMap value;
-	private List<PropertyDTO> props = new ArrayList<PropertyDTO>();
-	private Map<String, PropertyMetadata> propsMap = new HashMap<String, PropertyMetadata>();
+	private List<PropertyDTO> props = new ArrayList<>();
+	private Map<String, PropertyMetadata> propsMap = new HashMap<>();
 
 	@Override
 	public void dispose() {
@@ -91,7 +85,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		JRPropertiesMap v = new JRPropertiesMap();
 		for (PropertyDTO p : props)
 			if (p.getName() != null && !p.getName().equals("")) //$NON-NLS-1$
-				v.setProperty(p.getName(), p.getValue().toString());
+				v.setProperty(p.getName(), p.getValue());
 		super.dispose();
 	}
 
@@ -123,11 +117,9 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 	}
 
 	public void createControl(Composite parent) {
-		getShell().addListener(SWT.Traverse, new Listener() {
-			public void handleEvent(Event e) {
-				if (e.detail == SWT.TRAVERSE_RETURN)
-					e.doit = false;
-			}
+		getShell().addListener(SWT.Traverse, e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN)
+				e.doit = false;
 		});
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(3, false);
@@ -141,16 +133,13 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		txt = new Text(composite, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txt.setMessage("Search property");
-		txt.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (!Misc.isNullOrEmpty(search) && txt.getText().trim().equalsIgnoreCase(search.trim()))
-					return;
-				refreshWidgets();
-			}
+		txt.addModifyListener(e -> {
+			if (!Misc.isNullOrEmpty(search) && txt.getText().trim().equalsIgnoreCase(search.trim()))
+				return;
+			refreshWidgets();
 		});
 		txt.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				if (!Misc.isNullOrEmpty(search) && txt.getText().trim().equalsIgnoreCase(search.trim()))
 					return;
@@ -179,22 +168,12 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		cmp.setBackgroundMode(SWT.INHERIT_FORCE);
 
 		sc.setContent(cmp);
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				txt.setFocus();
-				createFormWidgets(cmp, sc);
-			}
+		UIUtils.getDisplay().asyncExec(() -> {
+			txt.setFocus();
+			createFormWidgets(cmp, sc);
 		});
 
-		sc.addListener(SWT.Resize, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
-			}
-		});
+		sc.addListener(SWT.Resize, event -> sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT)));
 		propCmpLayout.topControl = sc;
 	}
 
@@ -210,7 +189,11 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 	protected void createProperties(String search) {
 		String cat = null;
 		scmp = cmp;
-
+		if (props.isEmpty()) {
+			String[] names = value.getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				props.add(new PropertyDTO(names[i], value.getProperty(names[i])));
+		}
 		for (PropertyDTO pdto : props)
 			if (!propsMap.containsKey(pdto.getName())) {
 				StandardPropertyMetadata v = new StandardPropertyMetadata();
@@ -220,7 +203,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 				added = true;
 			}
 		if (added) {
-			sortedEDS = new ArrayList<PropertyMetadata>(propsMap.values());
+			sortedEDS = new ArrayList<>(propsMap.values());
 			Collections.sort(sortedEDS, new Comparator<PropertyMetadata>() {
 				private NullComparator nc = new NullComparator(true);
 
@@ -247,8 +230,8 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 			if (showExisting && !containsProperty(pm.getName()))
 				continue;
 			String c = pm.getCategory();
-			if (c != null && c.indexOf(":") >= 0)
-				c = c.substring(c.indexOf(":") + 1);
+			if (c != null && c.indexOf(':') >= 0)
+				c = c.substring(c.indexOf(':') + 1);
 			if (c == null)
 				c = "Miscellaneous";
 			if (!Misc.isNullOrEmpty(search) && !(pm.getName().toLowerCase().trim().contains(search)
@@ -268,25 +251,15 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 			if (custom && !containsProperty(pm.getName()))
 				continue;
 			col.setLabelEditable(showExisting && custom);
-			UIUtils.getDisplay().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					TColumnFactory.addWidget(col, scmp, value, jConfig);
-				}
-			});
+			UIUtils.getDisplay().syncExec(() -> TColumnFactory.addWidget(col, scmp, value, jConfig));
 		}
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (cmp.getChildren().length == 0) {
-					Label lbl = new Label(cmp, SWT.CENTER);
-					lbl.setText("Search result is empty");
-					GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.FILL_HORIZONTAL);
-					gd.horizontalSpan = 2;
-					lbl.setLayoutData(gd);
-				}
+		UIUtils.getDisplay().syncExec(() -> {
+			if (cmp.getChildren().length == 0) {
+				Label lbl = new Label(cmp, SWT.CENTER);
+				lbl.setText("Search result is empty");
+				GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.FILL_HORIZONTAL);
+				gd.horizontalSpan = 2;
+				lbl.setLayoutData(gd);
 			}
 		});
 	}
@@ -346,35 +319,25 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 
 		badd = new ToolItem(buttons, SWT.PUSH);
 		badd.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/plus.png"));
-		badd.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				PropertyDTO p = new PropertyDTO(getPropertyName(), "NEW_VALUE");
-				p.seteContext(eContext);
-				p.setJrElement(jrElement);
-				JRPropertyDialog dialog = new JRPropertyDialog(UIUtils.getShell());
-				dialog.setValue(p);
-				if (dialog.open() == Window.OK) {
-					value.setProperty(p.getName(), p.getValue());
-					props.add(p);
-					refreshWidgets();
-				}
+		badd.addListener(SWT.Selection, event -> {
+			PropertyDTO p = new PropertyDTO(getPropertyName(), "NEW_VALUE");
+			p.seteContext(eContext);
+			p.setJrElement(jrElement);
+			JRPropertyDialog dialog = new JRPropertyDialog(UIUtils.getShell());
+			dialog.setValue(p);
+			if (dialog.open() == Window.OK) {
+				value.setProperty(p.getName(), p.getValue());
+				props.add(p);
+				refreshWidgets();
 			}
-
 		});
 		badd.setToolTipText("Add property.");
 
 		bSystem = new ToolItem(buttons, SWT.CHECK);
 		bSystem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/jrxml_icon.png"));
-		bSystem.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				showExisting = bSystem.getSelection();
-				refreshWidgets();
-			}
-
+		bSystem.addListener(SWT.Selection, event -> {
+			showExisting = bSystem.getSelection();
+			refreshWidgets();
 		});
 		bSystem.setToolTipText("Show only existing properties in the report template.");
 		bSystem.setSelection(false);
@@ -502,27 +465,19 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		tableViewer.setContentProvider(new ListContentProvider());
 		tableViewer.setLabelProvider(new TPropertyLabelProvider());
 
-		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				int selectedIndex = table.getSelectionIndex();
-				if (selectedIndex != -1) {
-					PropertyDTO selectedElement = props.get(selectedIndex);
-					editElement(selectedElement);
-				}
+		tableViewer.addDoubleClickListener(event -> {
+			int selectedIndex = table.getSelectionIndex();
+			if (selectedIndex != -1) {
+				PropertyDTO selectedElement = props.get(selectedIndex);
+				editElement(selectedElement);
 			}
 		});
 
-		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				int selectedIndex = table.getSelectionIndex();
-				boolean buttonEnabled = selectedIndex != -1;
-				editButton.setEnabled(buttonEnabled);
-				deleteButton.setEnabled(buttonEnabled);
-			}
+		tableViewer.addSelectionChangedListener(event -> {
+			int selectedIndex = table.getSelectionIndex();
+			boolean buttonEnabled = selectedIndex != -1;
+			editButton.setEnabled(buttonEnabled);
+			deleteButton.setEnabled(buttonEnabled);
 		});
 
 		tableViewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
@@ -554,14 +509,13 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
-				List<ICopyable> copyList = new ArrayList<ICopyable>();
+				List<ICopyable> copyList = new ArrayList<>();
 				for (Object selected : selection.toList()) {
 					PropertyDTO prop = (PropertyDTO) selected;
-					if (prop.isExpression()) {
+					if (prop.isExpression())
 						copyList.add(new CopyElementExpressionProperty(prop.getName(), prop.getValue()));
-					} else {
+					else
 						copyList.add(new CopyElementProperty(prop.getName(), prop.getValue()));
-					}
 				}
 				if (!copyList.isEmpty()) {
 					PastableProperties container = new PastableProperties(copyList);
@@ -579,17 +533,15 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				PastableProperties pasteContainer = (PastableProperties) Clipboard.getDefault().getContents();
 				List<CopyElementExpressionProperty> copiedProperties = pasteContainer.getCopiedProperties();
-				for (CopyElementExpressionProperty property : copiedProperties) {
-					if (!property.isExpression() && !containsProperty(property.getPropertyName())) {
+				for (CopyElementExpressionProperty property : copiedProperties)
+					if (!property.isExpression() && !containsProperty(property.getPropertyName()))
 						props.add(new PropertyDTO(property.getPropertyName(), property.getValue()));
-					}
-				}
 				tableViewer.refresh();
 			}
 
 		});
 
-		tableMenu.addMenuListener(new MenuListener() {
+		tableMenu.addMenuListener(new MenuAdapter() {
 
 			@Override
 			public void menuShown(MenuEvent e) {
@@ -604,9 +556,6 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 				pasteItem.setEnabled(pasteEnabled);
 			}
 
-			@Override
-			public void menuHidden(MenuEvent e) {
-			}
 		});
 
 		table.setMenu(tableMenu);
@@ -629,13 +578,13 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 	}
 
 	/**
-	 * Check if at least one of the copied properties can be pasted on the
-	 * current element
+	 * Check if at least one of the copied properties can be pasted on the current
+	 * element
 	 * 
 	 * @param copiedProperties
 	 *            the copied properties
-	 * @return true if at least one of the copied properties can be pasted,
-	 *         false otherwise
+	 * @return true if at least one of the copied properties can be pasted, false
+	 *         otherwise
 	 */
 	private boolean canPaste(List<CopyElementExpressionProperty> copiedProperties) {
 		for (CopyElementExpressionProperty property : copiedProperties) {
@@ -662,40 +611,28 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 			protected IStatus run(IProgressMonitor monitor) {
 				final boolean ex = showExisting;
 				try {
-					UIUtils.getDisplay().syncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							search = txt.getText();
-							for (Control c : cmp.getChildren()) {
-								if (c == txt || c == buttons)
-									continue;
-								c.dispose();
-							}
+					UIUtils.getDisplay().syncExec(() -> {
+						search = txt.getText();
+						for (Control c : cmp.getChildren()) {
+							if (c == txt || c == buttons)
+								continue;
+							c.dispose();
 						}
 					});
 
 					canceled = false;
 					createProperties(search.trim().toLowerCase());
 					if (!canceled) {
-						UIUtils.getDisplay().syncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
-								cmp.layout(true);
-							}
+						UIUtils.getDisplay().syncExec(() -> {
+							sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
+							cmp.layout(true);
 						});
 					}
 				} finally {
 					refreshing = false;
-					UIUtils.getDisplay().syncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							if (!search.equals(txt.getText()) || ex != showExisting)
-								refreshWidgets();
-						}
+					UIUtils.getDisplay().syncExec(() -> {
+						if (!search.equals(txt.getText()) || ex != showExisting)
+							refreshWidgets();
 					});
 				}
 				return Status.OK_STATUS;
@@ -710,48 +647,40 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 	private ToolItem bSystem;
 
 	private void buildSectionComposite() {
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				scmp = new Composite(cmp, SWT.NONE);
-				scmp.setLayout(new GridLayout(2, false));
-				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.horizontalSpan = 2;
-				scmp.setLayoutData(gd);
-			}
+		UIUtils.getDisplay().syncExec(() -> {
+			scmp = new Composite(cmp, SWT.NONE);
+			scmp.setLayout(new GridLayout(2, false));
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			scmp.setLayoutData(gd);
 		});
 	}
 
 	private void buildSection(final String cat) {
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (scmp != null) {
-					cmp.layout(true);
-					sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
-				}
-				scmp = new Composite(cmp, SWT.NONE);
-				scmp.setLayout(new GridLayout(2, false));
-				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.horizontalSpan = 2;
-				scmp.setLayoutData(gd);
-
-				Label lbl = new Label(scmp, SWT.NONE);
-				String gn = WordUtils.capitalizeFully(cat.replace(".", " "));
-				gn = gn.replaceAll("Jasperreports", "JasperReports");
-				lbl.setText(gn);
-				lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
-				gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.horizontalSpan = 2;
-				lbl.setLayoutData(gd);
-
-				lbl = new Label(scmp, SWT.SEPARATOR | SWT.HORIZONTAL);
-				gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.horizontalSpan = 2;
-				lbl.setLayoutData(gd);
+		UIUtils.getDisplay().syncExec(() -> {
+			if (scmp != null) {
+				cmp.layout(true);
+				sc.setMinSize(cmp.computeSize(sc.getClientArea().width, SWT.DEFAULT));
 			}
+			scmp = new Composite(cmp, SWT.NONE);
+			scmp.setLayout(new GridLayout(2, false));
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			scmp.setLayoutData(gd);
+
+			Label lbl = new Label(scmp, SWT.NONE);
+			String gn = WordUtils.capitalizeFully(cat.replace(".", " "));
+			gn = gn.replaceAll("Jasperreports", "JasperReports");
+			lbl.setText(gn);
+			lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			lbl.setLayoutData(gd);
+
+			lbl = new Label(scmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			lbl.setLayoutData(gd);
 		});
 	}
 }
