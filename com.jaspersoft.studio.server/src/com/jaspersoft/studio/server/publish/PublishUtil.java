@@ -51,33 +51,30 @@ public class PublishUtil {
 	public static ResourceDescriptor getMainReport(IProgressMonitor monitor, MReportUnit mrunit, JasperDesign jd) {
 		String jrxmln = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
 		String unit = mrunit.getValue().getUriString();
-		if (jrxmln != null) {
-			if (unit != null && jrxmln.startsWith(unit) && jrxmln.length() > unit.length()
-					&& jrxmln.substring((unit + WSClientHelper._FILES).length()).indexOf('/') < 0) {
-				MServerProfile sp = (MServerProfile) mrunit.getRoot();
-				if (sp != null) {
-					ResourceDescriptor rd = new ResourceDescriptor();
-					rd.setName(jrxmln.substring((unit + WSClientHelper._FILES).length()));
-					rd.setLabel(IDStringValidator.safeChar(rd.getName()));
-					String d = jd.getProperty(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
-					if (!Misc.isNullOrEmpty(d))
-						rd.setDescription(d);
-					rd.setUriString(jrxmln);
-					rd.setParentFolder(unit + "_files");
-					rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
-					rd.setIsNew(true);
-					rd.setWsType(ResourceDescriptor.TYPE_JRXML);
-					rd.setIsReference(false);
+		if (jrxmln != null && unit != null && jrxmln.startsWith(unit) && jrxmln.length() > unit.length()
+				&& jrxmln.substring((unit + WSClientHelper._FILES).length()).indexOf('/') < 0) {
+			MServerProfile sp = (MServerProfile) mrunit.getRoot();
+			if (sp != null) {
+				ResourceDescriptor rd = new ResourceDescriptor();
+				rd.setName(jrxmln.substring((unit + WSClientHelper._FILES).length()));
+				rd.setLabel(IDStringValidator.safeChar(rd.getName()));
+				String d = jd.getProperty(PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
+				if (!Misc.isNullOrEmpty(d))
+					rd.setDescription(d);
+				rd.setUriString(jrxmln);
+				rd.setParentFolder(unit + "_files");
+				rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
+				rd.setIsNew(true);
+				rd.setWsType(ResourceDescriptor.TYPE_JRXML);
+				rd.setIsReference(false);
+				rd.setHasData(true);
+				try {
+					rd = sp.getWsClient(monitor).get(monitor, rd, null);
 					rd.setHasData(true);
-					try {
-						rd = sp.getWsClient(monitor).get(monitor, rd, null);
-						rd.setHasData(true);
-						if (rd != null)
-							return rd;
-					} catch (Exception e) {
-						rd.setMainReport(true);
-						return rd;
-					}
+					return rd;
+				} catch (Exception e) {
+					rd.setMainReport(true);
+					return rd;
 				}
 			}
 		}
@@ -225,7 +222,6 @@ public class PublishUtil {
 					String ref = ifile
 							.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"));
 					if (ref != null) {
-						exists = true;
 						popt.setPublishMethod(ResourcePublishMethod.valueOf(ref));
 						String path = ifile
 								.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"));
@@ -249,15 +245,15 @@ public class PublishUtil {
 	}
 
 	public static List<String[]> loadPath(IProgressMonitor monitor, IFile ifile) throws CoreException {
-		List<String[]> paths = new ArrayList<String[]>();
+		List<String[]> paths = new ArrayList<>();
 		Map<QualifiedName, String> pmap = ifile.getPersistentProperties();
 		int substr = "JRSPATH.".length();
-		for (QualifiedName key : pmap.keySet()) {
-			String lname = key.getLocalName();
-			if (key.getQualifier().equals(Activator.PLUGIN_ID) && lname.startsWith("JRSPATH."))
-				paths.add(new String[] { lname.substring(substr), pmap.get(key) });
-			if (key.getQualifier().equals(Activator.PLUGIN_ID) && lname.startsWith("JRSUSER."))
-				paths.add(new String[] { lname, pmap.get(key) });
+		for (Map.Entry<QualifiedName, String> entry : pmap.entrySet()) {
+			String lname = entry.getKey().getLocalName();
+			if (entry.getKey().getQualifier().equals(Activator.PLUGIN_ID) && lname.startsWith("JRSPATH."))
+				paths.add(new String[] { lname.substring(substr), entry.getValue() });
+			if (entry.getKey().getQualifier().equals(Activator.PLUGIN_ID) && lname.startsWith("JRSUSER."))
+				paths.add(new String[] { lname, entry.getValue() });
 		}
 		return paths;
 	}
@@ -273,11 +269,8 @@ public class PublishUtil {
 			String uri = mres.getValue().getUriString();
 			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, "JRSPATH." + jrs), uri);
 			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, "JRSUSER." + user), user);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
+		} catch (MalformedURLException | URISyntaxException e) {
 			e.printStackTrace();
 		}
-
 	}
 }

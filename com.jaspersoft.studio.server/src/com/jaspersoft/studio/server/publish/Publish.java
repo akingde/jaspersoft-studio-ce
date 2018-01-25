@@ -53,7 +53,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class Publish {
 	private JasperReportsConfiguration jrConfig;
-	private List<String> resources = new ArrayList<String>();
+	private List<String> resources = new ArrayList<>();
 
 	public Publish(JasperReportsConfiguration jrConfig) {
 		this.jrConfig = jrConfig;
@@ -65,16 +65,15 @@ public class Publish {
 			publishResources(monitor, jd, node);
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;
-			// UIUtils.showInformation(Messages.JrxmlPublishAction_successpublishing);
 
 			if (isNewRU)
 				JaspersoftStudioPlugin.getInstance().getUsageManager().audit(UsageStatisticsIDs.SERVER_UPLOAD,
 						UsageStatisticsIDs.CATEGORY_SERVER);
 
-			String str = Messages.Publish_0;
+			StringBuilder str = new StringBuilder(Messages.Publish_0);
 			for (String mres : resources)
-				str += mres + "\n"; //$NON-NLS-1$
-			UIUtils.showInformation(str);
+				str.append(mres).append("\n"); //$NON-NLS-1$
+			UIUtils.showInformation(str.toString());
 
 			// refresh
 			jrConfig.get(PublishUtil.KEY_PUBLISH2JSS_DATA);
@@ -118,14 +117,13 @@ public class Publish {
 		if (rdjrxml.getParentFolder() != null && !rdjrxml.getParentFolder().endsWith("_files")) //$NON-NLS-1$
 			rdjrxml.setIsReference(true);
 
-		List<AMResource> resources = ((JasperReportsConfiguration) jrConfig).get(PublishUtil.KEY_PUBLISH2JSS_DATA,
-				new ArrayList<AMResource>());
-		updSelectedResources(monitor, resources, version);
+		List<AMResource> rs = jrConfig.get(PublishUtil.KEY_PUBLISH2JSS_DATA, new ArrayList<AMResource>());
+		updSelectedResources(monitor, rs, version);
 		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(jrConfig, jd, version));
 		jrxml.setFile(file);
 
 		IFile ifile = (IFile) jrConfig.get(FileUtils.KEY_FILE);
-		PublishUtil.savePreferences(ifile, resources);
+		PublishUtil.savePreferences(ifile, rs);
 
 		if (mrunit != null && !jrxml.getValue().getIsReference()) {
 			ResourceDescriptor oldRU = mrunit.getValue();
@@ -176,28 +174,28 @@ public class Publish {
 			}
 			rdjrxml.setMainReport(isMain);
 			PublishUtil.setChild(r, rdjrxml);
-			for (AMResource res : resources) {
+			for (AMResource res : rs) {
 				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.OVERWRITE)) {
 					ResourceDescriptor rd = res.getValue();
-					if (rd.getData() != null && !rd.getParentFolder().endsWith("_files")) { //$NON-NLS-1$
+					if (rd.getData() != null && !rd.getParentFolder().endsWith("_files")) //$NON-NLS-1$
 						mrunit.getWsClient().addOrModifyResource(monitor, rd, null);
-					} else
+					else
 						PublishUtil.setChild(r, rd);
 				}
 			}
-			if (!mrunit.getWsClient().isSupported(Feature.SEARCHREPOSITORY) && !isMain) {
+			if (!mrunit.getWsClient().isSupported(Feature.SEARCHREPOSITORY) && !isMain)
 				mrunit.getWsClient().modifyReportUnitResource(monitor, r, rdjrxml, file);
-			} else
+			else
 				mrunit.getWsClient().addOrModifyResource(monitor, r, file);
 			this.resources.add(r.getUriString());
-			for (AMResource res : resources)
+			for (AMResource res : rs)
 				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.OVERWRITE)) {
 					PublishUtil.savePreferencesNoOverwrite(ifile, res);
 					this.resources.add(res.getValue().getUriString());
 				}
 		} else {
 			jrxml.setValue(saveResource(monitor, jrxml));
-			for (AMResource res : resources) {
+			for (AMResource res : rs) {
 				PublishOptions popt = res.getPublishOptions();
 				if (popt.getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.OVERWRITE)) {
 					saveResource(monitor, res);
@@ -212,7 +210,7 @@ public class Publish {
 
 	protected void updSelectedResources(IProgressMonitor monitor, List<AMResource> files, String version)
 			throws IOException, Exception {
-		List<MJrxml> toSave = new ArrayList<MJrxml>();
+		List<MJrxml> toSave = new ArrayList<>();
 		for (AMResource res : files) {
 			PublishOptions popt = res.getPublishOptions();
 			if (!popt.getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.IGNORE)) {
@@ -254,7 +252,7 @@ public class Publish {
 						ref.setReferenceUri(popt.getReferencedResource().getUriString());
 						ref.setParentFolder(rd.getParentFolder());
 						ref.setUriString(rd.getUriString());
-						ref.setWsType(rd.getWsType());// ResourceDescriptor.TYPE_REFERENCE);
+						ref.setWsType(rd.getWsType());
 
 						res.setValue(ref);
 					} else if (popt.getPublishMethod() == ResourcePublishMethod.RESOURCE) {
@@ -276,7 +274,7 @@ public class Publish {
 						ref.setReferenceUri(r.getUriString());
 						ref.setParentFolder(rd.getParentFolder());
 						ref.setUriString(r.getUriString());
-						ref.setWsType(rd.getWsType());// ResourceDescriptor.TYPE_REFERENCE);
+						ref.setWsType(rd.getWsType());
 
 						res.setValue(ref);
 					} else if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION) {
@@ -300,7 +298,7 @@ public class Publish {
 	}
 
 	private void createICProperties(JasperDesign jd, List<?> files) {
-		for (Object mres : files) {
+		for (Object mres : files)
 			if (mres instanceof MInputControl) {
 				MInputControl mic = (MInputControl) mres;
 				if (!mic.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.IGNORE)) {
@@ -310,7 +308,6 @@ public class Publish {
 								mic.getValue().getUriString());
 				}
 			}
-		}
 	}
 
 	private ResourceDescriptor saveResource(IProgressMonitor monitor, AMResource mres) throws Exception {
@@ -322,45 +319,39 @@ public class Publish {
 	}
 
 	private void postProcessLocal(final MJrxml node) {
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				JasperDesign rpt = jrConfig.getJasperDesign();
-				INode n = node.getRoot();
-				if (n != null && n instanceof MServerProfile) {
-					MServerProfile server = (MServerProfile) n;
-					ServerProfile v = server.getValue();
-					try {
-						rpt.setProperty(AExporter.PROP_SERVERURL, v.getUrl());
-					} catch (MalformedURLException e) {
-						UIUtils.showError(e);
-					} catch (URISyntaxException e) {
-						UIUtils.showError(e);
-					}
-					rpt.setProperty(AExporter.PROP_USER, AExporter.encodeUsr(v));
-				}
-				ResourceDescriptor rd = node.getValue();
-				if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
-					for (Object r : rd.getChildren())
-						if (((ResourceDescriptor) r).getWsType().equals(ResourceDescriptor.TYPE_JRXML)) {
-							rd = (ResourceDescriptor) r;
-							break;
-						}
-					createICProperties(rpt, node.getChildren());
-				}
-				rpt.setProperty(AExporter.PROP_REPORTRESOURCE, rd.getUriString());
-				if (node.getParent() instanceof MReportUnit) {
-					MReportUnit mrunit = (MReportUnit) node.getParent();
-					rpt.setProperty(AExporter.PROP_REPORTUNIT, mrunit.getValue().getUriString());
-				}
+		UIUtils.getDisplay().syncExec(() -> {
+			JasperDesign rpt = jrConfig.getJasperDesign();
+			INode n = node.getRoot();
+			if (n != null && n instanceof MServerProfile) {
+				MServerProfile server = (MServerProfile) n;
+				ServerProfile v = server.getValue();
 				try {
-					IFile iFile = (IFile) jrConfig.get(FileUtils.KEY_FILE);
-					AExporter.setServerLocation(node, iFile);
-					PublishUtil.savePath(iFile, node);
-				} catch (CoreException e) {
-					e.printStackTrace();
+					rpt.setProperty(AExporter.PROP_SERVERURL, v.getUrl());
+				} catch (MalformedURLException | URISyntaxException e) {
+					UIUtils.showError(e);
 				}
+				rpt.setProperty(AExporter.PROP_USER, AExporter.encodeUsr(v));
+			}
+			ResourceDescriptor rd = node.getValue();
+			if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
+				for (Object r : rd.getChildren())
+					if (((ResourceDescriptor) r).getWsType().equals(ResourceDescriptor.TYPE_JRXML)) {
+						rd = (ResourceDescriptor) r;
+						break;
+					}
+				createICProperties(rpt, node.getChildren());
+			}
+			rpt.setProperty(AExporter.PROP_REPORTRESOURCE, rd.getUriString());
+			if (node.getParent() instanceof MReportUnit) {
+				MReportUnit mrunit = (MReportUnit) node.getParent();
+				rpt.setProperty(AExporter.PROP_REPORTUNIT, mrunit.getValue().getUriString());
+			}
+			try {
+				IFile iFile = (IFile) jrConfig.get(FileUtils.KEY_FILE);
+				AExporter.setServerLocation(node, iFile);
+				PublishUtil.savePath(iFile, node);
+			} catch (CoreException e) {
+				e.printStackTrace();
 			}
 		});
 	}

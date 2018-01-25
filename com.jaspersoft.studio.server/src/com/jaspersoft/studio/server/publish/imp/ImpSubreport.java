@@ -5,8 +5,8 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
 
@@ -18,7 +18,6 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
-import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -41,19 +40,14 @@ public class ImpSubreport extends AImpObject {
 			if (f != null) {
 				try {
 					Object obj = JRLoader.loadObject(jrConfig, f);
-					if (obj != null && obj instanceof JasperReport) {
-						JasperReport jrReport = (JasperReport) obj;
+					if (obj instanceof JasperReport) {
 						f = FileUtils.getTmpFile(str);
-						FileOutputStream fos = null;
-						try {
-							fos = new FileOutputStream(f);
-							JRXmlWriter.writeReport(jrReport, fos, "UTF-8");
+						try (FileOutputStream fos = new FileOutputStream(f);) {
+							JRXmlWriter.writeReport((JasperReport) obj, fos, "UTF-8");
 							return f;
-						} catch (FileNotFoundException e) {
-							FileUtils.closeStream(fos);
+						} catch (IOException e) {
 							e.printStackTrace();
 						}
-
 					}
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -65,7 +59,7 @@ public class ImpSubreport extends AImpObject {
 
 	@Override
 	protected String doPath(String path) {
-		return StringUtils.replaceAllIns(path, FileExtension.PointJASPER + "$", FileExtension.PointJRXML);
+		return FileExtension.getJRXMLFileName(path);
 	}
 
 	protected ResourceDescriptor createResource(MReportUnit mrunit) {
@@ -75,8 +69,7 @@ public class ImpSubreport extends AImpObject {
 	protected JRDesignExpression getExpression(JRDesignElement img) {
 		JRDesignExpression exp = (JRDesignExpression) ((JRDesignSubreport) img).getExpression();
 		if (exp != null && !Misc.isNullOrEmpty(exp.getText())) {
-			exp.setText(StringUtils.replaceAllIns(exp.getText(), FileExtension.PointJASPER + "$",
-					FileExtension.PointJRXML));
+			exp.setText(FileExtension.getJRXMLFileName(exp.getText()));
 			return exp;
 		}
 		return (JRDesignExpression) ((JRDesignSubreport) img).getExpression();

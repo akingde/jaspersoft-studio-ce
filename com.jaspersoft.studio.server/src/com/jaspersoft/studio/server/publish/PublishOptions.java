@@ -49,7 +49,7 @@ public class PublishOptions {
 
 	public void setjExpression(JRDesignExpression jExpression) {
 		if (this.jExpression == null)
-			this.jExpression = new ArrayList<JRDesignExpression>();
+			this.jExpression = new ArrayList<>();
 		this.jExpression.add(jExpression);
 	}
 
@@ -73,8 +73,7 @@ public class PublishOptions {
 	}
 
 	/**
-	 * @return null if local, true if a reference, false if located in another
-	 *         place
+	 * @return null if local, true if a reference, false if located in another place
 	 */
 	public ResourcePublishMethod getPublishMethod() {
 		return publishMethod;

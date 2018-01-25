@@ -48,6 +48,7 @@ import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
+import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRChart;
@@ -167,7 +168,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			fres.setJd(jrd);
 			if (jrd != null) {
 				publishJrxml(fres, monitor, jrd, fileset, fs);
-				File f = FileUtils.createTempFile("jrsres", ".jrxml");
+				File f = FileUtils.createTempFile("jrsres", FileExtension.PointJRXML);
 				FileUtils.writeFile(f, JRXmlWriterHelper.writeReport(jrConfig, jrd, version));
 				fres.setFile(f);
 			}
@@ -177,7 +178,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			JasperDesign jrd = readJR(fs);
 			fres.setJd(jrd);
 			if (jrd != null) {
-				File f = FileUtils.createTempFile("jrsres", ".jrxml");
+				File f = FileUtils.createTempFile("jrsres", FileExtension.PointJRXML);
 				FileUtils.writeFile(f, JRXmlWriterHelper.writeReport(jrConfig, jrd, version));
 				fres.setFile(f);
 			}
@@ -185,37 +186,25 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	}
 
 	protected JasperDesign readJR(File f) {
-		JasperDesign jd = null;
-		InputStream in = null;
-		InputSource is = null;
-		try {
-			in = JRXMLUtils.getJRXMLInputStream(jrConfig, f.toURI().toURL().openStream(),
-					FilenameUtils.getExtension(f.getName()), "UTF-8", version);
-			is = new InputSource(new InputStreamReader(in, "UTF-8"));
-			jd = new JRXmlLoader(jrConfig, JRXmlDigesterFactory.createDigester(jrConfig)).loadXML(is);
+		try (InputStream in = JRXMLUtils.getJRXMLInputStream(jrConfig, f.toURI().toURL().openStream(),
+				FilenameUtils.getExtension(f.getName()), "UTF-8", version);) {
+			InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
+			return new JRXmlLoader(jrConfig, JRXmlDigesterFactory.createDigester(jrConfig)).loadXML(is);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			FileUtils.closeStream(in);
 		}
-		return jd;
+		return null;
 	}
 
 	protected JasperDesign readJR(IFile f) {
-		JasperDesign jd = null;
-		InputStream in = null;
-		InputSource is = null;
-		try {
-			in = JRXMLUtils.getJRXMLInputStream(jrConfig, f.getContents(), f.getFileExtension(), f.getCharset(true),
-					version);
-			is = new InputSource(new InputStreamReader(in, "UTF-8"));
-			jd = new JRXmlLoader(jrConfig, JRXmlDigesterFactory.createDigester(jrConfig)).loadXML(is);
+		try (InputStream in = JRXMLUtils.getJRXMLInputStream(jrConfig, f.getContents(), f.getFileExtension(),
+				f.getCharset(true), version);) {
+			InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
+			return new JRXmlLoader(jrConfig, JRXmlDigesterFactory.createDigester(jrConfig)).loadXML(is);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			FileUtils.closeStream(in);
 		}
-		return jd;
+		return null;
 	}
 
 	@Override
@@ -237,9 +226,8 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			Set<String> fileset, IFile file, JRChart chart, String version) throws Exception {
 		String customizerClass = chart.getCustomizerClass();
 		impChartCustomizer.publish(jasper, customizerClass, mrunit, monitor, fileset, file, version);
-		for (String subCustomizerClass : impChartCustomizer.getSubCustmizersClass(chart)) {
+		for (String subCustomizerClass : impChartCustomizer.getSubCustmizersClass(chart))
 			impChartCustomizer.publish(jasper, subCustomizerClass, mrunit, monitor, fileset, file, version);
-		}
 	}
 
 	protected void publishTemplates(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper,
@@ -250,7 +238,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 
 	protected void publishDataAdapters(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper,
 			Set<String> fileset, IFile file, String version) throws Exception {
-		List<JRDataset> ds = new ArrayList<JRDataset>();
+		List<JRDataset> ds = new ArrayList<>();
 		ds.add(jasper.getMainDataset());
 		List<JRDataset> datasetsList = jasper.getDatasetsList();
 		if (datasetsList != null && !datasetsList.isEmpty())
@@ -265,7 +253,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 					ADataAdapterStorage storage = DataAdapterManager.getJRDefaultStorage(jrConfig);
 					for (DataAdapterDescriptor dad : storage.getDataAdapterDescriptors()) {
 						if (dad.getDataAdapter().getName().equals(name)) {
-							dapath = storage.getUrl(dad).toString();
+							dapath = storage.getUrl(dad);
 							break;
 						}
 					}
@@ -280,7 +268,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 
 	protected void publishBundles(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper,
 			Set<String> fileset, IFile file, String version) throws Exception {
-		List<JRDataset> ds = new ArrayList<JRDataset>();
+		List<JRDataset> ds = new ArrayList<>();
 		ds.add(jasper.getMainDataset());
 		List<JRDataset> datasetsList = jasper.getDatasetsList();
 		if (datasetsList != null && !datasetsList.isEmpty())
@@ -292,7 +280,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			impBundle.publish(jrConfig, jasper, dapath, mrunit, monitor, fileset, file);
 
 			JSSFileRepositoryService repService = jrConfig.getFileRepositoryService();
-			List<String> roots = new ArrayList<String>();
+			List<String> roots = new ArrayList<>();
 			List<RepositoryService> rservices = repService.getRepositoryServices();
 			for (RepositoryService rs : rservices) {
 				if (rs instanceof FileRepositoryService) {
@@ -300,8 +288,8 @@ public class JrxmlPublishContributor implements IPublishContributor {
 					roots.add(frs.getRoot());
 				}
 			}
-			List<File> files = new ArrayList<File>();
-			Set<String> fileNames = new HashSet<String>();
+			List<File> files = new ArrayList<>();
+			Set<String> fileNames = new HashSet<>();
 			for (String r : roots)
 				look4Files(r, dapath, fileNames, files);
 			for (File f : files) {

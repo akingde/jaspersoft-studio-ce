@@ -33,23 +33,18 @@ public class ImpStyleTemplate extends AImpObject {
 
 	private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-	public File publish(JasperDesign jd, JRReportTemplate img,
-			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
-			IFile file) throws Exception {
-		AFileResource fres = findFile(mrunit, monitor, jd, fileset,
-				getExpression(img), file);
+	public File publish(JasperDesign jd, JRReportTemplate img, MReportUnit mrunit, IProgressMonitor monitor,
+			Set<String> fileset, IFile file) throws Exception {
+		AFileResource fres = findFile(mrunit, monitor, jd, fileset, getExpression(img), file);
 		if (fres != null) {
-			JRSimpleTemplate jrt = (JRSimpleTemplate) JRXmlTemplateLoader
-					.load(fres.getFile());
+			JRSimpleTemplate jrt = (JRSimpleTemplate) JRXmlTemplateLoader.load(fres.getFile());
 			for (JRTemplateReference r : jrt.getIncludedTemplatesList()) {
-				IFile[] fs = root.findFilesForLocationURI(fres.getFile()
-						.toURI());
+				IFile[] fs = root.findFilesForLocationURI(fres.getFile().toURI());
 				if (fs != null && fs.length > 0) {
 					File ftr = findFile(file, r.getLocation());
 					if (ftr != null && ftr.exists()) {
 						fileset.add(ftr.getAbsolutePath());
-						addResource(monitor, mrunit, fileset, ftr,
-								createOptions(jrConfig, r.getLocation()));
+						addResource(monitor, mrunit, fileset, ftr, createOptions(jrConfig, r.getLocation()));
 					}
 				}
 			}
@@ -64,14 +59,12 @@ public class ImpStyleTemplate extends AImpObject {
 	}
 
 	protected JRDesignExpression getExpression(JRReportTemplate img) {
-		return (JRDesignExpression) ((JRReportTemplate) img)
-				.getSourceExpression();
+		return (JRDesignExpression) img.getSourceExpression();
 	}
 
 	@Override
-	public AFileResource publish(JasperDesign jd, JRDesignElement img,
-			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
-			IFile file) throws Exception {
+	public AFileResource publish(JasperDesign jd, JRDesignElement img, MReportUnit mrunit, IProgressMonitor monitor,
+			Set<String> fileset, IFile file) throws Exception {
 		return null;
 	}
 
