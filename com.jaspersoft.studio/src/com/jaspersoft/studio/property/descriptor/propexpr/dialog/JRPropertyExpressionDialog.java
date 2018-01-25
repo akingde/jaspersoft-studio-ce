@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.DatasetPropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;

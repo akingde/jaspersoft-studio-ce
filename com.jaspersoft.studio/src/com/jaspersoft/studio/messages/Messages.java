@@ -2513,6 +2513,9 @@ public class Messages extends NLS {
 	public static String SpreadsheetPostDelete_optionDeleteSelected;
 	public static String SpreadsheetPostDelete_title;
 
+	public static String JRPropertyExpressionDialog_0;
+	public static String JRPropertyExpressionDialog_1;
+	
 	private Messages() {
 	}
 
