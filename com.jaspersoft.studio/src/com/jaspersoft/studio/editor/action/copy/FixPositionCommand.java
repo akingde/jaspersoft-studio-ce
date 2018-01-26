@@ -11,6 +11,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRChild;
@@ -54,6 +55,11 @@ public class FixPositionCommand extends Command{
 	private JRDesignBand parentBand = null;
 	
 	/**
+	 *	The {@link JasperReportsConfiguration} of the report 
+	 */
+	private JasperReportsConfiguration jConfig;
+	
+	/**
 	 * Create the command 
 	 * 
 	 * @param mge The pasted element
@@ -64,17 +70,18 @@ public class FixPositionCommand extends Command{
 		this.mge = mge;
 		this.newParent = newParent;
 		this.originalParent = originalParent;
+		this.jConfig = mge.getJasperConfiguration();
 	}
 	
 	@Override
 	public void execute() {
 		JRDesignElement de = (JRDesignElement) mge.getValue();
-		if (originalParent == newParent) {
+		if (originalParent == newParent || originalParent == null) {
 			int xOffset = 5;
 			int yOffset = 5;
 			if (newParent.getValue() instanceof JRBand){
 				JRBand band = (JRBand)newParent.getValue();
-				Boolean resizeBandOnPaste = originalParent.getJasperConfiguration().getPropertyBoolean(DesignerPreferencePage.P_RESIZE_ON_PASTE, true);
+				Boolean resizeBandOnPaste = jConfig.getPropertyBoolean(DesignerPreferencePage.P_RESIZE_ON_PASTE, true);
 				boolean fixXaxes = false;
 				int height = de.getY() + yOffset+ de.getHeight();
 				if (band.getHeight() < height && !resizeBandOnPaste) {
@@ -101,7 +108,7 @@ public class FixPositionCommand extends Command{
 				//check if the band need and could be resized
 				height = de.getY() + yOffset+ de.getHeight();
 				if (band.getHeight() < height) {
-					int maxBandHeight = ModelUtils.getMaxBandHeight((JRDesignBand)band, originalParent.getJasperDesign());
+					int maxBandHeight = ModelUtils.getMaxBandHeight((JRDesignBand)band, jConfig.getJasperDesign());
 					if (maxBandHeight >= height) {
 						parentBand = (JRDesignBand)band;
 						oldBandHeight = band.getHeight();
