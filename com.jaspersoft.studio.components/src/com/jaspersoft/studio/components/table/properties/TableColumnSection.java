@@ -57,6 +57,7 @@ public class TableColumnSection extends AbstractSection {
 			HashSet<BaseColumn> fixedColumns = new HashSet<BaseColumn>();
 			for (APropertyNode n : getElements()) {
 				if (StandardBaseColumn.PROPERTY_WIDTH.equals(property) && n instanceof MColumn){
+					cc.setLayoutTableContent(true);
 					//Add the column to the fixed ones
 					fixedColumns.add(((MColumn)n).getValue());
 					if (isChanged(property, newValue, n)) {
