@@ -106,11 +106,14 @@ public class ExportJar extends Action {
 					ChartThemeSettings cts = editor.getChartThemeSettings();
 					File f = new File(file.getRawLocationURI());
 					f.createNewFile();
+					// NOTE: Recall to refresh the newly created jar in order 
+					// to avoid wrong event triggering from the file system listener.
+					// We verified it could impact the classpath reload.
+					file.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 					XmlChartThemeExtensionsRegistryFactory.saveToJar(cts, name, f);
 					if (addtoclasspath)
 						ProjectUtil.addFileToClasspath(monitor, file);
 					UIUtils.showInformation("Chart Theme was generated");
-					file.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
 				} catch (UnsupportedEncodingException e) {
 					UIUtils.showError(e);
 				} catch (IOException e) {
