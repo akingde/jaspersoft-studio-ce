@@ -142,7 +142,7 @@ public class ImpDataAdapter extends AImpObject {
 
 								fname = fname.replace("\\", "/");
 
-								int indx = fname.lastIndexOf("/");
+								int indx = fname.lastIndexOf('/');
 								if (indx >= 0 && indx + 1 < fname.length())
 									fname = fname.substring(indx + 1);
 

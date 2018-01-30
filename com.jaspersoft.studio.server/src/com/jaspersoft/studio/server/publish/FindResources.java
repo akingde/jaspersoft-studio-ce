@@ -31,6 +31,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class FindResources {
@@ -90,7 +91,7 @@ public class FindResources {
 		jrConfig.put(PublishUtil.KEY_PUBLISH2JSS_DATA, new ArrayList<AFileResource>());
 
 		String version = ServerManager.getVersion(mres);
-		HashSet<String> fileset = new HashSet<String>();
+		HashSet<String> fileset = new HashSet<>();
 		IFile file = (IFile) jrConfig.get(FileUtils.KEY_FILE);
 
 		mres.removeChildren();
@@ -100,26 +101,20 @@ public class FindResources {
 		Object r = jrConfig.get(PublishUtil.KEY_PUBLISH2JSS_DATA);
 		if (r != null && r instanceof List) {
 			List<?> resources = (List<?>) r;
-			List<AMResource> rs = new ArrayList<AMResource>();
-			Map<String, ResourceDescriptor> names = new HashMap<String, ResourceDescriptor>();
+			List<AMResource> rs = new ArrayList<>();
+			Map<String, ResourceDescriptor> names = new HashMap<>();
+			Map<String, AMResource> mresources = new HashMap<>();
 			for (Object obj : resources) {
 				if (obj instanceof AMResource) {
 					AMResource m = (AMResource) obj;
 					ResourceDescriptor rd = m.getValue();
 					if (names.containsKey(rd.getName())) {
-						if (names.get(rd.getName()) == rd) {
-							continue;
-						} else {
-							// renaming
-							int i = 0;
-							do {
-								i++;
-								rd.setName(rd.getName() + "_" + i);
-								rd.setLabel(rd.getLabel() + "_" + i);
-								rd.setUriString(rd.getUriString() + "_" + i);
-							} while (names.containsKey(rd.getName()) && i < 10000);
-						}
+						if (names.get(rd.getName()) != rd)
+							for (JRDesignExpression exp : m.getPublishOptions().getjExpression())
+								mresources.get(rd.getName()).getPublishOptions().setjExpression(exp);
+						continue;
 					}
+					mresources.put(rd.getName(), m);
 					names.put(rd.getName(), rd);
 					rs.add(m);
 				}

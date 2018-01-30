@@ -137,7 +137,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		column = viewerColumn.getColumn();
 		column.setText(Messages.ResourcesPage_table_overwrite);
-		column.setWidth(140);
+		column.setWidth(200);
 		viewerColumn.setLabelProvider(new TLabelProvider() {
 
 			@Override

@@ -163,6 +163,6 @@ public class ImpJRXML {
 	}
 
 	protected JRDesignExpression getExpression(StandardSubreportPartComponent img) {
-		return (JRDesignExpression) ((StandardSubreportPartComponent) img).getExpression();
+		return (JRDesignExpression) img.getExpression();
 	}
 }
