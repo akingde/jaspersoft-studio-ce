@@ -20,6 +20,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 
@@ -123,9 +124,12 @@ public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 	public void setNewItems(final RWComboBoxPropertyDescriptor pd) {
 		// Block the update and reset the previously selected item
 		refresh = true;
-		String oldSelection = combo.getText();
-		combo.setItems(pd.getItems());
-		setComboSelection(oldSelection, pd.isCaseSensitive());
+		String[] newItems = pd.getItems();
+		if (!ModelUtils.safeEquals(newItems, combo.getItems())) {
+			String oldSelection = combo.getText();
+			combo.setItems(newItems);
+			setComboSelection(oldSelection, pd.isCaseSensitive());
+		}	
 		refresh = false;
 	}
 }

@@ -52,6 +52,7 @@ import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetsDefinitionManager;
 
+import net.sf.jasperreports.charts.ChartThemeBundle;
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.data.BuiltinDataFileServiceFactory;
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
@@ -72,6 +73,7 @@ import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.fill.DefaultChartTheme;
 import net.sf.jasperreports.engine.fonts.FontExtensionsCollector;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.FontSet;
@@ -133,9 +135,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			String property = event.getProperty();
 			if (property.equals(FontsPreferencePage.FPP_FONT_LIST)) {
 				refreshFonts();
-				refreshBundles = true;
+				componentBundles.invalidate();
 			} else if (property.equals(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES)) {
-				refreshBundles = true;
+				componentBundles.invalidate();
 				isPropsCached = false;
 				getProperties();
 				qExecutors = null;
@@ -193,16 +195,15 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		public void propertyChange(PropertyChangeEvent arg0) {
 			initClassloader((IFile) get(FileUtils.KEY_FILE));
 			refreshFonts = true;
-			refreshBundles = true;
-			refreshMessageProviderFactory = true;
-			refreshFunctionsBundles = true;
-			functionsBundles = null;
-			messageProviderFactory = null;
 			fontList = null;
+			messageProviderFactory.invalidate();
+			functionsBundles.invalidate();
+			componentBundles.invalidate();
+			chartThemesBundles.invalidate();
 			ExpressionUtil.removeAllReportInterpreters(JasperReportsConfiguration.this);
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "classpath", null, arg0));
 
-			castorBundles = null;
+			castorBundles.invalidate();
 			// trigger the reload of mappings
 			getExtensions(CastorMapping.class);
 			// try {
@@ -233,15 +234,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	private String qualifier;
 	private String[] fontList;
 	private boolean refreshFonts = true;
-	private boolean refreshBundles = true;
-	private boolean refreshMessageProviderFactory = true;
-	private boolean refreshFunctionsBundles = true;
 	private FontExtensionsCollector lst;
 	private JavaProjectClassLoader javaclassloader;
-	private List<ComponentsBundle> bundles;
-	private List<FunctionsBundle> functionsBundles;
-	private List<CastorMapping> castorBundles;
-	private MessageProviderFactory messageProviderFactory;
+	private ExtensionCache<ComponentsBundle> componentBundles = new ExtensionCache<ComponentsBundle>();
+	private ExtensionCache<FunctionsBundle> functionsBundles = new ExtensionCache<FunctionsBundle>();
+	private ExtensionCache<CastorMapping> castorBundles = new ExtensionCache<CastorMapping>();
+	private ExtensionCache<ChartThemeBundle> chartThemesBundles = new ExtensionCache<ChartThemeBundle>();
+	private ExtensionCache<MessageProviderFactory> messageProviderFactory = new ExtensionCache<MessageProviderFactory>();
 	private static JasperReportsConfiguration instance;
 	private List<RepositoryService> repositoryServices;
 	private List<JRQueryExecuterFactoryBundle> qExecutors;
@@ -760,16 +759,16 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * @return a not null components extension
 	 */
 	private List<ComponentsBundle> getExtensionComponents() {
-		if (bundles == null || refreshBundles) {
-			bundles = super.getExtensions(ComponentsBundle.class);
+		if (!componentBundles.isValid()) {
+			List<ComponentsBundle> componentBundlesList = super.getExtensions(ComponentsBundle.class);
 			// remove all duplicates
-			Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(bundles);
-			bundles = new ArrayList<ComponentsBundle>(components);
-			for (ComponentsBundle cb : bundles)
+			Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(componentBundlesList);
+			componentBundlesList = new ArrayList<ComponentsBundle>(components);
+			for (ComponentsBundle cb : componentBundlesList)
 				JaspersoftStudioPlugin.getComponentConverterManager().setupComponentConvertor(cb);
-			refreshBundles = false;
+			componentBundles.setValue(componentBundlesList);
 		}
-		return bundles;
+		return componentBundles.getValue();
 	}
 
 	/**
@@ -780,13 +779,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * @return a not null functions extension
 	 */
 	private List<FunctionsBundle> getExtensionFunctions() {
-		if (functionsBundles == null || refreshFunctionsBundles) {
-			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(
-					JRExtensionsUtils.getReloadedExtensions(FunctionsBundle.class, "functions"));
-			functionsBundles = new ArrayList<FunctionsBundle>(fBundlesSet);
-			refreshFunctionsBundles = false;
+		if (!functionsBundles.isValid()) {
+			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(JRExtensionsUtils.getReloadedExtensions(FunctionsBundle.class, "functions"));
+			functionsBundles.setValue(new ArrayList<FunctionsBundle>(fBundlesSet));
 		}
-		return functionsBundles;
+		return functionsBundles.getValue();
 	}
 
 	/**
@@ -797,13 +794,53 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * @return a not null functions extension
 	 */
 	private List<CastorMapping> getExtensionCastors() {
-		if (castorBundles == null) {
+		if (!castorBundles.isValid()) {
 			JSSCastorUtil.clearCache(this);
 			Set<CastorMapping> fBundlesSet = new LinkedHashSet<CastorMapping>(
 					JRExtensionsUtils.getReloadedExtensions(CastorMapping.class, "castor.mapping"));
-			castorBundles = (List<CastorMapping>) new ArrayList<CastorMapping>(fBundlesSet);
+			castorBundles.setValue((List<CastorMapping>) new ArrayList<CastorMapping>(fBundlesSet));
 		}
-		return castorBundles;
+		return castorBundles.getValue();
+	}
+	
+	/**
+	 * Return the Chart Theme extension both by resolving the property of the current
+	 * project and from the commons extension. If it is available instead of request
+	 * the extension from the superclass it search it in the common cache
+	 * 
+	 * @return a not null functions extension
+	 */
+	private List<ChartThemeBundle> getExtensionChartThemes() {
+		if (!chartThemesBundles.isValid()) {
+			Set<ChartThemeBundle> fBundlesSet = new LinkedHashSet<ChartThemeBundle>(JRExtensionsUtils.getReloadedExtensions(ChartThemeBundle.class, "chart.theme"));
+			List<ChartThemeBundle> bundlesList = (List<ChartThemeBundle>) new ArrayList<ChartThemeBundle>(fBundlesSet);
+			fBundlesSet = new LinkedHashSet<ChartThemeBundle>(JRExtensionsUtils.getReloadedExtensions(ChartThemeBundle.class, "xml.chart.themes"));
+			bundlesList.addAll(fBundlesSet);
+			bundlesList.add(0, DefaultChartTheme.BUNDLE);
+			chartThemesBundles.setValue(bundlesList);
+		}
+		return chartThemesBundles.getValue();
+	}
+	
+	public List<MessageProviderFactory> getExtensionMessageProviderFactories() {
+		if (!messageProviderFactory.isValid()) {
+			List<MessageProviderFactory> factories = new ArrayList<MessageProviderFactory>();
+			factories.add(new ResourceBundleMessageProviderFactory(getClassLoader()));
+			messageProviderFactory.setValue(factories);
+		}
+		return messageProviderFactory.getValue();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> void setExtensions(Class<T> extensionType, List<? extends T> extensions) {
+		if (extensionType == ChartThemeBundle.class) {
+			//In some case the extension is set manually, like in the initialization or the JRCTX editor, 
+			//in this case we don't want to invalidate and reload the extension on a classpath change, since
+			//it was manually set to a specific value
+			chartThemesBundles.setValue((List<ChartThemeBundle>)extensions);
+			chartThemesBundles.setAvoidInvalidation(true);
+		} else super.setExtensions(extensionType, extensions);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -822,16 +859,14 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				result = (List<T>) getExtensionFontSets();
 			} else if (extensionType == CastorMapping.class) {
 				result = (List<T>) getExtensionCastors();
+			} else if (extensionType == ChartThemeBundle.class) { 
+				result = (List<T>) getExtensionChartThemes();
 			} else if (extensionType == ComponentsBundle.class) {
 				result = (List<T>) getExtensionComponents();
 			} else if (extensionType == FunctionsBundle.class) {
 				result = (List<T>) getExtensionFunctions();
 			} else if (extensionType == MessageProviderFactory.class) {
-				if (messageProviderFactory == null || refreshMessageProviderFactory) {
-					messageProviderFactory = new ResourceBundleMessageProviderFactory(getClassLoader());
-					refreshFunctionsBundles = false;
-				}
-				result = (List<T>) Collections.singletonList(messageProviderFactory);
+				result = (List<T>) getExtensionMessageProviderFactories();
 			} else if (extensionType == JRQueryExecuterFactoryBundle.class) {
 				try {
 					if (qExecutors == null) {

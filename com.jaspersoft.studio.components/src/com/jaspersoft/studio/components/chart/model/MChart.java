@@ -20,7 +20,7 @@ import com.jaspersoft.studio.components.chart.model.plot.PlotFactory;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
-import com.jaspersoft.studio.components.chart.util.ChartHelper;
+import com.jaspersoft.studio.components.chart.property.widget.ChartThemeComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.CategorySerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.GanttSeries;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.PieSerie;
@@ -241,8 +241,7 @@ public class MChart extends MGraphicElementLineBox
 		rendererTypeD.setDescription(Messages.MChart_renderer_type_description);
 		desc.add(rendererTypeD);
 
-		RWComboBoxPropertyDescriptor themeD = new RWComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_THEME,
-				Messages.MChart_theme, ChartHelper.getChartThemesNull(), NullEnum.NULL);
+		ChartThemeComboBoxPropertyDescriptor themeD = new ChartThemeComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_THEME, Messages.MChart_theme, NullEnum.NULL);
 		themeD.setDescription(Messages.MChart_theme_description);
 		desc.add(themeD);
 
