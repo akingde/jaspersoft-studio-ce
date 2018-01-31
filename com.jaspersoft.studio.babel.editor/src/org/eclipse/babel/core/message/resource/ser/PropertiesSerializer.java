@@ -230,25 +230,53 @@ public class PropertiesSerializer {
             // Wrap lines
             if (config.isWrapLinesEnabled() && valueStartPos < lineLength) {
                 StringBuffer valueBuf = new StringBuffer(value);
-                while (valueBuf.length() + valueStartPos > lineLength
-                        || valueBuf.indexOf("\n") != -1) { //$NON-NLS-1$
-                    int endPos = Math.min(valueBuf.length(), lineLength
-                            - valueStartPos);
+                while (valueBuf.length() + valueStartPos > lineLength || valueBuf.indexOf("\n") != -1) { //$NON-NLS-1$
+                    int endPos = Math.min(valueBuf.length(), lineLength- valueStartPos);
                     String line = valueBuf.substring(0, endPos);
-                    int breakPos = line.indexOf(SYSTEM_LINE_SEP);
-                    if (breakPos != -1) {
-                        endPos = breakPos + SYSTEM_LINE_SEP.length();
+                    if (line.endsWith("\\") && (valueBuf.length() > endPos + 1) && valueBuf.substring(endPos, endPos + 1).toLowerCase().equals("u")) {
+                    	//avoid to break the start of an unicode character
+                    	endPos--;
                         saveValue(text, valueBuf.substring(0, endPos));
-                        // text.append(valueBuf.substring(0, endPos));
+                        text.append("\\"); //$NON-NLS-1$
+                        text.append(SYSTEM_LINE_SEP);
                     } else {
-                        breakPos = line.lastIndexOf(' ');
-                        if (breakPos != -1) {
-                            endPos = breakPos + 1;
-                            saveValue(text, valueBuf.substring(0, endPos));
-                            // text.append(valueBuf.substring(0, endPos));
-                            text.append("\\"); //$NON-NLS-1$
-                            text.append(SYSTEM_LINE_SEP);
-                        }
+	                    int breakPos = line.indexOf(SYSTEM_LINE_SEP);
+	                    if (breakPos != -1) {
+	                        endPos = breakPos + SYSTEM_LINE_SEP.length();
+	                        saveValue(text, valueBuf.substring(0, endPos));
+	                    } else {
+	                    	//try to break on a space
+	                        breakPos = line.lastIndexOf(' ');
+	                        if (breakPos != -1) {
+	                            endPos = breakPos + 1;
+	                            saveValue(text, valueBuf.substring(0, endPos));
+	                            text.append("\\"); //$NON-NLS-1$
+	                            text.append(SYSTEM_LINE_SEP);
+	                        } else {
+	                        	//try to avoid to split an unicode character
+		                    	breakPos = line.lastIndexOf("\\u");
+		                    	if (breakPos != -1) {
+		                    		if (breakPos > 0) {
+			                    		//break before the unicode char
+		                    			endPos = breakPos;
+			                    		saveValue(text, valueBuf.substring(0, endPos));
+			                    		text.append("\\"); //$NON-NLS-1$
+				                        text.append(SYSTEM_LINE_SEP);
+		                    		} else {
+		                    			//not possible to break before so break after
+		                    			endPos = breakPos + 6;
+			                    		saveValue(text, valueBuf.substring(0, endPos));
+			                    		text.append("\\"); //$NON-NLS-1$
+				                        text.append(SYSTEM_LINE_SEP);
+		                    		}
+		                    	} else {
+		                    		//no special break found, simply break at the end point
+		                    		saveValue(text, valueBuf.substring(0, endPos));
+		                    		text.append("\\"); //$NON-NLS-1$
+			                        text.append(SYSTEM_LINE_SEP);
+		                    	}
+	                        }
+	                    }
                     }
                     valueBuf.delete(0, endPos);
                     // Figure out starting position for next line
