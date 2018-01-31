@@ -5,16 +5,19 @@
 package com.jaspersoft.studio.server.publish;
 
 import java.io.File;
-import java.io.FileFilter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.InputSource;
@@ -292,9 +295,9 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			Set<String> fileNames = new HashSet<>();
 			for (String r : roots)
 				look4Files(r, dapath, fileNames, files);
+			dapath = FilenameUtils.getPath(dapath);
 			for (File f : files) {
-				String p = f.getName();
-				p = p.substring(0, p.length() - ".properties".length());
+				String p = dapath + FilenameUtils.getBaseName(f.getName());
 				impBundle.publish(jrConfig, jasper, p, mrunit, monitor, fileset, file);
 				if (monitor.isCanceled())
 					return;
@@ -315,13 +318,18 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	}
 
 	private void look4Files(String root, String dapath, Set<String> fileNames, List<File> files) {
-		File dir = new File(root);
-		FileFilter fileFilter = new WildcardFileFilter(dapath + "_*.properties");
-		for (File f : dir.listFiles(fileFilter)) {
-			if (fileNames.contains(f.getName()))
-				continue;
-			fileNames.add(f.getName());
-			files.add(f);
+		try (Stream<Path> st = Files.walk(Paths.get(root))) {
+			String pattern = "(.*)" + dapath + "_(.*).properties";
+			st.filter(Files::isRegularFile).forEach(f -> {
+				File file = f.toFile();
+				String fn = file.getAbsolutePath();
+				if (!fileNames.contains(fn) && fn.matches(pattern)) {
+					fileNames.add(fn);
+					files.add(file);
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
