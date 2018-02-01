@@ -205,7 +205,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	 * lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
-		JRDesignField jrField = (JRDesignField) getValue();
+		JRDesignField jrField = getValue();
 		if (id.equals(JRDesignField.PROPERTY_NAME))
 			return jrField.getName();
 		if (id.equals(JRDesignField.PROPERTY_VALUE_CLASS_NAME))

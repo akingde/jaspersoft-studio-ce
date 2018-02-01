@@ -428,7 +428,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	}
 
 	public void put(String key, Object value) {
-		setValue(key, value);
+		if (key == null)
+			return;
+		if (value == null)
+			removeValue(key);
+		else
+			setValue(key, value);
 	}
 
 	public Object get(String key) {
@@ -780,7 +785,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 */
 	private List<FunctionsBundle> getExtensionFunctions() {
 		if (!functionsBundles.isValid()) {
-			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(JRExtensionsUtils.getReloadedExtensions(FunctionsBundle.class, "functions"));
+			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(
+					JRExtensionsUtils.getReloadedExtensions(FunctionsBundle.class, "functions"));
 			functionsBundles.setValue(new ArrayList<FunctionsBundle>(fBundlesSet));
 		}
 		return functionsBundles.getValue();
@@ -802,26 +808,28 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		return castorBundles.getValue();
 	}
-	
+
 	/**
-	 * Return the Chart Theme extension both by resolving the property of the current
-	 * project and from the commons extension. If it is available instead of request
-	 * the extension from the superclass it search it in the common cache
+	 * Return the Chart Theme extension both by resolving the property of the
+	 * current project and from the commons extension. If it is available instead of
+	 * request the extension from the superclass it search it in the common cache
 	 * 
 	 * @return a not null functions extension
 	 */
 	private List<ChartThemeBundle> getExtensionChartThemes() {
 		if (!chartThemesBundles.isValid()) {
-			Set<ChartThemeBundle> fBundlesSet = new LinkedHashSet<ChartThemeBundle>(JRExtensionsUtils.getReloadedExtensions(ChartThemeBundle.class, "chart.theme"));
+			Set<ChartThemeBundle> fBundlesSet = new LinkedHashSet<ChartThemeBundle>(
+					JRExtensionsUtils.getReloadedExtensions(ChartThemeBundle.class, "chart.theme"));
 			List<ChartThemeBundle> bundlesList = (List<ChartThemeBundle>) new ArrayList<ChartThemeBundle>(fBundlesSet);
-			fBundlesSet = new LinkedHashSet<ChartThemeBundle>(JRExtensionsUtils.getReloadedExtensions(ChartThemeBundle.class, "xml.chart.themes"));
+			fBundlesSet = new LinkedHashSet<ChartThemeBundle>(
+					JRExtensionsUtils.getReloadedExtensions(ChartThemeBundle.class, "xml.chart.themes"));
 			bundlesList.addAll(fBundlesSet);
 			bundlesList.add(0, DefaultChartTheme.BUNDLE);
 			chartThemesBundles.setValue(bundlesList);
 		}
 		return chartThemesBundles.getValue();
 	}
-	
+
 	public List<MessageProviderFactory> getExtensionMessageProviderFactories() {
 		if (!messageProviderFactory.isValid()) {
 			List<MessageProviderFactory> factories = new ArrayList<MessageProviderFactory>();
@@ -830,17 +838,20 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		return messageProviderFactory.getValue();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> void setExtensions(Class<T> extensionType, List<? extends T> extensions) {
 		if (extensionType == ChartThemeBundle.class) {
-			//In some case the extension is set manually, like in the initialization or the JRCTX editor, 
-			//in this case we don't want to invalidate and reload the extension on a classpath change, since
-			//it was manually set to a specific value
-			chartThemesBundles.setValue((List<ChartThemeBundle>)extensions);
+			// In some case the extension is set manually, like in the initialization or the
+			// JRCTX editor,
+			// in this case we don't want to invalidate and reload the extension on a
+			// classpath change, since
+			// it was manually set to a specific value
+			chartThemesBundles.setValue((List<ChartThemeBundle>) extensions);
 			chartThemesBundles.setAvoidInvalidation(true);
-		} else super.setExtensions(extensionType, extensions);
+		} else
+			super.setExtensions(extensionType, extensions);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -859,7 +870,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				result = (List<T>) getExtensionFontSets();
 			} else if (extensionType == CastorMapping.class) {
 				result = (List<T>) getExtensionCastors();
-			} else if (extensionType == ChartThemeBundle.class) { 
+			} else if (extensionType == ChartThemeBundle.class) {
 				result = (List<T>) getExtensionChartThemes();
 			} else if (extensionType == ComponentsBundle.class) {
 				result = (List<T>) getExtensionComponents();
