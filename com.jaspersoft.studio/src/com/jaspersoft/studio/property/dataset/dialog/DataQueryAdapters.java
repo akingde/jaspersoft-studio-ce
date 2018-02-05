@@ -63,6 +63,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.annotations.properties.PropertyScope;
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -93,14 +94,14 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 	private IFile file;
 
 	public static void initMetadata() {
-		List<PropertyMetadata> pm = new ArrayList<PropertyMetadata>();
+		List<PropertyMetadata> pm = new ArrayList<>();
 
 		StandardPropertyMetadata spm = new StandardPropertyMetadata();
 		spm.setName(DEFAULT_DATAADAPTER);
 		spm.setLabel(Messages.DataQueryAdapters_0);
 		spm.setDescription(Messages.DataQueryAdapters_1);
 		spm.setValueType("jssDA"); //$NON-NLS-1$
-		List<PropertyScope> scopes = new ArrayList<PropertyScope>();
+		List<PropertyScope> scopes = new ArrayList<>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
 		spm.setCategory("net.sf.jasperreports.metadata.property.category:data.source"); //$NON-NLS-1$
@@ -111,7 +112,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		spm.setLabel(Messages.DataQueryAdapters_4);
 		spm.setDescription(Messages.DataQueryAdapters_5);
 		spm.setValueType("java.io.File"); //$NON-NLS-1$
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
 		spm.setCategory("net.sf.jasperreports.metadata.property.category:data.snapshot"); //$NON-NLS-1$
@@ -122,7 +123,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		spm.setLabel("Field Path");
 		spm.setDescription("Field path used to show fields as a tree.");
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.FIELD);
 		spm.setScopes(scopes);
 		spm.setCategory("net.sf.jasperreports.metadata.property.category:field"); //$NON-NLS-1$
@@ -133,7 +134,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		spm.setLabel("Field Label");
 		spm.setDescription("Field label, can be used as column label.");
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.FIELD);
 		spm.setScopes(scopes);
 		spm.setCategory("net.sf.jasperreports.metadata.property.category:field"); //$NON-NLS-1$
@@ -216,7 +217,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			public void propertyChange(PropertyChangeEvent evt) {
 				String pname = evt.getPropertyName();
 				if (pname.equals(DataQueryAdapters.DEFAULT_DATAADAPTER)
-						|| pname.equals(DataQueryAdapters.DEFAULT_DATAADAPTER)) {
+						|| pname.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)) {
 					daUI.refreshDaUI(tabFolder, background, jDesign, newdataset, jConfig);
 				}
 			}
@@ -551,6 +552,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				langs = languages;
 			if (!setupLanguagesCombo(langs))
 				return;
+			isRefresh = false;
 			changeLanguage();
 		} finally {
 			isRefresh = false;
