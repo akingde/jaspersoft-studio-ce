@@ -13,9 +13,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -26,6 +23,10 @@ import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.templates.TemplateBundle;
+import com.jaspersoft.templates.TemplateLoadingException;
+
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * The default implementation in JSS of template provider looks for templates inside the plugin's templates
@@ -107,12 +108,13 @@ public class DefaultTemplateProvider implements TemplateProvider {
 			if (files != null) {
 				for (File f : files) {
 					try {
-						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(f.toURI().toURL(), true,
-								JasperReportsConfiguration.getDefaultInstance());
+						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(f.toURI().toURL(), true, JasperReportsConfiguration.getDefaultInstance());
 						Object engine = bundle.getProperty(BuiltInCategories.ENGINE_KEY);
 						if (bundle != null && (engine == null || defaultEngineKey.equals(engine.toString().toLowerCase()))) {
 							templates.add(bundle);
 						}
+					} catch (TemplateLoadingException ex) {
+						JaspersoftStudioPlugin.getInstance().logError(ex);
 					} catch (Exception ex) {
 						// Log error but continue...
 						JaspersoftStudioPlugin.getInstance().getLog().log(

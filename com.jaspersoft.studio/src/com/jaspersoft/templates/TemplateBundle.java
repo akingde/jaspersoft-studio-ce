@@ -41,7 +41,7 @@ public interface TemplateBundle {
 	 * The main JasperDesign. Many templates may store template information
 	 * directly inside the primary jrxml.
 	 * 
-	 * @return
+	 * @return a not null {@link JasperDesign}
 	 */
 	public JasperDesign getJasperDesign();
 	

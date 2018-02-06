@@ -323,13 +323,14 @@ public abstract class GenericTemplateBundle implements IconedTemplateBundle, Val
 	/**
 	 * Load the jasperdesign from the JRXML file and save it
 	 */
-	protected void loadJasperDesign() {
+	protected void loadJasperDesign() throws TemplateLoadingException {
 		InputStream is = null;
 		try {
 			is = templateURL.openStream();
 			this.jasperDesign = JRXmlLoader.load(jrContext, is);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new TemplateLoadingException("Unble to load the template " + templateURL.toExternalForm(), e, templateURL);
 		} finally {
 			FileUtils.closeStream(is);
 		}

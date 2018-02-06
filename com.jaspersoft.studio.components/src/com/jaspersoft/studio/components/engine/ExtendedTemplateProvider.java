@@ -13,9 +13,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -26,6 +23,10 @@ import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.templates.TemplateBundle;
+import com.jaspersoft.templates.TemplateLoadingException;
+
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Provide the TemplateBundles for all the template jrxml inside the folder
@@ -104,6 +105,8 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 						if (bundle != null && tableTemplateKey.equals(bundle.getProperty(BuiltInCategories.ENGINE_KEY))) {
 							templates.add(bundle);
 						}
+					} catch (TemplateLoadingException ex) {
+						JaspersoftStudioPlugin.getInstance().logError(ex);
 					} catch (Exception ex) {
 						// Log error but continue...
 						JaspersoftStudioPlugin.getInstance().getLog().log(
