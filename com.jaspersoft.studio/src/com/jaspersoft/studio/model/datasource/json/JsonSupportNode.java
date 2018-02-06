@@ -4,16 +4,17 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.datasource.json;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.design.JRDesignField;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.data.JsonDataSource;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 public class JsonSupportNode extends ANode {
 
@@ -22,18 +23,18 @@ public class JsonSupportNode extends ANode {
 	private String expression;
 
 	public ImageDescriptor getImagePath() {
-		return ResourceManager.getPluginImageDescriptor(
-				JaspersoftStudioPlugin.PLUGIN_ID,"icons/resources/element_obj.gif");
+		return ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID,
+				"icons/resources/element_obj.gif");
 	}
 
 	public String getDisplayText() {
 		return this.nodeText;
 	}
 
-	public Image getImage(){
+	public Image getImage() {
 		return ResourceManager.getImage(getImagePath());
 	}
-	
+
 	public String getNodeText() {
 		return nodeText;
 	}
@@ -42,20 +43,21 @@ public class JsonSupportNode extends ANode {
 		this.nodeText = nodeText;
 	}
 
-	public String getExpression(){
+	public String getExpression() {
 		return this.expression;
 	}
-	
-	public void setExpression(String expression){
-		this.expression=expression;
+
+	public void setExpression(String expression) {
+		this.expression = expression;
 	}
 
 	@Override
 	public Object getAdapter(Class adapter) {
-		if(adapter==JRDesignField.class || adapter==JRField.class){
-			JRDesignField field=new JRDesignField();
+		if (adapter == JRDesignField.class || adapter == JRField.class) {
+			JRDesignField field = new JRDesignField();
 			field.setName(nodeText);
 			field.setDescription(expression);
+			field.getPropertiesMap().setProperty(JsonDataSource.PROPERTY_FIELD_EXPRESSION, expression);
 			field.setValueClass(String.class);
 			return field;
 		}

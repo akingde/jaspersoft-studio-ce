@@ -51,8 +51,8 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	private MRoot jsonSupportModel;
 	private Map<JsonSupportNode, JsonNode> jsonNodesMap;
 	private String language;
-	
-	public JsonDataManager(String language){
+
+	public JsonDataManager(String language) {
 		this.language = language;
 	}
 
@@ -64,7 +64,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 *            the resource information to get the JSON
 	 * @param jconfig
 	 *            the context
-	 * @param jDataset 
+	 * @param jDataset
 	 * @throws IOException
 	 * @throws JRException
 	 */
@@ -77,7 +77,8 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 			if (parameters == null) {
 				parameters = new HashMap<String, Object>();
 			}
-			ParameterContributorContext paramContributorCtx = new ParameterContributorContext(jconfig, jDataset, parameters);
+			ParameterContributorContext paramContributorCtx = new ParameterContributorContext(jconfig, jDataset,
+					parameters);
 			ins = DataFileUtils.instance(paramContributorCtx).getDataStream(dataFile, parameters);
 			jsonRoot = getJsonMapper().readTree(ins);
 			buildJsonSupportTree();
@@ -192,14 +193,14 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 */
 	public List<JsonSupportNode> getSelectableNodes(String query) {
 		List<JsonSupportNode> selectedList = new ArrayList<JsonSupportNode>();
-		if(language.equalsIgnoreCase(JsonExpressionLanguageEnum.JSONQL.getName())) {
+		if (language.equalsIgnoreCase(JsonExpressionLanguageEnum.JSONQL.getName())) {
 			JRJsonNode jrJsonNode = new JRJsonNode(null, jsonRoot);
 			DefaultJsonQLExecuter jsonqlExec = new DefaultJsonQLExecuter();
 			try {
 				List<JRJsonNode> jrSelectedNodes = jsonqlExec.selectNodes(jrJsonNode, query);
 				List<JsonNode> elementsList = new ArrayList<JsonNode>();
-				if(jrSelectedNodes!=null){
-					for(JRJsonNode n : jrSelectedNodes) {
+				if (jrSelectedNodes != null) {
+					for (JRJsonNode n : jrSelectedNodes) {
 						elementsList.add(n.getDataNode());
 					}
 					for (JsonSupportNode sn : getJsonNodesMap().keySet()) {
@@ -211,8 +212,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 			} catch (Exception e) {
 				// Do not care about error in node selection
 			}
-		}
-		else {
+		} else {
 			JsonQueryHelper jsonQueryHelper = new JsonQueryHelper(mapper);
 			try {
 				JsonNode jsonData = jsonQueryHelper.getJsonData(jsonRoot, query);
@@ -226,7 +226,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 					} else if (jsonData.isObject()) {
 						elementsList.add(jsonData);
 					}
-	
+
 					for (JsonSupportNode sn : getJsonNodesMap().keySet()) {
 						if (elementsList.contains(getJsonNodesMap().get(sn))) {
 							selectedList.add(sn);
@@ -249,26 +249,25 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 * @return a list of fields
 	 */
 	public List<JRDesignField> extractFields(String query) {
-		ArrayList<JRDesignField> result = new ArrayList<JRDesignField>();
+		ArrayList<JRDesignField> result = new ArrayList<>();
 		JsonNode jsonData = null;
 		try {
-			if(language.equalsIgnoreCase(JsonExpressionLanguageEnum.JSONQL.getName())) {
+			if (language.equalsIgnoreCase(JsonExpressionLanguageEnum.JSONQL.getName())) {
 				JRJsonNode jrJsonNode = new JRJsonNode(null, jsonRoot);
 				DefaultJsonQLExecuter jsonqlExec = new DefaultJsonQLExecuter();
 				List<JRJsonNode> jrSelectedNodes = jsonqlExec.selectNodes(jrJsonNode, query);
-				List<JsonNode> elementsList = new ArrayList<JsonNode>();
-				if(jrSelectedNodes!=null){
-					for(JRJsonNode n : jrSelectedNodes) {
+				List<JsonNode> elementsList = new ArrayList<>();
+				if (jrSelectedNodes != null) {
+					for (JRJsonNode n : jrSelectedNodes) {
 						elementsList.add(n.getDataNode());
 					}
 				}
-				if(elementsList.size()>0){
+				if (!elementsList.isEmpty()) {
 					// FIXME - for now select the first found
 					// we should find a good way to digg all possible ones
 					jsonData = elementsList.get(0);
 				}
-			}
-			else {
+			} else {
 				JsonQueryHelper jsonQueryHelper = new JsonQueryHelper(mapper);
 				jsonData = jsonQueryHelper.getJsonData(jsonRoot, query);
 			}
@@ -294,7 +293,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 		JRDesignField f = new JRDesignField();
 		f.setName(ModelUtils.getNameForField(fields, "node"));
 		String infoStr = ".";
-		if(language.equalsIgnoreCase(JsonExpressionLanguageEnum.JSONQL.getName())){
+		if (language.equalsIgnoreCase(JsonExpressionLanguageEnum.JSONQL.getName())) {
 			infoStr = "[0]";
 		}
 		f.setDescription(infoStr);
@@ -303,7 +302,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 		fields.add(f);
 		return fields;
 	}
-	
+
 	/*
 	 * Gets the fields from a JSON node of type object.
 	 */
@@ -324,23 +323,22 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	/*
 	 * Gets the fields from a JSON node of type array.
 	 */
-	private List<JRDesignField> getFieldsFromArrayNode(ArrayNode node,List<JRDesignField> fields) {
+	private List<JRDesignField> getFieldsFromArrayNode(ArrayNode node, List<JRDesignField> fields) {
 		// Assumption: consider the first element as template
 		JsonNode firstEl = node.get(0);
 		if (firstEl instanceof ObjectNode) {
-			return getFieldsFromObjectNode((ObjectNode) firstEl,fields);
+			return getFieldsFromObjectNode((ObjectNode) firstEl, fields);
 		} else if (firstEl instanceof ArrayNode) {
-			return getFieldsFromArrayNode((ArrayNode) firstEl,fields);
+			return getFieldsFromArrayNode((ArrayNode) firstEl, fields);
 		} else {
-			return getFieldFromGenericJsonNode(firstEl,fields);
+			return getFieldFromGenericJsonNode(firstEl, fields);
 		}
 	}
-	
+
 	private String getFieldExpressionName() {
-		if(JsonExpressionLanguageEnum.JSONQL.getName().equalsIgnoreCase(language)){
+		if (JsonExpressionLanguageEnum.JSONQL.getName().equalsIgnoreCase(language)) {
 			return JsonQLDataSource.PROPERTY_FIELD_EXPRESSION;
-		}
-		else {
+		} else {
 			return JsonDataSource.PROPERTY_FIELD_EXPRESSION;
 		}
 	}

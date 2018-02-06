@@ -517,7 +517,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 					.getService(da.getDataAdapter());
 			try {
 				final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, newdataset);
-				if (fields != null) {
+				if (fields != null && !monitor.isCanceled()) {
 					monitor.setTaskName(Messages.DataQueryAdapters_9);
 					Display.getDefault().syncExec(new Runnable() {
 
@@ -528,6 +528,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 					monitor.setTaskName(Messages.DataQueryAdapters_10);
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				if (e.getCause() != null)
 					qStatus.showError(e.getCause().getMessage(), e);
 				else
