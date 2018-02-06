@@ -52,7 +52,7 @@ public class JsonSupportNode extends ANode {
 	}
 
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == JRDesignField.class || adapter == JRField.class) {
 			JRDesignField field = new JRDesignField();
 			field.setName(nodeText);

@@ -43,9 +43,8 @@ public class ExcelFieldsProvider implements IFieldsProvider {
 			ExcelQueryExecuter qe = (ExcelQueryExecuter) new ExcelQueryExecuterFactory().createQueryExecuter(jConfig,
 					reportDataset, ParameterUtil.convertMap(parameters, reportDataset));
 			ds = (ExcelDataSource) qe.createDatasource();
-		} else {
+		} else
 			ds = (ExcelDataSource) parameters.get(JRParameter.REPORT_DATA_SOURCE);
-		}
 		if (ds != null) {
 			ds.setUseFirstRowAsHeader(da.isUseFirstRowAsHeader());
 			boolean hasNext = ds.next();
