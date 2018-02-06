@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.eclipse.core.resources.IFile;
@@ -487,7 +486,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			return getPropertiesMap();
 		setPropertiesMap(null);
 		Map<String, String> smap = super.getProperties();
-		Map<String, String> propmap = new HashMap<String, String>();
+		Map<String, String> propmap = new HashMap<>();
 		if (smap != null && !smap.isEmpty())
 			propmap.putAll(smap);
 		setPropertiesMap(propmap);
@@ -570,7 +569,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		if (p == null) {
 			String v = pstore.getDefaultString(key);
 			if (v != null && !v.isEmpty())
-				return new Character(v.charAt(0));
+				return v.charAt(0);
 		}
 		if (p == null)
 			p = def;
@@ -587,7 +586,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public Character getPropertyCharacter(String key) {
 		String p = getProperty(key);
 		if (p != null && !p.isEmpty())
-			return new Character(p.charAt(0));
+			return p.charAt(0);
 		return null;
 	}
 
@@ -930,7 +929,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 
 	public Map<Object, Object> getMap() {
 		if (map == null)
-			map = new HashMap<Object, Object>();
+			map = new HashMap<>();
 		return map;
 	}
 
@@ -970,8 +969,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 					try {
 						URL url = JRResourcesUtil.createURL(uri, urlHandlerFactory);
 						if (url != null) {
-							if (url.getProtocol().toLowerCase().equals("http")
-									|| url.getProtocol().toLowerCase().equals("https")) {
+							if (url.getProtocol().equalsIgnoreCase("http")
+									|| url.getProtocol().equalsIgnoreCase("https")) {
 								try {
 									URI uuri = url.toURI();
 									Executor exec = Executor.newInstance();
@@ -982,31 +981,23 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 									return exec.execute(req).returnContent().asStream();
 								} catch (URISyntaxException e) {
 									e.printStackTrace();
-								} catch (ClientProtocolException e) {
-									new JRException(JRLoader.EXCEPTION_MESSAGE_KEY_INPUT_STREAM_FROM_URL_OPEN_ERROR,
-											new Object[] { url }, e);
 								} catch (IOException e) {
 									new JRException(JRLoader.EXCEPTION_MESSAGE_KEY_INPUT_STREAM_FROM_URL_OPEN_ERROR,
 											new Object[] { url }, e);
 								}
-
 							}
 							return JRLoader.getInputStream(url);
 						}
 
 						File file = JRResourcesUtil.resolveFile(uri, fileResolver);
-						if (file != null) {
+						if (file != null)
 							return JRLoader.getInputStream(file);
-						}
-
 						url = JRResourcesUtil.findClassLoaderResource(uri, classLoader);
-						if (url != null) {
+						if (url != null)
 							return JRLoader.getInputStream(url);
-						}
 					} catch (JRException e) {
 						throw new JRRuntimeException(e);
 					}
-
 					return null;
 				}
 			};

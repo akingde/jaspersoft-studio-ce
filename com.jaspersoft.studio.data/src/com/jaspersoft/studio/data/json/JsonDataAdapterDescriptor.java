@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -22,6 +23,7 @@ import com.jaspersoft.studio.data.FieldTypeGuesser;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.querydesigner.json.JsonDataManager;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 
@@ -75,11 +77,15 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor
 	@Override
 	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset)
 			throws JRException, UnsupportedOperationException {
+		IProgressMonitor monitor = (IProgressMonitor) jConfig.getMap().get(DataQueryAdapters.PROGRESSMONITOR);
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("REPORT_PARAMETERS_MAP", new HashMap<String, Object>());
 		con.contributeParameters(parameters);
 		ParameterUtil.setParameters(jConfig, jDataset, parameters);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, FieldTypeGuesser.SAMPLESIZE);
+		
+		if (monitor != null && monitor.isCanceled())
+			return null;
 
 		Throwable err = null;
 		List<JRDesignField> fields = new ArrayList<>();
@@ -101,7 +107,7 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor
 				ds = qef.createQueryExecuter(jConfig, jDataset, ParameterUtil.convertMap(parameters, jDataset))
 						.createDatasource();
 			}
-			FieldTypeGuesser.guessTypes(ds, fields, ds.next());
+			FieldTypeGuesser.guessTypes(ds, fields, ds.next(), monitor);
 		} catch (IOException e) {
 			err = e;
 		}

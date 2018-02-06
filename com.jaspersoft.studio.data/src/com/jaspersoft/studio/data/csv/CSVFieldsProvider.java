@@ -9,8 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import com.jaspersoft.studio.data.FieldTypeGuesser;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 
@@ -33,11 +36,15 @@ public class CSVFieldsProvider implements IFieldsProvider {
 
 	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig,
 			JRDataset reportDataset) throws JRException, UnsupportedOperationException {
+		IProgressMonitor monitor = (IProgressMonitor) jConfig.getMap().get(DataQueryAdapters.PROGRESSMONITOR);
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("REPORT_PARAMETERS_MAP", new HashMap<String, Object>());
 		con.contributeParameters(parameters);
 		ParameterUtil.setParameters(jConfig, reportDataset, parameters);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, FieldTypeGuesser.SAMPLESIZE);
+
+		if (monitor != null && monitor.isCanceled())
+			return null;
 
 		JRCsvDataSource ds = null;
 		List<JRDesignField> columns = new ArrayList<>();
@@ -66,7 +73,7 @@ public class CSVFieldsProvider implements IFieldsProvider {
 				for (String key : map.keySet())
 					createColumn(columns, key);
 			}
-			FieldTypeGuesser.guessTypes(ds, columns, hasNext);
+			FieldTypeGuesser.guessTypes(ds, columns, hasNext, monitor);
 		}
 		return columns;
 	}

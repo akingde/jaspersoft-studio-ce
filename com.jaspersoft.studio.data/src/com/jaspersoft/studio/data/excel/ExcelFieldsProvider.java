@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.excel.ExcelDataAdapter;
@@ -23,6 +25,7 @@ import net.sf.jasperreports.engine.query.ExcelQueryExecuterFactory;
 
 import com.jaspersoft.studio.data.FieldTypeGuesser;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 
@@ -30,11 +33,15 @@ public class ExcelFieldsProvider implements IFieldsProvider {
 
 	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig,
 			JRDataset reportDataset) throws JRException, UnsupportedOperationException {
+		IProgressMonitor monitor = (IProgressMonitor) jConfig.getMap().get(DataQueryAdapters.PROGRESSMONITOR);
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("REPORT_PARAMETERS_MAP", new HashMap<String, Object>());
 		con.contributeParameters(parameters);
 		ParameterUtil.setParameters(jConfig, reportDataset, parameters);
-		parameters.put(JRParameter.REPORT_MAX_COUNT, 2);
+		parameters.put(JRParameter.REPORT_MAX_COUNT, FieldTypeGuesser.SAMPLESIZE);
+		
+		if (monitor != null && monitor.isCanceled())
+			return null;
 
 		ExcelDataSource ds = null;
 
@@ -56,7 +63,7 @@ public class ExcelFieldsProvider implements IFieldsProvider {
 				field.setValueClass(String.class);
 				columns.add(field);
 			}
-			FieldTypeGuesser.guessTypes(ds, columns, hasNext);
+			FieldTypeGuesser.guessTypes(ds, columns, hasNext, monitor);
 			return columns;
 		}
 		return null;

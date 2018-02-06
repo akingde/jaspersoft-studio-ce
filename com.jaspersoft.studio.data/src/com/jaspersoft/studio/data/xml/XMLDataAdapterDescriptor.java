@@ -13,6 +13,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.xerces.util.DOMUtil;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -28,6 +29,7 @@ import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.FieldTypeGuesser;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.XMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -92,11 +94,15 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor
 	@Override
 	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset)
 			throws JRException, UnsupportedOperationException {
+		IProgressMonitor monitor = (IProgressMonitor) jConfig.getMap().get(DataQueryAdapters.PROGRESSMONITOR);
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("REPORT_PARAMETERS_MAP", new HashMap<String, Object>());
 		con.contributeParameters(parameters);
 		ParameterUtil.setParameters(jConfig, jDataset, parameters);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, FieldTypeGuesser.SAMPLESIZE);
+
+		if (monitor != null && monitor.isCanceled())
+			return null;
 
 		setRecursiveRetrieval(jConfig);
 		setConsiderEmptyNodes(jConfig);
@@ -124,7 +130,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor
 					.createQueryExecuter(jConfig, jDataset, ParameterUtil.convertMap(parameters, jDataset))
 					.createDatasource();
 
-		FieldTypeGuesser.guessTypes(ds, fields, ds.next());
+		FieldTypeGuesser.guessTypes(ds, fields, ds.next(), monitor);
 		return fields;
 	}
 
