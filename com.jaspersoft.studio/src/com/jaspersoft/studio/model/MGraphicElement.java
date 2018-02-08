@@ -14,6 +14,7 @@ import java.util.Map;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
@@ -307,7 +308,7 @@ public class MGraphicElement extends APropertyNode
 					// http://community.jaspersoft.com/questions/826441/javalangnullpointerexception-crosstabs
 					return new Rectangle(jr.getX(), jr.getY(), jr.getWidth(), jr.getHeight());
 				} else {
-					b = new Rectangle(((IGraphicElement) node).getBounds());
+					b = new Rectangle(b);
 				}
 				if (node instanceof IGraphicElementContainer) {
 					int x = ((IGraphicElementContainer) node).getLeftPadding();
@@ -1141,6 +1142,23 @@ public class MGraphicElement extends APropertyNode
 	@Override
 	public boolean isCuttable(ISelection currentSelection) {
 		return true;
+	}
+
+	@Override
+	public Point getAbsoluteLocation() {
+		int x = getValue().getX();
+		int y = getValue().getY();
+		ANode parent = getParent();
+		if (parent instanceof IGraphicalPropertiesHandler) {
+			Point parentLocation = ((IGraphicalPropertiesHandler)parent).getAbsoluteLocation();
+			x += parentLocation.x;
+			y += parentLocation.y;
+		} else if (parent instanceof MBand) {
+			JasperDesign jd = getJasperDesign();
+			x += jd.getLeftMargin();
+			y += jd.getTopMargin();
+		}
+		return new Point(x,y);
 	}
 
 }

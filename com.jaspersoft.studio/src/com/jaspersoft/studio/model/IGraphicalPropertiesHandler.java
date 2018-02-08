@@ -6,6 +6,8 @@ package com.jaspersoft.studio.model;
 
 import java.util.HashSet;
 
+import org.eclipse.swt.graphics.Point;
+
 /**
  * Class used to support the refresh system of the elements only when 
  * one of its graphical property is changed. The hasChangedProperty method is used 
@@ -44,4 +46,11 @@ public interface IGraphicalPropertiesHandler {
 	 * when changed
 	 */
 	public HashSet<String> getGraphicalProperties();
+	
+	/**
+	 * Return the absolute position of the element inside the report
+	 * 
+	 * @return a not null point
+	 */
+	public Point getAbsoluteLocation();
 }

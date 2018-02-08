@@ -14,6 +14,7 @@ import java.util.Map;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
@@ -43,9 +44,11 @@ import com.jaspersoft.studio.property.descriptor.combo.RWStyleComboBoxPropertyDe
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
+import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -191,12 +194,18 @@ public class MCell extends MColumn implements IGraphicElement,
 				return lineBox;
 			}
 			if (id.equals(MGraphicElement.PROPERTY_MAP)) {
-				// to avoid duplication I remove it first
-				JRPropertiesMap pmap = cell.getPropertiesMap();
-				return pmap;
+				//return a copy of the map
+				return getPropertiesMapClone();
 			}
 		}
 		return super.getPropertyValue(id);
+	}
+	
+	protected JRPropertiesMap getPropertiesMapClone() {
+		JRPropertiesMap propertiesMap = cell.getPropertiesMap();
+		if (propertiesMap != null)
+			propertiesMap = propertiesMap.cloneProperties();
+		return propertiesMap;
 	}
 
 	/*
@@ -260,17 +269,22 @@ public class MCell extends MColumn implements IGraphicElement,
 				}
 				return;
 			} else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+				JRPropertiesMap originalMap = cell.getPropertiesMap().cloneProperties();
 				JRPropertiesMap v = (JRPropertiesMap) value;
 				String[] names = cell.getPropertiesMap().getPropertyNames();
+				//clear the old map
 				for (int i = 0; i < names.length; i++) {
 					cell.getPropertiesMap().removeProperty(names[i]);
 				}
+				//set the new properties
 				names = v.getPropertyNames();
-				for (int i = 0; i < names.length; i++)
-					cell.getPropertiesMap().setProperty(names[i],
-							v.getProperty(names[i]));
-				this.getPropertyChangeSupport().firePropertyChange(
-						MGraphicElement.PROPERTY_MAP, false, true);
+				for (int i = 0; i < names.length; i++) {
+					cell.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
+				}
+				// really important to trigger the property with source the JR object and not the node
+				// using the node could cause problem with the refresh of the advanced properties view
+				this.getPropertyChangeSupport().firePropertyChange(new PropertyChangeEvent(cell, PROPERTY_MAP, originalMap, cell.getPropertiesMap()));
+				
 				return; // Attention! MColumn has his own property map, here we
 						// work with cell
 			}
@@ -533,5 +547,24 @@ public class MCell extends MColumn implements IGraphicElement,
 		MLineBox element = (MLineBox) getPropertyValue(LINE_BOX);
 		result.put(LINE_BOX, element);
 		return result;
+	}
+
+	@Override
+	public Point getAbsoluteLocation() {
+		StandardBaseColumn currentColumn = getValue();
+		MTable tableModel = getTable();
+		StandardTable table = tableModel.getStandardTable();
+		Point tableLocation = tableModel.getAbsoluteLocation();
+		int previousColumnsWidth = 0;
+		for(BaseColumn column : table.getColumns()) {
+			if (column == currentColumn) {
+				break;
+			} else {
+				previousColumnsWidth += column.getWidth();
+			}
+		}
+		int x = previousColumnsWidth + tableLocation.x;
+		int y = getBounds().y + tableLocation.y;
+		return new Point(x, y);
 	}
 }
