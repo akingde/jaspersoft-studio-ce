@@ -186,6 +186,7 @@ public class CrosstabEditor extends NamedSubeditor {
 	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
 		ActionContributionItem item = new ActionContributionItem(getActionRegistry().getAction(DatasetAction.ID));
 		act4TextIcon.add(item);
+		toolbarManager.add(item);
 		toolbarManager.add(new Separator());
 		super.contributeItemsToEditorTopToolbar(toolbarManager);
 	}
