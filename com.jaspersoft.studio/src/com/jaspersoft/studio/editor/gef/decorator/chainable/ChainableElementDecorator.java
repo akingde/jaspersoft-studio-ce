@@ -4,9 +4,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.chainable;
 
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IFigure;
+
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * An element decorator that instances one and only one ChainableElementDecorator, that will be 
@@ -42,4 +46,11 @@ public abstract class ChainableElementDecorator implements IElementDecorator {
 		getDecorator(fig);
 	}
 
+	/**
+	 * By default a global feedback is not provided
+	 */
+	@Override
+	public void paintGlobal(Graphics g, IFigure figure, JasperReportsConfiguration jConfig) {
+		
+	}
 }

@@ -8,6 +8,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.util.List;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
@@ -15,9 +16,12 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.base.JRBaseReport;
 
@@ -133,6 +137,20 @@ public class ReportPageFigure extends APageFigure {
 	}
 	
 	/**
+	 * Paint all the global decorators on the page
+	 * 
+	 * @param graphics the graphics used to paint the decorators
+	 */
+	protected void paintDecorators(Graphics graphics) {
+		List<IElementDecorator> decorators = JaspersoftStudioPlugin.getDecoratorManager().getDecorators();
+		if (decorators == null)
+			return;
+		JasperReportsConfiguration jConfig = ((ANode)page.getModel()).getJasperConfiguration();
+		for (IElementDecorator d : decorators)
+			d.paintGlobal(graphics, this, jConfig);
+	}
+	
+	/**
 	 * Override the original paintChildren to avoid to pain elements 
 	 * that are marked as not visible inside the model. The grid is always painted
 	 */
@@ -168,6 +186,8 @@ public class ReportPageFigure extends APageFigure {
 				}
 			}
 		}
+
+		paintDecorators(graphics);
 	}
 
 	/*

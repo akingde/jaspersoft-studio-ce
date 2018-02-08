@@ -7,6 +7,8 @@ package com.jaspersoft.studio.editor.gef.decorator.error;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -24,6 +26,7 @@ import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Error decorator, used to validate and show errors on the elements with an informative tooltip message on the error
@@ -97,4 +100,11 @@ public class ElementErrorDecorator implements IElementDecorator {
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, IWorkbenchPart part) {
 	}
 
+	/**
+	 * By default a global feedback is not provided
+	 */
+	@Override
+	public void paintGlobal(Graphics g, IFigure figure, JasperReportsConfiguration jConfig) {
+		
+	}
 }

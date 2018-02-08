@@ -32,54 +32,56 @@ public class DecoratorManager {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
 				if (o instanceof IElementDecorator){
 					if (JaspersoftStudioPlugin.PLUGIN_ID.equalsIgnoreCase(e.getContributor().getName())){
-						nodeFactory.add(0, (IElementDecorator)o);
+						elementDecorators.add(0, (IElementDecorator)o);
 					} else {
-						nodeFactory.add((IElementDecorator) o);
+						elementDecorators.add((IElementDecorator) o);
 					}
-				}
+				} 
 			} catch (CoreException ex) {
 				System.out.println(ex.getMessage());
 			}
 		}
 	}
 
-	private List<IElementDecorator> nodeFactory = new ArrayList<IElementDecorator>();
+	private List<IElementDecorator> elementDecorators = new ArrayList<IElementDecorator>();
 
+	
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
-		for (IElementDecorator f : nodeFactory)
+		for (IElementDecorator f : elementDecorators)
 			f.setupFigure(fig, editPart);
 	}
 
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, GraphicalViewer gviewer,
 			AbstractVisualEditor part) {
-		for (IElementDecorator f : nodeFactory)
+		for (IElementDecorator f : elementDecorators) {
 			f.registerActions(registry, selectionActions, gviewer, part);
+		}
 	}
 	
 	public List<IElementDecorator> getDecorators(){
-		return nodeFactory;
+		return elementDecorators;
 	}
 
 	public void buildContextMenu(ActionRegistry registry, EditPartViewer viewer, IMenuManager menu) {
-		for (IElementDecorator f : nodeFactory)
+		for (IElementDecorator f : elementDecorators)
 			f.buildContextMenu(registry, viewer, menu);
 	}
 
 	public List<RetargetAction> buildMenuActions() {
 		List<RetargetAction> actions = new ArrayList<RetargetAction>();
-		for (IElementDecorator f : nodeFactory)
+		for (IElementDecorator f : elementDecorators)
 			actions.addAll(Arrays.asList(f.buildMenuActions()));
 		return actions;
 	}
 
 	public void contribute2Menu(ActionRegistry registry, MenuManager menuManager) {
-		for (IElementDecorator f : nodeFactory)
+		for (IElementDecorator f : elementDecorators)
 			f.contribute2Menu(registry, menuManager);
 	}
 
 	public List<String> getActionIDs() {
 		List<String> ids = new ArrayList<String>();
-		for (IElementDecorator f : nodeFactory) {
+		for (IElementDecorator f : elementDecorators) {
 			ids.addAll(f.getActionIDs());
 		}
 		return ids;
