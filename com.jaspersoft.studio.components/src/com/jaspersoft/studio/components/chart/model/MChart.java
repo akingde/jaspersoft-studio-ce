@@ -241,7 +241,8 @@ public class MChart extends MGraphicElementLineBox
 		rendererTypeD.setDescription(Messages.MChart_renderer_type_description);
 		desc.add(rendererTypeD);
 
-		ChartThemeComboBoxPropertyDescriptor themeD = new ChartThemeComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_THEME, Messages.MChart_theme, NullEnum.NULL);
+		ChartThemeComboBoxPropertyDescriptor themeD = new ChartThemeComboBoxPropertyDescriptor(
+				JRBaseChart.PROPERTY_THEME, Messages.MChart_theme, NullEnum.NULL);
 		themeD.setDescription(Messages.MChart_theme_description);
 		desc.add(themeD);
 
@@ -564,19 +565,19 @@ public class MChart extends MGraphicElementLineBox
 		}
 
 		else if (id.equals(JRBaseChart.PROPERTY_TITLE_COLOR)) {
-			if (value == null || value instanceof AlfaRGB){
+			if (value == null || value instanceof AlfaRGB) {
 				jrElement.setTitleColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 			}
 		} else if (id.equals(JRBaseChart.PROPERTY_SUBTITLE_COLOR)) {
-			if (value == null || value instanceof AlfaRGB){
+			if (value == null || value instanceof AlfaRGB) {
 				jrElement.setSubtitleColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 			}
 		} else if (id.equals(JRBaseChart.PROPERTY_LEGEND_COLOR)) {
-			if (value == null || value instanceof AlfaRGB){
+			if (value == null || value instanceof AlfaRGB) {
 				jrElement.setLegendColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 			}
 		} else if (id.equals(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR)) {
-			if (value == null || value instanceof AlfaRGB){
+			if (value == null || value instanceof AlfaRGB) {
 				jrElement.setLegendBackgroundColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 			}
 		} else if (id.equals(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS)) {
@@ -778,8 +779,11 @@ public class MChart extends MGraphicElementLineBox
 	 */
 	@Override
 	public String getDisplayText() {
+		String p = getElementNameProperty();
+		if (!Misc.isNullOrEmpty(p))
+			return p;
 		if (getValue() != null) {
-			JRDesignChart chart = (JRDesignChart) getValue();
+			JRDesignChart chart = getValue();
 			String chartype = "";
 			switch (chart.getChartType()) {
 			case JRDesignChart.CHART_TYPE_AREA:
@@ -1010,9 +1014,9 @@ public class MChart extends MGraphicElementLineBox
 	}
 
 	/**
-	 * This type of node return a custom set value command provider that will
-	 * allow to generate command that will check if the table has the autoresize
-	 * and if the changed property need to trigger its refresh
+	 * This type of node return a custom set value command provider that will allow
+	 * to generate command that will check if the table has the autoresize and if
+	 * the changed property need to trigger its refresh
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override

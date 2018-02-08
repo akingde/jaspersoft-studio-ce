@@ -121,8 +121,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	private Point mousePosition = new Point(-1, -1);
 
 	/**
-	 * On linux the click event on the arrow to expand a tree node is not catched if the tree element hasen't the focus.
-	 * So we need a trick to have here the same behavior of the others operative systems
+	 * On linux the click event on the arrow to expand a tree node is not catched if
+	 * the tree element hasen't the focus. So we need a trick to have here the same
+	 * behavior of the others operative systems
 	 */
 	private boolean enableFocusFix = Util.isLinux();
 
@@ -130,9 +131,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * Instantiates a new jD report outline view.
 	 * 
 	 * @param editor
-	 *          the editor
+	 *            the editor
 	 * @param viewer
-	 *          the viewer
+	 *            the viewer
 	 */
 	public JDReportOutlineView(IGraphicalEditor editor, EditPartViewer viewer) {
 		super(viewer);
@@ -165,8 +166,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	private PreferenceListener preferenceListener = new PreferenceListener();
 
 	/**
-	 * Listener for the preferences, when the flags to show or hide default parameters and variables changes then it
-	 * refresh all the MParameters and Mvariables nodes on the tree
+	 * Listener for the preferences, when the flags to show or hide default
+	 * parameters and variables changes then it refresh all the MParameters and
+	 * Mvariables nodes on the tree
 	 */
 	private final class PreferenceListener implements IPropertyChangeListener {
 
@@ -178,11 +180,13 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 					@Override
 					public boolean visit(EditPart n) {
 						if (n.getModel() instanceof MParameters || n.getModel() instanceof MVariables) {
-							// We must be sure that the node has the widget already created, a refresh on a node
+							// We must be sure that the node has the widget already created, a refresh on a
+							// node
 							// without widget throw an NPE
 							if (((TreeEditPart) n).getWidget() != null)
 								n.refresh();
-							// We can't stop the research when an MParameters and an MVariables are found, because
+							// We can't stop the research when an MParameters and an MVariables are found,
+							// because
 							// in this way we will miss to hide the default values of subdatasets
 							return false;
 						}
@@ -202,10 +206,12 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	}
 
 	/**
-	 * Check if the outline page was closed. When the outline page is closed the control inside the viewer is disposed and
-	 * removed (so this method will always catch the getViewer().getControl() == null when the outline was closed).
+	 * Check if the outline page was closed. When the outline page is closed the
+	 * control inside the viewer is disposed and removed (so this method will always
+	 * catch the getViewer().getControl() == null when the outline was closed).
 	 * 
-	 * @return true if the outline was closed and its control disposed. False otherwise
+	 * @return true if the outline was closed and its control disposed. False
+	 *         otherwise
 	 */
 	public boolean isDisposed() {
 		return (getViewer() == null || getViewer().getControl() == null || getViewer().getControl().isDisposed());
@@ -255,7 +261,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 
 		IPageSite site = getSite();
 		// team menu was shown, if we register this on the site
-		// site.registerContextMenu(provider.getId(), provider, site.getSelectionProvider());
+		// site.registerContextMenu(provider.getId(), provider,
+		// site.getSelectionProvider());
 
 		IToolBarManager tbm = site.getActionBars().getToolBarManager();
 		registerToolbarAction(tbm);
@@ -264,12 +271,13 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	}
 
 	/**
-	 * Create on the table manger the toolbar actions for the outline. The actions are created only if the toolbar manager
-	 * dosen't contains them already. Actually the added action are the one the show the standard outline and the one to
-	 * show the thumbnail of the report.
+	 * Create on the table manger the toolbar actions for the outline. The actions
+	 * are created only if the toolbar manager dosen't contains them already.
+	 * Actually the added action are the one the show the standard outline and the
+	 * one to show the thumbnail of the report.
 	 * 
 	 * @param tbm
-	 *          the toolbar manager for the outline.
+	 *            the toolbar manager for the outline.
 	 */
 	public void registerToolbarAction(IToolBarManager tbm) {
 		IContributionItem items[] = tbm.getItems();
@@ -285,7 +293,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			}
 		};
 		showOutlineAction.setId(ID_ACTION_OUTLINE);
-		showOutlineAction.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/outline.gif")); //$NON-NLS-1$
+		showOutlineAction
+				.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/outline.gif")); //$NON-NLS-1$
 		showOutlineAction.setToolTipText(Messages.JDReportOutlineView_show_outline_tool_tip);
 		if (!existingItems.contains(ID_ACTION_OUTLINE)) {
 			ActionContributionItem showOutlineItem = new ActionContributionItem(showOutlineAction);
@@ -313,7 +322,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.ui.parts.ContentOutlinePage#createControl(org.eclipse.swt.widgets.Composite)
+	 * @see
+	 * org.eclipse.gef.ui.parts.ContentOutlinePage#createControl(org.eclipse.swt.
+	 * widgets.Composite)
 	 */
 	@Override
 	public void createControl(Composite parent) {
@@ -343,7 +354,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 					if (enableFocusFix && mousePosition.x != -1) {
 						EditPart part = getViewer().findObjectAt(mousePosition);
 						if (part != null && part.getModel() instanceof MRoot) {
-							EditPart translatedPart = getViewer().findObjectAt(new Point(mousePosition.x + 10, mousePosition.y));
+							EditPart translatedPart = getViewer()
+									.findObjectAt(new Point(mousePosition.x + 10, mousePosition.y));
 							if (translatedPart != null && translatedPart.getModel() != part.getModel()) {
 								TreeItem item = (TreeItem) ((TreeEditPart) translatedPart).getWidget();
 								item.setExpanded(!item.getExpanded());
@@ -358,7 +370,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			});
 
 			tree.addMouseListener(new MouseAdapter() {
-
+				@Override
 				public void mouseDoubleClick(MouseEvent e) {
 					if (e.getSource() instanceof Tree) {
 						Tree t = (Tree) e.getSource();
@@ -366,7 +378,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 						if (ti != null && ti.length > 0) {
 							Object obj = ti[0].getData();
 							if (obj instanceof EditPart) {
-								//if the part is openable and understand the open request then perform the request
+								// if the part is openable and understand the open request then perform the
+								// request
 								EditPart part = (EditPart) obj;
 								SelectionRequest request = new SelectionRequest();
 								request.setType(RequestConstants.REQ_OPEN);
@@ -375,37 +388,37 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 									return;
 								}
 							}
-							if(ti.length==1 && ti[0].getItemCount()>0){
-								 ti[0].setExpanded(!ti[0].getExpanded());
+							if (ti.length == 1 && ti[0].getItemCount() > 0) {
+								ti[0].setExpanded(!ti[0].getExpanded());
 							}
 						}
 					}
 				}
 			});
-			
-			//listener to move the selected elements up and down on keypress
+
+			// listener to move the selected elements up and down on keypress
 			tree.addKeyListener(new KeyAdapter() {
-				
-				private static final String ACTION_UP_BINDING = "com.jaspersoft.studio.editor.action.order.BringForwardAction" ;
-				
-				private static final String ACTION_DOWN_BINDING = "com.jaspersoft.studio.editor.action.order.BringBackwardAction" ;
-				
+
+				private static final String ACTION_UP_BINDING = "com.jaspersoft.studio.editor.action.order.BringForwardAction";
+
+				private static final String ACTION_DOWN_BINDING = "com.jaspersoft.studio.editor.action.order.BringBackwardAction";
+
 				@Override
 				public void keyPressed(KeyEvent e) {
 					if (BindingsPreferencePersistence.isPressed(ACTION_DOWN_BINDING)) {
-						BringForwardAction action = new BringForwardAction((AbstractVisualEditor)getEditor());
+						BringForwardAction action = new BringForwardAction((AbstractVisualEditor) getEditor());
 						action.setLazyEnablementCalculation(true);
 						if (action.isEnabled()) {
 							action.run();
 						}
 					} else if (BindingsPreferencePersistence.isPressed(ACTION_UP_BINDING)) {
-						BringBackwardAction action = new BringBackwardAction((AbstractVisualEditor)getEditor());
+						BringBackwardAction action = new BringBackwardAction((AbstractVisualEditor) getEditor());
 						action.setLazyEnablementCalculation(true);
 						if (action.isEnabled()) {
 							action.run();
 						}
 					}
-					
+
 				}
 			});
 
@@ -505,7 +518,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		RootEditPart rep = editor.getGraphicalViewer().getRootEditPart();
 		if (rep instanceof MainDesignerRootEditPart) {
 			MainDesignerRootEditPart root = (MainDesignerRootEditPart) rep;
-			thumbnail = new JSSScrollableThumbnail((Viewport) root.getFigure(), (MRoot) getViewer().getContents().getModel());
+			thumbnail = new JSSScrollableThumbnail((Viewport) root.getFigure(),
+					(MRoot) getViewer().getContents().getModel());
 			thumbnail.setSource(root.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
 			disposeListener = new DisposeListener() {
@@ -525,7 +539,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * Sets the contents.
 	 * 
 	 * @param contents
-	 *          the new contents
+	 *            the new contents
 	 */
 	public void setContents(Object contents) {
 		if (getViewer().getEditPartFactory() != null) {
@@ -546,7 +560,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * Show page.
 	 * 
 	 * @param id
-	 *          the id
+	 *            the id
 	 */
 	protected void showPage(String id) {
 		if (ID_ACTION_OUTLINE.equals(id)) {

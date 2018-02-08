@@ -385,8 +385,8 @@ public class MTextField extends MTextElement {
 	}
 
 	/**
-	 * Listener for the expression of the element. This will ask for the refresh
-	 * of its container or eventually of the containers of the element
+	 * Listener for the expression of the element. This will ask for the refresh of
+	 * its container or eventually of the containers of the element
 	 * 
 	 * @author Orlandin Marco
 	 *
@@ -439,11 +439,11 @@ public class MTextField extends MTextElement {
 
 	/**
 	 * When the value of the element is set, it will be removed also all the
-	 * ExpressionNameChange from the expression of its value and will be set a
-	 * new ExpressionNameChange on the expression for the actual model. This is
-	 * done to avoid duplicate of the listener if for example the JRElement is
-	 * moved from a model to another. The listener is used to update the
-	 * graphical appearance after a refactor of something used in the expression
+	 * ExpressionNameChange from the expression of its value and will be set a new
+	 * ExpressionNameChange on the expression for the actual model. This is done to
+	 * avoid duplicate of the listener if for example the JRElement is moved from a
+	 * model to another. The listener is used to update the graphical appearance
+	 * after a refactor of something used in the expression
 	 */
 	@Override
 	public void setValue(Object value) {
@@ -499,6 +499,9 @@ public class MTextField extends MTextElement {
 	 */
 	@Override
 	public String getDisplayText() {
+		String p = getElementNameProperty();
+		if (!Misc.isNullOrEmpty(p))
+			return p;
 		if (getValue() != null) {
 			JRTextField jrTextField = (JRTextField) getValue();
 			if (jrTextField.getExpression() != null)

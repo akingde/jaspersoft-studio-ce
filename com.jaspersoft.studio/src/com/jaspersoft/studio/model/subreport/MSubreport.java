@@ -26,6 +26,7 @@ import com.jaspersoft.studio.property.descriptor.subreport.parameter.SubreportPr
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
@@ -46,7 +47,7 @@ public class MSubreport extends MGraphicElement {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
+
 	private static IPropertyDescriptor[] descriptors;
 
 	/**
@@ -71,11 +72,11 @@ public class MSubreport extends MGraphicElement {
 	 * Instantiates a new m subreport.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrSubreport
-	 *          the jr subreport
+	 *            the jr subreport
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MSubreport(ANode parent, JRDesignSubreport jrSubreport, int newIndex) {
 		super(parent, newIndex);
@@ -98,7 +99,7 @@ public class MSubreport extends MGraphicElement {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
@@ -142,18 +143,20 @@ public class MSubreport extends MGraphicElement {
 		dsExprD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#dataSourceExpression")); //$NON-NLS-1$
 
-		SubreportPropertiesPropertyDescriptor propertiesD = new SubreportPropertiesPropertyDescriptor(JRDesignSubreport.PROPERTY_PARAMETERS, Messages.MSubreport_parametersName);
+		SubreportPropertiesPropertyDescriptor propertiesD = new SubreportPropertiesPropertyDescriptor(
+				JRDesignSubreport.PROPERTY_PARAMETERS, Messages.MSubreport_parametersName);
 		propertiesD.setDescription(Messages.MSubreport_parameters_description);
 		desc.add(propertiesD);
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreportParameter")); //$NON-NLS-1$
 		propertiesD.init(this);
 
-		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES, Messages.MSubreport_returnValuesName);
+		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES,
+				Messages.MSubreport_returnValuesName);
 		returnValuesD.setDescription(Messages.MSubreport_return_values_description);
 		desc.add(returnValuesD);
-		returnValuesD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#returnValue")); //$NON-NLS-1$
+		returnValuesD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#returnValue")); //$NON-NLS-1$
 
 		overflowTypeD = new NamedEnumPropertyDescriptor<OverflowType>(JRBaseSubreport.PROPERTY_OVERFLOW_TYPE,
 				Messages.MSubreport_0, OverflowType.STRETCH, NullEnum.NOTNULL);
@@ -215,7 +218,7 @@ public class MSubreport extends MGraphicElement {
 		if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
 			jrElement.setRunToBottom((Boolean) value);
 		if (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE))
-			jrElement.setUsingCache((Boolean)value);
+			jrElement.setUsingCache((Boolean) value);
 		else if (id.equals(JRBaseSubreport.PROPERTY_OVERFLOW_TYPE))
 			jrElement.setOverflowType(overflowTypeD.getEnumValue(value));
 		else if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
@@ -273,7 +276,9 @@ public class MSubreport extends MGraphicElement {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
+	 * @see
+	 * com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.
+	 * engine.design.JasperDesign)
 	 */
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign, boolean applayDefault) {
@@ -282,7 +287,7 @@ public class MSubreport extends MGraphicElement {
 		if (applayDefault) {
 			DefaultManager.INSTANCE.applyDefault(this.getClass(), subreport);
 		}
-			
+
 		return subreport;
 	}
 
@@ -293,7 +298,8 @@ public class MSubreport extends MGraphicElement {
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String p = getElementNameProperty();
+		return Misc.isNullOrEmpty(p) ? getIconDescriptor().getTitle() : p;
 	}
 
 	/*

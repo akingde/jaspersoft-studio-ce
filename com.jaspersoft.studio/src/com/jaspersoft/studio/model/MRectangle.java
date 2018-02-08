@@ -18,6 +18,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRRectangle;
@@ -33,7 +34,7 @@ public class MRectangle extends MGraphicElementLinePen {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
+
 	private static IPropertyDescriptor[] descriptors;
 
 	/**
@@ -58,17 +59,17 @@ public class MRectangle extends MGraphicElementLinePen {
 	 * Instantiates a new m rectangle.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrRectangle
-	 *          the jr rectangle
+	 *            the jr rectangle
 	 * @param newImage
-	 *          the new image
+	 *            the new image
 	 */
 	public MRectangle(ANode parent, JRDesignRectangle jrRectangle, int newImage) {
 		super(parent, newImage);
 		setValue(jrRectangle);
 	}
-	
+
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
@@ -83,7 +84,7 @@ public class MRectangle extends MGraphicElementLinePen {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
@@ -91,7 +92,8 @@ public class MRectangle extends MGraphicElementLinePen {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#graphicElement");
 
-		IntegerPropertyDescriptor rD = new IntegerPropertyDescriptor(JRBaseStyle.PROPERTY_RADIUS, Messages.common_radius);
+		IntegerPropertyDescriptor rD = new IntegerPropertyDescriptor(JRBaseStyle.PROPERTY_RADIUS,
+				Messages.common_radius);
 		rD.setCategory(Messages.MRectangle_rectangle_properties_category);
 		rD.setDescription(Messages.MRectangle_radius_description);
 		rD.setBounds(0, Integer.MAX_VALUE);
@@ -99,13 +101,13 @@ public class MRectangle extends MGraphicElementLinePen {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rectangle");
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
-		
+
 		defaultsMap.put(JRBaseStyle.PROPERTY_RADIUS, new DefaultValue(null, true));
-		
+
 		return defaultsMap;
 	}
 
@@ -116,7 +118,7 @@ public class MRectangle extends MGraphicElementLinePen {
 			return jrElement.getOwnRadius();
 		return super.getPropertyValue(id);
 	}
-	
+
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignRectangle jrElement = (JRDesignRectangle) getValue();
@@ -157,7 +159,9 @@ public class MRectangle extends MGraphicElementLinePen {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
+	 * @see
+	 * com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.
+	 * engine.design.JasperDesign)
 	 */
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
@@ -179,7 +183,8 @@ public class MRectangle extends MGraphicElementLinePen {
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String p = getElementNameProperty();
+		return Misc.isNullOrEmpty(p) ? getIconDescriptor().getTitle() : p;
 	}
 
 	/*

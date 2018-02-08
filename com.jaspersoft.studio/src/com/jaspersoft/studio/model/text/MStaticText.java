@@ -18,6 +18,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRStaticText;
 import net.sf.jasperreports.engine.base.JRBaseStaticText;
@@ -29,14 +30,13 @@ import net.sf.jasperreports.engine.design.JasperDesign;
  * The Class MStaticText.
  */
 public class MStaticText extends MTextElement {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
-	private static IPropertyDescriptor[] descriptors;
 
+	private static IPropertyDescriptor[] descriptors;
 
 	/**
 	 * Gets the icon descriptor.
@@ -60,17 +60,17 @@ public class MStaticText extends MTextElement {
 	 * Instantiates a new m static text.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrStaticText
-	 *          the jr static text
+	 *            the jr static text
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MStaticText(ANode parent, JRStaticText jrStaticText, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrStaticText);
 	}
-	
+
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
@@ -85,12 +85,13 @@ public class MStaticText extends MTextElement {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		super.createPropertyDescriptors(desc);
 
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRBaseStaticText.PROPERTY_TEXT, Messages.common_text);
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRBaseStaticText.PROPERTY_TEXT,
+				Messages.common_text);
 		desc.add(textD);
 		textD.setCategory(Messages.MStaticText_text_description);
 
-		textD
-				.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#text"));
+		textD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#text"));
 	}
 
 	@Override
@@ -105,18 +106,18 @@ public class MStaticText extends MTextElement {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignStaticText jrElement = (JRDesignStaticText) getValue();
 
-		if (id.equals(JRBaseStaticText.PROPERTY_TEXT)){
+		if (id.equals(JRBaseStaticText.PROPERTY_TEXT)) {
 			jrElement.setText((String) value);
-		}	else
+		} else
 			super.setPropertyValue(id, value);
 	}
-
-
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
+	 * @see
+	 * com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.
+	 * engine.design.JasperDesign)
 	 */
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
@@ -136,10 +137,16 @@ public class MStaticText extends MTextElement {
 	 */
 	@Override
 	public String getDisplayText() {
-		if (getValue() != null) {
-			return ((JRStaticText) getValue()).getText();
+		String p = getElementNameProperty();
+		if (!Misc.isNullOrEmpty(p))
+			return p;
+		JRStaticText st = (JRStaticText) getValue();
+		if (st != null) {
+			p = st.getText();
+			if (!Misc.isNullOrEmpty(p))
+				return p;
 		}
-		return getIconDescriptor().getTitle();
+		return Misc.isNullOrEmpty(p) ? getIconDescriptor().getTitle() : p;
 	}
 
 	/*
@@ -164,11 +171,11 @@ public class MStaticText extends MTextElement {
 		}
 		return getIconDescriptor().getToolTip();
 	}
-	
+
 	/**
 	 * Return the graphical properties for an MStaticText
 	 */
-	public HashSet<String> generateGraphicalProperties(){
+	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> result = super.generateGraphicalProperties();
 		result.add(JRBaseStaticText.PROPERTY_TEXT);
 		return result;

@@ -7,6 +7,7 @@ package com.jaspersoft.studio.model;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.base.JRBaseBreak;
@@ -168,7 +169,8 @@ public class MBreak extends MGraphicElement {
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String p = getElementNameProperty();
+		return Misc.isNullOrEmpty(p) ? getIconDescriptor().getTitle() : p;
 	}
 
 	/*

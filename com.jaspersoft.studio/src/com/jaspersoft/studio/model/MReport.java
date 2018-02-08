@@ -217,7 +217,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 
 		JSSTextPropertyDescriptor descD = new JSSTextPropertyDescriptor(
 				PHolderUtil.COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION, Messages.common_description);
-		nameD.setCategory(Messages.common_report);
+		descD.setCategory(Messages.common_report);
 		descD.setDescription(Messages.common_description);
 		desc.add(descD);
 

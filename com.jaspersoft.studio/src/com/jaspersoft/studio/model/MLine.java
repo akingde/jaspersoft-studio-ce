@@ -18,6 +18,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRLine;
@@ -176,7 +177,8 @@ public class MLine extends MGraphicElementLinePen {
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String p = getElementNameProperty();
+		return Misc.isNullOrEmpty(p) ? getIconDescriptor().getTitle() : p;
 	}
 
 	/*

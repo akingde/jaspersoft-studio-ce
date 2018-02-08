@@ -4,15 +4,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.graphic;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /*
  * The location section on the location tab.
@@ -29,20 +30,25 @@ public class GraphicSection extends AbstractSection {
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
+	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent = getWidgetFactory().createSection(parent, Messages.GraphicSection_Detail_Section_Title, true, 2);
 		section1 = (ExpandableComposite) parent.getParent();
 
-		createWidget4Property(parent, JRDesignElement.PROPERTY_KEY).getControl().setLayoutData(
-				new GridData(GridData.FILL_HORIZONTAL));
+		createWidget4Property(parent, MGraphicElement.PROPERTY_ELEMENT_NAME).getControl()
+				.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		createWidget4Property(parent, JRDesignElement.PROPERTY_KEY).getControl()
+				.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		createWidget4Property(parent, JRDesignElement.PROPERTY_PARENT_STYLE);
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, false).getControl().setLayoutData(gd);
+		createWidget4Property(parent, JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, false).getControl()
+				.setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -70,7 +76,8 @@ public class GraphicSection extends AbstractSection {
 
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, false).getControl().setLayoutData(gd);
+		createWidget4Property(parent, JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, false).getControl()
+				.setLayoutData(gd);
 	}
 
 	private void expandSection(ExpandableComposite section) {

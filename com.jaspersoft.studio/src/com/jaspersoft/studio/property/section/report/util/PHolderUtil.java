@@ -6,6 +6,8 @@ package com.jaspersoft.studio.property.section.report.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.metadata.PropertyMetadataRegistry;
 
 import net.sf.jasperreports.annotations.properties.PropertyScope;
@@ -16,8 +18,13 @@ import net.sf.jasperreports.properties.PropertyMetadata;
 import net.sf.jasperreports.properties.StandardPropertyMetadata;
 
 public class PHolderUtil {
-	public static final String COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION = "com.jaspersoft.studio.report.description";
-	public static final String COM_JASPERSOFT_STUDIO_UNIT = "com.jaspersoft.studio.unit.";
+	private static final String COM_JASPERSOFT_STUDIO_DESIGNER_UNITS = "com.jaspersoft.studio.designer:units"; //$NON-NLS-1$
+
+	private PHolderUtil() {
+	}
+
+	public static final String COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION = "com.jaspersoft.studio.report.description"; //$NON-NLS-1$
+	public static final String COM_JASPERSOFT_STUDIO_UNIT = "com.jaspersoft.studio.unit."; //$NON-NLS-1$
 
 	public static String getUnit(JRPropertiesHolder pholder, String prop, String def) {
 		return Misc.nvl(pholder.getPropertiesMap().getProperty(COM_JASPERSOFT_STUDIO_UNIT + prop), def);
@@ -35,7 +42,7 @@ public class PHolderUtil {
 			pmap.setProperty(pname, unit);
 			return true;
 		}
-		if (p != null && unit == null) {
+		if (p != null) {
 			pmap.removeProperty(pname);
 			return true;
 		}
@@ -43,14 +50,14 @@ public class PHolderUtil {
 	}
 
 	public static void initMetadata() {
-		List<PropertyMetadata> pm = new ArrayList<PropertyMetadata>();
+		List<PropertyMetadata> pm = new ArrayList<>();
 
 		StandardPropertyMetadata spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "x");
-		spm.setLabel("Unit for x");
-		spm.setDescription("Unit for x");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "x"); //$NON-NLS-1$
+		spm.setLabel(Messages.PHolderUtil_4);
+		spm.setDescription(Messages.PHolderUtil_4);
 		spm.setValueType(String.class.getName());
-		List<PropertyScope> scopes = new ArrayList<PropertyScope>();
+		List<PropertyScope> scopes = new ArrayList<>();
 		scopes.add(PropertyScope.ELEMENT);
 		scopes.add(PropertyScope.FRAME);
 		scopes.add(PropertyScope.BAND);
@@ -58,145 +65,155 @@ public class PHolderUtil {
 		scopes.add(PropertyScope.TABLE_CELL);
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "y");
-		spm.setLabel("Unit for y");
-		spm.setDescription("Unit for y");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "y"); //$NON-NLS-1$
+		spm.setLabel(Messages.PHolderUtil_7);
+		spm.setDescription(Messages.PHolderUtil_7);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.ELEMENT);
 		scopes.add(PropertyScope.FRAME);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "width");
-		spm.setLabel("Unit for width");
-		spm.setDescription("Unit for width");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + Messages.PHolderUtil_9);
+		spm.setLabel(Messages.PHolderUtil_10);
+		spm.setDescription(Messages.PHolderUtil_10);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.ELEMENT);
 		scopes.add(PropertyScope.FRAME);
 		scopes.add(PropertyScope.CROSSTAB_CELL);
 		scopes.add(PropertyScope.TABLE_CELL);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "height");
-		spm.setLabel("Unit for height");
-		spm.setDescription("Unit for height");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + Messages.PHolderUtil_12);
+		spm.setLabel(Messages.PHolderUtil_13);
+		spm.setDescription(Messages.PHolderUtil_13);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.ELEMENT);
 		scopes.add(PropertyScope.FRAME);
 		scopes.add(PropertyScope.BAND);
 		scopes.add(PropertyScope.CROSSTAB_CELL);
 		scopes.add(PropertyScope.TABLE_CELL);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "pageHeight");
-		spm.setLabel("Unit for page height");
-		spm.setDescription("Unit for page height");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + Messages.PHolderUtil_15);
+		spm.setLabel(Messages.PHolderUtil_16);
+		spm.setDescription(Messages.PHolderUtil_16);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "pageWidth");
-		spm.setLabel("Unit for page width");
-		spm.setDescription("Unit for page width");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + Messages.PHolderUtil_18);
+		spm.setLabel(Messages.PHolderUtil_19);
+		spm.setDescription(Messages.PHolderUtil_19);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "topMargin");
-		spm.setLabel("Unit for page top margin");
-		spm.setDescription("Unit for page top margin");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + Messages.PHolderUtil_21);
+		spm.setLabel(Messages.PHolderUtil_22);
+		spm.setDescription(Messages.PHolderUtil_22);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "bottomMargin");
-		spm.setLabel("Unit for page bottom margin");
-		spm.setDescription("Unit for page bottom margin");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + Messages.PHolderUtil_24);
+		spm.setLabel(Messages.PHolderUtil_25);
+		spm.setDescription(Messages.PHolderUtil_25);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "leftMargin");
-		spm.setLabel("Unit for page left margin");
-		spm.setDescription("Unit for page left margin");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + Messages.PHolderUtil_27);
+		spm.setLabel(Messages.PHolderUtil_28);
+		spm.setDescription(Messages.PHolderUtil_28);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "rightMargin");
-		spm.setLabel("Unit for page right margin");
-		spm.setDescription("Unit for page right margin");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + Messages.PHolderUtil_30);
+		spm.setLabel(Messages.PHolderUtil_31);
+		spm.setDescription(Messages.PHolderUtil_31);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "columnWidth");
-		spm.setLabel("Unit for page column width");
-		spm.setDescription("Unit for page column width");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + Messages.PHolderUtil_33);
+		spm.setLabel(Messages.PHolderUtil_34);
+		spm.setDescription(Messages.PHolderUtil_34);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
-		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + "columnSpacing");
-		spm.setLabel("Unit for page column spacing");
-		spm.setDescription("Unit for page column spacing");
+		spm.setName(COM_JASPERSOFT_STUDIO_UNIT + Messages.PHolderUtil_36);
+		spm.setLabel(Messages.PHolderUtil_37);
+		spm.setDescription(Messages.PHolderUtil_37);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.designer:units");
+		spm.setCategory(COM_JASPERSOFT_STUDIO_DESIGNER_UNITS);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
 		spm.setName(COM_JASPERSOFT_STUDIO_REPORT_DESCRIPTION);
-		spm.setLabel("Description");
-		spm.setDescription("Report description.");
+		spm.setLabel(Messages.PHolderUtil_39);
+		spm.setDescription(Messages.PHolderUtil_40);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<PropertyScope>();
+		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
+		spm.setScopes(scopes);
+		pm.add(spm);
+
+		spm = new StandardPropertyMetadata();
+		spm.setName(MGraphicElement.PROPERTY_ELEMENT_NAME); //$NON-NLS-1$
+		spm.setLabel(Messages.PHolderUtil_1);
+		spm.setDescription("Element label that will be used in outline and other views");
+		spm.setValueType(String.class.getName());
+		scopes = new ArrayList<>();
+		scopes.add(PropertyScope.ELEMENT);
 		spm.setScopes(scopes);
 		pm.add(spm);
 

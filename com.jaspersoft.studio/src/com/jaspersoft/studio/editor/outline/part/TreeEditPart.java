@@ -80,6 +80,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	protected EditPart lastEditorFeedback = null;
 
 	public TreeEditPart() {
+		// nothing to do
 	}
 
 	/**

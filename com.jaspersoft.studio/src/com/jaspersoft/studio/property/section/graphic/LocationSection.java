@@ -24,16 +24,17 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 public class LocationSection extends AbstractSection {
 
 	private ExpandableComposite section;
-	
+
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
+	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent = getWidgetFactory().createSection(parent, Messages.LocationSection_locationLabel, true, 4);
-		section = (ExpandableComposite)parent.getParent();
+		section = (ExpandableComposite) parent.getParent();
 
 		ASPropertyWidget<?> pw = createWidget4Property(parent, JRDesignElement.PROPERTY_X);
 		CLabel lbl = pw.getLabel();
@@ -50,14 +51,14 @@ public class LocationSection extends AbstractSection {
 		gd.horizontalSpan = 3;
 		w.getControl().setLayoutData(gd);
 	}
-	
+
 	@Override
 	public void expandForProperty(Object propertyId) {
 		if (section != null && !section.isExpanded()) {
 			section.setExpanded(true);
 		}
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();

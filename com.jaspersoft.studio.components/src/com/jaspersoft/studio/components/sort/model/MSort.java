@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.sort.SortComponent;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;
@@ -138,7 +139,8 @@ public class MSort extends MGraphicElement {
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String p = getElementNameProperty();
+		return Misc.isNullOrEmpty(p) ? getIconDescriptor().getTitle() : p;
 	}
 
 	/*

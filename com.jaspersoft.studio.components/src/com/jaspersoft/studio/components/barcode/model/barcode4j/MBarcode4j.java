@@ -27,6 +27,7 @@ import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 import net.sf.jasperreports.components.barcode4j.Barcode4jComponent;
 import net.sf.jasperreports.components.barcode4j.OrientationEnum;
 import net.sf.jasperreports.components.barcode4j.TextPositionEnum;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -93,7 +94,8 @@ public class MBarcode4j extends MBarcode {
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String p = getElementNameProperty();
+		return Misc.isNullOrEmpty(p) ? getIconDescriptor().getTitle() : p;
 	}
 
 	/*

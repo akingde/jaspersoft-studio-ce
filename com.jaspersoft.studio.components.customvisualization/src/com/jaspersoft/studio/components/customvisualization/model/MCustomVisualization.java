@@ -89,6 +89,9 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 
 	@Override
 	public String getDisplayText() {
+		String p = getElementNameProperty();
+		if (!Misc.isNullOrEmpty(p))
+			return p;
 		CVCWidgetsDescriptor cd = ItemPropertiesUtil.getComponentDescriptor(this);
 		if (cd != null)
 			return Misc.nvl(cd.getLocalizedString(cd.getLabel()), getIconDescriptor().getTitle());
@@ -185,18 +188,18 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 		onErrorTypeD.setDescription(Messages.MCustomVisualization_OnErrorTypeDesc);
 		desc.add(onErrorTypeD);
 
-
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
-		
+
 		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, false));
-		
-		int errorTypeValue = NamedEnumPropertyDescriptor.getIntValue(OnErrorTypeEnum.ERROR, NullEnum.NULL, OnErrorTypeEnum.ERROR);
+
+		int errorTypeValue = NamedEnumPropertyDescriptor.getIntValue(OnErrorTypeEnum.ERROR, NullEnum.NULL,
+				OnErrorTypeEnum.ERROR);
 		defaultsMap.put(CVDesignComponent.PROPERTY_ON_ERROR_TYPE, new DefaultValue(errorTypeValue, true));
-		
+
 		return defaultsMap;
 	}
 

@@ -19,6 +19,7 @@ import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JREllipse;
@@ -36,8 +37,7 @@ public class MEllipse extends MGraphicElementLinePen {
 	private static IIconDescriptor iconDescriptor;
 	private static IPropertyDescriptor[] descriptors;
 	private static final String[] fillEnumNames = EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED);
-	
-	
+
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -70,14 +70,14 @@ public class MEllipse extends MGraphicElementLinePen {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		super.createPropertyDescriptors(desc);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(
-				JRBaseStyle.PROPERTY_FILL, Messages.common_fill, fillEnumNames);
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL,
+				Messages.common_fill, fillEnumNames);
 		fillD.setDescription(Messages.MEllipse_fill_description);
 		desc.add(fillD);
 
@@ -109,8 +109,7 @@ public class MEllipse extends MGraphicElementLinePen {
 		JRDesignEllipse jrElement = (JRDesignEllipse) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL)) {
 			jrElement.setFill(EnumHelper.getEnumByObjectValue(FillEnum.values(), value, true));
-		}
-		else {
+		} else {
 			super.setPropertyValue(id, value);
 		}
 	}
@@ -119,11 +118,11 @@ public class MEllipse extends MGraphicElementLinePen {
 	 * Instantiates a new m ellipse.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrEllipse
-	 *          the jr ellipse
+	 *            the jr ellipse
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MEllipse(ANode parent, JRDesignEllipse jrEllipse, int newIndex) {
 		super(parent, newIndex);
@@ -132,20 +131,24 @@ public class MEllipse extends MGraphicElementLinePen {
 
 	@Override
 	public int getDefaultHeight() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
-		return defaultValue != null ? (Integer)defaultValue : 50;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer) defaultValue : 50;
 	}
 
 	@Override
 	public int getDefaultWidth() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
-		return defaultValue != null ? (Integer)defaultValue : 100;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer) defaultValue : 100;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
+	 * @see
+	 * com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.
+	 * engine.design.JasperDesign)
 	 */
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
@@ -167,7 +170,8 @@ public class MEllipse extends MGraphicElementLinePen {
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String p = getElementNameProperty();
+		return Misc.isNullOrEmpty(p) ? getIconDescriptor().getTitle() : p;
 	}
 
 	/*
@@ -200,19 +204,19 @@ public class MEllipse extends MGraphicElementLinePen {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JREllipse jrSource = (JREllipse) getValue();
-		if (jrSource != null){
-			((JREllipse)target).setFill(jrSource.getOwnFillValue());
+		if (jrSource != null) {
+			((JREllipse) target).setFill(jrSource.getOwnFillValue());
 		}
 	}
-	
+
 	@Override
-	public HashSet<String> generateGraphicalProperties(){
+	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> result = super.generateGraphicalProperties();
 		result.add(JRBaseStyle.PROPERTY_FILL);
 		return result;

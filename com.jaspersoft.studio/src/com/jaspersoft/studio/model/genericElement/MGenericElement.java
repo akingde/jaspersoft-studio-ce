@@ -7,6 +7,7 @@ package com.jaspersoft.studio.model.genericElement;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRGenericElementParameter;
 import net.sf.jasperreports.engine.JRGenericElementType;
@@ -91,7 +92,8 @@ public class MGenericElement extends MGraphicElement {
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String p = getElementNameProperty();
+		return Misc.isNullOrEmpty(p) ? getIconDescriptor().getTitle() : p;
 	}
 
 	/*
