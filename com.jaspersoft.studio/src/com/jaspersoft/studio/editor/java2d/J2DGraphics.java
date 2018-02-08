@@ -6,6 +6,7 @@ package com.jaspersoft.studio.editor.java2d;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
+import java.awt.Composite;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -132,6 +133,16 @@ public class J2DGraphics extends Graphics {
 	@Override
 	public void setAlpha(int alpha) {
 		getGraphics2D().setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (alpha / 255.0f)));
+	}
+	
+	@Override
+	public int getAlpha() {
+		Composite comp = getGraphics2D().getComposite();
+		if (comp instanceof AlphaComposite) {
+			AlphaComposite alphaComp = (AlphaComposite)comp;
+			return Math.round(alphaComp.getAlpha() * 255);
+		}
+		return 255;
 	}
 
 	/** Current XOR mode. */
