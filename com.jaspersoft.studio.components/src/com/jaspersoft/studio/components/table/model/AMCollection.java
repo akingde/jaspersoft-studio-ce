@@ -30,6 +30,14 @@ public abstract class AMCollection extends MCollection {
 			String property) {
 		super(parent, jrDataset, property);
 	}
+	
+	@Override
+	public void register() {
+		//the table collections doesn't register them self because
+		//the would use the same key of the table (the JRDesignComponentElement)
+		//overriding the registration of the table, that is the real node
+		//associated with the key
+	}
 
 	/*
 	 * (non-Javadoc)
