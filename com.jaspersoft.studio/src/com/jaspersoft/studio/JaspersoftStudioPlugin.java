@@ -47,7 +47,6 @@ import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
-import net.sf.jasperreports.eclipse.util.HttpUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
