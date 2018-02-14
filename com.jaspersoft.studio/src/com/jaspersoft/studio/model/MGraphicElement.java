@@ -14,7 +14,6 @@ import java.util.Map;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
@@ -1207,21 +1206,30 @@ public class MGraphicElement extends APropertyNode
 		return true;
 	}
 
+
 	@Override
-	public Point getAbsoluteLocation() {
+	public Rectangle getAbsoluteBounds() {
 		int x = getValue().getX();
 		int y = getValue().getY();
 		ANode parent = getParent();
 		if (parent instanceof IGraphicalPropertiesHandler) {
-			Point parentLocation = ((IGraphicalPropertiesHandler)parent).getAbsoluteLocation();
+			Rectangle parentLocation = ((IGraphicalPropertiesHandler)parent).getAbsoluteBounds();
 			x += parentLocation.x;
 			y += parentLocation.y;
 		} else if (parent instanceof MBand) {
 			JasperDesign jd = getJasperDesign();
+			int bandVOffset = 0;
+			for(JRBand band : jd.getAllBands()) {
+				if (band != null && band != parent.getValue()) {
+					bandVOffset += band.getHeight();
+				} else {
+					break;
+				}
+			}
 			x += jd.getLeftMargin();
-			y += jd.getTopMargin();
+			y += jd.getTopMargin() + bandVOffset;
 		}
-		return new Point(x,y);
+		return new Rectangle(x,y, getValue().getWidth(), getValue().getHeight());
 	}
 
 }

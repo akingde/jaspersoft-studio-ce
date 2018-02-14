@@ -13,8 +13,8 @@ import java.util.Map;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
@@ -550,11 +550,11 @@ public class MCell extends MColumn implements IGraphicElement,
 	}
 
 	@Override
-	public Point getAbsoluteLocation() {
+	public Rectangle getAbsoluteBounds() {
 		StandardBaseColumn currentColumn = getValue();
 		MTable tableModel = getTable();
 		StandardTable table = tableModel.getStandardTable();
-		Point tableLocation = tableModel.getAbsoluteLocation();
+		Rectangle tableLocation = tableModel.getAbsoluteBounds();
 		int previousColumnsWidth = 0;
 		for(BaseColumn column : table.getColumns()) {
 			if (column == currentColumn) {
@@ -565,6 +565,6 @@ public class MCell extends MColumn implements IGraphicElement,
 		}
 		int x = previousColumnsWidth + tableLocation.x;
 		int y = getBounds().y + tableLocation.y;
-		return new Point(x, y);
+		return new Rectangle(x, y, getValue().getWidth(), cell.getHeight());
 	}
 }

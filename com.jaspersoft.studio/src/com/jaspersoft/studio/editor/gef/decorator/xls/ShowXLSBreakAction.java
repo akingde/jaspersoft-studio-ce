@@ -11,14 +11,14 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Tag in the viewer to display or not the XLS decorator
+ * Tag in the viewer to display or not the XLS break decorator
  * 
  * @author Orlandin Marco
  * 
  */
-public class ShowXLSTagsAction extends ACheckResourcePrefAction {
+public class ShowXLSBreakAction extends ACheckResourcePrefAction {
 	
-	public static final String ID = "com.jaspersoft.studio.editor.gef.decorator.xls.ShowXLSTagsAction"; //$NON-NLS-1$
+	public static final String ID = "com.jaspersoft.studio.editor.gef.decorator.xls.ShowXLSBreakAction"; //$NON-NLS-1$
 
 	/**
 	 * Constructor
@@ -26,9 +26,9 @@ public class ShowXLSTagsAction extends ACheckResourcePrefAction {
 	 * @param diagramViewer
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
-	public ShowXLSTagsAction(GraphicalViewer diagramViewer, JasperReportsConfiguration jrConfig) {
-		super(Messages.ShowXLSTagsAction_label, jrConfig);
-		setToolTipText(Messages.ShowXLSTagsAction_toolTip);
+	public ShowXLSBreakAction(GraphicalViewer diagramViewer, JasperReportsConfiguration jrConfig) {
+		super(Messages.ShowXLSBreakAction_name, jrConfig);
+		setToolTipText(Messages.ShowXLSBreakAction_tooltip);
 		setId(ID);
 	}
 
@@ -36,5 +36,4 @@ public class ShowXLSTagsAction extends ACheckResourcePrefAction {
 	protected String getProperty() {
 		return ID;
 	}
-	
 }

@@ -14,7 +14,6 @@ import java.util.Map;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabCell;
@@ -623,12 +622,12 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 	
 	@Override
-	public Point getAbsoluteLocation() {
+	public Rectangle getAbsoluteBounds() {
 		MCrosstab crosstabModel = getCrosstab();
-		Point crosstabLocationLocation = crosstabModel.getAbsoluteLocation();
+		Rectangle crosstabLocationLocation = crosstabModel.getAbsoluteBounds();
 		Rectangle cellBounds = getBounds();
 		int x = cellBounds.x + crosstabLocationLocation.x;
 		int y = cellBounds.y + crosstabLocationLocation.y;
-		return new Point(x, y);
+		return new Rectangle(x, y, cellBounds.width, cellBounds.height);
 	}
 }

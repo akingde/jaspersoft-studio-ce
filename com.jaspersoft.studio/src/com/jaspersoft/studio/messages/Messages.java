@@ -2081,6 +2081,8 @@ public class Messages extends NLS {
 	public static String ShowPropertyViewAction_show_properties_tool_tip;
 	public static String ShowRullersAction_0;
 	public static String ShowRullersAction_1;
+	public static String ShowXLSBreakAction_name;
+	public static String ShowXLSBreakAction_tooltip;
 	public static String ShowXLSTagsAction_label;
 	public static String ShowXLSTagsAction_toolTip;
 	public static String SimpleQueryWizardDataEditorComposite_noQueryProvidedText;

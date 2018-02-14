@@ -6,7 +6,7 @@ package com.jaspersoft.studio.model;
 
 import java.util.HashSet;
 
-import org.eclipse.swt.graphics.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 
 /**
  * Class used to support the refresh system of the elements only when 
@@ -50,7 +50,7 @@ public interface IGraphicalPropertiesHandler {
 	/**
 	 * Return the absolute position of the element inside the report
 	 * 
-	 * @return a not null point
+	 * @return a not null rectangle
 	 */
-	public Point getAbsoluteLocation();
+	public Rectangle getAbsoluteBounds();
 }

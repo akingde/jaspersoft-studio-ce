@@ -99,6 +99,7 @@ public class JDTreeContainerEditPolicy extends TreeContainerEditPolicy {
 	@Override
 	protected Command getMoveChildrenCommand(ChangeBoundsRequest request) {
 		JSSCompoundCommand command = new JSSCompoundCommand(null);
+		//command.enableSelectionRestore(true);
 		List<?> editparts = request.getEditParts();
 		List<?> children = getHost().getChildren();
 		int newIndex = findIndexOfTreeItemAt(request.getLocation());
