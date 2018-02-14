@@ -97,9 +97,10 @@ public class SelectionHelper {
 	 * @return the node of the passed element in the current editor, or null if it can't be found
 	 */
 	public static ANode getNode(JRChild jrElement) {
-		AbstractJRXMLEditor editor = (AbstractJRXMLEditor) getActiveJRXMLEditor();
-		if (editor != null) {
-			IEditorPart designEditor = editor.getActiveInnerEditor();
+		IEditorPart activeEditor = getActiveJRXMLEditor();
+		if (activeEditor != null && activeEditor instanceof AbstractJRXMLEditor) {
+			AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor) activeEditor;
+			IEditorPart designEditor = jrxmlEditor.getActiveInnerEditor();
 			if (designEditor instanceof AbstractVisualEditor) {
 				AbstractVisualEditor visualEditor = (AbstractVisualEditor) designEditor;
 				INode model = visualEditor.getModel();
