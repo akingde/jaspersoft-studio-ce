@@ -570,9 +570,12 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				} else if (parent instanceof MParameter) {
 					JRDesignParameter p = (JRDesignParameter) child.getValue();
 					if ((p == null || !p.isSystemDefined()) && parent.getParent() != null) {
-						newIndex = parent.getParent().getChildren().indexOf(parent);
-						return new CreateParameterCommand((MParameters<?>) parent.getParent(), (MParameter) child,
-								newIndex);
+						MParameters<?> paramterParent = (MParameters<?>)parent.getParent();
+						if (paramterParent.getValue() instanceof JRDesignDataset) {
+							newIndex = parent.getParent().getChildren().indexOf(parent);
+							return new CreateParameterCommand((MParameters<?>) parent.getParent(), (MParameter) child,
+									newIndex);
+						}
 					}
 				}
 			}
