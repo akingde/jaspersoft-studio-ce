@@ -312,7 +312,7 @@ public class XLSElementDecorator extends ChainableElementDecorator {
 	@Override
 	public RetargetAction[] buildMenuActions() {
 		return new RetargetAction[] { new RetargetAction(ShowXLSTagsAction.ID, Messages.XLSElementDecorator_showXLSTagsLabel, IAction.AS_CHECK_BOX),
-															new RetargetAction(ShowXLSBreakAction.ID, "Show XLS Break", IAction.AS_CHECK_BOX) };
+															new RetargetAction(ShowXLSBreakAction.ID, Messages.ShowXLSBreakAction_name, IAction.AS_CHECK_BOX) };
 	}
 
 	@Override
