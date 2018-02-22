@@ -31,7 +31,7 @@ public class JPropertiesCellEditor extends EditableDialogCellEditor {
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK)
-			return wizard.getValue();
+			return new JRPropertiesMap(wizard.getValue());
 		return null;
 	}
 
