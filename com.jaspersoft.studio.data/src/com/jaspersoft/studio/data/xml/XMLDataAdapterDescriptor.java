@@ -254,7 +254,9 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor
 		f.getPropertiesMap().setProperty("net.sf.jasperreports.xpath.field.expression", description);
 		// Let's consider the description indicating the XPath query
 		// as unique and therefore as map key.
-		fieldsMap.put(description, f);
+		if(!fieldsMap.containsKey(description)){
+			fieldsMap.put(description, f);			
+		}
 	}
 
 	/*
