@@ -332,7 +332,7 @@ public class CategoriesPage extends JSSWizardPage {
 	{
 		categoriesSelected.clear();
 		for(TableItem item : rightTable.getItems()){
-			categoriesSelected.add(item.getData().toString());
+			categoriesSelected.add(((Category)item.getData()).name);
 		}
 	}
 	
