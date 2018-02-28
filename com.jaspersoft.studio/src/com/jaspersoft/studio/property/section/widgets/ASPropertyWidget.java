@@ -39,6 +39,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -179,10 +180,14 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 						resetItem.addSelectionListener(new SelectionAdapter() {
 							@Override
 							public void widgetSelected(SelectionEvent e) {
-								ResetValueCommand cmd = new ResetValueCommand();
-								cmd.setPropertyId(propertyID);
-								cmd.setTarget(node);
-								section.getEditDomain().getCommandStack().execute(cmd);
+								JSSCompoundCommand resetCommand = new JSSCompoundCommand(node);
+								for(APropertyNode selectedNode : section.getElements()) {
+									ResetValueCommand cmd = new ResetValueCommand();
+									cmd.setPropertyId(propertyID);
+									cmd.setTarget(selectedNode);
+									resetCommand.add(cmd);
+								}
+								section.getEditDomain().getCommandStack().execute(resetCommand);
 								focusControl(control);
 							}
 						});
@@ -196,11 +201,15 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 						nullItem.addSelectionListener(new SelectionAdapter() {
 							@Override
 							public void widgetSelected(SelectionEvent e) {
-								SetValueCommand cmd = new SetValueCommand();
-								cmd.setPropertyId(propertyID);
-								cmd.setTarget(node);
-								cmd.setPropertyValue(null);
-								section.getEditDomain().getCommandStack().execute(cmd);
+								JSSCompoundCommand resetCommand = new JSSCompoundCommand(node);
+								for(APropertyNode selectedNode : section.getElements()) {
+									SetValueCommand cmd = new SetValueCommand();
+									cmd.setPropertyId(propertyID);
+									cmd.setTarget(selectedNode);
+									cmd.setPropertyValue(null);
+									resetCommand.add(cmd);
+								}
+								section.getEditDomain().getCommandStack().execute(resetCommand);
 								focusControl(control);
 							}
 						});
