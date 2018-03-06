@@ -39,6 +39,7 @@ import com.jaspersoft.studio.editor.action.OpenEditorAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.UnBindElementsAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
+import com.jaspersoft.studio.editor.action.band.ImportContentAction;
 import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
 import com.jaspersoft.studio.editor.action.band.StretchToContentAction;
 import com.jaspersoft.studio.editor.action.copy.CopyFormatAction;
@@ -691,6 +692,10 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action.isEnabled())
 			menu.add(action);
 
+		action = getActionRegistry().getAction(ImportContentAction.ID);
+		if (action.isEnabled())
+			menu.add(action);
+		
 		action = getActionRegistry().getAction(MaximizeContainerAction.ID);
 		if (action.isEnabled())
 			menu.add(action);
