@@ -56,7 +56,7 @@ public abstract class AHistorySPropertyWidget<K extends IPropertyDescriptor> ext
 	private void activateHandlers() {
 		if (getBindingService() == null)
 			return;
-		ICommandService cs = PlatformUI.getWorkbench().getService(ICommandService.class);
+		ICommandService cs = (ICommandService)PlatformUI.getWorkbench().getService(ICommandService.class);
 		if (cs != null)
 			bindingService.readRegistryAndPreferences(cs);
 	}

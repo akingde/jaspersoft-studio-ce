@@ -479,7 +479,7 @@ public class CustomPropertySheetEntry extends EventManager implements IResettabl
 
     if (object instanceof IAdaptable) {
         IAdaptable adaptable = (IAdaptable) object;
-        IPropertySourceProvider result = adaptable.getAdapter(IPropertySourceProvider.class);
+        IPropertySourceProvider result = (IPropertySourceProvider)adaptable.getAdapter(IPropertySourceProvider.class);
         if (result != null) {
             return result;
         }
@@ -494,7 +494,7 @@ public class CustomPropertySheetEntry extends EventManager implements IResettabl
 
     if (object instanceof IAdaptable) {
         IAdaptable adaptable = (IAdaptable) object;
-        IPropertySource result = adaptable.getAdapter(IPropertySource.class);
+        IPropertySource result = (IPropertySource)adaptable.getAdapter(IPropertySource.class);
         if (result != null) {
             return result;
         }

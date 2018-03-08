@@ -1047,7 +1047,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
       if (sourceObject instanceof IAdaptable) {
           IAdaptable adaptable = (IAdaptable) sourceObject;
 
-		T result = adaptable.getAdapter(adapterType);
+		T result = (T)adaptable.getAdapter(adapterType);
           if (result != null) {
               // Sanity-check
               Assert.isTrue(adapterType.isInstance(result));
@@ -1056,7 +1056,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
       }
 
       if (!(sourceObject instanceof PlatformObject)) {
-		T result = Platform.getAdapterManager().getAdapter(sourceObject, adapterType);
+		T result = (T)Platform.getAdapterManager().getAdapter(sourceObject, adapterType);
           if (result != null) {
               return result;
           }

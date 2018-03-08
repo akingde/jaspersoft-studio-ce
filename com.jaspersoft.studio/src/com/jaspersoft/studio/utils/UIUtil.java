@@ -639,7 +639,17 @@ public class UIUtil {
 		String minSWTVersion = "3.104"; //$NON-NLS-1$
 		String currentSWTVersion = BundleCommonUtils.getBundleVersion("org.eclipse.swt"); //$NON-NLS-1$
 		if(currentSWTVersion!=null && currentSWTVersion.compareTo(minSWTVersion)>=0){
-			menuItem.setToolTipText(tooltipTxt);
+			//in the min platform the method is not defined, to have it working at compile time
+			//try to resolve this with the reflection
+			java.lang.reflect.Method method;
+			try {
+			  method = menuItem.getClass().getMethod("setToolTipText", String.class);
+			  method.invoke(menuItem, tooltipTxt);
+			} catch (NoSuchMethodException e) {
+				//the method is not defined in the current platform, do nothing
+			} catch (Exception e) { 
+				e.printStackTrace();
+			}
 		}
 	}
 }
