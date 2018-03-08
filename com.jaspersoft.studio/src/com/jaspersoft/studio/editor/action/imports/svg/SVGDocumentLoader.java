@@ -1,3 +1,7 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
+ * All Rights Reserved. Confidential & Proprietary.
+ ******************************************************************************/
 package com.jaspersoft.studio.editor.action.imports.svg;
 
 import java.awt.Color;
@@ -62,6 +66,7 @@ import org.w3c.dom.svg.SVGPaint;
 import org.w3c.dom.svg.SVGRect;
 import org.w3c.dom.svg.SVGSVGElement;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -83,16 +88,31 @@ import net.sf.jasperreports.engine.util.JRStyledTextParser;
 import net.sf.jasperreports.engine.util.JRStyledTextUtil;
 import net.sf.jasperreports.engine.util.JRTextMeasurerUtil;
 
+/**
+ * Class to convert an SVG file into a series of JRDesignElement. 
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class SVGDocumentLoader {
 
   private static final double degree = 180 / Math.PI;
   
   private static final double radian = Math.PI / 180;
 	
+  /**
+   * Prefix of the image imported into the workspace, because for the SVG are stored as byte blob in base64
+   */
   private static final String IMPORTED_IMAGE_PREFIX = "imported_image_"; //$NON-NLS-1$
   
+  /**
+   * The loaded document
+   */
   private Document svgDocument;
   
+  /**
+   * The {@link JasperReportsConfiguration} of the report where the elements will be created
+   */
   private JasperReportsConfiguration jConfig;
 
   /**
@@ -112,6 +132,40 @@ public class SVGDocumentLoader {
 	  return new String(chars);
   }
   
+  protected int getSplitPoint(String text, int startPoint) {
+	  char[] chars = text.toCharArray();
+	  for(int i = startPoint ; i < chars.length ; i++) {
+		  char c = chars[i];
+		  if (c == ' ') {
+			  return i;
+		  } else if (c == '.' || c == ',') {
+			  return i+1;
+		  }
+	  }
+	  return -1;
+  }
+  
+  /**
+   * Look in the passed svg element for its transformation matrix and return 
+   * the affine transform of it
+   * 
+   * @param element a not null SVG element
+   * @return a not null affine transform
+   */
+  private AffineTransform getTransofrm(SVGOMElement element) {
+	  TransformListParser transformMatrix = new TransformListParser();
+      AWTTransformProducer matrixProducer = new AWTTransformProducer();
+      transformMatrix.setTransformListHandler(matrixProducer);
+      transformMatrix.parse(element.getAttribute("transform")); //$NON-NLS-1$
+      return matrixProducer.getAffineTransform();
+  }
+ 
+  /**
+   * check if a {@link CSSStyleDeclaration} has the attribute to be bold
+   * 
+   * @param style a not null {@link CSSStyleDeclaration}
+   * @return true if the style has the bold attribute, false otherwise
+   */
   private boolean isBold(CSSStyleDeclaration style) {
 	  String fontWeight = style.getPropertyValue("font-weight"); //$NON-NLS-1$
 	  if (fontWeight != null && !fontWeight.trim().isEmpty()) {
@@ -130,6 +184,12 @@ public class SVGDocumentLoader {
 	  return false;
   }
   
+  /**
+   * check a {@link CSSStyleDeclaration} for the stroke width
+   * 
+   * @param style a not null {@link CSSStyleDeclaration}
+   * @return the float value of the stroke or 0 if it can't be found
+   */
   private float getStrokeWidth(CSSStyleDeclaration style) {
 	  String strokeWidth = style.getPropertyValue("stroke-width"); //$NON-NLS-1$
 	  if (StringUtils.isNumeric(strokeWidth)) {
@@ -142,7 +202,12 @@ public class SVGDocumentLoader {
 	  return 0f;
   }
   
-  
+  /**
+   * check if a {@link CSSStyleDeclaration} has the attribute to be italic
+   * 
+   * @param style a not null {@link CSSStyleDeclaration}
+   * @return true if the style has the italic attribute, false otherwise
+   */
   private boolean isItalic(CSSStyleDeclaration style) {
 	  String fontWeight = style.getPropertyValue("font-style"); //$NON-NLS-1$
 	  if (fontWeight != null && !fontWeight.trim().isEmpty()) {
@@ -156,7 +221,7 @@ public class SVGDocumentLoader {
   /** 
    * Returns the color of the given attribute in the given element. 
    * 
-   * @param element An element with color attributes. 
+   * @param style a not null {@link CSSStyleDeclaration}
    * @param attribute The name of the attribute (fill, stroke, etc.) 
    * 
    * @return An instance of Color. 
@@ -186,6 +251,46 @@ public class SVGDocumentLoader {
 	  return result;
   }
   
+  /**
+   * Parse the coordinate value converting them from string to value
+   * 
+   * @param value the string value
+   * @return the value as double or 0 if the value is null or empty
+   */
+  private double parseCoordinates(String value) {
+	  if (value == null || value.trim().isEmpty()) return 0;
+	  if (value.contains(" ")) { //$NON-NLS-1$
+		  value = value.split(" ")[0]; //$NON-NLS-1$
+	  }
+	  return Double.parseDouble(value);
+  }
+  
+  /**
+   * Parse a list of coordinates converting them from string to value
+   * 
+   * @param value the string value
+   * @return a list of double, can be null
+   */
+  private List<Double> parseCoordinatesList(String value) {
+	  if (value == null || value.trim().isEmpty()) return null;
+	  String[] stringValues = value.split(" "); //$NON-NLS-1$
+	  List<Double> result = new ArrayList<>();
+	  for(String stringValue : stringValues) {
+		  try {
+			  result.add(Double.parseDouble(stringValue));
+		  }catch (Exception ex) {
+			  ex.printStackTrace();
+		  }
+	  }
+	  return result;
+  }
+  
+  /**
+   * Return the rotation in degree given by the current transform
+   * 
+   * @param transform a not null transform
+   * @return the rotation in degree of the element
+   */
   private double getRotation(AffineTransform transform)  {
       /**
        * scaleX = sqrt(a^2+c^2)
@@ -211,6 +316,13 @@ public class SVGDocumentLoader {
       return rotation * degree;
   }
   
+  /**
+   * Return the size that a {@link JRDesignStaticText} must have to contains and show the text
+   * inside it
+   * 
+   * @param newStaticText a not null {@link JRDesignStaticText}
+   * @return the size the text will have inside the static text
+   */
   private JRMeasuredText getTextSize(JRDesignStaticText newStaticText) {
 	  String text = newStaticText.getText();
 	  JRTextMeasurer measurer = JRTextMeasurerUtil.getInstance(jConfig).createTextMeasurer(newStaticText, null);
@@ -222,6 +334,18 @@ public class SVGDocumentLoader {
 	  return measuredText;
   }
   
+  /**
+   * Generate the {@link JRDesignStaticText} with the passed attributes
+   * @param text the text inside the {@link JRDesignStaticText}
+   * @param style the resolved style in the SVG format
+   * @param x the x position where the element will be placed
+   * @param y the y position where be placed
+   * @param singleCharX this is currently not used but it would be the x defined into the tspan x position when it uses an array. In svg is 
+   * possible define an array of x into a tspan, this means give to position for every single character
+   * @param boundingBox this is the bounding box of the text in the svg, currently this is not used
+   * @param transform the current transform
+   * @return a not null {@link JRDesignStaticText}
+   */
   private JRDesignStaticText generateText(String text, CSSStyleDeclaration style, int x, int y, List<Double> singleCharX, SVGRect boundingBox, AffineTransform transform) {
 	  JRDesignStaticText newStaticText = new JRDesignStaticText(); 
 	  float fontSize = 9f;
@@ -303,40 +427,14 @@ public class SVGDocumentLoader {
 	  return newStaticText;
   }
   
-  protected int getSplitPoint(String text, int startPoint) {
-	  char[] chars = text.toCharArray();
-	  for(int i = startPoint ; i < chars.length ; i++) {
-		  char c = chars[i];
-		  if (c == ' ') {
-			  return i;
-		  } else if (c == '.' || c == ',') {
-			  return i+1;
-		  }
-	  }
-	  return -1;
-  }
-  
-  private double parseCoordinates(String value) {
-	  if (value == null || value.trim().isEmpty()) return 0;
-	  if (value.contains(" ")) { //$NON-NLS-1$
-		  value = value.split(" ")[0]; //$NON-NLS-1$
-	  }
-	  return Double.parseDouble(value);
-  }
-  private List<Double> parseCoordinatesList(String value) {
-	  if (value == null || value.trim().isEmpty()) return null;
-	  String[] stringValues = value.split(" "); //$NON-NLS-1$
-	  List<Double> result = new ArrayList<>();
-	  for(String stringValue : stringValues) {
-		  try {
-			  result.add(Double.parseDouble(stringValue));
-		  }catch (Exception ex) {
-			  ex.printStackTrace();
-		  }
-	  }
-	  return result;
-  }
-  
+  /**
+   * Convert a SVG tspan element into a series of {@link JRDesignStaticText}
+   * 
+   * @param textNode the svg tspan
+   * @param textBoundingBox the boinding box of the text
+   * @param previousTransform the current transform
+   * @return a not null list of {@link JRDesignStaticText} converted from the content of the span
+   */
   public List<JRDesignStaticText> parseSpan(SVGOMTSpanElement textNode, SVGRect textBoundingBox, AffineTransform previousTransform) {
 	  NodeList nodes = textNode.getChildNodes();
 	  AffineTransform newTransform = getTransofrm(textNode);
@@ -363,18 +461,20 @@ public class SVGDocumentLoader {
 	  return result;
   }
 
+  /**
+   * Convert a SVG text element into a series of {@link JRDesignStaticText}
+   * 
+   * @param textNode the svg text
+   * @param previousTransform the current transform
+   * @return a not null list of {@link JRDesignStaticText} converted from the content of the text
+   */
   public List<JRDesignStaticText> parseText(SVGOMTextElement textNode, AffineTransform previousTransform) {
 	  NodeList nodes = textNode.getChildNodes();
 	  AffineTransform newTransform = getTransofrm(textNode);
 	  previousTransform.concatenate(newTransform);
       List<JRDesignStaticText> result = new ArrayList<>();
       SVGRect boundingBox = textNode.getBBox();
-      //textNode.getAttribute("style");
-      //textNode.setComputedStyleMap(null, null);
       CSSStyleDeclaration textNodeStyle = ((SVGSVGElement)svgDocument.getDocumentElement()).getComputedStyle(textNode, null);   
-     // textNodeStyle.getPropertyValue("fill");
-      //textNode.getAttribute("fill")
-    //  textNode.getStyle().getPropertyValue("fill")
 	  for (int i = 0;  i < nodes.getLength();  i++) {
           Node node = nodes.item(i);
           if (node instanceof GenericText) {
@@ -396,6 +496,13 @@ public class SVGDocumentLoader {
 	  return result;
   }
   
+  /**
+   * Convert an SVG rectangle into a JR rectangle
+   * 
+   * @param rect the SVG rectangle
+   * @param previousTransform the current transform
+   * @return a not null {@link JRDesignRectangle}
+   */
   private JRDesignRectangle parseRectangle(SVGOMRectElement rect, AffineTransform previousTransform) {
 	  AffineTransform newTransform = getTransofrm(rect);
 	  previousTransform.concatenate(newTransform);
@@ -427,16 +534,14 @@ public class SVGDocumentLoader {
 	  return rectangle;
   }
  
-  
-  private AffineTransform getTransofrm(SVGOMElement element) {
-	  TransformListParser transformMatrix = new TransformListParser();
-      AWTTransformProducer matrixProducer = new AWTTransformProducer();
-      transformMatrix.setTransformListHandler(matrixProducer);
-      transformMatrix.parse(element.getAttribute("transform")); //$NON-NLS-1$
-      return matrixProducer.getAffineTransform();
-  }
-  
-  
+  /**
+   * Parse an SVG base64 image and convert it into a JR image. The extracted file is stored in the workspace
+   * in the same folder of the report
+   * 
+   * @param imageElement the svg image element
+   * @param previousTransform the current transform
+   * @return a JR image
+   */
   private JRDesignImage parseImage(SVGOMImageElement imageElement, AffineTransform previousTransform) {
 	  AffineTransform newTransofrm = getTransofrm(imageElement);
 	  previousTransform.concatenate(newTransofrm);
@@ -503,6 +608,13 @@ public class SVGDocumentLoader {
 	  return jrImage;
   }
   
+  /**
+   * Parse an SVG ellipse element and convert it to a JR ellipse
+   * 
+   * @param ellipseElement the svg ellipse
+   * @param previousTransform the current transform
+   * @return the JR ellipse
+   */
   private JRDesignEllipse parseEllipse(SVGOMEllipseElement ellipseElement, AffineTransform previousTransform) {
 	  JRDesignEllipse result = new JRDesignEllipse(jConfig.getJasperDesign());
 	  AffineTransform newTransofrm = getTransofrm(ellipseElement);
@@ -534,6 +646,13 @@ public class SVGDocumentLoader {
 	  return result;
   }
   
+  /**
+   * Convert a path into a series of line
+   * 
+   * @param pathElement the path element
+   * @param previousTransform the current transform 
+   * @return the list of design element that represent the path
+   */
   private List<JRDesignElement> parsePath(SVGOMPathElement pathElement, AffineTransform previousTransform) {
 	  List<JRDesignElement> result = new ArrayList<>();
 	  AffineTransform newTransofrm = getTransofrm(pathElement);
@@ -598,6 +717,14 @@ public class SVGDocumentLoader {
 	  return result;
   }
   
+  /**
+   * Parse an SVG single element, case by case and invoke the method to convert it to the corresponding 
+   * JR element
+   * 
+   * @param element the SVG element
+   * @param previousTransform the current transformation 
+   * @return a not null list of {@link JRDesignElement} created from this element
+   */
   private List<JRDesignElement> parseElement(SVGOMElement element, AffineTransform previousTransform) {
 	  List<JRDesignElement> result = new ArrayList<>();
 	  if (element instanceof SVGOMTextElement) {
@@ -626,12 +753,19 @@ public class SVGDocumentLoader {
 		  List<JRDesignElement> lines = parsePath((SVGOMPathElement)element, new AffineTransform(previousTransform));
 		  result.addAll(lines);
 	  } else{
-		  System.out.println("unhandled");
+		  System.out.println("SVG element " + element.toString() + " not supported");
+		  JaspersoftStudioPlugin.getInstance().logWarning("SVG element " + element.toString() + " not supported");
 	  }
 	  return result;
   }
   
-  
+  /**
+   * Parse the SVG group element 
+   * 
+   * @param group the group to parse
+   * @param previousTransofrm the current transformation, must be not null
+   * @return a not null list of {@link JRDesignElement} converted from the current of the group
+   */
   public List<JRDesignElement> parseGroup(SVGOMGElement group, AffineTransform previousTransofrm) {
 	  AffineTransform newTransform = getTransofrm(group);
 	  previousTransofrm.concatenate(newTransform);
@@ -646,9 +780,11 @@ public class SVGDocumentLoader {
 	  return result;
   }
   
-  
   /**
-   * Finds all the path nodes and converts them to MetaPost code.
+   * Explore all the svg for its content and convert it to a JasperReports equivalent format.
+   * After the conversion the elements are moved to be on the left and top edge
+   * 
+   * @return a not null list of {@link JRDesignElement}
    */
   public List<JRDesignElement> run() {
       SVGOMSVGElement rootElement = getSVGDocumentRoot();
@@ -661,6 +797,7 @@ public class SVGDocumentLoader {
         	  result.addAll(parseElement((SVGOMGElement)node, startingStransform));
           }
       }
+      //move the leftmost and topmost on the edge
       int minX = Integer.MAX_VALUE;
       int minY = Integer.MAX_VALUE;
       for(JRDesignElement element : result) {
