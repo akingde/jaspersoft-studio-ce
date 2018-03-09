@@ -57,7 +57,6 @@
 		<module>../../com.jaspersoft.studio.components</module>
 		<module>../../com.jaspersoft.studio.components.customvisualization</module>		
 		<module>../../com.jaspersoft.studio.data</module>
-		<module>../../com.jaspersoft.studio.data.cassandra</module>
 		<module>../../com.jaspersoft.studio.data.drivers</module>
 		<module>../../com.jaspersoft.studio.data.mongodb</module>
 		<module>../../com.jaspersoft.studio.data.sql</module>

@@ -65,11 +65,11 @@
       <import plugin="org.apache.httpcomponents.httpclient" version="4.3.4" match="greaterOrEqual"/>
       <import plugin="org.apache.httpcomponents.httpcore" version="4.3.2" match="greaterOrEqual"/>
       <import plugin="com.jaspersoft.studio.book" version="6.6.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.lang3" version="3.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.views" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.draw2d"/>
-      <import plugin="com.google.guava" version="10.0.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.xtext.ui" version="2.8.4" match="greaterOrEqual"/>
       <import plugin="org.eclipse.xtext.common.types" version="2.8.4" match="greaterOrEqual"/>
       <import plugin="org.eclipse.xtext"/>
@@ -107,7 +107,6 @@
       <import plugin="org.apache.commons.codec" version="1.3.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.discovery" version="0.2.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.console"/>
-      <import plugin="org.apache.commons.lang3" version="3.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -175,13 +174,6 @@
 
    <plugin
          id="com.jaspersoft.studio.community"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.jaspersoft.studio.data.cassandra"
          download-size="0"
          install-size="0"
          version="0.0.0"
