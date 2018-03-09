@@ -21,6 +21,8 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.imports.svg.ConsolePdfConverter;
 import com.jaspersoft.studio.editor.action.imports.svg.SVGDocumentLoader;
+import com.jaspersoft.studio.editor.layout.ChangeLayoutCommand;
+import com.jaspersoft.studio.editor.layout.FreeLayout;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -64,6 +66,10 @@ public class ImportContentAction extends ACachedSelectionAction {
 		 */
 		private MBand band;
 		
+		private Command createResourceCommand;
+		
+		private ChangeLayoutCommand changeLayoutCommand;
+		
 		/**
 		 * The model for the band where the element will be stored
 		 * 
@@ -72,6 +78,7 @@ public class ImportContentAction extends ACachedSelectionAction {
 		public ImportElementsCommand(MBand band) {
 			this.band = band;
 			this.targetBand = band.getValue();
+			this.changeLayoutCommand = new ChangeLayoutCommand(band, new FreeLayout());
 		}
 		
 		@Override
@@ -97,29 +104,43 @@ public class ImportContentAction extends ACachedSelectionAction {
 						fileToConvert = resultFile;
 					}
 					if (fileToConvert != null) {
-						List<JRDesignElement> newElements = new SVGDocumentLoader(fileToConvert.toURI().toString(), jConfig).run();
-						if (!newElements.isEmpty()) {
-							elementsToCreate.addAll(newElements);
+						SVGDocumentLoader loader = new SVGDocumentLoader(fileToConvert.toURI().toString(), jConfig);
+						elementsToCreate.addAll(loader.getJRElements());
+						//set the layout to free layout
+						changeLayoutCommand.execute();
+						//execute the command to create the resources
+						createResourceCommand = loader.getResourceCreationCommands();
+						if (createResourceCommand != null) {
+							createResourceCommand.execute();
+						}
+						//add the elements to the band
+						for(JRDesignElement element : elementsToCreate) {
+							targetBand.addElement(element);
 						}
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			 }
-			for(JRDesignElement element : elementsToCreate) {
-				targetBand.addElement(element);
-			}
 		}
 		
 		@Override
 		public void undo() {
+			if (createResourceCommand != null) {
+				createResourceCommand.undo();
+			}
 			for(JRDesignElement element : elementsToCreate) {
 				targetBand.removeElement(element);
 			}
+			changeLayoutCommand.undo();
 		}
 		
 		@Override
 		public void redo() {
+			changeLayoutCommand.execute();
+			if (createResourceCommand != null) {
+				createResourceCommand.redo();
+			}
 			for(JRDesignElement element : elementsToCreate) {
 				targetBand.removeElement(element);
 			}

@@ -21,15 +21,12 @@ import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.Util;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
@@ -102,16 +99,6 @@ public class ConsolePdfConverter {
 		readOutputJob.setPriority(Job.SHORT);
 		readOutputJob.addJobChangeListener(jobChangeListener);
 		readOutputJob.schedule(); // start as soon as possible*/
-	}
-	
-	private IWorkbenchPage getActivePage() {
-		IWorkbench w = PlatformUI.getWorkbench();
-		IWorkbenchWindow aww = w.getActiveWorkbenchWindow();
-		if (aww == null && w.getWorkbenchWindowCount() > 0) {
-			aww = w.getWorkbenchWindows()[0];
-			return aww.getActivePage();
-		}
-		return null;
 	}
 	
 	/**
@@ -274,7 +261,7 @@ public class ConsolePdfConverter {
 			if (!inkscapePath.endsWith(File.pathSeparator))
 				inkscapePath += File.separator;
 			if (Util.isMac()) {
-				return new Pair<String,File>(inkscapePath + "inkscape-bin", null); //$NON-NLS-1$
+				return new Pair<String,File>(inkscapePath + "inkscape", null); //$NON-NLS-1$
 			} else {
 				return new Pair<String,File>(inkscapePath + "inkscape", null); //$NON-NLS-1$
 			}
@@ -287,7 +274,7 @@ public class ConsolePdfConverter {
 				command = new Pair<String, File>(windowsInkscapeFile.getAbsolutePath(), windowsInkscapeFile.getParentFile());
 			}
 		} else if (Util.isMac()) {
-			command = new Pair<String, File>("/Applications/Inkscape.app/Contents/Resources/bin/inkscape-bin", null); //$NON-NLS-1$
+			command = new Pair<String, File>("/Applications/Inkscape.app/Contents/Resources/bin/inkscape", null); //$NON-NLS-1$
 		}
 		return command;
 	}
@@ -333,25 +320,12 @@ public class ConsolePdfConverter {
 	 */
 	private MessageConsole getCleanConsole() {
 		final MessageConsole myConsole = findConsole(CONSOLE_NAME);
-
-		// Try to show the console
-		UIUtils.getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					String id = IConsoleConstants.ID_CONSOLE_VIEW;
-					IWorkbenchPage activePage = getActivePage();
-					if (activePage != null) {
-						IConsoleView view = (IConsoleView) activePage.showView(id);
-						view.display(myConsole);
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		});
-
+		//force the opening of the console
+		try {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(IConsoleConstants.ID_CONSOLE_VIEW);
+		} catch (PartInitException e) {
+			e.printStackTrace();
+		}
 		myConsole.clearConsole();
 		return myConsole;
 	}

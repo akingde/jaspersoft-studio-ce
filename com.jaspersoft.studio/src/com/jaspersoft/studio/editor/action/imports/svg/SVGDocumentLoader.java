@@ -14,7 +14,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.AttributedCharacterIterator.Attribute;
 import java.util.ArrayList;
@@ -51,11 +52,8 @@ import org.apache.batik.parser.TransformListParser;
 import org.apache.batik.util.Base64DecodeStream;
 import org.apache.batik.util.XMLResourceDescriptor;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -70,10 +68,10 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Pair;
 import net.sf.jasperreports.engine.JRCommonText;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignEllipse;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignLine;
 import net.sf.jasperreports.engine.design.JRDesignRectangle;
@@ -103,7 +101,7 @@ public class SVGDocumentLoader {
   /**
    * Prefix of the image imported into the workspace, because for the SVG are stored as byte blob in base64
    */
-  private static final String IMPORTED_IMAGE_PREFIX = "imported_image_"; //$NON-NLS-1$
+  protected static final String IMPORTED_IMAGE_PREFIX = "imported_image_"; //$NON-NLS-1$
   
   /**
    * The loaded document
@@ -114,6 +112,12 @@ public class SVGDocumentLoader {
    * The {@link JasperReportsConfiguration} of the report where the elements will be created
    */
   private JasperReportsConfiguration jConfig;
+  
+  /**
+   * The list of resources (static images) found in the svg file. The resources are stored in the system temp folder
+   * and can be recovered when executing the command to create the elements
+   */
+  private List<Pair<File, JRDesignImage>> resources = new ArrayList<>();
 
   /**
    * Creates an SVG Document given a URI.
@@ -347,84 +351,88 @@ public class SVGDocumentLoader {
    * @return a not null {@link JRDesignStaticText}
    */
   private JRDesignStaticText generateText(String text, CSSStyleDeclaration style, int x, int y, List<Double> singleCharX, SVGRect boundingBox, AffineTransform transform) {
-	  JRDesignStaticText newStaticText = new JRDesignStaticText(); 
-	  float fontSize = 9f;
-	  String fontSizeText = style.getPropertyValue("font-size"); //$NON-NLS-1$
-	  if (fontSizeText != null && !fontSizeText.trim().isEmpty()) {
-		  if (fontSizeText.endsWith("px")) { //$NON-NLS-1$
-			  fontSizeText = fontSizeText.substring(0, fontSizeText.length() - 2);
+	  if (text == null || text.trim().isEmpty()) {
+		  return null;
+	  } else {
+		  JRDesignStaticText newStaticText = new JRDesignStaticText(); 
+		  float fontSize = 9f;
+		  String fontSizeText = style.getPropertyValue("font-size"); //$NON-NLS-1$
+		  if (fontSizeText != null && !fontSizeText.trim().isEmpty()) {
+			  if (fontSizeText.endsWith("px")) { //$NON-NLS-1$
+				  fontSizeText = fontSizeText.substring(0, fontSizeText.length() - 2);
+			  }
+			  fontSize = Float.valueOf(fontSizeText);
+		  } 
+	
+		  newStaticText.setFontSize(fontSize);
+		  String fontFamily = style.getPropertyValue("font-family"); //$NON-NLS-1$
+		  if (fontFamily != null && !fontFamily.trim().isEmpty()) {
+			  newStaticText.setFontName(fontFamily);
+		  } else {
+			  fontFamily = "sans-serif"; //$NON-NLS-1$
 		  }
-		  fontSize = Float.valueOf(fontSizeText);
-	  } 
-
-	  newStaticText.setFontSize(fontSize);
-	  String fontFamily = style.getPropertyValue("font-family"); //$NON-NLS-1$
-	  if (fontFamily != null && !fontFamily.trim().isEmpty()) {
-		  newStaticText.setFontName(fontFamily);
-	  } else {
-		  fontFamily = "sans-serif"; //$NON-NLS-1$
-	  }
-	  
-	  Color foregroundColor = getColor(style, "fill"); //$NON-NLS-1$
-	  if (foregroundColor != null) {
-		  newStaticText.setForecolor(foregroundColor);
-	  }
-	  
-	  boolean isBold = isBold(style);
-	  newStaticText.setBold(isBold);
-	  boolean isItalic = isItalic(style);
-	  newStaticText.setItalic(isItalic);
-	  
-	  double rotation = getRotation(transform);
-	  if (rotation != 0d) {
-		  if (rotation > 0d && rotation <= 90d) {
-			  newStaticText.setRotation(RotationEnum.RIGHT);
-		  } else if (rotation > 90d && rotation <= 180d) {
-			  newStaticText.setRotation(RotationEnum.UPSIDE_DOWN);
-		  } else if (rotation > 180d && rotation <= 270d) {
-			  newStaticText.setRotation(RotationEnum.LEFT);
+		  
+		  Color foregroundColor = getColor(style, "fill"); //$NON-NLS-1$
+		  if (foregroundColor != null) {
+			  newStaticText.setForecolor(foregroundColor);
 		  }
+		  
+		  boolean isBold = isBold(style);
+		  newStaticText.setBold(isBold);
+		  boolean isItalic = isItalic(style);
+		  newStaticText.setItalic(isItalic);
+		  
+		  double rotation = getRotation(transform);
+		  if (rotation != 0d) {
+			  if (rotation > 0d && rotation <= 90d) {
+				  newStaticText.setRotation(RotationEnum.RIGHT);
+			  } else if (rotation > 90d && rotation <= 180d) {
+				  newStaticText.setRotation(RotationEnum.UPSIDE_DOWN);
+			  } else if (rotation > 180d && rotation <= 270d) {
+				  newStaticText.setRotation(RotationEnum.LEFT);
+			  }
+		  }
+		  
+		  newStaticText.setWidth(10000);
+		  newStaticText.setHeight(10000);
+		  newStaticText.setText(text);
+		  
+		  JRMeasuredText measuredText = getTextSize(newStaticText);
+		  	  
+		  int width = (int)Math.ceil(measuredText.getTextWidth()+1);
+		  int height = (int)Math.ceil(measuredText.getTextHeight()+1);
+		 /* 
+		   	  Font font = new Font(fontFamily, getAwtFontStyle(isBold, isItalic), (int)Math.ceil(fontSize));
+		  FontRenderContext context = new FontRenderContext(transform, false, false);
+		  LineMetrics metrics = font.getLineMetrics(text, context);
+		   int height = (int)Math.ceil(metrics.getHeight());
+		   if (singleCharX != null && singleCharX.size() > 1) {
+			  double lastCharWidth =  font.getStringBounds(text.substring(text.length()-1), context).getWidth() + 1;
+			  width = (int)(Math.abs(Math.ceil(singleCharX.get(0) - singleCharX.get(singleCharX.size() - 1))) + lastCharWidth) ;
+			  Rectangle2D bounds = new Rectangle2D.Float(x, y, width, height);
+			  bounds = transform.createTransformedShape(bounds).getBounds2D();
+			  width = (int)Math.ceil(bounds.getWidth());
+		  } else {
+			  Rectangle2D bounds = new Rectangle2D.Float(boundingBox.getX(), boundingBox.getY(), boundingBox.getWidth(), boundingBox.getHeight());
+			  bounds = transform.createTransformedShape(bounds).getBounds2D();
+			  width = (int)Math.ceil(bounds.getWidth());
+		  }*/
+		  
+		  
+		  if (newStaticText.getRotationValue() == RotationEnum.LEFT || newStaticText.getRotationValue() == RotationEnum.RIGHT) {
+			  newStaticText.setHeight(width);
+			  newStaticText.setWidth(height);
+			  newStaticText.setY(y);
+			  newStaticText.setX(x - newStaticText.getWidth() + 1);
+		  } else {
+			  newStaticText.setHeight(height);
+			  newStaticText.setWidth(width);
+			  newStaticText.setY(y - newStaticText.getHeight() + 1);
+			  newStaticText.setX(x);
+		  }
+		  //newStaticText.setY(y - newStaticText.getHeight() + 1);
+		  return newStaticText;
 	  }
-	  
-	  newStaticText.setWidth(10000);
-	  newStaticText.setHeight(10000);
-	  newStaticText.setText(text);
-	  
-	  JRMeasuredText measuredText = getTextSize(newStaticText);
-	  	  
-	  int width = (int)Math.ceil(measuredText.getTextWidth()+1);
-	  int height = (int)Math.ceil(measuredText.getTextHeight()+1);
-	 /* 
-	   	  Font font = new Font(fontFamily, getAwtFontStyle(isBold, isItalic), (int)Math.ceil(fontSize));
-	  FontRenderContext context = new FontRenderContext(transform, false, false);
-	  LineMetrics metrics = font.getLineMetrics(text, context);
-	   int height = (int)Math.ceil(metrics.getHeight());
-	   if (singleCharX != null && singleCharX.size() > 1) {
-		  double lastCharWidth =  font.getStringBounds(text.substring(text.length()-1), context).getWidth() + 1;
-		  width = (int)(Math.abs(Math.ceil(singleCharX.get(0) - singleCharX.get(singleCharX.size() - 1))) + lastCharWidth) ;
-		  Rectangle2D bounds = new Rectangle2D.Float(x, y, width, height);
-		  bounds = transform.createTransformedShape(bounds).getBounds2D();
-		  width = (int)Math.ceil(bounds.getWidth());
-	  } else {
-		  Rectangle2D bounds = new Rectangle2D.Float(boundingBox.getX(), boundingBox.getY(), boundingBox.getWidth(), boundingBox.getHeight());
-		  bounds = transform.createTransformedShape(bounds).getBounds2D();
-		  width = (int)Math.ceil(bounds.getWidth());
-	  }*/
-	  
-	  
-	  if (newStaticText.getRotationValue() == RotationEnum.LEFT || newStaticText.getRotationValue() == RotationEnum.RIGHT) {
-		  newStaticText.setHeight(width);
-		  newStaticText.setWidth(height);
-		  newStaticText.setY(y);
-		  newStaticText.setX(x - newStaticText.getWidth() + 1);
-	  } else {
-		  newStaticText.setHeight(height);
-		  newStaticText.setWidth(width);
-		  newStaticText.setY(y - newStaticText.getHeight() + 1);
-		  newStaticText.setX(x);
-	  }
-	  //newStaticText.setY(y - newStaticText.getHeight() + 1);
-	  return newStaticText;
   }
   
   /**
@@ -506,8 +514,8 @@ public class SVGDocumentLoader {
   private JRDesignRectangle parseRectangle(SVGOMRectElement rect, AffineTransform previousTransform) {
 	  AffineTransform newTransform = getTransofrm(rect);
 	  previousTransform.concatenate(newTransform);
-	  double x = Double.parseDouble(rect.getAttribute("x")); //$NON-NLS-1$
-	  double y = Double.parseDouble(rect.getAttribute("y")); //$NON-NLS-1$
+	  double x = parseCoordinates(rect.getAttribute("x")); //$NON-NLS-1$
+	  double y = parseCoordinates(rect.getAttribute("y")); //$NON-NLS-1$
 	  double width = Double.parseDouble(rect.getAttribute("width")); //$NON-NLS-1$
 	  double height = Double.parseDouble(rect.getAttribute("height")); //$NON-NLS-1$
 	  Rectangle2D rectFigure = new Rectangle2D.Double(x, y, width, height);
@@ -545,8 +553,8 @@ public class SVGDocumentLoader {
   private JRDesignImage parseImage(SVGOMImageElement imageElement, AffineTransform previousTransform) {
 	  AffineTransform newTransofrm = getTransofrm(imageElement);
 	  previousTransform.concatenate(newTransofrm);
-	  double x = Double.parseDouble(imageElement.getAttribute("x")); //$NON-NLS-1$
-	  double y = Double.parseDouble(imageElement.getAttribute("y")); //$NON-NLS-1$
+	  double x = parseCoordinates(imageElement.getAttribute("x")); //$NON-NLS-1$
+	  double y = parseCoordinates(imageElement.getAttribute("y")); //$NON-NLS-1$
 	  double width = Double.parseDouble(imageElement.getAttribute("width")); //$NON-NLS-1$
 	  double height = Double.parseDouble(imageElement.getAttribute("height")); //$NON-NLS-1$
 	  Rectangle2D rectFigure = new Rectangle2D.Double(x, y, width, height);
@@ -576,29 +584,35 @@ public class SVGDocumentLoader {
 	  try {       
 		  image = ImageIO.read(decodeStream);
 		  // write the image to a file
-		  IFile mfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
-		  IContainer parent = mfile.getParent();
+		 // IFile mfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		  //IContainer parent = mfile.getParent();
 		  int counter = 1;
 		  String filename;
-		  IFile destFile;
+		  //IFile destFile;
+		  File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
+		  File destFile;
 		  do{
 			  filename = IMPORTED_IMAGE_PREFIX + counter + "." + extension; //$NON-NLS-1$
-			  destFile = parent.getFile(new Path(filename));
+			 // destFile = parent.getFile(new Path(filename));
+			  destFile = new File(tempDir, filename);
 			  counter++;
 		  } while (destFile.exists());
-		  ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-		  ByteArrayInputStream fileInputStream = null;
+		  //ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+		  //ByteArrayInputStream fileInputStream = null;
+		  FileOutputStream outStream = new FileOutputStream(destFile);
 		  try {
 			ImageIO.write(image, extension, outStream);
-			fileInputStream = new ByteArrayInputStream(outStream.toByteArray());
-			destFile.create(fileInputStream, true, new NullProgressMonitor());
-		} catch (CoreException e) {
+			//fileInputStream = new ByteArrayInputStream(outStream.toByteArray());
+			//destFile.create(fileInputStream, true, new NullProgressMonitor());
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			FileUtils.closeStream(outStream);
-			FileUtils.closeStream(fileInputStream);
+			//FileUtils.closeStream(fileInputStream);
 		}
-		  jrImage.setExpression(new JRDesignExpression("\"" + destFile.getName() + "\"")); //$NON-NLS-1$ //$NON-NLS-2$
+		//The expression is set from the command returned by getResourceCreationCommands
+		//jrImage.setExpression(new JRDesignExpression("\"" + destFile.getName() + "\"")); //$NON-NLS-1$ //$NON-NLS-2$
+		resources.add(new Pair<File, JRDesignImage>(destFile, jrImage));
 	  } catch (IOException e) {
 		  e.printStackTrace();
 	  } finally { 
@@ -782,11 +796,15 @@ public class SVGDocumentLoader {
   
   /**
    * Explore all the svg for its content and convert it to a JasperReports equivalent format.
-   * After the conversion the elements are moved to be on the left and top edge
+   * After the conversion the elements are moved to be on the left and top edge. If the svg
+   * contains static images it is important to execute before the command returned from getResourceCreationCommands
+   * This commands are delegated to create inside the workspace the resources of the static images, and they
+   * also update the {@link JRDesignImage} with the correct name of the resource in the workspace
    * 
    * @return a not null list of {@link JRDesignElement}
    */
-  public List<JRDesignElement> run() {
+  public List<JRDesignElement> getJRElements() {
+	  resources.clear();
       SVGOMSVGElement rootElement = getSVGDocumentRoot();
       NodeList nodes = rootElement.getChildNodes();
       AffineTransform startingStransform = new AffineTransform();
@@ -801,30 +819,40 @@ public class SVGDocumentLoader {
       int minX = Integer.MAX_VALUE;
       int minY = Integer.MAX_VALUE;
       for(JRDesignElement element : result) {
-    	  if (element.getX() < minX) {
-    		  minX = element.getX();
-    	  }
-    	  if (element.getY() < minY) {
-    		  minY = element.getY();
-    	  }
-      }
+	    	  if (element.getX() < minX) {
+	    		  minX = element.getX();
+	    	  }
+	    	  if (element.getY() < minY) {
+	    		  minY = element.getY();
+	    	  }
+	      }
       for(JRDesignElement element : result) {
-    	  element.setX(element.getX() - minX);
-    	  element.setY(element.getY() - minY);
+    	  	element.setX(element.getX() - minX);
+    	  		element.setY(element.getY() - minY);
       }
       return result;
   }
 
   /**
-   * Returns a list of elements in the SVG document with names that
-   * match PATH_ELEMENT_NAME.
+   * Get the commands necessary to create in the workspace the static image resources necessary
+   * for the static images found in the svg. Can be null if there are not resource to create
+   * in the workspace, this commands can be undone
    * 
-   * @return The list of "path" elements in the SVG document.
+   * @return a command to create the resource or null
    */
-/*  private NodeList getPathElements() {
-    return getSVGDocumentRoot().getElementsByTagName( PATH_ELEMENT_NAME );
+  public Command getResourceCreationCommands() {
+	  CompoundCommand result = new CompoundCommand();
+	  for(Pair<File, JRDesignImage> resource : resources) {
+		CreateResourceCommand resourceCommand = new CreateResourceCommand(resource.getKey(), resource.getValue(), jConfig);
+		result.add(resourceCommand);
+	  }
+	  if (!result.isEmpty()) {
+		  return result;
+	  } else { 
+		  return null;
+	  }
   }
-*/
+
   /**
    * Returns an SVGOMSVGElement that is the document's root element.
    * 
