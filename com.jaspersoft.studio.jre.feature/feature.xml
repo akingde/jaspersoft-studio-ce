@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.jre.feature"
       label="JRE for Jaspersoft Studio"
-      version="1.8.0.u144"
+      version="1.8.0.u161"
       provider-name="TIBCO Software Inc.">
 
    <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
