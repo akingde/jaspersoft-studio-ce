@@ -91,7 +91,7 @@ public class ParentSelectionOverrider implements ISelectionOverrider {
 			JSSKeySequence keysSequence = JSSKeySequence.getInstance(pressedKeys);
 			message.append("\r\n Currently Pressed: ");
 			message.append(keysSequence);
-			JaspersoftStudioPlugin.getInstance().logTrage(message.toString());
+			JaspersoftStudioPlugin.getInstance().logTrace(message.toString());
 		}
 		return false;
 	}

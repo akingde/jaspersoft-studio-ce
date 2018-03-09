@@ -4,19 +4,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.widgets;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.data.designer.AQueryDesigner;
+import com.jaspersoft.studio.data.designer.ICQuery;
+import com.jaspersoft.studio.data.designer.IFilterQuery;
 import com.jaspersoft.studio.data.designer.SelectParameterDialog;
 import com.jaspersoft.studio.data.jdbc.JDBCFieldsProvider;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
@@ -30,7 +34,7 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.util.JRClassLoader;
 
-public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
+public class ParameterWidget extends AOperandWidget<ParameterPOperand> implements IFilterQuery {
 
 	private Text txt;
 
@@ -56,15 +60,10 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 
 		ToolItem button = new ToolItem(buttons, SWT.PUSH);
 		button.setText("..."); //$NON-NLS-1$
-		button.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				SelectParameterDialog d = new SelectSQLParameterDialog(parent.getShell(), designer);
-				if (d.open() == Dialog.OK)
-					fillValue();
-			}
-
+		button.addListener(SWT.Selection, event -> {
+			SelectParameterDialog d = new SelectSQLParameterDialog(parent.getShell(), designer, ParameterWidget.this);
+			if (d.open() == Dialog.OK)
+				fillValue();
 		});
 		button.setToolTipText(com.jaspersoft.studio.data.sql.messages.Messages.FieldWidget_0);
 		buttons.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
@@ -73,8 +72,8 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 	}
 
 	class SelectSQLParameterDialog extends SelectParameterDialog {
-		public SelectSQLParameterDialog(Shell parentShell, AQueryDesigner designer) {
-			super(parentShell, designer);
+		public SelectSQLParameterDialog(Shell parentShell, AQueryDesigner designer, IFilterQuery fq) {
+			super(parentShell, designer, fq);
 			if (getValue().getJrParameter() != null)
 				pname = getValue().getJrParameter().getName();
 		}
@@ -88,8 +87,10 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 
 		@Override
 		protected void cancelPressed() {
-			if (getValue().getJrParameter() == null)
-				commitValues();
+			if (getValue().getJrParameter() == null) {
+				super.commitValues();
+				getValue().setJrParameter(prm);
+			}
 			super.cancelPressed();
 		}
 
@@ -108,9 +109,9 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 						e.printStackTrace();
 						return false;
 					}
-				} else if (aop instanceof ScalarOperand<?>)
-					if (!((ScalarOperand<?>) aop).getType().isAssignableFrom(p.getValueClass()))
-						return false;
+				} else if (aop instanceof ScalarOperand<?>
+						&& !((ScalarOperand<?>) aop).getType().isAssignableFrom(p.getValueClass()))
+					return false;
 			}
 			return true;
 		}
@@ -128,7 +129,7 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 			}
 			return Object.class.getName();
 		}
-	};
+	}
 
 	private void fillValue() {
 		JRDesignParameter p = getValue().getJrParameter();
@@ -136,10 +137,33 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 			txt.setText(Misc.nvl(p.getName()));
 			txt.setToolTipText(Misc.nvl(p.getName()));
 		} else {
-			SelectParameterDialog d = new SelectSQLParameterDialog(UIUtils.getShell(), designer);
+			SelectParameterDialog d = new SelectSQLParameterDialog(UIUtils.getShell(), designer, this);
 			if (d.open() == Dialog.OK)
 				fillValue();
 		}
+	}
+
+	@Override
+	public String getFilterQuery() {
+		return getFilterQueryObject(getValue().getExpression().getOperands());
+	}
+
+	public static String getFilterQueryObject(java.util.List<AOperand> ops) {
+		for (AOperand aop : ops) {
+			if (aop instanceof FieldOperand) {
+				FieldOperand fop = (FieldOperand) aop;
+				ICQuery q = new ICQuery();
+				q.query = "SELECT * FROM " + fop.getFromTable().toSQLString();
+				q.columns = new ArrayList<>();
+				q.valueField = fop.toSQLString();
+				try {
+					return new ObjectMapper().writeValueAsString(q);
+				} catch (JsonProcessingException e) {
+					UIUtils.showError(e);
+				}
+			}
+		}
+		return null;
 	}
 
 }

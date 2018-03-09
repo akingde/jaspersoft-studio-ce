@@ -4,7 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.dnd;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
@@ -51,7 +51,7 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 	public boolean performDrop(Object data) {
 		if (data == null)
 			return false;
-		final List<AMResource> mc = new ArrayList<AMResource>();
+		final List<AMResource> mc = new ArrayList<>();
 		if (data.getClass().isArray()) {
 			Object[] ar = (Object[]) data;
 			for (Object obj : ar)
@@ -68,7 +68,7 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 				try {
 					Object target = getCurrentTarget();
 					if (target instanceof ANode) {
-						List<INode> toRefresh = new ArrayList<INode>();
+						List<INode> toRefresh = new ArrayList<>();
 						if (((ANode) target).getParent() instanceof MReportUnit
 								|| ((ANode) target).getParent() instanceof MFolder
 								|| ((ANode) target).getParent() instanceof MServerProfile)
@@ -103,8 +103,6 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 								try {
 									PasteResourceAction.putIntoReportUnit(monitor, (MReportUnit) target, c,
 											amr.getValue());
-								} catch (IOException e) {
-									UIUtils.showError(e);
 								} catch (Exception e) {
 									UIUtils.showError(e);
 								}
@@ -144,11 +142,12 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 
 	private List<AMResource> getDroppedObjects() {
 		TreeViewer viewer = (TreeViewer) getViewer();
-		List<AMResource> res = new ArrayList<AMResource>();
-		for (Object obj : viewer.getStructuredSelection().toList())
+		List<AMResource> res = new ArrayList<>();
+		TreeSelection sel = (TreeSelection) viewer.getSelection();
+		for (Object obj : sel.toList())
 			if (obj instanceof AMResource)
 				res.add((AMResource) obj);
-		List<AMResource> toDel = new ArrayList<AMResource>();
+		List<AMResource> toDel = new ArrayList<>();
 		for (AMResource amr : res)
 			if (hasParent(res, amr))
 				toDel.add(amr);
@@ -175,7 +174,8 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 				return false;
 			if (d instanceof AMResource && ResourceDragSourceListener.isDragable(((AMResource) d).getParent())) {
 				TreeViewer viewer = (TreeViewer) getViewer();
-				for (Object obj : viewer.getStructuredSelection().toArray()) {
+				TreeSelection sel = (TreeSelection) viewer.getSelection();
+				for (Object obj : sel.toArray()) {
 					if (obj instanceof AMResource) {
 						if (!PasteResourceAction.isSameServer((AMResource) d, (AMResource) obj))
 							return false;

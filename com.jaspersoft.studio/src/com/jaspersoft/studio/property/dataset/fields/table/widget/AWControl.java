@@ -33,4 +33,6 @@ public abstract class AWControl {
 	protected String getText() {
 		return Misc.nvl(aw.getValue(), "");
 	}
+
+	public abstract void setEnabled(boolean en);
 }

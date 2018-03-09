@@ -35,8 +35,9 @@ import org.eclipse.ui.part.WorkbenchPart;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
-import com.jaspersoft.studio.data.designer.AQueryDesigner;
+import com.jaspersoft.studio.data.designer.IFilterQuery;
 import com.jaspersoft.studio.data.designer.IParameterICContributor;
+import com.jaspersoft.studio.data.designer.SelectParameterDialog;
 import com.jaspersoft.studio.data.jdbc.JDBCDriverDefinition;
 import com.jaspersoft.studio.data.jdbc.JDBCDriverDefinitionsContainer;
 import com.jaspersoft.studio.editor.IEditorContributor;
@@ -147,7 +148,7 @@ public class ExtensionManager {
 		DataAdapterManager.getPreferencesStorage();
 	}
 
-	public void createParameterICUI(Composite parent, JRDesignParameter prm, AQueryDesigner designer) {
+	public void createParameterICUI(Composite parent, JRDesignParameter prm, SelectParameterDialog pd, IFilterQuery fq) {
 		IConfigurationElement[] config = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "parameterIC"); //$NON-NLS-1$
 		prmICContributors.clear();
@@ -159,7 +160,7 @@ public class ExtensionManager {
 			}
 		}
 		for (IParameterICContributor pic : prmICContributors)
-			pic.createUI(parent, prm, designer);
+			pic.createUI(parent, prm, pd, fq);
 	}
 
 	public void refreshICUI(JRDesignParameter prm) {
@@ -193,8 +194,9 @@ public class ExtensionManager {
 	}
 
 	/**
-	 * Returns the list of {@link JDBCDriverDefinition} items contributed by different plug-ins through the
-	 * extension-point <code>com.jaspersoft.studio.jdbcDriverDefinitions</code>.
+	 * Returns the list of {@link JDBCDriverDefinition} items contributed by
+	 * different plug-ins through the extension-point
+	 * <code>com.jaspersoft.studio.jdbcDriverDefinitions</code>.
 	 * 
 	 * @return the list of JDBC driver definitions contributed
 	 */
@@ -240,8 +242,9 @@ public class ExtensionManager {
 						defaultFactory = (IExpressionEditorSupportFactory) defaultSupportClazz;
 					}
 				} catch (CoreException e) {
-					JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-							"An error occurred while trying to create the new class.", e));
+					JaspersoftStudioPlugin.getInstance().getLog()
+							.log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+									"An error occurred while trying to create the new class.", e));
 				}
 			} else {
 				if (!overrideFound && "true".equals(el.getAttribute("override"))) {
@@ -253,8 +256,9 @@ public class ExtensionManager {
 							return (IExpressionEditorSupportFactory) overrideClazz;
 						}
 					} catch (CoreException e) {
-						JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR,
-								JaspersoftStudioPlugin.PLUGIN_ID, "An error occurred while trying to create the new class.", e));
+						JaspersoftStudioPlugin.getInstance().getLog()
+								.log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+										"An error occurred while trying to create the new class.", e));
 					}
 				}
 			}
@@ -264,9 +268,11 @@ public class ExtensionManager {
 	}
 
 	/**
-	 * Returns the list of contributed template provider, on the extension point templateProviderSupport
+	 * Returns the list of contributed template provider, on the extension point
+	 * templateProviderSupport
 	 * 
-	 * @return the list of contributed template provider, it can be empty but not null
+	 * @return the list of contributed template provider, it can be empty but not
+	 *         null
 	 */
 	public List<TemplateProvider> getTemplateProviders() {
 
@@ -283,8 +289,9 @@ public class ExtensionManager {
 					providersList.add((TemplateProvider) defaultSupportClazz);
 				}
 			} catch (CoreException e) {
-				JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-						"An error occurred while trying to create the new class.", e));
+				JaspersoftStudioPlugin.getInstance().getLog()
+						.log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+								"An error occurred while trying to create the new class.", e));
 			}
 		}
 		return providersList;
@@ -296,8 +303,8 @@ public class ExtensionManager {
 	private ArrayList<TemplateViewProvider> stylesViewList = null;
 
 	/**
-	 * Return a list of the contributed Tab to visualize a series of Template Styles. The read styles are cached after the
-	 * first time they are red
+	 * Return a list of the contributed Tab to visualize a series of Template
+	 * Styles. The read styles are cached after the first time they are red
 	 * 
 	 * @return a not null list of TemplateViewProvider
 	 */
@@ -315,8 +322,9 @@ public class ExtensionManager {
 						stylesViewList.add((TemplateViewProvider) defaultSupportClazz);
 					}
 				} catch (CoreException e) {
-					JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-							"An error occurred while trying to create the new class.", e));
+					JaspersoftStudioPlugin.getInstance().getLog()
+							.log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+									"An error occurred while trying to create the new class.", e));
 				}
 			}
 		}
@@ -329,8 +337,9 @@ public class ExtensionManager {
 	private ArrayList<AExporterFactory> exportersFactories = null;
 
 	/**
-	 * Return a list of the contributed exporter factories, that can be accessed from the preview. An exporter factory
-	 * define how the generated report is exported to another format
+	 * Return a list of the contributed exporter factories, that can be accessed
+	 * from the preview. An exporter factory define how the generated report is
+	 * exported to another format
 	 * 
 	 * @return a not null list of AExporterFactory
 	 */
@@ -347,12 +356,14 @@ public class ExtensionManager {
 						AExporterFactory factory = (AExporterFactory) defaultSupportClazz;
 						exportersFactories.add(factory);
 						String rawSeparateBefore = el.getAttribute("separatorBefore");
-						Boolean separatorBeofre = rawSeparateBefore == null ? false : Boolean.valueOf(rawSeparateBefore);
+						Boolean separatorBeofre = rawSeparateBefore == null ? false
+								: Boolean.valueOf(rawSeparateBefore);
 						factory.setSeparatorPlacedBefore(separatorBeofre);
 					}
 				} catch (CoreException e) {
-					JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-							"An error occurred while trying to create the new class.", e));
+					JaspersoftStudioPlugin.getInstance().getLog()
+							.log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+									"An error occurred while trying to create the new class.", e));
 				}
 			}
 		}
@@ -360,8 +371,9 @@ public class ExtensionManager {
 	}
 
 	/**
-	 * Return a list of the contributed actions, this action are the one that must be executed the first time JSS is
-	 * started. Between all the contributed actions are returned only the ones that are not overridden by another startup
+	 * Return a list of the contributed actions, this action are the one that must
+	 * be executed the first time JSS is started. Between all the contributed
+	 * actions are returned only the ones that are not overridden by another startup
 	 * action.
 	 * 
 	 * @return a not null list of IFirstStartupAction
@@ -387,8 +399,9 @@ public class ExtensionManager {
 					}
 				}
 			} catch (CoreException e) {
-				JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-						"An error occurred while trying to create the new class.", e));
+				JaspersoftStudioPlugin.getInstance().getLog()
+						.log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+								"An error occurred while trying to create the new class.", e));
 			}
 		}
 		// Remove the overriden actions
@@ -400,16 +413,18 @@ public class ExtensionManager {
 	}
 
 	/**
-	 * Static variable to cache the loaded binding after the first time they are requested
+	 * Static variable to cache the loaded binding after the first time they are
+	 * requested
 	 */
 	private static HashMap<String, BindingElement> contributedBindings = null;
 
 	/**
-	 * Return a list of the contributed key bindings, these are the keybindings contributed to the studio keybindings
-	 * manager. The key binding of a specific action can be read from the returned map using its id
+	 * Return a list of the contributed key bindings, these are the keybindings
+	 * contributed to the studio keybindings manager. The key binding of a specific
+	 * action can be read from the returned map using its id
 	 * 
-	 * @return a not null list Map of binding where the key is the id of the binded key and the value is the definition of
-	 *         the binding key
+	 * @return a not null list Map of binding where the key is the id of the binded
+	 *         key and the value is the definition of the binding key
 	 */
 	public static HashMap<String, BindingElement> getContributedBindings() {
 		if (contributedBindings == null) {
@@ -438,12 +453,14 @@ public class ExtensionManager {
 	}
 
 	/**
-	 * List of handler used to export or import Jaspersoft Studio resources. It is used as cache for the contributed items
+	 * List of handler used to export or import Jaspersoft Studio resources. It is
+	 * used as cache for the contributed items
 	 */
 	private static List<IExportedResourceHandler> contributedExporters = null;
 
 	/**
-	 * Return the List of handler used to export or import Jaspersoft Studio resources.
+	 * Return the List of handler used to export or import Jaspersoft Studio
+	 * resources.
 	 * 
 	 * @return A not null list of IExportedResourceHandler
 	 */
@@ -465,8 +482,9 @@ public class ExtensionManager {
 						contributedExporters.add(handler);
 					}
 				} catch (CoreException e) {
-					JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-							"An error occurred while trying to create the new class.", e));
+					JaspersoftStudioPlugin.getInstance().getLog()
+							.log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+									"An error occurred while trying to create the new class.", e));
 				}
 			}
 		}
@@ -622,7 +640,7 @@ public class ExtensionManager {
 		}
 		return null;
 	}
-	
+
 	public EditPart createTreeEditPart(EditPart context, Object model) {
 		for (IComponentFactory f : getPrioritizedFactoryList(model)) {
 			EditPart c = f.createTreeEditPart(context, model);
@@ -723,7 +741,7 @@ public class ExtensionManager {
 	 * Looks for contributions related to the specified preview mode ID.
 	 * 
 	 * @param previewModeID
-	 *          the preview mode identifier
+	 *            the preview mode identifier
 	 * @return the list of contributed information
 	 */
 	public List<PreviewModeDetails> getAllPreviewModeDetails(String previewModeID) {
@@ -739,7 +757,8 @@ public class ExtensionManager {
 						allDetails.add((PreviewModeDetails) clazz);
 					}
 				} catch (CoreException e) {
-					JaspersoftStudioPlugin.getInstance().logError("An error occurred while trying to create the new class.", e);
+					JaspersoftStudioPlugin.getInstance()
+							.logError("An error occurred while trying to create the new class.", e);
 				}
 			}
 		}
@@ -793,17 +812,20 @@ public class ExtensionManager {
 					elements = el.getChildren("uiElements");
 					if (elements.length == 1) {
 						IConfigurationElement[] uiElements = elements[0].getChildren("uiElement");
-						List<WHyperlink.UIElement> uiElementsList = new ArrayList<WHyperlink.UIElement>(uiElements.length);
+						List<WHyperlink.UIElement> uiElementsList = new ArrayList<WHyperlink.UIElement>(
+								uiElements.length);
 						for (IConfigurationElement u : uiElements) {
 							String id = u.getAttribute("id");
 							try {
 								uiElementsList.add(WHyperlink.UIElement.valueOf(id));
 							} catch (NullPointerException e1) {
-								JaspersoftStudioPlugin.getInstance().logWarning(NLS
-										.bind("Custom Hyperlink Type {0} - The attribute id for the uiElement tag can not be null", type));
+								JaspersoftStudioPlugin.getInstance().logWarning(NLS.bind(
+										"Custom Hyperlink Type {0} - The attribute id for the uiElement tag can not be null",
+										type));
 							} catch (IllegalArgumentException e2) {
-								JaspersoftStudioPlugin.getInstance().logWarning(
-										NLS.bind("Custom Hyperlink Type {0} - The value {1} for the attribute id is not valid", type, id));
+								JaspersoftStudioPlugin.getInstance().logWarning(NLS.bind(
+										"Custom Hyperlink Type {0} - The value {1} for the attribute id is not valid",
+										type, id));
 							}
 						}
 						uiElementsIDByCustomType.put(type, uiElementsList);
@@ -822,8 +844,8 @@ public class ExtensionManager {
 	}
 
 	/**
-	 * Returns a list, maybe empty, of default parameters that can be suggested when choosing the specified hyperlink
-	 * type.
+	 * Returns a list, maybe empty, of default parameters that can be suggested when
+	 * choosing the specified hyperlink type.
 	 * 
 	 * @param hyperlinkType
 	 * @return the list of default parameters, if any, associated to the hyperlink
@@ -838,8 +860,9 @@ public class ExtensionManager {
 	}
 
 	/**
-	 * Returns a list, maybe empty, of ids that refer to UI elements that are supposed to be used in dialogs, widgets and
-	 * composites that allow the final user to modify hyperlinks.
+	 * Returns a list, maybe empty, of ids that refer to UI elements that are
+	 * supposed to be used in dialogs, widgets and composites that allow the final
+	 * user to modify hyperlinks.
 	 * 
 	 * @param hyperlinkType
 	 * @return the list of ui elements, if any, associated to the hyperlink

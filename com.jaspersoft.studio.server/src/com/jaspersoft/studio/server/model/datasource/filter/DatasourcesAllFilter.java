@@ -12,7 +12,7 @@ import com.jaspersoft.studio.server.model.datasource.MRDatasourceAWS;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
 
 public class DatasourcesAllFilter implements IDatasourceFilter {
-	private final static Set<String> types = new HashSet<String>();
+	private static final Set<String> types = new HashSet<>();
 	static {
 		types.add(ResourceDescriptor.TYPE_DATASOURCE);
 		types.add(ResourceDescriptor.TYPE_DATASOURCE_BEAN);
@@ -34,9 +34,13 @@ public class DatasourcesAllFilter implements IDatasourceFilter {
 		return types;
 	}
 
+	public static String[] getTypesArray() {
+		return types.toArray(new String[types.size()]);
+	}
+
 	@Override
 	public Set<String> getFilterTypes() {
-		return types;
+		return getTypes();
 	}
 
 	@Override
@@ -44,22 +48,6 @@ public class DatasourcesAllFilter implements IDatasourceFilter {
 		if (r.getIsReference() && r.getReferenceType() != null)
 			return types.contains(r.getReferenceType());
 		return types.contains(r.getWsType());
-
-		// return wsType.equals(ResourceDescriptor.TYPE_DATASOURCE) ||
-		// wsType.equals(ResourceDescriptor.TYPE_DATASOURCE_BEAN) ||
-		// wsType.equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)
-		// || wsType.equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC) ||
-		// wsType.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI) ||
-		// wsType.equals(MRDatasourceVDS.TYPE_DATASOURCE_VDS)
-		// || wsType.equals(MRDatasourceAWS.TYPE_AWS) ||
-		// wsType.equals("Domain"); //$NON-NLS-1$
-		// || (wsType.equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)
-		// //$NON-NLS-1$
-		// && r.getResourcePropertyValue("PROP_RESOURCE_TYPE") != null && r
-		// //$NON-NLS-1$
-		// .getResourcePropertyValue("PROP_RESOURCE_TYPE") //$NON-NLS-1$
-		// .equals("com.jaspersoft.jasperserver.api.metadata.jasperreports.domain.CustomReportDataSource"));
-		// //$NON-NLS-1$
 	}
 
 }

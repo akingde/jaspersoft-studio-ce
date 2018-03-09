@@ -120,8 +120,8 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		new Label(cmp, SWT.NONE).setText("Excel Format");
 
 		format = new Combo(cmp, SWT.READ_ONLY);
-		format.setItems(ExcelFormatEnum.AUTODETECT.getName(), ExcelFormatEnum.XLS.getName(),
-				ExcelFormatEnum.XLSX.getName());
+		format.setItems(new String[] { ExcelFormatEnum.AUTODETECT.getName(), ExcelFormatEnum.XLS.getName(),
+				ExcelFormatEnum.XLSX.getName() });
 
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayout(new FillLayout(SWT.VERTICAL));

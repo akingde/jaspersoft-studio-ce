@@ -5,12 +5,8 @@ package com.jaspersoft.studio.property.dataset.fields.table.widget;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
@@ -23,25 +19,15 @@ import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
-public class WProperties extends WText {
+public class WProperties extends AWTextButton {
 	public WProperties(AWidget aw) {
 		super(aw);
 	}
 
 	@Override
-	protected void createControl(Composite parent) {
-		Composite cmp = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		cmp.setLayout(layout);
-		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		super.createControl(cmp);
-
-		Button b = new Button(cmp, SWT.PUSH);
-		b.setText("...");
-		b.addSelectionListener(new SelectionAdapter() {
+	protected void createButton(Composite cmp) {
+		super.createButton(cmp);
+		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				JRPropertyExpressionEditor wizard = new JRPropertyExpressionEditor();
@@ -73,15 +59,20 @@ public class WProperties extends WText {
 			JRPropertyExpression[] pexp = field.getPropertyExpressions();
 			if (pexp != null)
 				size += field.getPropertyExpressions().length;
-			return size == 0 ? "" : (size == 1 ? "1 Property" : size + " Properties");
+			return formatLabel(size);
 		} else if (aw.element instanceof JRDesignParameter) {
 			JRDesignParameter field = (JRDesignParameter) aw.element;
 			int size = 0;
 			JRPropertiesMap pmap = field.getPropertiesMap();
 			if (pmap != null && pmap.getPropertyNames() != null)
 				size += pmap.getPropertyNames().length;
-			return size == 0 ? "" : (size == 1 ? "1 Property" : size + " Properties");
+			return formatLabel(size);
 		}
 		return "";
+	}
+
+	protected String formatLabel(int size) {
+		String lbl = size == 1 ? "1 Property" : size + " Properties";
+		return size == 0 ? "" : lbl;
 	}
 }

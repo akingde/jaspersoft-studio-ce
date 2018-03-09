@@ -16,8 +16,8 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.data.designer.AQueryDesigner;
+import com.jaspersoft.studio.data.designer.IFilterQuery;
 import com.jaspersoft.studio.data.designer.SelectParameterDialog;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
@@ -40,11 +41,12 @@ import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.UnknownOperand;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
+import com.jaspersoft.studio.data.sql.widgets.ParameterWidget;
 
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
 
-public class EditExpressionXDialog extends ATitledDialog {
+public class EditExpressionXDialog extends ATitledDialog implements IFilterQuery {
 	private MExpressionX value;
 	private AQueryDesigner designer;
 
@@ -69,7 +71,7 @@ public class EditExpressionXDialog extends ATitledDialog {
 		this.value = value;
 		setFunction(value.getFunction());
 		setPrevcond(value.getPrevCond());
-		operands = new ArrayList<AOperand>(value.getOperands());
+		operands = new ArrayList<>(value.getOperands());
 	}
 
 	private java.util.List<AOperand> operands;
@@ -161,15 +163,14 @@ public class EditExpressionXDialog extends ATitledDialog {
 		Composite parent = new Composite(cmp, SWT.NONE);
 		GridLayout gd = new GridLayout(2, false);
 		gd.marginHeight = 0;
-		// gd.marginWidth = 0;
 		parent.setLayout(gd);
-		Set<Class<? extends AOperand>> mop = new HashSet<Class<? extends AOperand>>();
+		Set<Class<? extends AOperand>> mop = new HashSet<>();
 		mop.add(FieldOperand.class);
 		mop.add(UnknownOperand.class);
 		Factory.createWidget(parent, operands, 0, value, mop, designer);
 	}
 
-	private Map<String, Composite> map = new HashMap<String, Composite>();
+	private Map<String, Composite> map = new HashMap<>();
 	private Composite rcmp;
 	private StackLayout stackLayout;
 
@@ -289,17 +290,7 @@ public class EditExpressionXDialog extends ATitledDialog {
 				}
 			}
 		});
-		inlist.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-
-			}
+		inlist.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -311,7 +302,7 @@ public class EditExpressionXDialog extends ATitledDialog {
 	}
 
 	private void handleAddInList(List inlist) {
-		SelectParameterDialog d = new SelectParameterDialog(rcmp.getShell(), designer);
+		SelectParameterDialog d = new SelectParameterDialog(rcmp.getShell(), designer, this);
 		if (d.open() == Dialog.OK) {
 			int index = inlist.getSelectionIndex();
 			ParameterPOperand op = new ParameterPOperand(value);
@@ -328,7 +319,7 @@ public class EditExpressionXDialog extends ATitledDialog {
 		int index = inlist.getSelectionIndex() + 1;
 		if (index >= 0 && index < operands.size()) {
 			ParameterPOperand pop = (ParameterPOperand) operands.get(index);
-			SelectParameterDialog d = new SelectParameterDialog(rcmp.getShell(), designer, pop.getJrParameter());
+			SelectParameterDialog d = new SelectParameterDialog(rcmp.getShell(), designer, pop.getJrParameter(), this);
 			if (d.open() == Dialog.OK) {
 				pop.setJrParameter(d.getPname());
 				showInList(inlist);
@@ -338,10 +329,15 @@ public class EditExpressionXDialog extends ATitledDialog {
 
 	private void showInList(List inlist) {
 		String[] ilarray = new String[Math.max(operands.size() - 1, 0)];
-		if (operands.size() > 0)
+		if (!operands.isEmpty())
 			for (int i = 1; i < operands.size(); i++)
 				ilarray[i - 1] = operands.get(i).toXString();
 		inlist.setItems(ilarray);
+	}
+
+	@Override
+	public String getFilterQuery() {
+		return ParameterWidget.getFilterQueryObject(operands);
 	}
 
 }

@@ -10,8 +10,6 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.dataset.MDataset;
-import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
-import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 import net.sf.jasperreports.eclipse.util.Misc;
@@ -30,14 +28,11 @@ public class WExpression extends AWControl {
 
 	protected void createControl(Composite parent) {// here depending on the type we could have different widget
 		expr = new WTextExpression(parent, SWT.NONE, 1);
-		expr.addModifyListener(new ExpressionModifiedListener() {
-			@Override
-			public void expressionModified(ExpressionModifiedEvent event) {
-				if (refresh)
-					return;
-				aw.setValue(expr.getExpression());
-				expr.setToolTipText(aw.getToolTipText());
-			}
+		expr.addModifyListener(event -> {
+			if (refresh)
+				return;
+			aw.setValue(expr.getExpression());
+			expr.setToolTipText(aw.getToolTipText());
 		});
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		expr.setExpressionContext(expContext);
@@ -54,15 +49,21 @@ public class WExpression extends AWControl {
 		expr.setToolTipText(aw.getToolTipText());
 	}
 
+	@Override
 	protected String getText() {
 		JRExpression exp = (JRExpression) aw.getValue();
 		if (exp != null)
-			Misc.nvl(exp.getText());
+			return Misc.nvl(exp.getText());
 		return "";
 	}
 
 	@Override
 	public void addDisposeListener(DisposeListener dlistener) {
 		expr.addDisposeListener(dlistener);
+	}
+
+	@Override
+	public void setEnabled(boolean en) {
+		expr.setEnabled(en);
 	}
 }

@@ -9,8 +9,6 @@ import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -38,11 +36,9 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorLov;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorQuery;
 import com.jaspersoft.studio.utils.UIUtil;
 
-public class InputControlPageContent extends APageContent implements
-		IPageCompleteListener {
+public class InputControlPageContent extends APageContent implements IPageCompleteListener {
 
-	public InputControlPageContent(ANode parent, AMResource resource,
-			DataBindingContext bindingContext) {
+	public InputControlPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -84,14 +80,10 @@ public class InputControlPageContent extends APageContent implements
 
 		ctype = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
 		ctype.setItems(new String[] { Messages.InputControlPageContent_boolean,
-				Messages.InputControlPageContent_singleValue,
-				Messages.RDInputControlPage_singlselectlistofvalues,
-				Messages.RDInputControlPage_singleselectlovradio,
-				Messages.RDInputControlPage_multiselectlov,
-				Messages.RDInputControlPage_multiselectlovradio,
-				Messages.RDInputControlPage_singlselectquery,
-				Messages.RDInputControlPage_singleselectqueryradio,
-				Messages.RDInputControlPage_multiselectquery,
+				Messages.InputControlPageContent_singleValue, Messages.RDInputControlPage_singlselectlistofvalues,
+				Messages.RDInputControlPage_singleselectlovradio, Messages.RDInputControlPage_multiselectlov,
+				Messages.RDInputControlPage_multiselectlovradio, Messages.RDInputControlPage_singlselectquery,
+				Messages.RDInputControlPage_singleselectqueryradio, Messages.RDInputControlPage_multiselectquery,
 				Messages.RDInputControlPage_multiselectquerycheckbox });
 
 		stackComposite = new Composite(composite, SWT.NONE);
@@ -127,9 +119,8 @@ public class InputControlPageContent extends APageContent implements
 
 	@Override
 	protected void rebind() {
-		bindingContext.bindValue(SWTObservables
-				.observeSingleSelectionIndex(ctype), PojoObservables
-				.observeValue(getProxy(res.getValue()), "controlType")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSingleSelectionIndex(ctype),
+				PojoObservables.observeValue(getProxy(res.getValue()), "controlType")); //$NON-NLS-1$
 
 		bindingContext.bindValue(SWTObservables.observeSelection(bmand),
 				PojoObservables.observeValue(res.getValue(), "mandatory")); //$NON-NLS-1$
@@ -138,9 +129,8 @@ public class InputControlPageContent extends APageContent implements
 		bindingContext.bindValue(SWTObservables.observeSelection(bvisible),
 				PojoObservables.observeValue(res.getValue(), "visible")); //$NON-NLS-1$
 		if (tvalue != null)
-			bindingContext.bindValue(SWTObservables.observeText(tvalue,
-					SWT.Modify), PojoObservables.observeValue(res.getValue(),
-					"queryValueColumn")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeText(tvalue, SWT.Modify),
+					PojoObservables.observeValue(res.getValue(), "queryValueColumn")); //$NON-NLS-1$
 
 		handleTypeChanged(ctype, stackLayout);
 	}
@@ -150,7 +140,6 @@ public class InputControlPageContent extends APageContent implements
 		int s = ctype.getSelectionIndex();
 		if (cSelector != null)
 			cSelector.removePageCompleteListener(this);
-		// cSelector = null;
 		if (s < 1) {
 			stackLayout.topControl = cvalue;
 			res.getValue().getChildren().clear();
@@ -252,14 +241,7 @@ public class InputControlPageContent extends APageContent implements
 
 		qvct = new QueryVisibleColumnsTable(cmp, res.getValue(), this, sQuery);
 
-		tvalue.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				pageCompleted(sQuery.isPageComplete());
-				// page.setPageComplete(sQuery.isPageComplete());
-			}
-		});
+		tvalue.addModifyListener(e -> pageCompleted(sQuery.isPageComplete()));
 
 	}
 
@@ -291,17 +273,13 @@ public class InputControlPageContent extends APageContent implements
 
 	class ShiftMapProxy {
 		private ResourceDescriptor rd;
-		private final int[] shift = new int[] {
-				ResourceDescriptor.IC_TYPE_BOOLEAN,
-				ResourceDescriptor.IC_TYPE_SINGLE_VALUE,
-				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES,
+		private final int[] shift = new int[] { ResourceDescriptor.IC_TYPE_BOOLEAN,
+				ResourceDescriptor.IC_TYPE_SINGLE_VALUE, ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES,
 				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO,
 				ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES,
 				ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX,
-				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY,
-				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO,
-				ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY,
-				ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX };
+				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY, ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO,
+				ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY, ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX };
 
 		public void setResourceDescriptor(ResourceDescriptor rd) {
 			this.rd = rd;

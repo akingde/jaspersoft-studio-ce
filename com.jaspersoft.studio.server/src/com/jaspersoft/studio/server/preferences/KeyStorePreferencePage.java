@@ -33,6 +33,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -125,6 +126,16 @@ public class KeyStorePreferencePage extends PreferencePage implements IWorkbench
 					return res.toArray();
 				}
 				return null;
+			}
+
+			@Override
+			public void dispose() {
+				// nothing to do
+			}
+
+			@Override
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+				// nothing to do
 			}
 		});
 		treeviewer.setLabelProvider(new CertificateLabelProvider());

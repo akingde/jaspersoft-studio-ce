@@ -28,7 +28,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.metadata.PropertyMetadataRegistry;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.ic.ICParameterContributor;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -43,78 +43,74 @@ import net.sf.jasperreports.properties.StandardPropertyMetadata;
 
 public class AExporter {
 	public static Map<String, IFile> fileurimap = new HashMap<>();
-	public static final String PROP_SERVERURL = "ireport.jasperserver.url";
-	public static final String PROP_USER = "ireport.jasperserver.user";
-	public static final String PROP_REPORTRESOURCE = "ireport.jasperserver.report.resource";
-	public static final String PROP_REPORTUNIT = "ireport.jasperserver.reportUnit";
-	public static final String COM_JASPERSOFT_STUDIO_REPORT_UNIT_DESCRIPTION = "com.jaspersoft.studio.report.unit.description";
+	public static final String PROP_SERVERURL = "ireport.jasperserver.url"; //$NON-NLS-1$
+	public static final String PROP_USER = "ireport.jasperserver.user"; //$NON-NLS-1$
+	public static final String PROP_REPORTRESOURCE = "ireport.jasperserver.report.resource"; //$NON-NLS-1$
+	public static final String PROP_REPORTUNIT = "ireport.jasperserver.reportUnit"; //$NON-NLS-1$
+	public static final String COM_JASPERSOFT_STUDIO_REPORT_UNIT_DESCRIPTION = "com.jaspersoft.studio.report.unit.description"; //$NON-NLS-1$
 
 	public static void initMetadata() {
 		List<PropertyMetadata> pm = new ArrayList<>();
 
 		StandardPropertyMetadata spm = new StandardPropertyMetadata();
 		spm.setName(PROP_SERVERURL);
-		spm.setLabel("Server URL");
-		spm.setDescription("URL for JasperReports Server.");
+		spm.setLabel(Messages.AExporter_5);
+		spm.setDescription(Messages.AExporter_6);
 		spm.setValueType(URL.class.getName());
 		List<PropertyScope> scopes = new ArrayList<>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
+		spm.setCategory(Activator.SERVER_CATEGORY);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
 		spm.setName(PROP_USER);
-		spm.setLabel("User/Ogranization");
-		spm.setDescription("User and organization if exists, separated by `|`.");
+		spm.setLabel(Messages.AExporter_7);
+		spm.setDescription(Messages.AExporter_8);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
+		spm.setCategory(Activator.SERVER_CATEGORY);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
 		spm.setName(PROP_REPORTRESOURCE);
-		spm.setLabel("Report Resource Path");
-		spm.setDescription("Resource path.");
-		spm.setValueType(ICParameterContributor.ICPATH);
-		scopes = new ArrayList<>();
+		spm.setLabel(Messages.AExporter_9);
+		spm.setDescription(Messages.AExporter_10);
+		spm.setValueType(Activator.REPPATH);
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
+		spm.setCategory(Activator.SERVER_CATEGORY);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
 		spm.setName(PROP_REPORTUNIT);
-		spm.setLabel("Report Unit Path");
-		spm.setDescription("Report Unit path.");
-		spm.setValueType(ICParameterContributor.ICPATH);
-		scopes = new ArrayList<>();
+		spm.setLabel(Messages.AExporter_11);
+		spm.setDescription(Messages.AExporter_12);
+		spm.setValueType(Activator.RUPATH);
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
+		spm.setCategory(Activator.SERVER_CATEGORY);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
 		spm.setName(JrxmlPublishContributor.COM_JASPERSOFT_JRS_DATA_SOURCE);
-		spm.setLabel("Report Unit Datasource Path");
-		spm.setDescription("Report Unit data source path.");
-		spm.setValueType(ICParameterContributor.ICPATH);
-		scopes = new ArrayList<>();
+		spm.setLabel(Messages.AExporter_13);
+		spm.setDescription(Messages.AExporter_14);
+		spm.setValueType(Activator.DSPATH);
 		scopes.add(PropertyScope.DATASET);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server");
+		spm.setCategory(Activator.SERVER_CATEGORY);
 		pm.add(spm);
 
 		spm = new StandardPropertyMetadata();
 		spm.setName(COM_JASPERSOFT_STUDIO_REPORT_UNIT_DESCRIPTION);
-		spm.setLabel("Report Unit Description");
-		spm.setDescription("Report unitnit description.");
+		spm.setLabel(Messages.AExporter_15);
+		spm.setDescription(Messages.AExporter_16);
 		spm.setValueType(String.class.getName());
-		scopes = new ArrayList<>();
 		scopes.add(PropertyScope.REPORT);
 		spm.setScopes(scopes);
+		spm.setCategory(Activator.SERVER_CATEGORY);
 		pm.add(spm);
 
 		PropertyMetadataRegistry.addMetadata(pm);
@@ -151,20 +147,14 @@ public class AExporter {
 	}
 
 	public static String encodeUsr(ServerProfile v) {
-		String r = "";
-		if (v.isUseSSO())
-			r += v.getSsoUuid();
-		else
-			r += v.getUser();
+		String r = v.isUseSSO() ? v.getSsoUuid() : v.getUser();
 		if (!Misc.isNullOrEmpty(v.getOrganisation()))
-			r += "|" + v.getOrganisation();
+			r += "|" + v.getOrganisation(); //$NON-NLS-1$
 		return r;
 	}
 
 	protected String getExtension(AMResource res) {
-		// if (res instanceof AFileResource)
-		// return "." + ((AFileResource) res).getDefaultFileExtension();
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	protected IFile getTempFile(AMResource res, ResourceDescriptor rd, String fkeyname, String dextention,
@@ -204,7 +194,7 @@ public class AExporter {
 			file.createNewFile();
 			String ffp = file.toURI().toASCIIString();
 			for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-				String ppath = p.getLocationURI().toASCIIString() + "/";
+				String ppath = p.getLocationURI().toASCIIString() + "/"; //$NON-NLS-1$
 				if (ffp.startsWith(ppath)) {
 					p.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 					f = p.getFile(ffp.substring(ppath.length()));
@@ -231,7 +221,7 @@ public class AExporter {
 		String path = rd.getName();
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_IMAGE)) {
 			String fname = path.toLowerCase();
-			if (fname.endsWith(".jpg") || fname.endsWith(".jpeg") || fname.endsWith(".gif") || fname.endsWith(".tiff"))
+			if (fname.endsWith(".jpg") || fname.endsWith(".jpeg") || fname.endsWith(".gif") || fname.endsWith(".tiff")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				return path;
 		}
 		if (!path.endsWith(dextention))

@@ -3,7 +3,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.prm;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -17,11 +16,7 @@ import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -34,8 +29,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -47,9 +40,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -81,13 +72,13 @@ import com.jaspersoft.studio.property.descriptor.propexpr.dialog.PropertyDialogH
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
 import com.jaspersoft.studio.swt.widgets.table.IEditElement;
-import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.UIUtil;
 
 import net.sf.jasperreports.annotations.properties.PropertyScope;
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
@@ -118,30 +109,24 @@ public class ParametersTable extends AbstractModifyTable {
 		this.isMainDataset = isMainDataset;
 		this.dataset = dataset;
 		createControl(parent);
-		dataset.getPropertiesMap().getEventSupport().addPropertyChangeListener(new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				String pname = evt.getPropertyName();
-				if (pname.equals(DataQueryAdapters.DEFAULT_DATAADAPTER)
-						|| pname.equals(DataQueryAdapters.DEFAULT_DATAADAPTER)) {
-					refreshDataAdapter();
-					refreshProperties(da);
-					tviewer.refresh(true);
-					treeviewer.refresh(true);
-				}
+		dataset.getPropertiesMap().getEventSupport().addPropertyChangeListener(evt -> {
+			String pname = evt.getPropertyName();
+			if (pname.equals(DataQueryAdapters.DEFAULT_DATAADAPTER)
+					|| pname.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)) {
+				refreshDataAdapter();
+				refreshProperties(da);
+				tviewer.refresh(true);
+				treeviewer.refresh(true);
 			}
 		});
 		if (dataset.getQuery() != null)
-			((JRDesignQuery) dataset.getQuery()).getEventSupport()
-					.addPropertyChangeListener(JRDesignQuery.PROPERTY_LANGUAGE, evt -> {
-						UIUtils.getDisplay().asyncExec(() -> {
-							List<JRParameter> fields = dataset.getParametersList();
-							if (fields == null)
-								fields = new ArrayList<>();
-							setFields(fields);
-						});
-					});
+			((JRDesignQuery) dataset.getQuery()).getEventSupport().addPropertyChangeListener(
+					JRDesignQuery.PROPERTY_LANGUAGE, evt -> UIUtils.getDisplay().asyncExec(() -> {
+						List<JRParameter> fields = dataset.getParametersList();
+						if (fields == null)
+							fields = new ArrayList<>();
+						setFields(fields);
+					}));
 	}
 
 	public Composite getControl() {
@@ -185,40 +170,25 @@ public class ParametersTable extends AbstractModifyTable {
 		bSystem = new ToolItem(buttons, SWT.CHECK);
 		bSystem.setImage(
 				JaspersoftStudioPlugin.getInstance().getImage(MParameterSystem.getIconDescriptor().getIcon16()));
-		bSystem.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				filter.setShowSystem(!bSystem.getSelection());
-				// bDA.setSelection(false);
-				tviewer.refresh();
-				treeviewer.refresh();
-				// if (layout.topControl == treeCmp) {
-				// layout.topControl = tblCmp;
-				// pcmp.layout();
-				// }
-			}
-
+		bSystem.addListener(SWT.Selection, event -> {
+			filter.setShowSystem(!bSystem.getSelection());
+			tviewer.refresh();
+			treeviewer.refresh();
 		});
 		bSystem.setToolTipText("Hide Built-In parameters");
 		bSystem.setSelection(false);
 
 		bDA = new ToolItem(buttons, SWT.CHECK);
 		bDA.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/parameter-da-16.png"));
-		bDA.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				if (bDA.getSelection()) {
-					layout.topControl = treeCmp;
-					refreshTree();
-				} else {
-					layout.topControl = tblCmp;
-					refreshTable(dataset.getParametersList());
-				}
-				pcmp.layout();
+		bDA.addListener(SWT.Selection, event -> {
+			if (bDA.getSelection()) {
+				layout.topControl = treeCmp;
+				refreshTree();
+			} else {
+				layout.topControl = tblCmp;
+				refreshTable(dataset.getParametersList());
 			}
-
+			pcmp.layout();
 		});
 		bDA.setToolTipText("Show parameter properties");
 	}
@@ -233,6 +203,15 @@ public class ParametersTable extends AbstractModifyTable {
 
 		treeviewer = new TreeViewer(wtree);
 		treeviewer.setContentProvider(new ITreeContentProvider() {
+			@Override
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+				// do nothing
+			}
+
+			@Override
+			public void dispose() {
+				// do nothing
+			}
 
 			@Override
 			public boolean hasChildren(Object element) {
@@ -254,7 +233,7 @@ public class ParametersTable extends AbstractModifyTable {
 			@Override
 			public Object[] getChildren(Object element) {
 				if (element instanceof Collection<?>) {
-					List<Object> res = new ArrayList<Object>();
+					List<Object> res = new ArrayList<>();
 					for (Object el : (Collection<?>) element) {
 						if (el instanceof JRDesignParameter && !filter.showSystem
 								&& ((JRDesignParameter) el).isSystemDefined())
@@ -388,7 +367,6 @@ public class ParametersTable extends AbstractModifyTable {
 						pm.setProperty((String) row[0], (String) value);
 						row[1] = value;
 					}
-					// viewer.update(element, null);
 				} else
 					super.setValue(element, value);
 			}
@@ -428,13 +406,9 @@ public class ParametersTable extends AbstractModifyTable {
 						e1.printStackTrace();
 					}
 				}
-				p.getPropertiesMap().getEventSupport().addPropertyChangeListener(new PropertyChangeListener() {
-
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						treeviewer.refresh(true);
-						treeviewer.expandToLevel(p, 1);
-					}
+				p.getPropertiesMap().getEventSupport().addPropertyChangeListener(evt -> {
+					treeviewer.refresh(true);
+					treeviewer.expandToLevel(p, 1);
 				});
 				fireModifyListeners();
 
@@ -467,8 +441,8 @@ public class ParametersTable extends AbstractModifyTable {
 					PropertyMetadata pm = DatasetUtil.getPmap(mdataset.getJasperConfiguration()).get(key);
 					if (pm != null)
 						value = pm.getDefaultValue();
-
-					p.getPropertiesMap().setProperty(key, value);
+					if (p != null)
+						p.getPropertiesMap().setProperty(key, value);
 
 					treeviewer.refresh();
 					treeviewer.expandToLevel(p, 2);
@@ -489,9 +463,9 @@ public class ParametersTable extends AbstractModifyTable {
 				Object obj = sel.getFirstElement();
 				if (obj instanceof JRDesignParameter) {
 					JRDesignParameter oldF = (JRDesignParameter) obj;
-					PropertiesDialog<JRDesignParameter> d = new PropertiesDialog<JRDesignParameter>(
-							tviewer.getTable().getShell(), (JRDesignParameter) oldF.clone(), tcolumns,
-							MParameter.getIconDescriptor().getDescription(), mdataset.getJasperConfiguration());
+					PropertiesDialog<JRDesignParameter> d = new PropertiesDialog<>(tviewer.getTable().getShell(),
+							(JRDesignParameter) oldF.clone(), tcolumns, MParameter.getIconDescriptor().getDescription(),
+							mdataset.getJasperConfiguration());
 					if (d.open() == Dialog.OK) {
 						int pos = dataset.getParametersList().indexOf(oldF);
 						dataset.removeParameter(oldF.getName());
@@ -528,13 +502,9 @@ public class ParametersTable extends AbstractModifyTable {
 			}
 		};
 		bedit.addSelectionListener(editListener);
-		treeviewer.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				if (bedit.isEnabled())
-					editListener.widgetSelected(null);
-			}
+		treeviewer.addDoubleClickListener(event -> {
+			if (bedit.isEnabled())
+				editListener.widgetSelected(null);
 		});
 
 		final Button bdel = new Button(bGroup, SWT.PUSH);
@@ -562,29 +532,25 @@ public class ParametersTable extends AbstractModifyTable {
 				treeviewer.refresh();
 			}
 		});
-		treeviewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				StructuredSelection sel = (StructuredSelection) treeviewer.getSelection();
-				Object obj = sel.getFirstElement();
-				badd.setEnabled(!sel.isEmpty() && (obj instanceof JRDesignParameter || obj instanceof Object[]));
-				bedit.setEnabled(!sel.isEmpty());
-				bdel.setEnabled(!sel.isEmpty());
-			}
+		treeviewer.addSelectionChangedListener(event -> {
+			StructuredSelection sel = (StructuredSelection) treeviewer.getSelection();
+			Object obj = sel.getFirstElement();
+			badd.setEnabled(!sel.isEmpty() && (obj instanceof JRDesignParameter || obj instanceof Object[]));
+			bedit.setEnabled(!sel.isEmpty());
+			bdel.setEnabled(!sel.isEmpty());
 		});
 		treeviewer.addDragSupport(DND.DROP_COPY | DND.DROP_MOVE,
 				new Transfer[] { TemplateTransfer.getInstance(), PluginTransfer.getInstance() },
 				new NodeDragListener(treeviewer));
 		treeviewer.expandAll();
 
-		params = new ArrayList<JRDesignParameter>();
+		params = new ArrayList<>();
 		if (dataset.getParametersList() != null)
 			fillTree();
 		treeviewer.setInput(params);
 	}
 
-	private Map<JRParameter, PropertyChangeListener> map = new HashMap<JRParameter, PropertyChangeListener>();
+	private Map<JRParameter, PropertyChangeListener> map = new HashMap<>();
 
 	private void fillTree() {
 		for (JRParameter p : map.keySet())
@@ -593,13 +559,9 @@ public class ParametersTable extends AbstractModifyTable {
 		for (JRParameter p : dataset.getParametersList()) {
 			params.add((JRDesignParameter) p);
 			final JRParameter prm = p;
-			PropertyChangeListener pcl = new PropertyChangeListener() {
-
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					treeviewer.refresh(true);
-					treeviewer.expandToLevel(prm, 1);
-				}
+			PropertyChangeListener pcl = evt -> {
+				treeviewer.refresh(true);
+				treeviewer.expandToLevel(prm, 1);
 			};
 			map.put(p, pcl);
 			p.getPropertiesMap().getEventSupport().addPropertyChangeListener(pcl);
@@ -633,26 +595,20 @@ public class ParametersTable extends AbstractModifyTable {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			lprop.setLayoutData(gd);
-			lprop.addModifyListener(new ModifyListener() {
-
-				@Override
-				public void modifyText(ModifyEvent e) {
-					key = lprop.getText();
-				}
-			});
+			lprop.addModifyListener(e -> key = lprop.getText());
 
 			final org.eclipse.swt.widgets.List cmb = new org.eclipse.swt.widgets.List(cmp, SWT.BORDER | SWT.SINGLE);
 			gd = new GridData(GridData.FILL_BOTH);
 			gd.widthHint = 400;
 			gd.heightHint = 300;
 			cmb.setLayoutData(gd);
-			final List<String> items = new ArrayList<String>();
+			final List<String> items = new ArrayList<>();
 			Map<String, PropertyMetadata> pmap = DatasetUtil.getPmap(mdataset.getJasperConfiguration());
-			for (String key : pmap.keySet()) {
-				List<PropertyScope> scopes = pmap.get(key).getScopes();
+			for (Map.Entry<String, PropertyMetadata> entry : pmap.entrySet()) {
+				List<PropertyScope> scopes = entry.getValue().getScopes();
 				if (scopes != null && scopes.contains(PropertyScope.PARAMETER)
-						&& !p.getPropertiesMap().containsProperty(key))
-					items.add(key);
+						&& !p.getPropertiesMap().containsProperty(entry.getKey()))
+					items.add(entry.getKey());
 			}
 			Collections.sort(items);
 
@@ -672,21 +628,18 @@ public class ParametersTable extends AbstractModifyTable {
 					lprop.setText(items.get(cmb.getSelectionIndex()));
 				}
 			});
-			cmb.addListener(SWT.MouseMove, new Listener() {
-				@Override
-				public void handleEvent(Event event) {
-					int itemTop = 0;
-					for (int i = 0; i < cmb.getItemCount(); i++) {
-						if (event.y >= itemTop && event.y <= itemTop + cmb.getItemHeight()) {
-							PropertyMetadata pm = DatasetUtil.getPmap(mdataset.getJasperConfiguration())
-									.get(items.get(cmb.getTopIndex() + i));
-							if (pm != null) {
-								cmb.setToolTipText(pm.getName() + "\n\n" + Misc.nvl(pm.getDescription()));
-							} else
-								cmb.setToolTipText("");
-						}
-						itemTop += cmb.getItemHeight();
+			cmb.addListener(SWT.MouseMove, event -> {
+				int itemTop = 0;
+				for (int i = 0; i < cmb.getItemCount(); i++) {
+					if (event.y >= itemTop && event.y <= itemTop + cmb.getItemHeight()) {
+						PropertyMetadata pm = DatasetUtil.getPmap(mdataset.getJasperConfiguration())
+								.get(items.get(cmb.getTopIndex() + i));
+						if (pm != null)
+							cmb.setToolTipText(pm.getName() + "\n\n" + Misc.nvl(pm.getDescription()));
+						else
+							cmb.setToolTipText("");
 					}
+					itemTop += cmb.getItemHeight();
 				}
 			});
 			if (items.size() > 0) {
@@ -709,7 +662,7 @@ public class ParametersTable extends AbstractModifyTable {
 		tviewer.setContentProvider(new ListContentProvider());
 		UIUtil.setViewerCellEditingOnDblClick(tviewer);
 		ColumnViewerToolTipSupport.enableFor(tviewer, ToolTip.NO_RECREATE);
-		tviewer.setFilters(filter);
+		tviewer.setFilters(new ViewerFilter[] { filter });
 
 		refreshDataAdapter();
 		refreshProperties(da);
@@ -730,15 +683,11 @@ public class ParametersTable extends AbstractModifyTable {
 					e.printStackTrace();
 				}
 			}
-		}.createNewButtons(bGroup, tviewer, new INewElement() {
-
-			public Object newElement(List<?> input, int pos) {
-				JRDesignParameter f = new JRDesignParameter();
-				f.setName(getName());
-				f.setValueClass(String.class);
-				return f;
-			}
-
+		}.createNewButtons(bGroup, tviewer, (input, pos) -> {
+			JRDesignParameter f = new JRDesignParameter();
+			f.setName(getName());
+			f.setValueClass(String.class);
+			return f;
 		});
 
 		EditButton<JRDesignParameter> eb = new EditButton<JRDesignParameter>() {
@@ -795,14 +744,11 @@ public class ParametersTable extends AbstractModifyTable {
 			fields = new ArrayList<>();
 		setFields(fields);
 
-		tviewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			public void selectionChanged(SelectionChangedEvent event) {
-				StructuredSelection sel = (StructuredSelection) event.getSelection();
-				if (!sel.isEmpty()) {
-					JRDesignParameter prm = (JRDesignParameter) sel.getFirstElement();
-					delb.setEnabled(!prm.isSystemDefined());
-				}
+		tviewer.addSelectionChangedListener(event -> {
+			StructuredSelection sel = (StructuredSelection) event.getSelection();
+			if (!sel.isEmpty()) {
+				JRDesignParameter prm = (JRDesignParameter) sel.getFirstElement();
+				delb.setEnabled(!prm.isSystemDefined());
 			}
 		});
 
@@ -812,12 +758,12 @@ public class ParametersTable extends AbstractModifyTable {
 	}
 
 	public String getName() {
-		List<JRDesignParameter> list = (List<JRDesignParameter>) getParameters();
+		List<JRDesignParameter> list = getParameters();
 		String name = "Parameter"; //$NON-NLS-1$
 		boolean match = false;
 		String tmp = name;
 		for (int i = 1; i < 100000; i++) {
-			tmp = name + i;// ModelUtils.getNameFormat(name, i);
+			tmp = name + i;
 
 			for (JRDesignParameter f : list) {
 				match = f.getName().equals(tmp);

@@ -32,7 +32,7 @@ public class FindResourceJob {
 
 	public static ResourceDescriptor doFindResource(MServerProfile msp, String[] in, String[] excl,
 			boolean containedResource) {
-		return doFindResource(msp, in, excl, false, null);
+		return doFindResource(msp, in, excl, containedResource, null);
 	}
 
 	public static ResourceDescriptor doFindResource(MServerProfile msp, String[] in, String[] excl,
@@ -90,17 +90,13 @@ public class FindResourceJob {
 				try {
 					final AMResource mr = WSClientHelper.findSelected(monitor, rd, msp);
 					if (mr != null) {
-						UIUtils.getDisplay().asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								try {
-									sp.setSkipLazyLoad(true);
-									treeViewer.refresh(true);
-									treeViewer.setSelection(new StructuredSelection(mr));
-								} finally {
-									sp.setSkipLazyLoad(false);
-								}
+						UIUtils.getDisplay().asyncExec(() -> {
+							try {
+								sp.setSkipLazyLoad(true);
+								treeViewer.refresh(true);
+								treeViewer.setSelection(new StructuredSelection(mr));
+							} finally {
+								sp.setSkipLazyLoad(false);
 							}
 						});
 					}

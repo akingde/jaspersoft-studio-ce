@@ -20,7 +20,7 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 public abstract class AWidget {
-	private static Map<String, Class<? extends AWControl>> wmap = new HashMap<String, Class<? extends AWControl>>();
+	private static Map<String, Class<? extends AWControl>> wmap = new HashMap<>();
 	static {
 		wmap.put(Class.class.getName(), WClassName.class);
 		wmap.put(Boolean.class.getName(), WBoolean.class);
@@ -55,23 +55,18 @@ public abstract class AWidget {
 		initControl(parent, c);
 	}
 
+	public AWControl getControl() {
+		return control;
+	}
+
 	protected void initControl(Composite parent, TColumn c) {
 		if (wmap.containsKey(c.getPropertyType())) {
 			try {
 				Constructor<? extends AWControl> constr = wmap.get(c.getPropertyType()).getConstructor(AWidget.class);
 				control = constr.newInstance(this);
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+			} catch (SecurityException | NoSuchMethodException | IllegalArgumentException | InstantiationException
+					| IllegalAccessException | InvocationTargetException e) {
+				// nothing to do
 			}
 		} else if (c.getType().equals("classTypeCombo"))
 			control = new WClassName(this);
@@ -81,8 +76,9 @@ public abstract class AWidget {
 			try {
 				Class<?> clazz = Class.forName(c.getPropertyType());
 				if (clazz.isEnum())
-					control = new WEnum(this, clazz);
+					control = new WEnum(this, (Class<? extends Enum<?>>) clazz);
 			} catch (ClassNotFoundException e) {
+				// nothing to do
 			}
 		}
 		if (control == null)
@@ -124,5 +120,9 @@ public abstract class AWidget {
 
 	public Object getElement() {
 		return element;
+	}
+
+	public void setElement(Object element) {
+		this.element = element;
 	}
 }

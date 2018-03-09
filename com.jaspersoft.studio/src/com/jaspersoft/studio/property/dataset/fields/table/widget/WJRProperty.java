@@ -16,8 +16,6 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -77,10 +75,10 @@ public class WJRProperty extends AWidget {
 		super(parent, c, element, jConfig);
 	}
 
-	private static Map<String, IWCallback> wmap = new HashMap<String, IWCallback>();
+	private static Map<String, IWCallback> ipdmap = new HashMap<>();
 
 	public static void addCallback(String key, IWCallback wcnt) {
-		wmap.put(key, wcnt);
+		ipdmap.put(key, wcnt);
 	}
 
 	@Override
@@ -88,12 +86,12 @@ public class WJRProperty extends AWidget {
 		if (isPropertyExpressions(element)) {
 			ItemPropertyDescription<?> ipd = null;
 			String pname = c.getPropertyName();
-			if (wmap.containsKey(c.getPropertyType())) {
+			if (ipdmap.containsKey(c.getPropertyType())) {
 				c.setValue(element);
-				ipd = wmap.get(c.getPropertyType()).create(c);
+				ipd = ipdmap.get(c.getPropertyType()).create(c);
 			}
 			if (c.getPropertyType().equals(Boolean.class.getName()))
-				ipd = new ComboItemPropertyDescription<Boolean>(pname, c.getLabel(), c.getDescription(), false,
+				ipd = new ComboItemPropertyDescription<>(pname, c.getLabel(), c.getDescription(), false,
 						Boolean.parseBoolean(c.getDefaultValue()), new String[] { "", "true", "false" });
 			else if (c.getPropertyName().equals("net.sf.jasperreports.data.adapter")
 					|| c.getPropertyType().equals(DataAdapter.class.getName()))
@@ -143,13 +141,13 @@ public class WJRProperty extends AWidget {
 							else
 								items[i][0] = ((Enum<?>) obj[i]).name();
 						}
-						ipd = new ComboItemPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
+						ipd = new ComboItemPropertyDescription<>(pname, c.getLabel(), c.getDescription(), false,
 								c.getDefaultValue(), items);
 					}
 				} catch (ClassNotFoundException e) {
 				}
 				if (ipd == null)
-					ipd = new NotNullableTextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
+					ipd = new NotNullableTextPropertyDescription<>(pname, c.getLabel(), c.getDescription(), false,
 							c.getDefaultValue());
 			}
 			if (c.isLabelEditable() || (pname.contains("{") && pname.contains("}"))) {
@@ -190,16 +188,12 @@ public class WJRProperty extends AWidget {
 					});
 				}
 				lblText.setLayoutData(gd);
-				lblText.addModifyListener(new ModifyListener() {
-
-					@Override
-					public void modifyText(ModifyEvent e) {
-						PropertyExpressionDTO dto = getValue();
-						removePropertyExpression(element, dto.getName());
-						c.setPropertyName(lblText.getText());
-						dto.setName(lblText.getText());
-						setValue(dto);
-					}
+				lblText.addModifyListener(e -> {
+					PropertyExpressionDTO tdto = getValue();
+					removePropertyExpression(element, tdto.getName());
+					c.setPropertyName(lblText.getText());
+					tdto.setName(lblText.getText());
+					setValue(tdto);
 				});
 
 			} else {
@@ -221,17 +215,17 @@ public class WJRProperty extends AWidget {
 
 				@Override
 				public String getPropertyValue(String propertyName) {
-					PropertyExpressionDTO dto = getValue();
-					if (!dto.isExpression())
-						return dto.getValue();
+					PropertyExpressionDTO tdto = getValue();
+					if (!tdto.isExpression())
+						return tdto.getValue();
 					return null;
 				}
 
 				@Override
 				public JRExpression getPropertyValueExpression(String propertyName) {
-					PropertyExpressionDTO dto = getValue();
-					if (dto.isExpression())
-						return dto.getValueAsExpression();
+					PropertyExpressionDTO tdto = getValue();
+					if (tdto.isExpression())
+						return tdto.getValueAsExpression();
 					return null;
 				}
 
@@ -241,14 +235,14 @@ public class WJRProperty extends AWidget {
 						removeProperty(propertyName);
 						return;
 					}
-					PropertyExpressionDTO dto = getValue();
+					PropertyExpressionDTO tdto = getValue();
 					if (valueExpression != null) {
-						dto.setExpression(true);
-						dto.setValue(valueExpression.getText());
+						tdto.setExpression(true);
+						tdto.setValue(valueExpression.getText());
 						setValue(valueExpression);
 					} else {
-						dto.setValue(value);
-						dto.setExpression(false);
+						tdto.setValue(value);
+						tdto.setExpression(false);
 						setValue(value);
 					}
 				}
@@ -307,24 +301,24 @@ public class WJRProperty extends AWidget {
 		if (element instanceof JRPropertiesHolder) {
 			final JRPropertiesHolder field = (JRPropertiesHolder) element;
 			if (isPropertyExpressions(element) && value instanceof PropertyExpressionDTO) {
-				PropertyExpressionDTO dto = (PropertyExpressionDTO) value;
-				if (dto.isExpression()) {
-					if (dto.getValue() == null || dto.getValue().isEmpty())
+				PropertyExpressionDTO tdto = (PropertyExpressionDTO) value;
+				if (tdto.isExpression()) {
+					if (tdto.getValue() == null || tdto.getValue().isEmpty())
 						removePropertyExpression(element, c.getPropertyName());
 					else {
 						removePropertyExpression(element, c.getPropertyName());
-						if (dto instanceof DatasetPropertyExpressionDTO)
-							addPropertyExpression(element, c.getPropertyName(), dto.getValueAsExpression(),
-									((DatasetPropertyExpressionDTO) dto).getEvalTime());
+						if (tdto instanceof DatasetPropertyExpressionDTO)
+							addPropertyExpression(element, c.getPropertyName(), tdto.getValueAsExpression(),
+									((DatasetPropertyExpressionDTO) tdto).getEvalTime());
 						else
-							addPropertyExpression(element, c.getPropertyName(), dto.getValueAsExpression(), null);
+							addPropertyExpression(element, c.getPropertyName(), tdto.getValueAsExpression(), null);
 					}
 				} else {
 					removePropertyExpression(element, c.getPropertyName());
-					if (dto.getValue() == null || dto.getValue().isEmpty())
+					if (tdto.getValue() == null || tdto.getValue().isEmpty())
 						field.getPropertiesMap().removeProperty(c.getPropertyName());
 					else
-						field.getPropertiesMap().setProperty(c.getPropertyName(), dto.getValue());
+						field.getPropertiesMap().setProperty(c.getPropertyName(), tdto.getValue());
 				}
 			} else {
 				if (value == null || value.toString().isEmpty())
@@ -334,34 +328,34 @@ public class WJRProperty extends AWidget {
 			}
 		} else if (element instanceof PropertyExpressionsDTO) {
 			PropertyExpressionsDTO d = (PropertyExpressionsDTO) element;
-			for (PropertyExpressionDTO dto : d.getProperties())
-				if (dto.getName().equals(c.getPropertyName())) {
-					dto.setExpression(value instanceof JRDesignExpression);
-					dto.setValue(value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText()
+			for (PropertyExpressionDTO tdto : d.getProperties())
+				if (tdto.getName().equals(c.getPropertyName())) {
+					tdto.setExpression(value instanceof JRDesignExpression);
+					tdto.setValue(value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText()
 							: value.toString());
 					return;
 				}
-			PropertyExpressionDTO dto = null;
+			PropertyExpressionDTO tdto = null;
 			if (element instanceof DatasetPropertyExpressionsDTO)
 				if (value instanceof PropertyExpressionDTO) {
 					PropertyExpressionDTO pedto = (PropertyExpressionDTO) value;
-					dto = new DatasetPropertyExpressionDTO(pedto.isExpression(), c.getPropertyName(),
+					tdto = new DatasetPropertyExpressionDTO(pedto.isExpression(), c.getPropertyName(),
 							pedto.isExpression() ? pedto.getValueAsExpression().toString() : pedto.getValue(),
 							PropertyEvaluationTimeEnum.LATE);
 				} else
-					dto = new DatasetPropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
+					tdto = new DatasetPropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
 							value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText()
 									: value.toString(),
 							PropertyEvaluationTimeEnum.LATE);
 			else {
 				if (value instanceof PropertyExpressionDTO)
-					dto = (PropertyExpressionDTO) value;
+					tdto = (PropertyExpressionDTO) value;
 				else
-					dto = new PropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
+					tdto = new PropertyExpressionDTO(value instanceof JRDesignExpression, c.getPropertyName(),
 							value instanceof JRDesignExpression ? ((JRDesignExpression) value).getText()
 									: value.toString());
 			}
-			((PropertyExpressionsDTO) element).getProperties().add(dto);
+			((PropertyExpressionsDTO) element).getProperties().add(tdto);
 		} else if (element instanceof JRPropertiesMap) {
 			JRPropertiesMap map = (JRPropertiesMap) element;
 			map.setProperty(c.getPropertyName(), (String) value);
@@ -410,14 +404,10 @@ public class WJRProperty extends AWidget {
 	}
 
 	public boolean isPropertyExpressions(Object element) {
-		if (element instanceof JRDesignField || element instanceof JRElement || element instanceof JRReport
-				|| element instanceof JRDataset || element instanceof PropertyExpressionsDTO) {
-			if (element instanceof PropertyExpressionsDTO
-					&& ((PropertyExpressionsDTO) element).getJrElement() instanceof JRDesignParameter)
-				return false;
-			return true;
-		}
-		return false;
+		return (element instanceof JRDesignField || element instanceof JRElement || element instanceof JRReport
+				|| element instanceof JRDataset || element instanceof PropertyExpressionsDTO)
+				&& !(element instanceof PropertyExpressionsDTO
+						&& ((PropertyExpressionsDTO) element).getJrElement() instanceof JRDesignParameter);
 	}
 
 	public JRPropertyExpression[] getPropertyExpressions(Object element) {
@@ -444,9 +434,9 @@ public class WJRProperty extends AWidget {
 		else if (element instanceof PropertyExpressionsDTO) {
 			PropertyExpressionsDTO d = (PropertyExpressionsDTO) element;
 			PropertyExpressionDTO toDel = null;
-			for (PropertyExpressionDTO dto : d.getProperties()) {
-				if (dto.getName().equals(name)) {
-					toDel = dto;
+			for (PropertyExpressionDTO tdto : d.getProperties()) {
+				if (tdto.getName().equals(name)) {
+					toDel = tdto;
 					break;
 				}
 			}

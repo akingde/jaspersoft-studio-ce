@@ -89,11 +89,6 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	}
 
 	@Override
-	public JRDesignParameter getValue() {
-		return (JRDesignParameter) super.getValue();
-	}
-
-	@Override
 	public Color getForeground() {
 		return null;
 	}
@@ -139,9 +134,8 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		classD.setDescription(Messages.MParameter_nested_type_name_description);
 		desc.add(classD);
 
-		evaluationTimeD = new NamedEnumPropertyDescriptor<ParameterEvaluationTimeEnum>(
-				JRDesignParameter.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time,
-				ParameterEvaluationTimeEnum.EARLY, NullEnum.NULL);
+		evaluationTimeD = new NamedEnumPropertyDescriptor<>(JRDesignParameter.PROPERTY_EVALUATION_TIME,
+				Messages.common_evaluation_time, ParameterEvaluationTimeEnum.EARLY, NullEnum.NULL);
 		evaluationTimeD.setDescription(Messages.MParameter_3);
 		desc.add(evaluationTimeD);
 
@@ -169,11 +163,11 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		JRDesignParameter jrParameter = (JRDesignParameter) getValue();
+		JRDesignParameter jrParameter = getValue();
 		if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION))
 			return jrParameter.getDescription();
 		if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING))
-			return new Boolean(jrParameter.isForPrompting());
+			return jrParameter.isForPrompting();
 		if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION))
 			return ExprUtil.getExpression(jrParameter.getDefaultValueExpression());
 		if (id.equals(PROPERTY_MAP)) {
@@ -205,7 +199,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignParameter jrParameter = (JRDesignParameter) getValue();
+		JRDesignParameter jrParameter = getValue();
 
 		if (id.equals(JRDesignParameter.PROPERTY_EVALUATION_TIME)) {
 			if (evaluationTimeD == null)

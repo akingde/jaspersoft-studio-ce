@@ -16,9 +16,9 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
-public class MReportUnit extends AMJrxmlContainer implements
-		IInputControlsContainer {
+public class MReportUnit extends AMJrxmlContainer implements IInputControlsContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	public static final String RU_SUFFIX = "_files";
 
 	public MReportUnit(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
@@ -62,8 +62,7 @@ public class MReportUnit extends AMJrxmlContainer implements
 	@Override
 	public String getJRSUrl() throws UnsupportedEncodingException {
 		return "flow.html?_flowId=reportUnitFlow&selectedResource="
-				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1")
-				+ "&ParentFolderUri="
+				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1") + "&ParentFolderUri="
 				+ URLEncoder.encode(getValue().getParentFolder(), "ISO-8859-1");
 	}
 }

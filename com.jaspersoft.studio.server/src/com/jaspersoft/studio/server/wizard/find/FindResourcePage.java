@@ -18,8 +18,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -30,8 +28,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StyleRange;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -113,13 +109,9 @@ public class FindResourcePage extends WizardPage {
 
 		txt = new Text(cmp, SWT.BORDER);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		txt.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				tabFolder.setSelection(1);
-				doSearch();
-			}
+		txt.addModifyListener(e -> {
+			tabFolder.setSelection(1);
+			doSearch();
 		});
 
 		Button b = new Button(cmp, SWT.PUSH);
@@ -150,6 +142,7 @@ public class FindResourcePage extends WizardPage {
 
 			expcmp.setClient(scmp);
 			expcmp.addExpansionListener(new ExpansionAdapter() {
+				@Override
 				public void expansionStateChanged(ExpansionEvent e) {
 					UIUtils.relayoutDialog(getShell(), 0, -1);
 				}
@@ -169,16 +162,8 @@ public class FindResourcePage extends WizardPage {
 
 		tabFolder.setSelection(0);
 
-		if (!Misc.isNullOrEmpty(name)) {
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					txt.setText(name);
-					// doSearch();
-				}
-			});
-		}
+		if (!Misc.isNullOrEmpty(name))
+			UIUtils.getDisplay().asyncExec(() -> txt.setText(name));
 
 		txt.setFocus();
 		setPageComplete(false);
@@ -226,9 +211,7 @@ public class FindResourcePage extends WizardPage {
 		if (sp.getWsClient().getServerInfo().getVersion().compareTo("5.5") >= 0) {
 			Composite dsCmp = new Composite(scmp, SWT.NONE);
 			dsCmp.setLayout(new GridLayout(3, false));
-			GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-			// gd.horizontalSpan = 2;
-			dsCmp.setLayoutData(gd);
+			dsCmp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 			bft = new Button(dsCmp, SWT.CHECK);
 			bft.setText("Files By Type");
@@ -250,7 +233,7 @@ public class FindResourcePage extends WizardPage {
 				}
 			});
 			Label lbl = new Label(dsCmp, SWT.SEPARATOR | SWT.HORIZONTAL);
-			gd = new GridData(GridData.FILL_HORIZONTAL);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 3;
 			lbl.setLayoutData(gd);
 
@@ -337,9 +320,7 @@ public class FindResourcePage extends WizardPage {
 							doReadRepository(monitor);
 						}
 					});
-				} catch (InvocationTargetException e) {
-					UIUtils.showError(e.getCause());
-				} catch (InterruptedException e) {
+				} catch (InvocationTargetException | InterruptedException e) {
 					UIUtils.showError(e.getCause());
 				}
 			}
@@ -361,8 +342,7 @@ public class FindResourcePage extends WizardPage {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see com.jaspersoft.studio.server.properties.dialog.
-			 * RepositoryComposite
+			 * @see com.jaspersoft.studio.server.properties.dialog. RepositoryComposite
 			 * #setResource(com.jaspersoft.studio.server.model.MResource)
 			 */
 			@Override
@@ -417,13 +397,7 @@ public class FindResourcePage extends WizardPage {
 				return tt;
 			}
 		});
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				((FindWizardDialog) getContainer()).finishPressed();
-			}
-		});
+		viewer.addDoubleClickListener(event -> ((FindWizardDialog) getContainer()).finishPressed());
 
 		tableColumnLayout.setColumnData(col.getColumn(), new ColumnWeightData(100));
 		final Table table = viewer.getTable();
@@ -499,23 +473,19 @@ public class FindResourcePage extends WizardPage {
 		@Override
 		public void showResults(final java.util.List<ClientResourceLookup> res) {
 			FindResourcePage.this.res = res;
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					setPageComplete(res != null);
-					if (res != null)
-						viewer.setInput(res);
-					else
-						viewer.setInput(Collections.EMPTY_LIST);
-					value = null;
-					setPageComplete(false);
-					ended = true;
-					started--;
-					if (started > 0) {
-						started = 0;
-						doSearch();
-					}
+			UIUtils.getDisplay().asyncExec(() -> {
+				setPageComplete(res != null);
+				if (res != null)
+					viewer.setInput(res);
+				else
+					viewer.setInput(Collections.emptyList());
+				value = null;
+				setPageComplete(false);
+				ended = true;
+				started--;
+				if (started > 0) {
+					started = 0;
+					doSearch();
 				}
 			});
 		}
@@ -532,13 +502,11 @@ public class FindResourcePage extends WizardPage {
 
 	private void search() {
 		if (SystemUtils.IS_OS_WINDOWS)
-			new Thread(new Runnable() {
-				public void run() {
-					try {
-						WSClientHelper.findResources(new NullProgressMonitor(), finderUI);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+			new Thread(() -> {
+				try {
+					WSClientHelper.findResources(new NullProgressMonitor(), finderUI);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}).start();
 		else

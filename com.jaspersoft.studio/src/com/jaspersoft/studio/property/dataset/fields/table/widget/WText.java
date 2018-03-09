@@ -5,8 +5,6 @@ package com.jaspersoft.studio.property.dataset.fields.table.widget;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -27,15 +25,11 @@ public class WText extends AWControl {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 200;
 		txt.setLayoutData(gd);
-		txt.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (refresh)
-					return;
-				aw.setValue(txt.getText());
-				txt.setToolTipText(aw.getToolTipText());
-			}
+		txt.addModifyListener(e -> {
+			if (refresh)
+				return;
+			aw.setValue(txt.getText());
+			txt.setToolTipText(aw.getToolTipText());
 		});
 	}
 
@@ -54,6 +48,11 @@ public class WText extends AWControl {
 	@Override
 	public void addDisposeListener(DisposeListener dlistener) {
 		txt.addDisposeListener(dlistener);
+	}
+
+	@Override
+	public void setEnabled(boolean en) {
+		txt.setEnabled(en);
 	}
 
 }

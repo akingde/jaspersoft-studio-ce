@@ -13,8 +13,6 @@ import java.util.Set;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -30,8 +28,6 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
-import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
@@ -48,16 +44,18 @@ public class SelectParameterDialog extends ATitledDialog {
 	protected JRDesignParameter prm;
 	protected AQueryDesigner designer;
 	protected JRDesignDataset dataset;
+	protected IFilterQuery fq;
 
-	public SelectParameterDialog(Shell parentShell, AQueryDesigner designer) {
+	public SelectParameterDialog(Shell parentShell, AQueryDesigner designer, IFilterQuery fq) {
 		super(parentShell, false);
 		setTitle(Messages.SelectParameterDialog_0);
 		this.designer = designer;
+		this.fq = fq;
 		dataset = (JRDesignDataset) designer.getjDataset().clone();
 	}
 
-	public SelectParameterDialog(Shell parentShell, AQueryDesigner designer, JRDesignParameter prm) {
-		this(parentShell, designer);
+	public SelectParameterDialog(Shell parentShell, AQueryDesigner designer, JRDesignParameter prm, IFilterQuery fq) {
+		this(parentShell, designer, fq);
 		this.prm = prm;
 		if (prm != null)
 			this.pname = prm.getName();
@@ -68,14 +66,17 @@ public class SelectParameterDialog extends ATitledDialog {
 	protected Combo cmb;
 	protected Set<JRDesignParameter> dirty = new HashSet<>();
 
+	public AQueryDesigner getDesigner() {
+		return designer;
+	}
+
 	protected void addParameter() {
-		if (!dataset.getParametersMap().containsValue(prm)) {
+		if (!dataset.getParametersMap().containsValue(prm))
 			try {
 				dataset.addParameter(prm);
 			} catch (JRException e) {
 				UIUtils.showError(e);
 			}
-		}
 	}
 
 	@Override
@@ -214,9 +215,13 @@ public class SelectParameterDialog extends ATitledDialog {
 				getButton(IDialogConstants.OK_ID).setEnabled(false);
 		});
 
-		JaspersoftStudioPlugin.getExtensionManager().createParameterICUI(cmp, prm, designer);
+		JaspersoftStudioPlugin.getExtensionManager().createParameterICUI(cmp, prm, this, fq);
 
 		return cmp;
+	}
+
+	public void setDirty(JRDesignParameter p) {
+		dirty.add(p);
 	}
 
 	protected String getNewParameterName() {

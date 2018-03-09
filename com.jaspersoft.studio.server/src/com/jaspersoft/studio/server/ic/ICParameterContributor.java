@@ -3,47 +3,29 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.ic;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
-import com.jaspersoft.studio.data.designer.AQueryDesigner;
+import com.jaspersoft.studio.data.designer.IFilterQuery;
 import com.jaspersoft.studio.data.designer.IParameterICContributor;
+import com.jaspersoft.studio.data.designer.SelectParameterDialog;
+import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
+import com.jaspersoft.studio.property.dataset.fields.table.TColumnFactory;
 import com.jaspersoft.studio.property.dataset.fields.table.widget.AWidget;
+import com.jaspersoft.studio.property.dataset.fields.table.widget.WJRProperty;
 import com.jaspersoft.studio.property.metadata.PropertyMetadataRegistry;
-import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.AMResource;
-import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
-import com.jaspersoft.studio.server.protocol.Feature;
-import com.jaspersoft.studio.server.selector.SelectServerWizard;
-import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 
 import net.sf.jasperreports.annotations.properties.PropertyScope;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
-import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.properties.PropertyMetadata;
@@ -51,35 +33,80 @@ import net.sf.jasperreports.properties.StandardPropertyMetadata;
 
 public class ICParameterContributor implements IParameterICContributor {
 
-	public static final String ICPATH = "icpath"; //$NON-NLS-1$
 	public static final String PROPERTY_JS_INPUTCONTROL_PATH = "com.jaspersoft.studio.js.ic.path"; //$NON-NLS-1$
+	public static final String PROPERTY_JS_INPUTCONTROL_LABEL = "com.jaspersoft.studio.js.ic.label"; //$NON-NLS-1$
+	public static final String PROPERTY_JS_INPUTCONTROL_TYPE = "com.jaspersoft.studio.js.ic.type"; //$NON-NLS-1$
+	public static final String PROPERTY_JS_INPUTCONTROL_VALUE = "com.jaspersoft.studio.js.ic.value"; //$NON-NLS-1$
+	public static final String PROPERTY_JS_INPUTCONTROL_DATASOURCE = "com.jaspersoft.studio.js.ic.ds"; //$NON-NLS-1$
 
 	public static void initMetadata() {
-		AWidget.addControlValueType(ICPATH, WInputControlPathSelector.class);
+		AWidget.addControlValueType(Activator.ICPATH, WInputControlPathSelector.class);
+		AWidget.addControlValueType(Activator.DSPATH, WDatasourcePathSelector.class);
+		AWidget.addControlValueType(Activator.RSPATH, WResourcePathSelector.class);
+		AWidget.addControlValueType(Activator.REPPATH, WReportPathSelector.class);
+		AWidget.addControlValueType(Activator.RUPATH, WReportUnitPathSelector.class);
+		AWidget.addControlValueType(PROPERTY_JS_INPUTCONTROL_VALUE, WICValueSelector.class);
 
-		List<PropertyMetadata> pm = new ArrayList<PropertyMetadata>();
+		List<PropertyMetadata> pm = new ArrayList<>();
 		StandardPropertyMetadata spm = new StandardPropertyMetadata();
 		spm.setName(PROPERTY_JS_INPUTCONTROL_PATH);
 		spm.setLabel(Messages.ICParameterContributor_2);
 		spm.setDescription(Messages.ICParameterContributor_3);
-		spm.setValueType(ICPATH);
-		List<PropertyScope> scopes = new ArrayList<PropertyScope>();
+		spm.setValueType(Activator.ICPATH);
+		List<PropertyScope> scopes = new ArrayList<>();
 		scopes.add(PropertyScope.PARAMETER);
 		spm.setScopes(scopes);
-		spm.setCategory("com.jaspersoft.studio.jrs.category:JasperReports.server"); //$NON-NLS-1$
+		spm.setCategory(Activator.SERVER_CATEGORY); // $NON-NLS-1$
+		pm.add(spm);
+
+		spm = new StandardPropertyMetadata();
+		spm.setName(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+		spm.setLabel(Messages.ICParameterContributor_14);
+		spm.setDescription(Messages.ICParameterContributor_14);
+		spm.setValueType(Activator.DSPATH);
+		spm.setScopes(scopes);
+		spm.setCategory(Activator.SERVER_CATEGORY); // $NON-NLS-1$
+		pm.add(spm);
+
+		spm = new StandardPropertyMetadata();
+		spm.setName(PROPERTY_JS_INPUTCONTROL_TYPE);
+		spm.setLabel(Messages.ICParameterContributor_0);
+		spm.setDescription(Messages.ICParameterContributor_1);
+		spm.setValueType(ICTypes.class.getName());
+		spm.setScopes(scopes);
+		spm.setCategory(Activator.SERVER_CATEGORY); // $NON-NLS-1$
+		pm.add(spm);
+
+		spm = new StandardPropertyMetadata();
+		spm.setName(PROPERTY_JS_INPUTCONTROL_VALUE);
+		spm.setLabel(Messages.ICParameterContributor_4);
+		spm.setDescription(Messages.ICParameterContributor_6);
+		spm.setValueType(PROPERTY_JS_INPUTCONTROL_VALUE);
+		spm.setScopes(scopes);
+		spm.setCategory(Activator.SERVER_CATEGORY); // $NON-NLS-1$
+		pm.add(spm);
+
+		spm = new StandardPropertyMetadata();
+		spm.setName(PROPERTY_JS_INPUTCONTROL_LABEL);
+		spm.setLabel(Messages.ICParameterContributor_8);
+		spm.setDescription(Messages.ICParameterContributor_10);
+		spm.setValueType(String.class.getName());
+		spm.setScopes(scopes);
+		spm.setCategory(Activator.SERVER_CATEGORY); // $NON-NLS-1$
+		pm.add(spm);
 
 		pm.add(spm);
 		PropertyMetadataRegistry.addMetadata(pm);
 	}
 
-	private Text tpath;
 	private JRDesignParameter prm;
-	private Button bpath;
-	private ControlDecoration decorator;
+	private SelectParameterDialog pm;
 
 	@Override
-	public void createUI(Composite parent, JRDesignParameter prm, final AQueryDesigner designer) {
-		final JRDesignDataset dataset = designer.getjDataset();
+	public void createUI(Composite parent, JRDesignParameter prm, final SelectParameterDialog pm,
+			final IFilterQuery fq) {
+		this.pm = pm;
+		final JRDesignDataset dataset = pm.getDesigner().getjDataset();
 		if (!dataset.isMainDataset())
 			return;
 		String servURL = dataset.getPropertiesMap().getProperty(AExporter.PROP_SERVERURL);
@@ -88,129 +115,79 @@ public class ICParameterContributor implements IParameterICContributor {
 			return;
 
 		this.prm = prm;
-		new Label(parent, SWT.NONE).setText(Messages.ICParameterContributor_5);
 
-		Composite cmp = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		cmp.setLayout(layout);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		cmp.setLayoutData(gd);
+		parent = new Composite(parent, SWT.NONE);
+		parent.setLayout(new GridLayout(2, false));
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 3;
+		parent.setLayoutData(gd);
 
-		tpath = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
-		tpath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		tpath.addKeyListener(new KeyAdapter() {
+		wPath = new WJRProperty(parent,
+				TColumnFactory.getTColumn(
+						PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_PATH)),
+				prm, pm.getDesigner().getjConfig());
 
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if ((e.character == SWT.DEL && e.stateMask == 0) || e.keyCode == SWT.BS) {
-					JRPropertiesMap pmap = ICParameterContributor.this.prm.getPropertiesMap();
-					pmap.removeProperty(PROPERTY_JS_INPUTCONTROL_PATH);
-					refresh(ICParameterContributor.this.prm);
-				}
-			}
+		wLabel = new WJRProperty(parent,
+				TColumnFactory.getTColumn(
+						PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_LABEL)),
+				prm, pm.getDesigner().getjConfig());
+
+		TColumn c = TColumnFactory
+				.getTColumn(PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_TYPE));
+		c.setDefaultValue(ICTypes.VALUE.getValue());
+		wType = new WJRProperty(parent, c, prm, pm.getDesigner().getjConfig());
+
+		c = TColumnFactory
+				.getTColumn(PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_VALUE));
+		c.setValue1(fq);
+		wValue = new WJRProperty(parent, c, prm, pm.getDesigner().getjConfig());
+
+		wDs = new WJRProperty(parent,
+				TColumnFactory.getTColumn(
+						PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_DATASOURCE)),
+				prm, pm.getDesigner().getjConfig());
+
+		refresh(prm);
+		parent.addDisposeListener(e -> {
+			if (prm != null && prm.getPropertiesMap() != null)
+				prm.getPropertiesMap().getEventSupport().removePropertyChangeListener(pmapListener);
 		});
+	}
 
-		bpath = new Button(cmp, SWT.PUSH);
-		bpath.setText("..."); //$NON-NLS-1$
-		bpath.addSelectionListener(new SelectionAdapter() {
+	private WJRProperty wValue;
+	private WJRProperty wDs;
 
-			private MServerProfile msp;
+	PropertyChangeListener pmapListener = evt -> {
+		if (evt.getPropertyName().equals(PROPERTY_JS_INPUTCONTROL_TYPE))
+			setWidgetsState();
+		pm.setDirty(prm);
+	};
+	private WJRProperty wType;
+	private WJRProperty wLabel;
+	private WJRProperty wPath;
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				JRDesignDataset jd = dataset;
-				String servURL = jd.getPropertiesMap().getProperty(AExporter.PROP_SERVERURL);
-				String servUser = jd.getPropertiesMap().getProperty(AExporter.PROP_USER);
-
-				msp = ServerManager.getServerByUrl(servURL, servUser);
-				if (msp == null) {
-					SelectServerWizard wizard = new SelectServerWizard();
-					WizardDialog w = new WizardDialog(bpath.getShell(), wizard);
-					if (w.open() == Dialog.OK) {
-						msp = wizard.getValue();
-						try {
-							jd.setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
-							jd.setProperty(AExporter.PROP_USER, AExporter.encodeUsr(msp.getValue()));
-						} catch (MalformedURLException e1) {
-							e1.printStackTrace();
-						} catch (URISyntaxException e1) {
-							e1.printStackTrace();
-						}
-					}
-				}
-				if (msp != null)
-					showFindDialog(msp);
-			}
-
-			protected void showFindDialog(MServerProfile msp) {
-				JRPropertiesMap pmap = ICParameterContributor.this.prm.getPropertiesMap();
-				if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
-					String[] incl = new String[] { ResourceMediaType.INPUT_CONTROL_CLIENT_TYPE };
-					ResourceDescriptor rd = FindResourceJob.doFindResource(bpath.getShell(), msp, incl, null, true,
-							ICParameterContributor.this.prm.getName());
-					if (rd != null) {
-						if (rd.getName().equals(ICParameterContributor.this.prm.getName()))
-							pmap.setProperty(PROPERTY_JS_INPUTCONTROL_PATH, rd.getUriString());
-						else
-							UIUtils.showWarning(Messages.ICParameterContributor_7);
-					}
-				} else {
-					RepositoryDialog rd = new RepositoryDialog(bpath.getShell(), msp) {
-
-						@Override
-						public boolean isResourceCompatible(AMResource r) {
-							return r.getValue().getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)
-									&& r.getValue().getName().equals(ICParameterContributor.this.prm.getName());
-						}
-					};
-					if (rd.open() == Dialog.OK) {
-						AMResource rs = rd.getResource();
-						if (rs != null)
-							pmap.setProperty(PROPERTY_JS_INPUTCONTROL_PATH, rs.getValue().getUriString());
-						else
-							pmap.removeProperty(PROPERTY_JS_INPUTCONTROL_PATH);
-					}
-				}
-				refresh(ICParameterContributor.this.prm);
-			}
-		});
-		decorator = new ControlDecoration(tpath, SWT.CENTER);
-		decorator.setDescriptionText(Messages.ICParameterContributor_7);
-		decorator.setImage(
-				FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR).getImage());
-		refresh(ICParameterContributor.this.prm);
+	public void setWidgetsState() {
+		String v = prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_TYPE) : "";
+		wValue.getControl().setEnabled(
+				!Misc.isNullOrEmpty(v) && (v.equals(ICTypes.MULTI_LOV.name()) || v.equals(ICTypes.SINGLE_LOV.name())
+						|| v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name())));
+		wDs.getControl().setEnabled(!Misc.isNullOrEmpty(v)
+				&& (v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name())));
 	}
 
 	@Override
 	public void refresh(JRDesignParameter prm) {
 		this.prm = prm;
-		if (tpath == null)
-			return;
-		tpath.setEnabled(prm != null);
-		bpath.setEnabled(prm != null);
-		String p = null;
-		if (prm != null && prm.getPropertiesMap() != null)
-			p = prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_PATH);
-		if (tpath.isDisposed())
-			return;
-		tpath.setText(Misc.nvl(p));
-		String tt = Messages.ICParameterContributor_9;
-		if (!Misc.isNullOrEmpty(tpath.getText()))
-			tt = tpath.getText() + "\n\n" + tt; //$NON-NLS-1$
-		tpath.setToolTipText(tt);
-		if (!Misc.isNullOrEmpty(p) && prm != null) {
-			int ind = p.lastIndexOf("/");
-			if (ind >= 0)
-				p = p.substring(ind + 1);
-			if (!p.equals(prm.getName())) {
-				decorator.show();
-				return;
-			}
+		if (prm != null && prm.getPropertiesMap() != null) {
+			prm.getPropertiesMap().getEventSupport().removePropertyChangeListener(pmapListener);
+			prm.getPropertiesMap().getEventSupport().addPropertyChangeListener(pmapListener);
 		}
-		decorator.hide();
+		wDs.setElement(prm);
+		wValue.setElement(prm);
+		wPath.setElement(prm);
+		wType.setElement(prm);
+		wLabel.setElement(prm);
+		setWidgetsState();
 	}
 
 }

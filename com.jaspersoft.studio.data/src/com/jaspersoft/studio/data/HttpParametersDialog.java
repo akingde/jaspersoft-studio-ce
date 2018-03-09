@@ -109,7 +109,7 @@ public class HttpParametersDialog extends ATitledDialog {
 		new Label(cmp, SWT.NONE).setText(Messages.HttpParametersDialog_4);
 
 		final Combo cmb = new Combo(cmp, SWT.READ_ONLY);
-		cmb.setItems(RequestMethod.GET.name(), RequestMethod.POST.name(), RequestMethod.PUT.name());
+		cmb.setItems(new String[] { RequestMethod.GET.name(), RequestMethod.POST.name(), RequestMethod.PUT.name() });
 		if (dataFile.getMethod() == RequestMethod.POST)
 			cmb.select(1);
 		else if (dataFile.getMethod() == RequestMethod.PUT)

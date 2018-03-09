@@ -5,8 +5,6 @@ package com.jaspersoft.studio.property.dataset.fields.table.widget;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -29,20 +27,14 @@ public class WBoolean extends AWControl {
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		cmp.setLayout(layout);
-//		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		cmb = new Combo(cmp, SWT.BORDER | SWT.READ_ONLY);
 		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		cmb.setItems(getValues());
-		cmb.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (refresh)
-					return;
-				handleValueChanged();
-			}
-
+		cmb.addModifyListener(e -> {
+			if (refresh)
+				return;
+			handleValueChanged();
 		});
 	}
 
@@ -75,5 +67,10 @@ public class WBoolean extends AWControl {
 	@Override
 	public void addDisposeListener(DisposeListener dlistener) {
 		cmb.addDisposeListener(dlistener);
+	}
+
+	@Override
+	public void setEnabled(boolean en) {
+		cmb.setEnabled(en);
 	}
 }

@@ -10,15 +10,17 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
 
-import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
-import com.jaspersoft.studio.property.dataset.fields.table.widget.IWCallback;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.property.dataset.fields.table.widget.WJRProperty;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.ic.ICParameterContributor;
 import com.jaspersoft.studio.server.ic.ResourcePropertyDescription;
+import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MJrxml;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.server.utils.HttpUtils;
-import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
@@ -32,6 +34,14 @@ public class Activator extends AbstractJRUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+
+	public static final String ICPATH = "icpath"; //$NON-NLS-1$
+	public static final String DSPATH = "dspath"; //$NON-NLS-1$
+	public static final String RSPATH = "rspath"; //$NON-NLS-1$
+	public static final String RUPATH = "rupath"; //$NON-NLS-1$
+	public static final String REPPATH = "reppath"; //$NON-NLS-1$
+
+	public static final String SERVER_CATEGORY = "com.jaspersoft.studio.jrs.category:JasperReports.server";//$NON-NLS-1$
 
 	/**
 	 * The constructor
@@ -69,12 +79,38 @@ public class Activator extends AbstractJRUIPlugin {
 
 		ICParameterContributor.initMetadata();
 		AExporter.initMetadata();
-		WJRProperty.addCallback(ICParameterContributor.ICPATH, new IWCallback() {
-
+		WJRProperty.addCallback(Activator.ICPATH, c -> new ResourcePropertyDescription(c.getPropertyName(),
+				c.getLabel(), c.getDescription(), false, null, c.getValue()) {
 			@Override
-			public ItemPropertyDescription<?> create(TColumn c) {
-				return new ResourcePropertyDescription(c.getPropertyName(), c.getLabel(), c.getDescription(), false,
-						null, c.getValue());
+			protected boolean isResourceCompatible(AMResource r) {
+				return r.getValue().getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL);
+			}
+		});
+
+		WJRProperty.addCallback(Activator.DSPATH, c -> new ResourcePropertyDescription(c.getPropertyName(),
+				c.getLabel(), c.getDescription(), false, null, c.getValue()) {
+			@Override
+			protected boolean isResourceCompatible(AMResource r) {
+				return SelectorDatasource.isDatasource(r.getValue());
+			}
+		});
+
+		WJRProperty.addCallback(Activator.RUPATH, c -> new ResourcePropertyDescription(c.getPropertyName(),
+				c.getLabel(), c.getDescription(), false, null, c.getValue()) {
+			@Override
+			protected boolean isResourceCompatible(AMResource r) {
+				return r instanceof MReportUnit;
+			}
+		});
+
+		WJRProperty.addCallback(Activator.RSPATH, c -> new ResourcePropertyDescription(c.getPropertyName(),
+				c.getLabel(), c.getDescription(), false, null, c.getValue()));
+
+		WJRProperty.addCallback(Activator.REPPATH, c -> new ResourcePropertyDescription(c.getPropertyName(),
+				c.getLabel(), c.getDescription(), false, null, c.getValue()) {
+			@Override
+			protected boolean isResourceCompatible(AMResource r) {
+				return r instanceof MJrxml;
 			}
 		});
 

@@ -3,12 +3,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.designer;
 
-import org.eclipse.swt.widgets.Composite;
+import java.util.ArrayList;
+import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-
-public interface IParameterICContributor {
-	public void createUI(Composite parent, JRDesignParameter prm, SelectParameterDialog pd, IFilterQuery fq);
-
-	public void refresh(JRDesignParameter prm);
+public class ICQuery {
+	public String query;
+	public String valueField;
+	public List<String> columns = new ArrayList<>();
 }

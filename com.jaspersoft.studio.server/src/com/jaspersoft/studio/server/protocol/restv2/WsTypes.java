@@ -205,10 +205,10 @@ public class WsTypes {
 		return instance;
 	}
 
-	private static final Map<String, String> restMap = new HashMap<String, String>();
-	private static final Map<FileType, String> restFileMap = new HashMap<FileType, String>();
-	private static final Map<String, String> soapMap = new HashMap<String, String>();
-	private static final Map<String, FileType> soapFileMap = new HashMap<String, FileType>();
+	private static final Map<String, String> restMap = new HashMap<>();
+	private static final Map<FileType, String> restFileMap = new HashMap<>();
+	private static final Map<String, String> soapMap = new HashMap<>();
+	private static final Map<String, FileType> soapFileMap = new HashMap<>();
 
 	public void setRestType(String stype, String rtype) {
 		restMap.put(stype, rtype);
@@ -264,7 +264,7 @@ public class WsTypes {
 
 	public List<String> getRestTypes() {
 		if (tlist == null)
-			tlist = new ArrayList<String>(types.keySet());
+			tlist = new ArrayList<>(types.keySet());
 		return tlist;
 	}
 
@@ -310,7 +310,7 @@ public class WsTypes {
 		return cr;
 	}
 
-	private static final Set<String> dsTypes = new HashSet<String>();
+	private static final Set<String> dsTypes = new HashSet<>();
 
 	public Set<String> getDatasources() {
 		if (dsTypes.isEmpty())
@@ -319,7 +319,7 @@ public class WsTypes {
 		return dsTypes;
 	}
 
-	private static final Set<String> fileTypes = new HashSet<String>();
+	private static final Set<String> fileTypes = new HashSet<>();
 
 	public Set<String> getFileTypes() {
 		if (fileTypes.isEmpty())
@@ -332,7 +332,7 @@ public class WsTypes {
 		return getDatasources().toArray(new String[dsTypes.size()]);
 	}
 
-	private static final Set<Class<? extends ClientResource<?>>> containers = new HashSet<Class<? extends ClientResource<?>>>();
+	private static final Set<Class<? extends ClientResource<?>>> containers = new HashSet<>();
 	static {
 		containers.add(ClientQuery.class);
 		containers.add(ClientMondrianConnection.class);

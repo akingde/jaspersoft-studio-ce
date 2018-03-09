@@ -5,8 +5,6 @@ package com.jaspersoft.studio.property.dataset.fields.table.widget;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -39,15 +37,11 @@ public class WClassName extends AWControl {
 		cmb = new Combo(cmp, SWT.BORDER);
 		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		cmb.setItems(ClassTypeComboCellEditor.DEFAULT_ITEMS);
-		cmb.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (refresh)
-					return;
-				aw.setValue(cmb.getText());
-				cmb.setToolTipText(aw.getToolTipText());
-			}
+		cmb.addModifyListener(e -> {
+			if (refresh)
+				return;
+			aw.setValue(cmb.getText());
+			cmb.setToolTipText(aw.getToolTipText());
 		});
 
 		Button button = new Button(cmp, SWT.PUSH);
@@ -78,5 +72,10 @@ public class WClassName extends AWControl {
 	@Override
 	public void addDisposeListener(DisposeListener dlistener) {
 		cmb.addDisposeListener(dlistener);
+	}
+
+	@Override
+	public void setEnabled(boolean en) {
+		cmb.setEnabled(en);
 	}
 }

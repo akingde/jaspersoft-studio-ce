@@ -90,7 +90,7 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 		ToolItem b = new ToolItem(toolBar, SWT.FLAT);
 		b.setImage(getButtonImage());
 		b.addSelectionListener(new SelectionAdapter() {
-
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (wiProp.isRefresh())
 					return;
@@ -102,19 +102,17 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 
 							@Override
 							public boolean isResourceCompatible(AMResource r) {
-								return true; // r.getValue().getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL);
+								return isResourceCompatible(r);
 							}
 						};
 						if (rd.open() == Dialog.OK) {
 							AMResource rs = rd.getResource();
-							if (rs != null) {
+							if (rs != null)
 								wiProp.setValue(rs.getValue().getUriString(), null);
-							} else {
+							else
 								wiProp.setValue(null, null);
-							}
 						}
 					}
-
 				} finally {
 					wiProp.setRefresh(false);
 				}
@@ -127,6 +125,10 @@ public class ResourcePropertyDescription extends FilePropertyDescription {
 		if (isReadOnly()) {
 			toolBar.setEnabled(false);
 		}
+	}
+
+	protected boolean isResourceCompatible(AMResource r) {
+		return true;
 	}
 
 	private MServerProfile getServerProfile(final IWItemProperty wiProp) {
