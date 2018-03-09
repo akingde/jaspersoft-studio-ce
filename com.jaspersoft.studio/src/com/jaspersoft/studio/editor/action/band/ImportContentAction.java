@@ -142,7 +142,7 @@ public class ImportContentAction extends ACachedSelectionAction {
 				createResourceCommand.redo();
 			}
 			for(JRDesignElement element : elementsToCreate) {
-				targetBand.removeElement(element);
+				targetBand.addElement(element);
 			}
 		}
 	}
