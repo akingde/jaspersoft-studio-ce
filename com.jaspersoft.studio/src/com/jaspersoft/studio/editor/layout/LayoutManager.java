@@ -303,7 +303,8 @@ public class LayoutManager {
 					if (str == null)
 						str = FreeLayout.class.getName();
 				}
-				return LayoutManager.getLayout(str).getClass();
+				ILayout layout = LayoutManager.getLayout(str);
+				return layout != null ? layout.getClass() : FreeLayout.class;
 			} else {
 				return FreeLayout.class;
 			}
