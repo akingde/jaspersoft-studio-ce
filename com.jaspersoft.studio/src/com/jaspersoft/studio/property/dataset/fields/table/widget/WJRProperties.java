@@ -3,11 +3,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.fields.table.widget;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -24,7 +19,6 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
-import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 
 public class WJRProperties extends AWidget {
 	private MDataset mdataset;
@@ -32,27 +26,6 @@ public class WJRProperties extends AWidget {
 	public WJRProperties(Composite parent, TColumn c, final Object element, JasperReportsConfiguration jConfig) {
 		super(parent, c, element, jConfig);
 		this.mdataset = (MDataset) c.getValue();
-		final PropertyChangeListener l = new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				control.fillValue();
-			}
-		};
-		if (element instanceof JRChangeEventsSupport)
-			((JRChangeEventsSupport) element).getEventSupport().addPropertyChangeListener(l);
-		if (element instanceof JRPropertiesHolder)
-			((JRPropertiesHolder) element).getPropertiesMap().getEventSupport().addPropertyChangeListener(l);
-		control.addDisposeListener(new DisposeListener() {
-
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				if (element instanceof JRChangeEventsSupport)
-					((JRChangeEventsSupport) element).getEventSupport().removePropertyChangeListener(l);
-				if (element instanceof JRPropertiesHolder)
-					((JRPropertiesHolder) element).getPropertiesMap().getEventSupport().removePropertyChangeListener(l);
-			}
-		});
 	}
 
 	@Override
@@ -97,8 +70,8 @@ public class WJRProperties extends AWidget {
 			return new PropertyExpressionsDTO(propertyExpressions, MField.getPropertiesMapClone(prop), element,
 					ModelUtils.getExpressionContext(mdataset));
 		} else if (element instanceof JRPropertiesHolder)
-			return new PropertyExpressionsDTO(null, MParameter.getPropertiesMapClone((JRPropertiesHolder) element), element,
-					ModelUtils.getExpressionContext(mdataset));
+			return new PropertyExpressionsDTO(null, MParameter.getPropertiesMapClone((JRPropertiesHolder) element),
+					element, ModelUtils.getExpressionContext(mdataset));
 		else if (element instanceof JRPropertiesMap)
 			return new PropertyExpressionsDTO(null, ((JRPropertiesMap) element).cloneProperties(), element,
 					ModelUtils.getExpressionContext(mdataset));

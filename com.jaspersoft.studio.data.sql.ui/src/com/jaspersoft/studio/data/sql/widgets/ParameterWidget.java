@@ -102,9 +102,8 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> implement
 						return true;
 					String t = ((FieldOperand) aop).getMColumn().getUnformattedTypeName();
 					try {
-						if (JRClassLoader.loadClassForName(JDBCFieldsProvider.getJavaType4SQL(t))
-								.isAssignableFrom(p.getValueClass()))
-							return false;
+						Class<?> clazz = JRClassLoader.loadClassForName(JDBCFieldsProvider.getJavaType4SQL(t));
+						return clazz.isAssignableFrom(p.getValueClass());
 					} catch (ClassNotFoundException e) {
 						e.printStackTrace();
 						return false;

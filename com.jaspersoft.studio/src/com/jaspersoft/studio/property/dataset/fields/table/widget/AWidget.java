@@ -3,6 +3,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.fields.table.widget;
 
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -16,8 +17,10 @@ import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 
 public abstract class AWidget {
 	private static Map<String, Class<? extends AWControl>> wmap = new HashMap<>();
@@ -53,6 +56,21 @@ public abstract class AWidget {
 		this.jConfig = jConfig;
 
 		initControl(parent, c);
+
+		final PropertyChangeListener l = evt -> {
+			if (evt.getPropertyName().equals(c.getPropertyName()))
+				control.fillValue();
+		};
+		if (element instanceof JRChangeEventsSupport)
+			((JRChangeEventsSupport) element).getEventSupport().addPropertyChangeListener(l);
+		if (element instanceof JRPropertiesHolder)
+			((JRPropertiesHolder) element).getPropertiesMap().getEventSupport().addPropertyChangeListener(l);
+		control.addDisposeListener(e -> {
+			if (element instanceof JRChangeEventsSupport)
+				((JRChangeEventsSupport) element).getEventSupport().removePropertyChangeListener(l);
+			if (element instanceof JRPropertiesHolder)
+				((JRPropertiesHolder) element).getPropertiesMap().getEventSupport().removePropertyChangeListener(l);
+		});
 	}
 
 	public AWControl getControl() {

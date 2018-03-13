@@ -158,7 +158,8 @@ public class ICParameterContributor implements IParameterICContributor {
 	private WJRProperty wDs;
 
 	PropertyChangeListener pmapListener = evt -> {
-		if (evt.getPropertyName().equals(PROPERTY_JS_INPUTCONTROL_TYPE))
+		if (evt.getPropertyName().equals(PROPERTY_JS_INPUTCONTROL_TYPE)
+				|| evt.getPropertyName().equals(PROPERTY_JS_INPUTCONTROL_PATH))
 			setWidgetsState();
 		pm.setDirty(prm);
 	};
@@ -167,12 +168,18 @@ public class ICParameterContributor implements IParameterICContributor {
 	private WJRProperty wPath;
 
 	public void setWidgetsState() {
+		boolean en = prm != null;
+		String path = prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_PATH) : "";
+		en = en && Misc.isNullOrEmpty(path);
+
+		wLabel.getControl().setEnabled(en);
+		wType.getControl().setEnabled(en);
 		String v = prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_TYPE) : "";
-		wValue.getControl().setEnabled(
-				!Misc.isNullOrEmpty(v) && (v.equals(ICTypes.MULTI_LOV.name()) || v.equals(ICTypes.SINGLE_LOV.name())
-						|| v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name())));
-		wDs.getControl().setEnabled(!Misc.isNullOrEmpty(v)
-				&& (v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name())));
+		en = en && !Misc.isNullOrEmpty(v);
+		wValue.getControl().setEnabled(en && (v.equals(ICTypes.MULTI_LOV.name()) || v.equals(ICTypes.SINGLE_LOV.name())
+				|| v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name())));
+		wDs.getControl()
+				.setEnabled(en && (v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name())));
 	}
 
 	@Override
