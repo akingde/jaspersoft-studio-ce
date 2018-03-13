@@ -301,12 +301,22 @@ public class ReportEditor extends AbstractVisualEditor {
 	@Override
 	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
 		this.topToolbarManager = toolbarManager;
-		ActionContributionItem item = new ActionContributionItem(getActionRegistry().getAction(CompileAction.ID));
+		//main dataset action
+		ActionContributionItem item = new ActionContributionItem(getActionRegistry().getAction(DatasetAction.ID));
 		act4TextIcon.add(item);
 		toolbarManager.add(item);
-		item = new ActionContributionItem(getActionRegistry().getAction(DatasetAction.ID));
+		//compile action
+		item = new ActionContributionItem(getActionRegistry().getAction(CompileAction.ID));
 		act4TextIcon.add(item);
 		toolbarManager.add(item);
+		// Contributed actions
+		List<AContributorAction> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
+		for (AContributorAction a : contributedActions) {
+			a.setJrConfig((JasperReportsConfiguration) getGraphicalViewer().getProperty("JRCONTEXT"));
+			item = new ActionContributionItem(a);
+			act4TextIcon.add(item);
+			toolbarManager.add(item);
+		}
 		toolbarManager.add(new Separator());
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_OUT));
@@ -321,14 +331,6 @@ public class ReportEditor extends AbstractVisualEditor {
 			toolbarManager.add(zoomItem);
 		}
 		toolbarManager.add(new Separator());
-		// Contributed actions
-		List<AContributorAction> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
-		for (AContributorAction a : contributedActions) {
-			a.setJrConfig((JasperReportsConfiguration) getGraphicalViewer().getProperty("JRCONTEXT"));
-			item = new ActionContributionItem(a);
-			act4TextIcon.add(item);
-			toolbarManager.add(item);
-		}
 		// Global "View" menu items
 		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));
 		setTextIcon();
