@@ -47,6 +47,7 @@ import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.JSSSnapFeedBackPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.editor.java2d.J2DScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -458,6 +459,21 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 				pendingRefreshRequestEvent = null;
 				propertyChange(pendingRequest);
 			}
+		}
+	}
+	
+	/**
+	 * While refreshing the children mark the refreshing flag on the viewer. This should 
+	 * avoid update of the selection for every refreshed child
+	 */
+	@Override
+	protected void refreshChildren() {
+		J2DScrollingGraphicalViewer viewer = (J2DScrollingGraphicalViewer)getViewer();
+		viewer.setRefreshingParts(true, this);
+		try {
+			super.refreshChildren();
+		} finally {
+			viewer.setRefreshingParts(false, this);
 		}
 	}
 

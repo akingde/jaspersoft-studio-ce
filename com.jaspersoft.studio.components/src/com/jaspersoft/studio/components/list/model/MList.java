@@ -373,10 +373,13 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// System.out.println(this);
-		HashSet<String> graphicalProperties = getGraphicalProperties();
-		if (graphicalProperties.contains(evt.getPropertyName())) {
-			setChangedProperty(true, evt);
+		// check if it is already marked to be refreshed, in this case skip the check of
+		// the maps
+		if (!hasChangedProperty()) {
+			HashSet<String> graphicalProperties = getGraphicalProperties();
+			if (graphicalProperties.contains(evt.getPropertyName())) {
+				setChangedProperty(true, evt);
+			}
 		}
 		if (evt.getSource() == getValue()) {
 			if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_HEIGHT)) {

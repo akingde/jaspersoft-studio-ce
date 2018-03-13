@@ -957,7 +957,6 @@ public class MGraphicElement extends APropertyNode
 
 			ANode parent = getParent();
 			while (parent != null) {
-				;
 				if (parent.getValue() != null && parent.getValue() instanceof JRChangeEventsSupport) {
 					// We can't set the property on the element directly because even if it follow
 					// the hierarchy

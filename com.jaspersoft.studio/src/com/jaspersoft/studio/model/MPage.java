@@ -273,4 +273,21 @@ public class MPage extends MLockableRefresh implements IGraphicElement, IContain
 		}
 		return (MReport)parent;
 	}
+	
+	/**
+	 * Create or remove a lock for the refresh. It will apply the lock
+	 * also on the report, to assure to avoid the refresh also on 
+	 * the main editor
+	 * 
+	 * @param ignore true if the refresh should be ignored, false otherwise
+	 * @param caller who wants to put or to remove its previous lock
+	 */
+	public void setIgnoreEvents(boolean ignore, Object caller){
+		super.setIgnoreEvents(ignore, caller);
+		MReport parentReport = getReport();
+		if (parentReport != null) {
+			parentReport.setIgnoreEvents(ignore, caller);
+		}
+	}
+
 }

@@ -483,10 +483,10 @@ public class MTable extends MGraphicElement
 				|| evt.getPropertyName().equals(StandardColumn.PROPERTY_GROUP_FOOTERS))) {
 			super.propertyChange(evt);
 		} else {
-			if (hasChangedProperty()) {
+			if (!hasChangedProperty()) {
 				HashSet<String> graphicalProperties = getGraphicalProperties();
 				if (graphicalProperties.contains(evt.getPropertyName())) {
-					setChangedProperty(true);
+					setChangedProperty(true, evt);
 				}
 			}
 		}
