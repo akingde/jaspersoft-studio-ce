@@ -96,7 +96,7 @@ public class SelectionHelper {
 	 *          the element to search
 	 * @return the node of the passed element in the current editor, or null if it can't be found
 	 */
-	public static ANode getNode(JRChild jrElement) {
+	public static ANode getNode(Object jrElement) {
 		IEditorPart activeEditor = getActiveJRXMLEditor();
 		if (activeEditor != null && activeEditor instanceof AbstractJRXMLEditor) {
 			AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor) activeEditor;
@@ -201,6 +201,16 @@ public class SelectionHelper {
 				}
 				ep.getViewer().setSelection(new StructuredSelection(s));
 				ep.getViewer().reveal(ep);
+			}
+		}
+	}
+	
+	public static void setOutlineSelection(Object jrElement) {
+		ANode node = SelectionHelper.getNode(jrElement);
+		if (node != null) {
+			EditPart part = node.getTreeEditPart();
+			if (part != null) {
+				part.getViewer().setSelection(new StructuredSelection(part));
 			}
 		}
 	}
