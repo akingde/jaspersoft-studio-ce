@@ -2467,6 +2467,12 @@ public class Messages extends NLS {
 	public static String NextPageAction_actionName;
 	public static String NextPageAction_actionTooltip;
 	public static String QueryDesigner_readFieldsButton;
+	public static String QueryDialog_0;
+	public static String QueryDialog_1;
+	public static String QueryDialog_2;
+	public static String QueryDialog_3;
+	public static String QueryDialog_4;
+	public static String QueryDialog_5;
 	public static String DefaultDataAdapterEditorComposite_alredyExistingMessage;
 	public static String DefaultDatasetButton_setDefaultDAButton;
 

@@ -21,7 +21,7 @@ public class WText extends AWControl {
 
 	@Override
 	protected void createControl(Composite parent) {
-		txt = new Text(parent, SWT.BORDER);
+		txt = new Text(parent, aw.getTColumn().isLabelEditable() ? SWT.BORDER | SWT.READ_ONLY : SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 200;
 		txt.setLayoutData(gd);

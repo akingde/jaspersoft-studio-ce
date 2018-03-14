@@ -134,11 +134,13 @@ public class ICParameterContributor implements IParameterICContributor {
 
 		TColumn c = TColumnFactory
 				.getTColumn(PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_TYPE));
+		c.setLabelEditable(true);
 		c.setDefaultValue(ICTypes.VALUE.getValue());
 		wType = new WJRProperty(parent, c, prm, pm.getDesigner().getjConfig());
 
 		c = TColumnFactory
 				.getTColumn(PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_VALUE));
+		c.setReadOnly(true);
 		c.setValue1(fq);
 		wValue = new WJRProperty(parent, c, prm, pm.getDesigner().getjConfig());
 

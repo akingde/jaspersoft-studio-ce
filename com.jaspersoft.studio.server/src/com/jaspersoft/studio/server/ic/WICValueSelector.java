@@ -23,6 +23,12 @@ public class WICValueSelector extends AWTextButton {
 	}
 
 	@Override
+	protected void createControl(Composite parent) {
+		aw.getTColumn().setLabelEditable(true);
+		super.createControl(parent);
+	}
+
+	@Override
 	protected void createButton(Composite cmp) {
 		super.createButton(cmp);
 		btn.addSelectionListener(new SelectionAdapter() {

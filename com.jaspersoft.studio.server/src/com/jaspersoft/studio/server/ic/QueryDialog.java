@@ -49,7 +49,7 @@ public class QueryDialog extends ATitledDialog {
 
 	protected QueryDialog(Shell parentShell, String v, IFilterQuery fq) {
 		super(parentShell, false);
-		setTitle("Input Control Query");
+		setTitle(Messages.QueryDialog_0);
 		this.fq = fq;
 		try {
 			value = mapper.readValue(v, ICQuery.class);
@@ -76,7 +76,7 @@ public class QueryDialog extends ATitledDialog {
 
 		if (fq != null) {
 			Button btn = new Button(composite, SWT.PUSH);
-			btn.setText("Get Query");
+			btn.setText(Messages.QueryDialog_1);
 			btn.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -96,7 +96,7 @@ public class QueryDialog extends ATitledDialog {
 
 	private void createFields(CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Value And Columns");
+		bptab.setText(Messages.QueryDialog_2);
 
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
@@ -109,7 +109,7 @@ public class QueryDialog extends ATitledDialog {
 		gd.horizontalSpan = 2;
 		scmp.setLayoutData(gd);
 
-		new Label(scmp, SWT.NONE).setText("Value");
+		new Label(scmp, SWT.NONE).setText(Messages.QueryDialog_3);
 
 		tValue = new Text(scmp, SWT.BORDER);
 		tValue.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -124,7 +124,7 @@ public class QueryDialog extends ATitledDialog {
 
 		NewButton bnew = new NewButton();
 		bnew.createNewButtons(bGroup, tableViewer, (input, pos) -> {
-			StringValueDialog d = new StringValueDialog(cmp.getShell(), "Field");
+			StringValueDialog d = new StringValueDialog(cmp.getShell(), Messages.QueryDialog_4);
 			if (d.open() == Dialog.OK)
 				return d.getValue();
 			return null;
@@ -187,7 +187,7 @@ public class QueryDialog extends ATitledDialog {
 		table.setLayout(tlayout);
 
 		TableColumn tc = new TableColumn(table, SWT.NONE);
-		tc.setText("Column");
+		tc.setText(Messages.QueryDialog_5);
 		tc.pack();
 	}
 

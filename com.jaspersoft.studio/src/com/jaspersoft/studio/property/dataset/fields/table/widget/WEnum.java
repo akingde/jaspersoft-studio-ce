@@ -35,7 +35,7 @@ public class WEnum extends AWControl {
 		cmp.setLayout(layout);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		cmb = new Combo(cmp, SWT.BORDER);
+		cmb = new Combo(cmp, aw.getTColumn().isLabelEditable() ? SWT.BORDER | SWT.READ_ONLY : SWT.BORDER);
 		cmb.add(Messages.WEnum_0);
 		Enum<?>[] obj = clazz.getEnumConstants();
 		for (Enum<?> item : obj) {
