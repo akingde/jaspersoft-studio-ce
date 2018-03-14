@@ -95,7 +95,7 @@ public class J2DScrollingGraphicalViewer extends JSSScrollingGraphicalViewer {
 	@Override
 	protected void fireSelectionChanged() {
 		if (lockCounter <= 0) {
-			UIUtils.getDisplay().asyncExec(new Runnable() {
+			UIUtils.getDisplay().syncExec(new Runnable() {
 				
 				@Override
 				public void run() {
