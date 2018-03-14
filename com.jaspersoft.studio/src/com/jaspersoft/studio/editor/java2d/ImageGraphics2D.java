@@ -69,7 +69,11 @@ public class ImageGraphics2D extends ACachedGraphics {
 		//scale the graphics to the current zoom level and set the rendering hints
 		double scaleX = originalGrpahics.getTransform().getScaleX();
 		double scaleY = originalGrpahics.getTransform().getScaleY();
-		image = new BufferedImage( (int)(targetGraphics.getClipBounds().width*scaleX), (int)(originalGrpahics.getClipBounds().height*scaleY), BufferedImage.TYPE_INT_ARGB);
+		//we render to a resolution bigger than the image bounds and then scale to that size when a zoom bigger than 1 is used. This allow a better overall quality when using zoom
+		//but the size of the rendered element must be always at lest equal to the size of the image where it will painted. Otherwise will be generated only a portion of what should
+		image = new BufferedImage( (int)(targetGraphics.getClipBounds().width*Math.max(1,scaleX)), (int)(originalGrpahics.getClipBounds().height*Math.max(1, scaleY)), BufferedImage.TYPE_INT_ARGB);
+		image.getWidth();
+		image.getHeight();
 		imageGraphics = (Graphics2D)image.createGraphics();
 		imageGraphics.scale(scaleX, scaleY);
 		imageGraphics.setRenderingHints(originalGrpahics.getRenderingHints());
