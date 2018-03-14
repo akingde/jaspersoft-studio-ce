@@ -49,7 +49,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
  * 
  */
 public class FileSelectionDialog extends PersistentLocationDialog {
-
+	
 	// Expression that will be associated to the image element
 	protected String fileExpressionText;
 	// All widgets stuff
@@ -72,6 +72,9 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	protected JRDesignExpression jrFileExpression;
 
 	protected JasperReportsConfiguration jConfig;
+	
+	protected boolean allowValidation = true;
+	
 
 	/**
 	 * Create the dialog.
@@ -143,6 +146,7 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				changeFileSelectionMode(cmpWorkspaceResourceSelection);
+				allowValidation = true;
 			}
 		});
 		btnWorkspaceResource.setText(fileModesAndHeaderTitles[1]);
@@ -152,6 +156,7 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				changeFileSelectionMode(cmpFilesystemResourceSelection);
+				allowValidation = true;
 			}
 		});
 		btnAbsolutePath.setText(fileModesAndHeaderTitles[2]);
@@ -161,19 +166,22 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				changeFileSelectionMode(cmpURL);
+				allowValidation = true;
 			}
 		});
 		btnUrlRemote.setText(fileModesAndHeaderTitles[3]);
 
 		fselectors = JaspersoftStudioPlugin.getExtensionManager().getFileSelectors();
-		for (IFileSelection fs : fselectors)
+		for (IFileSelection fs : fselectors) {
 			fs.createRadioButton(grpFileSelectionMode, this, jConfig.getJasperDesign());
+		}
 
 		btnCustomExpression = new Button(grpFileSelectionMode, SWT.RADIO);
 		btnCustomExpression.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				changeFileSelectionMode(cmpCustomExpression);
+				allowValidation = false;
 			}
 		});
 		btnCustomExpression.setText(fileModesAndHeaderTitles[5]);
@@ -184,6 +192,7 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					changeFileSelectionMode(cmpNoFile);
+					allowValidation = false;
 				}
 			});
 			btnNoFile.setText(fileModesAndHeaderTitles[4]);
@@ -193,12 +202,14 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 			// As default no image radio button selected
 			btnNoFile.setSelection(true);
 			btnNoFile.setFocus();
+			allowValidation = false;
 	
 			changeFileSelectionMode(cmpNoFile);
 		} else {
 			createOptionsPanel(container);
 			// As default no image radio button selected
 			btnWorkspaceResource.setSelection(true);
+			allowValidation = true;
 			btnWorkspaceResource.setFocus();
 	
 			changeFileSelectionMode(cmpWorkspaceResourceSelection);
@@ -207,6 +218,24 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 		return area;
 	}
 
+	/**
+	 * Return if the selected path type allow a validation of the resource
+	 * 
+	 * @return true if it allow a validation of the resource, false of otherwise
+	 */
+	public boolean isValidationAllowed() {
+		return allowValidation;
+	}
+	
+	/**
+	 * Set if the selected path type allow a validation of the resource
+	 * 
+	 * @param value true if it allow a validation of the resource, false of otherwise
+	 */
+	public void setAllowValidation(boolean value) {
+		allowValidation = value;
+	}
+	
 	/*
 	 * Creates the panel with the different options container. A stack layout will be used.
 	 */
