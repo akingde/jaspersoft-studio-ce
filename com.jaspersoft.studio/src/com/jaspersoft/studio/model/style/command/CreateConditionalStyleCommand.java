@@ -11,6 +11,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.utils.SelectionHelper;
 /*
  * link nodes & together.
  * 
@@ -78,6 +79,7 @@ public class CreateConditionalStyleCommand extends Command {
 			else {
 				jrStyle.addConditionalStyle(index, jrConditionalStyle);
 			}
+			SelectionHelper.setOutlineSelection(jrConditionalStyle);
 		}
 	}
 

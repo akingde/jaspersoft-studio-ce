@@ -16,6 +16,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
 import com.jaspersoft.studio.model.sortfield.command.wizard.SortFieldWizard;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
  * link nodes & together.
@@ -74,6 +75,7 @@ public class CreateSortFieldCommand extends Command {
 					jrDataSet.addSortField(jrField);
 				else
 					jrDataSet.addSortField(index, jrField);
+				SelectionHelper.setOutlineSelection(jrField);
 			} catch (JRException e) {
 				e.printStackTrace();
 			}

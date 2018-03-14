@@ -16,6 +16,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.scriptlet.MScriptlet;
 import com.jaspersoft.studio.model.scriptlet.MScriptlets;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
 /*
  * link nodes & together.
  * 
@@ -66,6 +67,7 @@ public class CreateScriptletCommand extends Command {
 					jrDataset.addScriptlet(index, jrScriptlet);
 				else
 					jrDataset.addScriptlet(jrScriptlet);
+				SelectionHelper.setOutlineSelection(jrScriptlet);
 			} catch (JRException e) {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$

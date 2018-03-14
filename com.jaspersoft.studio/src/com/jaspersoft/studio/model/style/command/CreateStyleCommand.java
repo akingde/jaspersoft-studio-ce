@@ -4,10 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style.command;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
@@ -16,6 +12,11 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyles;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 /*
  * link nodes & together.
  * 
@@ -96,6 +97,7 @@ public class CreateStyleCommand extends Command {
 					}
 				}
 			}
+			SelectionHelper.setOutlineSelection(jrStyle);
 		}
 	}
 

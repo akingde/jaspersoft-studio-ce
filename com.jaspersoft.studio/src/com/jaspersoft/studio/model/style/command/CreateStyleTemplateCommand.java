@@ -9,6 +9,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -63,6 +64,7 @@ public class CreateStyleTemplateCommand extends Command {
 				jrDesign.addTemplate(jrTemplate);
 			else
 				jrDesign.addTemplate(index, jrTemplate);
+			SelectionHelper.setOutlineSelection(jrTemplate);
 		}
 	}
 

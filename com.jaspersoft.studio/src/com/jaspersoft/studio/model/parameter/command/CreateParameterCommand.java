@@ -4,11 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter.command;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
@@ -17,7 +12,13 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 /*
  * link nodes & together.
@@ -94,6 +95,7 @@ public class CreateParameterCommand extends Command {
 					jrDataset.addParameter(jrParameter);
 				else
 					jrDataset.addParameter(index, jrParameter);
+				SelectionHelper.setOutlineSelection(jrParameter);
 			} catch (JRException e) {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$

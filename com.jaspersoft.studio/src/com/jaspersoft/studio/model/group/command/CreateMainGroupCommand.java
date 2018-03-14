@@ -4,8 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.group.command;
 
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.Dialog;
@@ -21,7 +19,10 @@ import com.jaspersoft.studio.model.band.MBandGroupHeader;
 import com.jaspersoft.studio.model.band.command.CreateBandGroupFooterCommand;
 import com.jaspersoft.studio.model.band.command.CreateBandGroupHeaderCommand;
 import com.jaspersoft.studio.model.group.MGroup;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.wizards.group.BandGroupWizard;
+
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 public class CreateMainGroupCommand extends CompoundCommand {
 
@@ -90,6 +91,9 @@ public class CreateMainGroupCommand extends CompoundCommand {
 				}
 			if (createBandFooter != null)
 				createBandFooter.execute();
+		}
+		if (createBandHeader != null) {
+			SelectionHelper.setOutlineSelection(createBandHeader.getCreatedElement());
 		}
 
 	}

@@ -11,8 +11,8 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
-import com.jaspersoft.studio.model.parameter.command.ReorderParameterCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -90,6 +90,7 @@ public class CreateFieldCommand extends Command {
 					jrDataSet.addField(jrField);
 				else
 					jrDataSet.addField(index, jrField);
+				SelectionHelper.setOutlineSelection(jrField);
 			} catch (JRException e) {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$

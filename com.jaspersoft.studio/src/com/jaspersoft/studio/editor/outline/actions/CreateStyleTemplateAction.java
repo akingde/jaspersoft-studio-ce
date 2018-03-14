@@ -77,7 +77,7 @@ public class CreateStyleTemplateAction extends ACachedSelectionAction {
 			jrTemplate.setSourceExpression(fsd.getFileExpression());
 			IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
 			String location = ExternalStylesManager.evaluateStyleExpression(jrTemplate, project, jConfig);
-			if (location != null && ExternalStylesManager.validateTemplate(jConfig, location)){
+			if (location != null && (!fsd.isValidationAllowed() || ExternalStylesManager.validateTemplate(jConfig, location))){
 				//Check if the template is valid and add it only in that case
 				CreateStyleTemplateCommand command = new CreateStyleTemplateCommand(node, jrTemplate, 0);
 				execute(command);

@@ -15,7 +15,7 @@ import com.jaspersoft.studio.model.sortfield.MSortFields;
 /*
  * The Class CreateFieldAction.
  */
-public class CreateSortFieldAction extends ACreateAction {
+public class CreateSortFieldAction extends ACreateAndSelectAction {
 
 	/** The Constant ID. */
 	public static final String ID = "create_sort_field"; //$NON-NLS-1$

@@ -9,6 +9,7 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariables;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRException;
@@ -86,6 +87,7 @@ public class CreateVariableCommand extends Command {
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
+			SelectionHelper.setOutlineSelection(jrVariable);
 		}
 	}
 

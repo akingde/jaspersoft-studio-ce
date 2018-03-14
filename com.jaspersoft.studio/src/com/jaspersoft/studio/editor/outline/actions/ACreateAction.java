@@ -52,6 +52,20 @@ public abstract class ACreateAction extends ACachedSelectionAction {
 	}
 
 	/**
+	 * Get the CreationRequest for the EditParts, can be null
+	 */
+	protected CreateRequest getCreateRequest(List<Object> objects) {
+		CreateRequest createReq = new CreateRequest(RequestConstants.REQ_CREATE);
+		createReq.setLocation(location);
+		createReq.setFactory(creationFactory);
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		if (!setExtendedData(map, objects))
+			return null;
+		createReq.setExtendedData(map);
+		return createReq;
+	}
+	
+	/**
 	 * Create a command to create the selected objects.
 	 * 
 	 * @param objects
@@ -66,13 +80,10 @@ public abstract class ACreateAction extends ACachedSelectionAction {
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 
-		CreateRequest createReq = new CreateRequest(RequestConstants.REQ_CREATE);
-		createReq.setLocation(location);
-		createReq.setFactory(creationFactory);
-		Map<Object, Object> map = new HashMap<Object, Object>();
-		if (!setExtendedData(map, objects))
+		CreateRequest createReq = getCreateRequest(objects);
+		if (createReq == null){
 			return null;
-		createReq.setExtendedData(map);
+		}
 
 		JSSCompoundCommand jssCcmd = new JSSCompoundCommand(null);		
 		for (int i = 0; i < objects.size(); i++) {
