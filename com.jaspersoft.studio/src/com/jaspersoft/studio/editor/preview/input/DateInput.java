@@ -12,12 +12,8 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.nebula.widgets.cdatetime.CDT;
 import org.eclipse.nebula.widgets.cdatetime.CDateTime;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -74,17 +70,17 @@ public class DateInput extends ADataInput {
 			createDateRange(parent, param, params);
 		date.setToolTipText(VParameters.createToolTip(param));
 		if (supportDateRange) {
-			String tt = "Possible values to use as parameter:\n";
+			StringBuilder tt = new StringBuilder("Possible values to use as parameter:\n");
 			String del = "";
 			for (CalendarUnit cu : CalendarUnit.values()) {
-				tt += del;
+				tt.append(del);
 				if (cu.equals(CalendarUnit.WEEK)) {
 					DateRangeBuilder drb = new DateRangeBuilder("WEEK");
-					tt += cu.name() + "("
+					tt.append(cu.name() + "("
 							+ namesOfDays[Misc.nvl(drb.getWeekStartDay(), RelativeDateRange.DEFAULT_WEEK_START_DAY)]
-							+ ")";
+							+ ")");
 				} else
-					tt += cu.name();
+					tt.append(cu.name());
 				del = ", ";
 			}
 			date.setToolTipText(tt + "\n" + date.getToolTipText());
@@ -126,13 +122,13 @@ public class DateInput extends ADataInput {
 	protected void handleTimestampChanged() {
 		Date sdate = date.getSelection();
 		Timestamp d = sdate != null ? new java.sql.Timestamp(sdate.getTime()) : null;
-		updateModel(isNumeric ? d.getTime() : d);
+		updateModel(isNumeric && d != null ? d.getTime() : d);
 	}
 
 	protected void handleTimeChanged() {
 		Date sdate = date.getSelection();
 		Time d = sdate != null ? new java.sql.Time(sdate.getTime()) : null;
-		updateModel(isNumeric ? d.getTime() : d);
+		updateModel(isNumeric && d != null ? d.getTime() : d);
 	}
 
 	/**
@@ -150,15 +146,8 @@ public class DateInput extends ADataInput {
 			DateRangeBuilder drb = null;
 			if (date.getSelection() != null)
 				drb = new DateRangeBuilder(date.getSelection());
-			else {
-				String wval = Misc.nvl(date.getText().replaceAll(" ", "")).toUpperCase();
-				if (CalendarUnit.fromValue(wval) == null) {
-					updateModel(null);
-					return;
-				}
-				date.setSelection(null);
-				drb = new DateRangeBuilder(wval);
-			}
+			else
+				drb = new DateRangeBuilder(Misc.nvl(date.getText().replaceAll(" ", "")).toUpperCase());
 
 			// if the value should be influenced by the timezone then read its
 			// value from the parameter
@@ -195,23 +184,15 @@ public class DateInput extends ADataInput {
 
 			updateModel(drb.set(clazz).toDateRange());
 		} catch (InvalidDateRangeExpressionException dre) {
-			// Date now = new Date();
-			// if (Timestamp.class.isAssignableFrom(clazz))
-			// now = new Timestamp(now.getTime());
 			updateModel(null);
 		}
 	}
 
 	protected void createTimestampRange(Composite parent, final IParameter param, final Map<String, Object> params) {
-		final IPropertyChangeListener preferencesTimeZoneListener = new IPropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				if (ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty())
-						|| ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE
-								.equals(event.getProperty())) {
-					handleDateRangeChange(Timestamp.class);
-				}
+		final IPropertyChangeListener preferencesTimeZoneListener = event -> {
+			if (ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty())
+					|| ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE.equals(event.getProperty())) {
+				handleDateRangeChange(Timestamp.class);
 			}
 		};
 		getjConfig().getPrefStore().addPropertyChangeListener(preferencesTimeZoneListener);
@@ -225,35 +206,19 @@ public class DateInput extends ADataInput {
 		setFormat(date, InputControlsPreferencePage.JSS_TIMESTAMP_FORMAT);
 
 		setMandatory(param, date);
-		ModifyListener listener = new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				handleDateRangeChange(Timestamp.class);
-			}
-		};
+		ModifyListener listener = e -> handleDateRangeChange(Timestamp.class);
 		((DRDateTime) date).addModifyListener(listener);
-		date.addDisposeListener(new DisposeListener() {
-
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				getjConfig().getPrefStore().removePropertyChangeListener(preferencesTimeZoneListener);
-			}
-		});
+		date.addDisposeListener(
+				e -> getjConfig().getPrefStore().removePropertyChangeListener(preferencesTimeZoneListener));
 		updateInput();
 		listener.modifyText(null);
 	}
 
 	protected void createDateRange(Composite parent, final IParameter param, final Map<String, Object> params) {
-		final IPropertyChangeListener preferencesTimeZoneListener = new IPropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				if (ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty())
-						|| ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE
-								.equals(event.getProperty())) {
-					handleDateRangeChange(Date.class);
-				}
+		final IPropertyChangeListener preferencesTimeZoneListener = event -> {
+			if (ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE.equals(event.getProperty())
+					|| ReportExecutionPreferencePage.JSS_REPORT_FORCE_PARAMETER_TIMEZONE.equals(event.getProperty())) {
+				handleDateRangeChange(Date.class);
 			}
 		};
 		getjConfig().getPrefStore().addPropertyChangeListener(preferencesTimeZoneListener);
@@ -268,21 +233,10 @@ public class DateInput extends ADataInput {
 
 		setMandatory(param, date);
 
-		ModifyListener listener = new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				handleDateRangeChange(Date.class);
-			}
-		};
+		ModifyListener listener = e -> handleDateRangeChange(Date.class);
 		((DRDateTime) date).addModifyListener(listener);
-		date.addDisposeListener(new DisposeListener() {
-
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				getjConfig().getPrefStore().removePropertyChangeListener(preferencesTimeZoneListener);
-			}
-		});
+		date.addDisposeListener(
+				e -> getjConfig().getPrefStore().removePropertyChangeListener(preferencesTimeZoneListener));
 		updateInput();
 		listener.modifyText(null);
 	}
@@ -298,6 +252,7 @@ public class DateInput extends ADataInput {
 
 		setMandatory(param, date);
 		SelectionAdapter listener = new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleTimestampChanged();
 			}
@@ -318,6 +273,7 @@ public class DateInput extends ADataInput {
 		setMandatory(param, date);
 
 		SelectionAdapter listener = new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleTimeChanged();
 			}
@@ -339,6 +295,7 @@ public class DateInput extends ADataInput {
 
 		updateInput();
 		SelectionAdapter listener = new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleDateChanged();
 			}
@@ -382,7 +339,7 @@ public class DateInput extends ADataInput {
 						return;
 					}
 				}
-				date.setSelection(null);// dr.getStart());
+				date.setSelection(null);
 			}
 		} else {
 			date.setSelection(null);
