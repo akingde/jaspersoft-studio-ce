@@ -179,7 +179,14 @@ public class CustomDeleteAction extends DeleteAction{
 	public void run() {
 		CompoundCommand deleteCommandds = createDeleteCommand(getOrderedSelectedObjects(), false);
 		if (deleteCommandds != null) {
-			JSSCompoundCommand compCommand = new JSSCompoundCommand(deleteCommandds, getModel());
+			ANode model = getModel();
+			
+			//it is really important deselect all because otherwise GEF will trigger a selectionChange event
+			//for every part it delete (because a deleted part is first deselected), with an huge impact
+			//on performances with big selections
+			model.getTreeEditPart().getViewer().deselectAll();
+			
+			JSSCompoundCommand compCommand = new JSSCompoundCommand(deleteCommandds, model);
 			StringBuilder messages = new StringBuilder();
 			messages.append(Messages.CustomDeleteAction_messageListStart+"\n"); //$NON-NLS-1$
 			boolean messageFound = false;
