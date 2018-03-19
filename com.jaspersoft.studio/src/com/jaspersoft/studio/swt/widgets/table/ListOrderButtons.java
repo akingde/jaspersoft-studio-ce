@@ -12,8 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -31,13 +29,13 @@ public class ListOrderButtons {
 	private Button upField;
 	private Button downFields;
 
-	private Set<ChangeListener> listeners = new HashSet<ChangeListener>(1); // or can use ChangeSupport in NB 6.0
+	private Set<ChangeListener> listeners = new HashSet<>(1); // or can use ChangeSupport in NB 6.0
 
 	/**
 	 * Add a change listener to listen for changes on the selected fields
 	 * 
 	 * @param ChangeListener
-	 *          a listener
+	 *            a listener
 	 */
 	public final void addChangeListener(ChangeListener l) {
 		synchronized (listeners) {
@@ -131,13 +129,9 @@ public class ListOrderButtons {
 		downFields.addSelectionListener(new ElementOrderChanger(tableViewer, false));
 		Object obj = tableViewer.getInput();
 		setEnabled(obj != null && obj instanceof Collection<?> && !((Collection<?>) obj).isEmpty());
-		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				StructuredSelection sel = (StructuredSelection) event.getSelection();
-				setEnabled(sel != null && sel.size() > 0 && tableViewer.getTable().getItemCount() > 1);
-			}
+		tableViewer.addSelectionChangedListener(event -> {
+			StructuredSelection sel = (StructuredSelection) event.getSelection();
+			setEnabled(sel != null && sel.size() > 0 && tableViewer.getTable().getItemCount() > 1);
 		});
 	}
 

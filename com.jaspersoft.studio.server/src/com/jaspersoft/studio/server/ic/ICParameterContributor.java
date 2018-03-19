@@ -10,12 +10,13 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.data.designer.IFilterQuery;
 import com.jaspersoft.studio.data.designer.IParameterICContributor;
 import com.jaspersoft.studio.data.designer.SelectParameterDialog;
-import com.jaspersoft.studio.property.dataset.fields.table.TColumn;
 import com.jaspersoft.studio.property.dataset.fields.table.TColumnFactory;
 import com.jaspersoft.studio.property.dataset.fields.table.widget.AWidget;
 import com.jaspersoft.studio.property.dataset.fields.table.widget.WJRProperty;
@@ -25,6 +26,7 @@ import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 
 import net.sf.jasperreports.annotations.properties.PropertyScope;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -101,10 +103,19 @@ public class ICParameterContributor implements IParameterICContributor {
 
 	private JRDesignParameter prm;
 	private SelectParameterDialog pm;
+	private Composite cmp;
+	private WJRProperty wValue;
+	private WJRProperty wDs;
+	private IFilterQuery fq;
+	private WJRProperty wLabel;
+	private WJRProperty wPath;
+	private Combo cOpt;
+	private boolean refresh = false;
 
 	@Override
 	public void createUI(Composite parent, JRDesignParameter prm, final SelectParameterDialog pm,
 			final IFilterQuery fq) {
+		this.fq = fq;
 		this.pm = pm;
 		final JRDesignDataset dataset = pm.getDesigner().getjDataset();
 		if (!dataset.isMainDataset())
@@ -122,33 +133,52 @@ public class ICParameterContributor implements IParameterICContributor {
 		gd.horizontalSpan = 3;
 		parent.setLayoutData(gd);
 
-		wPath = new WJRProperty(parent,
-				TColumnFactory.getTColumn(
-						PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_PATH)),
-				prm, pm.getDesigner().getjConfig());
+		new Label(parent, SWT.NONE).setText("Input Control");
 
-		wLabel = new WJRProperty(parent,
-				TColumnFactory.getTColumn(
-						PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_LABEL)),
-				prm, pm.getDesigner().getjConfig());
-
-		TColumn c = TColumnFactory
-				.getTColumn(PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_TYPE));
-		c.setLabelEditable(true);
-		c.setDefaultValue(ICTypes.VALUE.getValue());
-		wType = new WJRProperty(parent, c, prm, pm.getDesigner().getjConfig());
-
-		c = TColumnFactory
-				.getTColumn(PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_VALUE));
-		c.setReadOnly(true);
-		c.setValue1(fq);
-		wValue = new WJRProperty(parent, c, prm, pm.getDesigner().getjConfig());
-
-		wDs = new WJRProperty(parent,
-				TColumnFactory.getTColumn(
-						PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_DATASOURCE)),
-				prm, pm.getDesigner().getjConfig());
-
+		cOpt = new Combo(parent, SWT.READ_ONLY);
+		cOpt.setItems(new String[] { "", "Existing From Repository", Messages.ICTypes_0, Messages.ICTypes_1,
+				"List Of Values", "Query" });
+		cOpt.addModifyListener(e -> {
+			if (refresh)
+				return;
+			refresh = true;
+			try {
+				cmp.dispose();
+				prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_TYPE);
+				prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_PATH);
+				prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+				prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
+				prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_LABEL);
+				switch (cOpt.getSelectionIndex()) {
+				case 1:
+					buildCmp();
+					buildRepositoryIC();
+					break;
+				case 2:
+					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE, ICTypes.BOOLEAN.name());
+					buildIC();
+					break;
+				case 3:
+					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE, ICTypes.VALUE.name());
+					buildIC();
+					break;
+				case 4:
+					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE, ICTypes.SINGLE_LOV.name());
+					buildIC();
+					break;
+				case 5:
+					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE, ICTypes.SINGLE_QUERY.name());
+					buildIC();
+					break;
+				}
+				cOpt.getParent().update();
+				cOpt.getParent().layout(true);
+				UIUtils.relayoutDialogHeight(cOpt.getShell(), -1);
+			} finally {
+				refresh = false;
+			}
+		});
+		buildIC();
 		refresh(prm);
 		parent.addDisposeListener(e -> {
 			if (prm != null && prm.getPropertiesMap() != null)
@@ -156,32 +186,119 @@ public class ICParameterContributor implements IParameterICContributor {
 		});
 	}
 
-	private WJRProperty wValue;
-	private WJRProperty wDs;
+	private void buildIC() {
+		if (prm == null)
+			return;
+		buildCmp();
+
+		String path = prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_PATH) : "";
+		if (!Misc.isNullOrEmpty(path)) {
+			buildRepositoryIC();
+			return;
+		}
+
+		wLabel = new WJRProperty(cmp,
+				TColumnFactory.getTColumn(
+						PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_LABEL)),
+				prm, pm.getDesigner().getjConfig());
+
+		String v = Misc.nvl(prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_TYPE) : "");
+		if (v.equals(ICTypes.BOOLEAN.name()))
+			buildBooleanIC();
+		else if (v.equals(ICTypes.VALUE.name()))
+			buildValueIC();
+		else if (v.equals(ICTypes.MULTI_LOV.name()) || v.equals(ICTypes.SINGLE_LOV.name()))
+			buildLOV();
+		else if (v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name()))
+			buildQuery();
+	}
+
+	private void buildCmp() {
+		cmp = new Composite(cOpt.getParent(), SWT.NONE);
+		cmp.setLayout(new GridLayout(2, false));
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		cmp.setLayoutData(gd);
+	}
+
+	private void buildRepositoryIC() {
+		wPath = new WJRProperty(cmp,
+				TColumnFactory.getTColumn(
+						PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_PATH)),
+				prm, pm.getDesigner().getjConfig());
+	}
+
+	private void buildBooleanIC() {
+		// nothing to do
+	}
+
+	private void buildValueIC() {
+		// here we could put pattern, etc.
+	}
+
+	private void buildLOV() {
+		Composite c = new Composite(cmp, SWT.NONE);
+		c.setLayout(new GridLayout(2, false));
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		c.setLayoutData(gd);
+
+		LovComposite lovc = new LovComposite(
+				Misc.nvl(prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_VALUE) : "")) {
+			@Override
+			protected void handleValueChanged() {
+				prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_VALUE, getValue());
+			}
+		};
+		lovc.createComposite(c);
+	}
+
+	private void buildQuery() {
+		Composite c = new Composite(cmp, SWT.NONE);
+		c.setLayout(new GridLayout());
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		c.setLayoutData(gd);
+
+		QueryComposite qc = new QueryComposite(
+				Misc.nvl(prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_VALUE) : ""), fq) {
+			@Override
+			protected void handleValueChanged() {
+				prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_VALUE, getValue());
+			}
+		};
+		qc.createComposite(c);
+	}
 
 	PropertyChangeListener pmapListener = evt -> {
+		if (refresh)
+			return;
 		if (evt.getPropertyName().equals(PROPERTY_JS_INPUTCONTROL_TYPE)
 				|| evt.getPropertyName().equals(PROPERTY_JS_INPUTCONTROL_PATH))
 			setWidgetsState();
 		pm.setDirty(prm);
 	};
-	private WJRProperty wType;
-	private WJRProperty wLabel;
-	private WJRProperty wPath;
 
 	public void setWidgetsState() {
-		boolean en = prm != null;
+		if (refresh)
+			return;
+		refresh = true;
 		String path = prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_PATH) : "";
-		en = en && Misc.isNullOrEmpty(path);
+		String v = Misc.nvl(prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_TYPE) : "");
 
-		wLabel.getControl().setEnabled(en);
-		wType.getControl().setEnabled(en);
-		String v = prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_TYPE) : "";
-		en = en && !Misc.isNullOrEmpty(v);
-		wValue.getControl().setEnabled(en && (v.equals(ICTypes.MULTI_LOV.name()) || v.equals(ICTypes.SINGLE_LOV.name())
-				|| v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name())));
-		wDs.getControl()
-				.setEnabled(en && (v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name())));
+		if (!Misc.isNullOrEmpty(path))
+			cOpt.select(1);
+		else if (v.equals(ICTypes.BOOLEAN.name()))
+			cOpt.select(2);
+		else if (v.equals(ICTypes.VALUE.name()))
+			cOpt.select(3);
+		else if (v.equals(ICTypes.SINGLE_LOV.name()) || v.equals(ICTypes.MULTI_LOV.name()))
+			cOpt.select(4);
+		else if (v.equals(ICTypes.SINGLE_QUERY.name()) || v.equals(ICTypes.MULTI_QUERY.name()))
+			cOpt.select(5);
+		else
+			cOpt.select(0);
+		refresh = false;
 	}
 
 	@Override
@@ -191,11 +308,14 @@ public class ICParameterContributor implements IParameterICContributor {
 			prm.getPropertiesMap().getEventSupport().removePropertyChangeListener(pmapListener);
 			prm.getPropertiesMap().getEventSupport().addPropertyChangeListener(pmapListener);
 		}
-		wDs.setElement(prm);
-		wValue.setElement(prm);
-		wPath.setElement(prm);
-		wType.setElement(prm);
-		wLabel.setElement(prm);
+		if (wDs != null)
+			wDs.setElement(prm);
+		if (wValue != null)
+			wValue.setElement(prm);
+		if (wPath != null)
+			wPath.setElement(prm);
+		if (wLabel != null)
+			wLabel.setElement(prm);
 		setWidgetsState();
 	}
 
