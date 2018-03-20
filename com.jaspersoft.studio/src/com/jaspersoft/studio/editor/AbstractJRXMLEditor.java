@@ -10,18 +10,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import net.sf.jasperreports.eclipse.JasperReportsPlugin;
-import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
-import net.sf.jasperreports.eclipse.builder.Markers;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.util.Misc;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -91,6 +79,18 @@ import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.SyncDatasetRunParameters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
+import net.sf.jasperreports.eclipse.builder.Markers;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 /**
  * This abstract class contains the basic that should be extended by clients in

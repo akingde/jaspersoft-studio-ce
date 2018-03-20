@@ -4,8 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
@@ -17,6 +15,8 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class DeltaVisitor implements IResourceDeltaVisitor {
 	private EditorPart part;
@@ -33,8 +33,9 @@ public class DeltaVisitor implements IResourceDeltaVisitor {
 		}
 		if (delta == null || delta.getResource() == null || part == null || editorInput == null	|| file == null)
 			return true;
-		if (!delta.getResource().equals(file))
+		if (!delta.getResource().equals(file)) {
 			return true;
+		}
 		switch (delta.getKind()) {
 		case IResourceDelta.ADDED:
 			break;

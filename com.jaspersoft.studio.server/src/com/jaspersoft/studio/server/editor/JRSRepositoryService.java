@@ -41,6 +41,7 @@ import com.jaspersoft.studio.utils.CacheMap;
 import com.jaspersoft.studio.utils.Callback;
 import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.utils.jasper.ResourceChangeEvent;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -334,7 +335,7 @@ public class JRSRepositoryService implements RepositoryService {
 					IFolder tmpDir = msp.getTmpDir(monitor);
 					if (tmpDir != null)
 						tmpDir.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					jConfig.getPropertyChangeSupport().firePropertyChange(JasperReportsConfiguration.RESOURCE_LOADED,
+					jConfig.getPropertyChangeSupport().firePropertyChange(ResourceChangeEvent.RESOURCE_LOADED,
 							true, false);
 					List<File> keys = new ArrayList<File>(fileTypes.keySet());
 					for (File f : keys) {

@@ -114,14 +114,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public static final String KEY_CONVERTER = "REPORT_CONVERTER";
 
 	/**
-	 * Key of the event that must be fired on the {@link JasperReportsConfiguration}
-	 * to notify that a physical resource not available before was loaded and can be
-	 * used. Doing this we can refresh some resources on the editor (ie image &
-	 * styles) when new resource are available
-	 */
-	public static final String RESOURCE_LOADED = "RESOURCE_LOADED";
-
-	/**
 	 * The key which identified the file being edited
 	 */
 	public static final String REPORT_FILE = "REPORTFILEWIZARD"; //$NON-NLS-1$
@@ -159,29 +151,54 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 */
 	private final class ResourceLoadedListener implements PropertyChangeListener {
 
+		private void refreshImages() {
+			// clear the image cache
+			LazyImageConverter.getInstance().removeCachedImages(JasperReportsConfiguration.this);
+		}
+		
+		private void refreshStyles() {
+			// clear the style cache of this configuration, since a resource could be
+			// changed for it
+			// and styles need to be loaded another time
+			ExternalStylesManager.removeCachedStyles(JasperReportsConfiguration.this);
+			// Not sure if the resource is a style, so this call will regenerate first the
+			// styles
+			// and trigger a complete refresh of the editor. Doing so it will cover every
+			// case of
+			// late loading of a resource
+			refreshCachedStyles();
+
+			// Fire an event to the template style to ask an update of the nodes
+			JRReportTemplate[] templates = getJasperDesign().getTemplates();
+			if (templates != null) {
+				for (int i = 0; i < templates.length; i++) {
+					((JRDesignReportTemplate) templates[i]).getEventSupport()
+							.firePropertyChange(MStyleTemplate.FORCE_UPDATE_CHILDREN, null, null);
+				}
+			}
+		}
+		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(RESOURCE_LOADED)) {
-				// clear the image cache
-				LazyImageConverter.getInstance().removeCachedImages(JasperReportsConfiguration.this);
-				// clear the style cache of this configuration, since a resource could be
-				// changed for it
-				// and styles need to be loaded another time
-				ExternalStylesManager.removeCachedStyles(JasperReportsConfiguration.this);
-				// Not sure if the resource is a style, so this call will regenerate first the
-				// styles
-				// and trigger a complete refresh of the editor. Doing so it will cover every
-				// case of
-				// late loading of a resource
-				refreshCachedStyles();
-
-				// Fire an event to the template style to ask an update of the nodes
-				JRReportTemplate[] templates = getJasperDesign().getTemplates();
-				if (templates != null) {
-					for (int i = 0; i < templates.length; i++) {
-						((JRDesignReportTemplate) templates[i]).getEventSupport()
-								.firePropertyChange(MStyleTemplate.FORCE_UPDATE_CHILDREN, null, null);
+			if (evt.getPropertyName().equals(ResourceChangeEvent.RESOURCE_LOADED)) {
+				if (evt instanceof ResourceChangeEvent) {
+					ResourceChangeEvent rEvt = (ResourceChangeEvent)evt;
+					switch(rEvt.getResourceType()) {
+					case IMAGE:
+						refreshImages();
+						break;
+					case TEMPLATE_STYLE:
+						refreshStyles();
+						break;
+					case ALL:
+					default:
+						refreshImages();
+						refreshStyles();
+						break;
 					}
+				} else {
+					refreshImages();
+					refreshStyles();
 				}
 			}
 		}

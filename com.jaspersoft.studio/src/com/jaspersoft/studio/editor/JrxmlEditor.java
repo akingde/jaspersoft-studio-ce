@@ -7,6 +7,7 @@ package com.jaspersoft.studio.editor;
 import java.util.HashSet;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -30,6 +31,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ReportFactory;
 
 import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRExpressionCollector;
@@ -206,5 +208,27 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 		if (part instanceof AbstractVisualEditor){
 			((AbstractVisualEditor)part).getRuler().layout(true);
 		}
+	}
+	
+	/**
+	 * Override of the original resource changed to check if update the tamplate styles
+	 */
+	@Override
+	public void resourceChanged(final IResourceChangeEvent event) {
+		super.resourceChanged(event);
+		if (isRefreshing)
+			return;
+		UIUtils.getDisplay().syncExec(new Runnable() {
+			public void run() {
+				if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
+					try {
+						TemplateStyleVisitor visitor = new TemplateStyleVisitor(JrxmlEditor.this);
+						event.getDelta().accept(visitor);
+					} catch (CoreException e) {
+						UIUtils.showError(e);
+					}
+				}
+			}
+		});
 	}
 }
