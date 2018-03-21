@@ -5,6 +5,7 @@ package com.jaspersoft.studio.server.ic;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -136,40 +137,70 @@ public class ICParameterContributor implements IParameterICContributor {
 		new Label(parent, SWT.NONE).setText("Input Control");
 
 		cOpt = new Combo(parent, SWT.READ_ONLY);
-		cOpt.setItems(new String[] { "", "Existing From Repository", Messages.ICTypes_0, Messages.ICTypes_1,
-				"List Of Values", "Query" });
+		Class<?> pClazz = prm.getValueClass();
+		if (Collection.class.isAssignableFrom(pClazz) || pClazz.isArray())
+			cOpt.setItems(new String[] { "", "Existing From Repository", Messages.ICTypes_0, Messages.ICTypes_1,
+					Messages.ICTypes_3, Messages.ICTypes_6, Messages.ICTypes_5, Messages.ICTypes_8 });
+		else
+			cOpt.setItems(new String[] { "", "Existing From Repository", Messages.ICTypes_0, Messages.ICTypes_1,
+					Messages.ICTypes_2, Messages.ICTypes_7, Messages.ICTypes_4, Messages.ICTypes_9 });
+
 		cOpt.addModifyListener(e -> {
 			if (refresh)
 				return;
 			refresh = true;
 			try {
 				cmp.dispose();
-				prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_TYPE);
-				prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_PATH);
-				prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
-				prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
-				prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_LABEL);
+				boolean isCol = Collection.class.isAssignableFrom(pClazz) || pClazz.isArray();
 				switch (cOpt.getSelectionIndex()) {
 				case 1:
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_LABEL);
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_TYPE);
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
 					buildCmp();
 					buildRepositoryIC();
 					break;
 				case 2:
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
 					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE, ICTypes.BOOLEAN.name());
 					buildIC();
 					break;
 				case 3:
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
 					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE, ICTypes.VALUE.name());
 					buildIC();
 					break;
 				case 4:
-					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE, ICTypes.SINGLE_LOV.name());
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
+							isCol ? ICTypes.MULTI_LOV.name() : ICTypes.SINGLE_LOV.name());
 					buildIC();
 					break;
 				case 5:
-					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE, ICTypes.SINGLE_QUERY.name());
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
+							isCol ? ICTypes.MULTI_LOV_CHECKBOX.name() : ICTypes.SINGLE_LOV_RADIO.name());
 					buildIC();
 					break;
+				case 6:
+					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
+							isCol ? ICTypes.MULTI_QUERY.name() : ICTypes.SINGLE_QUERY.name());
+					buildIC();
+					break;
+				case 7:
+					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
+							isCol ? ICTypes.MULTI_LOV_CHECKBOX.name() : ICTypes.SINGLE_QUERY_RADIO.name());
+					buildIC();
+					break;
+				default:
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_TYPE);
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_PATH);
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
+					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_LABEL);
 				}
 				cOpt.getParent().update();
 				cOpt.getParent().layout(true);
@@ -207,9 +238,9 @@ public class ICParameterContributor implements IParameterICContributor {
 			buildBooleanIC();
 		else if (v.equals(ICTypes.VALUE.name()))
 			buildValueIC();
-		else if (v.equals(ICTypes.MULTI_LOV.name()) || v.equals(ICTypes.SINGLE_LOV.name()))
+		else if (isLOV(v))
 			buildLOV();
-		else if (v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name()))
+		else if (isQuery(v))
 			buildQuery();
 	}
 
@@ -254,6 +285,11 @@ public class ICParameterContributor implements IParameterICContributor {
 	}
 
 	private void buildQuery() {
+		wDs = new WJRProperty(cmp,
+				TColumnFactory.getTColumn(
+						PropertyMetadataRegistry.getPropertiesMetadata().get(PROPERTY_JS_INPUTCONTROL_DATASOURCE)),
+				prm, pm.getDesigner().getjConfig());
+
 		Composite c = new Composite(cmp, SWT.NONE);
 		c.setLayout(new GridLayout());
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -285,20 +321,37 @@ public class ICParameterContributor implements IParameterICContributor {
 		refresh = true;
 		String path = prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_PATH) : "";
 		String v = Misc.nvl(prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_TYPE) : "");
-
+		Class<?> pClazz = prm != null ? prm.getValueClass() : null;
+		boolean isCol = prm != null && (Collection.class.isAssignableFrom(pClazz) || pClazz.isArray());
 		if (!Misc.isNullOrEmpty(path))
 			cOpt.select(1);
 		else if (v.equals(ICTypes.BOOLEAN.name()))
 			cOpt.select(2);
 		else if (v.equals(ICTypes.VALUE.name()))
 			cOpt.select(3);
-		else if (v.equals(ICTypes.SINGLE_LOV.name()) || v.equals(ICTypes.MULTI_LOV.name()))
-			cOpt.select(4);
-		else if (v.equals(ICTypes.SINGLE_QUERY.name()) || v.equals(ICTypes.MULTI_QUERY.name()))
-			cOpt.select(5);
-		else
+		else if (isLOV(v)) {
+			if (isCol && v.equals(ICTypes.MULTI_LOV_CHECKBOX.name()))
+				cOpt.select(5);
+			else
+				cOpt.select(4);
+		} else if (isQuery(v)) {
+			if (isCol && v.equals(ICTypes.MULTI_QUERY_CHECKBOX.name()))
+				cOpt.select(7);
+			else
+				cOpt.select(6);
+		} else
 			cOpt.select(0);
 		refresh = false;
+	}
+
+	private boolean isLOV(String v) {
+		return v.equals(ICTypes.MULTI_LOV.name()) || v.equals(ICTypes.SINGLE_LOV.name())
+				|| v.equals(ICTypes.SINGLE_LOV_RADIO.name()) || v.equals(ICTypes.MULTI_LOV_CHECKBOX.name());
+	}
+
+	private boolean isQuery(String v) {
+		return v.equals(ICTypes.MULTI_QUERY.name()) || v.equals(ICTypes.SINGLE_QUERY.name())
+				|| v.equals(ICTypes.MULTI_QUERY_CHECKBOX.name()) || v.equals(ICTypes.SINGLE_QUERY_RADIO.name());
 	}
 
 	@Override

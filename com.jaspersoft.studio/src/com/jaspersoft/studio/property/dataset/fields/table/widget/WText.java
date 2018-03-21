@@ -5,6 +5,7 @@ package com.jaspersoft.studio.property.dataset.fields.table.widget;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -38,7 +39,9 @@ public class WText extends AWControl {
 		String v = getText();
 		try {
 			refresh = true;
+			Point old = txt.getSelection();
 			txt.setText(Misc.nvl(v, ""));
+			txt.setSelection(old);
 		} finally {
 			refresh = false;
 		}

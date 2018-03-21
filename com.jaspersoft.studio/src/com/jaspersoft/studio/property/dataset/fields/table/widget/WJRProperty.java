@@ -98,7 +98,7 @@ public class WJRProperty extends AWidget {
 				ipd = new JRDataAdapterPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
 						getjConfig());
 			else if (c.getPropertyType().equals(String.class.getName()))
-				ipd = new NotNullableTextPropertyDescription<String>(pname, c.getLabel(), c.getDescription(), false,
+				ipd = new NotNullableTextPropertyDescription<>(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue());
 			else if (c.getPropertyType().equals(Class.class.getName()))
 				ipd = new ClassItemPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
@@ -115,7 +115,7 @@ public class WJRProperty extends AWidget {
 				ipd = new FloatPropertyDescription(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Float.parseFloat(c.getDefaultValue()) : null, null, null);
 			else if (c.getPropertyType().equals(Color.class.getName()))
-				ipd = new ColorPropertyDescription<Color>(pname, c.getLabel(), c.getDescription(), false,
+				ipd = new ColorPropertyDescription<>(pname, c.getLabel(), c.getDescription(), false,
 						c.getDefaultValue() != null ? Color.decode(c.getDefaultValue()) : null);
 			else if (c.getPropertyType().equals(TimeZone.class.getName()))
 				ipd = new TimezoneComboPropertyDescription(pname, c.getLabel(), c.getDescription(), false,

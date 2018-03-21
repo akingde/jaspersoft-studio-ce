@@ -177,6 +177,10 @@ public class Messages extends NLS {
 	public static String ICTypes_3;
 	public static String ICTypes_4;
 	public static String ICTypes_5;
+	public static String ICTypes_6;
+	public static String ICTypes_7;
+	public static String ICTypes_8;
+	public static String ICTypes_9;
 	public static String ImportDataSourceInfoFromDA_DialogTitle;
 	public static String ImportDataSourceInfoFromDA_InfoLabel;
 	public static String ImportDataSourceInJSSAction_ActionText;

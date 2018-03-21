@@ -67,53 +67,79 @@ public class ImpInputControls {
 
 			MInputControl mres = (MInputControl) ResourceFactory.getResource(mrunit, rd, -1);
 			String v = p.getPropertiesMap().getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_TYPE);
+			Class<?> pClazz = p.getValueClass();
 			if (!Misc.isNullOrEmpty(v)) {
-				String qvalue = p.getPropertiesMap().getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_VALUE);
 				if (v.equals(ICTypes.BOOLEAN.getValue()))
 					rd.setControlType(ResourceDescriptor.IC_TYPE_BOOLEAN);
 				else if (v.equals(ICTypes.VALUE.getValue())) {
 					rd.setControlType(ResourceDescriptor.IC_TYPE_SINGLE_VALUE);
-					if (String.class.isAssignableFrom(p.getValueClass()))
+					if (String.class.isAssignableFrom(pClazz))
 						addType(rd, mres, ResourceDescriptor.DT_TYPE_TEXT);
-					else if (Time.class.isAssignableFrom(p.getValueClass()))
+					else if (Time.class.isAssignableFrom(pClazz))
 						addType(rd, mres, (byte) 5);
-					else if (Timestamp.class.isAssignableFrom(p.getValueClass())
-							|| TimestampRange.class.isAssignableFrom(p.getValueClass()))
+					else if (Timestamp.class.isAssignableFrom(pClazz) || TimestampRange.class.isAssignableFrom(pClazz))
 						addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE_TIME);
-					else if (Date.class.isAssignableFrom(p.getValueClass())
-							|| DateRange.class.isAssignableFrom(p.getValueClass()))
+					else if (Date.class.isAssignableFrom(pClazz) || DateRange.class.isAssignableFrom(pClazz))
 						addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE);
-					else if (Number.class.isAssignableFrom(p.getValueClass()))
+					else if (Number.class.isAssignableFrom(pClazz))
 						addType(rd, mres, ResourceDescriptor.DT_TYPE_NUMBER);
-				} else if (v.equals(ICTypes.SINGLE_LOV.getValue())) {
-					rd.setControlType(ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES);
-					setupLOV(rd, qvalue);
-				} else if (v.equals(ICTypes.MULTI_LOV.getValue())) {
-					rd.setControlType(ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES);
-					setupLOV(rd, qvalue);
-				} else if (v.equals(ICTypes.SINGLE_QUERY.getValue())) {
-					rd.setControlType(ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY);
-					setupQuery(rd, qvalue, p, jasper);
-				} else if (v.equals(ICTypes.MULTI_QUERY.getValue())) {
-					rd.setControlType(ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY);
-					setupQuery(rd, qvalue, p, jasper);
+				} else {
+					String qvalue = p.getPropertiesMap()
+							.getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_VALUE);
+					if (Collection.class.isAssignableFrom(pClazz) || pClazz.isArray()) {
+						if (v.equals(ICTypes.SINGLE_LOV.getValue()) || v.equals(ICTypes.SINGLE_LOV_RADIO.getValue()))
+							v = ICTypes.MULTI_LOV.getValue();
+						else if (v.equals(ICTypes.SINGLE_QUERY.getValue())
+								|| v.equals(ICTypes.SINGLE_QUERY_RADIO.getValue()))
+							v = ICTypes.MULTI_QUERY.getValue();
+					} else {
+						if (v.equals(ICTypes.MULTI_LOV.getValue()) || v.equals(ICTypes.MULTI_LOV_CHECKBOX.getValue()))
+							v = ICTypes.SINGLE_LOV.getValue();
+						else if (v.equals(ICTypes.MULTI_QUERY.getValue())
+								|| v.equals(ICTypes.MULTI_QUERY_CHECKBOX.getValue()))
+							v = ICTypes.SINGLE_QUERY.getValue();
+					}
+
+					if (v.equals(ICTypes.SINGLE_LOV.getValue())) {
+						rd.setControlType(ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES);
+						setupLOV(rd, qvalue);
+					} else if (v.equals(ICTypes.SINGLE_LOV_RADIO.getValue())) {
+						rd.setControlType(ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO);
+						setupLOV(rd, qvalue);
+					} else if (v.equals(ICTypes.MULTI_LOV.getValue())) {
+						rd.setControlType(ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES);
+						setupLOV(rd, qvalue);
+					} else if (v.equals(ICTypes.MULTI_LOV_CHECKBOX.getValue())) {
+						rd.setControlType(ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX);
+						setupLOV(rd, qvalue);
+					} else if (v.equals(ICTypes.SINGLE_QUERY.getValue())) {
+						rd.setControlType(ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY);
+						setupQuery(rd, qvalue, p, jasper);
+					} else if (v.equals(ICTypes.SINGLE_QUERY_RADIO.getValue())) {
+						rd.setControlType(ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO);
+						setupQuery(rd, qvalue, p, jasper);
+					} else if (v.equals(ICTypes.MULTI_QUERY.getValue())) {
+						rd.setControlType(ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY);
+						setupQuery(rd, qvalue, p, jasper);
+					} else if (v.equals(ICTypes.MULTI_QUERY_CHECKBOX.getValue())) {
+						rd.setControlType(ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX);
+						setupQuery(rd, qvalue, p, jasper);
+					}
 				}
 			} else {
-				if (Boolean.class.isAssignableFrom(p.getValueClass())) {
+				if (Boolean.class.isAssignableFrom(pClazz)) {
 					rd.setControlType(ResourceDescriptor.IC_TYPE_BOOLEAN);
-				} else if (String.class.isAssignableFrom(p.getValueClass())) {
+				} else if (String.class.isAssignableFrom(pClazz)) {
 					addType(rd, mres, ResourceDescriptor.DT_TYPE_TEXT);
-				} else if (Time.class.isAssignableFrom(p.getValueClass())) {
+				} else if (Time.class.isAssignableFrom(pClazz)) {
 					addType(rd, mres, (byte) 5);
-				} else if (Timestamp.class.isAssignableFrom(p.getValueClass())
-						|| TimestampRange.class.isAssignableFrom(p.getValueClass())) {
+				} else if (Timestamp.class.isAssignableFrom(pClazz) || TimestampRange.class.isAssignableFrom(pClazz)) {
 					addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE_TIME);
-				} else if (Date.class.isAssignableFrom(p.getValueClass())
-						|| DateRange.class.isAssignableFrom(p.getValueClass())) {
+				} else if (Date.class.isAssignableFrom(pClazz) || DateRange.class.isAssignableFrom(pClazz)) {
 					addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE);
-				} else if (Number.class.isAssignableFrom(p.getValueClass())) {
+				} else if (Number.class.isAssignableFrom(pClazz)) {
 					addType(rd, mres, ResourceDescriptor.DT_TYPE_NUMBER);
-				} else if (Collection.class.isAssignableFrom(p.getValueClass())) {
+				} else if (Collection.class.isAssignableFrom(pClazz) || pClazz.isArray()) {
 					rd.setControlType(ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES);
 
 					ResourceDescriptor dt = new ResourceDescriptor();
@@ -123,9 +149,8 @@ public class ImpInputControls {
 					dt.setIsNew(true);
 					dt.setParentFolder(rd.getUriString() + MReportUnit.RU_SUFFIX);
 					dt.setUriString(dt.getParentFolder() + "/" + rd.getName());
-					List<ListItem> values = new ArrayList<>();
-
-					dt.setListOfValues(values);
+					// here maybe we could evaluate default parameter value to generate lov?
+					dt.setListOfValues(new ArrayList<ListItem>());
 					rd.getChildren().add(dt);
 				} else {
 					mrunit.removeChild(mres);
