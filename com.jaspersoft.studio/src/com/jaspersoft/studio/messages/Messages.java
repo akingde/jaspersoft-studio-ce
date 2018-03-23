@@ -670,6 +670,7 @@ public class Messages extends NLS {
 	public static String EqualsHSpaceAction_actionName;
 	public static String EqualsVSpaceAction_actionDescription;
 	public static String EqualsVSpaceAction_actionName;
+	public static String ErrorCombo_errorMessage;
 	public static String ErrorDecorator_PositionErrorToolTip;
 	public static String ExcelExporterPreferencePage_29;
 	public static String ExcelExporterPreferencePage_30;

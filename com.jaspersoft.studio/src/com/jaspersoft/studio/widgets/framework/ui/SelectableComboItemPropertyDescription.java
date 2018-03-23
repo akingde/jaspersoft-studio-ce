@@ -4,16 +4,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.ui;
 
-import org.eclipse.jface.util.Util;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Menu;
 
+import com.jaspersoft.studio.swt.widgets.CustomReadOnlyCombo;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
@@ -25,24 +20,7 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
  */
 public class SelectableComboItemPropertyDescription<T> extends ComboItemPropertyDescription<T> {
 	
-	/**
-	 * On MacOS seems the contextual menu is not opened on combo, this
-	 * lister will force it to open when a right click is found
-	 */
-	protected static MouseAdapter macComboMenuOpener = new MouseAdapter() {
-		
-		@Override
-		public void mouseUp(MouseEvent e) {	
-			if (e.button == 3 && ((Control)e.widget).getMenu() != null){
-				Menu menu = ((Control)e.widget).getMenu();
-				if (menu != null && !menu.isDisposed() && !menu.isVisible()){
-	        		Point location = e.widget.getDisplay().getCursorLocation();
-					menu.setLocation(location.x, location.y);
-					menu.setVisible(true);
-				}
-			}
-		}
-	};
+
 
 	public SelectableComboItemPropertyDescription() {
 		super();
@@ -62,12 +40,8 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 	
 	@Override
 	protected Combo createComboControl(Composite parent) {
-		Combo result = new Combo(parent, SWT.READ_ONLY);
-		//MacOS fix, the combo on MacOS doesn't have a contextual menu, so we need to handle this listener manually
-		boolean handleComboListener = Util.isMac();
-		if (handleComboListener){
-			result.addMouseListener(macComboMenuOpener);
-		}
+		CustomReadOnlyCombo result = (CustomReadOnlyCombo)super.createComboControl(parent);
+		result.setReadOnly(true);
 		return result;
 	}
 	
@@ -87,24 +61,41 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 	}
 	
 	@Override
+	public void handleEdit(Control txt, IWItemProperty wProp) {
+		if (txt instanceof Combo) {
+			int indx = ((Combo) txt).getSelectionIndex();
+			String tvalue = indx >= 0 && indx < keyValues.length ? keyValues[indx][0] : null;
+			if (tvalue != null && tvalue.isEmpty())
+				tvalue = null;
+			wProp.setValue(tvalue, null);
+		} else super.handleEdit(txt, wProp);
+	}
+	
+	@Override
 	public void update(Control c, IWItemProperty wip) {
 		DoubleControlComposite cmp = (DoubleControlComposite) wip.getControl();
 		if (wip.isExpressionMode()) {
 			super.update(c, wip);
 		} else {
 			boolean isFallback = false;
-			Combo combo = (Combo) cmp.getSecondContainer().getData();
+			CustomReadOnlyCombo combo = (CustomReadOnlyCombo) cmp.getSecondContainer().getData();
 			String v = wip.getStaticValue();
 			if (v == null && wip.getFallbackValue() != null){
 				v = wip.getFallbackValue().toString();
 				isFallback = true;
 			}
+			boolean found = false;
 			for (int i = 0; i < keyValues.length; i++) {
 				if (keyValues[i][0].equals(v)) {
 					combo.select(i);
+					found = true;
 					break;
 				}
 			}
+			if (!found) {
+				combo.setText(v);
+			}
+			combo.setError(!found);
 			combo.setToolTipText(getToolTip());
 			changeFallbackForeground(isFallback, combo);
 			cmp.switchToSecondContainer();

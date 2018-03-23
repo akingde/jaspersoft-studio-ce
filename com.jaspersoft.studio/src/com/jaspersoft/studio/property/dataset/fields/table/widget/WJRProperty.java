@@ -44,6 +44,7 @@ import com.jaspersoft.studio.widgets.framework.ui.JRDataAdapterPropertyDescripti
 import com.jaspersoft.studio.widgets.framework.ui.JSSDataAdapterPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.LocaleComboPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.NotNullableTextPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.SelectableComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.TimezoneComboPropertyDescription;
 
 import net.sf.jasperreports.data.DataAdapter;
@@ -91,7 +92,7 @@ public class WJRProperty extends AWidget {
 				ipd = ipdmap.get(c.getPropertyType()).create(c);
 			}
 			if (c.getPropertyType().equals(Boolean.class.getName()))
-				ipd = new ComboItemPropertyDescription<>(pname, c.getLabel(), c.getDescription(), false,
+				ipd = new SelectableComboItemPropertyDescription<>(pname, c.getLabel(), c.getDescription(), false,
 						Boolean.parseBoolean(c.getDefaultValue()), new String[] { "", "true", "false" });
 			else if (c.getPropertyName().equals("net.sf.jasperreports.data.adapter")
 					|| c.getPropertyType().equals(DataAdapter.class.getName()))

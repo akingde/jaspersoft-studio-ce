@@ -4,16 +4,21 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.ui;
 
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.swt.widgets.CustomReadOnlyCombo;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
@@ -24,7 +29,26 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import net.sf.jasperreports.eclipse.util.Misc;
 
 public class ComboItemPropertyDescription<T> extends AbstractExpressionPropertyDescription<T> {
-
+	
+	/**
+	 * On MacOS seems the contextual menu is not opened on combo, this
+	 * lister will force it to open when a right click is found
+	 */
+	protected static MouseAdapter macComboMenuOpener = new MouseAdapter() {
+		
+		@Override
+		public void mouseUp(MouseEvent e) {	
+			if (e.button == 3 && ((Control)e.widget).getMenu() != null){
+				Menu menu = ((Control)e.widget).getMenu();
+				if (menu != null && !menu.isDisposed() && !menu.isVisible()){
+	        		Point location = e.widget.getDisplay().getCursorLocation();
+					menu.setLocation(location.x, location.y);
+					menu.setVisible(true);
+				}
+			}
+		}
+	};
+	
 	/**
 	 * Matrix of n*2 for n elements, the first column of the matrix is the key of the element, the second
 	 * the label
@@ -69,16 +93,29 @@ public class ComboItemPropertyDescription<T> extends AbstractExpressionPropertyD
 	public void handleEdit(Control txt, IWItemProperty wProp) {
 		super.handleEdit(txt, wProp);
 		if (txt instanceof Combo) {
-			int indx = ((Combo) txt).getSelectionIndex();
-			String tvalue = indx >= 0 && indx < keyValues.length ? keyValues[indx][0] : null;
-			if (tvalue != null && tvalue.isEmpty())
-				tvalue = null;
-			wProp.setValue(tvalue, null);
+			Combo combo = (Combo)txt;
+			int indx = combo.getSelectionIndex();
+			String text = combo.getText();
+			if (indx == -1 && text != null && !text.trim().isEmpty()) {
+				//case where the value is typed directly
+				wProp.setValue(text, null);
+			} else {
+				String tvalue = indx >= 0 && indx < keyValues.length ? keyValues[indx][0] : null;
+				if (tvalue != null && tvalue.isEmpty())
+					tvalue = null;
+				wProp.setValue(tvalue, null);
+			}
 		}
 	}
 	
 	protected Combo createComboControl(Composite parent){
-		return new Combo(parent, SWT.NONE);
+		CustomReadOnlyCombo result = new CustomReadOnlyCombo(parent);
+		//MacOS fix, the combo on MacOS doesn't have a contextual menu, so we need to handle this listener manually
+		boolean handleComboListener = Util.isMac();
+		if (handleComboListener){
+			result.addMouseListener(macComboMenuOpener);
+		}
+		return result;
 	}
 
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
