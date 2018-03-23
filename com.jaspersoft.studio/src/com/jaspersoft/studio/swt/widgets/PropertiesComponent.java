@@ -35,6 +35,12 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
 public class PropertiesComponent {
+	
+	private Map<String, String> properties;
+	private Control control;
+	private TableViewer tviewer;
+	private Table wtable;
+	
 	class Property {
 		public String key;
 		public String value;
@@ -64,35 +70,33 @@ public class PropertiesComponent {
 		}
 	}
 
-	private Map<String, String> properties;
-
 	public Map<String, String> getProperties() {
 		List<Property> list = (List<Property>) tviewer.getInput();
-		if (list == null)
+		if (list == null) {
 			list = new ArrayList<Property>();
-		for (Property prop : list)
+		}
+		properties.clear();
+		for (Property prop : list) {
 			properties.put(prop.key, prop.value);
+		}
 		return properties;
 	}
 
 	public void setProperties(Map<String, String> properties) {
-		if (properties == null)
+		if (properties == null) {
 			properties = new HashMap<String, String>();
+		}
 		this.properties = properties;
 		List<Property> list = new ArrayList<Property>();
-		for (Entry<String, String> entry : properties.entrySet())
+		for (Entry<String, String> entry : properties.entrySet()) {
 			list.add(new Property(entry.getKey(), entry.getValue()));
-
+		}
 		tviewer.setInput(list);
 	}
 
 	public PropertiesComponent(Composite parent) {
 		createComponent(parent);
 	}
-
-	private Control control;
-	private TableViewer tviewer;
-	private Table wtable;
 
 	public Control getControl() {
 		return control;
