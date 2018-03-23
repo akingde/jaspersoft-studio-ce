@@ -70,10 +70,14 @@ public class CustomReadOnlyCombo extends Combo{
 			@Override
 			public void verifyText(VerifyEvent e) {
 				if (isReadOnly) {
-					for(String item : getItems()) {
-						if (item.equals(e.text)) {
-							e.doit = true;
-							return;
+					if  (e.character == SWT.DEL) {
+						setText("");
+					} else {
+						for(String item : getItems()) {
+							if (item.equals(e.text)) {
+								e.doit = true;
+								return;
+							}
 						}
 					}
 					e.doit = false;
@@ -139,6 +143,26 @@ public class CustomReadOnlyCombo extends Combo{
 		public void setText(String string) {	
 			removeVerifyListener(verifyListener);
 			super.setText(string);
+			addVerifyListener(verifyListener);
+		}
+		
+		/**
+		 * Doses't trigger the verify listener when selecting
+		 */
+		@Override
+		public void select(int index) {
+			removeVerifyListener(verifyListener);
+			super.select(index);
+			addVerifyListener(verifyListener);
+		}
+		
+		/**
+		 * Doses't trigger the verify listener when setting the items
+		 */
+		@Override
+		public void setItems(String... items) {
+			removeVerifyListener(verifyListener);
+			super.setItems(items);
 			addVerifyListener(verifyListener);
 		}
 		
