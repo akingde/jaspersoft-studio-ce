@@ -183,7 +183,7 @@ public class QueryComposite {
 	}
 
 	private void buildTable(Composite composite) {
-		Table table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
+		Table table = new Table(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 300;
 		gd.widthHint = 250;

@@ -10,7 +10,6 @@ import java.util.List;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -58,7 +57,8 @@ public class JRPropertyDialog extends Dialog {
 	protected Text tvalue;
 
 	/**
-	 * Combobox where the user can type the property key or choose a previously selected one
+	 * Combobox where the user can type the property key or choose a previously
+	 * selected one
 	 */
 	protected Combo cprop;
 
@@ -68,8 +68,8 @@ public class JRPropertyDialog extends Dialog {
 	protected List<ElementDescription> hints;
 	protected boolean showPropertyName = true;
 	/**
-	 * Composite with a stack layout where the value control is placed, other controls can be placed here and hidden using
-	 * the layout
+	 * Composite with a stack layout where the value control is placed, other
+	 * controls can be placed here and hidden using the layout
 	 */
 	protected Composite stackComposite;
 
@@ -97,8 +97,10 @@ public class JRPropertyDialog extends Dialog {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+	 * @see
+	 * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
 	 */
+	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(title);
@@ -115,14 +117,11 @@ public class JRPropertyDialog extends Dialog {
 	 * @return a not null modify listener
 	 */
 	protected ModifyListener getModifyListener() {
-		return new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				String newtext = cprop.getText();
-				value.setName(newtext);
-				if (propertiesSuggestions != null)
-					propertiesSuggestions.showOnlyElement(newtext);
-			}
+		return e -> {
+			String newtext = cprop.getText();
+			value.setName(newtext);
+			if (propertiesSuggestions != null)
+				propertiesSuggestions.showOnlyElement(newtext);
 		};
 	}
 
@@ -130,9 +129,11 @@ public class JRPropertyDialog extends Dialog {
 	 * Place holder used to create additional controls after the properties name
 	 * 
 	 * @param parent
-	 *          composite where the controls can be created (by default its a grid layout with two columns)
+	 *            composite where the controls can be created (by default its a grid
+	 *            layout with two columns)
 	 */
 	protected void createAdditionalControls(Composite parent) {
+		// no additional controls
 	}
 
 	@Override
@@ -153,7 +154,7 @@ public class JRPropertyDialog extends Dialog {
 			cprop.setLayoutData(gd);
 
 			if (h != null) {
-				List<String> comboItems = new ArrayList<String>();
+				List<String> comboItems = new ArrayList<>();
 				for (ElementDescription hint : h)
 					comboItems.add(hint.getName());
 				cprop.setItems(comboItems.toArray(new String[comboItems.size()]));
@@ -202,14 +203,13 @@ public class JRPropertyDialog extends Dialog {
 	 * Create the special properties section
 	 * 
 	 * @param cmp
-	 *          composite where the section will be placed
+	 *            composite where the section will be placed
 	 * @return a scrollable composite containing the properties
 	 */
 	protected SelectableComposite createSpecialProperties(Composite cmp) {
 		Section expandableSection = new Section(cmp, Section.TREE_NODE);
 		expandableSection.setText(Messages.JRPropertyDialog_spacialProperties);
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
-		data.heightHint = 200;
 		expandableSection.setLayoutData(data);
 		expandableSection.titleBarTextMarginWidth = 0;
 		expandableSection.setFont(SWTResourceManager.getBoldFont(expandableSection.getFont()));
@@ -256,26 +256,17 @@ public class JRPropertyDialog extends Dialog {
 	 * Create the controls for the value input
 	 * 
 	 * @param cmp
-	 *          where the control will be placed
+	 *            where the control will be placed
 	 * @return composite containing the control
 	 */
 	protected Composite createValueControl(Composite cmp) {
 		Composite composite = new Composite(cmp, SWT.NONE);
 		composite.setLayout(new GridLayout());
 
-		// Label label = new Label(composite, SWT.NONE);
-		// label.setText(Messages.JRPropertyDialog_propValue);
-
 		tvalue = new Text(composite, SWT.BORDER);
 		tvalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 		tvalue.setText(Messages.JRPropertyDialog_valuePlaceHolder);
-		tvalue.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				value.setValue(tvalue.getText());
-			}
-		});
+		tvalue.addModifyListener(e -> value.setValue(tvalue.getText()));
 		return composite;
 	}
 

@@ -33,14 +33,14 @@ import net.sf.jasperreports.properties.PropertyMetadata;
 public class HintsPropertiesList {
 
 	public static List<ElementDescription> getElementProperties(Object holder, ExpressionContext eContext) {
-		List<ElementDescription> result = new ArrayList<ElementDescription>();
+		List<ElementDescription> result = new ArrayList<>();
 		for (PropertyMetadata pm : getPropertiesMetadata(holder, eContext))
 			result.add(new ElementDescription(pm.getName(), pm.getDescription(), true));
 		return result;
 	}
 
 	public static List<PropertyMetadata> getPropertiesMetadata(Object holder, ExpressionContext eContext) {
-		List<PropertyMetadata> result = new ArrayList<PropertyMetadata>();
+		List<PropertyMetadata> result = new ArrayList<>();
 		if (holder instanceof JasperDesign) {
 			PropertiesMetadataUtil pmu = PropertiesMetadataUtil.getInstance(eContext.getJasperReportsConfiguration());
 			ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
@@ -139,9 +139,24 @@ public class HintsPropertiesList {
 				if (pm.getScopes().contains(PropertyScope.PARAMETER))
 					result.add(pm);
 			}
+		} else {
+			PropertiesMetadataUtil pmu = PropertiesMetadataUtil.getInstance(eContext.getJasperReportsConfiguration());
+			ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
+			try {
+				Thread.currentThread().setContextClassLoader(JRLoader.class.getClassLoader());
+				List<PropertyMetadata> eps = pmu.getProperties();
+				if (eps != null)
+					for (PropertyMetadata pm : eps)
+						if (pm.getScopes().contains(PropertyScope.CONTEXT))
+							result.add(pm);
+
+				result.addAll(PropertyMetadataRegistry.getPropertiesMetadata(PropertyScope.CONTEXT));
+			} finally {
+				Thread.currentThread().setContextClassLoader(oldCl);
+			}
 		}
-		List<PropertyMetadata> r = new ArrayList<PropertyMetadata>();
-		Set<String> set = new HashSet<String>();
+		List<PropertyMetadata> r = new ArrayList<>();
+		Set<String> set = new HashSet<>();
 		for (PropertyMetadata p : result) {
 			if (set.contains(p.getName()))
 				continue;
