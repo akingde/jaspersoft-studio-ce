@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
-import com.jaspersoft.studio.server.wizard.resource.KeyValueDialog;
 import com.jaspersoft.studio.server.wizard.resource.LovLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
@@ -29,6 +28,7 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.utils.KeyValueDialog;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 

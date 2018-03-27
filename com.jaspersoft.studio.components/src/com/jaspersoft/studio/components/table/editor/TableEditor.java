@@ -54,6 +54,7 @@ import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
+import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.base.JRBaseElement;
@@ -207,6 +208,15 @@ public class TableEditor extends NamedSubeditor {
 		ActionContributionItem item = new ActionContributionItem(getActionRegistry().getAction(DatasetAction.ID));
 		act4TextIcon.add(item);
 		toolbarManager.add(item);
+
+		// Contributed actions
+		List<AContributorAction> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
+		for (AContributorAction a : contributedActions) {
+			a.setJrConfig((JasperReportsConfiguration) getGraphicalViewer().getProperty("JRCONTEXT"));
+			item = new ActionContributionItem(a);
+			act4TextIcon.add(item);
+			toolbarManager.add(item);
+		}
 		toolbarManager.add(new Separator());
 		super.contributeItemsToEditorTopToolbar(toolbarManager);
 	}

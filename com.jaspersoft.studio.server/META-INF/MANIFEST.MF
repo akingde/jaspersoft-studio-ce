@@ -69,7 +69,8 @@ Bundle-ClassPath: lib/jasperserver-dto-bugfix-20180112.170012-2.jar,
  .
 Eclipse-RegisterBuddy: com.jaspersoft.studio
 Eclipse-BuddyPolicy: registered
-Export-Package: com.fasterxml.jackson.module.jaxb,
+Export-Package: com.fasterxml.jackson.dataformat.xml,
+ com.fasterxml.jackson.module.jaxb,
  com.jaspersoft.ireport.jasperserver.ws,
  com.jaspersoft.jasperserver.api,
  com.jaspersoft.jasperserver.api.metadata.common.domain,

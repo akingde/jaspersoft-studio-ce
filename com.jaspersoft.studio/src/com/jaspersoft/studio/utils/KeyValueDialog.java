@@ -2,7 +2,7 @@
  * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
  * All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
-package com.jaspersoft.studio.server.wizard.resource;
+package com.jaspersoft.studio.utils;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;

@@ -25,13 +25,13 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.LovLabelProvider;
-import com.jaspersoft.studio.server.wizard.resource.KeyValueDialog;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.utils.KeyValueDialog;
 
 public class LovPageContent extends APageContent {
 
