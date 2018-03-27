@@ -149,6 +149,12 @@
 							 <with variable="activeEditorInput">
 			      		<instanceof value="org.eclipse.ui.IFileEditorInput"/> 
 			    		</with> 
+			    		
+           <instanceof value="com.jaspersoft.studio.components.table.editor.TableEditor"/>
+           <instanceof value="com.jaspersoft.studio.components.crosstab.editor.CrosstabEditor" />
+           <instanceof
+                 value="com.jaspersoft.studio.components.list.editor.ListEditor">
+           </instanceof>
 		    		</or>
 					</iterate> 
 				</with> 
