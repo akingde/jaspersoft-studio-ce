@@ -79,26 +79,24 @@ public class ElementPreviewer {
 	public String runReport(JasperReportsConfiguration jConf, JRElement element, boolean fromCache,
 			IProgressMonitor monitor) {
 		if (jd == null)
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					StringBuffer sb = new StringBuffer();
-					sb.append("<!DOCTYPE html>").append("<html >").append("<head>")
-							.append("    <title>Highcharts loading page</title>  ").append("    <style>")
-							.append("        .container{").append("            display: flex;")
-							.append("            align-items: center;").append("            justify-content: center;")
-							.append("            height:95%;").append("        }").append("        body, html{")
-							.append("            height:95%;").append("        }        ").append("        .loading { ")
-							.append("          font-size: 1.2em; ").append("          font-family: Georgia;")
-							.append("        }        ").append("    </style>").append("    <script>")
-							.append("        i = 0;").append("        setInterval(function() {")
-							.append("            i = ++i % 4;")
-							.append("            document.querySelector('.loading').innerHTML = \"Loading HTML5 chart \" + Array(i+1).join(\".\");")
-							.append("        }, 800);").append("    </script>").append("</head>").append("<body>")
-							.append("    <div class=\"container\">")
-							.append("        <div class=\"loading\">Loading HTML5 chart</div>").append("    </div>  ")
-							.append("</body>").append("</html>");
-					browser.setText(sb.toString());
-				}
+			UIUtils.getDisplay().asyncExec(() -> {
+				StringBuffer sb = new StringBuffer();
+				sb.append("<!DOCTYPE html>").append("<html >").append("<head>")
+						.append("    <title>Highcharts loading page</title>  ").append("    <style>")
+						.append("        .container{").append("            display: flex;")
+						.append("            align-items: center;").append("            justify-content: center;")
+						.append("            height:95%;").append("        }").append("        body, html{")
+						.append("            height:95%;").append("        }        ").append("        .loading { ")
+						.append("          font-size: 1.2em; ").append("          font-family: Georgia;")
+						.append("        }        ").append("    </style>").append("    <script>")
+						.append("        i = 0;").append("        setInterval(function() {")
+						.append("            i = ++i % 4;")
+						.append("            document.querySelector('.loading').innerHTML = \"Loading HTML5 chart \" + Array(i+1).join(\".\");")
+						.append("        }, 800);").append("    </script>").append("</head>").append("<body>")
+						.append("    <div class=\"container\">")
+						.append("        <div class=\"loading\">Loading HTML5 chart</div>").append("    </div>  ")
+						.append("</body>").append("</html>");
+				browser.setText(sb.toString());
 			});
 		ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(jConf.getClassLoader());
@@ -146,16 +144,11 @@ public class ElementPreviewer {
 	}
 
 	protected void handleException(Exception e) {
-		e.printStackTrace();
 		StringWriter sw = new StringWriter();
 		e.printStackTrace(new PrintWriter(sw));
 
 		final String message = sw.getBuffer().toString();
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				browser.setText("<HTML><BODY><pre>" + message + "</pre></body></html>");
-			}
-		});
+		UIUtils.getDisplay().asyncExec(() -> browser.setText("<HTML><BODY><pre>" + message + "</pre></body></html>"));
 	}
 
 	private DatasetReader dr;
@@ -177,11 +170,11 @@ public class ElementPreviewer {
 		final String dest = new File(destDir, "index.html").getAbsolutePath();
 		JasperExportManager.getInstance(jConf).exportToHtmlFile(jrPrint, dest);
 		System.out.println(dest);
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				browser.setToolTipText(dest);
-				browser.setUrl(dest);
-			}
+		UIUtils.getDisplay().asyncExec(() -> {
+			if (browser.isDisposed())
+				return;
+			browser.setToolTipText(dest);
+			browser.setUrl(dest);
 		});
 		return dest;
 	}
@@ -189,7 +182,7 @@ public class ElementPreviewer {
 	protected void setupDatasets(JasperReportsConfiguration jConf, JasperDesign jDesign) throws JRException {
 		for (JRDataset ds : jd.getDatasets())
 			jd.removeDataset(ds);
-		List<String> columns = new ArrayList<String>();
+		List<String> columns = new ArrayList<>();
 		for (JRField f : jDesign.getMainDataset().getFields())
 			columns.add(f.getName());
 		DatasetReader.setupDataset(jd, (JRDesignDataset) jDesign.getMainDesignDataset(), jConf, columns);
@@ -204,25 +197,25 @@ public class ElementPreviewer {
 			String reportLocation = JaspersoftStudioPlugin.getInstance()
 					.getFileLocation(DataPreviewScriptlet.PREVIEW_REPORT_PATH);
 			is = new FileInputStream(reportLocation);
-			JasperDesign jd = JRXmlLoader.load(jConfig, is);
+			JasperDesign tjd = JRXmlLoader.load(jConfig, is);
 
-			jd.setLeftMargin(0);
-			jd.setRightMargin(0);
-			jd.setTopMargin(0);
-			jd.setBottomMargin(0);
-			jd.setTitle(null);
-			jd.setPageHeader(null);
-			jd.setColumnHeader(null);
-			((JRDesignSection) jd.getDetailSection()).removeBand(0);
-			jd.setColumnFooter(null);
-			jd.setPageFooter(null);
-			jd.setLastPageFooter(null);
-			jd.setNoData(null);
-			jd.setBackground(null);
-			jd.setScriptletClass(null);
-			for (JRScriptlet s : jd.getScriptlets())
-				jd.removeScriptlet(s);
-			return jd;
+			tjd.setLeftMargin(0);
+			tjd.setRightMargin(0);
+			tjd.setTopMargin(0);
+			tjd.setBottomMargin(0);
+			tjd.setTitle(null);
+			tjd.setPageHeader(null);
+			tjd.setColumnHeader(null);
+			((JRDesignSection) tjd.getDetailSection()).removeBand(0);
+			tjd.setColumnFooter(null);
+			tjd.setPageFooter(null);
+			tjd.setLastPageFooter(null);
+			tjd.setNoData(null);
+			tjd.setBackground(null);
+			tjd.setScriptletClass(null);
+			for (JRScriptlet s : tjd.getScriptlets())
+				tjd.removeScriptlet(s);
+			return tjd;
 		} finally {
 			FileUtils.closeStream(is);
 		}
@@ -267,11 +260,9 @@ public class ElementPreviewer {
 		bs.addElement(element);
 		element.setX(0);
 		element.setY(0);
-		UIUtils.getDisplay().syncExec(new Runnable() {
-			public void run() {
-				element.setWidth(Math.max(20, browser.getBounds().width - 20));
-				element.setHeight(Math.max(20, browser.getBounds().height - 20));
-			}
+		UIUtils.getDisplay().syncExec(() -> {
+			element.setWidth(Math.max(20, browser.getBounds().width - 20));
+			element.setHeight(Math.max(20, browser.getBounds().height - 20));
 		});
 
 		jd.setPageHeight(element.getHeight());

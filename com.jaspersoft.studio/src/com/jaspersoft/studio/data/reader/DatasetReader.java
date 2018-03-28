@@ -29,6 +29,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.data.cache.ColumnDataCacheHandler;
 import net.sf.jasperreports.data.cache.DataCacheHandler;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.builder.Markers;
@@ -247,11 +248,15 @@ public class DatasetReader {
 			if (dataAdapterDesc != null) {
 				hm.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
 				ReportContext rc = (ReportContext) hm.get(JRParameter.REPORT_CONTEXT);
-				if (rc == null || !rc.containsParameter(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER)) {
-					das = DataAdapterServiceUtil
-							.getInstance(new ParameterContributorContext(jConfig, designDataset, hm))
-							.getService(dataAdapterDesc.getDataAdapter());
-					das.contributeParameters(hm);
+				if (rc != null) {
+					Object obj = rc.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
+					if (obj == null || (obj instanceof ColumnDataCacheHandler
+							&& !((ColumnDataCacheHandler) obj).isSnapshotPopulated())) {
+						das = DataAdapterServiceUtil
+								.getInstance(new ParameterContributorContext(jConfig, designDataset, hm))
+								.getService(dataAdapterDesc.getDataAdapter());
+						das.contributeParameters(hm);
+					}
 				}
 			}
 			ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(),
