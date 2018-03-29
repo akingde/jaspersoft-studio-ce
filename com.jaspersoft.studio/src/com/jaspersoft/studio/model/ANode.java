@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -49,49 +50,48 @@ import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
  * 
  * @author Chicu Veaceslav
  */
-public abstract class ANode implements INode, Serializable, IAdaptable, Cloneable, IValidable, IEditablePropertySource{
+public abstract class ANode implements INode, Serializable, IAdaptable, Cloneable, IValidable, IEditablePropertySource {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	/** 
-	 * The parent. 
+	/**
+	 * The parent.
 	 */
 	private ANode parent;
 
-	/** 
-	 * The children. 
+	/**
+	 * The children.
 	 */
 	private List<INode> children;
 
-	/** 
-	 * The value. 
+	/**
+	 * The value.
 	 */
 	private Object value;
 
-	/** 
-	 * The property change support. 
+	/**
+	 * The property change support.
 	 */
 	private PropertyChangeSupport propertyChangeSupport;
 
 	/**
-	 * flag to know if the node is visible or not. The visibility can be set and in case of new nodes it is inherited by
-	 * the parent
+	 * flag to know if the node is visible or not. The visibility can be set and in
+	 * case of new nodes it is inherited by the parent
 	 */
 	private boolean visible = true;
-	
+
 	/**
-	 * List of validation error for the current element. The error messages
-	 * can be cached using the flag redoValidation
+	 * List of validation error for the current element. The error messages can be
+	 * cached using the flag redoValidation
 	 */
 	private List<ValidationError> validationErrors = null;
-	
+
 	/**
-	 * Flag used to know when something in the element change. If something
-	 * change the validation must be redone and the list of error messages
-	 * regenerated
+	 * Flag used to know when something in the element change. If something change
+	 * the validation must be redone and the list of error messages regenerated
 	 */
 	private boolean redoValidation = true;
-	
+
 	/**
 	 * Used to know if the node is makred as editable or not
 	 */
@@ -148,9 +148,9 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * Instantiates a new a node.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public ANode(ANode parent, int newIndex) {
 		if (parent != null)
@@ -196,13 +196,13 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		return root;
 	}
 
-	transient private INode root;
+	private transient INode root;
 
 	public void register() {
 		root = null;
-		INode root = getRoot();
-		if (root != null && root instanceof ANode)
-			((ANode) root).register(this);
+		INode troot = getRoot();
+		if (troot != null && troot instanceof ANode)
+			((ANode) troot).register(this);
 	}
 
 	public void unregister() {
@@ -221,9 +221,9 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * Sets the parent.
 	 * 
 	 * @param newparent
-	 *          the parent
+	 *            the parent
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public void setParent(ANode newparent, int newIndex) {
 		if (parent != null) {
@@ -247,14 +247,14 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		}
 	}
 
-	Set<ANode> dependents;
+	private Set<ANode> dependents;
 
 	public void setChildListener(ANode child) {
 		unsetChildListener(child);
 		if (child != null)
 			child.getPropertyChangeSupport().addPropertyChangeListener(this);
 		if (dependents == null)
-			dependents = new HashSet<ANode>();
+			dependents = new HashSet<>();
 		dependents.add(child);
 	}
 
@@ -277,7 +277,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * Adds the child.
 	 * 
 	 * @param child
-	 *          the child
+	 *            the child
 	 */
 	public void addChild(ANode child) {
 		child.setParent(this, -1);
@@ -294,16 +294,16 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	}
 
 	public ANode[] flatten() {
-		ArrayList<ANode> result = new ArrayList<ANode>();
+		ArrayList<ANode> result = new ArrayList<>();
 		doFlatten(this, result);
-		return (ANode[]) result.toArray(new ANode[result.size()]);
+		return result.toArray(new ANode[result.size()]);
 	}
 
 	private void doFlatten(ANode node, ArrayList<ANode> all) {
 		// add the gadget and its children to the list
 		all.add(node);
-		List<INode> children = node.getChildren();
-		for (INode n : children) {
+		List<INode> tchildren = node.getChildren();
+		for (INode n : tchildren) {
 			doFlatten((ANode) n, all);
 		}
 	}
@@ -312,12 +312,15 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * Removes the child.
 	 * 
 	 * @param child
-	 *          the child
+	 *            the child
 	 */
 	public void removeChild(ANode child) {
-		// Set the jasperconfiguration before to remove the parent, because if a selection is
-		// fired on the child it will search for the jasperconfiguration on the parent, and not
-		// finding it the result will be null. But this broke a lot of things on the selection
+		// Set the jasperconfiguration before to remove the parent, because if a
+		// selection is
+		// fired on the child it will search for the jasperconfiguration on the parent,
+		// and not
+		// finding it the result will be null. But this broke a lot of things on the
+		// selection
 		// event
 		child.setJasperConfiguration(getJasperConfiguration());
 		child.setParent(null, -1);
@@ -356,39 +359,38 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		//Redo the validation when something changes, for this element and the children
+		// Redo the validation when something changes, for this element and the children
 		revalidateChildren();
-		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
-			if (evt.getSource() == getValue()) {
-				if (evt.getOldValue() == null && evt.getNewValue() != null) {
-					int newIndex = -1;
-					if (evt instanceof CollectionElementAddedEvent) {
-						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
-					}
-					// add the node to this parent
-					ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
-					if (evt.getNewValue() instanceof JRElementGroup) {
-						JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
-						ReportFactory.createElementsForBand(n, jrFrame.getChildren());
-					}
+		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) && evt.getSource() == getValue()) {
+			if (evt.getOldValue() == null && evt.getNewValue() != null) {
+				int newIndex = -1;
+				if (evt instanceof CollectionElementAddedEvent) {
+					newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+				}
+				// add the node to this parent
+				ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
+				if (evt.getNewValue() instanceof JRElementGroup) {
+					JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
+					ReportFactory.createElementsForBand(n, jrFrame.getChildren());
+				}
 
-				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
-					// delete
-					for (INode n : getChildren()) {
-						if (n.getValue() == evt.getOldValue()) {
-							removeChild((ANode) n);
-							break;
-						}
+			} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+				// delete
+				for (INode n : getChildren()) {
+					if (n.getValue() == evt.getOldValue()) {
+						removeChild((ANode) n);
+						break;
 					}
-				} else {
-					// changed
-					for (INode n : getChildren()) {
-						if (n.getValue() == evt.getOldValue())
-							n.setValue(evt.getNewValue());
-					}
+				}
+			} else {
+				// changed
+				for (INode n : getChildren()) {
+					if (n.getValue() == evt.getOldValue())
+						n.setValue(evt.getNewValue());
 				}
 			}
 		}
@@ -396,11 +398,13 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		// if (evt.getSource() instanceof ANode) {
 		// ANode enode = (ANode) evt.getSource();
 		// if (dependents.contains(enode)) {
-		// newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(),
+		// newEvent = new PropertyChangeEvent(this, evt.getPropertyName(),
+		// evt.getOldValue(),
 		// evt.getNewValue());
 		// }
 		// } else {
-		// newEvent = new PropertyChangeEvent(evt.getSource(), evt.getPropertyName(), evt.getOldValue(),
+		// newEvent = new PropertyChangeEvent(evt.getSource(), evt.getPropertyName(),
+		// evt.getOldValue(),
 		// evt.getNewValue());
 		// }
 		firePropertyChange(evt);
@@ -417,7 +421,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 */
 	public List<INode> getChildren() {
 		if (children == null)
-			children = new ArrayList<INode>();
+			children = new ArrayList<>();
 		return children;
 	}
 
@@ -468,7 +472,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		}
 		return null;
 	}
-	
+
 	public EditPart getTreeEditPart() {
 		for (Object o : propertyChangeSupport.getPropertyChangeListeners()) {
 			if (o instanceof TreeEditPart)
@@ -555,9 +559,9 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 			ANode clone = (ANode) super.clone();
 			if (children != null) {
 				clone.intReset();
-				List<INode> oldChildren = new ArrayList<INode>(children);
+				List<INode> oldChildren = new ArrayList<>(children);
 				// fixed java.util.ConcurrentModificationException
-				List<ANode> ch = new ArrayList<ANode>();
+				List<ANode> ch = new ArrayList<>();
 				for (INode n : children)
 					ch.add(((ANode) n).clone());
 				for (ANode n : ch)
@@ -570,7 +574,6 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 			throw new JRRuntimeException(e);
 		}
 	}
-
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
@@ -586,15 +589,17 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	}
 
 	/**
-	 * This method should be overridden by sub-classes whenever a node during its life-cycle can be in a state where new
-	 * children can not be added.
+	 * This method should be overridden by sub-classes whenever a node during its
+	 * life-cycle can be in a state where new children can not be added.
 	 * <p>
 	 * 
 	 * Default value is <code>true</code> in order to ensure back-compatibility
 	 * 
 	 * @param child
-	 *          the child that should be added to the element (useful for example for typecheck)
-	 * @return <code>true</code> if new children can be added, <code>false</code> otherwise
+	 *            the child that should be added to the element (useful for example
+	 *            for typecheck)
+	 * @return <code>true</code> if new children can be added, <code>false</code>
+	 *         otherwise
 	 * 
 	 */
 	public boolean canAcceptChildren(ANode child) {
@@ -611,158 +616,166 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	}
 
 	/**
-	 * Set the visibility of the node. This dosen't affect the visibility of the children
+	 * Set the visibility of the node. This dosen't affect the visibility of the
+	 * children
 	 * 
 	 * @param visible
-	 *          true if the node is visible, false otherwise
+	 *            true if the node is visible, false otherwise
 	 */
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
-	
+
 	/**
-	 * Boolean flag to declare if the children are visible or not. By
-	 * default are always visible. But some elements are editable only
-	 * inside a subeditor, in this cases the children can be shown only
-	 * when the user is inside the subeditor
+	 * Boolean flag to declare if the children are visible or not. By default are
+	 * always visible. But some elements are editable only inside a subeditor, in
+	 * this cases the children can be shown only when the user is inside the
+	 * subeditor
 	 * 
 	 * @return true if the children are visible, false otherwise
 	 */
-	public boolean showChildren(){
+	public boolean showChildren() {
 		return true;
 	}
-	
+
 	/**
-	 * Some elements can be edited inside a subeditor. This method
-	 * can be overridden to create the subeditor, like putting styles
-	 * or dataset item. Every model that can be edited inside a subeditor can
-	 * define how it is initialized
+	 * Some elements can be edited inside a subeditor. This method can be overridden
+	 * to create the subeditor, like putting styles or dataset item. Every model
+	 * that can be edited inside a subeditor can define how it is initialized
 	 */
-	public void createSubeditor(){
-		
+	public void createSubeditor() {
+
 	}
-	
+
 	/**
-	 * Validate the current element and return a list of validation error. By default
-	 * this method doesn't do any validation but can be overridden
+	 * Validate the current element and return a list of validation error. By
+	 * default this method doesn't do any validation but can be overridden
 	 * 
-	 * @return null if the validation doesn't return errors, the list of errors 
-	 * otherwise
+	 * @return null if the validation doesn't return errors, the list of errors
+	 *         otherwise
 	 */
-	protected List<ValidationError> doValidation(){
+	protected List<ValidationError> doValidation() {
 		return null;
 	}
-	
+
 	/**
 	 * Request to redo the validation on the current element and on it's children.
 	 * This because in some case the validation of an element depends from the size
 	 * of the parent. Can be overridden to provide a different behavior
 	 */
-	public void revalidateChildren(){
+	public void revalidateChildren() {
 		redoValidation = true;
-		for(INode node : getChildren()){
-			((ANode)node).revalidateChildren();
+		for (INode node : getChildren()) {
+			((ANode) node).revalidateChildren();
 		}
 	}
-	
+
 	/**
-	 * Validate the current element and return a list of validation error. The result
-	 * is cached until something changes on the node. To avoid to do the validation
-	 * when it isn't necessary
+	 * Validate the current element and return a list of validation error. The
+	 * result is cached until something changes on the node. To avoid to do the
+	 * validation when it isn't necessary
 	 * 
-	 * @return null if the validation doesn't return errors, the list of errors 
-	 * otherwise
+	 * @return null if the validation doesn't return errors, the list of errors
+	 *         otherwise
 	 */
-	public List<ValidationError> validate(){
-		if (redoValidation){
+	public List<ValidationError> validate() {
+		if (redoValidation) {
 			validationErrors = doValidation();
 			redoValidation = false;
 		}
 		return validationErrors;
 	}
-	
+
 	/**
-	 * Return the size available for the placement of elements, it depends from the page
-	 * size. There is a minimum size that is 1000x1000, if the value is lower that this one
-	 * then 1000 is used
+	 * Return the size available for the placement of elements, it depends from the
+	 * page size. There is a minimum size that is 1000x1000, if the value is lower
+	 * that this one then 1000 is used
 	 * 
-	 * @return the space available outside the page. By default it is fourtime the page size, and
-	 * a minimum of 1000x1000
+	 * @return the space available outside the page. By default it is fourtime the
+	 *         page size, and a minimum of 1000x1000
 	 */
-	public Point getAvailableSize(){
+	public Point getAvailableSize() {
 		JasperDesign jd = getJasperDesign();
 		int w = jd.getPageWidth() + 20;
 		int h = jd.getPageHeight() + 20;
 		w = w * 4;
-		if (w < 1000) w = 1000;
+		if (w < 1000)
+			w = 1000;
 		h = h * 4;
-		if (h < 1000) h = 1000;
+		if (h < 1000)
+			h = 1000;
 		return new Point(w, h);
 	}
-	
+
 	/**
 	 * Add a style to the map of styles for this element. If the style was not
-	 * already in the map it is added with a list containing only this element, otherwise
-	 * this element is appended to the end of the list associated with the style
+	 * already in the map it is added with a list containing only this element,
+	 * otherwise this element is appended to the end of the list associated with the
+	 * style
 	 * 
-	 * @param style the style to add, if null this doensn't do nothing
-	 * @param map map where the style are added, must be not null
+	 * @param style
+	 *            the style to add, if null this doensn't do nothing
+	 * @param map
+	 *            map where the style are added, must be not null
 	 */
-	protected void addElementStyle(JRStyle style, HashMap<String, List<ANode>> map){
-		if (style == null) return;
+	protected void addElementStyle(JRStyle style, Map<String, List<ANode>> map) {
+		if (style == null)
+			return;
 		List<ANode> list = map.get(style.getName());
-		if (list == null){
-			list = new ArrayList<ANode>();
+		if (list == null) {
+			list = new ArrayList<>();
 			list.add(this);
 			map.put(style.getName(), list);
 		} else {
-			if (!list.contains(this)){
+			if (!list.contains(this)) {
 				list.add(this);
 			}
 		}
 	}
-	
+
 	/**
-	 * Merge to styles map into one, by also concatenated the list of elements
-	 * when a style is present in both
+	 * Merge to styles map into one, by also concatenated the list of elements when
+	 * a style is present in both
 	 * 
-	 * @param destination first map and destination of the merge
-	 * @param origin the map that will be merged with the first one
+	 * @param destination
+	 *            first map and destination of the merge
+	 * @param origin
+	 *            the map that will be merged with the first one
 	 */
-	protected void mergeElementStyle(HashMap<String, List<ANode>> destination, HashMap<String, List<ANode>> origin){
-		for(Entry<String, List<ANode>> entry : origin.entrySet()){
+	protected void mergeElementStyle(Map<String, List<ANode>> destination, Map<String, List<ANode>> origin) {
+		for (Entry<String, List<ANode>> entry : origin.entrySet()) {
 			String style = entry.getKey();
 			List<ANode> elements = entry.getValue();
 			List<ANode> targetElements = destination.get(style);
-			if (targetElements == null){
+			if (targetElements == null) {
 				destination.put(style, elements);
- 			} else {
- 				targetElements.addAll(elements);
- 			}
+			} else {
+				targetElements.addAll(elements);
+			}
 		}
 	}
-	
+
 	/**
 	 * Return the styles used by this element and eventually by its children.
 	 * 
-	 * @return a not null map with the names of all the styles used by this
-	 * element or one of its children. The value corresponding to each style is
-	 * the reference to the element that is using the style
+	 * @return a not null map with the names of all the styles used by this element
+	 *         or one of its children. The value corresponding to each style is the
+	 *         reference to the element that is using the style
 	 */
-	public HashMap<String, List<ANode>> getUsedStyles(){
-		return new HashMap<String, List<ANode>>();
+	public Map<String, List<ANode>> getUsedStyles() {
+		return new HashMap<>();
 	}
-	
+
 	/**
-	 * Set a style on this element, the default implementation is empty
-	 * but in the subclasses that support styles it should set the style
-	 * on the jr element
+	 * Set a style on this element, the default implementation is empty but in the
+	 * subclasses that support styles it should set the style on the jr element
 	 * 
-	 * @param style the style to set, could be null to remove it
+	 * @param style
+	 *            the style to set, could be null to remove it
 	 */
-	public void setStyle(JRStyle style){
-		
-	}	
+	public void setStyle(JRStyle style) {
+
+	}
 
 	@Override
 	public boolean isEditable() {

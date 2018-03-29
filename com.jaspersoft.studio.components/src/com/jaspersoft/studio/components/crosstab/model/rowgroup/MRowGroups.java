@@ -5,8 +5,8 @@
 package com.jaspersoft.studio.components.crosstab.model.rowgroup;
 
 import java.beans.PropertyChangeEvent;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -61,11 +61,12 @@ public class MRowGroups extends MCollection {
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.PropertyChangeEvent)
+	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -77,10 +78,10 @@ public class MRowGroups extends MCollection {
 		}
 		super.propertyChange(evt);
 	}
-	
+
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> result = super.getUsedStyles();
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> result = super.getUsedStyles();
 		for (INode node : getChildren()) {
 			if (node instanceof ANode) {
 				mergeElementStyle(result, ((ANode) node).getUsedStyles());

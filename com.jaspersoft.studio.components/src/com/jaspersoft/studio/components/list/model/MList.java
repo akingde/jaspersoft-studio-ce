@@ -453,7 +453,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		return datasetList;
 	}
 
-	private void fillUsedStyles(List<INode> children, HashMap<String, List<ANode>> map) {
+	private void fillUsedStyles(List<INode> children, Map<String, List<ANode>> map) {
 		for (INode node : children) {
 			if (node instanceof ANode) {
 				mergeElementStyle(map, ((ANode) node).getUsedStyles());
@@ -462,8 +462,8 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 	}
 
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> result = super.getUsedStyles();
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> result = super.getUsedStyles();
 		fillUsedStyles(getChildren(), result);
 		return result;
 	}

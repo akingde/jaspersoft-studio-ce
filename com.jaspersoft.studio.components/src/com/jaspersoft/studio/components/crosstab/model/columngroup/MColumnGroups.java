@@ -4,13 +4,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.columngroup;
 
-import net.sf.jasperreports.crosstabs.JRCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.engine.JRConstants;
-
 import java.beans.PropertyChangeEvent;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -20,6 +16,10 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MCollection;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+
+import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.engine.JRConstants;
 
 public class MColumnGroups extends MCollection {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -61,7 +61,7 @@ public class MColumnGroups extends MCollection {
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// PropertyChangeEvent newEvent = evt;
@@ -72,10 +72,10 @@ public class MColumnGroups extends MCollection {
 		}
 		super.propertyChange(evt);
 	}
-	
+
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> result = super.getUsedStyles();
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> result = super.getUsedStyles();
 		for (INode node : getChildren()) {
 			if (node instanceof ANode) {
 				mergeElementStyle(result, ((ANode) node).getUsedStyles());

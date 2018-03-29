@@ -107,9 +107,10 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 
 	/**
-	 * used when we need to change the position of a band. The differences between this and for example
-	 * JRDesignSection.PROPERTY_BANDS is that this key uses a more light method to do the changes and since the hierarchy
-	 * remains the same it will keep also all the listeners
+	 * used when we need to change the position of a band. The differences between
+	 * this and for example JRDesignSection.PROPERTY_BANDS is that this key uses a
+	 * more light method to do the changes and since the hierarchy remains the same
+	 * it will keep also all the listeners
 	 */
 	public static final String CHANGE_BAND_POSITION = "changeBandPosition"; //$NON-NLS-1$
 
@@ -149,9 +150,9 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * Instantiates a new m report.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jd
-	 *          the jd
+	 *            the jd
 	 */
 	public MReport(ANode parent, JasperReportsConfiguration jConfig) {
 		super(parent, -1);
@@ -197,7 +198,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
@@ -302,7 +303,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			@Override
 			public ASPropertyWidget<NamedEnumPropertyDescriptor<OrientationEnum>> createWidget(Composite parent,
 					AbstractSection section) {
-				Image[] images = new Image[] { JaspersoftStudioPlugin.getInstance().getImage("icons/resources/portrait16.png"), //$NON-NLS-1$
+				Image[] images = new Image[] {
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/portrait16.png"), //$NON-NLS-1$
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/landscape16.png") }; //$NON-NLS-1$
 				return new SPToolBarEnum<NamedEnumPropertyDescriptor<OrientationEnum>>(parent, section, this, images);
 			}
@@ -312,7 +314,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		desc.add(orientationD);
 
 		NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD = new NamedEnumPropertyDescriptor<PrintOrderEnum>(
-				JasperDesign.PROPERTY_PRINT_ORDER, Messages.MReport_print_order, PrintOrderEnum.HORIZONTAL, NullEnum.NULL);
+				JasperDesign.PROPERTY_PRINT_ORDER, Messages.MReport_print_order, PrintOrderEnum.HORIZONTAL,
+				NullEnum.NULL);
 		printOrderD.setDescription(Messages.MReport_print_order_description);
 		printOrderD.setCategory(Messages.MReport_columns_category);
 		desc.add(printOrderD);
@@ -330,8 +333,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		titleNewPageD.setDescription(Messages.MReport_title_on_a_new_page_description);
 		desc.add(titleNewPageD);
 
-		CheckBoxPropertyDescriptor summaryNewPageD = new CheckBoxPropertyDescriptor(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE,
-				Messages.MReport_summary_on_a_new_page);
+		CheckBoxPropertyDescriptor summaryNewPageD = new CheckBoxPropertyDescriptor(
+				JasperDesign.PROPERTY_SUMMARY_NEW_PAGE, Messages.MReport_summary_on_a_new_page);
 		summaryNewPageD.setDescription(Messages.MReport_summary_on_a_new_page_description);
 		desc.add(summaryNewPageD);
 
@@ -388,7 +391,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_SPACING, new DefaultValue(new Integer(0), false));
 		defaultsMap.put(JasperDesign.PROPERTY_TITLE_NEW_PAGE, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE, new DefaultValue(Boolean.FALSE, false));
-		defaultsMap.put(JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER,
+				new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER, new DefaultValue(Boolean.FALSE, false));
 		defaultsMap.put(JasperDesign.PROPERTY_IGNORE_PAGINATION, new DefaultValue(Boolean.FALSE, false));
 
@@ -416,7 +420,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java .lang.Object)
+	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
 		JasperDesign jrDesign = (JasperDesign) getValue();
@@ -520,7 +525,9 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.
+	 * Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JasperDesign jrDesign = (JasperDesign) getValue();
@@ -577,16 +584,16 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			jrDesign.setColumnWidth((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		// -- enums
 		else if (id.equals(JasperDesign.PROPERTY_ORIENTATION)) {
-			OrientationEnum enumValue = NamedEnumPropertyDescriptor.getEnumValue(OrientationEnum.LANDSCAPE, NullEnum.NOTNULL,
-					value);
+			OrientationEnum enumValue = NamedEnumPropertyDescriptor.getEnumValue(OrientationEnum.LANDSCAPE,
+					NullEnum.NOTNULL, value);
 			jrDesign.setOrientation(enumValue);
 		} else if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER)) {
-			PrintOrderEnum enumValue = NamedEnumPropertyDescriptor.getEnumValue(PrintOrderEnum.HORIZONTAL, NullEnum.NULL,
-					value);
+			PrintOrderEnum enumValue = NamedEnumPropertyDescriptor.getEnumValue(PrintOrderEnum.HORIZONTAL,
+					NullEnum.NULL, value);
 			jrDesign.setPrintOrder(enumValue);
 		} else if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE)) {
-			WhenNoDataTypeEnum enumValue = NamedEnumPropertyDescriptor.getEnumValue(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL,
-					NullEnum.NULL, value);
+			WhenNoDataTypeEnum enumValue = NamedEnumPropertyDescriptor
+					.getEnumValue(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL, NullEnum.NULL, value);
 			jrDesign.setWhenNoDataType(enumValue);
 		} else if (id.equals(JasperDesign.PROPERTY_TITLE_NEW_PAGE))
 			jrDesign.setTitleNewPage(((Boolean) value).booleanValue());
@@ -628,9 +635,12 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 						jrDesign.getPropertiesMap().setProperty(p.getName(), p.getValue());
 					}
 				}
-				// really important to trigger the property with source the JR object and not the node
-				// using the node could cause problem with the refresh of the advanced properties view
-				firePropertyChange(new PropertyChangeEvent(jrDesign, PROPERTY_MAP, originalMap, jrDesign.getPropertiesMap()));
+				// really important to trigger the property with source the JR object and not
+				// the node
+				// using the node could cause problem with the refresh of the advanced
+				// properties view
+				firePropertyChange(
+						new PropertyChangeEvent(jrDesign, PROPERTY_MAP, originalMap, jrDesign.getPropertiesMap()));
 			}
 		} else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
 			JRPropertiesMap v = (JRPropertiesMap) value;
@@ -644,7 +654,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
 		} else if (id.equals(PROPERY_CREATE_BOOKMARKS)) {
 			jrDesign.getPropertiesMap().setProperty(JR_CREATE_BOOKMARKS, Boolean.toString((Boolean) value));
-			// Necessary event to made the properties view update correctly, removing the old map from the entry widget
+			// Necessary event to made the properties view update correctly, removing the
+			// old map from the entry widget
 			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
 		} else if (id.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)) {
 			JRDataset dataset = jrDesign.getMainDataset();
@@ -652,8 +663,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 				dataset.getPropertiesMap()
 						.removeProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
 			} else {
-				dataset.getPropertiesMap().setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
-						value.toString());
+				dataset.getPropertiesMap().setProperty(
+						DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, value.toString());
 			}
 			propertyChange(new PropertyChangeEvent(this,
 					DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, null, value));
@@ -699,7 +710,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.IGraphicElement#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
+	 * @see com.jaspersoft.studio.model.IGraphicElement#createJRElement(net.sf.
+	 * jasperreports.engine.design.JasperDesign)
 	 */
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		return null;
@@ -708,7 +720,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.PropertyChangeEvent)
+	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -746,7 +759,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * Handle datasource changed.
 	 * 
 	 * @param evt
-	 *          the evt
+	 *            the evt
 	 */
 	protected void handleDatasourceChanged(PropertyChangeEvent evt) {
 		if (evt.getSource() == getValue()) {
@@ -789,7 +802,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * Handle band changed.
 	 * 
 	 * @param evt
-	 *          the evt
+	 *            the evt
 	 */
 	protected void handleBandChanged(PropertyChangeEvent evt) {
 		for (Iterator<?> it = getChildren().iterator(); it.hasNext();) {
@@ -813,7 +826,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * Handle the change of the position of a band
 	 * 
 	 * @param evt
-	 *          the event that changed the band position
+	 *            the event that changed the band position
 	 */
 	protected void handleChangeOrder(PropertyChangeEvent evt) {
 		if (evt instanceof IndexedPropertyChangeEvent && evt.getNewValue() instanceof Integer) {
@@ -839,7 +852,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * Handle detail band changed.
 	 * 
 	 * @param evt
-	 *          the evt
+	 *            the evt
 	 */
 	protected void handleDetailBandChanged(PropertyChangeEvent evt) {
 		MBand firstBand = null;
@@ -855,7 +868,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 				if ((mBand instanceof MBandGroupHeader && groupName != null && bt.equals(BandTypeEnum.GROUP_HEADER)
 						&& groupName.equals(((MBandGroupHeader) mBand).getJrGroup().getName()))
 
-						|| (mBand instanceof MBandGroupFooter && groupName != null && bt.equals(BandTypeEnum.GROUP_FOOTER)
+						|| (mBand instanceof MBandGroupFooter && groupName != null
+								&& bt.equals(BandTypeEnum.GROUP_FOOTER)
 								&& groupName.equals(((MBandGroupFooter) mBand).getJrGroup().getName()))
 
 						|| (bt.equals(BandTypeEnum.DETAIL) && BandTypeEnum.DETAIL.equals(mBand.getBandType()))) {
@@ -908,7 +922,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			if (firstBand != null && firstBand.equals(lastBand)) {
 				firstBand.setValue(evt.getNewValue());
 				firstBand.removeChildren();
-				firstBand.propertyChange(new PropertyChangeEvent(firstBand, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
+				firstBand.propertyChange(
+						new PropertyChangeEvent(firstBand, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 			} else {
 				for (INode n : getChildren()) {
 					if (n.getValue() == evt.getOldValue()) {
@@ -925,7 +940,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * Handle group changed.
 	 * 
 	 * @param evt
-	 *          the evt
+	 *            the evt
 	 */
 	protected void handleGroupChanged(PropertyChangeEvent evt) {
 		if (evt.getOldValue() != null && evt.getNewValue() == null) { // delete
@@ -946,7 +961,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			for (ANode n : dNodes) {
 				removeChild(n);
 			}
-		} else if (evt instanceof CollectionElementAddedEvent && evt.getNewValue() != null && evt.getOldValue() == null) {
+		} else if (evt instanceof CollectionElementAddedEvent && evt.getNewValue() != null
+				&& evt.getOldValue() == null) {
 			JRDesignGroup group = (JRDesignGroup) evt.getNewValue();
 			for (INode n : getChildren()) {
 				if (n instanceof MBandGroupHeader && ((MBandGroupHeader) n).getJrGroup() == group)
@@ -955,9 +971,11 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 					return;
 			}
 
-			// Check if the new group is for the main dataset or from a subdataset, in the second case the band are not
+			// Check if the new group is for the main dataset or from a subdataset, in the
+			// second case the band are not
 			// created
-			boolean createBands = !getJasperDesign().getDatasetMap().containsKey(((JRDataset) evt.getSource()).getName());
+			boolean createBands = !getJasperDesign().getDatasetMap()
+					.containsKey(((JRDataset) evt.getSource()).getName());
 			if (createBands) {
 				// find the right position to put the band
 				addGroupListener(group);
@@ -994,7 +1012,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 								JRDesignBand jrDB = (JRDesignBand) it.next();
 								MBandGroupHeader b = new MBandGroupHeader(this, group, jrDB, position + j);
 								ReportFactory.createElementsForBand(b, jrDB.getChildren());
-								b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
+								b.propertyChange(
+										new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 							}
 						}
 					}
@@ -1032,7 +1051,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 								JRDesignBand jrDB = (JRDesignBand) it.next();
 								MBandGroupFooter b = new MBandGroupFooter(this, group, jrDB, position + j);
 								ReportFactory.createElementsForBand(b, jrDB.getChildren());
-								b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
+								b.propertyChange(
+										new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 							}
 						}
 					}
@@ -1085,7 +1105,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * Adds the group listener.
 	 * 
 	 * @param gr
-	 *          the gr
+	 *            the gr
 	 */
 	protected void addGroupListener(JRDesignGroup gr) {
 		((JRDesignSection) gr.getGroupFooterSection()).getEventSupport().addPropertyChangeListener(this);
@@ -1096,7 +1116,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * Removes the group listener.
 	 * 
 	 * @param gr
-	 *          the gr
+	 *            the gr
 	 */
 	protected void removeGroupListener(JRDesignGroup gr) {
 		((JRDesignSection) gr.getGroupFooterSection()).getEventSupport().removePropertyChangeListener(this);
@@ -1135,7 +1155,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 
 	public static String getMeasureUnit(JasperReportsConfiguration jConfig, JasperDesign jd) {
 		String defunit = jConfig.getProperty(DesignerPreferencePage.P_PAGE_DEFAULT_UNITS);
-		// In some cases the jasperdesign could not be available, with the jrtx file for example
+		// In some cases the jasperdesign could not be available, with the jrtx file for
+		// example
 		if (jd != null) {
 			defunit = PHolderUtil.getUnit(jd, "", defunit); //$NON-NLS-1$
 		}
@@ -1160,8 +1181,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	}
 
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> result = super.getUsedStyles();
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> result = super.getUsedStyles();
 		for (INode child : getChildren()) {
 			if (child instanceof ANode) {
 				mergeElementStyle(result, ((ANode) child).getUsedStyles());

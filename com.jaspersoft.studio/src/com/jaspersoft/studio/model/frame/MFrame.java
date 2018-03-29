@@ -4,9 +4,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.frame;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -44,19 +44,20 @@ import net.sf.jasperreports.engine.type.BorderSplitType;
 /*
  * The Class MFrame.
  */
-public class MFrame extends MGraphicElementLineBox implements IPastable, IPastableGraphic, IContainer,
-		IContainerLayout, IContainerEditPart, IGraphicElementContainer {
-	
+public class MFrame extends MGraphicElementLineBox implements IPastable, IPastableGraphic, IContainer, IContainerLayout,
+		IContainerEditPart, IGraphicElementContainer {
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
+
 	/**
-	 * Property used on JSS level to show or hide the elements placed outside the frame
+	 * Property used on JSS level to show or hide the elements placed outside the
+	 * frame
 	 */
 	public static final String PROPERTY_SHOW_OUT_OF_BOUND = "ShowOutOfBoundContent"; //$NON-NLS-1$
-	
+
 	private static IPropertyDescriptor[] descriptors;
 
 	/**
@@ -81,17 +82,16 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	 * Instantiates a new m frame.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrFrame
-	 *          the jr frame
+	 *            the jr frame
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MFrame(ANode parent, JRDesignFrame jrFrame, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrFrame);
 	}
-
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -108,14 +108,15 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		super.createPropertyDescriptors(desc);
 
 		RComboBoxPropertyDescriptor positionTypeD = new RComboBoxPropertyDescriptor(
-				JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE, Messages.MFrame_splitType, new String[] { "", //$NON-NLS-2$
+				JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE, Messages.MFrame_splitType, new String[] { "", // $NON-NLS-2$
 						MessagesByKeys.getString(BorderSplitType.NO_BORDERS.getName()),
 						MessagesByKeys.getString(BorderSplitType.DRAW_BORDERS.getName()) });
 		positionTypeD.setDescription(Messages.MGraphicElement_position_type_description);
 		desc.add(positionTypeD);
 		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
-		
-		CheckBoxPropertyDescriptor showOutOfBoundsContent = new CheckBoxPropertyDescriptor(PROPERTY_SHOW_OUT_OF_BOUND, Messages.MFrame_showOutOfBounds);
+
+		CheckBoxPropertyDescriptor showOutOfBoundsContent = new CheckBoxPropertyDescriptor(PROPERTY_SHOW_OUT_OF_BOUND,
+				Messages.MFrame_showOutOfBounds);
 		showOutOfBoundsContent.setDescription(Messages.MFrame_showOutOfBoundsDescription);
 		desc.add(showOutOfBoundsContent);
 		showOutOfBoundsContent.setCategory(Messages.MGraphicElement_location_category);
@@ -128,10 +129,12 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 			if (jrElement.getBorderSplitType() == null)
 				return ""; //$NON-NLS-1$
 			return MessagesByKeys.getString(jrElement.getBorderSplitType().getName());
-		} else if (id.equals(PROPERTY_SHOW_OUT_OF_BOUND)){
+		} else if (id.equals(PROPERTY_SHOW_OUT_OF_BOUND)) {
 			String value = jrElement.getPropertiesMap().getProperty(PROPERTY_SHOW_OUT_OF_BOUND);
-			if (value == null) return true;
-			else return Boolean.valueOf(value);
+			if (value == null)
+				return true;
+			else
+				return Boolean.valueOf(value);
 		}
 		return super.getPropertyValue(id);
 	}
@@ -149,8 +152,8 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 					jrElement.setBorderSplitType(BorderSplitType.DRAW_BORDERS);
 			}
 
-		} else if (id.equals(PROPERTY_SHOW_OUT_OF_BOUND)){
-			jrElement.getPropertiesMap().setProperty(PROPERTY_SHOW_OUT_OF_BOUND, Boolean.toString((Boolean)value));
+		} else if (id.equals(PROPERTY_SHOW_OUT_OF_BOUND)) {
+			jrElement.getPropertiesMap().setProperty(PROPERTY_SHOW_OUT_OF_BOUND, Boolean.toString((Boolean) value));
 			getPropertyChangeSupport().firePropertyChange(JSSCompoundCommand.REFRESH_UI_EVENT, null, null);
 		}
 		super.setPropertyValue(id, value);
@@ -173,7 +176,9 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
+	 * @see
+	 * com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.
+	 * engine.design.JasperDesign)
 	 */
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign, boolean applyDefault) {
@@ -182,7 +187,7 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		if (applyDefault) {
 			DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignElement);
 		}
-			
+
 		jrDesignElement.setWidth(getDefaultWidth());
 		jrDesignElement.setHeight(getDefaultHeight());
 		return jrDesignElement;
@@ -245,7 +250,7 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 			return frame.getLineBox().getRightPadding();
 		return 0;
 	}
-	
+
 	public Integer getPadding() {
 		JRDesignFrame frame = (JRDesignFrame) getValue();
 		if (frame != null)
@@ -253,7 +258,6 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		return 0;
 	}
 
-	
 	@Override
 	public JRDesignFrame getValue() {
 		return (JRDesignFrame) super.getValue();
@@ -271,10 +275,10 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
 	}
-	
+
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> usedStyles = super.getUsedStyles();
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> usedStyles = super.getUsedStyles();
 		for (INode node : getChildren()) {
 			if (node instanceof ANode) {
 				mergeElementStyle(usedStyles, ((ANode) node).getUsedStyles());
@@ -289,7 +293,7 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		result.add(JRDesignElement.PROPERTY_ELEMENT_GROUP);
 		return result;
 	}
-	
+
 	@Override
 	public ILayout getDefaultLayout() {
 		return LayoutManager.getLayout(FreeLayout.class.getName());

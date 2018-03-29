@@ -6,13 +6,14 @@ package com.jaspersoft.studio.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.List;
-
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /*
  * The Interface INode.
@@ -39,7 +40,7 @@ public interface INode extends PropertyChangeListener {
 	 * Sets the value.
 	 * 
 	 * @param value
-	 *          the new value
+	 *            the new value
 	 */
 	public void setValue(Object value);
 
@@ -56,7 +57,7 @@ public interface INode extends PropertyChangeListener {
 	 * @return the property change support
 	 */
 	public PropertyChangeSupport getPropertyChangeSupport();
-	
+
 	/**
 	 * Gets the root.
 	 * 
@@ -116,12 +117,13 @@ public interface INode extends PropertyChangeListener {
 	public Color getBackground();
 
 	/**
-	 * This represents a convenient way to access the JasperDesign object that subtends this node.
+	 * This represents a convenient way to access the JasperDesign object that
+	 * subtends this node.
 	 * 
 	 * @return the JasperDesign that subtends this model
 	 */
 	public JasperDesign getJasperDesign();
-	
+
 	/**
 	 * Boolean flag to declare if the children are visible or not
 	 * 

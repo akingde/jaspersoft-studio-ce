@@ -4,7 +4,6 @@
 package com.jaspersoft.studio.model.band;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -114,13 +113,13 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * Instantiates a new m band.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrband
-	 *          the jrband
+	 *            the jrband
 	 * @param bandtype
-	 *          the bandtype
+	 *            the bandtype
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MBand(ANode parent, JRBand jrband, BandTypeEnum bandtype, int newIndex) {
 		super(parent, newIndex);
@@ -141,7 +140,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * Set the index of the band
 	 * 
 	 * @param detailIndex
-	 *          number to use as index for the band
+	 *            number to use as index for the band
 	 */
 	public void setBandIndex(int detailIndex) {
 		bandIndex = detailIndex;
@@ -163,13 +162,15 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	/**
-	 * Refresh the index of the band with the current number returned by getFreeIndex.Update also the index map on the
-	 * mreport removing the old index and inserting the new one
+	 * Refresh the index of the band with the current number returned by
+	 * getFreeIndex.Update also the index map on the mreport removing the old index
+	 * and inserting the new one
 	 * 
 	 * @param oldValue
-	 *          the old value of the element
+	 *            the old value of the element
 	 * @param newValue
-	 *          value of the element, if this is not called when a set value is done the can be the same
+	 *            value of the element, if this is not called when a set value is
+	 *            done the can be the same
 	 */
 	protected void refreshIndex(JRDesignBand oldValue, JRDesignBand newValue) {
 		INode n = getRoot();
@@ -192,7 +193,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	/**
 	 * Return the first not used and greatest index number of all the other bands
 	 * 
-	 * @return -1 if the band is not a detail band otherwise a number >0 not used by any other detail band
+	 * @return -1 if the band is not a detail band otherwise a number >0 not used by
+	 *         any other detail band
 	 */
 	protected int getFreeIndex() {
 		// if (!BandTypeEnum.DETAIL.equals(bandType)) return -1;
@@ -231,15 +233,16 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	/**
-	 * Return the index of the band in the detailSection of the jasper design +1 . This only if the band is a detail band,
-	 * otherwise it return -1
+	 * Return the index of the band in the detailSection of the jasper design +1 .
+	 * This only if the band is a detail band, otherwise it return -1
 	 * 
 	 * @return a number > 0 if the band is a detail band, -1 otherwise;
 	 */
 	// private int getDesignIndex() {
 	// if (!BandTypeEnum.DETAIL.equals(bandType))
 	// return -1;
-	// return ((JRDesignSection) getJasperDesign().getDetailSection()).getBandsList().indexOf(getValue()) + 1;
+	// return ((JRDesignSection)
+	// getJasperDesign().getDetailSection()).getBandsList().indexOf(getValue()) + 1;
 	// }
 
 	@Override
@@ -266,7 +269,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 				index = " " + String.valueOf(bandIndex); //$NON-NLS-1$
 			if (value != null)
 				return Messages.MBand_detail + index + " [" + value.getHeight() + "px]" + hiddenText;// + //$NON-NLS-1$ //$NON-NLS-2$
-																																															// value.hashCode();
+																										// value.hashCode();
 			return Messages.MBand_detail + index + " "; //$NON-NLS-1$
 		}
 		if (value == null)
@@ -275,8 +278,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	/**
-	 * Return a human-readable text that represent the band name. Only the band name and no specific information on the
-	 * size is displayed (i.e. {@link #getDisplayText()}).
+	 * Return a human-readable text that represent the band name. Only the band name
+	 * and no specific information on the size is displayed (i.e.
+	 * {@link #getDisplayText()}).
 	 * 
 	 * @return the band name
 	 */
@@ -336,8 +340,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	/**
-	 * For a model band it can be normal to not have a jr object inside, in this case it should anyway return it's
-	 * descriptors
+	 * For a model band it can be normal to not have a jr object inside, in this
+	 * case it should anyway return it's descriptors
 	 */
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] descriptors = getDescriptors();
@@ -357,11 +361,12 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
-		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT, Messages.common_height);
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT,
+				Messages.common_height);
 		heightD.setValidator(new JSSPixelNotNullValidator());
 		heightD.setDescription(Messages.MBand_height_description);
 		desc.add(heightD);
@@ -378,8 +383,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		printWhenExpD.setDescription(Messages.MBand_print_when_expression_description);
 		desc.add(printWhenExpD);
 
-		printWhenExpD.setHelpRefBuilder(
-				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression")); //$NON-NLS-1$
+		printWhenExpD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression")); //$NON-NLS-1$
 
 		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
 				Messages.common_properties, getJasperConfiguration(), getValue());
@@ -408,7 +413,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.
+	 * Object)
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignBand jrband = (JRDesignBand) getValue();
@@ -441,7 +448,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.
+	 * Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignBand jrband = (JRDesignBand) getValue();
@@ -494,7 +503,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.IGraphicElement#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
+	 * @see com.jaspersoft.studio.model.IGraphicElement#createJRElement(net.sf.
+	 * jasperreports.engine.design.JasperDesign)
 	 */
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		return null;
@@ -563,8 +573,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> map = super.getUsedStyles();
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> map = super.getUsedStyles();
 		for (INode node : getChildren()) {
 			if (node instanceof ANode) {
 				mergeElementStyle(map, ((ANode) node).getUsedStyles());

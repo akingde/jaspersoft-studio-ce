@@ -80,8 +80,8 @@ import net.sf.jasperreports.engine.type.StretchTypeEnum;
 /*
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode
-		implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IDesignDragable, IGraphicalPropertiesHandler {
+public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable,
+		IDesignDragable, IGraphicalPropertiesHandler {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -232,7 +232,8 @@ public class MGraphicElement extends APropertyNode
 			((JRBasePen) ((JRDesignGraphicElement) getValue()).getLinePen()).getEventSupport()
 					.removePropertyChangeListener(this);
 		else if (value != null && value instanceof JRDesignGraphicElement)
-			((JRBasePen) ((JRDesignGraphicElement) value).getLinePen()).getEventSupport().addPropertyChangeListener(this);
+			((JRBasePen) ((JRDesignGraphicElement) value).getLinePen()).getEventSupport()
+					.addPropertyChangeListener(this);
 		super.setValue(value);
 	}
 
@@ -1008,8 +1009,8 @@ public class MGraphicElement extends APropertyNode
 	 *         reference to the element that is using the style
 	 */
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> result = super.getUsedStyles();
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> result = super.getUsedStyles();
 		JRStyle style = getValue().getStyle();
 		addElementStyle(style, result);
 		return result;
@@ -1205,20 +1206,19 @@ public class MGraphicElement extends APropertyNode
 		return true;
 	}
 
-
 	@Override
 	public Rectangle getAbsoluteBounds() {
 		int x = getValue().getX();
 		int y = getValue().getY();
 		ANode parent = getParent();
 		if (parent instanceof IGraphicalPropertiesHandler) {
-			Rectangle parentLocation = ((IGraphicalPropertiesHandler)parent).getAbsoluteBounds();
+			Rectangle parentLocation = ((IGraphicalPropertiesHandler) parent).getAbsoluteBounds();
 			x += parentLocation.x;
 			y += parentLocation.y;
 		} else if (parent instanceof MBand) {
 			JasperDesign jd = getJasperDesign();
 			int bandVOffset = 0;
-			for(JRBand band : jd.getAllBands()) {
+			for (JRBand band : jd.getAllBands()) {
 				if (band != null && band != parent.getValue()) {
 					bandVOffset += band.getHeight();
 				} else {
@@ -1228,7 +1228,7 @@ public class MGraphicElement extends APropertyNode
 			x += jd.getLeftMargin();
 			y += jd.getTopMargin() + bandVOffset;
 		}
-		return new Rectangle(x,y, getValue().getWidth(), getValue().getHeight());
+		return new Rectangle(x, y, getValue().getWidth(), getValue().getHeight());
 	}
 
 }

@@ -5,17 +5,17 @@
 package com.jaspersoft.studio.model;
 
 import java.beans.PropertyChangeEvent;
-import java.util.HashMap;
 import java.util.List;
-
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.design.JasperDesign;
+import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /*
  * The Class MRoot.
@@ -42,9 +42,9 @@ public class MRoot extends ANode {
 	 * Instantiates a new m root.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jd
-	 *          the jd
+	 *            the jd
 	 */
 	public MRoot(ANode parent, Object value) {
 		super(parent, -1);
@@ -104,7 +104,8 @@ public class MRoot extends ANode {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.PropertyChangeEvent)
+	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -112,12 +113,12 @@ public class MRoot extends ANode {
 	}
 
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> result = super.getUsedStyles();
-		for(INode child : getChildren()){
-			if (child instanceof ANode){
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> result = super.getUsedStyles();
+		for (INode child : getChildren()) {
+			if (child instanceof ANode) {
 				mergeElementStyle(result, ((ANode) child).getUsedStyles());
-			} 
+			}
 		}
 		return result;
 	}

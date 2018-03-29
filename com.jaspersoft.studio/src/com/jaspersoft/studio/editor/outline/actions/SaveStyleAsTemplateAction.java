@@ -5,8 +5,8 @@
 package com.jaspersoft.studio.editor.outline.actions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.EditPart;
@@ -48,10 +48,11 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 /**
- * Action to open the wizard to export one or more JRStyle as an external template style file.
- * This also propose a question to substitute the exported styles with the template reference.
- * This action should be used only on the report editor (and subeditor), it is not suited for
- * the Style template editor.
+ * Action to open the wizard to export one or more JRStyle as an external
+ * template style file. This also propose a question to substitute the exported
+ * styles with the template reference. This action should be used only on the
+ * report editor (and subeditor), it is not suited for the Style template
+ * editor.
  * 
  * @author Orlandin Marco
  * 
@@ -65,7 +66,7 @@ public class SaveStyleAsTemplateAction extends ACachedSelectionAction {
 	 * Constructs a <code>CreateAction</code> using the specified part.
 	 * 
 	 * @param part
-	 *          The part for this action
+	 *            The part for this action
 	 */
 	public SaveStyleAsTemplateAction(IWorkbenchPart part) {
 		super(part);
@@ -92,138 +93,153 @@ public class SaveStyleAsTemplateAction extends ACachedSelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MStyle.class);
-		if (elements.size() == getSelectedObjects().size()){
-			for(Object rawStyle : elements){
-				MStyle style = (MStyle)rawStyle;
-				if (!style.isEditable() || (style instanceof MConditionalStyle)) return false;
+		if (elements.size() == getSelectedObjects().size()) {
+			for (Object rawStyle : elements) {
+				MStyle style = (MStyle) rawStyle;
+				if (!style.isEditable() || (style instanceof MConditionalStyle))
+					return false;
 			}
-		} else return false;
+		} else
+			return false;
 		return true;
 	}
 
 	@Override
 	public void run() {
-		Pair<List<MStyle>,List<JRStyle>> styles = getSelectedStyles();
+		Pair<List<MStyle>, List<JRStyle>> styles = getSelectedStyles();
 		StyleTemplateExportWizard importWizard = new StyleTemplateExportWizard(styles.getValue());
 		ISelection selection = getSelection();
 		StructuredSelection structured = null;
-		if (selection instanceof StructuredSelection){
+		if (selection instanceof StructuredSelection) {
 			structured = (StructuredSelection) selection;
 		} else {
 			structured = new StructuredSelection();
 		}
 		importWizard.init(PlatformUI.getWorkbench(), structured);
 		WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), importWizard);
-		if (dialog.open() == Dialog.OK){
-			//Propose the question to substitute the styles
-			if (MessageDialog.openQuestion(UIUtils.getShell(), Messages.SaveStyleAsTemplateAction_replaceTitle, Messages.SaveStyleAsTemplateAction_replaceMessage)){
-				//generate the commands to substitute the styles
-				JSSCompoundCommand cmd = new JSSCompoundCommand(Messages.SaveStyleAsTemplateAction_replaceTitle, styles.getKey().get(0)); //$NON-NLS-1$
+		if (dialog.open() == Dialog.OK) {
+			// Propose the question to substitute the styles
+			if (MessageDialog.openQuestion(UIUtils.getShell(), Messages.SaveStyleAsTemplateAction_replaceTitle,
+					Messages.SaveStyleAsTemplateAction_replaceMessage)) {
+				// generate the commands to substitute the styles
+				JSSCompoundCommand cmd = new JSSCompoundCommand(Messages.SaveStyleAsTemplateAction_replaceTitle,
+						styles.getKey().get(0)); // $NON-NLS-1$
 				JasperReportsConfiguration jconfig = styles.getKey().get(0).getJasperConfiguration();
 				ANode root = getRoot(styles.getKey().get(0));
-				HashMap<String, List<ANode>> usedStyles = root.getUsedStyles();
-				
-				for(MStyle style : styles.getKey()){
+				Map<String, List<ANode>> usedStyles = root.getUsedStyles();
+
+				for (MStyle style : styles.getKey()) {
 					Command deleteCommand = getDeleteCommand(style);
-					if (deleteCommand != null){
+					if (deleteCommand != null) {
 						cmd.add(deleteCommand);
 						String styleName = style.getValue().getName();
-						//update the elements using the previously internal style to use the external one instead
+						// update the elements using the previously internal style to use the external
+						// one instead
 						List<ANode> elementsUsingStyle = usedStyles.get(styleName);
-						if (elementsUsingStyle != null){
-							for(ANode element : elementsUsingStyle){
+						if (elementsUsingStyle != null) {
+							for (ANode element : elementsUsingStyle) {
 								SetValueCommand setStyleCommand = new SetValueCommand();
-								setStyleCommand.setTarget((IPropertySource)element);
+								setStyleCommand.setTarget((IPropertySource) element);
 								setStyleCommand.setPropertyValue(styleName);
 								setStyleCommand.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
 								cmd.add(setStyleCommand);
 							}
 						}
 					}
-					
-				}			
+
+				}
 				IFile templateFile = importWizard.getReportFile();
 				Command createCommand = getCreateCommand(templateFile, styles.getKey().get(0).getParent());
-				if (createCommand != null){
+				if (createCommand != null) {
 					cmd.add(createCommand);
 				}
-				
+
 				execute(cmd);
-				if (jconfig != null){
+				if (jconfig != null) {
 					jconfig.refreshCachedStyles();
 				}
 			} else {
-				//The styles are not replace, open the editor on the new template
+				// The styles are not replace, open the editor on the new template
 				importWizard.openStyleEditor();
 			}
 		}
 	}
-	
-	private ANode getRoot(ANode currentNode){
-		if (currentNode instanceof MPage){
-			return getRoot(((MPage)currentNode).getRealParent());
-		} else if (currentNode instanceof MRoot){
+
+	private ANode getRoot(ANode currentNode) {
+		if (currentNode instanceof MPage) {
+			return getRoot(((MPage) currentNode).getRealParent());
+		} else if (currentNode instanceof MRoot) {
 			return currentNode;
 		} else {
 			return getRoot(currentNode.getParent());
 		}
 	}
-	
+
 	/**
-	 * Generate the command to create the template style node 
+	 * Generate the command to create the template style node
 	 * 
-	 * @param templateFile the file of the template. Must be a jrtx file
-	 * @param parent the parent where the new node to create. Must be an MStyle
+	 * @param templateFile
+	 *            the file of the template. Must be a jrtx file
+	 * @param parent
+	 *            the parent where the new node to create. Must be an MStyle
 	 * @return the command to create the template reference node on the parent.
 	 */
-	protected Command getCreateCommand(IFile templateFile, ANode parent){
+	protected Command getCreateCommand(IFile templateFile, ANode parent) {
 		JRDesignReportTemplate jrTemplate = MStyleTemplate.createJRTemplate();
-		jrTemplate.setSourceExpression(getFileExpression(templateFile, parent.getJasperConfiguration().getAssociatedReportFile()));
+		jrTemplate.setSourceExpression(
+				getFileExpression(templateFile, parent.getJasperConfiguration().getAssociatedReportFile()));
 		MStyleTemplate templateModel = new MStyleTemplate(null, jrTemplate, -1);
-		return new CreateStyleTemplateCommand((MStyles)parent, templateModel, 0);
+		return new CreateStyleTemplateCommand((MStyles) parent, templateModel, 0);
 	}
-	
+
 	/**
 	 * Generate the expression to reference the jrtx file of a template
 	 * 
-	 * @param file the file to reference, must be a jrtx
-	 * @param contextFile the context of the report, should be the report where the file is imported
+	 * @param file
+	 *            the file to reference, must be a jrtx
+	 * @param contextFile
+	 *            the context of the report, should be the report where the file is
+	 *            imported
 	 * @return the expression to reference the style
 	 */
-	protected JRDesignExpression getFileExpression(IFile file, IFile contextFile){
+	protected JRDesignExpression getFileExpression(IFile file, IFile contextFile) {
 		String filepath = null;
-		//try to convert to relative
-		if (contextFile != null && file.getProject().equals(contextFile.getProject())){
-			filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		// try to convert to relative
+		if (contextFile != null && file.getProject().equals(contextFile.getProject())) {
+			filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", //$NON-NLS-1$
+					""); //$NON-NLS-1$
 		} else {
 			filepath = file.getRawLocationURI().toASCIIString();
 		}
 		// Change the standard separator with an universal one
-		String fileExpressionText = StringUtils.replaceBackslashWithDoubleBackslash(filepath.replace(System.getProperty("file.separator").charAt(0), '/')); //$NON-NLS-1$
+		String fileExpressionText = StringUtils.replaceBackslashWithDoubleBackslash(
+				filepath.replace(System.getProperty("file.separator").charAt(0), '/')); //$NON-NLS-1$
 		JRDesignExpression jrFileExpression = new JRDesignExpression();
 		jrFileExpression.setText("\"" + fileExpressionText + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 		return jrFileExpression;
 	}
-	
+
 	/**
-	 * Return the command to delete a style 
+	 * Return the command to delete a style
 	 * 
-	 * @param style the style to delete
+	 * @param style
+	 *            the style to delete
 	 * @return the command to delete the style
 	 */
-	protected Command getDeleteCommand(MStyle style){
-		return new SimpleDeleteStyleCommand((MStyles)style.getParent(), (JRDesignStyle)style.getValue());
+	protected Command getDeleteCommand(MStyle style) {
+		return new SimpleDeleteStyleCommand((MStyles) style.getParent(), (JRDesignStyle) style.getValue());
 	}
 
 	/**
-	 * Return the list of all the selected JRStyle. The conditional and external styles are not exported
+	 * Return the list of all the selected JRStyle. The conditional and external
+	 * styles are not exported
 	 * 
 	 * @return a not null list of JRStyle
 	 */
-	private Pair<List<MStyle>,List<JRStyle>> getSelectedStyles() {
+	private Pair<List<MStyle>, List<JRStyle>> getSelectedStyles() {
 		List<?> objects = getSelectedObjects();
-		if (objects == null || objects.isEmpty()){
-			return new Pair<List<MStyle>,List<JRStyle>>(new ArrayList<MStyle>(), new ArrayList<JRStyle>());
+		if (objects == null || objects.isEmpty()) {
+			return new Pair<List<MStyle>, List<JRStyle>>(new ArrayList<MStyle>(), new ArrayList<JRStyle>());
 		}
 		List<JRStyle> styles = new ArrayList<JRStyle>();
 		List<MStyle> modelStyles = new ArrayList<MStyle>();
@@ -232,7 +248,7 @@ public class SaveStyleAsTemplateAction extends ACachedSelectionAction {
 				ANode n = (ANode) ((EditPart) obj).getModel();
 				if (n instanceof MStyle && !styles.contains(n.getValue())) {
 					styles.add((JRStyle) n.getValue());
-					modelStyles.add((MStyle)n);
+					modelStyles.add((MStyle) n);
 				}
 			}
 		}

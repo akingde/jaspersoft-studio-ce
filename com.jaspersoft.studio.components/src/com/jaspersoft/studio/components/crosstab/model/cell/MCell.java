@@ -255,8 +255,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
@@ -286,13 +285,13 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 				return lineBox;
 			}
 			if (id.equals(MGraphicElement.PROPERTY_MAP)) {
-				//return a copy of the map
+				// return a copy of the map
 				return getPropertiesMapClone(jrElement);
 			}
 		}
 		return null;
 	}
-	
+
 	protected JRPropertiesMap getPropertiesMapClone(JRDesignCellContents element) {
 		JRPropertiesMap propertiesMap = element.getPropertiesMap();
 		if (propertiesMap != null)
@@ -303,8 +302,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
@@ -347,18 +345,21 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 				JRPropertiesMap originalMap = jrElement.getPropertiesMap().cloneProperties();
 				JRPropertiesMap v = (JRPropertiesMap) value;
 				String[] names = jrElement.getPropertiesMap().getPropertyNames();
-				//clear the old map
+				// clear the old map
 				for (int i = 0; i < names.length; i++) {
 					jrElement.getPropertiesMap().removeProperty(names[i]);
 				}
-				//set the new properties
+				// set the new properties
 				names = v.getPropertyNames();
 				for (int i = 0; i < names.length; i++) {
 					jrElement.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
 				}
-				// really important to trigger the property with source the JR object and not the node
-				// using the node could cause problem with the refresh of the advanced properties view
-				this.getPropertyChangeSupport().firePropertyChange(new PropertyChangeEvent(jrElement, PROPERTY_MAP, originalMap, jrElement.getPropertiesMap()));
+				// really important to trigger the property with source the JR object and not
+				// the node
+				// using the node could cause problem with the refresh of the advanced
+				// properties view
+				this.getPropertyChangeSupport().firePropertyChange(
+						new PropertyChangeEvent(jrElement, PROPERTY_MAP, originalMap, jrElement.getPropertiesMap()));
 			}
 
 		}
@@ -463,15 +464,14 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	/**
-	 * Flag changed when some property that has graphical impact on the element
-	 * is changed. This is used to redraw the elemnt only when something
-	 * graphical is changed isndie it, all the other times can just be copied
+	 * Flag changed when some property that has graphical impact on the element is
+	 * changed. This is used to redraw the elemnt only when something graphical is
+	 * changed isndie it, all the other times can just be copied
 	 */
 	private boolean visualPropertyChanged = true;
 
 	/**
-	 * True if some graphical property is changed for the element, false
-	 * otherwise
+	 * True if some graphical property is changed for the element, false otherwise
 	 */
 	@Override
 	public boolean hasChangedProperty() {
@@ -481,10 +481,9 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	/**
-	 * When the style changes a refresh is sent not only to the current node,
-	 * but also to the node that are listening on the same JR element. This is
-	 * done to propagate the change to every editor where the element is
-	 * displayed
+	 * When the style changes a refresh is sent not only to the current node, but
+	 * also to the node that are listening on the same JR element. This is done to
+	 * propagate the change to every editor where the element is displayed
 	 */
 	@Override
 	public void setStyleChangedProperty() {
@@ -560,9 +559,9 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
+	public Map<String, List<ANode>> getUsedStyles() {
 		JRDesignCellContents jrElement = getValue();
-		HashMap<String, List<ANode>> result = super.getUsedStyles();
+		Map<String, List<ANode>> result = super.getUsedStyles();
 		if (jrElement != null && jrElement.getStyle() != null) {
 			addElementStyle(jrElement.getStyle(), result);
 		}
@@ -597,10 +596,9 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	/**
-	 * Override this to update the node name on some events (group name changed
-	 * for example). By default this doesn't to anything, trigger only an event
-	 * to force the UI to refresh, so it can be called by the override of this
-	 * method
+	 * Override this to update the node name on some events (group name changed for
+	 * example). By default this doesn't to anything, trigger only an event to force
+	 * the UI to refresh, so it can be called by the override of this method
 	 */
 	public void updateName() {
 		if (getValue() != null) {
@@ -620,7 +618,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		result.put(LINE_BOX, element);
 		return result;
 	}
-	
+
 	@Override
 	public Rectangle getAbsoluteBounds() {
 		MCrosstab crosstabModel = getCrosstab();

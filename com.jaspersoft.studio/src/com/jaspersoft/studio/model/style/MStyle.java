@@ -88,45 +88,46 @@ import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
  * 
  * @author Chicu Veaceslav
  */
-public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart, IDragable, MNotConditionalMarker {
-	
+public class MStyle extends APropertyNode
+		implements ICopyable, IPastable, IContainerEditPart, IDragable, MNotConditionalMarker {
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
+
 	private static IPropertyDescriptor[] descriptors;
-	
+
 	private static StyleNameValidator validator;
-	
+
 	private static RWComboBoxPropertyDescriptor styleD;
-	
+
 	private static NamedEnumPropertyDescriptor<FillEnum> fillD;
-	
+
 	private static NamedEnumPropertyDescriptor<ScaleImageEnum> scaleD;
-	
+
 	private static TextHAlignPropertyDescriptor halignText;
-	
+
 	private static TextVAlignPropertyDescriptor valignText;
-	
+
 	private static ImageHAlignPropertyDescriptor halignImage;
-	
+
 	private static ImageVAlignPropertyDescriptor valignImage;
-	
+
 	private static RotationPropertyDescriptor rotationD;
-	
+
 	private static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
-	
+
 	private static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
-	
+
 	public static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
 
 	private MLinePen linePen;
-	
+
 	private MLineBox lineBox;
-	
+
 	private MParagraph mParagraph;
-	
+
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -153,11 +154,11 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 * Instantiates a new m style.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrstyle
-	 *          the jrstyle
+	 *            the jrstyle
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MStyle(ANode parent, JRDesignStyle jrstyle, int newIndex) {
 		super(parent, newIndex);
@@ -249,12 +250,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
-		styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
-				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE,
+				Messages.common_parent_style, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MStyle_parent_style_description);
 		styleD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement_style")); //$NON-NLS-1$
@@ -291,13 +292,13 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		radiusD.setDescription(Messages.MStyle_radius_description);
 		desc.add(radiusD);
 
-		fillD = new NamedEnumPropertyDescriptor<FillEnum>(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.SOLID,
-				NullEnum.UNDEFINED);
+		fillD = new NamedEnumPropertyDescriptor<FillEnum>(JRBaseStyle.PROPERTY_FILL, Messages.common_fill,
+				FillEnum.SOLID, NullEnum.UNDEFINED);
 		fillD.setDescription(Messages.MStyle_fill_description);
 		desc.add(fillD);
 
-		scaleD = new NamedEnumPropertyDescriptor<ScaleImageEnum>(JRBaseStyle.PROPERTY_SCALE_IMAGE, Messages.MStyle_scale,
-				ScaleImageEnum.CLIP, NullEnum.UNDEFINED);
+		scaleD = new NamedEnumPropertyDescriptor<ScaleImageEnum>(JRBaseStyle.PROPERTY_SCALE_IMAGE,
+				Messages.MStyle_scale, ScaleImageEnum.CLIP, NullEnum.UNDEFINED);
 		scaleD.setDescription(Messages.MStyle_scale_description);
 		desc.add(scaleD);
 
@@ -326,7 +327,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		rotationD.setDescription(Messages.MStyle_rotation_description);
 		desc.add(rotationD);
 
-		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.common_opaque);
+		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
+				Messages.common_opaque);
 		opaqueDBool.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueDBool);
 
@@ -335,12 +337,13 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		blankWhenNullD.setDescription(Messages.MStyle_blank_when_null_description);
 		desc.add(blankWhenNullD);
 
-		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_BOLD, Messages.common_bold,
-				NullEnum.INHERITED) {
+		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_BOLD,
+				Messages.common_bold, NullEnum.INHERITED) {
 			@Override
-			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/bold.png")); //$NON-NLS-1$
+			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent,
+					AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/bold.png")); //$NON-NLS-1$
 			}
 		};
 		boldD.setDescription(Messages.MFont_bold_description);
@@ -349,9 +352,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_ITALIC,
 				Messages.common_italic, NullEnum.INHERITED) {
 			@Override
-			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/italic.png")); //$NON-NLS-1$
+			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent,
+					AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/italic.png")); //$NON-NLS-1$
 			}
 		};
 		italicD.setDescription(Messages.MFont_italic_description);
@@ -360,9 +364,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_UNDERLINE,
 				Messages.common_underline, NullEnum.INHERITED) {
 			@Override
-			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/underline.png")); //$NON-NLS-1$
+			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent,
+					AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/underline.png")); //$NON-NLS-1$
 			}
 		};
 		underlineD.setDescription(Messages.MFont_underline_description);
@@ -371,9 +376,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		CheckBoxPropertyDescriptor strikeThroughD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_STRIKE_THROUGH,
 				Messages.common_strike_trough, NullEnum.INHERITED) {
 			@Override
-			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/strikethrought.png")); //$NON-NLS-1$
+			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent,
+					AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/strikethrought.png")); //$NON-NLS-1$
 			}
 		};
 		strikeThroughD.setDescription(Messages.MFont_strike_trough_description);
@@ -394,11 +400,14 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
 
-		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE, Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED, false);
+		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(
+				JRBaseStyle.PROPERTY_FONT_SIZE, Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED,
+				false);
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
 		desc.add(fontSizeD);
 
-		FontSizeButtonPropertyDescriptor fontIncrement = new FontSizeButtonPropertyDescriptor(MFont.FONT_INCREMENT, this);
+		FontSizeButtonPropertyDescriptor fontIncrement = new FontSizeButtonPropertyDescriptor(MFont.FONT_INCREMENT,
+				this);
 		desc.add(fontIncrement);
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRBaseStyle.PROPERTY_PATTERN,
@@ -460,7 +469,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#style"); //$NON-NLS-1$
 	}
-	
+
 	@Override
 	protected Map<String, DefaultValue> createDefaultsMap() {
 		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
@@ -481,8 +490,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap.put(JRBaseStyle.PROPERTY_ITALIC, new DefaultValue(null, true));
 		defaultsMap.put(JRBaseStyle.PROPERTY_BOLD, new DefaultValue(null, true));
 		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_NAME, new DefaultValue("SansSerif", true)); //$NON-NLS-1$
-		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, new DefaultValue(10f, true)); //$NON-NLS-1$
-		
+		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, new DefaultValue(10f, true)); // $NON-NLS-1$
+
 		int modeValue = NamedEnumPropertyDescriptor.getIntValue(ModeEnum.OPAQUE, NullEnum.NOTNULL, ModeEnum.OPAQUE);
 		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, new DefaultValue(modeValue, true));
 
@@ -490,16 +499,18 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	}
 
 	/**
-	 * Return the internal style used. If the internal style is a reference to a removed style then it is also removed
-	 * from the element
+	 * Return the internal style used. If the internal style is a reference to a
+	 * removed style then it is also removed from the element
 	 */
 	public JRStyle getActualStyle() {
 		JRBaseStyle jrElement = (JRBaseStyle) getValue();
-		// Check if the used style is valid otherwise return null, but don't change the value.
-		//it is bad to change values without the user asking for it
-		if (jrElement.getStyle() != null && !getJasperDesign().getStylesMap().containsKey(jrElement.getStyle().getName())) {
+		// Check if the used style is valid otherwise return null, but don't change the
+		// value.
+		// it is bad to change values without the user asking for it
+		if (jrElement.getStyle() != null
+				&& !getJasperDesign().getStylesMap().containsKey(jrElement.getStyle().getName())) {
 			return null;
-			//setPropertyValue(JRDesignStyle.PROPERTY_PARENT_STYLE, null);
+			// setPropertyValue(JRDesignStyle.PROPERTY_PARENT_STYLE, null);
 		}
 		if (jrElement.getStyle() != null) {
 			return jrElement.getStyle();
@@ -510,7 +521,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.
+	 * Object)
 	 */
 	public Object getPropertyValue(Object id) {
 		if (getValue() == null)
@@ -545,7 +558,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			}
 			return linePen;
 		}
-		
+
 		if (id.equals(LINE_BOX)) {
 			if (lineBox == null) {
 				lineBox = new MLineBox(jrstyle.getLineBox(), this);
@@ -553,7 +566,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			}
 			return lineBox;
 		}
-		
+
 		if (id.equals(JRBaseStyle.PROPERTY_PATTERN))
 			return jrstyle.getOwnPattern();
 		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
@@ -580,7 +593,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return rotationD.getIntValue(jrstyle.getOwnRotationValue());
 		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
-			ModeEnum modeValue = jrstyle.getOwnModeValue(); 
+			ModeEnum modeValue = jrstyle.getOwnModeValue();
 			return modeValue != null ? modeValue.equals(ModeEnum.TRANSPARENT) : null;
 		}
 		if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
@@ -596,14 +609,14 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			return jrstyle.getOwnFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
-			return jrstyle.getOwnFontsize(); //$NON-NLS-1$
+			return jrstyle.getOwnFontsize(); // $NON-NLS-1$
 		if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
 			return jrstyle.getOwnPdfFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))
 			return jrstyle.getOwnPdfEncoding();
 		if (id.equals(JRBaseStyle.PROPERTY_PDF_EMBEDDED))
 			return jrstyle.isOwnPdfEmbedded();
-		
+
 		if (lineBox != null) {
 			Object val = lineBox.getPropertyValue(id);
 			if (val != null)
@@ -622,61 +635,63 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return null;
 		JSSStyleResolver resolver = getStyleResolver();
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
-		if (id.equals(JRBaseStyle.PROPERTY_PATTERN)){
+		if (id.equals(JRBaseStyle.PROPERTY_PATTERN)) {
 			return resolver.getPattern(jrstyle);
-		} else if (id.equals(JRBaseStyle.PROPERTY_RADIUS)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_RADIUS)) {
 			return resolver.getRadius(jrstyle);
-		} else if (id.equals(JRBaseStyle.PROPERTY_MARKUP)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_MARKUP)) {
 			return resolver.getMarkup(jrstyle);
-		} else if (id.equals(JRDesignStyle.PROPERTY_FORECOLOR)){
+		} else if (id.equals(JRDesignStyle.PROPERTY_FORECOLOR)) {
 			Color color = resolver.getForecolor(jrstyle);
 			return Colors.getSWTRGB4AWTGBColor(color);
-		} else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR)){
+		} else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR)) {
 			Color color = resolver.getBackcolor(jrstyle);
 			return Colors.getSWTRGB4AWTGBColor(color);
-		} else if (id.equals(JRBaseStyle.PROPERTY_FILL)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_FILL)) {
 			FillEnum fillValue = resolver.getFillValue(jrstyle);
 			return fillD.getIntValue(fillValue);
-		} else if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE)) {
 			ScaleImageEnum imageValue = resolver.getScaleImageValue(jrstyle);
 			return scaleD.getIntValue(imageValue);
-		} else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT)) {
 			HorizontalTextAlignEnum textAlignValue = resolver.getHorizontalTextAlign(jrstyle);
 			return halignText.getIntValue(textAlignValue);
-		} else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT)) {
 			VerticalTextAlignEnum textAlignValue = resolver.getVerticalTextAlign(jrstyle);
 			return valignText.getIntValue(textAlignValue);
-		} else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT)) {
 			HorizontalImageAlignEnum imageAlignValue = resolver.getHorizontalImageAlign(jrstyle);
 			return halignImage.getIntValue(imageAlignValue);
-		} else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT)) {
 			VerticalImageAlignEnum imageAlignValue = resolver.getVerticalImageAlign(jrstyle);
 			return valignImage.getIntValue(imageAlignValue);
-		} else if (id.equals(JRBaseStyle.PROPERTY_ROTATION)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_ROTATION)) {
 			RotationEnum rotationValue = resolver.getRotationValue(jrstyle);
 			return rotationD.getIntValue(rotationValue);
 		} else if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
 			ModeEnum modeValue = resolver.getModeValue(jrstyle);
 			return modeValue == null ? true : ModeEnum.TRANSPARENT == modeValue;
-		} else if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL)) {
 			return resolver.isBlankWhenNull(jrstyle);
-		} else if (id.equals(JRBaseStyle.PROPERTY_STRIKE_THROUGH)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_STRIKE_THROUGH)) {
 			return resolver.isStrikeThrough(jrstyle);
-		} else if (id.equals(JRBaseStyle.PROPERTY_UNDERLINE)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_UNDERLINE)) {
 			return resolver.isUnderline(jrstyle);
-		} else if (id.equals(JRBaseStyle.PROPERTY_ITALIC)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_ITALIC)) {
 			return resolver.isItalic(jrstyle);
-		} else if (id.equals(JRBaseStyle.PROPERTY_BOLD)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_BOLD)) {
 			return resolver.isBold(jrstyle);
-		} if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME)){
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME)) {
 			return resolver.getFontName(jrstyle);
-		} if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE)){
-			return resolver.getFontsize(jrstyle); //$NON-NLS-1$
-		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME)){
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE)) {
+			return resolver.getFontsize(jrstyle); // $NON-NLS-1$
+		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME)) {
 			return resolver.getPdfFontName(jrstyle);
-		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING)) {
 			return resolver.getPdfEncoding(jrstyle);
-		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_EMBEDDED)){
+		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_EMBEDDED)) {
 			return resolver.isPdfEmbedded(jrstyle);
 		}
 
@@ -685,7 +700,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			if (val != null)
 				return val;
 		}
-		
+
 		if (linePen != null) {
 			Object val = linePen.getPropertyActualValue(id);
 			if (val != null)
@@ -697,7 +712,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.
+	 * Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		if (!isEditable())
@@ -712,13 +729,15 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				if (!Misc.isNullOrEmpty((String) value)) {
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
-						// FIXME: It is important to set a null first the external style, because it is returned first on the
+						// FIXME: It is important to set a null first the external style, because it is
+						// returned first on the
 						// getPropertyValue and this raise a lot of events
 						jrstyle.setParentStyleNameReference(null);
 						jrstyle.setParentStyle(style);
 					} else {
 						jrstyle.setParentStyleNameReference((String) value);
-						// Set the external style as parent style if existing, to resolve JR resolving problem at design time
+						// Set the external style as parent style if existing, to resolve JR resolving
+						// problem at design time
 						fixExternalStyleReference((String) value);
 					}
 				} else {
@@ -790,26 +809,29 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	}
 
 	/**
-	 * When the external style change we need also to set the reference to the JRStyle as parent style. This normally
-	 * should be done by jasper reports when the reports is executed, but since we need to show it at design time we need
-	 * this trick to have the external styles resolved correctly when an element is painted. Anyway if the selected styles
-	 * can't be found this method set the style to null
+	 * When the external style change we need also to set the reference to the
+	 * JRStyle as parent style. This normally should be done by jasper reports when
+	 * the reports is executed, but since we need to show it at design time we need
+	 * this trick to have the external styles resolved correctly when an element is
+	 * painted. Anyway if the selected styles can't be found this method set the
+	 * style to null
 	 * 
 	 * @param externalStyleName
-	 *          name of the external style
+	 *            name of the external style
 	 */
 	protected void fixExternalStyleReference(String externalStyleName) {
 		if (externalStyleName != null) {
 			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
-			jrstyle.setParentStyle(ExternalStylesManager.getExternalStyle((String) externalStyleName,
-					getJasperConfiguration()));
+			jrstyle.setParentStyle(
+					ExternalStylesManager.getExternalStyle((String) externalStyleName, getJasperConfiguration()));
 		}
 	}
 
 	@Override
 	public void setValue(Object value) {
 		super.setValue(value);
-		// Set the external style as parent style if existing, to resolve JR resolving problem at design time
+		// Set the external style as parent style if existing, to resolve JR resolving
+		// problem at design time
 		fixExternalStyleReference(((JRBaseStyle) value).getStyleNameReference());
 	}
 
@@ -817,7 +839,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 * Creates the jr style.
 	 * 
 	 * @param jrDesign
-	 *          the jr design
+	 *            the jr design
 	 * @return the jR design style
 	 */
 	public static JRDesignStyle createJRStyle(JasperDesign jrDesign) {
@@ -827,38 +849,45 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	}
 
 	/**
-	 * Search all the nodes that are using this styles and set the flag to tell the graphic manager to repaint them
-	 * At the first iteration the node must be the root
+	 * Search all the nodes that are using this styles and set the flag to tell the
+	 * graphic manager to repaint them At the first iteration the node must be the
+	 * root
 	 * 
 	 * @param childerns
-	 *          the children of the actual level
-	 * @param force force the refresh in all the nodes, ignoring if they are using or not the style
+	 *            the children of the actual level
+	 * @param force
+	 *            force the refresh in all the nodes, ignoring if they are using or
+	 *            not the style
 	 */
 	private void setStyleRefresh(INode node, boolean force) {
-		if (force || getValue().isDefault()){
-			if (node instanceof IGraphicalPropertiesHandler){
-				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler)node;
+		if (force || getValue().isDefault()) {
+			if (node instanceof IGraphicalPropertiesHandler) {
+				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler) node;
 				graphicalElement.setChangedProperty(true);
-				//Since a style change can change the presence of an error decorator (the fault property can be inherited)
-				//we need to refresh also the elements depending on this style
-				((ANode)node).revalidateChildren();
+				// Since a style change can change the presence of an error decorator (the fault
+				// property can be inherited)
+				// we need to refresh also the elements depending on this style
+				((ANode) node).revalidateChildren();
 			}
-			//update all the nodes
+			// update all the nodes
 			for (INode child : node.getChildren()) {
 				setStyleRefresh(child, force);
 			}
 		} else {
-			HashMap<String, List<ANode>> nodesUsingStyle = ((ANode)node).getUsedStyles();
+			Map<String, List<ANode>> nodesUsingStyle = ((ANode) node).getUsedStyles();
 			List<ANode> nodes = nodesUsingStyle.get(getValue().getName());
-			if (nodes == null) return;
+			if (nodes == null)
+				return;
 			for (ANode aNode : nodes) {
-				if (aNode.getUsedStyles().containsKey(getValue().getName()) && aNode instanceof IGraphicalPropertiesHandler) {
-					IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler)aNode;
-					//ask the refresh of the element
+				if (aNode.getUsedStyles().containsKey(getValue().getName())
+						&& aNode instanceof IGraphicalPropertiesHandler) {
+					IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler) aNode;
+					// ask the refresh of the element
 					graphicalElement.setStyleChangedProperty();
-					//Since a style change can change the presence of an error decorator (the fault property can be inherited)
-					//we need to refresh also the elements depending on this style
-					((ANode)aNode).revalidateChildren();
+					// Since a style change can change the presence of an error decorator (the fault
+					// property can be inherited)
+					// we need to refresh also the elements depending on this style
+					aNode.revalidateChildren();
 				}
 			}
 		}
@@ -867,29 +896,30 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	/**
 	 * Return the styles used by this element and eventually by its children.
 	 * 
-	 * @return a not null map with the names of all the styles used by this
-	 * element or one of its children. The value corresponding to each style is
-	 * the reference to the element that is using the style
+	 * @return a not null map with the names of all the styles used by this element
+	 *         or one of its children. The value corresponding to each style is the
+	 *         reference to the element that is using the style
 	 */
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> result = super.getUsedStyles();
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> result = super.getUsedStyles();
 		JRStyle style = getValue().getStyle();
 		addElementStyle(style, result);
 		return result;
 	}
-	
+
 	@Override
 	public void setStyle(JRStyle style) {
-		if (getValue() != null){
-			((JRDesignStyle)getValue()).setParentStyle(style);
+		if (getValue() != null) {
+			((JRDesignStyle) getValue()).setParentStyle(style);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.PropertyChangeEvent)
+	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -900,7 +930,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				design.getStylesMap().remove(evt.getOldValue());
 				design.getStylesMap().put(jrstyle.getName(), jrstyle);
 			}
-		} else if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_CONDITIONAL_STYLES) && evt.getSource() == getValue()) {
+		} else if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_CONDITIONAL_STYLES)
+				&& evt.getSource() == getValue()) {
 			if (evt.getOldValue() == null && evt.getNewValue() != null) {
 				int newIndex = -1;
 				if (evt instanceof CollectionElementAddedEvent) {
@@ -930,7 +961,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	}
 
 	/**
-	 * Search in background the elements that are using this styles and mark them for the refresh
+	 * Search in background the elements that are using this styles and mark them
+	 * for the refresh
 	 */
 	public void fireUpdateForElements(final boolean force) {
 		Runnable notifier = new Runnable() {
@@ -945,7 +977,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		};
 		new Thread(notifier).start();
 	}
-	
+
 	/**
 	 * Return the style element
 	 */
@@ -953,33 +985,31 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		return (JRStyle) super.getValue();
 	}
 
-
-	
 	@Override
 	public void setEditable(boolean editable) {
 		super.setEditable(editable);
-		MLineBox lineBox = (MLineBox)getPropertyValue(LINE_BOX);
+		MLineBox lineBox = (MLineBox) getPropertyValue(LINE_BOX);
 		lineBox.setEditable(editable);
-		MLinePen linePen = (MLinePen)getPropertyValue(LINE_PEN);
+		MLinePen linePen = (MLinePen) getPropertyValue(LINE_PEN);
 		linePen.setEditable(editable);
-		MParagraph paragraph = (MParagraph)getPropertyValue(PARAGRAPH);
+		MParagraph paragraph = (MParagraph) getPropertyValue(PARAGRAPH);
 		paragraph.setEditable(editable);
 	}
-	
+
 	@Override
 	public ICopyable.RESULT isCopyable2(Object parent) {
-		//A style is copiable only to an MStyle or an MStyleReference that has
-		//the root as parent
-		if (parent instanceof MStyles){
+		// A style is copiable only to an MStyle or an MStyleReference that has
+		// the root as parent
+		if (parent instanceof MStyles) {
 			return ICopyable.RESULT.COPYABLE;
-		} else if (parent instanceof MStylesTemplate){
-			MStylesTemplate template = (MStylesTemplate)parent;
-			if (template.getParent() instanceof MRoot){
+		} else if (parent instanceof MStylesTemplate) {
+			MStylesTemplate template = (MStylesTemplate) parent;
+			if (template.getParent() instanceof MRoot) {
 				return ICopyable.RESULT.COPYABLE;
 			} else {
 				return ICopyable.RESULT.NOT_COPYABLE;
 			}
-		} else if (parent instanceof MConditionalStyle){
+		} else if (parent instanceof MConditionalStyle) {
 			return ICopyable.RESULT.NOT_COPYABLE;
 		}
 		return ICopyable.RESULT.CHECK_PARENT;

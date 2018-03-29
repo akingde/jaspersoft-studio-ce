@@ -4,8 +4,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -17,26 +17,25 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 public abstract class AMCollection extends MCollection {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String REFRESH_COLUM_NAMES = "refreshColumnNamesRequest";
-	
+
 	public abstract String getCellEvent();
 
 	public abstract void createColumn(ANode mth, BaseColumn bc, int i, int index);
 
-	public AMCollection(ANode parent, JRDesignComponentElement jrDataset,
-			String property) {
+	public AMCollection(ANode parent, JRDesignComponentElement jrDataset, String property) {
 		super(parent, jrDataset, property);
 	}
-	
+
 	@Override
 	public void register() {
-		//the table collections doesn't register them self because
-		//the would use the same key of the table (the JRDesignComponentElement)
-		//overriding the registration of the table, that is the real node
-		//associated with the key
+		// the table collections doesn't register them self because
+		// the would use the same key of the table (the JRDesignComponentElement)
+		// overriding the registration of the table, that is the real node
+		// associated with the key
 	}
 
 	/*
@@ -74,17 +73,17 @@ public abstract class AMCollection extends MCollection {
 	}
 
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> result = super.getUsedStyles();
-		for(INode child : getChildren()){
-			if (child instanceof ANode){
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> result = super.getUsedStyles();
+		for (INode child : getChildren()) {
+			if (child instanceof ANode) {
 				mergeElementStyle(result, ((ANode) child).getUsedStyles());
 			}
 		}
 		return result;
 	}
-	
-	public MTable getMTable(){
-		return (MTable)getParent();
+
+	public MTable getMTable() {
+		return (MTable) getParent();
 	}
 }

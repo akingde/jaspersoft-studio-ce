@@ -3,7 +3,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.reader;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -85,18 +84,14 @@ public class DatasetReader {
 	private boolean running;
 
 	public DatasetReader() {
-		listeners = new ArrayList<DatasetReaderListener>();
+		listeners = new ArrayList<>();
 	}
 
 	public static JasperDesign getJasperDesign(JasperReportsConfiguration jConfig) throws IOException, JRException {
-		FileInputStream is = null;
-		try {
-			String reportLocation = JaspersoftStudioPlugin.getInstance()
-					.getFileLocation(DataPreviewScriptlet.PREVIEW_REPORT_PATH);
-			is = new FileInputStream(reportLocation);
+		String reportLocation = JaspersoftStudioPlugin.getInstance()
+				.getFileLocation(DataPreviewScriptlet.PREVIEW_REPORT_PATH);
+		try (FileInputStream is = new FileInputStream(reportLocation);) {
 			return JRXmlLoader.load(jConfig, is);
-		} finally {
-			FileUtils.closeStream(is);
 		}
 	}
 
@@ -127,7 +122,7 @@ public class DatasetReader {
 		}
 
 		// 5. Add the fields
-		if (columns.size() > 0) {
+		if (columns.isEmpty()) {
 			// Clear "dirty" fields
 			dataJD.getFieldsList().clear();
 			dataJD.getFieldsMap().clear();
@@ -148,7 +143,6 @@ public class DatasetReader {
 		for (JRGroup sf : designDataset.getGroupsList()) {
 			JRDesignGroup gr = new JRDesignGroup();
 			gr.setName(sf.getName());
-			// gr.setExpression(sf.getExpression());
 			dataJD.addGroup(gr);
 		}
 
@@ -198,7 +192,6 @@ public class DatasetReader {
 		JasperReport jrobj = null;
 		IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
 		if (f != null) {
-			// System.out.println(JRXmlWriter.writeReport(dataJD, "UTF-8"));
 			Markers.deleteMarkers(f);
 			JasperReportCompiler compiler = new JasperReportCompiler();
 			compiler.setErrorHandler(new JRErrorHandler(f));
@@ -207,13 +200,13 @@ public class DatasetReader {
 			if (jrobj == null) {
 				IMarker[] markers = f.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 				if (!Misc.isNullOrEmpty(markers)) {
-					Set<String> set = new LinkedHashSet<String>();
+					Set<String> set = new LinkedHashSet<>();
 					for (IMarker m : markers)
 						set.add(m.getAttribute(IMarker.MESSAGE).toString());
-					String str = "";
+					StringBuilder str = new StringBuilder("");
 					for (String s : set)
-						str += s + "\n";
-					UIUtils.showError(new Exception(str));
+						str.append(s + "\n");
+					UIUtils.showError(new Exception(str.toString()));
 				}
 				return null;
 			}
@@ -223,7 +216,7 @@ public class DatasetReader {
 	}
 
 	public static Map<String, Object> prepareParameters(JasperReportsConfiguration jConfig, int maxRecords) {
-		Map<String, Object> hm = new HashMap<String, Object>();
+		Map<String, Object> hm = new HashMap<>();
 		if (jConfig.getJRParameters() != null) {
 			// add also prompting parameters that may have previously
 			// set during a preview phase. This way we can get a more
@@ -344,7 +337,6 @@ public class DatasetReader {
 			// a stop on the reading has been invoked.
 		} catch (Exception e) {
 			UIUtils.showError(e);
-			// UIUtils.showError(Messages.DatasetReader_GenericErrorMsg, e);
 		} finally {
 			if (hm != null && rc != null)
 				hm.put(JRParameter.REPORT_CONTEXT, rc);
@@ -403,14 +395,10 @@ public class DatasetReader {
 	public void setDesignDataset(JRDesignDataset designDataset) {
 		this.designDataset = designDataset;
 
-		designDataset.getEventSupport().addPropertyChangeListener(new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
-					recalcParameters = true;
-					listenParameters();
-				}
+		designDataset.getEventSupport().addPropertyChangeListener(evt -> {
+			if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
+				recalcParameters = true;
+				listenParameters();
 			}
 		});
 
@@ -424,13 +412,9 @@ public class DatasetReader {
 		}
 	}
 
-	private PropertyChangeListener dveListener = new PropertyChangeListener() {
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION))
-				recalcParameters = true;
-		}
+	private PropertyChangeListener dveListener = evt -> {
+		if (evt.getPropertyName().equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION))
+			recalcParameters = true;
 	};
 
 	public int getMaxRecords() {

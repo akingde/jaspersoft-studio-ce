@@ -5,8 +5,8 @@
 package com.jaspersoft.studio.components.crosstab.model;
 
 import java.beans.PropertyChangeEvent;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -84,9 +84,8 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
-		totalPositionD = new CrosstabtotalPropertyDescriptor(
-				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, Messages.common_total_position,
-				CrosstabTotalPositionEnum.NONE, NullEnum.NOTNULL);
+		totalPositionD = new CrosstabtotalPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION,
+				Messages.common_total_position, CrosstabTotalPositionEnum.NONE, NullEnum.NOTNULL);
 		totalPositionD.setDescription(Messages.MCrosstabGroup_total_position_description);
 		desc.add(totalPositionD);
 
@@ -110,8 +109,7 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
@@ -138,8 +136,8 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 	}
 
 	/**
-	 * Called when the group name changes, it must search the cells using that
-	 * group and update their reference as well
+	 * Called when the group name changes, it must search the cells using that group
+	 * and update their reference as well
 	 * 
 	 * @param oldName
 	 *            the old name of the group
@@ -151,8 +149,7 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
@@ -176,8 +173,8 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 	}
 
 	@Override
-	public HashMap<String, List<ANode>> getUsedStyles() {
-		HashMap<String, List<ANode>> result = super.getUsedStyles();
+	public Map<String, List<ANode>> getUsedStyles() {
+		Map<String, List<ANode>> result = super.getUsedStyles();
 		for (INode node : getChildren()) {
 			if (node instanceof ANode) {
 				mergeElementStyle(result, ((ANode) node).getUsedStyles());
