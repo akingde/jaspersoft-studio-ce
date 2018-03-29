@@ -51,6 +51,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 public class ElementPreviewer {
@@ -213,6 +214,7 @@ public class ElementPreviewer {
 			tjd.setNoData(null);
 			tjd.setBackground(null);
 			tjd.setScriptletClass(null);
+			tjd.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL);
 			for (JRScriptlet s : tjd.getScriptlets())
 				tjd.removeScriptlet(s);
 			return tjd;
