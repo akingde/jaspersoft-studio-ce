@@ -169,7 +169,6 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		int index = CreateRequestUtil.getNewIndex(request);
 		if (request.getType() == REQ_CREATE && getHost() instanceof AJDEditPart) {
 			Rectangle constraint = adaptConstraint(getConstraintFor(request));
-
 			ANode parent = (ANode) getHost().getModel();
 			Rectangle copyconstraint = constraint.getCopy();
 			if (request.getNewObject() instanceof Collection<?>) {
@@ -199,7 +198,10 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 								rest = 0;
 							}
 						}
-					} else if (objs.size() == 1 && parent.getChildren().isEmpty()) {	
+					} 	//THE CASE WHERE A SINGLE ITEM CREATED INTO AN EMPTY CONTAINER IS MOVED TO 0,0 WAS REMOVED DUE TO THE BUG JSS-662
+						//ALSO THE ADJUST CONSTRINT CALL WAS MODIFIED TO AVOID THE Y SET TO 0
+						/*else if (objs.size() == 1 && parent.getChildren().isEmpty()) {	
+						//here if the element is moved to the top left if the parent is empty
 						positionModifiedCreation = true;
 						Rectangle rparent = ((IGraphicElement) parent).getBounds();
 						copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left, copyconstraint.getLocation().y);
@@ -207,7 +209,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 						if (cmd != null) {
 							ccmd.add(cmd);
 						}	
-					}
+					}*/
 				} 
 				if (!positionModifiedCreation) {
 					for (Object it : objs) {
@@ -306,7 +308,20 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 					}
 				}
 			} else if (aNode instanceof MField || aNode instanceof MParameter || aNode instanceof MVariable) {
-				adjustConstraints(parent, constraint);
+				//AVOID TO SET THE Y TO 0 IF ONLY AN ELEMENT IS CREATED
+				boolean adjustConstraints = true;
+				if (request != null && request instanceof CreateRequest) {
+					CreateRequest createReq = (CreateRequest)request;
+					if (createReq.getNewObject() instanceof Collection<?>) {
+						Collection<?> objs = (Collection<?>) createReq.getNewObject(); 
+						if (objs.size() <= 1) {
+							adjustConstraints = false;
+						}
+					} else {
+						adjustConstraints = false;
+					}
+				}
+				if (adjustConstraints) adjustConstraints(parent, constraint);
 			} else if (aNode instanceof MFields) {
 				adjustConstraints(parent, constraint);
 				CompoundCommand c = new CompoundCommand();
