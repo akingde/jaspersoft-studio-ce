@@ -43,14 +43,18 @@ public class MPage extends MLockableRefresh implements IGraphicElement, IContain
 		return this;
 	}
 
-	public void register(ANode n) {
-		if (n.getValue() != null)
-			obj2Node.put(n.getValue(), n);
+	@Override
+	public void register(Object key, ANode value) {
+		if (key != null) {
+			obj2Node.put(key, value);
+		}
 	}
-
-	public void unregister(ANode n) {
-		if (n.getValue() != null)
-			obj2Node.remove(n.getValue());
+	
+	@Override
+	public void unregister(Object key) {
+		if (key != null) {
+			obj2Node.remove(key);
+		}
 	}
 
 	public ANode getNode(Object obj) {

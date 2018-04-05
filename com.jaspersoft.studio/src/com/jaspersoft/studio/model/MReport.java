@@ -118,17 +118,19 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	public INode getRoot() {
 		return this;
 	}
-
+	
 	@Override
-	public void register(ANode n) {
-		if (n.getValue() != null)
-			obj2Node.put(n.getValue(), n);
+	public void register(Object key, ANode value) {
+		if (key != null) {
+			obj2Node.put(key, value);
+		}
 	}
-
+	
 	@Override
-	public void unregister(ANode n) {
-		if (n.getValue() != null)
-			obj2Node.remove(n.getValue());
+	public void unregister(Object key) {
+		if (key != null) {
+			obj2Node.remove(key);
+		}
 	}
 
 	public ANode getNode(Object obj) {

@@ -6,7 +6,6 @@ package com.jaspersoft.studio.components.list.model;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -116,6 +115,34 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 	public MList(ANode parent, JRDesignComponentElement jrList, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrList);
+	}
+	
+	/**	
+	* The list register and deregister other additional object to make easier to find
+	* its model
+	*/
+	@Override
+	public void register() {
+		super.register();
+		if (getValue() != null) {
+			INode troot = getRoot();
+			if (troot != null && troot instanceof ANode) {
+				((ANode) troot).register(getList(), this);
+				((ANode) troot).register(getJRElementGroup(), this);
+			}
+		}
+	}
+	
+	@Override
+	public void unregister() {
+		super.unregister();
+		if (getValue() != null) {
+			INode troot = getRoot();
+			if (troot != null && troot instanceof ANode) {
+				((ANode) troot).unregister(getList());
+				((ANode) troot).unregister(getJRElementGroup());
+			}
+		}
 	}
 
 	@Override

@@ -79,7 +79,7 @@ public class SpreadsheetLayout extends AbstractLayout {
 	 */
 	public Map<JRElement, Rectangle> layout(JasperDesign jd, JRElementGroup container, JRElement[] elements, Dimension c) {
 		MBand ancestorBand = getParentBand(SelectionHelper.getNode(container));
-		if (ancestorBand.getBandType() != BandTypeEnum.DETAIL && jd.getDetailSection().getBands().length > 0){
+		if (ancestorBand != null && ancestorBand.getBandType() != BandTypeEnum.DETAIL && jd.getDetailSection().getBands().length > 0){
 			//Search the detail band
 			JRBand firstDetail = jd.getDetailSection().getBands()[0];
 			
