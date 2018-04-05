@@ -117,10 +117,6 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		setValue(jrList);
 	}
 	
-	/**	
-	* The list register and deregister other additional object to make easier to find
-	* its model
-	*/
 	@Override
 	public void register() {
 		super.register();

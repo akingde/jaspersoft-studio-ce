@@ -210,10 +210,10 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 			((ANode) root).unregister(this);
 		root = null;
 	}
-	
-	public void register(Object key, ANode value) {
-	}
 
+	public void register(Object key, ANode value){
+	}
+	
 	public void unregister(Object key) {
 	}
 
