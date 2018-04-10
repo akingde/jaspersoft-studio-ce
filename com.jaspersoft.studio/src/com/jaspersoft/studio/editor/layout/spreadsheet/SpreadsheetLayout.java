@@ -215,10 +215,30 @@ public class SpreadsheetLayout extends AbstractLayout {
 		return null;
 	}
 	
+	/**
+	 * Check if the passed node is child of the first detail band
+	 * 
+	 * @return true if the passed node is child of the first detail band,
+	 *  false otherwise
+	 */
+	private boolean isParentFirstDetailBand(ANode node) {
+		if (node != null) {
+			ANode parent = node.getParent();
+			if (parent != null && parent instanceof MBand) {
+				JRBand[] detailBands = node.getJasperDesign().getDetailSection().getBands();
+				if (detailBands.length > 0 && detailBands[0] == parent.getValue()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public boolean allowChildBoundChange(ANode resizedNode, Rectangle oldBounds, Rectangle newBounds) {
 		if (oldBounds == null || newBounds  == null) return false;
  		if (ModelUtils.safeEquals(oldBounds, newBounds)) return true;
+ 		if (isParentFirstDetailBand(resizedNode) && (oldBounds.x != newBounds.x || oldBounds.y != newBounds.y)) return false;
 		JRPropertiesMap nodeMap = LayoutManager.getPropertyHolder(resizedNode).getPropertiesMap();
 		if (!nodeMap.containsProperty(PROPERTY_ID)) return true;
 		return oldBounds.x != newBounds.x && oldBounds.y != newBounds.y;
