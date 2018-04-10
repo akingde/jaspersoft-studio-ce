@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
+import com.jaspersoft.jasperserver.dto.common.ErrorDescriptor;
 import com.jaspersoft.jasperserver.remote.exception.RemoteException;
 
 /**
@@ -111,7 +111,7 @@ public class ExportExecution {
 				try {
 					condition.await();
 				} catch (InterruptedException e) {
-					throw new RemoteException(new ErrorDescriptor(e));
+					throw new RemoteException(new ErrorDescriptor().setException(e));
 				}
 			}
 			if (status == null)
@@ -119,17 +119,18 @@ public class ExportExecution {
 			ErrorDescriptor descriptor = null;
 			switch (status) {
 			case failed: {
-				descriptor = errorDescriptor != null ? errorDescriptor : new ErrorDescriptor.Builder().setErrorCode("export.failed").setMessage("Export failed").getErrorDescriptor();
+				descriptor = errorDescriptor != null ? errorDescriptor
+						: new ErrorDescriptor().setErrorCode("export.failed").setMessage("Export failed");
 			}
 				break;
 			case cancelled: {
-				descriptor = new ErrorDescriptor.Builder().setErrorCode("export.cancelled").setMessage("Export cancelled").getErrorDescriptor();
+				descriptor = new ErrorDescriptor().setErrorCode("export.cancelled").setMessage("Export cancelled");
 			}
 				break;
 			case ready:
 				break;
 			default: {
-				descriptor = new ErrorDescriptor.Builder().setErrorCode("export.not.ready").setMessage("Export not ready").getErrorDescriptor();
+				descriptor = new ErrorDescriptor().setErrorCode("export.not.ready").setMessage("Export not ready");
 			}
 			}
 			if (descriptor != null)
@@ -156,6 +157,7 @@ public class ExportExecution {
 	@XmlElementWrapper(name = "attachments")
 	@XmlElement(name = "attachment")
 	public Set<ReportOutputResource> getAttachmentsSet() {
-		return attachments != null && !attachments.isEmpty() ? new HashSet<ReportOutputResource>(attachments.values()) : null;
+		return attachments != null && !attachments.isEmpty() ? new HashSet<ReportOutputResource>(attachments.values())
+				: null;
 	}
 }

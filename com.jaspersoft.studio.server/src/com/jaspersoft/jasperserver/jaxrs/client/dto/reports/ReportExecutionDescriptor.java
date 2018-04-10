@@ -33,12 +33,13 @@
 
 package com.jaspersoft.jasperserver.jaxrs.client.dto.reports;
 
-import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
+
+import com.jaspersoft.jasperserver.dto.common.ErrorDescriptor;
 
 //@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "reportExecution")

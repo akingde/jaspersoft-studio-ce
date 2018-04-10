@@ -35,7 +35,7 @@
  */
 package com.jaspersoft.jasperserver.remote.exception;
 
-import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
+import com.jaspersoft.jasperserver.dto.common.ErrorDescriptor;
 
 /**
  * @author Yaroslav.Kovalchyk
@@ -43,47 +43,48 @@ import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
  */
 public class RemoteException extends RuntimeException {
 
-    private ErrorDescriptor errorDescriptor;
+	private ErrorDescriptor errorDescriptor;
 
-    public RemoteException() {
-        super();
-        this.errorDescriptor = new ErrorDescriptor.Builder().getErrorDescriptor();
-    }
+	public RemoteException() {
+		super();
+		this.errorDescriptor = new ErrorDescriptor();
+	}
 
-    public RemoteException(String message) {
-        super(message);
-        this.errorDescriptor = new ErrorDescriptor.Builder().setMessage(message).getErrorDescriptor();
-    }
+	public RemoteException(String message) {
+		super(message);
+		this.errorDescriptor = new ErrorDescriptor().setMessage(message);
+	}
 
-    public RemoteException(String message, Throwable cause) {
-        super(message, cause);
-        this.errorDescriptor = new ErrorDescriptor.Builder().setMessage(message).getErrorDescriptor();
-    }
+	public RemoteException(String message, Throwable cause) {
+		super(message, cause);
+		this.errorDescriptor = new ErrorDescriptor().setMessage(message);
+	}
 
-    public RemoteException(Throwable cause) {
-        super(cause);
-        this.errorDescriptor = new ErrorDescriptor(cause);
-    }
+	public RemoteException(Throwable cause) {
+		super(cause);
+		this.errorDescriptor = new ErrorDescriptor().setException(cause);
+	}
 
-    public RemoteException(ErrorDescriptor errorDescriptor){
-        super(errorDescriptor.getMessage());
-        this.errorDescriptor = errorDescriptor;
-    }
+	public RemoteException(ErrorDescriptor errorDescriptor) {
+		super(errorDescriptor.getMessage());
+		this.errorDescriptor = errorDescriptor;
+	}
 
-    public RemoteException(ErrorDescriptor errorDescriptor, Throwable e){
-        super(errorDescriptor.getMessage(), e);
-        this.errorDescriptor = errorDescriptor;
-    }
+	public RemoteException(ErrorDescriptor errorDescriptor, Throwable e) {
+		super(errorDescriptor.getMessage(), e);
+		this.errorDescriptor = errorDescriptor;
+	}
 
-    public ErrorDescriptor getErrorDescriptor() {
-        return errorDescriptor;
-    }
+	public ErrorDescriptor getErrorDescriptor() {
+		return errorDescriptor;
+	}
 
-    public void setErrorDescriptor(ErrorDescriptor errorDescriptor) {
-        this.errorDescriptor = errorDescriptor;
-    }
+	public void setErrorDescriptor(ErrorDescriptor errorDescriptor) {
+		this.errorDescriptor = errorDescriptor;
+	}
 
-    public Boolean isUnexpected(){
-        return getErrorDescriptor() != null && ErrorDescriptor.ERROR_CODE_UNEXPECTED_ERROR.equals(getErrorDescriptor().getErrorCode());
-    }
+	public Boolean isUnexpected() {
+		return getErrorDescriptor() != null
+				&& ErrorDescriptor.ERROR_CODE_UNEXPECTED_ERROR.equals(getErrorDescriptor().getErrorCode());
+	}
 }

@@ -6,8 +6,6 @@ package com.jaspersoft.studio.server.wizard.imp;
 
 import java.lang.reflect.InvocationTargetException;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
@@ -16,6 +14,8 @@ import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class ImportMetadataWizard extends Wizard {
 	private ImportMetadataPage page0;

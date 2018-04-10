@@ -122,7 +122,7 @@ public class DatasetReader {
 		}
 
 		// 5. Add the fields
-		if (columns.isEmpty()) {
+		if (!columns.isEmpty()) {
 			// Clear "dirty" fields
 			dataJD.getFieldsList().clear();
 			dataJD.getFieldsMap().clear();
