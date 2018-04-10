@@ -218,8 +218,7 @@ public class SpreadsheetLayout extends AbstractLayout {
 	/**
 	 * Check if the passed node is child of the first detail band
 	 * 
-	 * @return true if the passed node is child of the first detail band,
-	 *  false otherwise
+	 * @return true if the passed node is child of the first detail band false otherwise
 	 */
 	private boolean isParentFirstDetailBand(ANode node) {
 		if (node != null) {

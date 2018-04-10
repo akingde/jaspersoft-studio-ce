@@ -66,7 +66,7 @@ public class SizeSection extends AbstractRealValueSection {
 	}
 	
 	/**
-	 * Create a custom command that will trigger a layout after the resize
+	 * Create a custom command that will trigger a layout after the resize 
 	 */
 	@Override
 	public Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
