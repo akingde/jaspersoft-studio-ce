@@ -237,10 +237,10 @@ public class SpreadsheetLayout extends AbstractLayout {
 	public boolean allowChildBoundChange(ANode resizedNode, Rectangle oldBounds, Rectangle newBounds) {
 		if (oldBounds == null || newBounds  == null) return false;
  		if (ModelUtils.safeEquals(oldBounds, newBounds)) return true;
- 		if (isParentFirstDetailBand(resizedNode) && (oldBounds.x != newBounds.x || oldBounds.y != newBounds.y)) return false;
+ 		if (isParentFirstDetailBand(resizedNode)) return (oldBounds.width != newBounds.width || oldBounds.height != newBounds.height);
 		JRPropertiesMap nodeMap = LayoutManager.getPropertyHolder(resizedNode).getPropertiesMap();
 		if (!nodeMap.containsProperty(PROPERTY_ID)) return true;
-		return oldBounds.x != newBounds.x && oldBounds.y != newBounds.y;
+		return oldBounds.width != newBounds.width || oldBounds.height != newBounds.height;
 	}
 
 	@Override
