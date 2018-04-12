@@ -119,11 +119,17 @@ public class SetConstraintCommand extends Command {
 	 */
 	private boolean isOperationAllowed(Rectangle oldBounds, Rectangle newBounds){
 		JRPropertiesMap newMap = LayoutManager.getPropertyMap(originalParent);
-		if (newMap != null){
+		if (newMap != null && jrElement != null){
 			 String parentLayout = newMap.getProperty(ILayout.KEY);
 			if (parentLayout != null){
 				ILayout layout = LayoutManager.getLayout(parentLayout);
-				return layout.allowChildBoundChange(getNodeForElement(originalParent), oldBounds, newBounds);
+				//calculate the new bounds of the element relative to the parent
+				Rectangle relativeNewBounds = new Rectangle(newBounds);
+				int x = jrElement.getX() + newBounds.x - parentBounds.x;
+				int y = jrElement.getY() + newBounds.y - parentBounds.y;
+				relativeNewBounds.setX(x);
+				relativeNewBounds.setY(y);
+				return layout.allowChildBoundChange(getNodeForElement(originalParent), oldBounds, relativeNewBounds);
 			}
 		}
 		return true;
