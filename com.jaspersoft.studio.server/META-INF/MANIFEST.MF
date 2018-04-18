@@ -29,7 +29,6 @@ Bundle-ClassPath: lib/jasperserver-dto-bugfix-20180112.170012-2.jar,
  lib/jersey/json-20131018.jar,
  lib/jersey/jsonp-jaxrs-1.0.jar,
  lib/jersey/jsr250-api-1.0.jar,
- lib/jersey/net.java.html.json-0.6.jar,
  lib/jersey213/html-json-2.13.jar,
  lib/jersey213/jersey-apache-connector-2.13.jar,
  lib/jersey213/jersey-client-2.13.jar,
@@ -66,6 +65,7 @@ Bundle-ClassPath: lib/jasperserver-dto-bugfix-20180112.170012-2.jar,
  lib/jersey213/jersey-guava-2.13.jar,
  lib/jersey213/jersey-media-multipart-2.13.jar,
  lib/jersey213/mimepull-1.9.6.jar,
+ lib/jersey/net.java.html.json-0.7.1.jar,
  .
 Eclipse-RegisterBuddy: com.jaspersoft.studio
 Eclipse-BuddyPolicy: registered
