@@ -177,6 +177,8 @@ public class Messages extends NLS {
 	public static String AdditionalJarsPage_columnTitle;
 	public static String AdditionalJarsPage_wizardDescription;
 	public static String AdditionalJarsPage_wizardTitle;
+	public static String AdjustTextFontSize_action_name;
+	public static String AdjustTextFontSize_action_tooltip;
 	public static String AExportAction_exportreport;
 	public static String AExportAction_overwriteCheckbox;
 	public static String AExportAction_overwriteMessage;
