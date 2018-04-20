@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/ejb3-persistence.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/persistence-api-1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/hibernate-annotations.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/hibernate-commons-annotations.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/hibernate3.jar"/>
