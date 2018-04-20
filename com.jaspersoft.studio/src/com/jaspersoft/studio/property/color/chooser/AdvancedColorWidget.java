@@ -396,7 +396,7 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 		int r = color.red;
 		int g = color.green;
 		int b = color.blue;
-		String s = StringUtils.rightPad(Integer.toHexString(r), 2, "0")  + StringUtils.rightPad(Integer.toHexString(g), 2, "0") + StringUtils.rightPad(Integer.toHexString(b), 2, "0");
+		String s = StringUtils.leftPad(Integer.toHexString(r), 2, "0")  + StringUtils.leftPad(Integer.toHexString(g), 2, "0") + StringUtils.leftPad(Integer.toHexString(b), 2, "0");
 		return "#" + s.toUpperCase(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
