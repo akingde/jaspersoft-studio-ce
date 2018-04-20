@@ -52,6 +52,7 @@ import com.jaspersoft.studio.editor.action.order.BringToBackAction;
 import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
+import com.jaspersoft.studio.editor.action.text.AdjustTextFontSize;
 import com.jaspersoft.studio.editor.action.text.ConvertStaticIntoText;
 import com.jaspersoft.studio.editor.action.text.ConvertTextIntoStatic;
 import com.jaspersoft.studio.editor.defaults.SetDefaultsAction;
@@ -710,16 +711,22 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 
 		menu.add(new Separator());
 
+		// Start of the convert actions
+		
 		action = getActionRegistry().getAction(ConvertStaticIntoText.ID);
 		if (action.isEnabled())
 			menu.add(action);
 
-		// Start of the convert actions
 		action = getActionRegistry().getAction(ConvertTextIntoStatic.ID);
 		if (action.isEnabled())
 			menu.add(action);
 
 		// End of the convert actions
+		
+		action = getActionRegistry().getAction(AdjustTextFontSize.ID);
+		if (action.isEnabled())
+			menu.add(action);
+
 
 		// Action to open a subreport into the editor
 		action = getActionRegistry().getAction(OpenEditorAction.ID);

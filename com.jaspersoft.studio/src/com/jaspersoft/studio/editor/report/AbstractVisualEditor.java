@@ -112,6 +112,7 @@ import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGeometryAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
+import com.jaspersoft.studio.editor.action.text.AdjustTextFontSize;
 import com.jaspersoft.studio.editor.action.text.BoldAction;
 import com.jaspersoft.studio.editor.action.text.ConvertStaticIntoText;
 import com.jaspersoft.studio.editor.action.text.ConvertTextIntoStatic;
@@ -1104,6 +1105,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		// End of the convert actions
+		
+		action = new AdjustTextFontSize(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
 
 		// Move group and detail actions
 		action = new MoveGroupUpAction(this);
