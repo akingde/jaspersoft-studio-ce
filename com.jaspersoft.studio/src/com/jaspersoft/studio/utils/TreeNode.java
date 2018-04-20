@@ -57,7 +57,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 	 */
 	public List<TreeNode<T>> getChildren() {
 		if(children==null){
-			children = new ArrayList<TreeNode<T>>();
+			children = new ArrayList<>();
 		}
 		return children;
 	}
@@ -83,7 +83,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 	 * 			<code>false</code> otherwise
 	 */
 	public boolean hasChildren() {
-		return getChildren().size()>0;
+		return !getChildren().isEmpty();
 	}
 
 }

@@ -11,6 +11,16 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+
+import com.jaspersoft.studio.messages.Messages;
+
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRRuntimeException;
@@ -22,16 +32,6 @@ import net.sf.jasperreports.repo.OutputStreamResource;
 import net.sf.jasperreports.repo.ReportResource;
 import net.sf.jasperreports.repo.RepositoryService;
 import net.sf.jasperreports.repo.Resource;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
-
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.SubreportsUtil;
 
 public class JSSFileRepositoryService implements RepositoryService {
 	private List<RepositoryService> list;
@@ -139,11 +139,11 @@ public class JSSFileRepositoryService implements RepositoryService {
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					if (rs instanceof DefaultRepositoryService) {
-						IFile[] fs = SubreportsUtil.root.findFilesForLocationURI(new URI(uri));
+						IFile[] fs = JDTUtils.WS_ROOT.findFilesForLocationURI(new URI(uri));
 						if (fs != null && fs.length > 0)
 							fs[0].refreshLocal(1, monitor);
 					} else if (rs instanceof FileRepositoryService) {
-						IFile[] fs = SubreportsUtil.root
+						IFile[] fs = JDTUtils.WS_ROOT
 								.findFilesForLocationURI(new File(((FileRepositoryService) rs).getRoot(), uri).toURI());
 						if (fs != null && fs.length > 0)
 							fs[0].refreshLocal(1, monitor);

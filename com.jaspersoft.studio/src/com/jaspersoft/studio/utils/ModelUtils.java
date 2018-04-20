@@ -115,11 +115,17 @@ import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
  */
 public class ModelUtils {
 
-	public static final String[] FONT_SIZES = new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
+	public static final String[] FONT_SIZES = new String[] { 
+			"", "8", "9", "10", "11", "12", "14", "16", "18", "20", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
 			"22", "24", "26" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	public static final String MAIN_DATASET = Messages.ModelUtils_13;
 	private static final String[] DEFAULT_LANGUAGES = new String[] { "groovy", "java", "javascript" };
+	private static Map<String, String> mp = new HashMap<>();
+	private static java.util.List<String> pdfencodings;
 
+	private ModelUtils() {
+	}
+	
 	public static JRDesignDataset getDataset(ANode node) {
 		ANode n = node.getParent();
 		while (n != null) {
@@ -184,8 +190,7 @@ public class ModelUtils {
 	public static JasperDesign copyJasperDesign(JasperReportsContext jContext, JasperDesign jrd) throws JRException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		JRSaver.saveObject(jrd, out);
-		JasperDesign jd = (JasperDesign) JRLoader.loadObject(jContext, new ByteArrayInputStream(out.toByteArray()));
-		return jd;
+		return (JasperDesign) JRLoader.loadObject(jContext, new ByteArrayInputStream(out.toByteArray()));
 	}
 
 	public static JRBand getGroupFooter(JRGroup group) {
@@ -239,12 +244,12 @@ public class ModelUtils {
 	 * @return an array of strings with the names of the datasets.
 	 */
 	public static String[] getDataSets(JasperDesign jd, boolean includeMainDataset) {
-		List<JRDataset> datasetsList = new ArrayList<JRDataset>(jd.getDatasetsList());
+		List<JRDataset> datasetsList = new ArrayList<>(jd.getDatasetsList());
 		if (includeMainDataset)
 			datasetsList.add(0, jd.getMainDataset());
 		String[] res = new String[datasetsList.size()];
 		for (int i = 0; i < datasetsList.size(); i++) {
-			String name = ((JRDataset) datasetsList.get(i)).getName();
+			String name = datasetsList.get(i).getName();
 			if (datasetsList.get(i) == jd.getMainDataset())
 				name = MAIN_DATASET;
 			res[i] = name;
@@ -253,7 +258,7 @@ public class ModelUtils {
 	}
 
 	public static List<Object> getReportObjects4Datasource(JasperDesign jd, String ds) {
-		ArrayList<Object> inFields = new ArrayList<Object>();
+		ArrayList<Object> inFields = new ArrayList<>();
 		inFields.addAll(ModelUtils.getFields4Datasource(jd, ds));
 		inFields.addAll(ModelUtils.getVariables4Datasource(jd, ds));
 		inFields.addAll(ModelUtils.getParameters4Datasource(jd, ds));
@@ -261,7 +266,7 @@ public class ModelUtils {
 	}
 
 	public static List<Object> getReportObjects4Datasource(JRDataset ds) {
-		ArrayList<Object> inFields = new ArrayList<Object>();
+		ArrayList<Object> inFields = new ArrayList<>();
 		inFields.addAll(Arrays.asList(ds.getFields()));
 		inFields.addAll(Arrays.asList(ds.getVariables()));
 		inFields.addAll(Arrays.asList(ds.getParameters()));
@@ -270,19 +275,16 @@ public class ModelUtils {
 
 	public static List<JRParameter> getParameters4Datasource(JasperDesign jd, String ds) {
 		if (ds == null || ds.equals("")) { //$NON-NLS-1$
-			List<JRParameter> res = new ArrayList<JRParameter>(jd.getParametersList());
-			return res;
+			return new ArrayList<>(jd.getParametersList());
 		}
 		List<?> datasetsList = jd.getDatasetsList();
 		for (int i = 0; i < datasetsList.size(); i++) {
 			JRDesignDataset d = (JRDesignDataset) datasetsList.get(i);
 			if (d.getName().equals(ds)) {
-				List<JRParameter> fieldsList = d.getParametersList();
-				List<JRParameter> res = new ArrayList<JRParameter>(fieldsList);
-				return res;
+				return new ArrayList<>(d.getParametersList());
 			}
 		}
-		return new ArrayList<JRParameter>();
+		return new ArrayList<>();
 	}
 
 	/**
@@ -300,38 +302,30 @@ public class ModelUtils {
 
 	public static List<JRVariable> getVariables4Datasource(JasperDesign jd, String ds) {
 		if (ds == null || ds.equals("")) { //$NON-NLS-1$
-			List<JRVariable> fieldsList = jd.getVariablesList();
-			List<JRVariable> res = new ArrayList<JRVariable>(fieldsList);
-			return res;
+			return new ArrayList<>(jd.getVariablesList());
 		}
 		List<?> datasetsList = jd.getDatasetsList();
 		for (int i = 0; i < datasetsList.size(); i++) {
 			JRDesignDataset d = (JRDesignDataset) datasetsList.get(i);
 			if (d.getName().equals(ds)) {
-				List<JRVariable> fieldsList = d.getVariablesList();
-				List<JRVariable> res = new ArrayList<JRVariable>(fieldsList);
-				return res;
+				return new ArrayList<>(d.getVariablesList());
 			}
 		}
-		return new ArrayList<JRVariable>();
+		return new ArrayList<>();
 	}
 
 	public static List<JRField> getFields4Datasource(JasperDesign jd, String ds) {
 		if (ds == null || ds.equals("")) { //$NON-NLS-1$
-			List<JRField> fieldsList = jd.getFieldsList();
-			List<JRField> res = new ArrayList<JRField>(fieldsList);
-			return res;
+			return new ArrayList<>(jd.getFieldsList());
 		}
 		List<?> datasetsList = jd.getDatasetsList();
 		for (int i = 0; i < datasetsList.size(); i++) {
 			JRDesignDataset d = (JRDesignDataset) datasetsList.get(i);
 			if (d.getName().equals(ds)) {
-				List<JRField> fieldsList = d.getFieldsList();
-				List<JRField> res = new ArrayList<JRField>(fieldsList);
-				return res;
+				return new ArrayList<>(jd.getFieldsList());
 			}
 		}
-		return new ArrayList<JRField>();
+		return new ArrayList<>();
 	}
 
 	/**
@@ -349,9 +343,6 @@ public class ModelUtils {
 		return exp;
 	}
 
-	private static Map<String, String> mp = new HashMap<String, String>();
-	private static java.util.List<String> pdfencodings;
-
 	/**
 	 * Return the ordered list of bands available in the current report.
 	 * 
@@ -360,7 +351,7 @@ public class ModelUtils {
 	 * @return a list of bands
 	 */
 	public static List<JRBand> getBands(JasperDesign jd) {
-		List<JRBand> list = new ArrayList<JRBand>();
+		List<JRBand> list = new ArrayList<>();
 		if (jd == null)
 			return list;
 
@@ -505,7 +496,7 @@ public class ModelUtils {
 	 * @return the all bands
 	 */
 	public static List<JRBand> getAllBands(JasperDesign jrDesign) {
-		List<JRBand> bands = new ArrayList<JRBand>();
+		List<JRBand> bands = new ArrayList<>();
 		if (jrDesign.getTitle() != null)
 			bands.add(jrDesign.getTitle());
 		if (jrDesign.getPageHeader() != null)
@@ -559,7 +550,7 @@ public class ModelUtils {
 	 */
 	public static List<JRCrosstab> getAllCrosstabs(JasperDesign jrDesign) {
 		List<JRDesignElement> allElements = getAllElements(jrDesign);
-		List<JRCrosstab> allCrosstabs = new ArrayList<JRCrosstab>();
+		List<JRCrosstab> allCrosstabs = new ArrayList<>();
 		for (JRDesignElement el : allElements) {
 			if (el instanceof JRCrosstab) {
 				allCrosstabs.add((JRCrosstab) el);
@@ -588,7 +579,7 @@ public class ModelUtils {
 				Object de = n.getValue();
 				if (de instanceof JRDesignBand) {
 					JRDesignBand deband = (JRDesignBand) de;
-					res = (ANode) n;
+					res = n;
 					if (point.y >= xband && point.y < xband + deband.getHeight()) {
 						// go to children, we have the band allready
 						break;

@@ -29,8 +29,6 @@ import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Drawable;
@@ -59,8 +57,6 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
-import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
-import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.NullableSpinner;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
@@ -71,6 +67,9 @@ import net.sf.jasperreports.eclipse.util.Misc;
 public class UIUtil {
 	/** ID for the "Properties View" */
 	public static final String PROPERTIES_VIEW_ID = "org.eclipse.ui.views.PropertySheet"; //$NON-NLS-1$
+	
+	private UIUtil() {
+	}
 
 	/**
 	 * Set the value of a spinner. For convenience this method takes an object as value, but if the obj is null, or if it
@@ -233,46 +232,34 @@ public class UIUtil {
 			private boolean hadFocusOnMousedown = false;
 
 			public void handleEvent(Event e) {
+				Text t = (Text) e.widget;
 				switch (e.type) {
-				case SWT.FocusIn: {
-					Text t = (Text) e.widget;
-
+				case SWT.FocusIn:
 					// Covers the case where the user focuses by keyboard.
 					t.selectAll();
-
 					// The case where the user focuses by mouse click is special because Eclipse,
 					// for some reason, fires SWT.FocusIn before SWT.MouseDown, and on mouse down
 					// it cancels the selection. So we set a variable to keep track of whether the
-					// control is focused (can't rely on isFocusControl() because sometimes it's wrong),
+					// control is focused (can't rely on isFocusControl() because sometimes it's
+					// wrong),
 					// and we make it asynchronous so it will get set AFTER SWT.MouseDown is fired.
-					t.getDisplay().asyncExec(new Runnable() {
-						public void run() {
-							hasFocus = true;
-						}
-					});
-
+					t.getDisplay().asyncExec(() -> hasFocus = true);
 					break;
-				}
-				case SWT.FocusOut: {
+				case SWT.FocusOut:
 					hasFocus = false;
 					((Text) e.widget).clearSelection();
-
 					break;
-				}
-				case SWT.MouseDown: {
+				case SWT.MouseDown:
 					// Set the variable which is used in SWT.MouseUp.
 					hadFocusOnMousedown = hasFocus;
-
 					break;
-				}
-				case SWT.MouseUp: {
-					Text t = (Text) e.widget;
+				case SWT.MouseUp:
 					if (t.getSelectionCount() == 0 && !hadFocusOnMousedown) {
 						((Text) e.widget).selectAll();
 					}
-
 					break;
-				}
+				default:
+					break;
 				}
 			}
 
@@ -292,6 +279,7 @@ public class UIUtil {
 	 */
 	public static void setViewerCellEditingOnDblClick(TableViewer tviewer) {
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tviewer) {
+			@Override
 			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
 				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION;
 			}
@@ -308,6 +296,7 @@ public class UIUtil {
 	 */
 	public static void setViewerCellEditingOnDblClick(TreeViewer tviewer) {
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tviewer) {
+			@Override
 			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
 				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION;
 			}
@@ -328,14 +317,11 @@ public class UIUtil {
 	 */
 	public static void createErrorDecorationForEmptyText(final Text widget, int marginWidth, String description) {
 		final ControlDecoration textDecoration = createErrorDecoration(widget, marginWidth, description);
-		widget.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (widget.getText() == null || widget.getText().trim().isEmpty()) {
-					textDecoration.show();
-				} else {
-					textDecoration.hide();
-				}
+		widget.addModifyListener(e -> {
+			if (widget.getText() == null || widget.getText().trim().isEmpty()) {
+				textDecoration.show();
+			} else {
+				textDecoration.hide();
 			}
 		});
 	}
@@ -354,14 +340,11 @@ public class UIUtil {
 	public static void createErrorDecorationForBlankExpression(final WTextExpression widget, int marginWidth,
 			String description) {
 		final ControlDecoration textDecoration = createErrorDecoration(widget, marginWidth, description);
-		widget.addModifyListener(new ExpressionModifiedListener() {
-			@Override
-			public void expressionModified(ExpressionModifiedEvent event) {
-				if (widget.getText() == null || widget.getText().trim().isEmpty()) {
-					textDecoration.show();
-				} else {
-					textDecoration.hide();
-				}
+		widget.addModifyListener(event -> {
+			if (widget.getText() == null || widget.getText().trim().isEmpty()) {
+				textDecoration.show();
+			} else {
+				textDecoration.hide();
 			}
 		});
 	}
@@ -443,7 +426,7 @@ public class UIUtil {
 	 * Utility enumeration that maintains a collection of the know extensions for files that can be open with a direct
 	 * double click from a file system navigator (i.e: in Windows).
 	 */
-	public static enum EditorExtension {
+	public enum EditorExtension {
 		JRXML(".jrxml"), JRCTX(".jrctx"), JRTX(".jrtx"), JASPER(".jasper"), JRPRINT(".jrprint"), JRPXML(".jrpxml"), JSSCE(
 				".jssce");
 
@@ -467,7 +450,7 @@ public class UIUtil {
 		}
 
 		public static List<String> getKnowExtensions() {
-			List<String> result = new ArrayList<String>();
+			List<String> result = new ArrayList<>();
 			for (EditorExtension ex : values()) {
 				result.add(ex.getExtension());
 			}
@@ -620,6 +603,7 @@ public class UIUtil {
 			
 			@Override
 			public void menuHidden(MenuEvent e) {
+				// do nothing
 			}
 		});
 		widget.setMenu(menu);

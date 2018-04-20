@@ -75,6 +75,7 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 	/**
 	 * Parse and validate the value. The validation is done checking the value against the pattern
 	 */
+	@Override
 	public Number parse(String source) throws ParseException {
     ParsePosition pp = new ParsePosition(0);
     //char groupSeparator = getDecimalFormatSymbols().getGroupingSeparator();

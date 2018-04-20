@@ -33,13 +33,13 @@ import net.sf.jasperreports.engine.query.QueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRQueryExecuterUtils;
 
 public class SyncDatasetRunParameters {
-	private static Map<String, Object[]> bipMap = new HashMap<String, Object[]>();
+	private static Map<String, Object[]> bipMap = new HashMap<>();
 
 	public static void addMoreParameters(String lang, Object[] params) {
 		bipMap.put(lang, params);
 	}
 
-	public static List<IQueryLanguageChanged> changed = new ArrayList<IQueryLanguageChanged>();
+	public static List<IQueryLanguageChanged> changed = new ArrayList<>();
 
 	public static void add(IQueryLanguageChanged executer) {
 		if (!changed.contains(executer))
@@ -244,7 +244,7 @@ public class SyncDatasetRunParameters {
 		// cleanup?
 	}
 
-	public static void cleanDatasetRun(Object[] bprms, JRDesignDatasetRun dr) throws JRException {
+	public static void cleanDatasetRun(Object[] bprms, JRDesignDatasetRun dr) {
 		if (dr.getDataSourceExpression() != null)
 			return;
 		for (int i = 0; i < bprms.length; i += 2) {
@@ -265,7 +265,7 @@ public class SyncDatasetRunParameters {
 
 	public static List<JRDesignDatasetRun> getDatasetRun(MReport mrep, JRDataset jDataset) {
 		final String dsName = jDataset.getName();
-		final List<JRDesignDatasetRun> dsRuns = new ArrayList<JRDesignDatasetRun>();
+		final List<JRDesignDatasetRun> dsRuns = new ArrayList<>();
 		new ModelVisitor<Object>(mrep) {
 
 			@Override

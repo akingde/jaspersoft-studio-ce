@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -73,6 +72,11 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.util.FileResolver;
 
 public class SelectionHelper {
+	
+	private static Map<String, IStorageEditorInput> streditors = new HashMap<>();
+	
+	private SelectionHelper() {
+	}
 
 	public static EditPart getEditPart(JRChild jrElement) {
 		ANode node = getNode(jrElement);
@@ -142,9 +146,7 @@ public class SelectionHelper {
 	public static ANode getOpenedRoot() {
 		IEditorPart editPart = getActiveJRXMLEditor();
 		if (editPart instanceof IMultiEditor) {
-			IMultiEditor editor = (IMultiEditor) editPart;
-			if (editor != null)
-				return (ANode) editor.getModel();
+			return (ANode) ((IMultiEditor) editPart).getModel();
 		}
 		return null;
 	}
@@ -190,13 +192,11 @@ public class SelectionHelper {
 			ANode mainNode = JSSCompoundCommand.getMainNode((ANode) ep.getModel());
 			if (!JSSCompoundCommand.isRefreshEventsIgnored(mainNode)) {
 				ISelection sel = ep.getViewer().getSelection();
-				List<Object> s = new ArrayList<Object>();
+				List<Object> s = new ArrayList<>();
 				s.add(ep);
-				if (add) {
-					if (sel instanceof StructuredSelection) {
-						for (Object o : ((StructuredSelection) sel).toList()) {
-							s.add(o);
-						}
+				if (add && sel instanceof StructuredSelection) {
+					for (Object o : ((StructuredSelection) sel).toList()) {
+						s.add(o);
 					}
 				}
 				ep.getViewer().setSelection(new StructuredSelection(s));
@@ -226,7 +226,7 @@ public class SelectionHelper {
 	 *         set
 	 */
 	public static Pair<ISelection, EditPartViewer> setSelection(List<JRChild> jrElements, boolean add) {
-		ArrayList<EditPart> editParts = new ArrayList<EditPart>();
+		ArrayList<EditPart> editParts = new ArrayList<>();
 		for (JRChild jrElement : jrElements) {
 			EditPart ep = getEditPart(jrElement);
 			if (ep != null) {
@@ -237,7 +237,7 @@ public class SelectionHelper {
 	}
 	
 	public static Pair<ISelection, EditPartViewer> setNodeSelection(List<ANode> elements, boolean add) {
-		ArrayList<EditPart> editParts = new ArrayList<EditPart>();
+		ArrayList<EditPart> editParts = new ArrayList<>();
 		for (ANode element : elements) {
 			EditPart ep = getEditPart(element);
 			if (ep != null) {
@@ -254,18 +254,16 @@ public class SelectionHelper {
 			ANode mainNode = JSSCompoundCommand.getMainNode((ANode) firstPart.getModel());
 			if (!JSSCompoundCommand.isRefreshEventsIgnored(mainNode)) {
 				ISelection oldSelection = firstPart.getViewer().getSelection();
-				List<Object> s = new ArrayList<Object>();
+				List<Object> s = new ArrayList<>();
 				s.addAll(editParts);
-				if (add) {
-					if (oldSelection instanceof StructuredSelection) {
-						for (Object o : ((StructuredSelection) oldSelection).toList()) {
-							s.add(o);
-						}
+				if (add && oldSelection instanceof StructuredSelection) {
+					for (Object o : ((StructuredSelection) oldSelection).toList()) {
+						s.add(o);
 					}
 				}
 				firstPart.getViewer().setSelection(new StructuredSelection(s));
 				firstPart.getViewer().reveal(firstPart);
-				return new Pair<ISelection, EditPartViewer>(oldSelection, firstPart.getViewer());
+				return new Pair<>(oldSelection, firstPart.getViewer());
 			}
 		}
 		return null;
@@ -356,15 +354,11 @@ public class SelectionHelper {
 		}
 	}
 
-	private static Map<String, IStorageEditorInput> streditors = new HashMap<String, IStorageEditorInput>();
-
 	public static final void openEditor(String content, String name) {
-		IStorageEditorInput input = streditors.get(content);
-		if (input == null) {
-			IStorage storage = new StringStorage(content);
-			input = new StringInput(storage);
-			streditors.put(content, input);
-		}
+		IStorageEditorInput input = streditors.computeIfAbsent(content, c -> {
+			IStorage storage = new StringStorage(c);
+			return new StringInput(storage);
+		});
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		if (window == null)
 			window = PlatformUI.getWorkbench().getWorkbenchWindows()[0];
@@ -405,13 +399,7 @@ public class SelectionHelper {
 	}
 
 	public static final void openEditorFile(final IFile file) {
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				openEditor(file);
-			}
-		});
+		UIUtils.getDisplay().asyncExec(() -> openEditor(file));
 	}
 
 	public static final boolean openEditor(IFile file, String path) {
@@ -419,9 +407,7 @@ public class SelectionHelper {
 			if (file != null && path != null) {
 				// String pathname = FileUtils.findRelativePath(rpath, path);
 				FileResolver fileResolver = getFileResolver(file);
-
 				File fileToBeOpened = fileResolver.resolveFile(path);
-
 				if (file != null && fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
 					IFileStore fileStore = EFS.getLocalFileSystem().getStore(fileToBeOpened.toURI());
 
@@ -443,19 +429,20 @@ public class SelectionHelper {
 			IFileEditorInput fe = ((IFileEditorInput) ep.getEditorInput());
 			return getFileResolver(fe.getFile());
 		}
-		URLFileResolver fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File(".") })); //$NON-NLS-1$
+		URLFileResolver fileResolver = new URLFileResolver(Arrays.asList(new File("."))); //$NON-NLS-1$
 		fileResolver.setResolveAbsolutePath(true);
 		return fileResolver;
 	}
 
 	public static URLFileResolver getFileResolver(IFile file) {
 		URLFileResolver fileResolver = null;
-		if (file == null)
-			fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
-			}));
-		else
+		if (file == null) {
+			fileResolver = new URLFileResolver(Arrays.asList(new File("."))); //$NON-NLS-1$
+		}
+		else {
 			fileResolver = new URLFileResolver(Arrays.asList(
-					new File[] { new File(file.getParent().getLocationURI()), new File(file.getProject().getLocationURI()) }));
+					new File(file.getParent().getLocationURI()), new File(file.getProject().getLocationURI())));
+		}
 		fileResolver.setResolveAbsolutePath(true);
 		return fileResolver;
 	}
@@ -479,29 +466,9 @@ public class SelectionHelper {
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
 		if (activeJRXMLEditor != null && activeJRXMLEditor.getEditorInput() instanceof IFileEditorInput) {
 			IProject prj = ((IFileEditorInput) activeJRXMLEditor.getEditorInput()).getFile().getProject();
-			IJavaProject javaProj = JavaCore.create(prj);
-			return javaProj;
+			return JavaCore.create(prj);
 		}
 		return null;
-	}
-
-	public static boolean isSelected(ISelection selection, List<Class<?>> classes) {
-		StructuredSelection sel = (StructuredSelection) selection;
-		for (Iterator<?> it = sel.iterator(); it.hasNext();) {
-			Object obj = it.next();
-			if (obj instanceof EditPart)
-				obj = ((EditPart) obj).getModel();
-			boolean iscompatible = false;
-			for (Class<?> c : classes) {
-				if (c.isAssignableFrom(obj.getClass())) {
-					iscompatible = iscompatible || true;
-					break;
-				}
-			}
-			if (!iscompatible)
-				return false;
-		}
-		return true;
 	}
 
 	public static boolean isMainEditorOpened() {
@@ -536,7 +503,7 @@ public class SelectionHelper {
 	 * @return a not null list of jrxml editor
 	 */
 	public static List<JrxmlEditor> getOpenedEditors() {
-		List<JrxmlEditor> editors = new ArrayList<JrxmlEditor>();
+		List<JrxmlEditor> editors = new ArrayList<>();
 		IWorkbenchWindow activeWorkbenchWindow = JaspersoftStudioPlugin.getInstance().getWorkbench()
 				.getActiveWorkbenchWindow();
 		if (activeWorkbenchWindow != null && activeWorkbenchWindow.getActivePage() != null) {
