@@ -5,8 +5,8 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -74,13 +74,14 @@ public class ImpJRXML {
 					Object obj = JRLoader.loadObject(jrConfig, f);
 					if (obj != null && obj instanceof JasperReport) {
 						JasperReport jrReport = (JasperReport) obj;
-						f = FileUtils.getTmpFile(str);
+
 						FileOutputStream fos = null;
 						try {
+							f = FileUtils.getTmpFile(str);
 							fos = new FileOutputStream(f);
 							JRXmlWriter.writeReport(jrReport, fos, "UTF-8");
 							return f;
-						} catch (FileNotFoundException e) {
+						} catch (IOException e) {
 							FileUtils.closeStream(fos);
 							e.printStackTrace();
 						}

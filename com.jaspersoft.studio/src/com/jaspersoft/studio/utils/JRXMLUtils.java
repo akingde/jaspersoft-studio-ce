@@ -19,7 +19,6 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -59,8 +58,6 @@ public class JRXMLUtils {
 	 */
 	public static InputStream getJRXMLInputStream(JasperReportsContext jrContext, InputStream in, String fileExtension,
 			String encoding, String version) throws JRException {
-		if (Misc.isNullOrEmpty(fileExtension))
-			return in;
 		if (fileExtension.equals(FileExtension.JASPER)) {
 			// get JRXML from the .jasper
 			JasperReport report = (JasperReport) JRLoader.loadObject(in);
@@ -73,11 +70,8 @@ public class JRXMLUtils {
 				UIUtils.showError(
 						"Something goes wrong while trying to create a JRXML input stream from a .jasper one.", e);
 			}
-		} else if (fileExtension.equals(FileExtension.JRXML)) {
-			// the original one is already ok
-			return in;
 		}
-		return null;
+		return in;
 	}
 
 	/**

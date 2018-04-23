@@ -43,7 +43,7 @@ public abstract class AImpObject {
 		if (fileset.contains(str)) {
 			File f = findFile(file, str);
 			if (f != null && f.exists())
-				setupSameExpression(mrunit, exp, doPath(f.getName()));
+				setupSameExpression(mrunit, exp, doPath(getFileName(f)));
 			else
 				setupSameExpression(mrunit, exp, doPath(str));
 			return null;
@@ -55,13 +55,22 @@ public abstract class AImpObject {
 			PublishOptions popt = createOptions(jrConfig, str);
 			popt.setjExpression(exp);
 			if (!f.getName().contains(":"))
-				popt.setExpression("\"repo:" + IDStringValidator.safeChar(f.getName()) + "\"");
+				popt.setExpression("\"repo:" + IDStringValidator.safeChar(getFileName(f)) + "\"");
 
 			fileset.add(str);
 
 			return addResource(monitor, mrunit, fileset, f, popt);
 		}
 		return null;
+	}
+
+	protected String getFileName(File f) {
+		String fname = f.getName();
+		if (fname.contains("___")) {
+			int ind = fname.indexOf("___");
+			fname = fname.substring(0, ind );
+		} 
+		return fname;
 	}
 
 	protected String doPath(String path) {
@@ -118,7 +127,7 @@ public abstract class AImpObject {
 	protected AFileResource addResource(IProgressMonitor monitor, MReportUnit mrunit, Set<String> fileset, File f,
 			PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
-		String rname = f.getName();
+		String rname = getFileName(f);
 		if (rname.startsWith("repo:"))
 			rname = rname.replaceFirst("repo:", "");
 		ResourceDescriptor rd = null;
