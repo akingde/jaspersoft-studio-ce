@@ -58,7 +58,7 @@ public class JRXMLUtils {
 	 */
 	public static InputStream getJRXMLInputStream(JasperReportsContext jrContext, InputStream in, String fileExtension,
 			String encoding, String version) throws JRException {
-		if (fileExtension.equals(FileExtension.JASPER)) {
+		if (fileExtension != null && fileExtension.equals(FileExtension.JASPER)) {
 			// get JRXML from the .jasper
 			JasperReport report = (JasperReport) JRLoader.loadObject(in);
 			String str;

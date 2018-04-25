@@ -41,8 +41,7 @@ import com.jaspersoft.studio.model.util.ModelVisitor;
 import net.sf.jasperreports.eclipse.util.Misc;
 
 public class Util {
-	public static boolean columnExists(MSQLColumn c, MDBObjects orderBy,
-			List<MSqlTable> tables) {
+	public static boolean columnExists(MSQLColumn c, MDBObjects orderBy, List<MSqlTable> tables) {
 		if (!tables.contains(c.getParent()))
 			return true;
 		for (INode n : orderBy.getChildren())
@@ -85,10 +84,8 @@ public class Util {
 
 	public static ANode getQueryRoot(ANode n) {
 		ANode root = n;
-		while (root != null
-				&& !(root instanceof MRoot || root instanceof MUnion
-						|| root instanceof ISubQuery || (root instanceof MFromTable && root
-						.getValue() instanceof MQueryTable)))
+		while (root != null && !(root instanceof MRoot || root instanceof MUnion || root instanceof ISubQuery
+				|| (root instanceof MFromTable && root.getValue() instanceof MQueryTable)))
 			root = root.getParent();
 		return root;
 	}
@@ -169,8 +166,7 @@ public class Util {
 		return nodes;
 	}
 
-	public static void filterTables(List<ANode> node, Set<MSqlTable> tables,
-			Set<MSQLColumn> cols, Set<ANode> others) {
+	public static void filterTables(List<ANode> node, Set<MSqlTable> tables, Set<MSQLColumn> cols, Set<ANode> others) {
 		for (ANode n : node) {
 			if (n instanceof MSqlTable)
 				tables.add((MSqlTable) n);
@@ -181,32 +177,26 @@ public class Util {
 		}
 	}
 
-	public static void cleanTableVersions(final MFromTable newTbl,
-			final MFromTable oldTbl) {
+	public static void cleanTableVersions(final MFromTable newTbl, final MFromTable oldTbl) {
 		new ModelVisitor<Object>(newTbl.getRoot()) {
 
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof MSelectColumn
-						&& ((MSelectColumn) n).getMFromTable().equals(oldTbl)) {
+				if (n instanceof MSelectColumn && ((MSelectColumn) n).getMFromTable().equals(oldTbl)) {
 					((MSelectColumn) n).setMFromTable(newTbl);
 					return false;
 				}
-				if (n instanceof MGroupByColumn
-						&& ((MGroupByColumn) n).getMFromTable().equals(oldTbl)) {
+				if (n instanceof MGroupByColumn && ((MGroupByColumn) n).getMFromTable().equals(oldTbl)) {
 					((MGroupByColumn) n).setMFromTable(newTbl);
 					return false;
 				}
-				if (n instanceof MOrderByColumn
-						&& ((MOrderByColumn) n).getMFromTable().equals(oldTbl)) {
+				if (n instanceof MOrderByColumn && ((MOrderByColumn) n).getMFromTable().equals(oldTbl)) {
 					((MOrderByColumn) n).setMFromTable(newTbl);
 					return false;
 				}
 				if (n instanceof AMExpression) {
 					for (AOperand op : ((AMExpression<?>) n).getOperands()) {
-						if (op instanceof FieldOperand
-								&& ((FieldOperand) op).getFromTable().equals(
-										oldTbl)) {
+						if (op instanceof FieldOperand && ((FieldOperand) op).getFromTable().equals(oldTbl)) {
 							((FieldOperand) op).setFromTable(newTbl);
 						}
 					}
@@ -218,8 +208,7 @@ public class Util {
 		};
 	}
 
-	public static void refreshTables(MRoot rmeta, final MRoot rquery,
-			final SQLQueryDesigner designer) {
+	public static void refreshTables(MRoot rmeta, final MRoot rquery, final SQLQueryDesigner designer) {
 		List<MSqlTable> oldTables = getTables(rquery);
 		Set<MSqlTable> newTables = new HashSet<MSqlTable>();
 		for (MSqlTable mt : oldTables) {
@@ -234,8 +223,7 @@ public class Util {
 			@Override
 			public void run() {
 				designer.setRefreshMetadata(true);
-				rquery.getPropertyChangeSupport().firePropertyChange(
-						"tablesupdated", false, true);
+				rquery.getPropertyChangeSupport().firePropertyChange("tablesupdated", false, true);
 				designer.setRefreshMetadata(false);
 			}
 		});
@@ -249,29 +237,22 @@ public class Util {
 			@Override
 			public boolean visit(INode n) {
 				if (n instanceof MFromTable)
-					if (((MFromTable) n).getValue().toSQLString()
-							.equals(sqlTable))
+					if (((MFromTable) n).getValue().toSQLString().equals(sqlTable))
 						n.setValue(mtable);
 				if (n instanceof MSelectColumn) {
-					MSQLColumn mc = getColumn(
-							((MSelectColumn) n).getMFromTable(),
-							((MSelectColumn) n).getValue());
+					MSQLColumn mc = getColumn(((MSelectColumn) n).getMFromTable(), ((MSelectColumn) n).getValue());
 					if (mc != null)
 						n.setValue(mc);
 					return false;
 				}
 				if (n instanceof MGroupByColumn) {
-					MSQLColumn mc = getColumn(
-							((MGroupByColumn) n).getMFromTable(),
-							((MGroupByColumn) n).getValue());
+					MSQLColumn mc = getColumn(((MGroupByColumn) n).getMFromTable(), ((MGroupByColumn) n).getValue());
 					if (mc != null)
 						n.setValue(mc);
 					return false;
 				}
 				if (n instanceof MOrderByColumn) {
-					MSQLColumn mc = getColumn(
-							((MOrderByColumn) n).getMFromTable(),
-							((MOrderByColumn) n).getValue());
+					MSQLColumn mc = getColumn(((MOrderByColumn) n).getMFromTable(), ((MOrderByColumn) n).getValue());
 					if (mc != null)
 						n.setValue(mc);
 					return false;
@@ -279,8 +260,7 @@ public class Util {
 				if (n instanceof AMExpression) {
 					for (AOperand op : ((AMExpression<?>) n).getOperands()) {
 						if (op instanceof FieldOperand) {
-							MSQLColumn mc = getColumn(
-									((FieldOperand) op).getFromTable(),
+							MSQLColumn mc = getColumn(((FieldOperand) op).getFromTable(),
 									((FieldOperand) op).getMColumn());
 							if (mc != null)
 								((FieldOperand) op).setColumn(mc);
@@ -304,14 +284,12 @@ public class Util {
 		};
 	}
 
-	public static MSqlTable getTable(MRoot rmeta, final MSqlTable mt,
-			final SQLQueryDesigner designer) {
+	public static MSqlTable getTable(MRoot rmeta, final MSqlTable mt, final SQLQueryDesigner designer) {
 		MSqlSchema msch = null;
 		if (mt.getParent() != null) {
 			if (mt.getParent() instanceof MSqlSchema)
 				msch = (MSqlSchema) mt.getParent();
-			else if (mt.getParent().getParent() != null
-					&& mt.getParent().getParent() instanceof MSqlSchema)
+			else if (mt.getParent().getParent() != null && mt.getParent().getParent() instanceof MSqlSchema)
 				msch = (MSqlSchema) mt.getParent().getParent();
 		}
 		final String schema = msch != null ? msch.getValue() : "";
@@ -321,14 +299,13 @@ public class Util {
 			public boolean visit(INode n) {
 				if (n instanceof MSqlSchema) {
 					MSqlSchema mschema = (MSqlSchema) n;
-					if (!mschema.getValue().equalsIgnoreCase(schema)
+					if (mschema.getValue() == null || !mschema.getValue().equalsIgnoreCase(schema)
 							|| mschema.isNotInMetadata())
 						return false;
 					else
 						designer.getDbMetadata().loadSchema(mschema);
 				} else if (n instanceof MSqlTable) {
-					if (((MSqlTable) n).getValue().equalsIgnoreCase(
-							mt.getValue())) {
+					if (((MSqlTable) n).getValue().equalsIgnoreCase(mt.getValue())) {
 						designer.getDbMetadata().loadTable((MSqlTable) n);
 						setObject((MSqlTable) n);
 						stop();
@@ -340,12 +317,10 @@ public class Util {
 	}
 
 	public static MSqlTable getTable(MRoot rmeta, MSqlTable mtable) {
-		return getTable(rmeta, null, mtable.getSchema().getValue(),
-				mtable.getValue());
+		return getTable(rmeta, null, mtable.getSchema().getValue(), mtable.getValue());
 	}
 
-	public static MSqlTable getTable(MRoot rmeta, final String cat,
-			String schema, final String table) {
+	public static MSqlTable getTable(MRoot rmeta, final String cat, String schema, final String table) {
 		if (schema == null && cat != null)
 			schema = cat;
 		final String schemaName = schema;
@@ -354,8 +329,7 @@ public class Util {
 			@Override
 			public boolean visit(INode n) {
 				if (n instanceof MSqlSchema)
-					return Misc.nvl(((MSqlSchema) n).getValue()).equals(
-							Misc.nvl(schemaName));
+					return Misc.nvl(((MSqlSchema) n).getValue()).equals(Misc.nvl(schemaName));
 				if (n instanceof MSqlTable) {
 					if (n.getValue().equals(table)) {
 						setObject((MSqlTable) n);
@@ -377,8 +351,7 @@ public class Util {
 		if (mftj.getValue() instanceof MQueryTable) {
 			List<INode> children = new ArrayList<INode>(mftj.getChildren());
 			for (INode n : children) {
-				if (n instanceof MUnion || n instanceof MSelect
-						|| n instanceof MFrom || n instanceof MWhere
+				if (n instanceof MUnion || n instanceof MSelect || n instanceof MFrom || n instanceof MWhere
 						|| n instanceof MGroupBy || n instanceof MHaving)
 					mtbl.addChild((ANode) n);
 			}
