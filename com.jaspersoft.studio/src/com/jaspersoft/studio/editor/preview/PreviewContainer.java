@@ -467,9 +467,9 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			}
 		}
 		APreview view = null;
-		if (RunStopAction.MODERUN_JIVE.equals(this.runMode)) {
-			view = getJiveViewer();
-			getRightContainer().switchView(null, getJiveViewer());
+		if (ReportController.getRunners().containsKey(this.runMode)) {
+			view = getBrowserViewer();
+			getRightContainer().switchView(null, view);
 		} else if (RunStopAction.MODERUN_LOCAL.equals(this.runMode)) {
 			getRightContainer().switchView(null, getDefaultViewerKey());
 			view = getDefaultViewer();
@@ -599,8 +599,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	public void setMode(String mode) {
 		this.runMode = mode;
-		if (mode.equals(RunStopAction.MODERUN_JIVE)) {
-			getRightContainer().switchView(null, getJiveViewer());
+		if (ReportController.getRunners().containsKey(mode)) {
+			getRightContainer().switchView(null, getBrowserViewer());
 		} else if (mode.equals(RunStopAction.MODERUN_LOCAL)) {
 			getRightContainer().switchView(null, getDefaultViewerKey());
 		}
@@ -610,7 +610,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return runMode;
 	}
 
-	public ABrowserViewer getJiveViewer() {
+	public ABrowserViewer getBrowserViewer() {
 		if (jiveViewer == null) {
 			jiveViewer = new ABrowserViewer(rightComposite, jrContext);
 		}

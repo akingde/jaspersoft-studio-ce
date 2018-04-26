@@ -45,6 +45,7 @@ import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.preview.PreviewModeDetails;
+import com.jaspersoft.studio.editor.preview.view.control.IReportRunner;
 import com.jaspersoft.studio.editor.preview.view.report.system.AExporterFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.jface.IFileSelection;
@@ -100,7 +101,8 @@ public class ExtensionManager {
 			}
 		}
 	};
-	private List<IParameterICContributor> prmICContributors = new ArrayList<IParameterICContributor>();
+	private List<IParameterICContributor> prmICContributors = new ArrayList<>();
+	private List<IReportRunner> reportRunners = new ArrayList<>();
 
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry()
@@ -144,11 +146,27 @@ public class ExtensionManager {
 				System.out.println(ex.getMessage());
 			}
 		}
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID,
+				"reportRunner"); //$NON-NLS-1$
+		for (IConfigurationElement e : config) {
+			try {
+				Object o = e.createExecutableExtension("ReportRunner"); //$NON-NLS-1$
+				if (o instanceof IReportRunner)
+					reportRunners.add((IReportRunner) o);
+			} catch (CoreException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
 
 		DataAdapterManager.getPreferencesStorage();
 	}
 
-	public void createParameterICUI(Composite parent, JRDesignParameter prm, SelectParameterDialog pd, IFilterQuery fq) {
+	public List<IReportRunner> getReportRunners() {
+		return reportRunners;
+	}
+
+	public void createParameterICUI(Composite parent, JRDesignParameter prm, SelectParameterDialog pd,
+			IFilterQuery fq) {
 		IConfigurationElement[] config = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "parameterIC"); //$NON-NLS-1$
 		prmICContributors.clear();

@@ -50,7 +50,7 @@ public class ExportFilesToHandler extends AbstractHandler {
 	 * leaving to the wizard the task to try recovering the proposed selection, for example from
 	 * the currently active JRXML editor.
 	 */
-	private IStructuredSelection getActiveSelection(ExecutionEvent event) {
+	public static IStructuredSelection getActiveSelection(ExecutionEvent event) {
 		ISelection currentSelection = HandlerUtil.getCurrentSelection(event);
 		if (currentSelection instanceof IStructuredSelection && !currentSelection.isEmpty()) {
 			for (Object o : ((IStructuredSelection) currentSelection).toArray()) {

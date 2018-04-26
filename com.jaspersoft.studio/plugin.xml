@@ -27,6 +27,7 @@
 <extension-point id="fileSelectors" name="File Selectors" schema="schema/fileSelectors.exsd"/>
 <extension-point id="bindings" name="com.jaspersoft.studio.bindings" schema="schema/bindings.exsd"/>
 <extension-point id="resourceExporter" name="com.jaspersoft.studio.resourceExporter" schema="schema/resourceExporter.exsd"/>
+<extension-point id="reportRunner" name="Report Runner" schema="schema/reportrunner.exsd"/>
 <extension-point id="dynamicWidgetDefinitions" name="Dynamic Widget Definitions" schema="schema/dynamicWidgetDefinitions.exsd"/>
 
 <extension-point id="daQueryUI" name="Data Adapter Query UI" schema="schema/daQueryUI.exsd"/>

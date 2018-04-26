@@ -4,6 +4,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions;
 
+import java.util.Map;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.SWT;
@@ -16,11 +18,13 @@ import org.eclipse.swt.widgets.MenuItem;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.IRunReport;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
+import com.jaspersoft.studio.editor.preview.view.control.IReportRunner;
+import com.jaspersoft.studio.editor.preview.view.control.JiveRunner;
+import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.messages.Messages;
 
 public class RunStopAction extends Action implements IMenuCreator {
 	public static final String MODERUN_LOCAL = "RUNLOCAL";
-	public static final String MODERUN_JIVE = "RUNJIVE";
 
 	public static final String ID = "PREVIEWRELOADACTION"; //$NON-NLS-1$
 	private PreviewJRPrint editor;
@@ -78,11 +82,13 @@ public class RunStopAction extends Action implements IMenuCreator {
 		m1.addSelectionListener(listener);
 		m1.setData("run.key", MODERUN_LOCAL);
 
-		m1 = new MenuItem(listMenu, SWT.RADIO);
-		m1.setText("Run Interactive Report (Jive)");
-		m1.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/start_task.gif"));
-		m1.addSelectionListener(listener);
-		m1.setData("run.key", MODERUN_JIVE);
+		for (Map.Entry<String, IReportRunner> entry : ReportController.getRunners().entrySet()) {
+			m1 = new MenuItem(listMenu, SWT.RADIO);
+			m1.setText(entry.getValue().getLabel());
+			m1.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/start_task.gif"));
+			m1.addSelectionListener(listener);
+			m1.setData("run.key", entry.getKey());
+		}
 
 		return listMenu;
 	}

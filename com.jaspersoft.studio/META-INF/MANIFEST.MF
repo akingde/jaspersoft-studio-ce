@@ -393,6 +393,7 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.ui,
    org.eclipse.core.resources",
  com.jaspersoft.studio.editor.xml,
+ com.jaspersoft.studio.handlers,
  com.jaspersoft.studio.help,
  com.jaspersoft.studio.jasper,
  com.jaspersoft.studio.jface;uses:="org.eclipse.jface.viewers,com.jaspersoft.studio.property.descriptor",

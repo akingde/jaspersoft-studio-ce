@@ -195,7 +195,7 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	}
 
 	private void refresh() {
-
+		// nothing, a placeholder for refresh
 	}
 
 	public void setDataAdapterStorages(ADataAdapterStorage[] dastorages) {

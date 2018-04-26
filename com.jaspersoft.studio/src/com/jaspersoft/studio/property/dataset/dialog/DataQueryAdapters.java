@@ -3,8 +3,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -24,8 +22,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -207,20 +203,14 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		return tabFolder;
 	}
 
-	private DataAdapterUI daUI;
-
 	private void createDataAdapterTab(final CTabFolder tabFolder) {
-		daUI = new DataAdapterUI();
+		DataAdapterUI daUI = new DataAdapterUI();
 		daUI.refreshDaUI(tabFolder, background, jDesign, newdataset, jConfig);
-		newdataset.getPropertiesMap().getEventSupport().addPropertyChangeListener(new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				String pname = evt.getPropertyName();
-				if (pname.equals(DataQueryAdapters.DEFAULT_DATAADAPTER)
-						|| pname.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)) {
-					daUI.refreshDaUI(tabFolder, background, jDesign, newdataset, jConfig);
-				}
+		newdataset.getPropertiesMap().getEventSupport().addPropertyChangeListener(evt -> {
+			String pname = evt.getPropertyName();
+			if (pname.equals(DataQueryAdapters.DEFAULT_DATAADAPTER)
+					|| pname.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)) {
+				daUI.refreshDaUI(tabFolder, background, jDesign, newdataset, jConfig);
 			}
 		});
 	}
@@ -257,29 +247,26 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				widgetSelected(e);
 			}
 		});
-		langCombo.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				if (isRefresh)
-					return;
-				String lang = langCombo.getText();
-				int index = Misc.indexOf(languages, lang);
-				if (index < 0) {
-					Point oldSelection = langCombo.getSelection();
-					languages[0] = lang;
-					langCombo.setItem(0, lang);
-					langCombo.select(0);
-					// On windows the selection of an entry select also all the
-					// text inside the combo, so we need to restore the old selection
-					langCombo.setSelection(oldSelection);
-				} else if (index > 0 && !languages[0].isEmpty()) {
-					// if the input language is a known language and there was before an
-					// entry for a not recognized language then remove it
-					languages[0] = ""; //$NON-NLS-1$
-					langCombo.setItem(0, ""); //$NON-NLS-1$
-				}
-				changeLanguage();
+		langCombo.addModifyListener(e -> {
+			if (isRefresh)
+				return;
+			String lang = langCombo.getText();
+			int index = Misc.indexOf(languages, lang);
+			if (index < 0) {
+				Point oldSelection = langCombo.getSelection();
+				languages[0] = lang;
+				langCombo.setItem(0, lang);
+				langCombo.select(0);
+				// On windows the selection of an entry select also all the
+				// text inside the combo, so we need to restore the old selection
+				langCombo.setSelection(oldSelection);
+			} else if (index > 0 && !languages[0].isEmpty()) {
+				// if the input language is a known language and there was before an
+				// entry for a not recognized language then remove it
+				languages[0] = ""; //$NON-NLS-1$
+				langCombo.setItem(0, ""); //$NON-NLS-1$
 			}
+			changeLanguage();
 		});
 
 		tbCompo = new Composite(sectionClient, SWT.NONE);
@@ -299,8 +286,6 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		langComposite.setBackground(background);
 
 		qdfactory = new QDesignerFactory(langComposite, tbCompo, this);
-		// for (String lang : languages)
-		// qdfactory.getDesigner(lang);
 
 		bptab.setControl(sectionClient);
 	}
@@ -325,13 +310,9 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			langComposite.layout();
 			currentDesigner = designer;
 			currentDesigner.setJasperConfiguration(jConfig);
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					currentDesigner.setQuery(jDesign, newdataset, jConfig);
-					currentDesigner.setDataAdapter(dscombo.getSelected());
-				}
+			UIUtils.getDisplay().asyncExec(() -> {
+				currentDesigner.setQuery(jDesign, newdataset, jConfig);
+				currentDesigner.setDataAdapter(dscombo.getSelected());
 			});
 			refreshDsCombo();
 		}
@@ -355,22 +336,6 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		comp.setLayout(new GridLayout(6, false));
 		comp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		comp.setBackgroundMode(SWT.INHERIT_FORCE);
-
-		// final Label lbl = new Label(comp, SWT.NONE);
-		// lbl.setImage(JaspersoftStudioPlugin.getInstance().getImage(MDataAdapters.getIconDescriptor().getIcon16()));
-		// lbl.addMouseListener(new MouseAdapter() {
-		// @Override
-		// public void mouseUp(MouseEvent e) {
-		// IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
-		// if (f != null) {
-		// PreferenceDialog pref =
-		// PreferencesUtil.createPropertyDialogOn(UIUtils.getShell(), f.getProject(),
-		// DesignerPreferencePage.PAGE_ID, null, null);
-		// if (pref != null && pref.open() == Dialog.OK)
-		// refreshDsCombo();
-		// }
-		// }
-		// });
 
 		tb = new ToolBar(comp, SWT.FLAT | SWT.RIGHT);
 		tb.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
@@ -609,7 +574,6 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		private MenuItem itemFilterAll;
 		private MenuItem itemFilterDA;
 		private MenuItem itemFilterLang;
-		private MenuItem itemFilter;
 
 		@Override
 		public void dispose() {
@@ -684,7 +648,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 				new MenuItem(menu, SWT.SEPARATOR);
 
-				itemFilter = new MenuItem(menu, SWT.PUSH);
+				MenuItem itemFilter = new MenuItem(menu, SWT.PUSH);
 				itemFilter.setText(Messages.DataQueryAdapters_17);
 				itemFilter.addSelectionListener(new SelectionAdapter() {
 

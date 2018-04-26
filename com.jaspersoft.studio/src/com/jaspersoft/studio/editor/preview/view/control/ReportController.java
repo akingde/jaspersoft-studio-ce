@@ -13,7 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -55,13 +54,10 @@ import com.jaspersoft.studio.editor.preview.input.TimeZoneInput;
 import com.jaspersoft.studio.editor.preview.input.URLInput;
 import com.jaspersoft.studio.editor.preview.input.array.CollectionInput;
 import com.jaspersoft.studio.editor.preview.input.map.MapInput;
-import com.jaspersoft.studio.editor.preview.jive.Context;
-import com.jaspersoft.studio.editor.preview.jive.JettyUtil;
 import com.jaspersoft.studio.editor.preview.stats.RecordCountScriptletFactory;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
-import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.execution.VirtualizerHelper;
 import com.jaspersoft.studio.utils.Console;
@@ -131,6 +127,17 @@ public class ReportController {
 		List<IDataInput> ict = JaspersoftStudioPlugin.getInputControlTypeManager().getInputControlTypes();
 		if (ict != null && !ict.isEmpty())
 			inputs.addAll(ict);
+	}
+	private static Map<String, IReportRunner> runners;
+
+	public static Map<String, IReportRunner> getRunners() {
+		if (runners == null) {
+			runners = new HashMap<>();
+			runners.put(JiveRunner.ID, new JiveRunner());
+			for (IReportRunner r : JaspersoftStudioPlugin.getExtensionManager().getReportRunners())
+				runners.put(r.getID(), r);
+		}
+		return runners;
 	}
 
 	private List<JRParameter> prompts;
@@ -404,8 +411,10 @@ public class ReportController {
 						setupVirtualizer(jd);
 						setupRecordCounters();
 						setupDataSnapshot();
-						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE)) {
-							runJive(pcontainer, file, jasperReport);
+
+						IReportRunner runner = runners.get(pcontainer.getMode());
+						if (runner != null) {
+							runner.run(pcontainer, file, jasperReport, jrContext, jasperParameters);
 						} else {
 							c.startMessage(Messages.ReportControler_msg_fillreports);
 
@@ -438,29 +447,6 @@ public class ReportController {
 		};
 		job.setPriority(Job.LONG);
 		job.schedule();
-	}
-
-	protected void runJive(final PreviewContainer pcontainer, final IFile file, final JasperReport jasperReport) {
-		JettyUtil.startJetty(file.getProject(), jrContext);
-		UIUtils.getDisplay().syncExec(() -> {
-			try {
-				Map<String, Object> prm = new HashMap<>();
-
-				prm.put(JettyUtil.PRM_JRPARAMETERS, jasperParameters);
-				prm.put(JettyUtil.PRM_JASPERREPORT, jasperReport);
-
-				UUID randomUUID = UUID.randomUUID();
-				Context.putContext(randomUUID.toString(), prm);
-
-				String url = JettyUtil.getURL(file, randomUUID.toString(), jrContext);
-				ABrowserViewer jiveViewer = pcontainer.getJiveViewer();
-				jiveViewer.setURL(url);
-				pcontainer.getRightContainer().switchView(null, jiveViewer);
-
-			} catch (Throwable e) {
-				UIUtils.showError(e);
-			}
-		});
 	}
 
 	private JasperReport compileJasperDesign(IFile file, JasperDesign jd, IProgressMonitor monitor)
