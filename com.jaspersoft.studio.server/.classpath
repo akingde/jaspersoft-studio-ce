@@ -5,16 +5,16 @@
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/mimepull-1.9.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-media-multipart-2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-guava-2.13.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-dataformat-xml-2.4.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-guava-2.4.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-joda-2.4.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-json-org-2.4.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-jsr353-2.4.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-jaxrs-base-2.4.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-jaxrs-json-provider-2.4.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-jaxrs-xml-provider-2.4.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-module-jaxb-annotations-2.4.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-module-jsonSchema-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-dataformat-xml-2.9.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-guava-2.9.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-joda-2.9.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-json-org-2.9.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-jsr353-2.9.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-jaxrs-base-2.9.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-jaxrs-json-provider-2.9.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-jaxrs-xml-provider-2.9.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-module-jaxb-annotations-2.9.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-module-jsonSchema-2.9.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jackson/stax2-api-3.1.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jackson/woodstox-core-asl-4.4.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/aopalliance-repackaged-2.3.0-b10.jar"/>
