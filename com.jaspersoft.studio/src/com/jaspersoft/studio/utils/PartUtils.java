@@ -9,6 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
+
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.StringUtils;
@@ -18,13 +24,6 @@ import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.parts.subreport.StandardSubreportPartComponent;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-
 /**
  * Utility methods to handle the JRPart elements and its content
  * 
@@ -32,11 +31,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  *
  */
 public class PartUtils {
-
-	/**
-	 * The current workspace root
-	 */
-	private static IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+	
+	private PartUtils() {
+	}
 
 	/**
 	 * Inspect the passed report to search report parts and return a map of the
@@ -58,7 +55,7 @@ public class PartUtils {
 			boolean isRecursive, IProgressMonitor monitor) {
 		IFile mainFile = (IFile) jConfig.get(FileUtils.KEY_FILE);
 		List<JRPart> elements = ModelUtils.getAllPartElements(jd);
-		Map<File, IFile> result = new HashMap<File, IFile>();
+		Map<File, IFile> result = new HashMap<>();
 		for (JRPart part : elements) {
 			if (part.getComponent() instanceof StandardSubreportPartComponent) {
 				StandardSubreportPartComponent component = (StandardSubreportPartComponent) part.getComponent();
@@ -100,18 +97,14 @@ public class PartUtils {
 		File f = FileUtils.findFile(file, expr);
 		if (f == null)
 			try {
-				try {
-					f = new File(expr);
-				} catch (IllegalArgumentException e) {
-					f = new File(file.getRawLocationURI().getPath(), expr);
-				}
+				f = fallbackFindFile(file, expr);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		if (fmap.containsKey(f))
 			return;
 		if (f != null && f.exists()) {
-			IFile[] fs = root.findFilesForLocationURI(f.toURI());
+			IFile[] fs = JDTUtils.WS_ROOT.findFilesForLocationURI(f.toURI());
 			if (fs != null && fs.length > 0) {
 				IFile ifile = fs[0];
 				fmap.put(f, ifile);
@@ -136,5 +129,15 @@ public class PartUtils {
 				fmap.put(f, null);
 			}
 		}
+	}
+	
+	private static File fallbackFindFile(IFile file, String expression) {
+		File f;
+		try {
+			f = new File(expression);
+		} catch (IllegalArgumentException e) {
+			f = new File(file.getRawLocationURI().getPath(), expression);
+		}
+		return f;
 	}
 }

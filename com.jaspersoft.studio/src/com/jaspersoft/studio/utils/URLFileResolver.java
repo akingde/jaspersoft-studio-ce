@@ -8,11 +8,11 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Path;
+
+import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 /**
  * Extends the default SimpleFileResolver by adding 
@@ -56,7 +56,9 @@ public class URLFileResolver extends SimpleFileResolver {
 				URL fileURL = new URL(fileName);
 				File f = new File(fileURL.toURI());
 				if (f.exists()) fileToBeOpened = f;
-			} catch (Exception e) {}
+			} catch (Exception e) {
+				// do not care about it 
+			}
 		}
 		return fileToBeOpened;
 	}

@@ -159,7 +159,8 @@ public class Factory {
 			mi1.setText(key);
 			mi1.setData(OPERAND, aOperand);
 			setupMenuItem(mi1, w, operands, index);
-			if (w.getValue() == aOperand)
+			if (w.getValue() == aOperand || (w.getValue() != null && aOperand != null
+					&& w.getValue().getClass().equals(aOperand.getClass())))
 				mi1.setSelection(true);
 		}
 	}

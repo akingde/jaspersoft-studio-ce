@@ -97,6 +97,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	/**
 	 *
 	 */
+	@Override
 	public void createFieldEditors() {
 		addField(new ComboFieldEditor(P_ELEMENT_DESIGN_BORDER_STYLE,
 				Messages.DesignerPreferencePage_element_design_border_style,
@@ -127,7 +128,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
 		addField(new ComboFieldEditor(P_DAFILTER, Messages.DesignerPreferencePage_3,
 				new String[][] { { Messages.DesignerPreferencePage_4, "all" }, // $NON-NLS-3$ //$NON-NLS-1$
-						{ Messages.DesignerPreferencePage_6, "lang" }, { Messages.DesignerPreferencePage_8, "da" } },  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-4$
+						{ Messages.DesignerPreferencePage_6, "lang" }, { Messages.DesignerPreferencePage_8, "da" } }, //$NON-NLS-1$//$NON-NLS-2$
+																														// //$NON-NLS-4$
 				getFieldEditorParent()));
 
 		Label separator = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -148,7 +150,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_RESIZE_CONTAINER, Messages.DesignerPreferencePage_autoresizeBand,
 				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_RESIZE_ON_PASTE, Messages.DesignerPreferencePage_resizeBandOption, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_RESIZE_ON_PASTE, Messages.DesignerPreferencePage_resizeBandOption,
+				getFieldEditorParent()));
 
 		// Eventually create the extensions for the page
 		super.createFieldEditors();

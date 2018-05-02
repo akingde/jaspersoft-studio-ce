@@ -140,15 +140,17 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Search for the first dataset in hierarchy starting from the parent of the passed node. go back until it arrive to a
-	 * root node or to a node with a dataset run
+	 * Search for the first dataset in hierarchy starting from the parent of the
+	 * passed node. go back until it arrive to a root node or to a node with a
+	 * dataset run
 	 * 
 	 */
 	public static JRDesignDataset getFirstDatasetInHierarchy(ANode node) {
 		ANode n = node.getParent();
 		while (n != null) {
 			if (n instanceof MPage) {
-				// In this case the node is into a separated editor, need to get the real parent of the node
+				// In this case the node is into a separated editor, need to get the real parent
+				// of the node
 				ANode realParent = ((MPage) n).getRealParent();
 				if (realParent != null) {
 					n = realParent;
@@ -197,23 +199,25 @@ public class ModelUtils {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Get the index of the element edge near the passed point
 	 * 
-	 * @param parent the container of the nodes
-	 * @param point a not null point
-	 * @return the element index just before the dropped point with the edge near to 
-	 * it, the element is resolved by the layout since the disposition follow the layout
-	 * It can return -1 if the point is not near any edge
+	 * @param parent
+	 *            the container of the nodes
+	 * @param point
+	 *            a not null point
+	 * @return the element index just before the dropped point with the edge near to
+	 *         it, the element is resolved by the layout since the disposition
+	 *         follow the layout It can return -1 if the point is not near any edge
 	 */
-	public static int getBetweenIndex(ANode parent, Point point){
+	public static int getBetweenIndex(ANode parent, Point point) {
 		JRPropertiesHolder holder = LayoutManager.getPropertyHolder(parent);
-		if (holder != null){
+		if (holder != null) {
 			String layoutClassName = holder.getPropertiesMap().getProperty(ILayout.KEY);
-			if (layoutClassName != null){
+			if (layoutClassName != null) {
 				ILayout layout = LayoutManager.getLayout(layoutClassName);
-				if (layout != null){
+				if (layout != null) {
 					return layout.getInsertPosition(parent, point);
 				}
 			}
@@ -228,14 +232,15 @@ public class ModelUtils {
 	/**
 	 * Get all the available datasets in the provided JasperDesign.
 	 * 
-	 * If the main datasetis included, since the main dataset has not a name, it is assigned with a constanct name:
+	 * If the main datasetis included, since the main dataset has not a name, it is
+	 * assigned with a constanct name:
 	 * 
 	 * {@link ModelUtils.MAIN_DATASET MAIN_DATASET}
 	 * 
 	 * 
 	 * @param jd
 	 * @param includeMainDataset
-	 *          - true to include the main dataset
+	 *            - true to include the main dataset
 	 * @return an array of strings with the names of the datasets.
 	 */
 	public static String[] getDataSets(JasperDesign jd, boolean includeMainDataset) {
@@ -289,8 +294,9 @@ public class ModelUtils {
 	 * Return the position of a child in the children list of the parent
 	 * 
 	 * @param child
-	 * @return the position of the child, or -1 if the child or its parent are null, or if the the children it isn't
-	 *         present in the parent's children lists
+	 * @return the position of the child, or -1 if the child or its parent are null,
+	 *         or if the the children it isn't present in the parent's children
+	 *         lists
 	 */
 	public static int getChildrenPosition(INode child) {
 		if (child != null && child.getParent() != null)
@@ -335,10 +341,11 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Create an expression from a textual string, that is the content of the expression
+	 * Create an expression from a textual string, that is the content of the
+	 * expression
 	 * 
 	 * @param text
-	 *          the content of the expression
+	 *            the content of the expression
 	 * @return the jasperreports element that represent an expression
 	 */
 	public static JRDesignExpression createExpression(String text) {
@@ -356,7 +363,7 @@ public class ModelUtils {
 	 * Return the ordered list of bands available in the current report.
 	 * 
 	 * @param jd
-	 *          the JasperDesign
+	 *            the JasperDesign
 	 * @return a list of bands
 	 */
 	public static List<JRBand> getBands(JasperDesign jd) {
@@ -427,7 +434,7 @@ public class ModelUtils {
 	 * Gets the design height.
 	 * 
 	 * @param jd
-	 *          the jd
+	 *            the jd
 	 * @return the design height
 	 */
 	public static int getDesignHeight(JasperDesign jd) {
@@ -438,9 +445,11 @@ public class ModelUtils {
 			designHeight += jd.getBottomMargin();
 		}
 		/*
-		 * // Detached background... if (IReportManager.getInstance().isBackgroundSeparated() && jd.getBackground() != null
-		 * && jd.getBackground().getHeight() > 0) { designHeight += jd.getTopMargin(); designHeight += jd.getBottomMargin();
-		 * designHeight += 40; }
+		 * // Detached background... if
+		 * (IReportManager.getInstance().isBackgroundSeparated() && jd.getBackground()
+		 * != null && jd.getBackground().getHeight() > 0) { designHeight +=
+		 * jd.getTopMargin(); designHeight += jd.getBottomMargin(); designHeight += 40;
+		 * }
 		 */
 
 		return designHeight;
@@ -450,7 +459,7 @@ public class ModelUtils {
 	 * Gets the design height.
 	 * 
 	 * @param bands
-	 *          the bands
+	 *            the bands
 	 * @return the design height
 	 */
 	public static int getDesignHeight(List<JRBand> bands) {
@@ -465,9 +474,9 @@ public class ModelUtils {
 	 * Element exists.
 	 * 
 	 * @param jrBand
-	 *          the jr band
+	 *            the jr band
 	 * @param jrElement
-	 *          the jr element
+	 *            the jr element
 	 * @return true, if successful
 	 */
 	public static boolean elementExists(JRBand jrBand, JRElement jrElement) {
@@ -483,9 +492,9 @@ public class ModelUtils {
 	 * Gets the band4 element.
 	 * 
 	 * @param bands
-	 *          the bands
+	 *            the bands
 	 * @param jrElement
-	 *          the jr element
+	 *            the jr element
 	 * @return the band4 element
 	 */
 	public static int getBand4Element(List<JRBand> bands, JRElement jrElement) {
@@ -501,7 +510,7 @@ public class ModelUtils {
 	 * Gets the all bands.
 	 * 
 	 * @param jrDesign
-	 *          the jr design
+	 *            the jr design
 	 * @return the all bands
 	 */
 	public static List<JRBand> getAllBands(JasperDesign jrDesign) {
@@ -554,7 +563,7 @@ public class ModelUtils {
 	 * Returns the list of all crosstabs contained the specified report.
 	 * 
 	 * @param jrDesign
-	 *          the jasper design of the report
+	 *            the jasper design of the report
 	 * @return the list of crosstabs
 	 */
 	public static List<JRCrosstab> getAllCrosstabs(JasperDesign jrDesign) {
@@ -572,9 +581,9 @@ public class ModelUtils {
 	 * Gets the band4 point.
 	 * 
 	 * @param jd
-	 *          the jd
+	 *            the jd
 	 * @param point
-	 *          the point
+	 *            the point
 	 * @return the band4 point
 	 */
 	public static MBand getBand4Point(INode jd, Point point) {
@@ -631,9 +640,9 @@ public class ModelUtils {
 	 * Gets the band location.
 	 * 
 	 * @param b
-	 *          the b
+	 *            the b
 	 * @param jd
-	 *          the jd
+	 *            the jd
 	 * @return the band location
 	 */
 	public static int getBandLocation(JRBand b, JasperDesign jd) {
@@ -675,10 +684,11 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given plug-in relative path.
+	 * Returns an image descriptor for the image file at the given plug-in relative
+	 * path.
 	 * 
 	 * @param path
-	 *          the path
+	 *            the path
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
@@ -690,9 +700,9 @@ public class ModelUtils {
 	 * Name of.
 	 * 
 	 * @param b
-	 *          the b
+	 *            the b
 	 * @param jd
-	 *          the jd
+	 *            the jd
 	 * @return the string
 	 */
 	public static String nameOf(JRBand b, JasperDesign jd) {
@@ -716,12 +726,13 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Return the index of band in the section. It return -1 if the band is not found in this section
+	 * Return the index of band in the section. It return -1 if the band is not
+	 * found in this section
 	 * 
 	 * @param section
-	 *          the section
+	 *            the section
 	 * @param band
-	 *          the band
+	 *            the band
 	 * @return the band index
 	 */
 	public static int getBandIndex(JRSection section, JRBand band) {
@@ -927,7 +938,7 @@ public class ModelUtils {
 	 * Name of.
 	 * 
 	 * @param origin
-	 *          the origin
+	 *            the origin
 	 * @return the string
 	 */
 	public static String nameOf(JROrigin origin) {
@@ -935,13 +946,14 @@ public class ModelUtils {
 	}
 
 	/**
-	 * This method summarize the JasperReports rules for bands height. The real check should be done by the JRVerifier
-	 * class, probably we should move that code there providing a similar static method.
+	 * This method summarize the JasperReports rules for bands height. The real
+	 * check should be done by the JRVerifier class, probably we should move that
+	 * code there providing a similar static method.
 	 * 
 	 * @param b
-	 *          the b
+	 *            the b
 	 * @param jd
-	 *          the jd
+	 *            the jd
 	 * @return the max band height
 	 */
 	public static int getMaxBandHeight(JRDesignBand b, JasperDesign jd) {
@@ -955,7 +967,8 @@ public class ModelUtils {
 		if ((origin.getBandTypeValue() == BandTypeEnum.TITLE && jd.isTitleNewPage())
 				|| (origin.getBandTypeValue() == BandTypeEnum.SUMMARY) || // &&
 				// jd.isSummaryNewPage()
-				origin.getBandTypeValue() == BandTypeEnum.BACKGROUND || origin.getBandTypeValue() == BandTypeEnum.NO_DATA) {
+				origin.getBandTypeValue() == BandTypeEnum.BACKGROUND
+				|| origin.getBandTypeValue() == BandTypeEnum.NO_DATA) {
 			return jd.getPageHeight() - topBottomMargins;
 		}
 
@@ -1034,9 +1047,9 @@ public class ModelUtils {
 	 * Gets the default name.
 	 * 
 	 * @param map
-	 *          the map
+	 *            the map
 	 * @param name
-	 *          the name
+	 *            the name
 	 * @return the default name
 	 */
 	public static String getDefaultName(Map<?, ?> map, String name) {
@@ -1092,6 +1105,7 @@ public class ModelUtils {
 	static {
 		deprecatedLanguages.add("xlsx");
 		deprecatedLanguages.add("xpath2");
+		deprecatedLanguages.add("ad hoc query api");
 	}
 
 	@SuppressWarnings("deprecation")
@@ -1188,8 +1202,9 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Return the font names, the names can be split in more array to categorize them. In this way when represented, the
-	 * category can be graphically divided (for example with a separator)
+	 * Return the font names, the names can be split in more array to categorize
+	 * them. In this way when represented, the category can be graphically divided
+	 * (for example with a separator)
 	 * 
 	 * @param jContext
 	 * @return
@@ -1327,8 +1342,9 @@ public class ModelUtils {
 	 * Starting from a node go up in the hierarchy until an MReport is found
 	 * 
 	 * @param node
-	 *          the starting node
-	 * @return the MReport where the starting node is contained, or null if it can't be found
+	 *            the starting node
+	 * @return the MReport where the starting node is contained, or null if it can't
+	 *         be found
 	 */
 	public static MReport getReport(ANode node) {
 		ANode parent = node.getParent();
@@ -1346,15 +1362,17 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Returns the {@link JRDesignDataset} instance corresponding to the dataset name specified.
+	 * Returns the {@link JRDesignDataset} instance corresponding to the dataset
+	 * name specified.
 	 * 
 	 * <p>
-	 * If the corresponding name is not found, then the main design dataset is returned as fallback solution.
+	 * If the corresponding name is not found, then the main design dataset is
+	 * returned as fallback solution.
 	 * 
 	 * @param jd
-	 *          the jasper design
+	 *            the jasper design
 	 * @param datasetName
-	 *          the name of design dataset we are looking for
+	 *            the name of design dataset we are looking for
 	 * @return the corresponding design dataset, or the main (report) one
 	 */
 	public static JRDesignDataset getDesignDatasetByName(JasperDesign jd, String datasetName) {
@@ -1370,16 +1388,17 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Returns the {@link JRDesignDatase} instance that correspond to the dataset information contained in the datasetrun.
+	 * Returns the {@link JRDesignDatase} instance that correspond to the dataset
+	 * information contained in the datasetrun.
 	 * 
 	 * <p>
-	 * If the dataset run is <code>null</code> or no design dataset can be found, the main one is returned as fallback
-	 * solution.
+	 * If the dataset run is <code>null</code> or no design dataset can be found,
+	 * the main one is returned as fallback solution.
 	 * 
 	 * @param jd
-	 *          the jasper design
+	 *            the jasper design
 	 * @param datasetRun
-	 *          the dataset run
+	 *            the dataset run
 	 * @return the corresponding design dataset, or the main (report) one
 	 */
 	public static JRDesignDataset getDesignDatasetForDatasetRun(JasperDesign jd, JRDatasetRun datasetRun) {
@@ -1395,13 +1414,14 @@ public class ModelUtils {
 	 * Finds the top element group for a specified {@link JRDesignElement}.
 	 * 
 	 * @param element
-	 *          the design element
+	 *            the design element
 	 * @return the top element group if any exists, <code>null</code> otherwise
 	 */
 	public static JRElementGroup getTopElementGroup(JRDesignElement element) {
 		JRElementGroup g1 = element.getElementGroup();
 		while (g1 != null) {
-			// if (!g1.getChildren().contains(element)) return null; // The element points to its parent, but its parent has
+			// if (!g1.getChildren().contains(element)) return null; // The element points
+			// to its parent, but its parent has
 			// not it as child
 			if (g1 instanceof JRDesignBand || g1 instanceof JRDesignCellContents)
 				return g1;
@@ -1411,18 +1431,21 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Returns a valid {@link ExpressionContext} that can be used in the expression editor when editing a specific node
-	 * expression.
+	 * Returns a valid {@link ExpressionContext} that can be used in the expression
+	 * editor when editing a specific node expression.
 	 * 
 	 * <p>
-	 * Usually a {@link JRDesignElement} instance is given so we can use this to look for a valid expression context. When
-	 * not available, the original model object node is used. During the search, if for some reasons an expression context
-	 * can not be returned, a generic expression context that uses the report main dataset is used.
+	 * Usually a {@link JRDesignElement} instance is given so we can use this to
+	 * look for a valid expression context. When not available, the original model
+	 * object node is used. During the search, if for some reasons an expression
+	 * context can not be returned, a generic expression context that uses the
+	 * report main dataset is used.
 	 * 
 	 * @param element
-	 *          the design element to be investigated
+	 *            the design element to be investigated
 	 * @param node
-	 *          the model object node for which we are currently asking an expression context
+	 *            the model object node for which we are currently asking an
+	 *            expression context
 	 * @return the expression context found, or a default one
 	 * 
 	 * @see IComponentFactory#getElementExpressionContext(Object)
@@ -1440,7 +1463,8 @@ public class ModelUtils {
 				JRDesignCellContents contents = (JRDesignCellContents) ModelUtils.getTopElementGroup(element);
 				return new ExpressionContext(contents.getOrigin().getCrosstab(), node.getJasperConfiguration());
 			} else if (!(group instanceof JRBand)) {
-				// Custom component, then try to get information from a possible related IComponentFactory
+				// Custom component, then try to get information from a possible related
+				// IComponentFactory
 				// If necessary walk the tree (up direction).
 				ExpressionContext ec = getExpressionContext4Component(node);
 				if (ec != null) {
@@ -1455,7 +1479,8 @@ public class ModelUtils {
 				return ec;
 			}
 
-			// Last resort, we try to gather a proper JRDesignDataset from the node information
+			// Last resort, we try to gather a proper JRDesignDataset from the node
+			// information
 			if (node != null) {
 				JRDesignDataset dataset = getDataset(node);
 				JasperReportsConfiguration jconfig = node.getJasperConfiguration();
@@ -1470,15 +1495,18 @@ public class ModelUtils {
 	}
 
 	/*
-	 * Given an ANode instance, tries to obtain a valid expression context. When this method is invoked, it usually means
-	 * that a custom component is being introspected, therefore we will rely on the its component factory to obtain a
-	 * possible valid expression context (see IComponentFactory#getElementExpressionContext(Object)).
+	 * Given an ANode instance, tries to obtain a valid expression context. When
+	 * this method is invoked, it usually means that a custom component is being
+	 * introspected, therefore we will rely on the its component factory to obtain a
+	 * possible valid expression context (see
+	 * IComponentFactory#getElementExpressionContext(Object)).
 	 */
 	private static ExpressionContext getExpressionContext4Component(ANode node) {
 		ANode cursorNode = node;
 		while (cursorNode != null) {
 			if (cursorNode.getValue() instanceof JRDesignComponentElement) {
-				ExpressionContext ec = JaspersoftStudioPlugin.getExtensionManager().getExpressionContext4Element(cursorNode);
+				ExpressionContext ec = JaspersoftStudioPlugin.getExtensionManager()
+						.getExpressionContext4Element(cursorNode);
 				if (ec != null) {
 					return ec;
 				}
@@ -1498,13 +1526,14 @@ public class ModelUtils {
 	/**
 	 * Creates a valid name for a JRField element.
 	 * <p>
-	 * It searches the existing fields in order to check for field name validity. If no other field is found with the same
-	 * name, then the <code>namePrefix</code> itself is used.
+	 * It searches the existing fields in order to check for field name validity. If
+	 * no other field is found with the same name, then the <code>namePrefix</code>
+	 * itself is used.
 	 * 
 	 * @param fields
-	 *          list of already existing fields
+	 *            list of already existing fields
 	 * @param namePrefix
-	 *          name prefix for new field name
+	 *            name prefix for new field name
 	 * @return a valid name for the JRField
 	 */
 	public static String getNameForField(List<JRDesignField> fields, String namePrefix) {
@@ -1525,13 +1554,14 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Copies all the properties contained in the source map to the destination one. <br>
+	 * Copies all the properties contained in the source map to the destination one.
+	 * <br>
 	 * It also removes the properties that do not exist in the source map.
 	 * 
 	 * @param sourceMap
-	 *          the source map containing the properties to be copied
+	 *            the source map containing the properties to be copied
 	 * @param destMap
-	 *          the destination properties map
+	 *            the destination properties map
 	 */
 	public static void replacePropertiesMap(JRPropertiesMap sourceMap, JRPropertiesMap destMap) {
 		// Copy/Replace properties
@@ -1553,10 +1583,11 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Returns the language set for the report to which the input jasper configuration belongs to.
+	 * Returns the language set for the report to which the input jasper
+	 * configuration belongs to.
 	 * 
 	 * @param jconfig
-	 *          the jasper configuration
+	 *            the jasper configuration
 	 * @return the current report language if any, <code>null</code> otherwise
 	 */
 	public static String getCurrentReportLanguage(JasperReportsConfiguration jconfig) {
@@ -1570,14 +1601,15 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Returns the list with the names of different hyperlink types. This list includes possibly contributed types via
-	 * dedicated extension point.
+	 * Returns the list with the names of different hyperlink types. This list
+	 * includes possibly contributed types via dedicated extension point.
 	 * <p>
 	 * 
 	 * Clients can specify to exclude some types through the input list.
 	 * 
 	 * @param filteredTypes
-	 *          a list of types that should be filtered out from the final list, it can be <code>null</code>
+	 *            a list of types that should be filtered out from the final list,
+	 *            it can be <code>null</code>
 	 * @return the list of hyperlink type names
 	 */
 	public static List<String> getHyperlinkTypeNames4Widget(List<HyperlinkTypeEnum> filteredTypes) {
@@ -1597,13 +1629,14 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Gets a valid {@link ItemData} instance, representing the Marker Data information associated to the Fusion Map
-	 * component. If needed it creates a new one.
+	 * Gets a valid {@link ItemData} instance, representing the Marker Data
+	 * information associated to the Fusion Map component. If needed it creates a
+	 * new one.
 	 * 
 	 * @param mapComponent
-	 *          the map component to look into
+	 *            the map component to look into
 	 * @param update
-	 *          specifies to update the original map component or not
+	 *            specifies to update the original map component or not
 	 * @return the marker data information associated to the map
 	 */
 	public static ItemData safeGetMarkerData(MapComponent mapComponent, boolean update) {
@@ -1619,12 +1652,14 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Return a list of sortfield, that are on the same level of the node passed as parameter (so if the node is fore
-	 * example a field of a subdataset then only the sortfield defined inside the subdataset will be returned)
+	 * Return a list of sortfield, that are on the same level of the node passed as
+	 * parameter (so if the node is fore example a field of a subdataset then only
+	 * the sortfield defined inside the subdataset will be returned)
 	 * 
 	 * @param node
-	 *          node used to retrieve the sortfields
-	 * @return a list of sortfield or null if from the passed node wasn't possibile to reach the sortfields
+	 *            node used to retrieve the sortfields
+	 * @return a list of sortfield or null if from the passed node wasn't possibile
+	 *         to reach the sortfields
 	 */
 	public static List<INode> getSortFields(ANode node) {
 		ANode n = node.getParent();
@@ -1637,12 +1672,13 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Given a root node, like a MReport or an MDataset, search a node MSortFields inside its children and return the
-	 * sortfields defined under it
+	 * Given a root node, like a MReport or an MDataset, search a node MSortFields
+	 * inside its children and return the sortfields defined under it
 	 * 
 	 * @param parent
-	 *          and MReport or MDataset node
-	 * @return all the sortfields defined on the same level of the passed node, it will never be null
+	 *            and MReport or MDataset node
+	 * @return all the sortfields defined on the same level of the passed node, it
+	 *         will never be null
 	 */
 	private static List<INode> findSortFieldsNode(ANode parent) {
 		for (INode node : parent.getChildren()) {
@@ -1653,16 +1689,18 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Verifies that all the specified objects are EditParts referring to model objects belonging or not to the specified
-	 * list of classes.
+	 * Verifies that all the specified objects are EditParts referring to model
+	 * objects belonging or not to the specified list of classes.
 	 * 
 	 * @param editParts
-	 *          list of objects supposed to be {@link EditPart}
+	 *            list of objects supposed to be {@link EditPart}
 	 * @param allowed
-	 *          determines if the list is of allowed (true) or excluded (false) types
+	 *            determines if the list is of allowed (true) or excluded (false)
+	 *            types
 	 * @param classes
-	 *          the list of type(s)
-	 * @return <code>true</code> all model objects respect the condition,<code>false</code> otherwise
+	 *            the list of type(s)
+	 * @return <code>true</code> all model objects respect the
+	 *         condition,<code>false</code> otherwise
 	 */
 	public static boolean checkTypesForAllEditParModels(List<?> editParts, boolean allowed, Class<?>... classes) {
 		if (editParts.size() == 0)
@@ -1676,15 +1714,18 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Verifies that there is only one EditPart selected referring to a model object of the allowed class types.
+	 * Verifies that there is only one EditPart selected referring to a model object
+	 * of the allowed class types.
 	 * 
 	 * @param editPart
-	 *          the object supposed to be {@link EditPart}
+	 *            the object supposed to be {@link EditPart}
 	 * @param allowed
-	 *          determines if the list is of allowed (true) or excluded (false) types
+	 *            determines if the list is of allowed (true) or excluded (false)
+	 *            types
 	 * @param classes
-	 *          the list of type(s)
-	 * @return <code>true</code> if the single model object respects the condition,<code>false</code> otherwise
+	 *            the list of type(s)
+	 * @return <code>true</code> if the single model object respects the
+	 *         condition,<code>false</code> otherwise
 	 */
 	public static boolean checkTypesForSingleEditPartModel(Object editPart, boolean allowed, Class<?>... classes) {
 		if (editPart instanceof EditPart) {
@@ -1714,14 +1755,15 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Verifies if the specified element belongs to a dataset. It makes sense for the element to be a field, variable or
-	 * parameter.
+	 * Verifies if the specified element belongs to a dataset. It makes sense for
+	 * the element to be a field, variable or parameter.
 	 * 
 	 * @param element
-	 *          the element to check
+	 *            the element to check
 	 * @param datasetName
-	 *          the (target) dataset name
-	 * @return <code>true</code> if the element belongs to the dataset, <code>false</code> otherwise
+	 *            the (target) dataset name
+	 * @return <code>true</code> if the element belongs to the dataset,
+	 *         <code>false</code> otherwise
 	 */
 	public static boolean belongsToDataset(APropertyNode element, String datasetName) {
 		Assert.isNotNull(element);
@@ -1733,7 +1775,8 @@ public class ModelUtils {
 				String fDsName = value.getName();
 				return datasetName.equals(fDsName);
 			} else if (upperParent instanceof MReport) {
-				MDataset mainDS = (MDataset) ((MReport) upperParent).getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+				MDataset mainDS = (MDataset) ((MReport) upperParent)
+						.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
 				String mainDSName = (String) mainDS.getPropertyValue(JRDesignDataset.PROPERTY_NAME);
 				return datasetName.equals(mainDSName);
 			}
@@ -1758,13 +1801,13 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Compare two JRPropertiesMap to check if they are equals. They are equals when they have the same set of keys
-	 * associated with the same values
+	 * Compare two JRPropertiesMap to check if they are equals. They are equals when
+	 * they have the same set of keys associated with the same values
 	 * 
 	 * @param map1
-	 *          the first map, can be null
+	 *            the first map, can be null
 	 * @param map2
-	 *          the second map, can be null
+	 *            the second map, can be null
 	 * @return true if the map are equals, false otherwise
 	 */
 	public static boolean jrPropertiesMapEquals(JRPropertiesMap map1, JRPropertiesMap map2) {
@@ -1785,14 +1828,15 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Tries to retrieve a valid group name from the specified parameter. If the information can not be extracted null
-	 * string is returned.
+	 * Tries to retrieve a valid group name from the specified parameter. If the
+	 * information can not be extracted null string is returned.
 	 * <p>
 	 * 
-	 * This method should be used when setting/getting the group name details for a model element property.
+	 * This method should be used when setting/getting the group name details for a
+	 * model element property.
 	 * 
 	 * @param value
-	 *          a generic object possibly containing the group information
+	 *            a generic object possibly containing the group information
 	 * @return the group name if any, <code>null</code> otherwise
 	 */
 	public static String getGroupNameForProperty(Object value) {
@@ -1810,13 +1854,14 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Tries to retrieve a valid group instance from the specified parameters. The dataset can be used to extract the
-	 * group, for example based on a value string.
+	 * Tries to retrieve a valid group instance from the specified parameters. The
+	 * dataset can be used to extract the group, for example based on a value
+	 * string.
 	 * 
 	 * @param value
-	 *          a generic object possibly containing group details
+	 *            a generic object possibly containing group details
 	 * @param dataset
-	 *          a dataset instance that can allow to retrieve the group
+	 *            a dataset instance that can allow to retrieve the group
 	 * @return the group instance if any, <code>null</code> otherwise
 	 */
 	public static JRGroup getGroupForProperty(Object value, JRDesignDataset dataset) {
@@ -1860,7 +1905,7 @@ public class ModelUtils {
 	}
 
 	public static boolean isEmpty(ANode n) {
-		return Misc.isNullOrEmpty(n.getChildren()) || n.getChildren().get(0) instanceof MDummy;
+		return n == null || Misc.isNullOrEmpty(n.getChildren()) || n.getChildren().get(0) instanceof MDummy;
 	}
 
 	/**
@@ -1874,10 +1919,11 @@ public class ModelUtils {
 	 * </ul>
 	 * 
 	 * @param field1
-	 *          the first field to compare
+	 *            the first field to compare
 	 * @param field2
-	 *          the second field to compare
-	 * @return <code>true</code> if the fields are considered equals, <code>false</code> otherwise
+	 *            the second field to compare
+	 * @return <code>true</code> if the fields are considered equals,
+	 *         <code>false</code> otherwise
 	 */
 	public static boolean areFieldsEquals(JRField field1, JRField field2) {
 		Assert.isNotNull(field1);
@@ -1908,10 +1954,11 @@ public class ModelUtils {
 	 * </ul>
 	 * 
 	 * @param param1
-	 *          the first parameter to compare
+	 *            the first parameter to compare
 	 * @param param2
-	 *          the second parameter to compare
-	 * @return <code>true</code> if the parameters are considered equals, <code>false</code> otherwise
+	 *            the second parameter to compare
+	 * @return <code>true</code> if the parameters are considered equals,
+	 *         <code>false</code> otherwise
 	 */
 	public static boolean areParametersEquals(JRParameter param1, JRParameter param2) {
 		Assert.isNotNull(param1);
@@ -1944,10 +1991,11 @@ public class ModelUtils {
 	 * </ul>
 	 * 
 	 * @param sfield1
-	 *          the first sort field
+	 *            the first sort field
 	 * @param sfield2
-	 *          the second sort field
-	 * @return <code>true</code> if the sort fields are considered equals, <code>false</code> otherwise
+	 *            the second sort field
+	 * @return <code>true</code> if the sort fields are considered equals,
+	 *         <code>false</code> otherwise
 	 */
 	public static boolean areSortFieldsEquals(JRSortField sfield1, JRSortField sfield2) {
 		Assert.isNotNull(sfield1);
@@ -1964,7 +2012,8 @@ public class ModelUtils {
 		return true;
 	}
 
-	// Utility methods used to check if a string can be converted to a numeric or a boolean type
+	// Utility methods used to check if a string can be converted to a numeric or a
+	// boolean type
 
 	public static boolean isInteger(String value) {
 		try {
@@ -2014,7 +2063,7 @@ public class ModelUtils {
 	 * Tries the conversion of a generic value into a Integer one.
 	 * 
 	 * @param value
-	 *          the value to convert
+	 *            the value to convert
 	 * @return a converted Integer instance, <code>null</code> otherwise
 	 */
 	public static Integer getInteger(Object value) {
@@ -2031,7 +2080,7 @@ public class ModelUtils {
 	 * Tries the conversion of a generic value into a Long one.
 	 * 
 	 * @param value
-	 *          the value to convert
+	 *            the value to convert
 	 * @return a converted Long instance, <code>null</code> otherwise
 	 */
 	public static Long getLong(Object value) {
@@ -2048,7 +2097,7 @@ public class ModelUtils {
 	 * Tries the conversion of a generic value into a Float one.
 	 * 
 	 * @param value
-	 *          the value to convert
+	 *            the value to convert
 	 * @return a converted Float instance, <code>null</code> otherwise
 	 */
 	public static Float getFloat(Object value) {
@@ -2065,7 +2114,7 @@ public class ModelUtils {
 	 * Tries the conversion of a generic value into a Double one.
 	 * 
 	 * @param value
-	 *          the value to convert
+	 *            the value to convert
 	 * @return a converted Double instance, <code>null</code> otherwise
 	 */
 	public static Double getDouble(Object value) {
@@ -2082,7 +2131,7 @@ public class ModelUtils {
 	 * Tries the conversion of a generic value into a Boolean one.
 	 * 
 	 * @param value
-	 *          the value to convert
+	 *            the value to convert
 	 * @return a converted Boolean instance, <code>null</code> otherwise
 	 */
 	public static Boolean getBoolean(Object value) {
@@ -2099,7 +2148,7 @@ public class ModelUtils {
 	 * Returns a field text expression that uses the specified name.
 	 * 
 	 * @param name
-	 *          field name
+	 *            field name
 	 * @return field expression
 	 */
 	public static String getNameAsField(String name) {
@@ -2111,7 +2160,7 @@ public class ModelUtils {
 	 * Returns a parameter text expression that uses the specified name.
 	 * 
 	 * @param name
-	 *          parameter name
+	 *            parameter name
 	 * @return parameter expression
 	 */
 	public static String getNameAsParameter(String name) {
@@ -2123,7 +2172,7 @@ public class ModelUtils {
 	 * Returns a variable text expression that uses the specified name.
 	 * 
 	 * @param name
-	 *          variable name
+	 *            variable name
 	 * @return variable expression
 	 */
 	public static String getNameAsVariable(String name) {
@@ -2135,7 +2184,7 @@ public class ModelUtils {
 	 * Returns a resource key text expression that uses the specified name.
 	 * 
 	 * @param name
-	 *          resource key name
+	 *            resource key name
 	 * @return resource key expression
 	 */
 	public static String getNameAsResourceKey(String name) {
@@ -2147,10 +2196,11 @@ public class ModelUtils {
 	 * Checks if a class is assignable to another type one.
 	 * 
 	 * @param clazz
-	 *          the class object
+	 *            the class object
 	 * @param className
-	 *          the name of the class to check
-	 * @return <code>true</code> if class is assignable, <code>false</code> otherwise
+	 *            the name of the class to check
+	 * @return <code>true</code> if class is assignable, <code>false</code>
+	 *         otherwise
 	 */
 	public static boolean isClassAssignableFrom(Class<?> clazz, String className) {
 		try {

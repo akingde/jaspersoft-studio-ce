@@ -9,11 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
-import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
-
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -26,6 +21,11 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.xml.XMLAttributeNode;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
 
 /**
  * This class works on the specified xml document or its nodes.
@@ -217,7 +217,7 @@ public class XMLDocumentManager implements ISelectableNodes<XMLNode> {
 					nodes.add(selectNodeList.item(i));
 				}
 			}
-		} catch (JRException e) {
+		} catch (Exception e) {
 			// Do not care about error in node selection
 		}
 		return nodes;

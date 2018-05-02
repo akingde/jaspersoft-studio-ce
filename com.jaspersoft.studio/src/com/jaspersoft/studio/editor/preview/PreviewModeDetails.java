@@ -7,6 +7,7 @@ package com.jaspersoft.studio.editor.preview;
 import java.util.Map;
 
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
+import com.jaspersoft.studio.editor.preview.view.control.JiveRunner;
 
 /**
  * This interface should be implemented by whose clients who want to contribute
@@ -16,7 +17,7 @@ import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
  *
  */
 public interface PreviewModeDetails {
-	
+
 	/** Extension point id information */
 	String EXTENSION_POINT_ID = "previewModeInfo";
 
@@ -24,7 +25,7 @@ public interface PreviewModeDetails {
 	String PREVIEW_MODE_LOCAL = RunStopAction.MODERUN_LOCAL;
 
 	/** Constant for Jive Preview Mode */
-	String PREVIEW_MODE_JIVE = RunStopAction.MODERUN_JIVE;
+	String PREVIEW_MODE_JIVE = JiveRunner.ID;
 
 	/**
 	 * @return the id of the preview mode to which this details apply to
@@ -32,8 +33,9 @@ public interface PreviewModeDetails {
 	String getPreviewModeID();
 
 	/**
-	 * @return a map of properties that should be set in the specified preview mode ({@link #getPreviewModeID()}).
+	 * @return a map of properties that should be set in the specified preview mode
+	 *         ({@link #getPreviewModeID()}).
 	 */
 	Map<String, String> getPreviewModeProperties();
-	
+
 }

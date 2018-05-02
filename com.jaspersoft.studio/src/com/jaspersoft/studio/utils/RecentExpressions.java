@@ -15,7 +15,10 @@ import java.util.List;
  */
 public class RecentExpressions {
 
-	private static List<String> recentExpressions=new ArrayList<String>();
+	private static List<String> recentExpressionsLst=new ArrayList<>();
+	
+	private RecentExpressions() {
+	}
 	
 	/**
 	 * Returns the expression found at the specified index.
@@ -26,8 +29,8 @@ public class RecentExpressions {
 	 * @return the expression string at the specified position, <code>null</code> otherwise
 	 */
 	public static String getExpression(int index){
-		if(recentExpressions.size()>=index && index>0){
-			return recentExpressions.get(index-1);
+		if(recentExpressionsLst.size()>=index && index>0){
+			return recentExpressionsLst.get(index-1);
 		}
 		else {
 			return null;
@@ -38,7 +41,7 @@ public class RecentExpressions {
 	 * @return the whole list of cached expressions
 	 */
 	public static List<String> getRecentExpressionsList(){
-		return recentExpressions;
+		return recentExpressionsLst;
 	}
 	
 	/**
@@ -50,17 +53,17 @@ public class RecentExpressions {
 	 * @param expression the expression string to add
 	 */
 	public static void addNewExpression(String expression){
-		if(recentExpressions.contains(expression)){
-			recentExpressions.remove(expression);			
+		if(recentExpressionsLst.contains(expression)){
+			recentExpressionsLst.remove(expression);			
 		}
-		recentExpressions.add(0, expression);
+		recentExpressionsLst.add(0, expression);
 	}
 	
 	/**
 	 * Clears the list of recent expressions.
 	 */
 	public static void clear(){
-		recentExpressions.clear();
+		recentExpressionsLst.clear();
 	}
 	
 }

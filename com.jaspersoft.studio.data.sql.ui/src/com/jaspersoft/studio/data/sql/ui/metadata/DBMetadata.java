@@ -506,7 +506,7 @@ public class DBMetadata {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				for (INode n : DBMetadata.this.root.getChildren()) {
-					if (n instanceof MSqlSchema && n.getValue().equals(schema)) {
+					if (n instanceof MSqlSchema && n.getValue() != null && n.getValue().equals(schema)) {
 						((MSqlSchema) n).setCurrent(true);
 						treeViewer.expandToLevel((MSqlSchema) n, 1);
 						break;

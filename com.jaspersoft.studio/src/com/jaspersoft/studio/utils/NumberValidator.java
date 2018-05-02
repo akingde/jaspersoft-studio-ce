@@ -43,6 +43,8 @@ public class NumberValidator implements VerifyListener {
 		case SWT.END:
 		case SWT.ARROW:
 			return;
+		default:
+			break;
 		}
 		if (Misc.isNullOrEmpty(e.text)) {
 			e.doit = false;
@@ -95,7 +97,7 @@ public class NumberValidator implements VerifyListener {
 		}
 	}
 
-	protected Number getNumber(String number, Class<?> typ) throws NumberFormatException {
+	protected Number getNumber(String number, Class<?> typ) {
 		if (typ.equals(Long.class))
 			return new Long(number);
 		else if (typ.equals(BigInteger.class))
@@ -112,7 +114,6 @@ public class NumberValidator implements VerifyListener {
 			return new Byte(number);
 		else if (typ.equals(BigDecimal.class))
 			return new BigDecimal(number);
-
 		return null;
 	}
 }

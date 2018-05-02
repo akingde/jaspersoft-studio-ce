@@ -12,15 +12,18 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
 public class XMLUtils {
 	private static DocumentBuilder db;
+	
+	private XMLUtils() {
+	}
 
 	public static Document parseNoValidation(InputStream io) throws ParserConfigurationException, SAXException,
 			IOException {
@@ -29,14 +32,10 @@ public class XMLUtils {
 
 	public static Document parseNoValidation(String xml) throws ParserConfigurationException, SAXException, IOException {
 		Document doc = null;
-		ByteArrayInputStream is = null;
-		try {
-			is = new ByteArrayInputStream(xml.getBytes(FileUtils.UTF8_ENCODING));
+		try (ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(FileUtils.UTF8_ENCODING));) {
 			doc = getDocumentBuilder().parse(is);
-		} finally {
-			FileUtils.closeStream(is);
+			return doc;
 		}
-		return doc;
 	}
 
 	private static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
@@ -60,11 +59,7 @@ public class XMLUtils {
 		}
 		if (jdesign != null) {
 			String detectNamespaces = jdesign.getProperty("net.sf.jasperreports.xml.detect.namespaces");
-			if (detectNamespaces != null && "true".equals(detectNamespaces)) {
-				return true;
-			} else {
-				return false;
-			}
+			return (detectNamespaces != null && "true".equals(detectNamespaces));
 		}
 		return false;
 	}
