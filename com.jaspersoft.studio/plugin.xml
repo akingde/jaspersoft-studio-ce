@@ -27,6 +27,7 @@
 <extension-point id="fileSelectors" name="File Selectors" schema="schema/fileSelectors.exsd"/>
 <extension-point id="bindings" name="com.jaspersoft.studio.bindings" schema="schema/bindings.exsd"/>
 <extension-point id="resourceExporter" name="com.jaspersoft.studio.resourceExporter" schema="schema/resourceExporter.exsd"/>
+<extension-point id="reportRunner" name="Report Runner" schema="schema/reportrunner.exsd"/>
 <extension-point id="dynamicWidgetDefinitions" name="Dynamic Widget Definitions" schema="schema/dynamicWidgetDefinitions.exsd"/>
 
 <extension-point id="daQueryUI" name="Data Adapter Query UI" schema="schema/daQueryUI.exsd"/>
@@ -2075,16 +2076,49 @@
              id="com.jaspersoft.studio.graphic.text"
              label="%TextProperties">
           <toolitem
-                class="com.jaspersoft.studio.toolbars.TextualContributionItem"
-                id="com.jaspersoft.studio.editor.action.text">
+                class="com.jaspersoft.studio.toolbars.text.TextualFontNameContributionItem"
+                id="com.jaspersoft.studio.editor.action.text.font_name">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.text.TextualFontSizeContributionItem"
+                id="com.jaspersoft.studio.editor.action.text.font_size">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.text.IncrementFontSizeButtonContributionItem"
+                id="com.jaspersoft.studio.editor.action.text.increment">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.text.DecrementFontSizeButtonContributionItem"
+                controlIndex="decrement"
+                id="com.jaspersoft.studio.editor.action.text.decrement">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.text.TextualButtonsContributionItem"
+                id="com.jaspersoft.studio.editor.action.text.text_attributes">
           </toolitem>
        </toolitemsets>
        <toolitemsets
              id="com.jaspersoft.studio.graphic.bring"
              label="%ElementOrder">
           <toolitem
-                class="com.jaspersoft.studio.toolbars.OrderContributionItem"
-                id="com.jaspersoft.studio.editor.action.order">
+                class="com.jaspersoft.studio.toolbars.order.ForwardOrderContributionItem"
+                id="com.jaspersoft.studio.editor.action.order_forward">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.order.BackwardOrderContributionItem"
+                id="com.jaspersoft.studio.editor.action.order_backward">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.order.TopOrderContributionItem"
+                id="com.jaspersoft.studio.editor.action.order_top">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.order.BottomOrderContributionItem"
+                id="com.jaspersoft.studio.editor.action.order_bottom">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.order.SortOrderContributionItem"
+                id="com.jaspersoft.studio.editor.action.order_sort">
           </toolitem>
        </toolitemsets>
        <toolitemsets
@@ -2098,22 +2132,62 @@
              id="com.jaspersoft.studio.graphic.align"
              label="%ElementsAlignment">
           <toolitem
-                class="com.jaspersoft.studio.toolbars.AlignmentContributionItem"
-                id="com.jaspersoft.studio.editor.action.alignment"></toolitem>
+                class="com.jaspersoft.studio.toolbars.alignment.LeftAlignmentContributionItem"
+                id="com.jaspersoft.studio.editor.action.alignment_left"></toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.alignment.RightAlignmentContributionItem"
+                id="com.jaspersoft.studio.editor.action.alignment_right">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.alignment.TopAlignmentContributionItem"
+                id="com.jaspersoft.studio.editor.action.alignment_top">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.alignment.BottomAlignmentContributionItem"
+                id="com.jaspersoft.studio.editor.action.alignment_bottom">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.alignment.HorizontalCenterAlignmentContributionItem"
+                id="com.jaspersoft.studio.editor.action.alignment_horizontal_center">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.alignment.VerticalCenterAlignmentContributionItem"
+                id="com.jaspersoft.studio.editor.action.alignment_vertical_center">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.alignment.JoinLeftAlignmentContributionItem"
+                id="com.jaspersoft.studio.editor.action.alignment_join_left">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.alignment.JoinRightAlignmentContributionItem"
+                id="com.jaspersoft.studio.editor.action.alignment_join_right">
+          </toolitem>
        </toolitemsets>
        <toolitemsets
              id="com.jaspersoft.studio.graphic.size"
              label="%ElementsSize">
           <toolitem
-                class="com.jaspersoft.studio.toolbars.SizeContributionItem"
-                id="com.jaspersoft.studio.editor.action.size"></toolitem>
+                class="com.jaspersoft.studio.toolbars.size.FitWidthSizeContributionItem"
+                id="com.jaspersoft.studio.editor.action.size_width"></toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.size.FitHeightSizeContributionItem"
+                id="com.jaspersoft.studio.editor.action.size_height">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.size.FitBothSizeContributionItem"
+                id="com.jaspersoft.studio.editor.action.size_both">
+          </toolitem>
        </toolitemsets>
        <toolitemsets
              id="com.jaspersoft.studio.graphic.borders"
              label="%Borders">
           <toolitem
-                class="com.jaspersoft.studio.toolbars.BorderContributionItem"
-                id="com.jaspersoft.studio.editor.action.borders"></toolitem>
+                class="com.jaspersoft.studio.toolbars.border.BorderLabelContributionItem"
+                id="com.jaspersoft.studio.editor.action.borders.border_label"></toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.border.BorderContributionItem"
+                id="com.jaspersoft.studio.editor.action.borders.border_widget">
+          </toolitem>
        </toolitemsets>
        <toolitemsets
              id="com.jaspersoft.studio.graphic.image"
@@ -2137,8 +2211,20 @@
              id="com.jaspersoft.studio.graphic.movebands"
              label="%moveBandActionGroup">
           <toolitem
-                class="com.jaspersoft.studio.toolbars.MoveBandContributionItem"
-                id="com.jaspersoft.studio.editor.action.movedetailband"></toolitem>
+                class="com.jaspersoft.studio.toolbars.bands.MoveBandDownContributionItem"
+                id="com.jaspersoft.studio.editor.action.bands.move_band_down"></toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.bands.MoveBandUpContributionItem"
+                id="com.jaspersoft.studio.editor.action.bands.move_band_up">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.bands.MoveGroupDownContributionItem"
+                id="com.jaspersoft.studio.editor.action.bands.move_group_down">
+          </toolitem>
+          <toolitem
+                class="com.jaspersoft.studio.toolbars.bands.MoveGroupUpContributionItem"
+                id="com.jaspersoft.studio.editor.action.bands.move_group_up">
+          </toolitem>
        </toolitemsets>
     </extension>
     <extension

@@ -2,7 +2,7 @@
  * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
  * All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
-package com.jaspersoft.studio.toolbars;
+package com.jaspersoft.studio.toolbars.border;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -16,18 +16,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.border.TemplateBorder;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.toolbars.CommonToolbarHandler;
 import com.jaspersoft.studio.utils.AlfaRGB;
 
 import net.sf.jasperreports.engine.JRPen;
@@ -36,7 +37,9 @@ import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 /**
  * Component that represent a combo with inside the preview of some border presets. This component should 
- * be placed in the toolbar when an element that can have borders is selected
+ * be placed in the toolbar when an element that can have borders is selected. It should also be placed along
+ * with the {@link BorderLabelContributionItem} because the toolbar is unable to set the height (handled natively
+ * by the os) without a static element. In this way the label will provide the height for the toolbar.
  * 
  * @author Orlandin Marco
  *
@@ -52,7 +55,6 @@ public class BorderContributionItem extends CommonToolbarHandler {
 		 */
 		private TableCombo combo;
 
-		
 		/**
 		 * The list of available presets
 		 */
@@ -207,15 +209,21 @@ public class BorderContributionItem extends CommonToolbarHandler {
 
 		@Override
 		protected boolean fillWithToolItems(ToolBar parent) {
-			// FIXME - Temporary solution when solving Bugzilla #44189
-			// It appears that in Windows with Eclipse Mars it's not correctly
-			// Creating a possible ToolItem separator containing a composite/label.
-			ToolItem tiBorderLbl = new ToolItem(parent,SWT.PUSH);
-			tiBorderLbl.setText(Messages.ATableComboContribution_presets_label);
-			getToolItems().add(tiBorderLbl);
-			
 			ToolItem tiBorderCombo = new ToolItem(parent,SWT.SEPARATOR);
-			combo = new TableCombo(parent, SWT.BORDER | SWT.READ_ONLY);
+			combo = new TableCombo(parent, SWT.BORDER | SWT.READ_ONLY) {
+				protected Table createTable(Composite parent) {
+					Table table = super.createTable(parent);
+					//Load the image for every preset and insert them into the combo element
+					TemplateBorder.setWidth(100);
+					for (TemplateBorder border: exampleImages) {
+						TableItem ti = new TableItem(table, SWT.READ_ONLY);
+						ti.setImage(border.getImage());
+					}
+					TableItem ti = new TableItem(table, SWT.NONE);
+					ti.setImage(TemplateBorder.getCustomImage());
+					return table;
+				};
+			};
 			combo.setEditable(false);
 			combo.addSelectionListener(new SelectionAdapter() {
 					@Override
@@ -223,7 +231,6 @@ public class BorderContributionItem extends CommonToolbarHandler {
 						changeProperty();
 					}
 			});
-			loadImages();
 			setAllControlsData();
 			combo.pack();
 			tiBorderCombo.setWidth(130);
@@ -249,19 +256,7 @@ public class BorderContributionItem extends CommonToolbarHandler {
 				
 			} 
 		}
-		
-		/**
-		 * Load the image for every preset and insert them into the combo element
-		 */
-		private void loadImages() {
-			TemplateBorder.setWidth(100);
-			for (TemplateBorder border: exampleImages) {
-				TableItem ti = new TableItem(combo.getTable(), SWT.READ_ONLY);
-				ti.setImage(border.getImage());
-			}
-			TableItem ti = new TableItem(combo.getTable(), SWT.NONE);
-			ti.setImage(TemplateBorder.getCustomImage());
-		}		
+
 		
 		@Override
 		public boolean isVisible() {

@@ -549,6 +549,15 @@ public class TableCombo extends Composite {
 	}
 	
 	/**
+	 * Create the table that will be shown in the combo. Can be overridden to create the content
+	 * of the table after the creation. Override this is useful when we want to use this element
+	 * without a viewer
+	 */
+	protected Table createTable(Composite parent) {
+		return new Table(parent, SWT.SINGLE | SWT.FULL_SELECTION);
+	}
+	
+	/**
 	 * creates the popup shell.
 	 * @param selectionIndex
 	 */
@@ -564,7 +573,7 @@ public class TableCombo extends Composite {
 //		if ((style & SWT.LEFT_TO_RIGHT) != 0) tableStyle |= SWT.LEFT_TO_RIGHT;
 		
 		// create table
-		table = new Table(popup, SWT.SINGLE | SWT.FULL_SELECTION);
+		table = createTable(popup);
 
 		if (font != null) table.setFont (font);
 		if (foreground != null) table.setForeground (foreground);
@@ -643,6 +652,7 @@ public class TableCombo extends Composite {
 		
 		// calculate the table height.
 		int itemCount = table.getItemCount();
+	
 		itemCount = (itemCount == 0) ? visibleItemCount : Math.min(visibleItemCount, itemCount) - 1;
 		int itemHeight = (table.getItemHeight () * itemCount);
 		

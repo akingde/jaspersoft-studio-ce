@@ -22,7 +22,7 @@ import com.jaspersoft.studio.model.image.MImage;
 /**
  * Create the toolbar button to change the image expression
  * 
- * @author Tigre
+ * @author Orlandin Marco
  *
  */
 public class ImageContributionItem extends CommonToolbarHandler{

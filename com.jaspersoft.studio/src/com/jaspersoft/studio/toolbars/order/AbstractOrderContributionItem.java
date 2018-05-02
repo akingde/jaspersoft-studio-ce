@@ -2,7 +2,7 @@
  * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
  * All Rights Reserved. Confidential & Proprietary.
  ******************************************************************************/
-package com.jaspersoft.studio.toolbars;
+package com.jaspersoft.studio.toolbars.order;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,17 +14,14 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 
 import com.ibm.icu.text.MessageFormat;
 import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.selection.SelectElementsByValueCommand;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.editor.outline.actions.HideDefaultVariablesAction;
@@ -41,6 +38,7 @@ import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.model.variable.MVariables;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.toolbars.CommonToolbarHandler;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -54,26 +52,25 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 
 /**
- * Create the toolbar buttons to change the order of the elements
+ * Toolbar controls to change the order of the selected elements. These are the common methods, but every
+ * toolitem, corresponding to the specific order action, is provided by the implementation
  * 
  * @author Orlandin Marco
  *
  */
-public class OrderContributionItem extends CommonToolbarHandler{
+public abstract class AbstractOrderContributionItem extends CommonToolbarHandler{
 	
 	/**
 	 * Enumeration used internally to associate to a every button a 
 	 * specific movement
 	 *
 	 */
-	private enum ORDER_TYPE{FORWARD, BACKWARD, TOP, BOTTOM, SORT_VARIABLES, SORT_FIELDS, SORT_PARAMETERS};
-	
-	private ToolItem sortElement;
+	protected enum ORDER_TYPE{FORWARD, BACKWARD, TOP, BOTTOM, SORT_VARIABLES, SORT_FIELDS, SORT_PARAMETERS};
 	
 	/**
 	 * Selection listener that create the right command when a button is pushed
 	 */
-	private SelectionAdapter pushButtonPressed = new SelectionAdapter() {
+	protected SelectionAdapter pushButtonPressed = new SelectionAdapter() {
 		
 	
 		public void widgetSelected(SelectionEvent e) {
@@ -114,141 +111,10 @@ public class OrderContributionItem extends CommonToolbarHandler{
 	};
 	
 	@Override
-	protected Control createControl(Composite parent) {
-		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
-		
-		ToolItem moveButton = new ToolItem(buttons, SWT.PUSH);
-		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/bring_forward.gif")); //$NON-NLS-1$
-		moveButton.setData(WIDGET_DATA_KEY, ORDER_TYPE.FORWARD);
-		moveButton.setToolTipText(Messages.BringForwardAction_bring_forward_tool_tip);
-		moveButton.addSelectionListener(pushButtonPressed);
-		
-		moveButton = new ToolItem(buttons, SWT.PUSH);
-		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_backward.gif")); //$NON-NLS-1$
-		moveButton.setData(WIDGET_DATA_KEY, ORDER_TYPE.BACKWARD);
-		moveButton.setToolTipText(Messages.BringBackwardAction_send_backward_tool_tip);
-		moveButton.addSelectionListener(pushButtonPressed);
-		
-		moveButton = new ToolItem(buttons, SWT.PUSH);
-		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/bring_to_front.gif")); //$NON-NLS-1$
-		moveButton.setData(WIDGET_DATA_KEY, ORDER_TYPE.TOP);
-		moveButton.setToolTipText(Messages.BringToFrontAction_bring_to_front_tool_tip);
-		moveButton.addSelectionListener(pushButtonPressed);
-		
-		moveButton = new ToolItem(buttons, SWT.PUSH);
-		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
-		moveButton.setData(WIDGET_DATA_KEY, ORDER_TYPE.BOTTOM);
-		moveButton.setToolTipText(Messages.BringToBackAction_send_to_back_tool_tip);
-		moveButton.addSelectionListener(pushButtonPressed);
-		
-		sortElement = new ToolItem(buttons, SWT.PUSH);
-		sortElement.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/sort-alpha-asc.png")); //$NON-NLS-1$
-		sortElement.addSelectionListener(pushButtonPressed);
-		setSortButtonEnablement();
-		
-		return buttons;
-	}
+	protected abstract Control createControl(Composite parent);
 	
 	@Override
-	protected boolean fillWithToolItems(ToolBar parent) {
-		ToolItem moveForward = new ToolItem(parent, SWT.PUSH);
-		moveForward.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/bring_forward.gif")); //$NON-NLS-1$
-		moveForward.setData(WIDGET_DATA_KEY, ORDER_TYPE.FORWARD);
-		moveForward.setToolTipText(Messages.BringForwardAction_bring_forward_tool_tip);
-		moveForward.addSelectionListener(pushButtonPressed);
-		getToolItems().add(moveForward);
-		
-		ToolItem moveBackward = new ToolItem(parent, SWT.PUSH);
-		moveBackward.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
-		moveBackward.setData(WIDGET_DATA_KEY, ORDER_TYPE.BACKWARD);
-		moveBackward.setToolTipText(Messages.BringBackwardAction_send_backward_tool_tip);
-		moveBackward.addSelectionListener(pushButtonPressed);
-		getToolItems().add(moveBackward);
-		
-		ToolItem moveTop = new ToolItem(parent, SWT.PUSH);
-		moveTop.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/bring_to_front.gif")); //$NON-NLS-1$
-		moveTop.setData(WIDGET_DATA_KEY, ORDER_TYPE.TOP);
-		moveTop.setToolTipText(Messages.BringToFrontAction_bring_to_front_tool_tip);
-		moveTop.addSelectionListener(pushButtonPressed);
-		getToolItems().add(moveTop);
-		
-		ToolItem moveBottom = new ToolItem(parent, SWT.PUSH);
-		moveBottom.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_backward.gif")); //$NON-NLS-1$
-		moveBottom.setData(WIDGET_DATA_KEY, ORDER_TYPE.BOTTOM);
-		moveBottom.setToolTipText(Messages.BringToBackAction_send_to_back_tool_tip);
-		moveBottom.addSelectionListener(pushButtonPressed);
-		getToolItems().add(moveBottom);
-		
-		sortElement = new ToolItem(parent, SWT.PUSH);
-		sortElement.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/sort-alpha-asc.png")); //$NON-NLS-1$
-		sortElement.addSelectionListener(pushButtonPressed);
-		setSortButtonEnablement();
-		
-		return true;
-	}
-	
-	private boolean setSortButtonEnablement() {
-		setSortElementStatus(false, Messages.OrderContributionItem_disabledtooltip, null);
-		if (areParameters()) {
-			setSortElementStatus(true, Messages.OrderContributionItem_paramTooltip, ORDER_TYPE.SORT_PARAMETERS);
-		} else {
-			if (areVariables()) {
-				setSortElementStatus(true, Messages.OrderContributionItem_varTooltip, ORDER_TYPE.SORT_VARIABLES);
-			} else {
-				if (areFields()) {
-					setSortElementStatus(true, Messages.OrderContributionItem_fieldstooltip, ORDER_TYPE.SORT_FIELDS);
-				} else {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
-	@Override
-	public boolean isVisible() {
-		if (!super.isVisible()) return false;
-		
-		List<Object> selection = getSelectionForType(MGraphicElement.class);
-		if (selection.size() == 0){
-			return setSortButtonEnablement();
-		} else {
-			setSortElementStatus(false, Messages.OrderContributionItem_disabledtooltip, null);
-		}
-		return true;
-	}
-	
-	private void setSortElementStatus(boolean enablement, String tooltip, ORDER_TYPE type) {
-		if (sortElement != null && !sortElement.isDisposed()) {
-			sortElement.setEnabled(enablement);
-			sortElement.setData(WIDGET_DATA_KEY, type);
-			sortElement.setToolTipText(tooltip);
-		}
-	}
-	
-	private boolean areParameters() {
-		List<Object> selection = getSelectionForType(MParameter.class);
-		if (selection.size() == 0) {
-			 selection = getSelectionForType(MParameters.class);
-		}
-		return !selection.isEmpty();
-	}
-	
-	private boolean areVariables() {
-		List<Object> selection = getSelectionForType(MVariable.class);
-		if (selection.size() == 0) {
-			 selection = getSelectionForType(MVariables.class);
-		}
-		return !selection.isEmpty();
-	}
-	
-	private boolean areFields() {
-		List<Object> selection = getSelectionForType(MField.class);
-		if (selection.size() == 0) {
-			 selection = getSelectionForType(MFields.class);
-		}
-		return !selection.isEmpty();
-	}
+	protected abstract boolean fillWithToolItems(ToolBar parent);
 	
 	private CompoundCommand generateBringForwardCommand(List<Object> selection){
 		CompoundCommand compoundCmd = new CompoundCommand("Move Elements"); //$NON-NLS-1$
@@ -352,6 +218,26 @@ public class OrderContributionItem extends CommonToolbarHandler{
 		compoundCmd.add(new SelectElementsByValueCommand(movedElements, viewer));
 		return compoundCmd;
 	}
+	
+	protected boolean checkWidgetVisible() {
+		return super.isVisible();
+	}
+	
+	private boolean checkSelectedDatasetType() {
+		return (areParameters() || areVariables() || areFields());
+	}
+	
+	@Override
+	public boolean isVisible() {
+		if (!checkWidgetVisible()) return false;
+		
+		List<Object> selection = getSelectionForType(MGraphicElement.class);
+		if (selection.size() == 0){
+			return checkSelectedDatasetType();
+		}
+		return true;
+	}
+	
 	
 	private Command sortParametersCommand(List<Object> selection) {
 		Object firstNode = selection.get(0);
@@ -553,12 +439,28 @@ public class OrderContributionItem extends CommonToolbarHandler{
 		return compoundCmd;
 	}
 	
-	@Override
-	public void dispose() {
-		super.dispose();
-		if (sortElement != null){
-			sortElement.dispose();
-			sortElement = null;
+	protected boolean areParameters() {
+		List<Object> selection = getSelectionForType(MParameter.class);
+		if (selection.size() == 0) {
+			 selection = getSelectionForType(MParameters.class);
 		}
+		return !selection.isEmpty();
 	}
+	
+	protected boolean areVariables() {
+		List<Object> selection = getSelectionForType(MVariable.class);
+		if (selection.size() == 0) {
+			 selection = getSelectionForType(MVariables.class);
+		}
+		return !selection.isEmpty();
+	}
+	
+	protected boolean areFields() {
+		List<Object> selection = getSelectionForType(MField.class);
+		if (selection.size() == 0) {
+			 selection = getSelectionForType(MFields.class);
+		}
+		return !selection.isEmpty();
+	}
+	
 }
