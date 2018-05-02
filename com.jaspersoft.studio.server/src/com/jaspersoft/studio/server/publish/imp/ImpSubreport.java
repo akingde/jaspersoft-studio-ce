@@ -49,7 +49,7 @@ public class ImpSubreport extends AImpObject {
 							e.printStackTrace();
 						}
 					}
-				} catch (IOException | JRException e) {
+				} catch (JRException | IOException e) {
 					e.printStackTrace();
 				}
 			}
