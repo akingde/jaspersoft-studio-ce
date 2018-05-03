@@ -194,7 +194,7 @@ public class ReportRunControler {
 							stats.endCount(ReportController.ST_REPORTEXECUTIONTIME);
 							if (repExec.getTotalPages() != null)
 								stats.setValue(ReportController.ST_PAGECOUNT, repExec.getTotalPages());
-							if (repExec.getReportOutputURL() != null) {
+							if (repExec.getReportOutputURL() != null && reptype.equals("HTML")) {
 								showURL(repExec);
 							} else {
 								Map<String, FileContent> files = repExec.getFiles();
