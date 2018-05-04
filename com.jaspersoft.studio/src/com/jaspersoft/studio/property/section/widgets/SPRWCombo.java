@@ -84,7 +84,7 @@ public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 		refresh = false;
 	}
 
-	private void setComboSelection(String str, boolean isCaseSensitive) {
+	protected void setComboSelection(String str, boolean isCaseSensitive) {
 		Point oldSel = combo.getSelection();
 		int oldLenght = combo.getText().length();
 		String[] items = combo.getItems();

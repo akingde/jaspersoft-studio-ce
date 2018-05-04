@@ -38,7 +38,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWLanguageComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
@@ -293,7 +293,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		columnSpaceD.setCategory(Messages.MReport_columns_category);
 		desc.add(columnSpaceD);
 
-		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JasperDesign.PROPERTY_LANGUAGE,
+		RWLanguageComboBoxPropertyDescriptor languageD = new RWLanguageComboBoxPropertyDescriptor(JasperDesign.PROPERTY_LANGUAGE,
 				Messages.common_language, ModelUtils.getDefaultReportLanguages(), NullEnum.NOTNULL, false);
 		languageD.setDescription(Messages.MReport_language_description);
 		languageD.setCategory(Messages.common_report);
