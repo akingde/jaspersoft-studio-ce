@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -62,28 +63,30 @@ public class ElementDescription implements Comparable<ElementDescription> {
 	 * Create an element for the SelectableComposite
 	 * 
 	 * @param name
-	 *          the title of the element, displayed in bold style
+	 *            the title of the element, displayed in bold style
 	 * @param description
-	 *          the textual description of the element
+	 *            the textual description of the element
 	 * @param parseHtml
-	 *          this class has a really basic html parser to format a description that contains html tags. Set this value
-	 *          to true to parse the description or to false to use it as it is.
+	 *            this class has a really basic html parser to format a description
+	 *            that contains html tags. Set this value to true to parse the
+	 *            description or to false to use it as it is.
 	 */
 	public ElementDescription(String name, String description, boolean parseHtml) {
 		this.name = name;
-		this.description = description;
-		textStyles = new ArrayList<SortableStyleRange>();
+		this.description = Misc.nvl(description);
+		textStyles = new ArrayList<>();
 		if (parseHtml)
 			parseHTMLdescription();
 	}
 
 	/**
-	 * Utility method used to replace all the occurrences of a pattern inside a string
+	 * Utility method used to replace all the occurrences of a pattern inside a
+	 * string
 	 * 
 	 * @param regex
-	 *          regular expression of the pattern
+	 *            regular expression of the pattern
 	 * @param replacment
-	 *          replacment string
+	 *            replacment string
 	 */
 	private void replaceAll(String regex, String replacment) {
 		Pattern p = Pattern.compile(regex);
@@ -92,10 +95,11 @@ public class ElementDescription implements Comparable<ElementDescription> {
 	}
 
 	/**
-	 * Remove the code tag from the description and generate the styles to have it in italic
+	 * Remove the code tag from the description and generate the styles to have it
+	 * in italic
 	 * 
 	 * @param index
-	 *          position where the <code> tag start
+	 *            position where the <code> tag start
 	 */
 	private void removeCode(int index) {
 		if (index != -1) {
@@ -111,10 +115,11 @@ public class ElementDescription implements Comparable<ElementDescription> {
 	}
 
 	/**
-	 * Remove the <b> tag from the description and generate the styles to have it in bold
+	 * Remove the <b> tag from the description and generate the styles to have it in
+	 * bold
 	 * 
 	 * @param index
-	 *          position where the <b> tag start
+	 *            position where the <b> tag start
 	 */
 	private void removeBold(int index) {
 		if (index != -1) {
@@ -130,10 +135,11 @@ public class ElementDescription implements Comparable<ElementDescription> {
 	}
 
 	/**
-	 * Remove the <api> tag from the description and generate the styles to have it as link
+	 * Remove the <api> tag from the description and generate the styles to have it
+	 * as link
 	 * 
 	 * @param index
-	 *          position where the <api> tag start
+	 *            position where the <api> tag start
 	 */
 	private void removeLink(int index) {
 		if (index != -1) {
@@ -156,11 +162,11 @@ public class ElementDescription implements Comparable<ElementDescription> {
 	}
 
 	/**
-	 * Get an array of integers an return the index of the smaller one different from -1 if the are all equals to -1 it
-	 * return null
+	 * Get an array of integers an return the index of the smaller one different
+	 * from -1 if the are all equals to -1 it return null
 	 * 
 	 * @param numbersArray
-	 *          array of integer number
+	 *            array of integer number
 	 * @return index of the smaller number in the array different from -1
 	 */
 	private Integer getMinimum(int[] numbersArray) {
@@ -193,7 +199,8 @@ public class ElementDescription implements Comparable<ElementDescription> {
 			int indexCode = description.indexOf("<code>");
 			int indexBold = description.indexOf("<b>");
 			int indexLink = description.indexOf("<api ");
-			// it is really important to remove each time the tag placed first, to avoid to broke the
+			// it is really important to remove each time the tag placed first, to avoid to
+			// broke the
 			// char positions of the previously placed StyleRanges
 			Integer min = getMinimum(new int[] { indexCode, indexBold, indexLink });
 			if (min == null)
@@ -217,7 +224,8 @@ public class ElementDescription implements Comparable<ElementDescription> {
 	}
 
 	/**
-	 * return the description, or its parsed version if the parse html was enabled in the constructor
+	 * return the description, or its parsed version if the parse html was enabled
+	 * in the constructor
 	 * 
 	 * @return
 	 */
@@ -244,11 +252,11 @@ public class ElementDescription implements Comparable<ElementDescription> {
 	 * Retrieves a list of element descriptions from the specified properties file.
 	 * 
 	 * @param pathname
-	 *          the location of the properties file
+	 *            the location of the properties file
 	 * @return the list of descriptions
 	 */
 	public static List<ElementDescription> getPropertiesInformation(String pathname) {
-		List<ElementDescription> descriptions = new ArrayList<ElementDescription>();
+		List<ElementDescription> descriptions = new ArrayList<>();
 		FileInputStream fin = null;
 		try {
 			fin = new FileInputStream(new File(pathname));
