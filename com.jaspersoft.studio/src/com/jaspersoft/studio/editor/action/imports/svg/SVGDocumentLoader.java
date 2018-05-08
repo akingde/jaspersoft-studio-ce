@@ -33,6 +33,7 @@ import org.apache.batik.anim.dom.SVGOMElement;
 import org.apache.batik.anim.dom.SVGOMEllipseElement;
 import org.apache.batik.anim.dom.SVGOMGElement;
 import org.apache.batik.anim.dom.SVGOMImageElement;
+import org.apache.batik.anim.dom.SVGOMMaskElement;
 import org.apache.batik.anim.dom.SVGOMPathElement;
 import org.apache.batik.anim.dom.SVGOMRectElement;
 //import org.apache.batik.dom.svg.SVGOMSVGElement;
@@ -55,6 +56,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.css.CSSStyleDeclaration;
@@ -118,6 +120,12 @@ public class SVGDocumentLoader {
    * and can be recovered when executing the command to create the elements
    */
   private List<Pair<File, JRDesignImage>> resources = new ArrayList<>();
+  
+  /**
+   * For performance reasons the masks loaded during the execution are keep cached. They are loaded in a lazy way
+   * so the caching has no negative impact on performances
+   */
+  private HashMap<String, List<BufferedImage>> masks = new HashMap<>();
 
   /**
    * Creates an SVG Document given a URI.
@@ -541,6 +549,97 @@ public class SVGDocumentLoader {
 	  
 	  return rectangle;
   }
+  
+  /**
+   * Parse a mask for an image and return the buggered image to apply to the original image as mask. The cache 
+   * for masks is used in this case
+   * 
+   * @param maskElement the mask element
+   * @return the {@link BufferedImage} of each mask found, can be empty if no image is found but not null
+   */
+  private List<BufferedImage> parseMask(SVGOMMaskElement maskElement){
+	  String maskId = maskElement.getAttribute("id");
+	  //look first in the cache
+	  List<BufferedImage> result = masks.get(maskId);
+	  if (result == null) {
+		  result = new ArrayList<>();
+		  NodeList nodes = maskElement.getChildNodes();
+		  for (int i = 0;  i < nodes.getLength();  i++) {
+	          Node node = nodes.item(i);
+	          if (node instanceof SVGOMMaskElement) {
+	        	  result.addAll(parseMask((SVGOMMaskElement)node));
+	          } else if (node instanceof SVGOMImageElement) {
+	        	  SVGOMImageElement imageElement = (SVGOMImageElement)node;
+	        	  String sourceData = imageElement.getAttributeNS("http://www.w3.org/1999/xlink", "href"); //$NON-NLS-1$ //$NON-NLS-2$
+	        	  String[] splitData = sourceData.split(","); //$NON-NLS-1$
+	        	  BufferedImage maskImage = decodeImage(imageElement, splitData[1].getBytes()) ;
+	        	  if (maskElement != null) {
+	        		  result.add(maskImage);
+	        	  }
+	          }
+	      }
+		  masks.put(maskId, result);
+	  }
+	  return result;
+  }
+  
+  /**
+   * Decode an image from a bytestream and eventually applay a mask if it is defined on its element. The mask is 
+   * loaded eventually by this method that will applay a chain of masks
+   * 
+   * @param imageElement the image element
+   * @param imageBytesArray the bytearray of the mask
+   * @return a {@link BufferedImage} with applied any defined mask or null if the image can't be loaded
+   */
+  private BufferedImage decodeImage(SVGOMImageElement imageElement, byte[] imageBytesArray) {
+	  ByteArrayInputStream imageBytes = new ByteArrayInputStream(imageBytesArray);
+	  Base64DecodeStream decodeStream = new Base64DecodeStream(imageBytes);
+	  // create a buffered image
+	  BufferedImage image;
+	  try {       
+		  image = ImageIO.read(decodeStream);
+		  
+		  String maskRef = imageElement.getAttribute("mask");
+		  if (maskRef != null) {
+			  if (maskRef.startsWith("url(") && maskRef.endsWith(")")) {
+				  maskRef = maskRef.substring(4, maskRef.length()-1);
+				  if (maskRef.startsWith("#")) {
+					  maskRef = maskRef.substring(1);
+					  Element maskElement = svgDocument.getElementById(maskRef);
+					  if (maskElement != null && maskElement instanceof SVGOMMaskElement) {
+						  List<BufferedImage> masks = parseMask((SVGOMMaskElement)maskElement);
+						  for(BufferedImage mask : masks) {
+							  final int width = image.getWidth();
+							  int[] imgData = new int[width];
+							  int[] maskData = new int[width];
+
+							  for (int y = 0; y < image.getHeight(); y++) { 
+								  image.getRGB(0, y, width, 1, imgData, 0, 1);
+							      mask.getRGB(0, y, width, 1, maskData, 0, 1);
+							      for (int x = 0; x < width; x++) { 
+							    	  int color = imgData[x] & 0x00FFFFFF; 
+							    	  int maskColor = (maskData[x] & 0x00FF0000) << 8;
+							    	  color |= maskColor;        
+							    	  imgData[x] = color;    
+							      }
+
+							      //replace the data
+							      image.setRGB(0, y, width, 1, imgData, 0, 1);
+							  }
+						  }
+					  }
+				  }
+			  }
+		  }
+		  return image;
+	  } catch (IOException e) {
+		  e.printStackTrace();
+	  } finally { 
+		  FileUtils.closeStream(decodeStream);
+		  FileUtils.closeStream(imageBytes);	
+	  }
+	  return null;
+  }
  
   /**
    * Parse an SVG base64 image and convert it into a JR image. The extracted file is stored in the workspace
@@ -577,47 +676,32 @@ public class SVGDocumentLoader {
 	  } else {
 		  extension = "jpg"; //$NON-NLS-1$
 	  }
-	  ByteArrayInputStream imageBytes = new ByteArrayInputStream(splitData[1].getBytes());
-	  Base64DecodeStream decodeStream = new Base64DecodeStream(imageBytes);
+	 
 	  // create a buffered image
-	  BufferedImage image;
-	  try {       
-		  image = ImageIO.read(decodeStream);
+	  BufferedImage image = decodeImage(imageElement, splitData[1].getBytes());
+	  if (image != null) {
 		  // write the image to a file
-		 // IFile mfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
-		  //IContainer parent = mfile.getParent();
 		  int counter = 1;
 		  String filename;
-		  //IFile destFile;
 		  File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 		  File destFile;
 		  do{
 			  filename = IMPORTED_IMAGE_PREFIX + counter + "." + extension; //$NON-NLS-1$
-			 // destFile = parent.getFile(new Path(filename));
+			  //destFile = parent.getFile(new Path(filename));
 			  destFile = new File(tempDir, filename);
 			  counter++;
 		  } while (destFile.exists());
-		  //ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-		  //ByteArrayInputStream fileInputStream = null;
-		  FileOutputStream outStream = new FileOutputStream(destFile);
+		  FileOutputStream outStream = null;
 		  try {
+			outStream = new FileOutputStream(destFile);
 			ImageIO.write(image, extension, outStream);
-			//fileInputStream = new ByteArrayInputStream(outStream.toByteArray());
-			//destFile.create(fileInputStream, true, new NullProgressMonitor());
-		} catch (Exception e) {
+		  } catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			FileUtils.closeStream(outStream);
-			//FileUtils.closeStream(fileInputStream);
-		}
-		//The expression is set from the command returned by getResourceCreationCommands
-		//jrImage.setExpression(new JRDesignExpression("\"" + destFile.getName() + "\"")); //$NON-NLS-1$ //$NON-NLS-2$
-		resources.add(new Pair<File, JRDesignImage>(destFile, jrImage));
-	  } catch (IOException e) {
-		  e.printStackTrace();
-	  } finally { 
-		  FileUtils.closeStream(decodeStream);
-		  FileUtils.closeStream(imageBytes);	
+		  } finally {
+		    FileUtils.closeStream(outStream);
+		  }
+		  //The expression is set from the command returned by getResourceCreationCommands
+		  resources.add(new Pair<File, JRDesignImage>(destFile, jrImage));
 	  }
 	  return jrImage;
   }
@@ -809,6 +893,7 @@ public class SVGDocumentLoader {
       NodeList nodes = rootElement.getChildNodes();
       AffineTransform startingStransform = new AffineTransform();
       List<JRDesignElement> result = new ArrayList<>();
+      masks.clear();
       for (int i = 0;  i < nodes.getLength();  i++) {
           Node node = nodes.item(i);
           if (node instanceof SVGOMGElement) {

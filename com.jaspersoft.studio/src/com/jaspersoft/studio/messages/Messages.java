@@ -2543,6 +2543,7 @@ public class Messages extends NLS {
 	public static String SPItemDataList_5;
 	public static String SPItemDataList_6;
 	public static String SPItemDataList_7;
+	public static String SPRWLanguageCombo_languageDeprecated;
 	public static String ZoomActualAction_0;
 	public static String ZoomActualAction_1;
 	public static String ZoomActualAction_3;
