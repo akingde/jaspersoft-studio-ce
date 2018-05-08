@@ -903,6 +903,7 @@ public class ParametersTable extends AbstractModifyTable {
 		c.setDescription(Messages.MParameter_3);
 		c.setValue(dataset);
 		c.setPropertyType(ParameterEvaluationTimeEnum.class.getName());
+		c.setLabelEditable(false);
 		columns.add(TColumnFactory.addColumn(c, tviewer, null));
 		tcolumns.add(c);
 	}
