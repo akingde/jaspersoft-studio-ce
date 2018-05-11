@@ -109,7 +109,7 @@ public class FindResources {
 					AMResource m = (AMResource) obj;
 					ResourceDescriptor rd = m.getValue();
 					if (names.containsKey(rd.getName())) {
-						if (names.get(rd.getName()) != rd)
+						if (names.get(rd.getName()) != rd && m.getPublishOptions().getjExpression() != null)
 							for (JRDesignExpression exp : m.getPublishOptions().getjExpression())
 								mresources.get(rd.getName()).getPublishOptions().setjExpression(exp);
 						continue;
