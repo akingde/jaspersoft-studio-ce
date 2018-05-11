@@ -17,6 +17,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.model.text.MTextField;
@@ -122,12 +123,12 @@ public class AdjustTextFontSize extends ACachedSelectionAction {
 		setToolTipText(Messages.AdjustTextFontSize_action_tooltip);
 	}
 
-	private float getTextSize(JRStaticText textElement, JasperReportsConfiguration jConfig) {
+	private Float getTextSize(JRStaticText textElement, JasperReportsConfiguration jConfig) {
 		String text = textElement.getText();
 		return getTextSize(textElement, text, jConfig);
 	}
 	
-	private float getTextSize(JRTextField textElement, JasperReportsConfiguration jConfig) {
+	private Float getTextSize(JRTextField textElement, JasperReportsConfiguration jConfig) {
 		String text = textElement.getExpression().getText();
 		return getTextSize(textElement, text, jConfig);
 	}
@@ -139,7 +140,7 @@ public class AdjustTextFontSize extends ACachedSelectionAction {
 	 * @param textElement a not null {@link JRTextElement}
 	 * @return the size the text will have inside the static text
 	 */
-	private float getTextSize(JRTextElement textElement, String text, JasperReportsConfiguration jConfig) {
+	private Float getTextSize(JRTextElement textElement, String text, JasperReportsConfiguration jConfig) {
 		JRTextMeasurer measurer = JRTextMeasurerUtil.getInstance(jConfig).createTextMeasurer(textElement, null);
 		Map<Attribute, Object> attributes = new HashMap<>(); 
 		FontUtil.getInstance(jConfig).getAttributesWithoutAwtFont(attributes, textElement);
@@ -162,6 +163,10 @@ public class AdjustTextFontSize extends ACachedSelectionAction {
 				attributes.put(TextAttribute.SIZE, currentSize);
 				styledText.setGlobalAttributes(attributes);
 				measuredText = measurer.measure(styledText, 0, textElement.getHeight(), false);
+				if (measuredText.getTextWidth() == 0 || measuredText.getTextHeight() == 0) {
+					//some problem here fallback to the original size
+					return null;
+				}
 				if (!(measuredText.getTextWidth() < textElement.getWidth() && measuredText.getTextHeight() < textElement.getHeight())) {
 					currentSize--;
 					break;
@@ -181,18 +186,20 @@ public class AdjustTextFontSize extends ACachedSelectionAction {
 	 */
 	@Override
 	protected Command createCommand() {
-		List<Object> editparts = editor.getSelectionCache().getSelectionModelForType(MTextElement.class);
+		List<Object> editparts = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
 		if (editparts.isEmpty())
 			return null;
 		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		for(Object part : editparts){
-			MTextElement textElement = (MTextElement)part;
-
-			command.setReferenceNodeIfNull(textElement);
-			
-			LazyCreateTextFieldCommand createCommand = new LazyCreateTextFieldCommand(textElement);
-			
-			command.add(createCommand);
+			if (part instanceof MTextElement) {
+				MTextElement textElement = (MTextElement)part;
+				command.setReferenceNodeIfNull(textElement);
+				LazyCreateTextFieldCommand createCommand = new LazyCreateTextFieldCommand(textElement);
+				command.add(createCommand);
+			}
+		}
+		if (command.isEmpty()) {
+			return null;
 		}
 		return command;
 	}
