@@ -8,6 +8,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -54,6 +55,14 @@ public class ColoredSquareHandles extends ResizeHandle {
 	 * The color of a not focused element
 	 */
 	protected static Color[] JSS_NOT_FOCUSED_COLOR = null;
+	
+	//keep the color cached for the current selection and position
+	
+	private List<Object> oldSelection = null;
+	
+	private Rectangle ownerOldBounds = null;
+	
+	private Color[] oldColor = null;
 
 	/**
 	 * Creates a new ResizeHandle for the given GraphicalEditPart. <code>direction</code> is the relative direction from
@@ -132,6 +141,7 @@ public class ColoredSquareHandles extends ResizeHandle {
 	 * 
 	 * @return the color of the handle
 	 */
+	@SuppressWarnings("unchecked")
 	protected Color[] getFillColorAwt() {
 		ANode element = (ANode) getOwner().getModel();
 		//Typically the element has always a parent, but in some cases it could happen
@@ -141,31 +151,39 @@ public class ColoredSquareHandles extends ResizeHandle {
 		//part still exist and has this handle on it. So we need to do this check.
 		if (element.getParent() == null) return JSS_FOCUSED_COLOR;
 		Rectangle bound1 = ((IGraphicElement) element).getBounds();
-		int index1 = element.getParent().getChildren().indexOf(element);
-		List<INode> brothers = element.getParent().getChildren();
-		Iterator<INode> it = brothers.iterator();
-		boolean overlap = false;
-		boolean cover = false;
-		while (it.hasNext() && !cover) {
-			INode actualElement = it.next();
-			if (!actualElement.equals(element) && actualElement instanceof MGraphicElement) {
-				MGraphicElement element2 = (MGraphicElement) actualElement;
-				int index2 = element.getParent().getChildren().indexOf(element2);
-				Rectangle bound2 = element2.getBounds();
-				if (bound1.intersects(bound2)) {
-					overlap = true;
-				}
-				// Check if contains and the z-order
-				if (bound1.contains(bound2) && index1 > index2) {
-					cover = true;
+		//avoid to recalculate the color is the selection and position of the element is still the same
+		if (oldSelection != null && oldColor != null && ownerOldBounds != null && oldSelection.equals(getOwner().getViewer().getSelectedEditParts()) && ownerOldBounds.equals(bound1)) {
+			return oldColor;
+		} else {
+			oldSelection = new ArrayList<Object>(getOwner().getViewer().getSelectedEditParts());
+			ownerOldBounds = bound1;
+			int index1 = element.getParent().getChildren().indexOf(element);
+			List<INode> brothers = element.getParent().getChildren();
+			Iterator<INode> it = brothers.iterator();
+			boolean overlap = false;
+			boolean cover = false;
+			while (it.hasNext() && !cover) {
+				INode actualElement = it.next();
+				if (!actualElement.equals(element) && actualElement instanceof MGraphicElement) {
+					MGraphicElement element2 = (MGraphicElement) actualElement;
+					int index2 = element.getParent().getChildren().indexOf(element2);
+					Rectangle bound2 = element2.getBounds();
+					if (bound1.intersects(bound2)) {
+						overlap = true;
+					}
+					// Check if contains and the z-order
+					if (bound1.contains(bound2) && index1 > index2) {
+						cover = true;
+					}
 				}
 			}
+			if (cover)
+				oldColor = JSS_COVER_COLOR;
+			else if (overlap)
+				oldColor = JSS_OVERLAP_COLOR;
+			else oldColor = (isPrimary()) ? JSS_FOCUSED_COLOR : JSS_NOT_FOCUSED_COLOR;
+			return oldColor;
 		}
-		if (cover)
-			return JSS_COVER_COLOR;
-		if (overlap)
-			return JSS_OVERLAP_COLOR;
-		return (isPrimary()) ? JSS_FOCUSED_COLOR : JSS_NOT_FOCUSED_COLOR;
 	}
 
 	/**

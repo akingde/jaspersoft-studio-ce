@@ -27,7 +27,6 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-// import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
 import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
 import org.apache.batik.anim.dom.SVGOMElement;
 import org.apache.batik.anim.dom.SVGOMEllipseElement;
@@ -36,7 +35,6 @@ import org.apache.batik.anim.dom.SVGOMImageElement;
 import org.apache.batik.anim.dom.SVGOMMaskElement;
 import org.apache.batik.anim.dom.SVGOMPathElement;
 import org.apache.batik.anim.dom.SVGOMRectElement;
-//import org.apache.batik.dom.svg.SVGOMSVGElement;
 import org.apache.batik.anim.dom.SVGOMSVGElement;
 import org.apache.batik.anim.dom.SVGOMTSpanElement;
 import org.apache.batik.anim.dom.SVGOMTextElement;
