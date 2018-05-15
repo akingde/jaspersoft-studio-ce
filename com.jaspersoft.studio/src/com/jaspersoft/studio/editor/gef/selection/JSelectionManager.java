@@ -53,6 +53,13 @@ public class JSelectionManager extends SelectionManager {
 	private GroupSelectionEditPart selectionPart;
 	
 	/**
+	 * The keyboard event is triggered each time the mouse move since it is a general listener,
+	 * to avoid to do too much setSelection (whose have an impact on performances) we keep 
+	 * track is the key was released before to do a new key down
+	 */
+	private boolean isGroupButtonPressed = false;
+	
+	/**
 	 * The keyboard handler used to show or hide a group selection
 	 */
 	private IKeyboardEvent keyboardEvent = new IKeyboardEvent() {
@@ -60,13 +67,15 @@ public class JSelectionManager extends SelectionManager {
 		@Override
 		public void keyUp(int keycode) {
 			if (getGroupSelectionPart().isActive() && !BindingsPreferencePersistence.isPressed(GroupSelectionEditPart.BINDING_KEY_ID)) {
+				isGroupButtonPressed = false;
 				setSelection(new StructuredSelection(selection));
 			}
 		}
 		
 		@Override
 		public void keyDown(int keycode) {
-			if (BindingsPreferencePersistence.isPressed(GroupSelectionEditPart.BINDING_KEY_ID)) {
+			if (!isGroupButtonPressed && BindingsPreferencePersistence.isPressed(GroupSelectionEditPart.BINDING_KEY_ID)) {
+				isGroupButtonPressed = true;
 				setSelection(new StructuredSelection(selection));
 			}
 			
