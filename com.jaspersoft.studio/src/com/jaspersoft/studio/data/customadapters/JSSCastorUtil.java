@@ -15,10 +15,12 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.map.ReferenceMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exolab.castor.mapping.Mapping;
@@ -100,8 +102,11 @@ public class JSSCastorUtil {
 	 *
 	 */
 	private XMLContext getXmlContext(String contextCacheKey, String version) {
-		XMLContext xmlContext = (XMLContext) jasperReportsContext.getOwnValue(contextCacheKey);
+		Object cacheKey = jasperReportsContext.getClassLoader();
+		Map<Object, XMLContext> xmlContextCache = getXmlContextCache(contextCacheKey);
+		XMLContext xmlContext = xmlContextCache.get(cacheKey);
 		if (xmlContext == null) {
+
 			xmlContext = new XMLContext();
 			xmlContext.setClassLoader(jasperReportsContext.getClassLoader());
 			Mapping mapping = new Mapping(jasperReportsContext.getClassLoader());
@@ -116,9 +121,22 @@ public class JSSCastorUtil {
 				throw new JRRuntimeException(EXCEPTION_MESSAGE_KEY_MAPPINGS_LOADING_ERROR, (Object[]) null, e);
 			}
 
-			jasperReportsContext.setValue(contextCacheKey, xmlContext);
+			xmlContextCache.put(cacheKey, xmlContext);
+			jasperReportsContext.setValue(contextCacheKey, xmlContextCache);
 		}
 		return xmlContext;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected Map<Object, XMLContext> getXmlContextCache(String contextCacheKey) {
+		Map<Object, XMLContext> xmlContextCache = (Map<Object, XMLContext>) jasperReportsContext
+				.getOwnValue(contextCacheKey);
+		if (xmlContextCache == null) {
+			// TODO lucianc prevent double cache creation?
+			xmlContextCache = Collections.synchronizedMap(new ReferenceMap(ReferenceMap.WEAK, ReferenceMap.SOFT));
+			jasperReportsContext.setValue(contextCacheKey, xmlContextCache);
+		}
+		return xmlContextCache;
 	}
 
 	protected List<CastorMapping> getMappings(String version) {
