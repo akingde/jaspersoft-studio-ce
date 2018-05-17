@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/jasperserver-dto-7.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey/net.java.html.json-0.7.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jasperserver-dto-bugfix-20180112.170012-2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/mimepull-1.9.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-media-multipart-2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-guava-2.13.jar"/>
