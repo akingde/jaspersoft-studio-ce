@@ -159,8 +159,12 @@ public class Factory {
 			mi1.setText(key);
 			mi1.setData(OPERAND, aOperand);
 			setupMenuItem(mi1, w, operands, index);
-			if (w.getValue() == aOperand || (w.getValue() != null && aOperand != null
-					&& w.getValue().getClass().equals(aOperand.getClass())))
+			if (w.getValue() == aOperand
+					|| (w.getValue() != null && !(w.getValue() instanceof ScalarOperand)
+							&& w.getValue().getClass().equals(aOperand.getClass()))
+					|| (w.getValue() instanceof ScalarOperand && aOperand instanceof ScalarOperand
+							&& ((ScalarOperand<?>) w.getValue()).getType()
+									.equals(((ScalarOperand<?>) aOperand).getType())))
 				mi1.setSelection(true);
 		}
 	}
