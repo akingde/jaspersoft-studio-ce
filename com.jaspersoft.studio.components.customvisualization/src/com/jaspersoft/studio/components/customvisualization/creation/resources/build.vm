@@ -22,8 +22,8 @@
     #end
 	
 	wrap: {
-        start: "if (typeof define === 'function' && define.amd){}\nelse if (typeof __visualize__ !== 'undefined' &&\ntypeof __visualize__.define === 'function')\n{\n}\n\n(function(root){\n\nvar define = root.define;\n\n",
-        end: "\n\n}(typeof __visualize__ != 'undefined' ? __visualize__ : window));"
+        start: "(function(root){\n\nvar define = root.define;\n\n",
+        end: "\n\n}(typeof __visualize__ != 'undefined' ? __visualize__ : (typeof __jrio__ != 'undefined' ? __jrio__ : window)));"
     },
     
     name: "${modulename}",
