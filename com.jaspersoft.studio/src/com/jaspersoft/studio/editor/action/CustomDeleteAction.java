@@ -184,7 +184,10 @@ public class CustomDeleteAction extends DeleteAction{
 			//it is really important deselect all because otherwise GEF will trigger a selectionChange event
 			//for every part it delete (because a deleted part is first deselected), with an huge impact
 			//on performances with big selections
-			model.getTreeEditPart().getViewer().deselectAll();
+			EditPart treeEditPart = model.getTreeEditPart();
+			if (treeEditPart != null) {
+				treeEditPart.getViewer().deselectAll();
+			}
 			
 			JSSCompoundCommand compCommand = new JSSCompoundCommand(deleteCommandds, model);
 			StringBuilder messages = new StringBuilder();
