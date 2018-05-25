@@ -466,7 +466,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 			if (el instanceof JRDesignSubreport) {
 				JRDesignSubreport sr = (JRDesignSubreport) el;
 				String res = evalResourceName(sr.getExpression());
-				if (res.endsWith(".jasper")) { //$NON-NLS-1$
+				if (res != null && res.endsWith(".jasper")) { //$NON-NLS-1$
 					res = res.substring(0, res.length() - ".jasper".length()) + ".jrxml"; //$NON-NLS-1$ //$NON-NLS-2$
 					File resFile = findFile(reportFile, res);
 					sr.setExpression(new JRDesignExpression("\""+resFile.getName()+"\"")); //$NON-NLS-1$ //$NON-NLS-2$
