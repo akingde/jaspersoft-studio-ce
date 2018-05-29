@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.foundation.bundles"
       label="Jaspersoft Studio Required Bundles Feature"
-      version="1.0.10"
+      version="1.0.11"
       provider-name="TIBCO Software Inc.">
 
    <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
@@ -185,7 +185,7 @@
          id="com.jaspersoft.studio.bundles.jackson"
          download-size="0"
          install-size="0"
-         version="2.9.5.b01"
+         version="2.9.5.b02"
          unpack="false"/>
 
 </feature>
