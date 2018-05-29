@@ -14,9 +14,11 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.AttributedCharacterIterator.Attribute;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +30,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
+import org.apache.batik.anim.dom.SVGDOMImplementation;
 import org.apache.batik.anim.dom.SVGOMElement;
 import org.apache.batik.anim.dom.SVGOMEllipseElement;
 import org.apache.batik.anim.dom.SVGOMGElement;
@@ -48,11 +51,16 @@ import org.apache.batik.parser.AWTPathProducer;
 import org.apache.batik.parser.AWTTransformProducer;
 import org.apache.batik.parser.PathParser;
 import org.apache.batik.parser.TransformListParser;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.svg2svg.SVGTranscoder;
 import org.apache.batik.util.Base64DecodeStream;
+import org.apache.batik.util.SVGConstants;
 import org.apache.batik.util.XMLResourceDescriptor;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -228,6 +236,18 @@ public class SVGDocumentLoader {
 	  return false;
   }
   
+  public Color getColor(SVGPaint svgPaint) { 
+	  Color returnColor = null;
+      if (svgPaint != null && svgPaint.getPaintType() == SVGPaint.SVG_PAINTTYPE_RGBCOLOR) { 
+          final RGBColor rgb = svgPaint.getRGBColor(); 
+          final float red = rgb.getRed().getFloatValue(CSSValue.CSS_PRIMITIVE_VALUE); 
+          final float green = rgb.getGreen().getFloatValue(CSSValue.CSS_PRIMITIVE_VALUE); 
+          final float blue = rgb.getBlue().getFloatValue(CSSValue.CSS_PRIMITIVE_VALUE); 
+          returnColor = new Color(red / 255, green / 255, blue / 255); 
+      }
+      return returnColor; 
+  } 
+  
   /** 
    * Returns the color of the given attribute in the given element. 
    * 
@@ -238,15 +258,7 @@ public class SVGDocumentLoader {
    */ 
   public Color getColor(CSSStyleDeclaration style, String attribute) { 
 	  SVGPaint svgPaint = (SVGPaint) style.getPropertyCSSValue(attribute); 
-	  Color returnColor = null;
-      if (svgPaint != null && svgPaint.getPaintType() == SVGPaint.SVG_PAINTTYPE_RGBCOLOR) { 
-          final RGBColor rgb = svgPaint.getRGBColor(); 
-          final float red = rgb.getRed().getFloatValue(CSSValue.CSS_PRIMITIVE_VALUE); 
-          final float green = rgb.getGreen().getFloatValue(CSSValue.CSS_PRIMITIVE_VALUE); 
-          final float blue = rgb.getBlue().getFloatValue(CSSValue.CSS_PRIMITIVE_VALUE); 
-          returnColor = new Color(red / 255, green / 255, blue / 255); 
-      }
-      return returnColor; 
+      return getColor(svgPaint); 
   } 
   
   @SuppressWarnings("unused")
@@ -259,6 +271,22 @@ public class SVGDocumentLoader {
 		  result = result | Font.ITALIC;
 	  }
 	  return result;
+  }
+  
+  /**
+   * Parse the coordinate value converting them from string to value
+   * 
+   * @param value the string value
+   * @return the value as double or 0 if the value is null or empty
+   */
+  private Number parseNumber(String value) {
+	  if (value == null || value.trim().isEmpty()) return null;
+	  try {
+		  return Double.parseDouble(value);
+	  }catch(Exception ex) {
+		  ex.printStackTrace();
+	  }
+	  return null;
   }
   
   /**
@@ -638,6 +666,28 @@ public class SVGDocumentLoader {
 	  }
 	  return null;
   }
+  
+  /**
+   * Get the filename for a resource that will be saved inside the workspace. This name
+   * is used for the temp folder
+   * 
+   * @param extension extension of the file
+   * @return a not existing file for the resource
+   */
+  private File getFileName(String extension) {
+	  // write the image to a file
+	  int counter = 1;
+	  String filename;
+	  File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
+	  File destFile;
+	  do{
+		  filename = IMPORTED_IMAGE_PREFIX + counter + "." + extension; //$NON-NLS-1$
+		  //destFile = parent.getFile(new Path(filename));
+		  destFile = new File(tempDir, filename);
+		  counter++;
+	  } while (destFile.exists());
+	  return destFile;
+  }
  
   /**
    * Parse an SVG base64 image and convert it into a JR image. The extracted file is stored in the workspace
@@ -678,17 +728,7 @@ public class SVGDocumentLoader {
 	  // create a buffered image
 	  BufferedImage image = decodeImage(imageElement, splitData[1].getBytes());
 	  if (image != null) {
-		  // write the image to a file
-		  int counter = 1;
-		  String filename;
-		  File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
-		  File destFile;
-		  do{
-			  filename = IMPORTED_IMAGE_PREFIX + counter + "." + extension; //$NON-NLS-1$
-			  //destFile = parent.getFile(new Path(filename));
-			  destFile = new File(tempDir, filename);
-			  counter++;
-		  } while (destFile.exists());
+		  File destFile = getFileName(extension);
 		  FileOutputStream outStream = null;
 		  try {
 			outStream = new FileOutputStream(destFile);
@@ -743,6 +783,150 @@ public class SVGDocumentLoader {
   }
   
   /**
+   * Store an SVG document as a file and return it 
+   * 
+   * @param doc the document to save
+   * @return the file of the saved document or null if something goes wrong
+   */
+  private File transcodeToSVG(Document doc) {
+	  	File destFile = null;
+	  	FileOutputStream outputStream = null;
+	    try {
+	        //Determine output type:
+	        SVGTranscoder t = new SVGTranscoder();
+
+	        //Set transcoder input/output
+	        TranscoderInput input = new TranscoderInput(doc);
+	        ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
+	        OutputStreamWriter ostream = new OutputStreamWriter(bytestream, "UTF-8");
+	        TranscoderOutput output = new TranscoderOutput(ostream);
+
+	        //Perform transcoding
+	        t.transcode(input, output);
+	        ostream.flush();
+	        ostream.close();
+	        destFile = getFileName("svg");
+	        byte[] svgBytes = bytestream.toByteArray();
+	        outputStream = new FileOutputStream(destFile);
+	        outputStream.write(svgBytes);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	    	FileUtils.closeStream(outputStream);
+	    }
+	    return destFile;
+	}
+  
+  /**
+   * Convert an {@link AffineTransform} to an SVG transformation matrix
+   * 
+   * @param at a not null {@link AffineTransform}
+   * @return a string representing and SVG transformation matrix
+   */
+  public static String affineTransformToString(final AffineTransform at) {
+      double[] matrix = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+      at.getMatrix(matrix);
+      return matrixArrayToString(matrix);
+  }
+  public static String matrixArrayToString(double[] vals) {
+      return new StringBuilder("matrix(").append(vals[0]).append(" ").append(vals[1]).append(" ").append(vals[2]).append(" ").append(vals[3]).append(" ").append(vals[4]).append(" ").append(vals[5]).append(") ").toString();
+  }
+  
+  /**
+   * Extract a path element from an SWG document and save it as a separate SVG to be used inside
+   * and Image. The path is translated to start from the origin
+   * 
+   * @param pathElement the path element
+   * @param previousTransform the {@link AffineTransform} of the path
+   * @param awtShape the awt shape of the path
+   * @return a not null list of {@link JRDesignElement}, that should contain only the image of the path
+   */
+  private List<JRDesignElement> exrtractPath(SVGOMPathElement pathElement, AffineTransform previousTransform, Shape awtShape){
+	  List<JRDesignElement> result = new ArrayList<>();
+	  
+	  //calculate size and transformation
+	  Rectangle2D bounds = awtShape.getBounds2D();
+	  Number stroke = parseNumber(pathElement.getAttribute("stroke-width"));
+	  if (stroke == null) {
+		  stroke = 0d;
+	  }
+	  double x = bounds.getX();
+	  double y = bounds.getY();
+	  double width = bounds.getWidth();
+	  double height = bounds.getHeight();
+			  
+	  Rectangle2D rectFigure = new Rectangle2D.Double(x, y, width, height);
+	  rectFigure = (Rectangle2D)previousTransform.createTransformedShape(rectFigure).getBounds2D();
+	  double imageWidth = rectFigure.getWidth()+stroke.doubleValue();
+	  double imageHeight= rectFigure.getHeight()+ stroke.doubleValue();
+	  //define the transformation that move the image into the origin
+	  double yTranslation = bounds.getY()* previousTransform.getScaleY();
+	  if (yTranslation < 0 && (bounds.getHeight()  * previousTransform.getScaleY())<0) {
+		  //this will increase the y-offset since both are negative
+		  yTranslation += bounds.getHeight()  * previousTransform.getScaleY();
+	  }
+	  double xTranslation = bounds.getX()* previousTransform.getScaleX();
+	  if (xTranslation < 0 && (bounds.getWidth()  * previousTransform.getScaleX())<0) {
+		  //this will increase the y-offset since both are negative
+		  xTranslation += bounds.getWidth()  * previousTransform.getScaleX();
+	  }
+	  AffineTransform originTransform = new AffineTransform(previousTransform.getScaleX(), previousTransform.getShearY(), previousTransform.getShearX(), previousTransform.getScaleY(), 
+				-xTranslation+stroke.doubleValue()/2, -yTranslation + stroke.doubleValue()/2);
+
+	  //generate the document
+	  DOMImplementation impl = SVGDOMImplementation.getDOMImplementation();
+	  String svgNS = SVGDOMImplementation.SVG_NAMESPACE_URI;
+	  Document doc = impl.createDocument(svgNS, "svg", null);
+	  Element svgRoot = doc.getDocumentElement();
+	  svgRoot.setAttribute("width", String.valueOf(imageWidth));
+	  svgRoot.setAttribute("height", String.valueOf(imageHeight));
+	  Element group = (Element)doc.createElementNS("http://www.w3.org/2000/svg", "g");
+	  svgRoot.appendChild(group);
+	  Element copy = (Element)doc.importNode(pathElement, true);
+	  group.setAttributeNS(null, SVGConstants.SVG_TRANSFORM_ATTRIBUTE, affineTransformToString(originTransform));
+	  group.appendChild(copy);
+	  File destFile = transcodeToSVG(doc);
+	  
+	  if (destFile != null) {
+		  JRDesignImage jrImage = new JRDesignImage(jConfig.getJasperDesign());
+		  jrImage.setX((int)rectFigure.getX());
+		  jrImage.setY((int)rectFigure.getY());
+		  jrImage.setWidth((int)imageWidth);
+		  jrImage.setHeight((int)imageHeight);
+		  resources.add(new Pair<File, JRDesignImage>(destFile, jrImage));
+		  result.add(jrImage);
+	  }
+	  return result;
+  }
+  
+  /**
+   * Check if a path a {@link Shape} is a single line
+   * 
+   * @param awtShape a not null shape
+   * @param transorm the affientransform of the same
+   * @return true if the shape is a single line, false otherwise
+   */ 
+  private boolean isSingleLine(Shape awtShape, AffineTransform transorm) {
+	  PathIterator iterator = awtShape.getPathIterator(transorm);
+	  int lines = 0;
+	  while(!iterator.isDone()) {
+		  float[] coords = new float[6];
+		  int segType = iterator.currentSegment(coords);
+		  if (segType == PathIterator.SEG_CUBICTO || segType == PathIterator.SEG_QUADTO || segType == PathIterator.SEG_CLOSE) {
+			  return false;
+		  }
+		  if (segType == PathIterator.SEG_LINETO) {
+			  lines++;
+			  if (lines > 1) {
+				  return false;
+			  }
+		  }
+		  iterator.next();
+	  }
+	  return true;
+  }
+  
+  /**
    * Convert a path into a series of line
    * 
    * @param pathElement the path element
@@ -750,7 +934,6 @@ public class SVGDocumentLoader {
    * @return the list of design element that represent the path
    */
   private List<JRDesignElement> parsePath(SVGOMPathElement pathElement, AffineTransform previousTransform) {
-	  List<JRDesignElement> result = new ArrayList<>();
 	  AffineTransform newTransofrm = getTransofrm(pathElement);
 	  previousTransform.concatenate(newTransofrm);
 	  AWTPathProducer pathProducer = new AWTPathProducer();
@@ -758,59 +941,62 @@ public class SVGDocumentLoader {
 	  pathParser.setPathHandler(pathProducer);
       pathParser.parse(pathElement.getAttribute("d")); //$NON-NLS-1$
 	  Shape awtShape = pathProducer.getShape();
-	  PathIterator iterator = awtShape.getPathIterator(previousTransform);
-	  float[] lastCoords = null;
-	  float[] firstCoords = null;
-	  while(!iterator.isDone()) {
-		  float[] coords = new float[6];
-		  int segType = iterator.currentSegment(coords);
-		  if (lastCoords != null) {
-			  JRDesignLine line = new JRDesignLine();
-			  double x1 = lastCoords[0];
-			  double y1 = lastCoords[1];
-			  double x2;
-			  double y2;
-			  if (segType == PathIterator.SEG_CLOSE) {
-				  x2 = firstCoords[0];
-				  y2 = firstCoords[1];
-			  } else { 
-				  x2 = coords[0];
-				  y2 = coords[1];
+	  if (isSingleLine(awtShape, previousTransform)) {
+		  List<JRDesignElement> result = new ArrayList<>();
+		  PathIterator iterator = awtShape.getPathIterator(previousTransform);
+		  float[] lastCoords = null;
+		  float[] firstCoords = null;
+		  while(!iterator.isDone()) {
+			  float[] coords = new float[6];
+			  int segType = iterator.currentSegment(coords);
+			  if (lastCoords != null) {
+				  JRDesignLine line = new JRDesignLine();
+				  double x1 = lastCoords[0];
+				  double y1 = lastCoords[1];
+				  double x2;
+				  double y2;
+				  if (segType == PathIterator.SEG_CLOSE) {
+					  x2 = firstCoords[0];
+					  y2 = firstCoords[1];
+				  } else { 
+					  x2 = coords[0];
+					  y2 = coords[1];
+				  }
+				 int xLineStart;
+				  int lineWdith;
+				  LineDirectionEnum direction = null;
+				  if (x1 < x2) {
+					  xLineStart = (int)Math.round(x1);
+					  lineWdith = (int)Math.round(x2 - x1);
+				  } else {
+					  xLineStart = (int)Math.round(x2);
+					  lineWdith = (int)Math.round(x1 - x2);
+				  }
+				  int yLineStart;
+				  int lineHeight;
+				  if (y1 < y2) {
+					  yLineStart = (int)Math.round(y1);
+					  lineHeight = (int)Math.round(y2 - y1);
+				  } else {
+					  yLineStart = (int)Math.round(y2);
+					  lineHeight = (int)Math.round(y1 - y2);
+					  direction = LineDirectionEnum.BOTTOM_UP;
+				  }
+				  line.setX(xLineStart);
+				  line.setY(yLineStart );
+				  line.setWidth(lineWdith);
+				  line.setHeight(lineHeight);
+				  line.setDirection(direction);
+				  result.add(line);
 			  }
-			 int xLineStart;
-			  int lineWdith;
-			  LineDirectionEnum direction = null;
-			  if (x1 < x2) {
-				  xLineStart = (int)Math.round(x1);
-				  lineWdith = (int)Math.round(x2 - x1);
-			  } else {
-				  xLineStart = (int)Math.round(x2);
-				  lineWdith = (int)Math.round(x1 - x2);
+			  lastCoords = coords;
+			  if (firstCoords == null) {
+				  firstCoords = coords;
 			  }
-			  int yLineStart;
-			  int lineHeight;
-			  if (y1 < y2) {
-				  yLineStart = (int)Math.round(y1);
-				  lineHeight = (int)Math.round(y2 - y1);
-			  } else {
-				  yLineStart = (int)Math.round(y2);
-				  lineHeight = (int)Math.round(y1 - y2);
-				  direction = LineDirectionEnum.BOTTOM_UP;
-			  }
-			  line.setX(xLineStart);
-			  line.setY(yLineStart );
-			  line.setWidth(lineWdith);
-			  line.setHeight(lineHeight);
-			  line.setDirection(direction);
-			  result.add(line);
+			  iterator.next();
 		  }
-		  lastCoords = coords;
-		  if (firstCoords == null) {
-			  firstCoords = coords;
-		  }
-		  iterator.next();
-	  }
-	  return result;
+		  return result;
+	  } else return exrtractPath(pathElement, previousTransform, awtShape);
   }
   
   /**
@@ -896,6 +1082,9 @@ public class SVGDocumentLoader {
           Node node = nodes.item(i);
           if (node instanceof SVGOMGElement) {
         	  result.addAll(parseElement((SVGOMGElement)node, startingStransform));
+          } else if (node instanceof SVGOMPathElement) {
+        	  //support for inline svg
+        	  result.addAll(parseElement((SVGOMPathElement)node, startingStransform));
           }
       }
       //move the leftmost and topmost on the edge
@@ -983,7 +1172,7 @@ public class SVGDocumentLoader {
     // Enable CSS- and SVG-specific enhancements.
     (new GVTBuilder()).build( bridgeContext, document );
   }
-
+  
   /**
    * Use the SAXSVGDocumentFactory to parse the given URI into a DOM.
    * 
@@ -993,7 +1182,7 @@ public class SVGDocumentLoader {
    */
   private Document createSVGDocument( String uri ) throws IOException {
     String parser = XMLResourceDescriptor.getXMLParserClassName();
-    SAXSVGDocumentFactory factory = new SAXSVGDocumentFactory( parser );
+    SAXSVGDocumentFactory factory = new InkscapeSVGDocumentFactory( parser );
     return factory.createDocument( uri );
   }
 }
