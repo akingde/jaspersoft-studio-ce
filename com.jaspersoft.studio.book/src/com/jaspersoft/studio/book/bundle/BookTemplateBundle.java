@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -242,7 +243,7 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
 		// Store the report bundle on file system
-		IProject container = (IProject) resource;
+		IContainer container = (IContainer) resource;
 		String prefix = fileName.replace(".jrxml", "");
 		
 		boolean createCover = (Boolean)templateSettings.get(COVER_SETTING) && coverPart != null;
@@ -274,9 +275,16 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 	 * @param resourceName the name of the created file
 	 * @param monitor the monitor to execute the operation
 	 */
-	protected void saveDesignResource(JasperDesign design, IProject container, String resourceName, IProgressMonitor monitor){
+	protected void saveDesignResource(JasperDesign design, IContainer container, String resourceName, IProgressMonitor monitor){
 		if (design != null){
-			IFile resourceFile = container.getFile(resourceName);
+			IFile resourceFile = null;
+			if (container instanceof IProject) {
+				resourceFile = ((IProject)container).getFile(resourceName);
+			} else if (container instanceof IFolder) {
+				resourceFile = ((IFolder)container).getFile(resourceName);
+			} else {
+				resourceFile = (IFile) container.getFile(container.getFullPath().append(resourceName));
+			}
 			ByteArrayInputStream stream = null;
 			// Save the all the files...
 			try {
@@ -298,7 +306,7 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 	}
 	
 	
-	protected void saveAdditionalDesignResources(JasperDesign jd, IProject container, IProgressMonitor monitor)
+	protected void saveAdditionalDesignResources(JasperDesign jd, IContainer container, IProgressMonitor monitor)
 	{
 				List<String> additionalResourceNames = new ArrayList<String>();
 				List<JRDesignElement> list = ModelUtils.getAllGElements(jd);
