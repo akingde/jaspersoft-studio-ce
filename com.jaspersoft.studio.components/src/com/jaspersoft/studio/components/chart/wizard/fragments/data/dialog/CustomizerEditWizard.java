@@ -72,7 +72,7 @@ public class CustomizerEditWizard extends Wizard {
 	@Override
 	public void addPages() {
 		if (editedElement.isOnlyClass()){
-			editClassPage = new EditClassPage(dto);
+			editClassPage = new EditClassPage(dto, jConfig);
 			editClassPage.setRawClass(editedElement.getRawClass());
 			addPage(editClassPage);
 		} else {

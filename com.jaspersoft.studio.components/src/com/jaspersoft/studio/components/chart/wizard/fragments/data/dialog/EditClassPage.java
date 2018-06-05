@@ -24,6 +24,7 @@ import com.jaspersoft.studio.components.chart.ContextHelpIDs;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 import net.sf.jasperreports.engine.JRChartCustomizer;
@@ -67,15 +68,22 @@ public class EditClassPage extends JSSHelpWizardPage {
 	 * Text area used to provide the classname
 	 */
 	private Text textArea;
+	
+	/**
+	 * The {@link JasperReportsConfiguration} of the report
+	 */
+	private JasperReportsConfiguration jConfig;
 
 	/**
 	 * Create the page
 	 * 
 	 * @param dto the dto of the edited chart, must be not null
+	 * @param jConfig the {@link JasperReportsConfiguration} of the report, should be not null
 	 */
-	public EditClassPage(CustomizerPropertyExpressionsDTO dto) {
+	public EditClassPage(CustomizerPropertyExpressionsDTO dto, JasperReportsConfiguration jConfig) {
 		super("editClassPage"); //$NON-NLS-1$
 		this.currentChartCustmizers = dto.getCustomizersNumber();
+		this.jConfig = jConfig;
 		setMessage(Messages.EditCustomizerPage_pageMessage);
 	}
 
@@ -138,7 +146,11 @@ public class EditClassPage extends JSSHelpWizardPage {
 			return false;
 		} else {
 			try{
-				JRClassLoader.loadClassForName(text);
+				if (jConfig != null) {
+					jConfig.getClassLoader().loadClass(text);
+				} else {
+					JRClassLoader.loadClassForName(text);
+				}
 				if (currentChartCustmizers > 0){
 					setMessage(Messages.EditClassPage_dialogMessageServer);
 				} else {
