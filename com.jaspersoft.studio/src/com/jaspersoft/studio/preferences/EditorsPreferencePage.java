@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
@@ -24,5 +25,15 @@ public class EditorsPreferencePage extends FieldEditorOverlayPage {
 	@Override
 	public String getPageId() {
 		return PAGE_ID;
+	}
+
+	@Override
+	public boolean isPropertyPage() {
+		return false;
+	}
+
+	@Override
+	protected IResource getResource() {
+		return null;
 	}
 }

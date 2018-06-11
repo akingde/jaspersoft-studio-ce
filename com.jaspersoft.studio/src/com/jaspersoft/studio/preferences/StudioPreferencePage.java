@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
@@ -27,17 +28,18 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	/**
-	 * Creates the field editors. Field editors are abstractions of the common GUI blocks needed to manipulate various
-	 * types of preferences. Each field editor knows how to save and restore itself.
+	 * Creates the field editors. Field editors are abstractions of the common GUI
+	 * blocks needed to manipulate various types of preferences. Each field editor
+	 * knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
-
 		addField(new BooleanFieldEditor(CHECK_FOR_UPDATE, Messages.StudioPreferencePage_checkForUpdates,
 				getFieldEditorParent()));
-		addField(new BooleanLinkFieldEditor(JSS_SEND_USAGE_STATISTICS, Messages.StudioPreferencePage_collectUsageStatistics,
-				getFieldEditorParent()));
-		
-		//Eventually create the extensions for the page
+		addField(new BooleanLinkFieldEditor(JSS_SEND_USAGE_STATISTICS,
+				Messages.StudioPreferencePage_collectUsageStatistics, getFieldEditorParent()));
+
+		// Eventually create the extensions for the page
 		super.createFieldEditors();
 	}
 
@@ -52,6 +54,16 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 	@Override
 	public String getPageId() {
 		return PAGE_ID;
+	}
+
+	@Override
+	public boolean isPropertyPage() {
+		return false;
+	}
+
+	@Override
+	protected IResource getResource() {
+		return null;
 	}
 
 }

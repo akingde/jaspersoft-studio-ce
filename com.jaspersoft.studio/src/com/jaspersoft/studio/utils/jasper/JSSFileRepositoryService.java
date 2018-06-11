@@ -78,6 +78,7 @@ public class JSSFileRepositoryService implements RepositoryService {
 			if (r != null)
 				return r;
 		} catch (JRRuntimeException e) {
+			// do nothing
 		}
 		try {
 			if (ReportResource.class.equals(resourceType) && uri.endsWith(FileExtension.PointJRXML)) {

@@ -42,7 +42,6 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.FileResolver;
 
 public class StyleTemplateFactory {
 
@@ -50,7 +49,8 @@ public class StyleTemplateFactory {
 	 * Create a template style node in the JRTX editor, with all the children inside
 	 * 
 	 */
-	public static ANode createNode(ANode parent, Object obj, int index, IFile templateStyleFile, JRSimpleTemplate jrst) {
+	public static ANode createNode(ANode parent, Object obj, int index, IFile templateStyleFile,
+			JRSimpleTemplate jrst) {
 		if (obj instanceof JRDesignStyle) {
 			index += jrst.getIncludedTemplatesList().size();
 			return new MStyle(parent, (JRDesignStyle) obj, index);
@@ -63,7 +63,8 @@ public class StyleTemplateFactory {
 	}
 
 	/**
-	 * Create a template style node in the report editor, with all the children inside
+	 * Create a template style node in the report editor, with all the children
+	 * inside
 	 * 
 	 */
 	public static ANode createTemplate(ANode parent, JRDesignReportTemplate jrObject, int newIndex, IFile file) {
@@ -82,18 +83,25 @@ public class StyleTemplateFactory {
 	/**
 	 * Create the nodes for a template reference
 	 * 
-	 * @param parent the parent where the node should be created
-	 * @param location the location of the reference
-	 * @param newIndex the index of the node
-	 * @param loadedResources the set of already loaded location, used for nested calls to avoid circular loading
-	 * @param editable flag to mark if the new nodes should be editable or not
+	 * @param parent
+	 *            the parent where the node should be created
+	 * @param location
+	 *            the location of the reference
+	 * @param newIndex
+	 *            the index of the node
+	 * @param loadedResources
+	 *            the set of already loaded location, used for nested calls to avoid
+	 *            circular loading
+	 * @param editable
+	 *            flag to mark if the new nodes should be editable or not
 	 * @return true if the style was loaded, false otherwise
 	 */
-	public static boolean createTemplateReference(ANode parent, String location, int newIndex, Set<String> loadedResources, boolean editable) {
-		if (!loadedResources.contains(location)){
+	public static boolean createTemplateReference(ANode parent, String location, int newIndex,
+			Set<String> loadedResources, boolean editable) {
+		if (!loadedResources.contains(location)) {
 			JasperReportsConfiguration jConfig = parent.getJasperConfiguration();
 			JRTemplate jrst = ExternalStylesManager.getTemplate(jConfig, location);
-			if (jrst != null){
+			if (jrst != null) {
 				loadedResources.add(location);
 				createTemplate(parent, loadedResources, editable, jrst);
 				return true;
@@ -114,16 +122,16 @@ public class StyleTemplateFactory {
 		for (JRTemplateReference s : jrst.getIncludedTemplates()) {
 			MStyleTemplateReference p = new MStyleTemplateReference(parent, s, -1);
 			p.setEditable(editable);
-			createTemplateReference(p, s.getLocation(), -1, loadedResources, editable);			
+			createTemplateReference(p, s.getLocation(), -1, loadedResources, editable);
 		}
 		for (JRStyle s : jrst.getStyles()) {
 			APropertyNode n = (APropertyNode) ReportFactory.createNode(parent, s, -2);
 			n.setEditable(editable);
 		}
 	}
-	
+
 	/**
-	 * Create the nodes for a styles template container, created in its own editor 
+	 * Create the nodes for a styles template container, created in its own editor
 	 */
 	public static void createTemplateRoot(ANode parent, Set<String> set, IFile file, JRSimpleTemplate jrst) {
 		JasperDesign jd = parent.getJasperDesign();
@@ -132,11 +140,11 @@ public class StyleTemplateFactory {
 			p.setEditable(true);
 			createTemplateReference(p, s.getLocation(), -1, set, false);
 		}
-		//Add the normal styles to the JasperDesign
+		// Add the normal styles to the JasperDesign
 		for (JRStyle s : jrst.getStyles()) {
 			APropertyNode n = (APropertyNode) ReportFactory.createNode(parent, s, -2);
 			n.setEditable(true);
-			if (jd != null){
+			if (jd != null) {
 				try {
 					jd.addStyle(s);
 				} catch (JRException e) {
@@ -144,68 +152,75 @@ public class StyleTemplateFactory {
 				}
 			}
 		}
-		//Add the external styles to the JasperDesign
-		for(INode node : parent.getChildren()){
-			if (node instanceof MStyleTemplateReference && jd != null){
-				MStyleTemplateReference externalNode = (MStyleTemplateReference)node;
-				JRTemplateReference externalValue = (JRTemplateReference)externalNode.getValue();
+		// Add the external styles to the JasperDesign
+		for (INode node : parent.getChildren()) {
+			if (node instanceof MStyleTemplateReference && jd != null) {
+				MStyleTemplateReference externalNode = (MStyleTemplateReference) node;
+				JRTemplateReference externalValue = (JRTemplateReference) externalNode.getValue();
 				JRDesignReportTemplate jrTemplate = MStyleTemplate.createJRTemplate();
 				JRDesignExpression jre = new JRDesignExpression();
 				jre.setText("\"" + externalValue.getLocation() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
-				((JRDesignReportTemplate) jrTemplate).setSourceExpression(jre);
+				jrTemplate.setSourceExpression(jre);
 				jd.addTemplate(jrTemplate);
 			}
 		}
 	}
-	
+
 	protected static final File getFile(String location, IFile file) {
-		// return SelectionHelper.getFileResolver(file).resoolveInTheWorkspace(location, file);
-		return SelectionHelper.getFileResolver(file).resolveFile(location);
+		return SelectionHelper.resolveFile(file, location);
 	}
-	
+
 	/**
-	 * This method try to return a relative path for the style from the current opened report. If it isn't
-	 * Possible to find a relative path then the absolute one is returned
+	 * This method try to return a relative path for the style from the current
+	 * opened report. If it isn't Possible to find a relative path then the absolute
+	 * one is returned
 	 * 
-	 * @param s the container with the style location path
-	 * @param fileToBeOpened the file currently opened in the jrtx editor
-	 * @param file the file currently opened in the jrtx editor, in java.io.File format
+	 * @param s
+	 *            the container with the style location path
+	 * @param fileToBeOpened
+	 *            the file currently opened in the jrtx editor
+	 * @param file
+	 *            the file currently opened in the jrtx editor, in java.io.File
+	 *            format
 	 * @return an absolute or relative path to the style resource
 	 */
-	protected static String getStylePath(JRTemplateReference s, File fileToBeOpened, IFile file){
+	protected static String getStylePath(JRTemplateReference s, File fileToBeOpened, IFile file) {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());
-		if (fs != null && fs.length > 0){
+		if (fs != null && fs.length > 0) {
 			File absoluteFile = getFile(s.getLocation(), fs[0]);
 			return absoluteFile != null ? absoluteFile.getAbsolutePath() : s.getLocation();
-		} else{
+		} else {
 			File absoluteFile = getFile(s.getLocation(), file);
 			return absoluteFile != null ? absoluteFile.getAbsolutePath() : s.getLocation();
 		}
 	}
 
 	/**
-	 * This method try to return a relative path for the style from the current opened report. If it isn't
-	 * Possible to find a relative path then the absolute one is returned
+	 * This method try to return a relative path for the style from the current
+	 * opened report. If it isn't Possible to find a relative path then the absolute
+	 * one is returned
 	 * 
-	 * @param p the container with the style location path
-	 * @param jConfig the configuration of the jrtx file opened in the editor
+	 * @param p
+	 *            the container with the style location path
+	 * @param jConfig
+	 *            the configuration of the jrtx file opened in the editor
 	 * @return an absolute or relative path to the style resource
 	 */
-	public static String getStylePath(JRTemplateReference p, JasperReportsConfiguration jConfig){
-		IFile resource = (IFile)jConfig.get(FileUtils.KEY_FILE);
+	public static String getStylePath(JRTemplateReference p, JasperReportsConfiguration jConfig) {
+		IFile resource = (IFile) jConfig.get(FileUtils.KEY_FILE);
 		File file = resource.getLocation().toFile();
 		return getStylePath(p, file, resource);
 	}
-	
+
 	public static void openEditor(Object obj, IEditorInput editorInput, ANode node) {
 		if (obj instanceof JRStyle || obj instanceof JRConditionalStyle) {
 			if (node.getParent() instanceof MStyles)
 				return;
 			if (node instanceof MConditionalStyle)
-				node = (ANode) node.getParent();
+				node = node.getParent();
 			if (node instanceof MStyle)
-				node = (ANode) node.getParent();
+				node = node.getParent();
 		}
 		if (node instanceof MStyleTemplate)
 			obj = node.getValue();
@@ -219,20 +234,20 @@ public class StyleTemplateFactory {
 			if (editorInput instanceof FileEditorInput) {
 				JRDesignReportTemplate s = (JRDesignReportTemplate) obj;
 				if (s.getSourceExpression() != null)
-					SelectionHelper.openEditor((FileEditorInput) editorInput,
-							ExpressionUtil.cachedExpressionEvaluationString(s.getSourceExpression(), node.getJasperConfiguration()));
+					SelectionHelper.openEditor((FileEditorInput) editorInput, ExpressionUtil
+							.cachedExpressionEvaluationString(s.getSourceExpression(), node.getJasperConfiguration()));
 			}
 			return;
 		}
 	}
 
 	private static IFile getFile(ANode node, IFile refFile) {
-		List<Object> plist = new ArrayList<Object>();
-		ANode p = (ANode) node;
+		List<Object> plist = new ArrayList<>();
+		ANode p = node;
 		JasperReportsConfiguration jConfig = node.getJasperConfiguration();
 		plist.add(p.getValue());
 		while (!(p.getParent() instanceof MStyles)) {
-			p = (ANode) p.getParent();
+			p = p.getParent();
 			plist.add(p.getValue());
 		}
 
@@ -242,7 +257,7 @@ public class StyleTemplateFactory {
 		return resolveTemplates(refFile, plist, jConfig, drt);
 	}
 
-	private static Map<JasperDesign, String[]> cstyles = new CacheMap<JasperDesign, String[]>(2000);
+	private static Map<JasperDesign, String[]> cstyles = new CacheMap<>(2000);
 
 	public static String[] getAllStyles(JasperReportsConfiguration jConf, JRDesignElement jrElement) {
 		// IMPROVEMENT: listen for all file changes, and update only when needed
@@ -254,7 +269,7 @@ public class StyleTemplateFactory {
 				return new String[] {};
 			JRStyle[] styles = jd.getStyles();
 			List<JRStyle> slist = getStyles(jConf, jd, (IFile) jConf.get(FileUtils.KEY_FILE));
-			List<String> itemsList = new ArrayList<String>();
+			List<String> itemsList = new ArrayList<>();
 			itemsList.add("");
 			for (JRStyle style : styles) {
 				itemsList.add(style.getName());
@@ -276,7 +291,7 @@ public class StyleTemplateFactory {
 		JRStyle[] styles = jd.getStyles();
 		List<JRStyle> slist = getStyles(jConf, jd, (IFile) jConf.get(FileUtils.KEY_FILE));
 		String actualStyleName = jrStyle.getName();
-		List<String> availableStyles = new ArrayList<String>();
+		List<String> availableStyles = new ArrayList<>();
 		availableStyles.add("");
 		for (JRStyle style : styles)
 			if (!style.getName().equals(actualStyleName))
@@ -287,7 +302,7 @@ public class StyleTemplateFactory {
 	}
 
 	private static List<JRStyle> getStyles(JasperReportsConfiguration jConfig, JasperDesign jd, IFile file) {
-		List<JRStyle> list = new ArrayList<JRStyle>();
+		List<JRStyle> list = new ArrayList<>();
 		for (JRReportTemplate t : jd.getTemplatesList())
 			list.addAll(ExternalStylesManager.getStyles(t, file, jConfig));
 		return list;
@@ -304,14 +319,13 @@ public class StyleTemplateFactory {
 			for (int i = plist.size() - 1; i >= 0; i--) {
 				Object obj = plist.get(i);
 				if (obj instanceof JRDesignReportTemplate) {
-					str = ExpressionUtil.cachedExpressionEvaluationString(((JRDesignReportTemplate) obj).getSourceExpression(),
-							jConfig);
+					str = ExpressionUtil.cachedExpressionEvaluationString(
+							((JRDesignReportTemplate) obj).getSourceExpression(), jConfig);
 				} else if (obj instanceof JRTemplateReference) {
 					str = ((JRTemplateReference) obj).getLocation();
 				}
 
-				FileResolver fileResolver = SelectionHelper.getFileResolver(refFile);
-				File fileToBeOpened = fileResolver.resolveFile(str);
+				File fileToBeOpened = SelectionHelper.resolveFile(refFile, str);
 				if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
 					IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());
 					if (fs != null && fs.length > 0) {

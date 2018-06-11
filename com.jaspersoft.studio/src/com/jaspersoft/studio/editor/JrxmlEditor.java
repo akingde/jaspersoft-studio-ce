@@ -4,13 +4,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.dialogs.IPageChangedListener;
-import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorPart;
@@ -44,28 +42,24 @@ import net.sf.jasperreports.engine.design.JasperDesign;
  * text editor. <li>page 1 allows you to change the font used in page 2 <li>page 2 shows the words in page 0 in sorted
  * order </ul>
  */
-public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
-		 CachedSelectionProvider {
-	
+public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor, CachedSelectionProvider {
+
 	/** The text editor used in page 0. */
 	private ReportContainer reportContainer;
-	
+
 	/** The Editor ID */
 	public static final String JRXML_EDITOR_ID = "com.jaspersoft.studio.editor.JrxmlEditor"; //$NON-NLS-1$
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.jaspersoft.studio.editor.AbstractJRXMLEditor#createDesignEditorPage()
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.editor.AbstractJRXMLEditor#createDesignEditorPage()
 	 */
 	@Override
 	protected void createDesignEditorPage() throws PartInitException {
 		reportContainer = new ReportContainer(this, jrContext);
-		reportContainer.addPageChangedListener(new IPageChangedListener() {
-
-			public void pageChanged(PageChangedEvent event) {
-				updateContentOutline(getActivePage());
-			}
-		});
+		reportContainer.addPageChangedListener(event -> updateContentOutline(getActivePage()));
 
 		int index = addPage(reportContainer, getEditorInput());
 		setPageText(index, Messages.JrxmlEditor_design);
@@ -77,19 +71,20 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 	public ReportContainer getReportContainer() {
 		return reportContainer;
 	}
-	
+
 	@Override
 	protected String getEditorHelpID() {
 		return "com.jaspersoft.studio.doc.editor_jrxml";
 	}
 
 	/**
-	 * Gets the current active inner editor.
-	 * The {@link ReportContainer} is itself a {@link MultiPageEditorPart}, so
-	 * it can contains different opened editors (i.e. lists, tables, cross-tabs).
+	 * Gets the current active inner editor. The {@link ReportContainer} is itself a
+	 * {@link MultiPageEditorPart}, so it can contains different opened editors
+	 * (i.e. lists, tables, cross-tabs).
 	 * 
 	 * @return the second level active editor
 	 */
+	@Override
 	public IEditorPart getActiveInnerEditor() {
 		IEditorPart iep = getActiveEditor();
 		if (iep instanceof ReportContainer)
@@ -99,6 +94,7 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.editor.AbstractJRXMLEditor#updateVisualView()
 	 */
 	@Override
@@ -112,6 +108,7 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 	 * 
 	 * @see org.eclipse.ui.ide.IGotoMarker
 	 */
+	@Override
 	public void gotoMarker(IMarker marker) {
 		if (activePage == PAGE_DESIGNER) {
 			try {
@@ -121,7 +118,8 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 					expression.setId(new Integer((String) expr));
 					JasperDesign jd = getJasperDesign();
 					JRExpressionCollector rc = JRExpressionCollector.collector(jrContext, jd);
-					if (!VErrorPreview.openExpressionEditor(jrContext, rc, (JRDesignDataset) jd.getMainDataset(), expression))
+					if (!VErrorPreview.openExpressionEditor(jrContext, rc, (JRDesignDataset) jd.getMainDataset(),
+							expression))
 						for (JRDataset d : jd.getDatasetsList())
 							if (VErrorPreview.openExpressionEditor(jrContext, rc, (JRDesignDataset) d, expression))
 								return;
@@ -135,39 +133,42 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 	}
 
 	/**
-	 * Opens an editor (even an internal one), using the 
-	 * specified object and Anode information.
+	 * Opens an editor (even an internal one), using the specified object and Anode
+	 * information.
 	 */
 	public void openEditor(Object obj, ANode node) {
 		reportContainer.openEditor(obj, node);
 	}
 
 	/**
-	 * FIXME: This method is currently commented because it's to heavy.
-	 * Should implement a faster solution if possible.
+	 * FIXME: This method is currently commented because it's to heavy. Should
+	 * implement a faster solution if possible.
 	 */
-	public void refreshExternalStyles(HashSet<String> removedStyles) {
+	public void refreshExternalStyles(Set<String> removedStyles) {
 		// Very very heavy method, leave commented for future improovments
 		/*
-		 * JasperDesign jrDesign = getMReport().getJasperDesign(); for(JRDesignElement element :
-		 * ModelUtils.getAllElements(jrDesign)){ if (element.getStyleNameReference() != null &&
-		 * removedStyles.contains(element.getStyleNameReference())){ String styleName = element.getStyleNameReference();
-		 * element.setStyleNameReference(null); element.setStyleNameReference(styleName); } } StyleHandlingReportConverter
+		 * JasperDesign jrDesign = getMReport().getJasperDesign(); for(JRDesignElement
+		 * element : ModelUtils.getAllElements(jrDesign)){ if
+		 * (element.getStyleNameReference() != null &&
+		 * removedStyles.contains(element.getStyleNameReference())){ String styleName =
+		 * element.getStyleNameReference(); element.setStyleNameReference(null);
+		 * element.setStyleNameReference(styleName); } } StyleHandlingReportConverter
 		 * reportConverter =
-		 * ((AEditPartFactory)reportContainer.getMainEditor().getGraphicalViewer().getEditPartFactory()).getReportConverter
-		 * (); if (reportConverter != null) reportConverter.resetStyles(jrDesign);
+		 * ((AEditPartFactory)reportContainer.getMainEditor().getGraphicalViewer().
+		 * getEditPartFactory()).getReportConverter (); if (reportConverter != null)
+		 * reportConverter.resetStyles(jrDesign);
 		 */
 	}
 
 	@Override
 	public Image getTitleImage() {
-		if(getCurrentFile()!=null && FileExtension.JRXML.equals(getCurrentFile().getFileExtension())){
+		if (getCurrentFile() != null && FileExtension.JRXML.equals(getCurrentFile().getFileExtension())) {
 			return JaspersoftStudioPlugin.getInstance().getImage("icons/jrxml_icon.png"); //$NON-NLS-1$
-		}
-		else {
+		} else {
 			return super.getTitleImage();
 		}
-	}	
+	}
+
 	@Override
 	public CommonSelectionCacheProvider getSelectionCache() {
 		return reportContainer.getSelectionCache();
@@ -197,7 +198,7 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 	protected INode createEditorModel() {
 		return ReportFactory.createReport(jrContext);
 	}
-	
+
 	/**
 	 * When the editor became visible layout the internal editors
 	 */
@@ -205,28 +206,27 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 	protected void editorVisible() {
 		super.editorActivated();
 		IEditorPart part = getActiveInnerEditor();
-		if (part instanceof AbstractVisualEditor){
-			((AbstractVisualEditor)part).getRuler().layout(true);
+		if (part instanceof AbstractVisualEditor) {
+			((AbstractVisualEditor) part).getRuler().layout(true);
 		}
 	}
-	
+
 	/**
-	 * Override of the original resource changed to check if update the tamplate styles
+	 * Override of the original resource changed to check if update the tamplate
+	 * styles
 	 */
 	@Override
 	public void resourceChanged(final IResourceChangeEvent event) {
 		super.resourceChanged(event);
 		if (isRefreshing)
 			return;
-		UIUtils.getDisplay().syncExec(new Runnable() {
-			public void run() {
-				if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
-					try {
-						TemplateStyleVisitor visitor = new TemplateStyleVisitor(JrxmlEditor.this);
-						event.getDelta().accept(visitor);
-					} catch (CoreException e) {
-						UIUtils.showError(e);
-					}
+		UIUtils.getDisplay().syncExec(() -> {
+			if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
+				try {
+					TemplateStyleVisitor visitor = new TemplateStyleVisitor(JrxmlEditor.this);
+					event.getDelta().accept(visitor);
+				} catch (CoreException e) {
+					UIUtils.showError(e);
 				}
 			}
 		});

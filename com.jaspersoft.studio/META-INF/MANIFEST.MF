@@ -171,6 +171,7 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.draw2d.geometry",
  com.jaspersoft.studio.editor.action.exporter,
  com.jaspersoft.studio.editor.action.snap,
+ com.jaspersoft.studio.editor.context,
  com.jaspersoft.studio.editor.defaults,
  com.jaspersoft.studio.editor.dnd,
  com.jaspersoft.studio.editor.expression;

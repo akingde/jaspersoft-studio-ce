@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.templates;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -31,5 +32,15 @@ public class PathsPreferencePage extends FieldEditorOverlayPage {
 	@Override
 	public String getPageId() {
 		return PAGE_ID;
+	}
+
+	@Override
+	public boolean isPropertyPage() {
+		return false;
+	}
+
+	@Override
+	protected IResource getResource() {
+		return null;
 	}
 }

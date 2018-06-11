@@ -42,6 +42,7 @@ import com.jaspersoft.studio.data.jdbc.JDBCDriverDefinition;
 import com.jaspersoft.studio.data.jdbc.JDBCDriverDefinitionsContainer;
 import com.jaspersoft.studio.editor.IEditorContributor;
 import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
+import com.jaspersoft.studio.editor.context.AEditorContext;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.preview.PreviewModeDetails;
@@ -62,6 +63,7 @@ import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.util.KeyValue;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -103,6 +105,7 @@ public class ExtensionManager {
 	};
 	private List<IParameterICContributor> prmICContributors = new ArrayList<>();
 	private List<IReportRunner> reportRunners = new ArrayList<>();
+	private List<AEditorContext> editorContext = new ArrayList<>();
 
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry()
@@ -157,8 +160,50 @@ public class ExtensionManager {
 				System.out.println(ex.getMessage());
 			}
 		}
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID,
+				"editorContext"); //$NON-NLS-1$
+		AEditorContext ec = new AEditorContext();
+		editorContexts.add(new KeyValue<String, String>(ec.getName(), ec.getName()));
+		for (IConfigurationElement e : config) {
+			try {
+				String cname = e.getAttribute("contextName");
+				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
+				if (o instanceof AEditorContext)
+					editorContexts.add(new KeyValue<String, String>(cname, ((AEditorContext) o).getName()));
+			} catch (CoreException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
 
 		DataAdapterManager.getPreferencesStorage();
+	}
+
+	private List<KeyValue<String, String>> editorContexts = new ArrayList<>();
+
+	public List<KeyValue<String, String>> getEditorContexts() {
+		return editorContexts;
+	}
+
+	public AEditorContext getEditorContext(String c) {
+		if (!Misc.isNullOrEmpty(c)) {
+			IConfigurationElement[] config = Platform.getExtensionRegistry()
+					.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "editorContext"); //$NON-NLS-1$
+			for (IConfigurationElement e : config) {
+				try {
+					String cname = e.getAttribute("contextName");
+					if (cname.equals(c)) {
+						Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
+						if (o instanceof AEditorContext) {
+							((AEditorContext) o).setId(cname);
+							return (AEditorContext) o;
+						}
+					}
+				} catch (CoreException ex) {
+					System.out.println(ex.getMessage());
+				}
+			}
+		}
+		return new AEditorContext();
 	}
 
 	public List<IReportRunner> getReportRunners() {

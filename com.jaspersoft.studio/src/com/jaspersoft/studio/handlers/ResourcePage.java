@@ -55,6 +55,7 @@ import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion;
 import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion.RESPONSE_TYPE;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRImage;
@@ -66,63 +67,64 @@ import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 /**
  * 
- * This is the page of the Template Export wizard that handle the recognition of 
+ * This is the page of the Template Export wizard that handle the recognition of
  * the resource used by the report and the save of them along with the report
  * 
  * @author Orlandin Marco
  *
  */
 public class ResourcePage extends JSSHelpWizardPage {
-	
+
 	/**
 	 * The template bundle of the exported Report
 	 */
 	private TemplateBundle bundle;
-	
+
 	/**
 	 * Table where the exported resources are listed
 	 */
 	private TableViewer tableViewer;
-	
+
 	/**
 	 * Text field where the exporting path is shown
 	 */
 	private Text pathText;
-	
+
 	/**
 	 * List of file where every file points a resource that must be exported
 	 */
 	private List<File> resourceList;
-	
+
 	/**
 	 * The configuration of the report
 	 */
 	private JasperReportsConfiguration jrContext;
-	
+
 	/**
 	 * The file of the exported report
 	 */
 	private IFile reportFile;
-	
+
 	/**
-	 * Path inserted in the textarea when the dialog is advanced, this is done so the path
-	 * can be read even when the control are disposed
+	 * Path inserted in the textarea when the dialog is advanced, this is done so
+	 * the path can be read even when the control are disposed
 	 */
 	private String pathString;
-	
+
 	/**
-	 * Boolean flag, true if there are conflict on the resource names, otherwise false
+	 * Boolean flag, true if there are conflict on the resource names, otherwise
+	 * false
 	 */
 	private boolean conflictResources;
-		
+
 	/**
 	 * Build the class
 	 * 
-	 * @param reportFile file of the report exported as template
+	 * @param reportFile
+	 *            file of the report exported as template
 	 */
 	protected ResourcePage(IFile reportFile) {
 		super("exportresources"); //$NON-NLS-1$
@@ -131,16 +133,16 @@ public class ResourcePage extends JSSHelpWizardPage {
 		conflictResources = false;
 		this.reportFile = reportFile;
 		setPageComplete(false);
-		try{
-			//Build the bundle and the jasper configuration
+		try {
+			// Build the bundle and the jasper configuration
 			this.jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), reportFile);
 			this.bundle = new JrxmlTemplateBundle(reportFile.getLocationURI().toURL(), true, jrContext);
 			jrContext.setJasperDesign(bundle.getJasperDesign());
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Return the context name for the help of this page
 	 */
@@ -154,43 +156,43 @@ public class ResourcePage extends JSSHelpWizardPage {
 	 * 
 	 * @return a not null JasperDesign
 	 */
-	public JasperDesign getDesign(){
+	public JasperDesign getDesign() {
 		return bundle.getJasperDesign();
 	}
-	
+
 	/**
 	 * Return the configuration pointing at the current report file
 	 * 
 	 * @return the current configuration
 	 */
-	public JasperReportsConfiguration getJRConfiguration(){
+	public JasperReportsConfiguration getJRConfiguration() {
 		return jrContext;
 	}
-	
+
 	/**
-	 * Return a full path that represent the destination on the filesystem of the template
+	 * Return a full path that represent the destination on the filesystem of the
+	 * template
 	 * 
-	 * @return a string that represent the destination of the template, it's included also the template
-	 * name and extension
+	 * @return a string that represent the destination of the template, it's
+	 *         included also the template name and extension
 	 */
-	public String getDestinationPath(){
+	public String getDestinationPath() {
 		return pathString;
 	}
-	
+
 	@Override
 	public IWizardPage getNextPage() {
 		pathString = pathText.getText();
 		return super.getNextPage();
 	}
-	
+
 	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		setControl(composite);
 		composite.setLayout(new GridLayout());
 
-		Table table = new Table(composite, SWT.V_SCROLL | SWT.MULTI
-				| SWT.FULL_SELECTION | SWT.BORDER);
+		Table table = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		table.setLayoutData(gd);
 		table.setHeaderVisible(true);
@@ -207,122 +209,122 @@ public class ResourcePage extends JSSHelpWizardPage {
 			c.pack();
 
 		Composite pathComposite = new Composite(composite, SWT.NONE);
-		pathComposite.setLayout(new GridLayout(3,false));
+		pathComposite.setLayout(new GridLayout(3, false));
 		gd = new GridData(GridData.FILL_BOTH);
 		pathComposite.setLayoutData(gd);
-		new Label(pathComposite,SWT.NONE).setText(Messages.ResourcePage_destinationFolderLabel);
-		
+		new Label(pathComposite, SWT.NONE).setText(Messages.ResourcePage_destinationFolderLabel);
+
 		pathText = new Text(pathComposite, SWT.BORDER);
 		pathText.setEditable(false);
 		gd = new GridData(SWT.FILL, SWT.BOTTOM, true, false);
 		pathText.setLayoutData(gd);
-		
+
 		Button browseButton = new Button(pathComposite, SWT.NONE);
 		browseButton.setText(Messages.ResourcePage_browseButton);
-		browseButton.addSelectionListener(new SelectionAdapter(){
+		browseButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.SAVE);
-			    fd.setText(Messages.ExportImageAction_saveDialogTitle);
-			    String[] filterExt = { "*.jrxml" }; //$NON-NLS-1$
-			    fd.setFileName(bundle.getLabel());
-			    fd.setFilterExtensions(filterExt);
-			    String selected = fd.open();
-			    if (selected != null){
-			    	File checkExisting = new File(selected);
-			    	boolean doIt = true;
-			    	if (checkExisting.exists()){
-			    		RESPONSE_TYPE response = RunnableOverwriteQuestion.showQuestion(Messages.ResourcePage_templateAlreadyExistTitle, Messages.ResourcePage_templateAlreadyExistMessage, false);
-			    		if (!RESPONSE_TYPE.OVERWRITE.equals(response)){
-			    			doIt = false;
-			    		}
-			    	}
-			    	if (doIt) {
-			    		pathText.setText(selected);
-				    	if (!conflictResources) {
-				    		setPageComplete(true);
-				    	}
-			    	}
-			    }
+				fd.setText(Messages.ExportImageAction_saveDialogTitle);
+				String[] filterExt = { "*.jrxml" }; //$NON-NLS-1$
+				fd.setFileName(bundle.getLabel());
+				fd.setFilterExtensions(filterExt);
+				String selected = fd.open();
+				if (selected != null) {
+					File checkExisting = new File(selected);
+					boolean doIt = true;
+					if (checkExisting.exists()) {
+						RESPONSE_TYPE response = RunnableOverwriteQuestion.showQuestion(
+								Messages.ResourcePage_templateAlreadyExistTitle,
+								Messages.ResourcePage_templateAlreadyExistMessage, false);
+						if (!RESPONSE_TYPE.OVERWRITE.equals(response)) {
+							doIt = false;
+						}
+					}
+					if (doIt) {
+						pathText.setText(selected);
+						if (!conflictResources) {
+							setPageComplete(true);
+						}
+					}
+				}
 			}
 		});
-		
+
 		tableViewer = new TableViewer(table);
 		tableViewer.setContentProvider(new ListContentProvider());
 		tableViewer.setLabelProvider(new TLabelProvider());
 
 		fillData();
 	}
-	
 
 	/**
-	 * Display a error message when there are conflicts between the resources, in the detail
-	 * section are listed the conflicted resources
+	 * Display a error message when there are conflicts between the resources, in
+	 * the detail section are listed the conflicted resources
 	 * 
-	 * @param conflicts List of all the resource with conflicts. The list must have a even number of elements
-	 * and every element in a pair position is in conflict with the file in the following position
+	 * @param conflicts
+	 *            List of all the resource with conflicts. The list must have a even
+	 *            number of elements and every element in a pair position is in
+	 *            conflict with the file in the following position
 	 */
-	private void createErrorMessage(List<String> conflicts){
-		String conf = ""; //$NON-NLS-1$
-		for(int i=0; i<conflicts.size(); i+=2){
-			conf += conflicts.get(i).concat("\n").concat(conflicts.get(i+1)).concat("\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+	private void createErrorMessage(List<String> conflicts) {
+		StringBuilder conf = new StringBuilder(); // $NON-NLS-1$
+		for (int i = 0; i < conflicts.size(); i += 2)
+			conf.append(conflicts.get(i).concat("\n").concat(conflicts.get(i + 1)).concat("\n\n")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		IStatus status = new OperationStatus(IStatus.ERROR, JasperReportsPlugin
-				.getDefault().getPluginID(), OperationStatus.NOTHING_TO_REDO,
-				conf, null);
-		new ConflictDetailsError(
-				UIUtils.getShell(),
-				Messages.ResourcePage_conflictTitle,
-				Messages.ResourcePage_conflictMessage,
-				status, IStatus.OK | IStatus.INFO | IStatus.WARNING
-						| IStatus.ERROR) {
+		IStatus status = new OperationStatus(IStatus.ERROR, JasperReportsPlugin.getDefault().getPluginID(),
+				OperationStatus.NOTHING_TO_REDO, conf.toString(), null);
+		new ConflictDetailsError(UIUtils.getShell(), Messages.ResourcePage_conflictTitle,
+				Messages.ResourcePage_conflictMessage, status,
+				IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR) {
+			@Override
 			protected void setShellStyle(int newShellStyle) {
 				super.setShellStyle(newShellStyle | SWT.SHEET);
 			}
 		}.open();
 	}
-	
+
 	/**
 	 * Read from the report the list of the resources that it use and show them into
 	 * a table. Search and identify also the conflicts between the resources
 	 */
 	public void fillData() {
 		resourceList = getResourceNames();
-		HashMap<String,File> resourceMap = new HashMap<String, File>();
-		List<String> conflicts = new ArrayList<String>();
-		for(File actualResource : resourceList){
+		HashMap<String, File> resourceMap = new HashMap<>();
+		List<String> conflicts = new ArrayList<>();
+		for (File actualResource : resourceList) {
 			if (resourceMap.containsKey(actualResource.getName())) {
 				File conflictFile = resourceMap.get(actualResource.getName());
-				//Avoid to identify as a conflict the same resource used in different places
-				if (!conflictFile.getAbsolutePath().equals(actualResource.getAbsolutePath())){
+				// Avoid to identify as a conflict the same resource used in different places
+				if (!conflictFile.getAbsolutePath().equals(actualResource.getAbsolutePath())) {
 					conflicts.add(actualResource.getAbsolutePath());
 					conflicts.add(conflictFile.getAbsolutePath());
 				}
-			} else resourceMap.put(actualResource.getName(), actualResource);
+			} else
+				resourceMap.put(actualResource.getName(), actualResource);
 		}
-		
-		List<File> exportedResource = new ArrayList<File>();
+
+		List<File> exportedResource = new ArrayList<>();
 		exportedResource.add(reportFile.getLocation().toFile());
 		exportedResource.addAll(resourceList);
 		tableViewer.setInput(exportedResource);
 		tableViewer.refresh();
-		//If there are conflict show an error message and disable the next button
-		if (conflicts.size()>0){
+		// If there are conflict show an error message and disable the next button
+		if (!conflicts.isEmpty()) {
 			conflictResources = true;
 			createErrorMessage(conflicts);
 		}
 	}
 
 	/**
-	 * Label provider for the table. Since the input are a list of file this extract 
-	 * from the file a string, the full path in the file system, as content of the cell
+	 * Label provider for the table. Since the input are a list of file this extract
+	 * from the file a string, the full path in the file system, as content of the
+	 * cell
 	 * 
 	 * @author Orlandin Marco
 	 *
 	 */
-	class TLabelProvider extends CellLabelProvider implements
-			ITableLabelProvider {
+	class TLabelProvider extends CellLabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;
@@ -338,56 +340,56 @@ public class ResourcePage extends JSSHelpWizardPage {
 			cell.setText(cell.getElement().toString());
 		}
 
-
+		@Override
 		public Point getToolTipShift(Object object) {
 			return new Point(5, 5);
 		}
 
+		@Override
 		public int getToolTipDisplayDelayTime(Object object) {
 			return 2000;
 		}
 
+		@Override
 		public int getToolTipTimeDisplayed(Object object) {
 			return 5000;
 		}
 	}
-	
+
 	/**
-	 * Given a report in the workspace and a resource name
-	 * it return a file to that resource
+	 * Given a report in the workspace and a resource name it return a file to that
+	 * resource
 	 * 
-	 * @param file file of the report
-	 * @param str name of the resource
+	 * @param file
+	 *            file of the report
+	 * @param str
+	 *            name of the resource
 	 * @return file to the resource in the filesystem
 	 */
 	protected File findFile(IFile file, String str) {
-		if (str == null) return null;
-		SimpleFileResolver fr = new SimpleFileResolver(
-				Arrays.asList(new File[] {
-						new File(file.getParent().getLocationURI()),
-						new File("."), //$NON-NLS-1$
-						new File(file.getProject().getLocationURI()) }));
-		fr.setResolveAbsolutePath(true);
-		return fr.resolveFile(str);
+		if (str == null)
+			return null;
+		return net.sf.jasperreports.eclipse.util.FileUtils.resolveFile(str,
+				Arrays.asList(new File(file.getParent().getLocationURI()), new File("."), //$NON-NLS-1$
+						new File(file.getProject().getLocationURI())),
+				true);
 	}
-	
+
 	/**
 	 * This method check that an expression has a text of type:
 	 * 
 	 * "filename"
 	 * 
-	 * if the format is different, or if filename does not exist in
-	 * the current report directory, it returns null.
+	 * if the format is different, or if filename does not exist in the current
+	 * report directory, it returns null.
 	 * 
 	 * @param exp
 	 * @return the correct filename
 	 */
-	private String evalResourceName(JRExpression exp)
-	{
+	private String evalResourceName(JRExpression exp) {
 		return ExpressionUtil.cachedExpressionEvaluationString(exp, jrContext);
 	}
-	
-	
+
 	/**
 	 * Take the jasperdesign and then convert it into an XML string
 	 */
@@ -396,8 +398,10 @@ public class ResourcePage extends JSSHelpWizardPage {
 		try {
 			JasperDesign report = bundle.getJasperDesign();
 			report.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-			String version = jrContext.getProperty(JRVersionPreferencesPages.JSS_COMPATIBILITY_VERSION, JRXmlWriterHelper.LAST_VERSION);
-			xml = JRXmlWriterHelper.writeReport(jrContext, report, net.sf.jasperreports.eclipse.util.FileUtils.UTF8_ENCODING, version); //$NON-NLS-1$
+			String version = jrContext.getProperty(JRVersionPreferencesPages.JSS_COMPATIBILITY_VERSION,
+					JRXmlWriterHelper.LAST_VERSION);
+			xml = JRXmlWriterHelper.writeReport(jrContext, report,
+					net.sf.jasperreports.eclipse.util.FileUtils.UTF8_ENCODING, version); // $NON-NLS-1$
 		} catch (Throwable e) {
 			UIUtils.showError(e);
 		}
@@ -407,28 +411,29 @@ public class ResourcePage extends JSSHelpWizardPage {
 	/**
 	 * Copy a file from a source to a destination
 	 * 
-	 * @param inputFile Source File
-	 * @param outputFile Destination file
+	 * @param inputFile
+	 *            Source File
+	 * @param outputFile
+	 *            Destination file
 	 * @throws IOException
 	 */
-	private void copyFile(File inputFile, File outputFile) throws IOException{
+	private void copyFile(File inputFile, File outputFile) throws IOException {
 		FileUtils.copyFile(inputFile, outputFile);
-	  //Files.copy(inputFile.toPath(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
 	}
-	
+
 	/**
 	 * Save the xml of the report on the disk
 	 */
 	private void saveReport() {
 		JasperDesign jd = bundle.getJasperDesign();
-		if (jd != null){
+		if (jd != null) {
 			rebindResources();
 			try {
 				File destination = new File(pathText.getText());
-				FileUtils.writeStringToFile(destination, model2xml(), net.sf.jasperreports.eclipse.util.FileUtils.UTF8_ENCODING); //$NON-NLS-1$
-				String destinationPath = destination.getParent()+System.getProperty("file.separator"); //$NON-NLS-1$
-				for(File resource : resourceList){
+				FileUtils.writeStringToFile(destination, model2xml(),
+						net.sf.jasperreports.eclipse.util.FileUtils.UTF8_ENCODING); // $NON-NLS-1$
+				String destinationPath = destination.getParent() + System.getProperty("file.separator"); //$NON-NLS-1$
+				for (File resource : resourceList) {
 					copyFile(resource, new File(destinationPath.concat(resource.getName())));
 				}
 			} catch (IOException e) {
@@ -436,19 +441,20 @@ public class ResourcePage extends JSSHelpWizardPage {
 			}
 		}
 	}
-	
+
 	/**
 	 * Method called to export the report and its resources
 	 */
-  public boolean finish() {
-  	saveReport();
-  	return true;
-  }
-  
+	public boolean finish() {
+		saveReport();
+		return true;
+	}
+
 	/**
-	 * Change all the report expression to a resource (like a subreport or an image) assuming that the resource is in the same folder
-	 * of the report. This can be an expensive operation, since the jrxml representing the template may be loaded in order locate all 
-	 * the referenced resources. 
+	 * Change all the report expression to a resource (like a subreport or an image)
+	 * assuming that the resource is in the same folder of the report. This can be
+	 * an expensive operation, since the jrxml representing the template may be
+	 * loaded in order locate all the referenced resources.
 	 * 
 	 */
 	private void rebindResources() {
@@ -460,46 +466,50 @@ public class ResourcePage extends JSSHelpWizardPage {
 				JRDesignImage im = (JRDesignImage) el;
 				String res = evalResourceName(im.getExpression());
 				File resFile = findFile(reportFile, res);
-				if (resFile != null) im.setExpression(new JRDesignExpression("\""+resFile.getName()+"\"")); //$NON-NLS-1$ //$NON-NLS-2$
+				if (resFile != null)
+					im.setExpression(new JRDesignExpression("\"" + resFile.getName() + "\"")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			if (el instanceof JRDesignSubreport) {
 				JRDesignSubreport sr = (JRDesignSubreport) el;
 				String res = evalResourceName(sr.getExpression());
-				if (res != null && res.endsWith(".jasper")) { //$NON-NLS-1$
-					res = res.substring(0, res.length() - ".jasper".length()) + ".jrxml"; //$NON-NLS-1$ //$NON-NLS-2$
+				if (res != null && res.endsWith(FileExtension.PointJASPER)) {
+					res = res.substring(0, res.length() - FileExtension.PointJASPER.length())
+							+ FileExtension.PointJRXML;
 					File resFile = findFile(reportFile, res);
-					sr.setExpression(new JRDesignExpression("\""+resFile.getName()+"\"")); //$NON-NLS-1$ //$NON-NLS-2$
+					sr.setExpression(new JRDesignExpression("\"" + resFile.getName() + "\"")); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
 		}
-		
+
 		List<JRReportTemplate> templates = bundle.getJasperDesign().getTemplatesList();
 		for (JRReportTemplate t : templates) {
 			String res = evalResourceName(t.getSourceExpression());
 			if (res != null && t instanceof JRDesignReportTemplate) {
 				File resFile = findFile(reportFile, res);
-				((JRDesignReportTemplate)t).setSourceExpression(new JRDesignExpression("\""+resFile.getName()+"\"")); //$NON-NLS-1$ //$NON-NLS-2$
+				((JRDesignReportTemplate) t)
+						.setSourceExpression(new JRDesignExpression("\"" + resFile.getName() + "\"")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}
-	
+
 	/**
-	 * Return the File to all the resources referenced by this template. This can be an expensive operation, since the
-	 * jrxml representing the template may be loaded in order locate all the referenced resources. In the returned list 
-	 * are avoided duplicated files to the same resource
+	 * Return the File to all the resources referenced by this template. This can be
+	 * an expensive operation, since the jrxml representing the template may be
+	 * loaded in order locate all the referenced resources. In the returned list are
+	 * avoided duplicated files to the same resource
 	 * 
 	 */
 	public List<File> getResourceNames() {
 
-		List<File> resourceNames = new ArrayList<File>();
-		
-		//This set is used to avoid duplicated resources
-		HashSet<String> alredyAddedElements = new HashSet<String>();
+		List<File> resourceNames = new ArrayList<>();
+
+		// This set is used to avoid duplicated resources
+		HashSet<String> alredyAddedElements = new HashSet<>();
 
 		List<JRDesignElement> list = ModelUtils.getAllGElements(bundle.getJasperDesign());
-		
+
 		for (JRDesignElement el : list) {
 			if (el instanceof JRImage) {
 				JRImage im = (JRImage) el;
@@ -511,11 +521,12 @@ public class ResourcePage extends JSSHelpWizardPage {
 				}
 			}
 
-			if (el instanceof JRSubreport ) {
+			if (el instanceof JRSubreport) {
 				JRSubreport sr = (JRSubreport) el;
 				String res = evalResourceName(sr.getExpression());
-				if (res != null && res.endsWith(".jasper")) { //$NON-NLS-1$
-					res = res.substring(0, res.length() - ".jasper".length()) + ".jrxml"; //$NON-NLS-1$ //$NON-NLS-2$
+				if (res != null && res.endsWith(FileExtension.PointJASPER)) {
+					res = res.substring(0, res.length() - FileExtension.PointJASPER.length())
+							+ FileExtension.PointJRXML;
 					File resFile = findFile(reportFile, res);
 					if (!alredyAddedElements.contains(resFile.getAbsolutePath())) {
 						resourceNames.add(resFile);

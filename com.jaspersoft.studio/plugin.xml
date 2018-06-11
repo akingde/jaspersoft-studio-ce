@@ -10,6 +10,7 @@
    <extension-point id="postsetvalue" name="PostSetValue" schema="schema/postsetvalue.exsd"/>
    <extension-point id="dataAdapters" name="Data Adapters" schema="schema/dataAdapters.exsd"/>
    <extension-point id="queryDesigner" name="Query Designer" schema="schema/queryDesigner.exsd"/> 
+   <extension-point id="editorContext" name="Editor Context" schema="schema/editorContext.exsd"/> 
    <extension-point id="mappingTool" name="Mapping Tool" schema="schema/mappingTool.exsd"/>
 <extension-point id="palette" name="Palette" schema="schema/palette.exsd"/>
 <extension-point id="repositoryview" name="repositoryview" schema="schema/repositoryview.exsd"/>

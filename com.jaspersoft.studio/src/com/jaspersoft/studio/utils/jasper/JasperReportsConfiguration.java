@@ -8,36 +8,30 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Request;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.customadapters.JSSCastorUtil;
+import com.jaspersoft.studio.editor.context.AEditorContext;
+import com.jaspersoft.studio.editor.context.EditorContextUtil;
 import com.jaspersoft.studio.jasper.JSSReportConverter;
 import com.jaspersoft.studio.jasper.LazyImageConverter;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -52,22 +46,19 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetsDefinitionManager;
 
 import net.sf.jasperreports.charts.ChartThemeBundle;
-import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.data.BuiltinDataFileServiceFactory;
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.IDisposeListener;
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
-import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FilePrefUtil;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.util.HttpUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.util.query.EmptyQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.SimpleJasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
@@ -78,22 +69,14 @@ import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.FontSet;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
-import net.sf.jasperreports.engine.util.CompositeClassloader;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.util.JRResourcesUtil;
-import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
 import net.sf.jasperreports.engine.util.MessageProviderFactory;
 import net.sf.jasperreports.engine.util.ResourceBundleMessageProviderFactory;
 import net.sf.jasperreports.functions.FunctionsBundle;
-import net.sf.jasperreports.repo.DefaultRepositoryService;
-import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
-import net.sf.jasperreports.repo.FileRepositoryService;
-import net.sf.jasperreports.repo.PersistenceServiceFactory;
 import net.sf.jasperreports.repo.RepositoryService;
 import net.sf.jasperreports.util.CastorMapping;
 import net.sf.jasperreports.utils.JRExtensionsUtils;
 
-public class JasperReportsConfiguration extends LocalJasperReportsContext implements JasperReportsContext {
+public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 
 	public static final String KEY_JASPERDESIGN = "JasperDesign";
 
@@ -155,7 +138,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			// clear the image cache
 			LazyImageConverter.getInstance().removeCachedImages(JasperReportsConfiguration.this);
 		}
-		
+
 		private void refreshStyles() {
 			// clear the style cache of this configuration, since a resource could be
 			// changed for it
@@ -177,13 +160,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				}
 			}
 		}
-		
+
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(ResourceChangeEvent.RESOURCE_LOADED)) {
 				if (evt instanceof ResourceChangeEvent) {
-					ResourceChangeEvent rEvt = (ResourceChangeEvent)evt;
-					switch(rEvt.getResourceType()) {
+					ResourceChangeEvent rEvt = (ResourceChangeEvent) evt;
+					switch (rEvt.getResourceType()) {
 					case IMAGE:
 						refreshImages();
 						break;
@@ -205,65 +188,24 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 
 	}
 
-	private class ClasspathListener implements PropertyChangeListener {
-
-		@Override
-		public void propertyChange(PropertyChangeEvent arg0) {
-			initClassloader((IFile) get(FileUtils.KEY_FILE));
-			refreshFonts = true;
-			fontList = null;
-			messageProviderFactory.invalidate();
-			functionsBundles.invalidate();
-			componentBundles.invalidate();
-			chartThemesBundles.invalidate();
-			ExpressionUtil.removeAllReportInterpreters(JasperReportsConfiguration.this);
-			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "classpath", null, arg0));
-
-			castorBundles.invalidate();
-			// trigger the reload of mappings
-			getExtensions(CastorMapping.class);
-			// try {
-			// DefaultExtensionsRegistry extensionsRegistry = new
-			// DefaultExtensionsRegistry();
-			// ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
-			// } catch (Throwable e) {
-			// JaspersoftStudioPlugin.getInstance().logError(
-			// "Cannot complete operations successfully after a classpath change occurred.",
-			// e);
-			// }
-			// Clear the old extensions
-			// JDTUtils.clearJRRegistry(classLoader);
-			JasperDesign jd = getJasperDesign();
-			if (jd != null) {
-				List<JRDesignElement> allElements = ModelUtils.getAllGElements(jd);
-				for (JRDesignElement element : allElements) {
-					element.getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, true, false);
-				}
-			}
-		}
-	}
-
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-	private ClasspathListener classpathlistener;
+
 	private PreferenceListener preferenceListener;
 	private ResourceLoadedListener resourceLoadedListener;
-	private String qualifier;
 	private String[] fontList;
 	private boolean refreshFonts = true;
 	private FontExtensionsCollector lst;
-	private JavaProjectClassLoader javaclassloader;
-	private ExtensionCache<ComponentsBundle> componentBundles = new ExtensionCache<ComponentsBundle>();
-	private ExtensionCache<FunctionsBundle> functionsBundles = new ExtensionCache<FunctionsBundle>();
-	private ExtensionCache<CastorMapping> castorBundles = new ExtensionCache<CastorMapping>();
-	private ExtensionCache<ChartThemeBundle> chartThemesBundles = new ExtensionCache<ChartThemeBundle>();
-	private ExtensionCache<MessageProviderFactory> messageProviderFactory = new ExtensionCache<MessageProviderFactory>();
+	private ExtensionCache<ComponentsBundle> componentBundles = new ExtensionCache<>();
+	private ExtensionCache<FunctionsBundle> functionsBundles = new ExtensionCache<>();
+	private ExtensionCache<CastorMapping> castorBundles = new ExtensionCache<>();
+	private ExtensionCache<ChartThemeBundle> chartThemesBundles = new ExtensionCache<>();
+	private ExtensionCache<MessageProviderFactory> messageProviderFactory = new ExtensionCache<>();
 	private static JasperReportsConfiguration instance;
-	private List<RepositoryService> repositoryServices;
+
 	private List<JRQueryExecuterFactoryBundle> qExecutors;
 	private Map<Object, Object> map;
 	private MScopedPreferenceStore pstore;
 	private List<IDisposeListener> toDispose;
-	private ClassLoader classLoader;
 	private boolean isPropsCached = false;
 	private ParameterSetProvider prmProvider;
 
@@ -287,17 +229,35 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		return propertyChangeSupport;
 	}
 
+	protected AEditorContext cntx;
+
+	public AEditorContext getEditorContext() {
+		return cntx;
+	}
+
+	public void changeContext(String c) {
+		IFile f = (IFile) get(FileUtils.KEY_FILE);
+		try {
+			f.setPersistentProperty(
+					new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(), AEditorContext.EDITOR_CONTEXT), c);
+		} catch (CoreException e) {
+			UIUtils.showError(e);
+		}
+		cntx = EditorContextUtil.getEditorContext(f, this);
+	}
+
 	public void init(IFile file) {
 		IFile oldFile = (IFile) get(FileUtils.KEY_FILE);
 		if (oldFile != null && oldFile == file)
 			return;
-		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
+		String qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
 		pstore = (MScopedPreferenceStore) JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier);
 		// if (service == null) {
 		// service = Platform.getPreferencesService();
 
 		// }
-		initClassloader(file);
+		cntx = EditorContextUtil.getEditorContext(file, this);
+		cntx.initClassloader();
 		IProject project = null;
 		if (file != null) {
 			put(FileUtils.KEY_FILE, file);
@@ -309,7 +269,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				// contexts = new IScopeContext[] { new ResourceScope(file), new
 				// ProjectScope(project), INSTANCE_SCOPE };
 			}
-			initRepositoryService(file);
+			cntx.configureRepositoryService();
 		} else {
 			// lookupOrders = new String[] { InstanceScope.SCOPE };
 			// contexts = new IScopeContext[] { INSTANCE_SCOPE };
@@ -329,89 +289,29 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 	}
 
-	protected void initClassloader(IFile file) {
-		if (javaclassloader != null && classpathlistener != null) {
-			javaclassloader.removeClasspathListener(classpathlistener);
-			remove(JavaProjectClassLoader.JAVA_PROJECT_CLASS_LOADER_KEY);
-		}
-		try {
-			ClassLoader cl = Thread.currentThread().getContextClassLoader();
-			if (file != null) {
-				IProject project = file.getProject();
-				if (project != null && project.getNature(JavaCore.NATURE_ID) != null) {
-					javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), cl);
-					put(JavaProjectClassLoader.JAVA_PROJECT_CLASS_LOADER_KEY, javaclassloader);
-					classpathlistener = new ClasspathListener();
-					javaclassloader.addClasspathListener(classpathlistener);
-					cl = javaclassloader;
-				}
-			}
-			cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
-			cl = new CompositeClassloader(cl, this.getClass().getClassLoader()) {
-				@Override
-				protected URL findResource(String name) {
-					if (name.endsWith("GroovyEvaluator.groovy"))
-						return null;
-					return super.findResource(name);
-				}
+	public void resetCaches(PropertyChangeEvent arg0) {
+		refreshFonts = true;
+		fontList = null;
+		messageProviderFactory.invalidate();
+		functionsBundles.invalidate();
+		componentBundles.invalidate();
+		chartThemesBundles.invalidate();
+		ExpressionUtil.removeAllReportInterpreters(this);
+		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "classpath", null, arg0));
 
-				@Override
-				protected Class<?> findClass(String className) throws ClassNotFoundException {
-					if (className.endsWith("GroovyEvaluator"))
-						throw new ClassNotFoundException(className);
-					return super.findClass(className);
-				}
-			};
-			setClassLoader(cl);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void initRepositoryService(IFile file) {
-		List<RepositoryService> list = getExtensions(RepositoryService.class);
-		if (list == null)
-			list = new ArrayList<RepositoryService>();
-		if (file != null) {
-			Set<String> rset = new HashSet<String>();
-			if (file.isLinked()) {
-				add(list, rset, file.getRawLocation().toFile().getParentFile().getAbsolutePath());
-			}
-			if (!file.getParent().isVirtual()) {
-				add(list, rset, file.getParent().getLocation().toFile().getAbsolutePath());
-			}
-			add(list, rset, file.getProject().getLocation().toFile().getAbsolutePath());
-		}
-		repositoryServices = new ArrayList<RepositoryService>();
-		repositoryServices.add(new JSSFileRepositoryService(this, list));
-		setExtensions(RepositoryService.class, repositoryServices);
-		List<PersistenceServiceFactory> persistenceServiceFactoryList = getExtensions(PersistenceServiceFactory.class);
-		if (persistenceServiceFactoryList != null)
-			persistenceServiceFactoryList.add(FileRepositoryPersistenceServiceFactory.getInstance());
-		setExtensions(PersistenceServiceFactory.class, persistenceServiceFactoryList);
+		castorBundles.invalidate();
 	}
 
 	public JSSFileRepositoryService getFileRepositoryService() {
-		if (repositoryServices != null)
-			for (RepositoryService rs : repositoryServices)
+		if (cntx.getRepositoryServices() != null)
+			for (RepositoryService rs : cntx.getRepositoryServices())
 				if (rs instanceof JSSFileRepositoryService)
 					return (JSSFileRepositoryService) rs;
 		return null;
 	}
 
-	private String add(List<RepositoryService> list, Set<String> rset, String root) {
-		if (rset.contains(root))
-			return null;
-		rset.add(root);
-		list.add(new FileRepositoryService(this, root, true));
-		return root;
-	}
-
-	@Override
 	public void setClassLoader(ClassLoader classLoader) {
-		this.classLoader = classLoader;
-		super.setClassLoader(classLoader);
-		put(AbstractClasspathAwareDataAdapterService.CURRENT_CLASS_LOADER, classLoader);
+		cntx.setClassLoader(classLoader);
 	}
 
 	public void dispose() {
@@ -421,8 +321,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		WidgetsDefinitionManager.disposedConfiguration(this);
 		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		getPropertyChangeSupport().removePropertyChangeListener(resourceLoadedListener);
-		if (javaclassloader != null)
-			javaclassloader.removeClasspathListener(classpathlistener);
+		cntx.dispose();
 		for (PropertyChangeListener l : Arrays.asList(propertyChangeSupport.getPropertyChangeListeners())) {
 			propertyChangeSupport.removePropertyChangeListener(l);
 		}
@@ -433,7 +332,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 
 	public void addDisposeListener(IDisposeListener listener) {
 		if (toDispose == null)
-			toDispose = new ArrayList<IDisposeListener>();
+			toDispose = new ArrayList<>();
 		toDispose.add(listener);
 	}
 
@@ -461,7 +360,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	}
 
 	public ClassLoader getClassLoader() {
-		return classLoader;
+		return cntx.getClassLoader();
 	}
 
 	public JasperDesign getJasperDesign() {
@@ -783,8 +682,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		if (!componentBundles.isValid()) {
 			List<ComponentsBundle> componentBundlesList = super.getExtensions(ComponentsBundle.class);
 			// remove all duplicates
-			Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(componentBundlesList);
-			componentBundlesList = new ArrayList<ComponentsBundle>(components);
+			Set<ComponentsBundle> components = new LinkedHashSet<>(componentBundlesList);
+			componentBundlesList = new ArrayList<>(components);
 			for (ComponentsBundle cb : componentBundlesList)
 				JaspersoftStudioPlugin.getComponentConverterManager().setupComponentConvertor(cb);
 			componentBundles.setValue(componentBundlesList);
@@ -801,7 +700,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 */
 	private List<FunctionsBundle> getExtensionFunctions() {
 		if (!functionsBundles.isValid()) {
-			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(
+			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<>(
 					JRExtensionsUtils.getReloadedExtensions(FunctionsBundle.class, "functions"));
 			functionsBundles.setValue(new ArrayList<FunctionsBundle>(fBundlesSet));
 		}
@@ -818,9 +717,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	private List<CastorMapping> getExtensionCastors() {
 		if (!castorBundles.isValid()) {
 			JSSCastorUtil.clearCache(this);
-			Set<CastorMapping> fBundlesSet = new LinkedHashSet<CastorMapping>(
+			Set<CastorMapping> fBundlesSet = new LinkedHashSet<>(
 					JRExtensionsUtils.getReloadedExtensions(CastorMapping.class, "castor.mapping"));
-			castorBundles.setValue((List<CastorMapping>) new ArrayList<CastorMapping>(fBundlesSet));
+			castorBundles.setValue((List<CastorMapping>) new ArrayList<>(fBundlesSet));
 		}
 		return castorBundles.getValue();
 	}
@@ -834,10 +733,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 */
 	private List<ChartThemeBundle> getExtensionChartThemes() {
 		if (!chartThemesBundles.isValid()) {
-			Set<ChartThemeBundle> fBundlesSet = new LinkedHashSet<ChartThemeBundle>(
+			Set<ChartThemeBundle> fBundlesSet = new LinkedHashSet<>(
 					JRExtensionsUtils.getReloadedExtensions(ChartThemeBundle.class, "chart.theme"));
-			List<ChartThemeBundle> bundlesList = (List<ChartThemeBundle>) new ArrayList<ChartThemeBundle>(fBundlesSet);
-			fBundlesSet = new LinkedHashSet<ChartThemeBundle>(
+			List<ChartThemeBundle> bundlesList = new ArrayList<>(fBundlesSet);
+			fBundlesSet = new LinkedHashSet<>(
 					JRExtensionsUtils.getReloadedExtensions(ChartThemeBundle.class, "xml.chart.themes"));
 			bundlesList.addAll(fBundlesSet);
 			bundlesList.add(0, DefaultChartTheme.BUNDLE);
@@ -848,7 +747,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 
 	public List<MessageProviderFactory> getExtensionMessageProviderFactories() {
 		if (!messageProviderFactory.isValid()) {
-			List<MessageProviderFactory> factories = new ArrayList<MessageProviderFactory>();
+			List<MessageProviderFactory> factories = new ArrayList<>();
 			factories.add(new ResourceBundleMessageProviderFactory(getClassLoader()));
 			messageProviderFactory.setValue(factories);
 		}
@@ -876,8 +775,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 		List<T> result = null;
 		try {
-			if (classLoader != null) {
-				Thread.currentThread().setContextClassLoader(classLoader);
+			if (cntx.getClassLoader() != null) {
+				Thread.currentThread().setContextClassLoader(cntx.getClassLoader());
 			}
 
 			if (extensionType == FontFamily.class) {
@@ -897,20 +796,20 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			} else if (extensionType == JRQueryExecuterFactoryBundle.class) {
 				try {
 					if (qExecutors == null) {
-						qExecutors = new ArrayList<JRQueryExecuterFactoryBundle>();
+						qExecutors = new ArrayList<>();
 						qExecutors.add(EmptyQueryExecuterFactoryBundle.getInstance(this));
 					}
 					result = (List<T>) qExecutors;
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
-			} else if (repositoryServices != null && extensionType == RepositoryService.class) {
-				result = (List<T>) repositoryServices;
+			} else if (cntx.getRepositoryServices() != null && extensionType == RepositoryService.class) {
+				result = (List<T>) cntx.getRepositoryServices();
 			} else {
 				try {
 					result = super.getExtensions(extensionType);
 					if (result != null) {
-						List<T> toDel = new ArrayList<T>();
+						List<T> toDel = new ArrayList<>();
 						for (T item : result)
 							if (item != null
 									&& (item.getClass().getName().equals(BuiltinDataFileServiceFactory.class.getName())
@@ -930,7 +829,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			try {
 				result.removeAll(Collections.singleton(null));
 			} catch (UnsupportedOperationException e) {
-				result = new ArrayList<T>(result);
+				result = new ArrayList<>(result);
 				result.removeAll(Collections.singleton(null));
 			}
 		}
@@ -973,53 +872,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	}
 
 	public void refreshClasspath() {
-		classpathlistener.propertyChange(null);
-	}
-
-	protected DefaultRepositoryService getLocalRepositoryService() {
-		if (localRepositoryService == null) {
-			localRepositoryService = new DefaultRepositoryService(this) {
-				@Override
-				public InputStream getInputStream(String uri) {
-					if (Misc.isNullOrEmpty(uri) || uri.startsWith("repo:"))
-						return null;
-					try {
-						URL url = JRResourcesUtil.createURL(uri, urlHandlerFactory);
-						if (url != null) {
-							if (url.getProtocol().equalsIgnoreCase("http")
-									|| url.getProtocol().equalsIgnoreCase("https")) {
-								try {
-									URI uuri = url.toURI();
-									Executor exec = Executor.newInstance();
-									HttpUtils.setupProxy(exec, uuri);
-
-									Request req = Request.Get("http://somehost/");
-									HttpUtils.setupProxy(exec, uuri, req);
-									return exec.execute(req).returnContent().asStream();
-								} catch (URISyntaxException e) {
-									e.printStackTrace();
-								} catch (IOException e) {
-									new JRException(JRLoader.EXCEPTION_MESSAGE_KEY_INPUT_STREAM_FROM_URL_OPEN_ERROR,
-											new Object[] { url }, e);
-								}
-							}
-							return JRLoader.getInputStream(url);
-						}
-
-						File file = JRResourcesUtil.resolveFile(uri, fileResolver);
-						if (file != null)
-							return JRLoader.getInputStream(file);
-						url = JRResourcesUtil.findClassLoaderResource(uri, classLoader);
-						if (url != null)
-							return JRLoader.getInputStream(url);
-					} catch (JRException e) {
-						throw new JRRuntimeException(e);
-					}
-					return null;
-				}
-			};
-		}
-		return localRepositoryService;
+		cntx.refreshClasspath();
 	}
 
 	/**
