@@ -10,12 +10,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
+
+import net.sf.jasperreports.customvisualization.design.CVDesignComponent;
 
 /**
  * Properties section for the main details of the Custom Visualization Component

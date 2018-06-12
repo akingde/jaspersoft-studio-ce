@@ -7,8 +7,6 @@ package com.jaspersoft.studio.components.customvisualization;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -16,7 +14,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.jasperreports.customvisualization.CVComponent;
 import com.jaspersoft.studio.components.customvisualization.figure.CVFigure;
 import com.jaspersoft.studio.components.customvisualization.model.MCustomVisualization;
 import com.jaspersoft.studio.components.customvisualization.model.command.CreateCustomVisualizationCommand;
@@ -33,6 +30,9 @@ import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.customvisualization.CVComponent;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 /**
  * Factory for the Custom Visualization component element.
