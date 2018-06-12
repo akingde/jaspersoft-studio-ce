@@ -1,0 +1,195 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2016. TIBCO Software Inc. 
+ * All Rights Reserved. Confidential & Proprietary.
+ ******************************************************************************/
+package com.jaspersoft.studio.editor.context;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.JavaCore;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
+import net.sf.jasperreports.engine.util.CompositeClassloader;
+import net.sf.jasperreports.repo.DefaultRepositoryService;
+import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
+import net.sf.jasperreports.repo.FileRepositoryService;
+import net.sf.jasperreports.repo.PersistenceServiceFactory;
+import net.sf.jasperreports.repo.RepositoryService;
+
+public class AEditorContext {
+	public static final String NAME = "project";
+	public static final String EDITOR_CONTEXT = "editor.context";
+	protected IFile f;
+	protected JasperReportsConfiguration jConf;
+	private String id;
+
+	public final void setId(String id) {
+		this.id = id;
+	}
+
+	public final String getId() {
+		return id;
+	}
+
+	public void init(IFile f, JasperReportsConfiguration jConf) {
+		this.f = f;
+		this.jConf = jConf;
+	}
+
+	public String getName() {
+		return "Project";
+	}
+
+	public void dispose() {
+		if (javaclassloader != null)
+			javaclassloader.removeClasspathListener(classpathlistener);
+	}
+
+	private List<RepositoryService> repositoryServices;
+
+	public List<RepositoryService> getRepositoryServices() {
+		return repositoryServices;
+	}
+
+	public void configureRepositoryService() {
+		List<RepositoryService> list = jConf.getExtensions(RepositoryService.class);
+		if (list == null)
+			list = new ArrayList<>();
+		if (f != null) {
+			list.clear();
+			configRepositoryPaths(list);
+		}
+		setupProxy(list);
+		repositoryServices = Collections.singletonList(new JSSFileRepositoryService(jConf, list));
+		jConf.setExtensions(RepositoryService.class, repositoryServices);
+		List<PersistenceServiceFactory> persistenceServiceFactoryList = jConf
+				.getExtensions(PersistenceServiceFactory.class);
+		if (persistenceServiceFactoryList != null)
+			persistenceServiceFactoryList.add(FileRepositoryPersistenceServiceFactory.getInstance());
+		jConf.setExtensions(PersistenceServiceFactory.class, persistenceServiceFactoryList);
+	}
+
+	protected void configRepositoryPaths(List<RepositoryService> list) {
+		Set<String> rset = new HashSet<>();
+		if (f.isLinked())
+			add(list, rset, f.getRawLocation().toFile().getParentFile().getAbsolutePath());
+		if (!f.getParent().isVirtual())
+			add(list, rset, f.getParent().getLocation().toFile().getAbsolutePath());
+		add(list, rset, f.getProject().getLocation().toFile().getAbsolutePath());
+	}
+
+	protected String add(List<RepositoryService> list, Set<String> rset, String root) {
+		if (rset.contains(root))
+			return null;
+		rset.add(root);
+		list.add(new FileRepositoryService(jConf, root, true));
+		return root;
+	}
+
+	protected void setupProxy(List<RepositoryService> rs) {
+		for (int i = 0; i < rs.size(); i++) {
+			RepositoryService r = rs.get(i);
+			if (r instanceof DefaultRepositoryService) {
+				if (jssDRepService == null)
+					jssDRepService = new JSSDefaultRepositoryService(jConf);
+				rs.set(i, jssDRepService);
+				break;
+			}
+		}
+	}
+
+	private JSSDefaultRepositoryService jssDRepService;
+	private ClassLoader classLoader;
+	private JavaProjectClassLoader javaclassloader;
+	private JSSClasspathListener classpathlistener;
+
+	public ClassLoader getClassLoader() {
+		return classLoader;
+	}
+
+	public void initClassloader() {
+		if (javaclassloader != null && classpathlistener != null) {
+			javaclassloader.removeClasspathListener(classpathlistener);
+			jConf.remove(JavaProjectClassLoader.JAVA_PROJECT_CLASS_LOADER_KEY);
+		}
+		try {
+			ClassLoader cl = Thread.currentThread().getContextClassLoader();
+			if (f != null) {
+				IProject project = f.getProject();
+				if (project != null && project.getNature(JavaCore.NATURE_ID) != null) {
+					javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), cl);
+					jConf.put(JavaProjectClassLoader.JAVA_PROJECT_CLASS_LOADER_KEY, javaclassloader);
+					classpathlistener = new JSSClasspathListener(this, jConf);
+					javaclassloader.addClasspathListener(classpathlistener);
+					cl = javaclassloader;
+				}
+			}
+			cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
+			cl = new CompositeClassloader(cl, this.getClass().getClassLoader()) {
+				@Override
+				protected URL findResource(String name) {
+					if (name.endsWith("GroovyEvaluator.groovy"))
+						return null;
+					return super.findResource(name);
+				}
+
+				@Override
+				protected Class<?> findClass(String className) throws ClassNotFoundException {
+					if (className.endsWith("GroovyEvaluator"))
+						throw new ClassNotFoundException(className);
+					return super.findClass(className);
+				}
+			};
+			setClassLoader(cl);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setClassLoader(ClassLoader classLoader) {
+		this.classLoader = classLoader;
+		List<RepositoryService> rs = jConf.getExtensions(RepositoryService.class);
+		for (RepositoryService r : rs)
+			if (r instanceof DefaultRepositoryService)
+				((DefaultRepositoryService) r).setClassLoader(classLoader);
+		jConf.put(AbstractClasspathAwareDataAdapterService.CURRENT_CLASS_LOADER, classLoader);
+	}
+
+	public void refreshClasspath() {
+		classpathlistener.propertyChange(null);
+	}
+
+	public void injectProperties() {
+
+	}
+
+	public boolean needCompilation() {
+		return true;
+	}
+
+	public boolean saveOnPreview() {
+		return false;
+	}
+
+	public String jrVersion() {
+		return "any";
+	}
+
+	public List<DataAdapter> getDataAdapters() {
+		return new ArrayList<>();
+	}
+}

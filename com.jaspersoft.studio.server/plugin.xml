@@ -316,5 +316,12 @@
            widgetName="serverResourceBrowser">
      </definition>
   </extension>
+  <extension
+        point="com.jaspersoft.studio.editorContext">
+     <editorContext
+           ClassFactory="com.jaspersoft.studio.server.editor.JRSEditorContext"
+           contextName="jrs">
+     </editorContext>
+  </extension>
 
 </plugin>

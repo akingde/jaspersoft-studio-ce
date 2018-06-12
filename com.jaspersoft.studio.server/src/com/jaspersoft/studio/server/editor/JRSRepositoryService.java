@@ -38,7 +38,6 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.utils.ReferenceResolver;
 import com.jaspersoft.studio.utils.CacheMap;
-import com.jaspersoft.studio.utils.Callback;
 import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.jasper.ResourceChangeEvent;
@@ -89,7 +88,7 @@ public class JRSRepositoryService implements RepositoryService {
 			if (f != null) {
 				try {
 					List<String[]> paths = PublishUtil.loadPath(new NullProgressMonitor(), f);
-					if (Misc.isNullOrEmpty(paths) && paths.size() > 0) {
+					if (Misc.isNullOrEmpty(paths)) {
 						uri = paths.get(0)[1];
 						if (paths.size() > 1)
 							serverUser = paths.get(1)[1];
@@ -113,26 +112,19 @@ public class JRSRepositoryService implements RepositoryService {
 					serverUser = usrs[0];
 			}
 		}
-		if (uri != null && !uri.equals(serverUri))
-
-		{
+		if (uri != null && !uri.equals(serverUri)) {
 			serverUri = uri;
 			c = null;
 		}
 		if (c == null && !isConnecting) {
 			isConnecting = true;
 			msp = ServerManager.getServerByUrl(serverUri, serverUser);
-			if (msp != null) {
-				setupConnection(msp.getWsClient(new Callback<IConnection>() {
-
-					@Override
-					public void completed(IConnection value) {
-						setupConnection(value);
-						if (c != null)
-							getResource(objuri, resourceType);
-					}
+			if (msp != null)
+				setupConnection(msp.getWsClient(value -> {
+					setupConnection(value);
+					if (c != null)
+						getResource(objuri, resourceType);
 				}));
-			}
 		}
 		return true;
 	}
@@ -149,7 +141,6 @@ public class JRSRepositoryService implements RepositoryService {
 			repService = new FileRepositoryService(jConfig, rpath, true);
 			int ind = servs.indexOf(JRSRepositoryService.this);
 			servs.add(Math.max(0, Math.max(ind - 2, ind - 1)), repService);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -182,7 +173,7 @@ public class JRSRepositoryService implements RepositoryService {
 	}
 
 	private List<ResourceDescriptor> reportUnitResources = null;
-	private CacheMap<String, String> negCache = new CacheMap<String, String>(1000);
+	private CacheMap<String, String> negCache = new CacheMap<>(1000);
 
 	@Override
 	public synchronized <K extends Resource> K getResource(String uri, Class<K> resourceType) {
@@ -262,7 +253,7 @@ public class JRSRepositoryService implements RepositoryService {
 						rd = c.get(monitor, rd, null);
 						reportUnitResources = c.list(monitor, rd);
 						if (reportUnitResources == null)
-							reportUnitResources = new ArrayList<ResourceDescriptor>();
+							reportUnitResources = new ArrayList<>();
 					}
 
 					// find the resource...
@@ -320,7 +311,7 @@ public class JRSRepositoryService implements RepositoryService {
 
 	private boolean isRefreshing = false;
 	private boolean needNewRefresh = false;
-	private Map<File, String> fileTypes = new HashMap<File, String>();
+	private Map<File, String> fileTypes = new HashMap<>();
 	private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 	private void refresh() {
@@ -335,9 +326,9 @@ public class JRSRepositoryService implements RepositoryService {
 					IFolder tmpDir = msp.getTmpDir(monitor);
 					if (tmpDir != null)
 						tmpDir.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					jConfig.getPropertyChangeSupport().firePropertyChange(ResourceChangeEvent.RESOURCE_LOADED,
-							true, false);
-					List<File> keys = new ArrayList<File>(fileTypes.keySet());
+					jConfig.getPropertyChangeSupport().firePropertyChange(ResourceChangeEvent.RESOURCE_LOADED, true,
+							false);
+					List<File> keys = new ArrayList<>(fileTypes.keySet());
 					for (File f : keys) {
 						IFile[] fs = root.findFilesForLocationURI(f.toURI());
 						if (!Misc.isNullOrEmpty(fs)) {
@@ -358,13 +349,9 @@ public class JRSRepositoryService implements RepositoryService {
 					// e.printStackTrace();
 				} finally {
 					isRefreshing = false;
-					UIUtils.getDisplay().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							if (needNewRefresh)
-								refresh();
-						}
+					UIUtils.getDisplay().asyncExec(() -> {
+						if (needNewRefresh)
+							refresh();
 					});
 				}
 				return Status.OK_STATUS;

@@ -243,7 +243,9 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 		} catch (CoreException e) {
 			UIUtils.showError(e);
 		}
-		cntx = EditorContextUtil.getEditorContext(f, this);
+		IFile oldFile = (IFile) get(FileUtils.KEY_FILE);
+		remove(FileUtils.KEY_FILE);
+		init(oldFile);
 	}
 
 	public void init(IFile file) {
