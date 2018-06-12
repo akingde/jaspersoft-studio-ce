@@ -6,9 +6,6 @@ package com.jaspersoft.studio.components.customvisualization.properties;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.items.ItemData;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -25,7 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 
-import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.components.customvisualization.model.CVItemDataDescriptor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -34,6 +30,10 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.swt.widgets.NumberedLabelProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.customvisualization.design.CVDesignComponent;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * Widget to modify the {@link CVDesignComponent#PROPERTY_ITEM_DATA} property in

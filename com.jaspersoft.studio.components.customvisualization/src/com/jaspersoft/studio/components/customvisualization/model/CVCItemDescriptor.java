@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator;
 import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
 import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptor;
@@ -33,6 +32,7 @@ import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItem;
 import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.customvisualization.design.CVDesignComponent;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;

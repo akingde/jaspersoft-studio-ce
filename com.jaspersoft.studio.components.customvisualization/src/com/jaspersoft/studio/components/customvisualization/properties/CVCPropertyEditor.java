@@ -6,13 +6,13 @@ package com.jaspersoft.studio.components.customvisualization.properties;
 
 import java.util.List;
 
-import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
 
 import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.customvisualization.design.CVDesignComponent;
 import net.sf.jasperreports.engine.JRExpression;
 
 /**

@@ -9,8 +9,9 @@ import java.util.List;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.osgi.util.NLS;
 
-import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
+
+import net.sf.jasperreports.customvisualization.design.CVDesignComponent;
 
 /**
  * Label provider for the {@link CVDesignComponent#PROPERTY_ITEM_PROPERTIES}

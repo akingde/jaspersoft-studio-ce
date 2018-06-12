@@ -7,11 +7,12 @@ package com.jaspersoft.studio.components.customvisualization.properties;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+
+import net.sf.jasperreports.customvisualization.design.CVDesignComponent;
 
 /**
  * Section where the dynamic controls of a CVC are created

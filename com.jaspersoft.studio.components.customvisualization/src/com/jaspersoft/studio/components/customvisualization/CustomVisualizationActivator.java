@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import org.osgi.framework.BundleContext;
 
-import com.jaspersoft.jasperreports.customvisualization.CVConstants;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 
+import net.sf.jasperreports.customvisualization.CVConstants;
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
 /**
