@@ -1027,6 +1027,12 @@ public class Messages extends NLS {
 	public static String ImportDialog_3;
 	public static String ImportDialog_4;
 	public static String ImportDialog_5;
+	public static String ImportDialog_AddCustomBtn;
+	public static String ImportDialog_AddCustomMsg;
+	public static String ImportDialog_AddCustomTitle;
+	public static String ImportDialog_EditCustomMsg;
+	public static String ImportDialog_EditCustomTitle;
+	public static String ImportDialog_EmptyImportErrorMsg;
 	public static String ImportMetadataPage_0;
 	public static String ImportMetadataPage_1;
 	public static String ImportMetadataPage_2;
