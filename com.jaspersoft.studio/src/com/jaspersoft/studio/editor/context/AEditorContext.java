@@ -57,6 +57,7 @@ public class AEditorContext {
 	public void dispose() {
 		if (javaclassloader != null)
 			javaclassloader.removeClasspathListener(classpathlistener);
+		jConf.remove(JavaProjectClassLoader.JAVA_PROJECT_CLASS_LOADER_KEY);
 	}
 
 	private List<RepositoryService> repositoryServices;
@@ -70,7 +71,7 @@ public class AEditorContext {
 		if (list == null)
 			list = new ArrayList<>();
 		if (f != null) {
-			list.clear();
+			// list.clear();
 			configRepositoryPaths(list);
 		}
 		setupProxy(list);
@@ -113,9 +114,9 @@ public class AEditorContext {
 	}
 
 	private JSSDefaultRepositoryService jssDRepService;
-	private ClassLoader classLoader;
-	private JavaProjectClassLoader javaclassloader;
-	private JSSClasspathListener classpathlistener;
+	protected ClassLoader classLoader;
+	protected JavaProjectClassLoader javaclassloader;
+	protected JSSClasspathListener classpathlistener;
 
 	public ClassLoader getClassLoader() {
 		return classLoader;
