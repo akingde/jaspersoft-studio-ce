@@ -16,8 +16,12 @@ import org.eclipse.jdt.internal.core.JavaElement;
 import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -29,6 +33,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.dialogs.SelectionDialog;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -40,11 +45,13 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
 import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 
 public class ImportDialog extends PersistentLocationDialog {
 	private String value;
 	private TableViewer tableViewer;
 	private List<String> imports;
+	private NotEmptyValidator importValidator = new NotEmptyValidator();
 
 	public ImportDialog(Shell parentShell, String value) {
 		super(parentShell);
@@ -137,6 +144,23 @@ public class ImportDialog extends PersistentLocationDialog {
 			}
 		});
 		bnew.setButtonText(Messages.ImportDialog_5);
+		
+		NewButton customBtn = new NewButton();
+		customBtn.createNewButtons(bGroup, tableViewer, new INewElement() {
+			@Override
+			public Object newElement(List<?> input, int pos) {
+				InputDialog id = new InputDialog(getShell(), 
+						Messages.ImportDialog_AddCustomTitle, 
+						Messages.ImportDialog_AddCustomMsg, null, importValidator);
+				if(id.open() == Window.OK) {
+					return new String[] { id.getValue() };
+				}
+				else { 
+					return null;
+				}
+			}
+		});
+		customBtn.setButtonText(Messages.ImportDialog_AddCustomBtn);
 
 		DeleteButton bdel = new DeleteButton();
 		bdel.createDeleteButton(bGroup, tableViewer);
@@ -147,8 +171,42 @@ public class ImportDialog extends PersistentLocationDialog {
 			imports.add(st.nextToken());
 
 		tableViewer.setInput(imports);
+		
+		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				TableItem[] selection = tableViewer.getTable().getSelection();
+				TableItem selectedItem = null;
+				if(selection!=null && selection.length==1) {
+					selectedItem = selection[0];
+				}
+				if(selectedItem !=null) {
+					int selectionIndex = tableViewer.getTable().getSelectionIndex();
+					InputDialog id = new InputDialog(getShell(), 
+							Messages.ImportDialog_EditCustomTitle, 
+							Messages.ImportDialog_EditCustomMsg, selectedItem.getText(), importValidator);
+	
+					if(id.open() == Window.OK) {
+						imports.remove(selectionIndex);
+						imports.add(selectionIndex, id.getValue());
+						tableViewer.setInput(imports);
+					}
+				}
+			}
+		});
 
 		return composite;
+	}
+	
+	private class NotEmptyValidator implements IInputValidator {
+
+		@Override
+		public String isValid(String newText) {
+			if(StringUtils.isNullOrEmpty(newText)) {
+				return Messages.ImportDialog_EmptyImportErrorMsg;
+			}
+			return null;
+		}
 	}
 
 	private void buildTable(Composite composite) {
