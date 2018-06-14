@@ -98,17 +98,8 @@ public class CollectionInput extends ADataInput {
 					}
 					Map<String, Object> p = CollectionInput.this.params;
 					Object value = p.get(param.getName());
-					if (value == null) {
-						try {
-							value = param.getValueClass().newInstance();
-						} catch (InstantiationException ex) {
-							if (param.getValueClass().isArray() || param.getValueClass().isAssignableFrom(List.class))
-								value = new ArrayList<Object>();
-							else if (param.getValueClass().isAssignableFrom(Set.class))
-								value = new HashSet<Object>();
-						} catch (IllegalAccessException ex) {
-						}
-					}
+					if (value == null)
+						return;
 					if (value.getClass().isArray())
 						value = s;
 					else if (value instanceof Collection) {
