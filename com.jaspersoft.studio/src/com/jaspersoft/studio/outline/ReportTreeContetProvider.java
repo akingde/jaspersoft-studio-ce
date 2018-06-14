@@ -37,7 +37,8 @@ public class ReportTreeContetProvider implements ITreeContentProvider, PropertyC
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
 	 */
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof INode) {
@@ -55,7 +56,8 @@ public class ReportTreeContetProvider implements ITreeContentProvider, PropertyC
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
 	 */
 	public Object getParent(Object element) {
 		if (element instanceof INode)
@@ -69,7 +71,8 @@ public class ReportTreeContetProvider implements ITreeContentProvider, PropertyC
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
 	 */
 	public boolean hasChildren(Object element) {
 		if (element == null)
@@ -83,7 +86,9 @@ public class ReportTreeContetProvider implements ITreeContentProvider, PropertyC
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
+	 * @see
+	 * org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.
+	 * Object)
 	 */
 	public Object[] getElements(Object inputElement) {
 		return getChildren(inputElement);
@@ -92,38 +97,37 @@ public class ReportTreeContetProvider implements ITreeContentProvider, PropertyC
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface .viewers.Viewer, java.lang.Object,
-	 * java.lang.Object)
+	 * @see
+	 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface
+	 * .viewers.Viewer, java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		this.viewer = (TreeViewer) viewer;
-		if (oldInput != null) {
-			if (newInput instanceof ANode) {
-				PropertyChangeSupport pChangeSource = ((ANode) oldInput).getPropertyChangeSupport();
-				pChangeSource.removePropertyChangeListener(this);
-				eventSources.remove(pChangeSource);
-			}
+		if (oldInput != null && newInput instanceof ANode) {
+			PropertyChangeSupport pChangeSource = ((ANode) oldInput).getPropertyChangeSupport();
+			pChangeSource.removePropertyChangeListener(this);
+			eventSources.remove(pChangeSource);
 		}
-		if (newInput != null) {
-			if (newInput instanceof ANode) {
-				PropertyChangeSupport pChangeSource = ((ANode) newInput).getPropertyChangeSupport();
-				pChangeSource.addPropertyChangeListener(this);
-				eventSources.add(pChangeSource);
-			}
+		if (newInput instanceof ANode) {
+			PropertyChangeSupport pChangeSource = ((ANode) newInput).getPropertyChangeSupport();
+			pChangeSource.addPropertyChangeListener(this);
+			eventSources.add(pChangeSource);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		viewer.refresh(true);
 	}
 
 	/** The event sources. */
-	private Set<PropertyChangeSupport> eventSources = new HashSet<PropertyChangeSupport>();
+	private Set<PropertyChangeSupport> eventSources = new HashSet<>();
 
 	/*
 	 * @see IContentProvider#dispose()
@@ -133,10 +137,10 @@ public class ReportTreeContetProvider implements ITreeContentProvider, PropertyC
 	 * 
 	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
 	 */
+	@Override
 	public void dispose() {
-		for (PropertyChangeSupport eventSource : eventSources) {
+		for (PropertyChangeSupport eventSource : eventSources)
 			eventSource.removePropertyChangeListener(this);
-		}
 	}
 
 }

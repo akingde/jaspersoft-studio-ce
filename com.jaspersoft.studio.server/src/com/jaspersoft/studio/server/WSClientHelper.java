@@ -46,7 +46,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class WSClientHelper {
-	private static Map<IConnection, ServerProfile> clients = new HashMap<IConnection, ServerProfile>();
+	private static Map<IConnection, ServerProfile> clients = new HashMap<>();
 
 	public static ServerProfile getServerProfile(IConnection cli) {
 		return clients.get(cli);
@@ -120,8 +120,8 @@ public class WSClientHelper {
 	}
 
 	/**
-	 * This function shows how to create a folder in the root directory.
-	 * Subfolders can be created just specifying a proper Uri string i.e.
+	 * This function shows how to create a folder in the root directory. Subfolders
+	 * can be created just specifying a proper Uri string i.e.
 	 * rd.setUriString("/this/is/my/new/folder");
 	 * 
 	 * @param client
@@ -149,47 +149,42 @@ public class WSClientHelper {
 		List<ResourceDescriptor> children = client.list(monitor, rd);
 		if (parent instanceof MServerProfile || (parent instanceof AMResource
 				&& ((AMResource) parent).getValue().getWsType().equals(ResourceDescriptor.TYPE_FOLDER))) {
-			Collections.sort(children, new Comparator<ResourceDescriptor>() {
-
-				@Override
-				public int compare(ResourceDescriptor arg0, ResourceDescriptor arg1) {
-					if (arg0.getLabel() == arg1.getLabel())
-						return 0;
-					if (arg0.getLabel() == null)
-						return -1;
-					if (arg1.getLabel() == null)
-						return 1;
-					String wsType0 = arg0.getWsType();
-					String wsType1 = arg1.getWsType();
-					if (wsType0.equals(wsType1))
-						return arg0.getLabel().compareToIgnoreCase(arg1.getLabel());
-					if (wsType0.equals(ResourceDescriptor.TYPE_FOLDER))
-						return -1;
-					if (wsType1.equals(ResourceDescriptor.TYPE_FOLDER))
-						return 1;
-					if (wsType0.equals(ResourceDescriptor.TYPE_REPORTUNIT))
-						return -1;
-					if (wsType1.equals(ResourceDescriptor.TYPE_REPORTUNIT))
-						return 1;
-					if (wsType0.equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
-						return -1;
-					if (wsType1.equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
-						return 1;
-					return wsType0.compareTo(wsType1);
-				}
+			Collections.sort(children, (arg0, arg1) -> {
+				if (arg0.getLabel() == arg1.getLabel())
+					return 0;
+				if (arg0.getLabel() == null)
+					return -1;
+				if (arg1.getLabel() == null)
+					return 1;
+				String wsType0 = arg0.getWsType();
+				String wsType1 = arg1.getWsType();
+				if (wsType0.equals(wsType1))
+					return arg0.getLabel().compareToIgnoreCase(arg1.getLabel());
+				if (wsType0.equals(ResourceDescriptor.TYPE_FOLDER))
+					return -1;
+				if (wsType1.equals(ResourceDescriptor.TYPE_FOLDER))
+					return 1;
+				if (wsType0.equals(ResourceDescriptor.TYPE_REPORTUNIT))
+					return -1;
+				if (wsType1.equals(ResourceDescriptor.TYPE_REPORTUNIT))
+					return 1;
+				if (wsType0.equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
+					return -1;
+				if (wsType1.equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
+					return 1;
+				return wsType0.compareTo(wsType1);
 			});
 		}
 
-		Set<String> set = new HashSet<String>();
+		Set<String> set = new HashSet<>();
 		for (ResourceDescriptor r : children) {
 			if (!r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && set.contains(r.getUriString()))
 				continue;
 			set.add(r.getUriString());
-			if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)
-					|| rd.getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS)) {
-				if (SelectorDatasource.isDatasource(r))
-					continue;
-			}
+			if ((rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)
+					|| rd.getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
+					&& SelectorDatasource.isDatasource(r))
+				continue;
 			AMResource node = ResourceFactory.getResource(parent, r, index);
 			if (depth <= 0) {
 				if (r.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
@@ -197,7 +192,7 @@ public class WSClientHelper {
 				} else if (r.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)
 						|| rd.getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS)) {
 					r = client.get(monitor, r, null);
-					Set<String> setRU = new HashSet<String>();
+					Set<String> setRU = new HashSet<>();
 					List<ResourceDescriptor> children2 = r.getChildren();
 					for (ResourceDescriptor res : children2) {
 						if (setRU.contains(res.getUriString()))
@@ -294,25 +289,23 @@ public class WSClientHelper {
 			IConnection cli = sp.getWsClient(monitor);
 			if (cli == null)
 				cli = connect(sp, monitor);
-			System.out.println("saving: " + rd.getUriString() + " parent:" + rd.getParentFolder());
-			if (mru != null && res != mru) {
-				String wsType = rd.getWsType();
-				if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && !rd.getIsNew())
+			if (cli != null) {
+				System.out.println("saving: " + rd.getUriString() + " parent:" + rd.getParentFolder());
+				if (mru != null && res != mru) {
+					String wsType = rd.getWsType();
+					if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && !rd.getIsNew())
+						rd = cli.addOrModifyResource(monitor, rd, file);
+					else if (res instanceof MRDataAdapter)
+						rd = cli.addOrModifyResource(monitor, rd, file);
+					else {
+						if (wsType.equals(ResourceDescriptor.TYPE_JRXML) && !rd.getIsNew()
+								&& rd.getName().equals("main_jrxml"))
+							rd.setMainReport(true);
+						rd = cli.modifyReportUnitResource(monitor, mru.getValue(), rd, file);
+					}
+				} else
 					rd = cli.addOrModifyResource(monitor, rd, file);
-				else if (res instanceof MRDataAdapter)
-					rd = cli.addOrModifyResource(monitor, rd, file);
-				else {
-					if (wsType.equals(ResourceDescriptor.TYPE_JRXML) && !rd.getIsNew()
-							&& rd.getName().equals("main_jrxml"))
-						rd.setMainReport(true);
-					// String turi = rd.getUriString();
-					ResourceDescriptor trd = cli.modifyReportUnitResource(monitor, mru.getValue(), rd, file);
-					// if (!trd.getUriString().equals(turi))
-					// rd = getResource(cli, rd, null);
-					rd = trd;
-				}
-			} else
-				rd = cli.addOrModifyResource(monitor, rd, file);
+			}
 			if (refresh && res.getParent() instanceof AMResource) {
 				// standard resource creation inside an existing MResource
 				refreshContainer((AMResource) res.getParent(), monitor);
@@ -347,7 +340,7 @@ public class WSClientHelper {
 				}
 				try {
 					if (n != null && !(f instanceof MReportUnit))
-						wsClient.delete(monitor, rd, ((MReportUnit) n).getValue());
+						wsClient.delete(monitor, rd, n.getValue());
 					else
 						wsClient.delete(monitor, rd);
 				} catch (Exception e1) {
@@ -378,13 +371,13 @@ public class WSClientHelper {
 			MReportUnit n = res.getReportUnit();
 			IConnection wsClient = sp.getWsClient(monitor);
 			if (n != null && !(res instanceof MReportUnit)) {
-				ResourceDescriptor ru = wsClient.delete(monitor, rd, ((MReportUnit) n).getValue());
+				ResourceDescriptor ru = wsClient.delete(monitor, rd, n.getValue());
 				if (ru != null)
 					n.setValue(ru);
 			} else
 				wsClient.delete(monitor, rd);
 		}
-		((ANode) res.getParent()).removeChild(res);
+		res.getParent().removeChild(res);
 	}
 
 	public static void refreshResource(final AMResource res, IProgressMonitor monitor) throws Exception {
@@ -421,31 +414,9 @@ public class WSClientHelper {
 	}
 
 	public static void fireResourceChanged(final AMResource res) {
-		Display.getDefault().syncExec(new Runnable() {
-
-			public void run() {
-				ServerManager.getPropertyChangeSupport()
-						.firePropertyChange(new PropertyChangeEvent(res, "MODEL", null, res));
-			}
-		});
+		Display.getDefault().syncExec(() -> ServerManager.getPropertyChangeSupport()
+				.firePropertyChange(new PropertyChangeEvent(res, "MODEL", null, res)));
 	}
-
-	//
-	// public static ReportExecution runReportUnit(IProgressMonitor monitor,
-	// MReportUnit res) throws Exception {
-	// ResourceDescriptor rd = res.getValue();
-	// MServerProfile sp = (MServerProfile) res.getRoot();
-	//
-	// ReportExecution repExec = new ReportExecution();
-	//
-	// Map<String, Object> parameters = new HashMap<String, Object>();
-	//
-	// List<Argument> args = new ArrayList<Argument>();
-	// args.add(new Argument(Argument.RUN_OUTPUT_FORMAT,
-	// Argument.RUN_OUTPUT_FORMAT_JRPRINT));
-	//
-	// return sp.getWsClient(monitor).runReport(monitor, rd, parameters, args);
-	// }
 
 	public static ReportExecution runReportUnit(IProgressMonitor monitor, ReportExecution repExec,
 			Map<String, Object> parameters) throws Exception {
@@ -457,15 +428,20 @@ public class WSClientHelper {
 		}
 		repExec.setPrm(parameters);
 		if (repExec.getArgs() == null) {
-			List<Argument> args = new ArrayList<Argument>();
+			List<Argument> args = new ArrayList<>();
 			args.add(new Argument(Argument.RUN_OUTPUT_FORMAT, Argument.RUN_OUTPUT_FORMAT_JRPRINT));
 			repExec.setArgs(args);
 		}
-		return getClient(monitor, repExec.getReportURIFull()).runReport(monitor, repExec);
+		IConnection cli = getClient(monitor, repExec.getReportURIFull());
+		if (cli != null)
+			return cli.runReport(monitor, repExec);
+		return null;
 	}
 
 	public static void cancelReportUnit(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
-		getClient(monitor, repExec.getReportURIFull()).cancelReport(monitor, repExec);
+		IConnection cli = getClient(monitor, repExec.getReportURIFull());
+		if (cli != null)
+			cli.cancelReport(monitor, repExec);
 	}
 
 	public static ResourceDescriptor getReportUnit(IProgressMonitor monitor, String uri) throws Exception {
@@ -473,7 +449,10 @@ public class WSClientHelper {
 		rd.setUriString(getReportUnitUri(uri));
 		rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
 
-		return getClient(monitor, uri).get(monitor, rd, null);
+		IConnection cli = getClient(monitor, uri);
+		if (cli != null)
+			return cli.get(monitor, rd, null);
+		return rd;
 	}
 
 	public static String getReportUnitUri(String uri) {
@@ -481,11 +460,6 @@ public class WSClientHelper {
 		if (tokens.length > 1)
 			return tokens[1];
 		return uri;
-		// StringTokenizer st = new StringTokenizer(uri, ":");
-		// String name = st.nextToken();
-		// return st.nextToken();
-
-		// return uri.substring(uri.indexOf(":") + 1);
 	}
 
 	public static IConnection getClient(IProgressMonitor monitor, String uri) throws Exception {
@@ -520,11 +494,9 @@ public class WSClientHelper {
 				p.removeChild(mr);
 				return ResourceFactory.getResource(p, cli.get(monitor, mr.getValue(), null), ind);
 			}
-			if (prunit != null && uri != null && prunit.startsWith(uri) && prunit.length() >= uri.length()) {
-				if (maxl < uri.length()) {
-					maxl = uri.length();
-					pos = i;
-				}
+			if (uri != null && prunit.startsWith(uri) && prunit.length() >= uri.length() && maxl < uri.length()) {
+				maxl = uri.length();
+				pos = i;
 			}
 		}
 		if (pos >= 0) {
@@ -596,8 +568,8 @@ public class WSClientHelper {
 	 * {@link AMResource} instance.
 	 * <p>
 	 * 
-	 * Usually the resource root element is an {@link MServerProfile} instance
-	 * that holds a valid connection.
+	 * Usually the resource root element is an {@link MServerProfile} instance that
+	 * holds a valid connection.
 	 * 
 	 * @param resource
 	 *            the remote resource

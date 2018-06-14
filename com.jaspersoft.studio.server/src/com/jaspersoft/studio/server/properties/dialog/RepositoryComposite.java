@@ -14,9 +14,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeViewerListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -72,7 +70,7 @@ public class RepositoryComposite extends Composite {
 					return super.getChildren(parentElement);
 				if (parentElement instanceof INode) {
 					INode node = (INode) parentElement;
-					List<INode> res = new ArrayList<INode>();
+					List<INode> res = new ArrayList<>();
 					for (INode n : node.getChildren()) {
 						if (n instanceof MFolder || n instanceof MDummy
 								|| (n instanceof AMResource && isResourceCompatible((AMResource) n)))
@@ -86,18 +84,15 @@ public class RepositoryComposite extends Composite {
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 
 		ColumnViewerToolTipSupport.enableFor(treeViewer);
-		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			public void selectionChanged(SelectionChangedEvent event) {
-				TreeSelection ts = (TreeSelection) event.getSelection();
-				Object obj = ts.getFirstElement();
-				if (obj instanceof AMResource) {
-					AMResource mres = (AMResource) obj;
-					boolean resCompatible = isResourceCompatible(mres);
-					setOkButtonEnabled(resCompatible);
-					if (resCompatible)
-						setResource((AMResource) obj);
-				}
+		treeViewer.addSelectionChangedListener(event -> {
+			TreeSelection ts = (TreeSelection) event.getSelection();
+			Object obj = ts.getFirstElement();
+			if (obj instanceof AMResource) {
+				AMResource mres = (AMResource) obj;
+				boolean resCompatible = isResourceCompatible(mres);
+				setOkButtonEnabled(resCompatible);
+				if (resCompatible)
+					setResource((AMResource) obj);
 			}
 		});
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
@@ -139,16 +134,10 @@ public class RepositoryComposite extends Composite {
 			}
 
 			public void treeCollapsed(TreeExpansionEvent event) {
-
+				// nothing to do
 			}
 		});
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				createReadRepositoryJob();
-			}
-		});
+		UIUtils.getDisplay().asyncExec(this::createReadRepositoryJob);
 
 	}
 
@@ -174,13 +163,7 @@ public class RepositoryComposite extends Composite {
 				msp = (MServerProfile) ((AMResource) root).getRoot();
 			if (ModelUtils.isEmpty(msp))
 				WSClientHelper.connectGetData(msp, monitor);
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					treeViewer.setInput(root);
-				}
-			});
+			UIUtils.getDisplay().asyncExec(() -> treeViewer.setInput(root));
 		} catch (Exception e) {
 			UIUtils.showError(e);
 			return Status.CANCEL_STATUS;
@@ -203,11 +186,11 @@ public class RepositoryComposite extends Composite {
 	}
 
 	protected void okPressed() {
-
+		// nothing to do
 	}
 
 	protected void setOkButtonEnabled(boolean resCompatible) {
-
+		// nothing to do
 	}
 
 }

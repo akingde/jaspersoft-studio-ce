@@ -165,7 +165,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
 		createActions(treeViewer);
-		List<IAction> lst = new ArrayList<IAction>();
+		List<IAction> lst = new ArrayList<>();
 		if (node instanceof MServers) {
 			if (createServerAction.isEnabled())
 				lst.add(createServerAction);
@@ -285,15 +285,13 @@ public class ServerProvider implements IRepositoryViewProvider {
 	public void hookKeyEvent(TreeViewer treeViewer, KeyEvent event) {
 		// Triggered when delete is used or backspace on mac also
 		if ((event.character == SWT.DEL || isMacDelete(event)) && event.stateMask == 0) {
-			if (deleteServerAction.isEnabled()) {
+			if (deleteServerAction.isEnabled())
 				deleteServerAction.run();
-			}
-			if (deleteAction.isEnabled()) {
+			if (deleteAction.isEnabled())
 				deleteAction.run();
-			}
-		} else if (((event.stateMask & SWT.CTRL) == SWT.CTRL) && (event.keyCode == 'f'))
-			if (findResourceAction.isEnabled())
-				findResourceAction.run();
+		} else if (((event.stateMask & SWT.CTRL) == SWT.CTRL) && (event.keyCode == 'f')
+				&& findResourceAction.isEnabled())
+			findResourceAction.run();
 	}
 
 	public void doubleClick(TreeViewer treeViewer) {
@@ -309,8 +307,6 @@ public class ServerProvider implements IRepositoryViewProvider {
 			}
 		} else if (editServerAction.isEnabled())
 			editServerAction.run();
-		// if (runReportUnitAction.isEnabled())
-		// runReportUnitAction.run();
 		else if (openInEditorAction.isEnabled())
 			openInEditorAction.run();
 		else if ((el instanceof MReportUnit || (el instanceof ANode && ((ANode) el).getParent() instanceof MReportUnit)
@@ -392,21 +388,12 @@ public class ServerProvider implements IRepositoryViewProvider {
 		AMResource r = (AMResource) event.getElement();
 		try {
 			WSClientHelper.refreshResource(r, monitor);
-			Display.getDefault().asyncExec(new Runnable() {
-
-				public void run() {
-					event.getTreeViewer().refresh(true);
-				}
-			});
+			Display.getDefault().asyncExec(() -> event.getTreeViewer().refresh(true));
 			return Status.OK_STATUS;
 		} catch (final Throwable e) {
-			Display.getDefault().syncExec(new Runnable() {
-
-				public void run() {
-					event.getTreeViewer().collapseToLevel(event.getElement(), 1);
-					UIUtils.showErrorDialog(e.getMessage(), e);
-				}
-
+			Display.getDefault().syncExec(() -> {
+				event.getTreeViewer().collapseToLevel(event.getElement(), 1);
+				UIUtils.showErrorDialog(e.getMessage(), e);
 			});
 		}
 		return Status.CANCEL_STATUS;
@@ -417,23 +404,14 @@ public class ServerProvider implements IRepositoryViewProvider {
 		final MServerProfile r = (MServerProfile) event.getElement();
 		try {
 			WSClientHelper.connectGetData(r, monitor, false);
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-
-				public void run() {
-					tv.refresh(r, true);
-				}
-			});
+			UIUtils.getDisplay().asyncExec(() -> tv.refresh(r, true));
 
 			return Status.OK_STATUS;
 		} catch (final Throwable e) {
-			UIUtils.getDisplay().syncExec(new Runnable() {
-
-				public void run() {
-					tv.collapseToLevel(r, 1);
-					if (!monitor.isCanceled())
-						UIUtils.showErrorDialog(e.getMessage(), e);
-				}
-
+			UIUtils.getDisplay().syncExec(() -> {
+				tv.collapseToLevel(r, 1);
+				if (!monitor.isCanceled())
+					UIUtils.showErrorDialog(e.getMessage(), e);
 			});
 		}
 		return Status.CANCEL_STATUS;
@@ -441,7 +419,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 	@Override
 	public List<TransferDragSourceListener> getTransferDragSourceListeners(TreeViewer treeViewer) {
-		List<TransferDragSourceListener> dragListeners = new ArrayList<TransferDragSourceListener>(2);
+		List<TransferDragSourceListener> dragListeners = new ArrayList<>(2);
 		dragListeners.add(new RepositoryImageDragSourceListener(treeViewer));
 		dragListeners.add(new UnitDragSourceListener(treeViewer));
 		dragListeners.add(new InputControlDragSourceListener(treeViewer));
@@ -451,7 +429,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 	@Override
 	public List<TransferDropTargetListener> getTransferDropTargetListeners(TreeViewer treeViewer) {
-		List<TransferDropTargetListener> dropListeners = new ArrayList<TransferDropTargetListener>(1);
+		List<TransferDropTargetListener> dropListeners = new ArrayList<>(1);
 		dropListeners.add(new RepositoryFileResourceDropTargetListener(FileTransfer.getInstance()));
 		dropListeners.add(new InputControlDropTargetListener(treeViewer));
 		dropListeners.add(new ResourceDropTargetListener(treeViewer));
@@ -478,7 +456,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 			String puser = AExporter.encodeUsr(v);
 
-			List<Command> cmds = new ArrayList<Command>();
+			List<Command> cmds = new ArrayList<>();
 			if (surl == null || (!surl.equals(v.getUrlString()) || !suser.equals(puser))) {
 				if (!UIUtils.showConfirmation("Drop Image",
 						"Source server is different from the current server.\nDo you want to overwrite server address?"))

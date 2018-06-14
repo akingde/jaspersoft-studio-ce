@@ -262,7 +262,7 @@ public class WsTypes {
 
 	private static List<String> tlist;
 
-	public List<String> getRestTypes() {
+	public static List<String> getRestTypes() {
 		if (tlist == null)
 			tlist = new ArrayList<>(types.keySet());
 		return tlist;
@@ -300,9 +300,7 @@ public class WsTypes {
 			cr = clazz.newInstance();
 			if (cr instanceof ClientFile)
 				((ClientFile) cr).setType(toRestFileType(rd.getWsType()));
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 		if (cr == null)

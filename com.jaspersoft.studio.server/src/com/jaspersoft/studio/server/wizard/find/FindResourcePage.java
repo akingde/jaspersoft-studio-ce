@@ -47,6 +47,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile.FileType;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
+import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
@@ -332,7 +333,10 @@ public class FindResourcePage extends WizardPage {
 				if (!finderUI.isShowHidden() && !containedResource && r.getValue().getParentFolder().endsWith("_files"))
 					return false;
 				String type = WsTypes.INST().toRestType(r.getValue().getWsType());
+				String ftype = WsTypes.INST().toRestFileType(r.getValue().getWsType()).toString();
 				for (String t : finderUI.getTypes()) {
+					if (type.equals(ResourceMediaType.FILE_CLIENT_TYPE) && t.equals(ftype))
+						return true;
 					if (t.equals(type))
 						return true;
 				}

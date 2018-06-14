@@ -10,7 +10,6 @@ import java.net.URISyntaxException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -48,12 +47,7 @@ public class FileSelector implements IFileSelection {
 	private FileSelectionDialog dialog;
 	private Text txtURL;
 	private JasperDesign jd;
-	private ModifyListener listener = new ModifyListener() {
-		@Override
-		public void modifyText(ModifyEvent e) {
-			dialog.setFileExpressionText(txtURL.getText());
-		}
-	};
+	private ModifyListener listener = e -> dialog.setFileExpressionText(txtURL.getText());
 
 	@Override
 	public void createRadioButton(Composite parent, FileSelectionDialog d, JasperDesign jd) {
@@ -93,14 +87,13 @@ public class FileSelector implements IFileSelection {
 		Button btn = new Button(cmpExpr, SWT.PUSH);
 		btn.setText("..."); //$NON-NLS-1$
 		btn.addSelectionListener(new SelectionAdapter() {
-			private MServerProfile msp;
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String servURL = jd.getProperty(AExporter.PROP_SERVERURL);
 				String servUser = jd.getProperty(AExporter.PROP_USER);
 
-				msp = ServerManager.getServerByUrl(servURL, servUser);
+				MServerProfile msp = ServerManager.getServerByUrl(servURL, servUser);
 				if (msp == null) {
 					SelectServerWizard wizard = new SelectServerWizard();
 					WizardDialog w = new WizardDialog(UIUtils.getShell(), wizard);
@@ -109,9 +102,7 @@ public class FileSelector implements IFileSelection {
 						try {
 							jd.setProperty(AExporter.PROP_SERVERURL, msp.getValue().getUrl());
 							jd.setProperty(AExporter.PROP_USER, AExporter.encodeUsr(msp.getValue()));
-						} catch (MalformedURLException e1) {
-							e1.printStackTrace();
-						} catch (URISyntaxException e1) {
+						} catch (MalformedURLException | URISyntaxException e1) {
 							e1.printStackTrace();
 						}
 					}

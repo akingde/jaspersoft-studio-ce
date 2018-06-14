@@ -71,7 +71,12 @@ public class AEditorContext {
 		if (list == null)
 			list = new ArrayList<>();
 		if (f != null) {
-			// list.clear();
+			Set<RepositoryService> toDel = new HashSet<>();
+			for (RepositoryService rs : list)
+				if (rs instanceof FileRepositoryService)
+					toDel.add(rs);
+			list.removeAll(toDel);
+
 			configRepositoryPaths(list);
 		}
 		setupProxy(list);

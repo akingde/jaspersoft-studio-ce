@@ -44,22 +44,28 @@ public class JRSEditorContext extends AEditorContext {
 		add(list, rset, f.getProject().getLocation().toFile().getAbsolutePath());
 	}
 
-	public ClassLoader getClassLoader() {
-		return null;
+	@Override
+	public void initClassloader() {
+		// here, he should look into report unit, then into JRS (project) classpath
+		super.initClassloader();
 	}
 
+	@Override
 	public boolean needCompilation() {
 		return false;
 	}
 
+	@Override
 	public boolean saveOnPreview() {
 		return true;
 	}
 
+	@Override
 	public String jrVersion() {
 		return "any";
 	}
 
+	@Override
 	public List<DataAdapter> getDataAdapters() {
 		return new ArrayList<>();
 	}
