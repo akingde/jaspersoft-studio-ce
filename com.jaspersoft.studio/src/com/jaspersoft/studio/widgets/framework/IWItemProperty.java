@@ -118,4 +118,14 @@ public interface IWItemProperty {
 	 * @return a not null {@link IPropertyEditor}
  	 */
 	public IPropertyEditor getPropertyEditor();
+	
+	/**
+	 * Set the property editor of this widget, used to read and write the property
+	 * from the handled element. Changing the editor will not update the widget, so
+	 * to see any change reflected in the widgets the method updateWidget should be 
+	 * called
+	 * 
+	 * @param editor a not null {@link IPropertyEditor}
+ 	 */
+	public void setPropertyEditor(IPropertyEditor editor);
 }
