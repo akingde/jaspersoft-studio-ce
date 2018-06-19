@@ -40,7 +40,6 @@ import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.Misc;
 
 public abstract class ADataInput implements IDataInput {
 	protected Map<String, Object> params;
