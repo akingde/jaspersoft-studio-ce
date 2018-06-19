@@ -460,6 +460,12 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	}
 	
 	@Override
+	public void setPropertyEditor(IPropertyEditor editor) {
+		Assert.isNotNull(editor);
+		this.editor = editor;
+	}
+	
+	@Override
 	public Object getFallbackValue() {
 		return ipDesc.getFallbackValue();
 	}
@@ -565,5 +571,4 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	public boolean hasForcedSimpleMode() {
 		return (getStyle() & FORCE_SIMPLE_MODE) == FORCE_SIMPLE_MODE;
 	}
-
 }

@@ -314,10 +314,10 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 										}
 									}
 									first = false;
+									CVCPropertyEditor editor = new CVCPropertyEditor(this.section, itemProps);
 									for (WidgetPropertyDescriptor pd : csd.getProperties()) {
 										ItemPropertyDescription<?> ipdesc = WidgetFactory.createItemPropertyDescriptor(currentDescriptor, pd, jConf);
 										if (ipdesc != null){
-											CVCPropertyEditor editor = new CVCPropertyEditor(this.section, itemProps);
 											descriptor.addItemPropertyDescriptor(ipdesc);
 											wIProps.add(createItemProperty(c, ipdesc, descriptorLabelProvider, ec, editor));	
 										}
@@ -342,7 +342,12 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 	}
 	
 	private void setDataIntoWidgets(){
+		//update the editor, if I'm refreshing a CVC the descriptor is the same between
+		//two CVC of the same type, but I need to update the editor with a new one
+		//with the properties of the currently selected
+		CVCPropertyEditor editor = new CVCPropertyEditor(this.section, itemProps);
 		for (WItemProperty wip : wIProps){
+			wip.setPropertyEditor(editor);
 			wip.updateWidget();
 		}
 	}
