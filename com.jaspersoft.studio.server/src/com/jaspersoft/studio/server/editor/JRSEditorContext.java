@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import com.jaspersoft.studio.editor.context.AEditorContext;
@@ -16,6 +17,9 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
+import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.repo.RepositoryService;
 
 public class JRSEditorContext extends AEditorContext {
@@ -63,6 +67,19 @@ public class JRSEditorContext extends AEditorContext {
 	@Override
 	public String jrVersion() {
 		return "any";
+	}
+
+	@Override
+	public Properties getJrProperties() {
+		Properties props = new Properties();
+		List<PropertySuffix> lst = JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance())
+				.getProperties("");//$NON-NLS-1$
+		for (PropertySuffix ps : lst)
+			props.setProperty(ps.getKey(), ps.getValue());
+
+		// here setup jr properties from jrs?
+
+		return props;
 	}
 
 	@Override

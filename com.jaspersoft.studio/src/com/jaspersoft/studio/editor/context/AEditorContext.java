@@ -4,11 +4,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.context;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -22,7 +24,10 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
+import net.sf.jasperreports.eclipse.util.FilePrefUtil;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.repo.DefaultRepositoryService;
 import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
@@ -179,8 +184,19 @@ public class AEditorContext {
 		classpathlistener.propertyChange(null);
 	}
 
-	public void injectProperties() {
-
+	public Properties getJrProperties() {
+		Properties props = null;
+		MScopedPreferenceStore pStore = jConf.getPrefStore();
+		try {
+			pStore.setWithDefault(false);
+			props = FileUtils.load(pStore.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
+		} catch (IOException e) {
+			e.printStackTrace();
+			props = new Properties();
+		} finally {
+			pStore.setWithDefault(true);
+		}
+		return props;
 	}
 
 	public boolean needCompilation() {

@@ -8,7 +8,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +24,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -221,7 +219,7 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 		resolver = new JSSStyleResolver(this);
 	}
 
-	public ScopedPreferenceStore getPrefStore() {
+	public MScopedPreferenceStore getPrefStore() {
 		return pstore;
 	}
 
@@ -245,7 +243,9 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 		}
 		IFile oldFile = (IFile) get(FileUtils.KEY_FILE);
 		remove(FileUtils.KEY_FILE);
+		isPropsCached = false;
 		init(oldFile);
+		getProperties();
 	}
 
 	public void init(IFile file) {
@@ -398,6 +398,11 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 		return def;
 	}
 
+	public void refreshProperties() {
+		isPropsCached = false;
+		getProperties();
+	}
+
 	@Override
 	public Map<String, String> getProperties() {
 		if (isPropsCached)
@@ -410,7 +415,7 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 		setPropertiesMap(propmap);
 		// get properties from eclipse stored jr properties (eclipse, project, file
 		// level)
-		Properties props = getJRProperties();
+		Properties props = cntx.getJrProperties();
 		for (Object key : props.keySet()) {
 			if (!(key instanceof String))
 				continue;
@@ -428,20 +433,6 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 		}
 		pstore.setWithDefault(true);
 		return propmap;
-	}
-
-	private Properties getJRProperties() {
-		Properties props = null;
-		try {
-			pstore.setWithDefault(false);
-			props = FileUtils.load(pstore.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
-		} catch (IOException e) {
-			e.printStackTrace();
-			props = new Properties();
-		} finally {
-			pstore.setWithDefault(true);
-		}
-		return props;
 	}
 
 	@Override
