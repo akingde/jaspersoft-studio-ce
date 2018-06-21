@@ -19,11 +19,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.JavaCore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.util.FilePrefUtil;
@@ -211,7 +211,7 @@ public class AEditorContext {
 		return "any";
 	}
 
-	public List<DataAdapter> getDataAdapters() {
-		return new ArrayList<>();
+	public boolean isDataAdapterStorage(ADataAdapterStorage storage) {
+		return true;
 	}
 }

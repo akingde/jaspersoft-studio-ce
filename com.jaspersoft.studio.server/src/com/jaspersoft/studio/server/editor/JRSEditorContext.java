@@ -6,17 +6,17 @@ package com.jaspersoft.studio.server.editor;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.editor.context.AEditorContext;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
@@ -83,7 +83,8 @@ public class JRSEditorContext extends AEditorContext {
 	}
 
 	@Override
-	public List<DataAdapter> getDataAdapters() {
-		return new ArrayList<>();
+	public boolean isDataAdapterStorage(ADataAdapterStorage storage) {
+		return storage instanceof FileDataAdapterStorage
+				&& ((FileDataAdapterStorage) storage).getProject().equals(f.getProject());
 	}
 }

@@ -165,6 +165,8 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 			if (currentDataset != null) {
 				for (int i = 0; i < dastorages.length; i++) {
 					final ADataAdapterStorage s = dastorages[i];
+					if (!editor.getConfiguration().getEditorContext().isDataAdapterStorage(s))
+						continue;
 					for (DataAdapterDescriptor d : s.getDataAdapterDescriptors(currentDataset)) {
 						if (language != null) {
 							String[] langs = d.getLanguages();
@@ -225,23 +227,23 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	}
 
 	public void setSelected(String d) {
-		if (d != null && dastorages != null) {
-			for (ADataAdapterStorage das : dastorages)
-				for (DataAdapterDescriptor dad : das.getDataAdapterDescriptors()) {
+		if (d != null && dastorages != null)
+			for (ADataAdapterStorage das : dastorages) {
+				if (!editor.getConfiguration().getEditorContext().isDataAdapterStorage(das))
+					continue;
+				for (DataAdapterDescriptor dad : das.getDataAdapterDescriptors())
 					if (dad.getName().equals(d)) {
 						setSelected(dad);
 						return;
 					}
-				}
-		}
+			}
 		// Else check if there is the default data adapter available
 		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(editor.getConfiguration());
 		JRDesignDataset currentDataset = getCurrentDataset();
 		if (currentDataset != null) {
 			DataAdapterDescriptor defaultDA = defaultStorage.getDefaultJRDataAdapter(currentDataset);
-			if (defaultDA != null) {
+			if (defaultDA != null)
 				setSelected(defaultDA);
-			}
 		}
 	}
 
