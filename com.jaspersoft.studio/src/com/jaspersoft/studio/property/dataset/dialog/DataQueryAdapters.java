@@ -515,7 +515,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			String filter = jConfig.getProperty(DesignerPreferencePage.P_DAFILTER);
 
 			String[] langs = null;
-			if (filter != null && filter.equals("lang")) //$NON-NLS-1$
+			if (filter != null && filter.equals("lang") && da != null) //$NON-NLS-1$
 				langs = da.getLanguages();
 			else
 				langs = languages;
