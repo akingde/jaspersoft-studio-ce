@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jaspersoft.studio.data.designer.tree.ISelectableNodes;
+import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -28,6 +30,7 @@ import net.sf.jasperreports.data.DataFile;
 import net.sf.jasperreports.data.DataFileStream;
 import net.sf.jasperreports.data.DataFileUtils;
 import net.sf.jasperreports.data.json.JsonExpressionLanguageEnum;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.ParameterContributorContext;
@@ -75,17 +78,15 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 		try {
 			Map<String, Object> parameters = jconfig.getJRParameters();
 			if (parameters == null) {
-				parameters = new HashMap<String, Object>();
+				parameters = new HashMap<>();
 			}
 			ParameterContributorContext paramContributorCtx = new ParameterContributorContext(jconfig, jDataset,
 					parameters);
+			
+			
 			ins = DataFileUtils.instance(paramContributorCtx).getDataStream(dataFile, parameters);
 			jsonRoot = getJsonMapper().readTree(ins);
 			buildJsonSupportTree();
-		} catch (IOException e) {
-			throw e;
-		} catch (JRException e) {
-			throw e;
 		} finally {
 			IOUtils.closeQuietly(ins);
 		}
@@ -100,7 +101,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 * @throws IOException
 	 * @throws JsonProcessingException
 	 */
-	public void loadJsonDataString(String jsonData) throws JsonProcessingException, IOException {
+	public void loadJsonDataString(String jsonData) throws IOException {
 		jsonRoot = getJsonMapper().readTree(jsonData);
 		buildJsonSupportTree();
 	}
@@ -138,13 +139,18 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 		for (JsonSupportNode c : children) {
 			c.setParent(jsonSupportModel, -1);
 		}
+		if(children.isEmpty()) {
+			UIUtils.getDisplay().asyncExec(() -> 
+				MessageDialog.openWarning(UIUtils.getShell(), Messages.JsonDataManager_errorTitle, 
+					Messages.JsonDataManager_errorMsg));
+		}
 	}
 
 	/*
 	 * Extract the children ANodes for a specified Json node.
 	 */
 	private List<JsonSupportNode> getChildrenJsonNodes(JsonNode jsonNode) {
-		List<JsonSupportNode> children = new ArrayList<JsonSupportNode>();
+		List<JsonSupportNode> children = new ArrayList<>();
 		if (jsonNode.isArray() && jsonNode.equals(jsonRoot)) {
 			// Assumption: consider the first element as a template
 			jsonNode = jsonNode.get(0);
@@ -192,13 +198,13 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 * getSelectableNodes(java.lang.String)
 	 */
 	public List<JsonSupportNode> getSelectableNodes(String query) {
-		List<JsonSupportNode> selectedList = new ArrayList<JsonSupportNode>();
+		List<JsonSupportNode> selectedList = new ArrayList<>();
 		if (language.equalsIgnoreCase(JsonExpressionLanguageEnum.JSONQL.getName())) {
 			JRJsonNode jrJsonNode = new JRJsonNode(null, jsonRoot);
 			DefaultJsonQLExecuter jsonqlExec = new DefaultJsonQLExecuter();
 			try {
 				List<JRJsonNode> jrSelectedNodes = jsonqlExec.selectNodes(jrJsonNode, query);
-				List<JsonNode> elementsList = new ArrayList<JsonNode>();
+				List<JsonNode> elementsList = new ArrayList<>();
 				if (jrSelectedNodes != null) {
 					for (JRJsonNode n : jrSelectedNodes) {
 						elementsList.add(n.getDataNode());
@@ -217,7 +223,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 			try {
 				JsonNode jsonData = jsonQueryHelper.getJsonData(jsonRoot, query);
 				if (jsonData != null) {
-					List<JsonNode> elementsList = new ArrayList<JsonNode>();
+					List<JsonNode> elementsList = new ArrayList<>();
 					if (jsonData.isArray()) {
 						Iterator<JsonNode> elements = jsonData.elements();
 						while (elements.hasNext()) {
@@ -291,10 +297,10 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 */
 	private List<JRDesignField> getFieldFromGenericJsonNode(JsonNode node, List<JRDesignField> fields) {
 		JRDesignField f = new JRDesignField();
-		f.setName(ModelUtils.getNameForField(fields, "node"));
-		String infoStr = ".";
+		f.setName(ModelUtils.getNameForField(fields, "node")); //$NON-NLS-1$
+		String infoStr = "."; //$NON-NLS-1$
 		if (language.equalsIgnoreCase(JsonExpressionLanguageEnum.JSONQL.getName())) {
-			infoStr = "[0]";
+			infoStr = "[0]"; //$NON-NLS-1$
 		}
 		f.setDescription(infoStr);
 		f.getPropertiesMap().setProperty(getFieldExpressionName(), infoStr);
@@ -345,7 +351,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 
 	public Map<JsonSupportNode, JsonNode> getJsonNodesMap() {
 		if (this.jsonNodesMap == null) {
-			this.jsonNodesMap = new HashMap<JsonSupportNode, JsonNode>();
+			this.jsonNodesMap = new HashMap<>();
 		}
 		return jsonNodesMap;
 	}
@@ -362,13 +368,13 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	}
 
 	private String getAbsoluteQueryExpression(JsonSupportNode selectedNode) {
-		StringBuffer queryBuff = new StringBuffer();
-		queryBuff.insert(0, selectedNode.getNodeText());
+		StringBuilder querysb = new StringBuilder();
+		querysb.insert(0, selectedNode.getNodeText());
 		JsonSupportNode tmpNode = selectedNode;
 		while (tmpNode.getParent() != null && !(tmpNode.getParent() instanceof MRoot)) {
 			tmpNode = (JsonSupportNode) tmpNode.getParent();
-			queryBuff.insert(0, tmpNode.getNodeText() + ".");
+			querysb.insert(0, tmpNode.getNodeText() + "."); //$NON-NLS-1$
 		}
-		return queryBuff.toString();
+		return querysb.toString();
 	}
 }
