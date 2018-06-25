@@ -598,11 +598,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	public void setMode(String mode) {
 		this.runMode = mode;
-		if (ReportController.getRunners().containsKey(mode)) {
+		if (ReportController.getRunners().containsKey(mode))
 			getRightContainer().switchView(null, getRunnerViewer(ReportController.getRunners().get(mode)));
-		} else if (mode.equals(RunStopAction.MODERUN_LOCAL)) {
+		else if (mode.equals(RunStopAction.MODERUN_LOCAL))
 			getRightContainer().switchView(null, getDefaultViewerKey());
-		}
 	}
 
 	public String getMode() {

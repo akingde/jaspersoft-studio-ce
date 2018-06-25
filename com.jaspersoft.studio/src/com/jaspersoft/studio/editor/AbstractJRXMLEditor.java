@@ -253,8 +253,10 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 
 	public void changeContext(String c, boolean reset) {
 		jrContext.changeContext(c, reset);
-		if (previewEditor != null)
+		if (previewEditor != null) {
 			previewEditor.setMode(jrContext.getEditorContext().getDefaultRunMode());
+			previewEditor.runReport();
+		}
 	}
 
 	/**
