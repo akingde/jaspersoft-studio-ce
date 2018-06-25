@@ -23,9 +23,12 @@ import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.repo.RepositoryService;
 
 public class JRSEditorContext extends AEditorContext {
+	public static final String JRS_ID = "jrs";
+	public static final String JRS_NAME = "JasperReports Server";
+
 	@Override
 	public String getName() {
-		return "JasperReports Server";
+		return JRS_NAME;
 	}
 
 	@Override

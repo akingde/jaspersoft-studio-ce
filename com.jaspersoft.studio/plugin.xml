@@ -1677,6 +1677,31 @@
          id="com.jaspersoft.studio.refactor.uuid"
          name="Reset UUIDs">
    </command>
+   <command
+         defaultHandler="com.jaspersoft.studio.editor.context.EditorContextCommand"
+         id="com.jaspersoft.studio.editor.context.type"
+         name="Report Repository">
+      <commandParameter
+            id="org.eclipse.ui.commands.radioStateParameter"
+            name="State"
+            optional="false">
+      </commandParameter>
+      <state
+            class="org.eclipse.ui.handlers.RadioState:project"
+            id="org.eclipse.ui.commands.radioState">
+         <class
+               class="org.eclipse.ui.handlers.RadioState">
+            <parameter
+                  name="default"
+                  value="project">
+            </parameter>
+            <parameter
+                  name="persisted"
+                  value="false">
+            </parameter>
+         </class>
+      </state>
+   </command>
 	</extension>
     <extension
           point="org.eclipse.core.contenttype.contentTypes">
@@ -1953,6 +1978,28 @@
         </visibleWhen>
      </command>
   </menuContribution>
+  <menuContribution
+        allPopups="false"
+        locationURI="popup:org.eclipse.ui.popup.any?endof=export">
+     <menu
+           id="com.jaspersoft.studio.editor.context.type"
+           label="Report Repository Type">
+     </menu>
+  </menuContribution>
+  <menuContribution
+        allPopups="false"
+        locationURI="popup:com.jaspersoft.studio.editor.context.type">
+     <command
+           commandId="com.jaspersoft.studio.editor.context.type"
+           label="Java Project"
+           style="radio">
+        <parameter
+              name="org.eclipse.ui.commands.radioStateParameter"
+              value="project">
+        </parameter>
+     </command>
+  </menuContribution>
+ 
 	</extension>
 	
 	<extension

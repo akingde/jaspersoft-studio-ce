@@ -1,5 +1,8 @@
 package com.jaspersoft.studio.editor.context;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -24,10 +27,19 @@ import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.KeyValue;
 import net.sf.jasperreports.eclipse.util.Misc;
 
 public class EditorContextUtil {
+
+	private static List<ContextSwitchAction> actions = new ArrayList<>();
+
+	public static void fireContextChanged() {
+		for (ContextSwitchAction csa : actions)
+			csa.refresh();
+	}
+
 	public static AEditorContext getEditorContext(IFile f, JasperReportsConfiguration jConf) {
 		String ctx = null;
 		try {
@@ -73,6 +85,8 @@ public class EditorContextUtil {
 			UIUtils.getDisplay().asyncExec(() -> setToolBarText(editor.getJrContext().getEditorContext().getName()));
 			setMenuCreator(this);
 			this.editor = editor;
+			actions.add(this);
+			toolBar.addDisposeListener(e -> actions.remove(ContextSwitchAction.this));
 		}
 
 		private void setToolBarText(String text) {
@@ -126,5 +140,15 @@ public class EditorContextUtil {
 			return null;
 		}
 
+		public void refresh() {
+			JasperReportsConfiguration jConf = editor.getJrContext();
+			AEditorContext old = jConf.getEditorContext();
+			IFile f = (IFile) jConf.get(FileUtils.KEY_FILE);
+			AEditorContext ec = getEditorContext(f, jConf);
+			if (old.getClass().equals(ec.getClass()))
+				return;
+			editor.changeContext(ec.getId());
+			setToolBarText(jConf.getEditorContext().getName());
+		}
 	}
 }

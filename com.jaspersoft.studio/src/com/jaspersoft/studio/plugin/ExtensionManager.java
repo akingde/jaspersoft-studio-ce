@@ -163,7 +163,7 @@ public class ExtensionManager {
 		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID,
 				"editorContext"); //$NON-NLS-1$
 		AEditorContext ec = new AEditorContext();
-		editorContexts.add(new KeyValue<String, String>(ec.getName(), ec.getName()));
+		editorContexts.add(new KeyValue<String, String>(ec.getId(), ec.getName()));
 		for (IConfigurationElement e : config) {
 			try {
 				String cname = e.getAttribute("contextName");

@@ -40,7 +40,7 @@ public class AEditorContext {
 	public static final String EDITOR_CONTEXT = "editor.context";
 	protected IFile f;
 	protected JasperReportsConfiguration jConf;
-	private String id;
+	private String id = NAME;
 
 	public final void setId(String id) {
 		this.id = id;

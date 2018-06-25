@@ -234,14 +234,14 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 	}
 
 	public void changeContext(String c) {
-		IFile f = (IFile) get(FileUtils.KEY_FILE);
+		IFile oldFile = (IFile) get(FileUtils.KEY_FILE);
 		try {
-			f.setPersistentProperty(
+			oldFile.setPersistentProperty(
 					new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(), AEditorContext.EDITOR_CONTEXT), c);
 		} catch (CoreException e) {
 			UIUtils.showError(e);
 		}
-		IFile oldFile = (IFile) get(FileUtils.KEY_FILE);
+
 		remove(FileUtils.KEY_FILE);
 		isPropsCached = false;
 		init(oldFile);
