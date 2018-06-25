@@ -15,7 +15,7 @@ import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 
 public class MultiPageContainer {
-	protected LinkedHashMap<String, APreview> pmap = new LinkedHashMap<String, APreview>();
+	protected LinkedHashMap<String, APreview> pmap = new LinkedHashMap<>();
 	private List<String> keys;
 	private Composite composite;
 	private Statistics stats;
@@ -44,12 +44,12 @@ public class MultiPageContainer {
 	}
 
 	public void afterSwitchView() {
-
+		// do nothing
 	}
 
 	public List<String> getKeys() {
 		if (keys == null)
-			keys = new ArrayList<String>(pmap.keySet());
+			keys = new ArrayList<>(pmap.keySet());
 		return keys;
 	}
 

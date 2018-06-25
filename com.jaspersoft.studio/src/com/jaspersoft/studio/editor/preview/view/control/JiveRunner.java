@@ -9,10 +9,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.jive.Context;
 import com.jaspersoft.studio.editor.preview.jive.JettyUtil;
+import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -45,7 +47,7 @@ public class JiveRunner implements IReportRunner {
 				Context.putContext(randomUUID.toString(), prm);
 
 				String url = JettyUtil.getURL(file, randomUUID.toString(), jrContext);
-				ABrowserViewer jiveViewer = pcontainer.getBrowserViewer();
+				ABrowserViewer jiveViewer = (ABrowserViewer) pcontainer.getRunnerViewer(JiveRunner.this);
 				jiveViewer.setURL(url);
 				pcontainer.getRightContainer().switchView(null, jiveViewer);
 
@@ -53,5 +55,10 @@ public class JiveRunner implements IReportRunner {
 				UIUtils.showError(e);
 			}
 		});
+	}
+
+	@Override
+	public APreview getPreview(Composite parent, JasperReportsConfiguration jrConfig) {
+		return new ABrowserViewer(parent, jrConfig);
 	}
 }

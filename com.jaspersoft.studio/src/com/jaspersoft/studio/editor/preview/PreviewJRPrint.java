@@ -81,57 +81,6 @@ public class PreviewJRPrint extends ABasicEditor {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadJRPrint(getEditorInput());
-		// getSite().getPage().addPartListener(new IPartListener2() {
-		//
-		// public void partVisible(IWorkbenchPartReference partRef) {
-		// if (console != null) {
-		// IEditorPart ceditor = getSite().getPage().getActiveEditor();
-		// if (partRef.getPart(false).getClass().equals(ceditor.getClass())) {
-		// if (ceditor instanceof JrxmlEditor && ((JrxmlEditor) ceditor).getActivePage()
-		// == JrxmlEditor.PAGE_PREVIEW) {
-		// console.showConsole();
-		// }
-		// if (ceditor instanceof PreviewJRPrint)
-		// console.showConsole();
-		// }
-		// }
-		// }
-		//
-		// public void partOpened(IWorkbenchPartReference partRef) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		//
-		// public void partInputChanged(IWorkbenchPartReference partRef) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		//
-		// public void partHidden(IWorkbenchPartReference partRef) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		//
-		// public void partDeactivated(IWorkbenchPartReference partRef) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		//
-		// public void partClosed(IWorkbenchPartReference partRef) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		//
-		// public void partBroughtToTop(IWorkbenchPartReference partRef) {
-		// // if (console != null)
-		// // console.showConsole();
-		// }
-		//
-		// public void partActivated(IWorkbenchPartReference partRef) {
-		// // if (console != null)
-		// // console.showConsole();
-		// }
-		// });
 
 		ActionRegistry registry = getActionRegistry();
 		IAction action = new PrintAction(this);
@@ -168,17 +117,13 @@ public class PreviewJRPrint extends ABasicEditor {
 
 	public void setJasperPrint(final Statistics stats, JasperPrint jasperPrint) {
 		this.jasperPrint = jasperPrint;
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				if (getDefaultViewer() instanceof IJRPrintable) {
-					JasperPrint jrprint = getJasperPrint();
-					if (jrprint != null) {
-						getRightContainer().switchView(stats, getDefaultViewerKey());
-					} else {
-						// errorPreview.setMessage("Document is empty");
-						getRightContainer().switchView(stats, errorPreview);
-					}
-				}
+		UIUtils.getDisplay().asyncExec(() -> {
+			if (getDefaultViewer() instanceof IJRPrintable) {
+				JasperPrint jrprint = getJasperPrint();
+				if (jrprint != null)
+					getRightContainer().switchView(stats, getDefaultViewerKey());
+				else
+					getRightContainer().switchView(stats, errorPreview);
 			}
 		});
 	}
@@ -212,21 +157,11 @@ public class PreviewJRPrint extends ABasicEditor {
 	}
 
 	public APreview getDefaultViewer() {
-		final APreview viewer = getRightContainer().getViewer(getDefaultViewerKey());
-		// Display.getDefault().syncExec(new Runnable() {
-		//
-		// @Override
-		// public void run() {
-		// if (topToolBarManager != null)
-		// topToolBarManager.contributeItems(viewer);
-		// }
-		// });
-
-		return viewer;
+		return getRightContainer().getViewer(getDefaultViewerKey());
 	}
 
 	protected void afterRightSwitchView() {
-
+		// do nothing
 	}
 
 	protected MultiPageContainer rightContainer;
@@ -241,11 +176,11 @@ public class PreviewJRPrint extends ABasicEditor {
 					afterRightSwitchView();
 				}
 
+				@Override
 				public void switchView(Statistics stats, String key) {
 					same = currentViewer == key;
 					currentViewer = key;
 					APreview view = pmap.get(key);
-					// topToolBarManager.contributeItems(view);
 					if (view instanceof IJRPrintable) {
 						JasperPrint jp = ((IJRPrintable) view).getJrPrint();
 						if (jp == null)
@@ -267,13 +202,9 @@ public class PreviewJRPrint extends ABasicEditor {
 						return;
 					super.switchView(stats, view);
 					if (!same || !view.isContributed2ToolBar())
-						Display.getDefault().syncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								if (actionToolBarManager != null)
-									actionToolBarManager.contributeItems(view);
-							}
+						Display.getDefault().syncExec(() -> {
+							if (actionToolBarManager != null)
+								actionToolBarManager.contributeItems(view);
 						});
 					else
 						actionToolBarManager.refreshToolbar();
@@ -328,7 +259,7 @@ public class PreviewJRPrint extends ABasicEditor {
 
 				@Override
 				protected void fillToolbar(IToolBarManager tbManager) {
-
+					// do nothing
 				}
 			};
 		return dataDapterToolBarManager;
@@ -357,8 +288,6 @@ public class PreviewJRPrint extends ABasicEditor {
 	}
 
 	protected Composite createRight(Composite parent) {
-		// CSashForm rightSash = new CSashForm(parent, SWT.VERTICAL);
-
 		rightComposite = new Composite(parent, SWT.BORDER);
 
 		StackLayout stacklayoutView = new StackLayout();
@@ -411,10 +340,8 @@ public class PreviewJRPrint extends ABasicEditor {
 	protected Composite rightComposite;
 
 	public Console getConsole() {
-		if (console == null) {
+		if (console == null)
 			console = Console.showConsole(getEditorInput().getName(), jrContext);
-			// console.addErrorPreview(errorPreview);
-		}
 		return console;
 	}
 

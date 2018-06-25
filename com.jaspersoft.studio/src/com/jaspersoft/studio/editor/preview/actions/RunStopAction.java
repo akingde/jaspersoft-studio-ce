@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -36,10 +37,10 @@ public class RunStopAction extends Action implements IMenuCreator {
 		setMenuCreator(this);
 		setDescription(Messages.RunStopAction_runreport_desc);
 		setToolTipText(Messages.RunStopAction_runreport_desc);
-		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		ImageDescriptor imgd = JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor("icons/resources/eclipse/start_task.gif");// $NON-NLS-1$
+		setImageDescriptor(imgd);
+		setDisabledImageDescriptor(imgd);
 	}
 
 	@Override
@@ -75,12 +76,14 @@ public class RunStopAction extends Action implements IMenuCreator {
 				run();
 			}
 		};
+		String defMode = editor.getJrContext().getEditorContext().getDefaultRunMode();
 
 		MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
 		m1.setText("Run Report");
 		m1.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/start_task.gif"));
 		m1.addSelectionListener(listener);
 		m1.setData("run.key", MODERUN_LOCAL);
+		setupMenu(m1, defMode);
 
 		for (Map.Entry<String, IReportRunner> entry : ReportController.getRunners().entrySet()) {
 			m1 = new MenuItem(listMenu, SWT.RADIO);
@@ -88,9 +91,19 @@ public class RunStopAction extends Action implements IMenuCreator {
 			m1.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/start_task.gif"));
 			m1.addSelectionListener(listener);
 			m1.setData("run.key", entry.getKey());
+			setupMenu(m1, defMode);
 		}
 
 		return listMenu;
+	}
+
+	private void setupMenu(MenuItem menuItem, String mode) {
+		String key = (String) menuItem.getData("run.key");
+		if (mode.equals(key)) {
+			menuItem.setSelection(true);
+			if (editor instanceof IRunReport)
+				((IRunReport) editor).setMode(mode);
+		}
 	}
 
 	public Menu getMenu(Menu parent) {

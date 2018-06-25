@@ -20,6 +20,7 @@ import org.eclipse.jdt.core.JavaCore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -213,5 +214,9 @@ public class AEditorContext {
 
 	public boolean isDataAdapterStorage(ADataAdapterStorage storage) {
 		return true;
+	}
+
+	public String getDefaultRunMode() {
+		return RunStopAction.MODERUN_LOCAL;
 	}
 }

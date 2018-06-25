@@ -48,17 +48,8 @@ public abstract class AViewsFactory {
 					try {
 						val = clazz.getConstructor(Composite.class, JasperReportsConfiguration.class)
 								.newInstance(composite, jContext);
-					} catch (IllegalArgumentException e) {
-						e.printStackTrace();
-					} catch (SecurityException e) {
-						e.printStackTrace();
-					} catch (InstantiationException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						e.printStackTrace();
-					} catch (NoSuchMethodException e) {
+					} catch (IllegalArgumentException | SecurityException | InstantiationException
+							| IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 						e.printStackTrace();
 					}
 					put((String) key, val);

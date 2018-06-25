@@ -7,6 +7,7 @@ package com.jaspersoft.studio.editor.preview;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,8 +53,8 @@ import com.jaspersoft.studio.editor.preview.toolbar.LeftToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.PreviewTopToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.control.IReportRunner;
 import com.jaspersoft.studio.editor.preview.view.control.ReportController;
-import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
@@ -321,7 +322,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			actionToolBarManager = new TopToolBarManagerJRPrint(this, container) {
 				@Override
 				protected void fillToolbar(IToolBarManager tbManager) {
-					if (runMode.equals(RunStopAction.MODERUN_LOCAL)) {
+					if (getMode().equals(RunStopAction.MODERUN_LOCAL)) {
 						if (pvModeAction == null)
 							pvModeAction = new SwitchViewsAction(container.getRightContainer(),
 									Messages.PreviewContainer_javatitle, true, getViewFactory());
@@ -391,8 +392,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		getLeftContainer().switchView(null, ReportController.FORM_PARAMETERS);
 	}
 
-	private ABrowserViewer jiveViewer;
-
 	@Override
 	protected Composite createRight(Composite parent) {
 		super.createRight(parent);
@@ -457,7 +456,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	private void addPreviewModeContributeProperties() {
 		List<PreviewModeDetails> previewDetails = JaspersoftStudioPlugin.getExtensionManager()
-				.getAllPreviewModeDetails(Misc.nvl(this.runMode));
+				.getAllPreviewModeDetails(Misc.nvl(getMode()));
 		for (PreviewModeDetails d : previewDetails) {
 			Map<String, String> previewModeProperties = d.getPreviewModeProperties();
 			for (String pKey : previewModeProperties.keySet()) {
@@ -467,10 +466,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			}
 		}
 		APreview view = null;
-		if (ReportController.getRunners().containsKey(this.runMode)) {
-			view = getBrowserViewer();
+		if (ReportController.getRunners().containsKey(getMode())) {
+			view = getRunnerViewer(ReportController.getRunners().get(getMode()));
 			getRightContainer().switchView(null, view);
-		} else if (RunStopAction.MODERUN_LOCAL.equals(this.runMode)) {
+		} else if (RunStopAction.MODERUN_LOCAL.equals(getMode())) {
 			getRightContainer().switchView(null, getDefaultViewerKey());
 			view = getDefaultViewer();
 		}
@@ -595,26 +594,35 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return dataAdapterDesc;
 	}
 
-	private String runMode = RunStopAction.MODERUN_LOCAL;
+	private String runMode;
 
 	public void setMode(String mode) {
 		this.runMode = mode;
 		if (ReportController.getRunners().containsKey(mode)) {
-			getRightContainer().switchView(null, getBrowserViewer());
+			getRightContainer().switchView(null, getRunnerViewer(ReportController.getRunners().get(mode)));
 		} else if (mode.equals(RunStopAction.MODERUN_LOCAL)) {
 			getRightContainer().switchView(null, getDefaultViewerKey());
 		}
 	}
 
 	public String getMode() {
+		if (runMode == null)
+			runMode = getJrContext().getEditorContext().getDefaultRunMode();
 		return runMode;
 	}
 
-	public ABrowserViewer getBrowserViewer() {
-		if (jiveViewer == null) {
-			jiveViewer = new ABrowserViewer(rightComposite, jrContext);
-		}
-		return jiveViewer;
+	@Override
+	public APreview getDefaultViewer() {
+		String m = getMode();
+		if (ReportController.getRunners().containsKey(m))
+			return getRunnerViewer(ReportController.getRunners().get(m));
+		return super.getDefaultViewer();
+	}
+
+	private Map<IReportRunner, APreview> runPreview = new HashMap<>();
+
+	public APreview getRunnerViewer(IReportRunner runner) {
+		return runPreview.computeIfAbsent(runner, k -> runner.getPreview(rightComposite, jrContext));
 	}
 
 	@Override

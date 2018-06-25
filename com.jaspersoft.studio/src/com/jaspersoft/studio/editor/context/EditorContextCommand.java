@@ -63,8 +63,8 @@ public class EditorContextCommand extends AbstractHandler {
 	}
 
 	private boolean isSelectable(IResource obj) {
-		return !((obj instanceof IFolder && obj.getName().equals("JR-INF")) || (obj.getParent() != null
-				&& obj.getParent() instanceof IFolder && obj.getParent().getName().equals("JR-INF")));
+		return !((obj instanceof IFolder && obj.getName().equals("JR-INF"))
+				|| (obj.getParent() != null && isSelectable(obj.getParent())));
 	}
 
 	@Override
