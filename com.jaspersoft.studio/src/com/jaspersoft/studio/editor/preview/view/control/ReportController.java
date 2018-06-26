@@ -133,7 +133,7 @@ public class ReportController {
 	public static Map<String, IReportRunner> getRunners() {
 		if (runners == null) {
 			runners = new HashMap<>();
-			runners.put(JiveRunner.ID, new JiveRunner());
+			// runners.put(JiveRunner.ID, new JiveRunner());
 			for (IReportRunner r : JaspersoftStudioPlugin.getExtensionManager().getReportRunners())
 				runners.put(r.getID(), r);
 		}

@@ -50,7 +50,10 @@ public class EditorContextCommand extends AbstractHandler {
 
 						State state = cmd.getState(RadioState.STATE_ID);
 						if (state != null)
-							state.setValue(Misc.nvl(p, AEditorContext.NAME));
+							if (p == null)
+								state.setValue("reset");
+							else
+								state.setValue(Misc.nvl(p, AEditorContext.NAME));
 					} catch (CoreException e) {
 						e.printStackTrace();
 					}
@@ -64,12 +67,11 @@ public class EditorContextCommand extends AbstractHandler {
 
 	private boolean isSelectable(IResource obj) {
 		return !((obj instanceof IFolder && obj.getName().equals("JR-INF"))
-				|| (obj.getParent() != null && isSelectable(obj.getParent())));
+				|| (obj.getParent() != null && !isSelectable(obj.getParent())));
 	}
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-
 		ISelection sel = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		if (sel instanceof IStructuredSelection) {
 			Object obj = ((IStructuredSelection) sel).getFirstElement();
@@ -91,6 +93,8 @@ public class EditorContextCommand extends AbstractHandler {
 	}
 
 	private String getPersistentState(String state) {
+		if (state != null && state.equals("reset"))
+			return null;
 		if (state != null && state.equals(AEditorContext.NAME))
 			return null;
 		return state;

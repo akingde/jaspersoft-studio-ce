@@ -1991,6 +1991,19 @@
         locationURI="popup:com.jaspersoft.studio.editor.context.type">
      <command
            commandId="com.jaspersoft.studio.editor.context.type"
+           label="Reset To Parent"
+           style="radio">
+        <parameter
+              name="org.eclipse.ui.commands.radioStateParameter"
+              value="reset">
+        </parameter>
+     </command>
+     <separator
+           name="com.jaspersoft.studio.separator1"
+           visible="true">
+     </separator>
+     <command
+           commandId="com.jaspersoft.studio.editor.context.type"
            label="Java Project"
            style="radio">
         <parameter
