@@ -578,20 +578,34 @@ public class MStyle extends APropertyNode
 		else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrstyle.getOwnBackcolor());
 
-		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return fillD.getIntValue(jrstyle.getOwnFillValue());
-		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			return scaleD.getIntValue(jrstyle.getOwnScaleImageValue());
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT))
-			return halignText.getIntValue(jrstyle.getOwnHorizontalTextAlign());
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT))
-			return valignText.getIntValue(jrstyle.getOwnVerticalTextAlign());
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
-			return halignImage.getIntValue(jrstyle.getOwnHorizontalImageAlign());
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
-			return valignImage.getIntValue(jrstyle.getOwnVerticalImageAlign());
-		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
-			return rotationD.getIntValue(jrstyle.getOwnRotationValue());
+		if (id.equals(JRBaseStyle.PROPERTY_FILL)) {
+			if (jrstyle.getOwnFillValue() == null) return null;
+			else return fillD.getIntValue(jrstyle.getOwnFillValue());
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE)) {
+			if (jrstyle.getOwnScaleImageValue() == null) return null;
+			else return scaleD.getIntValue(jrstyle.getOwnScaleImageValue());
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT)) {
+			if (jrstyle.getOwnHorizontalTextAlign() == null) return null;
+			else return halignText.getIntValue(jrstyle.getOwnHorizontalTextAlign());
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT)) {
+			if (jrstyle.getOwnVerticalTextAlign() == null) return null;
+			else return valignText.getIntValue(jrstyle.getOwnVerticalTextAlign());
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT)) {
+			if (jrstyle.getOwnHorizontalImageAlign() == null) return null;
+			else return halignImage.getIntValue(jrstyle.getOwnHorizontalImageAlign());
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT)) {
+			if (jrstyle.getOwnVerticalImageAlign() == null) return null;
+			else return valignImage.getIntValue(jrstyle.getOwnVerticalImageAlign());
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_ROTATION)) {
+			if (jrstyle.getOwnRotationValue() == null) return null;
+			else return rotationD.getIntValue(jrstyle.getOwnRotationValue());
+		}
 		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
 			ModeEnum modeValue = jrstyle.getOwnModeValue();
 			return modeValue != null ? modeValue.equals(ModeEnum.TRANSPARENT) : null;

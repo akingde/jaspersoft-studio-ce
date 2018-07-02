@@ -463,6 +463,7 @@ public class BordersSection extends AbstractSection {
 			@Override
 			public void propertyChange(AbstractSection section, String property, Object value) {
 				((BordersSection) section).changeProperty(property, value);
+				setInhterited(false);
 				Float beforeSelectionWidth = lineWidth.getValueAsFloat();
 				if (beforeSelectionWidth == null || beforeSelectionWidth.equals(0f)){
 					changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, 1f);	
@@ -950,7 +951,7 @@ public class BordersSection extends AbstractSection {
 
 			if (lineStyle != null && !isDisposed()) {
 				int ls = ((Integer) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue();
-				lineStyle.setData(ls);
+				lineStyle.setData(ls, pen.getOwnLineStyleValue() == null);
 			}
 
 			AlfaRGB backcolor = (AlfaRGB) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_COLOR);

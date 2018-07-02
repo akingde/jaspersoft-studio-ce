@@ -4,29 +4,43 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.util.UUID;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.ImageUtils;
 
 public class SPBooleanToggle extends ASPropertyWidget<CheckBoxPropertyDescriptor> {
 	private ToolItem cmb3Bool;
 
 	private Composite parent;
+	
+	private String imageId = null;
 
 	public SPBooleanToggle(Composite parent, AbstractSection section, CheckBoxPropertyDescriptor pDescriptor, Image image) {
 		super(parent, section, pDescriptor);
-		if (image != null)
+		if (image != null) {
 			cmb3Bool.setImage(image);
+			imageId = UUID.randomUUID().toString();
+			Image cachedImage = ResourceManager.getImage(imageId);
+			if (cachedImage == null || cachedImage.isDisposed()) {
+				ResourceManager.addImage(imageId, image);
+			}
+		}
 	}
 
 	@Override
@@ -52,6 +66,34 @@ public class SPBooleanToggle extends ASPropertyWidget<CheckBoxPropertyDescriptor
 			}
 		});
 		cmb3Bool.setToolTipText(pDescriptor.getDescription());
+	}
+	
+	@Override
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		if (imageId != null) {
+			if (elementValue == null) {
+				Image grayImage = ResourceManager.getImage(imageId+"greyScale");
+				if (grayImage == null) {
+					Image originalImage = ResourceManager.getImage(imageId);
+					ImageData grayData = ImageUtils.createGrayImage(originalImage);
+					if (grayData != null) {
+						grayImage = new Image(originalImage.getDevice(), grayData);
+						ResourceManager.addImage(imageId+"greyScale", grayImage);
+					}
+				}
+				if (grayImage != null) {
+					cmb3Bool.setImage(grayImage);
+				}
+			} else {
+				cmb3Bool.setImage(ResourceManager.getImage(imageId));
+			}
+		}
+		if (elementValue == null) {
+			cmb3Bool.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+		} else {
+			cmb3Bool.setToolTipText(pDescriptor.getDescription());
+		}
+		setData(pnode, resolvedValue);
 	}
 
 	public void setData(APropertyNode pnode, Object b) {

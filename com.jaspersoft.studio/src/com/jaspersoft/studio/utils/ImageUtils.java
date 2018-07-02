@@ -10,6 +10,7 @@ import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -299,5 +300,37 @@ public class ImageUtils {
 			return data;
 		}
 		return null;
+	}
+	
+	public static boolean arrayContains(Object[] arr, Object targetValue) {
+		for(Object s: arr){
+			if(s.equals(targetValue))
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Generate a grayed out image of a source image
+	 */
+	public static ImageData createGrayImage(Image baseImage) {
+		if (baseImage == null) return null;
+		ImageData data = (ImageData)baseImage.getImageData().clone();
+		PaletteData palette = data.palette;
+		for(int i=0; i<data.width; i++) {
+			for(int j=0; j<data.height; j++) {
+				RGB color = palette.getRGB(data.getPixel(i, j));
+				int newColor = ((color.blue + color.green + color.red) % 104) + 128;
+
+				RGB grayedColor = new RGB(newColor, newColor, newColor);
+				if (!palette.isDirect &&  !arrayContains(palette.colors, grayedColor)) {
+					RGB[] newPalette = Arrays.copyOf(palette.colors, palette.colors.length + 1);
+					newPalette[newPalette.length - 1] = grayedColor;
+					palette.colors = newPalette;
+				}
+				data.setPixel(i, j, palette.getPixel(grayedColor));
+			}
+		}
+		return data;
 	}
 }

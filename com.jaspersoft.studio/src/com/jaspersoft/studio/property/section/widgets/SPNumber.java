@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -17,6 +18,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.swt.widgets.NullableSpinner;
@@ -140,6 +142,13 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 		Number resolvedNumber = (Number) resolvedValue;
 		Number ownNumber = (Number)elementValue;
 		setDataNumber(resolvedNumber, ownNumber);
+		if (elementValue == null) {
+			ftext.setForeground(ColorConstants.gray);
+			ftext.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+		} else {
+			ftext.setForeground(ColorConstants.black);
+			ftext.setToolTipText(pDescriptor.getDescription());
+		}
 	}
 	
 	public void setDataNumber(Number resolvedNumber, Number ownNumber) {

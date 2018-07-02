@@ -126,6 +126,7 @@ public class ComboButton extends Viewer {
 	 */
 	private List<IOpenListener> openListeners = null;
 	
+	
 	private IMenuProvider menuProvider;
 	
 	/**
@@ -894,10 +895,10 @@ public class ComboButton extends Viewer {
 	}
 
 	private Color getRealTextForeground(Display display) {
-		if (!getControl().isEnabled())
-			return display.getSystemColor(SWT.COLOR_GRAY);
 		if (textForeground != null)
 			return textForeground;
+		if (!getControl().isEnabled())
+			return display.getSystemColor(SWT.COLOR_GRAY);
 		return display.getSystemColor(SWT.COLOR_LIST_FOREGROUND);
 	}
 

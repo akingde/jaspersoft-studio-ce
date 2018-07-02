@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -15,6 +16,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.color.chooser.ColorDialog;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
@@ -81,6 +83,18 @@ public class SPColor extends ASPropertyWidget<ColorPropertyDescriptor> {
 		});
 		foreButton.setToolTipText(pDescriptor.getDescription());
 		toolBar.pack();
+	}
+	
+	@Override
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		if (elementValue == null && getLabel() != null) {
+			getLabel().setForeground(ColorConstants.gray);
+			foreButton.setToolTipText(Messages.common_inherited + pDescriptor.getDescription());
+		} else if (getLabel() != null){
+			getLabel().setForeground(ColorConstants.black);
+			foreButton.setToolTipText(pDescriptor.getDescription());
+		}
+		setData(pnode, resolvedValue);
 	}
 
 	public void setData(APropertyNode parent, AlfaRGB b) {

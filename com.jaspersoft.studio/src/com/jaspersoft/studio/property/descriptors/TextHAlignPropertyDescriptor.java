@@ -24,10 +24,10 @@ public class TextHAlignPropertyDescriptor extends NamedEnumPropertyDescriptor<Ho
 	public ASPropertyWidget<NamedEnumPropertyDescriptor<HorizontalTextAlignEnum>> createWidget(Composite parent,
 			AbstractSection section) {
 		Image[] images = new Image[] {
-				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/left_align.gif"),
-				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/center_align.gif"),
-				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/right_align.gif"),
-				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/justified_align.gif") };
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/left_align.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/center_align.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/right_align.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/justified_align.png") };
 		return new SPToolBarEnum<NamedEnumPropertyDescriptor<HorizontalTextAlignEnum>>(parent, section, this, images, false);
 	}
 }

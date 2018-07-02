@@ -18,6 +18,7 @@ import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -568,6 +569,10 @@ public class ComboMenuViewer implements IMenuProvider {
 		}
 	}
 
+	public void setTextForeground(Color color) {
+		dropDownHandle.setTextForeground(color);
+	}
+	
 	/**
 	 * Set the combo enabled or disabled
 	 * 

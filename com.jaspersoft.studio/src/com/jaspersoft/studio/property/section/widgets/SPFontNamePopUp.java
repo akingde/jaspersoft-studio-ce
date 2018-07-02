@@ -25,6 +25,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
@@ -169,8 +170,10 @@ public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWi
 		if (combo != null && !combo.getControl().isDisposed()){
 			if (elementValue != null){
 				combo.setInherithed(false);
+				combo.setToolTipText(pDescriptor.getDescription());
 			} else {
 				combo.setInherithed(true);
+				combo.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
 			}
 		}
 	}

@@ -294,21 +294,28 @@ public class MImage extends MGraphicElementLineBox {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignImage jrElement = (JRDesignImage) getValue();
-		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return fillD.getIntValue(jrElement.getOwnFillValue());
-		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			return scaleImageD.getIntValue(jrElement.getOwnScaleImageValue());
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
-			return hAlignD.getIntValue(jrElement.getOwnHorizontalImageAlign());
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
-			return vAlignD.getIntValue(jrElement.getOwnVerticalImageAlign());
+		if (id.equals(JRBaseStyle.PROPERTY_FILL)) {
+			if (jrElement.getOwnFillValue() == null) return null;
+			else return fillD.getIntValue(jrElement.getOwnFillValue());
+		} 
+		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE)) {
+			if (jrElement.getOwnScaleImageValue() == null) return null;
+			else return scaleImageD.getIntValue(jrElement.getOwnScaleImageValue());
+		} 
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT)) {
+			if (jrElement.getOwnHorizontalImageAlign() == null) return null;
+			else return hAlignD.getIntValue(jrElement.getOwnHorizontalImageAlign());
+		} 
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT)) {
+			if (jrElement.getOwnVerticalImageAlign() == null) return null;
+			else return vAlignD.getIntValue(jrElement.getOwnVerticalImageAlign());
+		} 
 		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			return onErrorTypeD.getIntValue(jrElement.getOnErrorTypeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
 			return jrElement.getEvaluationTimeValue();
 		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getExpression());
-
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
 			if (jrElement.getEvaluationGroup() != null)
 				return jrElement.getEvaluationGroup().getName();

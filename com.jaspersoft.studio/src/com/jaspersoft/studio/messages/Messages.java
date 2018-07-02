@@ -82,6 +82,7 @@ public class Messages extends NLS {
 	public static String common_increment_group;
 	public static String common_increment_type;
 	public static String common_inherited;
+	public static String common_inherited_attribute;
 	public static String common_italic;
 	public static String common_jdbc_url;
 	public static String common_key;

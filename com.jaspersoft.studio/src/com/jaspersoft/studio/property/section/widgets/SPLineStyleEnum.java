@@ -10,6 +10,7 @@ import java.util.List;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -125,6 +126,14 @@ public class SPLineStyleEnum {
 		}
 		return index;
 	}
+	
+	protected void setInhterited(boolean isInherited) {
+		if (isInherited) {
+			combo.setTextForeground(ColorConstants.gray);
+		} else {
+			combo.setTextForeground(ColorConstants.black);
+		}
+	}
 
 	/**
 	 * Set the selected index of the popup combo
@@ -135,7 +144,17 @@ public class SPLineStyleEnum {
 	public void setData(Integer b) {
 		combo.select(b);
 	}
+	
+	public void setData(Integer b, boolean isInherited) {
+		setInhterited(isInherited);
+		setData(b);
+	}
 
+	public void setData(LineStyleEnum lse, boolean isInherited) {
+		setInhterited(isInherited);
+		setData(lse);
+	}
+	
 	public void setData(LineStyleEnum lse) {
 		if (lse == null)
 			combo.select(0);

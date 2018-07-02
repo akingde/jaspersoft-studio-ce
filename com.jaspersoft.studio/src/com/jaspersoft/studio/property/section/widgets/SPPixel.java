@@ -965,10 +965,11 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
 		setData(pnode, resolvedValue);
 		if (insertField != null && !insertField.isDisposed()) {
-			if (elementValue != null)
+			if (elementValue != null) {
 				insertField.setForeground(ColorConstants.black);
-			else
+			} else {
 				insertField.setForeground(ColorConstants.gray);
+			}
 		}
 	}
 

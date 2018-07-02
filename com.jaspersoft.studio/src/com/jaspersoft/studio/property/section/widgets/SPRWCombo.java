@@ -4,7 +4,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -17,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -26,7 +29,7 @@ import net.sf.jasperreports.eclipse.util.Misc;
 
 public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 
-	protected Combo combo;
+	protected CCombo combo;
 
 	protected APropertyNode pnode;
 
@@ -42,7 +45,7 @@ public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 	protected boolean refresh = false;
 
 	protected void createComponent(Composite parent) {
-		combo = new Combo(parent, SWT.FLAT);
+		combo = new CCombo(parent, SWT.FLAT | SWT.BORDER);
 		if (parent.getLayout() instanceof GridLayout) {
 			GridData gd = new GridData();
 			gd.minimumWidth = 100;
@@ -71,6 +74,18 @@ public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 			}
 		});
 		combo.setToolTipText(pDescriptor.getDescription());
+	}
+	
+	@Override
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		if (elementValue == null) {
+			combo.setForeground(ColorConstants.gray);
+			combo.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+		} else {
+			combo.setForeground(ColorConstants.black);
+			combo.setToolTipText(pDescriptor.getDescription());
+		}
+		setData(pnode, resolvedValue);
 	}
 
 	public void setData(APropertyNode pnode, Object b) {

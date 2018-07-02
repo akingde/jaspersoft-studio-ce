@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -50,6 +51,18 @@ public class SP3Boolean<T extends IPropertyDescriptor> extends ASPropertyWidget<
 		cmb3Bool.setToolTipText(pDescriptor.getDescription());
 	}
 
+	@Override
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		if (elementValue == null) {
+			cmb3Bool.setForeground(ColorConstants.gray);
+			cmb3Bool.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+		} else {
+			cmb3Bool.setForeground(ColorConstants.black);
+			cmb3Bool.setToolTipText(pDescriptor.getDescription());
+		}
+		setData(pnode, resolvedValue);
+	}
+	
 	public void setData(APropertyNode pnode, Object b) {
 		createContextualMenu(pnode);
 		cmb3Bool.setEnabled(pnode.isEditable());
