@@ -53,7 +53,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public final class JettyUtil {
 	private static Server server;
-	private static Map<IProject, List<Handler>> hmap = new HashMap<IProject, List<Handler>>();
+	private static Map<IProject, List<Handler>> hmap = new HashMap<>();
 	private static int port = 8888;
 	private static ContextHandlerCollection contextHandlerCollection;
 	public static String PRM_JSSContext = "jss_context";
@@ -99,20 +99,22 @@ public final class JettyUtil {
 	public static String getURL(IFile file, String uuid, JasperReportsConfiguration jContext) {
 		String ctxName = file.getProject().getName();
 		String prjRelPath = file.getProjectRelativePath().toString();
-		return String.format("http://localhost:%d/%s/servlets/viewer?" + WebUtil.REQUEST_PARAMETER_REPORT_URI
-				+ "=%s&%s=%s&" + WebUtil.REQUEST_PARAMETER_ASYNC_REPORT + "=true", port, ctxName, prjRelPath, PRM_JSSContext,
-				uuid);
+		return String.format(
+				"http://localhost:%d/%s/servlets/viewer?" + WebUtil.REQUEST_PARAMETER_REPORT_URI + "=%s&%s=%s&"
+						+ WebUtil.REQUEST_PARAMETER_ASYNC_REPORT + "=true",
+				port, ctxName, prjRelPath, PRM_JSSContext, uuid);
 	}
 
 	private static List<Handler> createContext(IProject project, final JasperReportsConfiguration jContext) {
-		List<Handler> handlers = new ArrayList<Handler>();
+		List<Handler> handlers = new ArrayList<>();
 		// final String waFolder = project.getLocation().toOSString() + "/";
 
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		context.setContextPath("/" + project.getName());
 		setupClassLoader(project, context);
 
-		// context.addServlet(new ServletHolder(DiagnosticServlet.class), "/servlets/diag");
+		// context.addServlet(new ServletHolder(DiagnosticServlet.class),
+		// "/servlets/diag");
 
 		ServletHolder rs = new ServletHolder(new ResourceServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -147,9 +149,11 @@ public final class JettyUtil {
 				return jContext;
 			}
 		});
-		rs.setInitParameter("net.sf.jasperreports.web.servlets.viewer.header.template", "viewer/CustomHeaderTemplate.vm");
+		rs.setInitParameter("net.sf.jasperreports.web.servlets.viewer.header.template",
+				"viewer/CustomHeaderTemplate.vm");
 		rs.setInitParameter("net.sf.jasperreports.web.servlets.viewer.body.template", "viewer/CustomBodyTemplate.vm");
-		rs.setInitParameter("net.sf.jasperreports.web.servlets.viewer.footer.template", "viewer/CustomFooterTemplate.vm");
+		rs.setInitParameter("net.sf.jasperreports.web.servlets.viewer.footer.template",
+				"viewer/CustomFooterTemplate.vm");
 		context.addServlet(rs, "/servlets/myviewer");
 
 		rs = new ServletHolder(new ViewerServlet() {
@@ -181,20 +185,22 @@ public final class JettyUtil {
 					if (das != null)
 						prm.putAll((Map<String, Object>) das);
 
-					JasperDesignCache cache = JasperDesignCache.getInstance(getJasperReportsContext(), webReportContext);
+					JasperDesignCache cache = JasperDesignCache.getInstance(getJasperReportsContext(),
+							webReportContext);
 
 					JasperPrintAccessor jasperPrintAccessor = (JasperPrintAccessor) webReportContext
 							.getParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT_ACCESSOR);
 
 					JRPropertiesUtil propUtil = JRPropertiesUtil.getInstance(getJasperReportsContext());
 					// FIXME - after JR Team refactor to JIVE use a constant in WebUtil class
-					String runReportParamName = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX
-							+ "web.request.parameter.run.report");
+					String runReportParamName = propUtil
+							.getProperty(JRPropertiesUtil.PROPERTY_PREFIX + "web.request.parameter.run.report");
 					String runReport = request.getParameter(runReportParamName);
 					if (jasperPrintAccessor == null || Boolean.valueOf(runReport)) {
 						// FIXME - after JR Team refactor to JIVE use a constant in WebUtil
 						// class
-						// String reportUriParamName = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX
+						// String reportUriParamName =
+						// propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX
 						// + "web.request.parameter.report.uri");
 						String reportUri = request.getParameter(WebUtil.REQUEST_PARAMETER_REPORT_URI);
 
