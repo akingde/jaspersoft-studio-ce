@@ -221,7 +221,9 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 		} else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
 			return cvComp.getProcessingClass();
 		} else if (CVDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)) {
-			return JRCloneUtils.cloneList(cvComp.getItemProperties());
+			List<ItemProperty> data = JRCloneUtils.cloneList(cvComp.getItemProperties());
+			CVCProprtiesExpressionDTO dto = new CVCProprtiesExpressionDTO(data, this, getJasperDesign(), getJasperConfiguration());
+			return dto;
 		} else if (CVDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
 			return JRCloneUtils.cloneList(cvComp.getItemData());
 		}
@@ -250,9 +252,10 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 				value = null;
 			cvComp.setProcessingClass((String) value);
 		} else if (CVDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)) {
+			CVCProprtiesExpressionDTO dto =  (CVCProprtiesExpressionDTO)value;
 			cvComp.getItemProperties().clear();
 			Set<String> keys = new HashSet<String>();
-			for (ItemProperty i : (List<ItemProperty>) value) {
+			for (ItemProperty i : dto.getItemProps()) {
 				// if (Misc.isNullOrEmpty(i.getValue())
 				// && (i.getValueExpression() == null || Misc
 				// .isNullOrEmpty(i.getValueExpression().getText())))
