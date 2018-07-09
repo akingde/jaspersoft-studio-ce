@@ -208,6 +208,18 @@ public class AEditorContext {
 		return false;
 	}
 
+	public boolean hasBookmarks() {
+		return true;
+	}
+
+	public boolean hasExporterSettings() {
+		return true;
+	}
+
+	public boolean hasSortFields() {
+		return true;
+	}
+
 	public String jrVersion() {
 		return "any";
 	}

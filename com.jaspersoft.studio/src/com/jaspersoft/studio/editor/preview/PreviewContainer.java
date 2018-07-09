@@ -195,6 +195,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		}
 	}
 
+	public void refreshLeftContainer() {
+		leftToolbar.refresh();
+	}
+
 	public MultiPageContainer getLeftContainer() {
 		if (leftContainer == null)
 			leftContainer = new MultiPageContainer() {
@@ -602,6 +606,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			getRightContainer().switchView(null, getRunnerViewer(ReportController.getRunners().get(mode)));
 		else if (mode.equals(RunStopAction.MODERUN_LOCAL))
 			getRightContainer().switchView(null, getDefaultViewerKey());
+		refreshLeftContainer();
 	}
 
 	public String getMode() {

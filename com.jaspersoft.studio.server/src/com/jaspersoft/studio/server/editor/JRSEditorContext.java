@@ -68,6 +68,21 @@ public class JRSEditorContext extends AEditorContext {
 	}
 
 	@Override
+	public boolean hasBookmarks() {
+		return false;
+	}
+
+	@Override
+	public boolean hasExporterSettings() {
+		return false;
+	}
+
+	@Override
+	public boolean hasSortFields() {
+		return false;
+	}
+
+	@Override
 	public String jrVersion() {
 		return "any";
 	}

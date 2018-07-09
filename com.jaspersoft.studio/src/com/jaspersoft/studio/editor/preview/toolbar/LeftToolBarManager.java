@@ -66,6 +66,11 @@ public class LeftToolBarManager extends ATopToolBarManager {
 		refreshToolbar();
 	}
 
+	public void refresh() {
+		tbManager.removeAll();
+		fillToolbar(tbManager);
+	}
+
 	protected void fillToolbar(IToolBarManager tbManager) {
 		PreviewContainer pvcont = (PreviewContainer) container;
 		if (vprmAction == null)
@@ -74,30 +79,38 @@ public class LeftToolBarManager extends ATopToolBarManager {
 		if (vprmrepAction == null)
 			vprmrepAction = new ViewReportParametersAction(pvcont.getLeftContainer());
 		tbManager.add(vprmrepAction);
-		if (vsortAction == null)
-			vsortAction = new ViewSortFieldsAction(pvcont.getLeftContainer());
-		tbManager.add(vsortAction);
+		if (pvcont.getJrContext().getEditorContext().hasSortFields()) {
+			if (vsortAction == null)
+				vsortAction = new ViewSortFieldsAction(pvcont.getLeftContainer());
+			tbManager.add(vsortAction);
+		}
 		// if (vexecAction == null)
 		// vexecAction = new ViewExecutionInfoAction(pvcont);
 		// tbManager.add(vexecAction);
 		addExporterSettings(tbManager, pvcont);
 
-		if (vTocAction == null)
-			vTocAction = new ViewBookmarksAction(pvcont.getLeftContainer());
-		tbManager.add(vTocAction);
+		if (pvcont.getJrContext().getEditorContext().hasBookmarks()) {
+			if (vTocAction == null)
+				vTocAction = new ViewBookmarksAction(pvcont.getLeftContainer());
+			tbManager.add(vTocAction);
+		}
 
 		addPin(container, tbManager);
 	}
 
-	protected void addExporterSettings(IToolBarManager tbManager, IParametrable pvcont) {
-		if (vexpAction == null) {
-			JasperReportsContext jrContext = (JasperReportsContext) container.getAdapter(JasperReportsContext.class);
-			IFile f = null;
-			if (jrContext != null)
-				f = (IFile) jrContext.getValue(FileUtils.KEY_FILE);
-			vexpAction = new ViewExporterAction(pvcont.getLeftContainer(), f);
+	protected void addExporterSettings(IToolBarManager tbManager, IParametrable ip) {
+		PreviewContainer pvcont = (PreviewContainer) container;
+		if (pvcont.getJrContext().getEditorContext().hasExporterSettings()) {
+			if (vexpAction == null) {
+				JasperReportsContext jrContext = (JasperReportsContext) container
+						.getAdapter(JasperReportsContext.class);
+				IFile f = null;
+				if (jrContext != null)
+					f = (IFile) jrContext.getValue(FileUtils.KEY_FILE);
+				vexpAction = new ViewExporterAction(ip.getLeftContainer(), f);
+			}
+			tbManager.add(vexpAction);
 		}
-		tbManager.add(vexpAction);
 	}
 
 	public void addPin(final PreviewJRPrint container, IToolBarManager tbManager) {
@@ -112,6 +125,7 @@ public class LeftToolBarManager extends ATopToolBarManager {
 		item.setToolTipText(Messages.LeftToolBarManager_pintooltip);
 		item.setSelection(!container.isHideParameters());
 		item.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				container.setHideParameters(!container.isHideParameters());
 			}
