@@ -30,7 +30,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
+import com.jaspersoft.studio.components.customvisualization.model.CVCProprtiesExpressionDTO;
 import com.jaspersoft.studio.components.customvisualization.model.CVItemPropertiesDescriptor;
+import com.jaspersoft.studio.components.customvisualization.model.MCustomVisualization;
 import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
 import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -76,7 +78,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 	private Button btnModifyProperty;
 	private Button btnRemoveProperty;
 	private Group propertiesGrp;
-	private List<ItemProperty> itemProps;
+	private CVCProprtiesExpressionDTO itemProps;
 	private StackLayout stackLayout;
 	private Composite form;
 	private Composite cmp;
@@ -126,7 +128,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 		CVItemPropertyDialog d = new CVItemPropertyDialog(UIUtils.getShell(), null, null);
 		d.setExpressionContext(getExpressionContext());
 		if (d.open() == Window.OK) {
-			itemProps.add(d.getItemProperty());
+			itemProps.getItemProps().add(d.getItemProperty());
 			section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
 		}
 	}
@@ -138,9 +140,9 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 			CVItemPropertyDialog d = new CVItemPropertyDialog(UIUtils.getShell(), clonedP, null);
 			d.setExpressionContext(getExpressionContext());
 			if (d.open() == Window.OK) {
-				int idx = itemProps.indexOf(p);
-				itemProps.remove(p);
-				itemProps.add(idx, clonedP);
+				int idx = itemProps.getItemProps().indexOf(p);
+				itemProps.getItemProps().remove(p);
+				itemProps.getItemProps().add(idx, clonedP);
 				section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
 			}
 		}
@@ -149,7 +151,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 	private void removePropertyBtnPressed() {
 		ItemProperty p = getCurrentSelectedProperty();
 		if (p != null) {
-			itemProps.remove(p);
+			itemProps.getItemProps().remove(p);
 			section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
 		}
 	}
@@ -255,11 +257,11 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void setData(APropertyNode pnode, Object value) {
-		itemProps = (List<ItemProperty>) value;
-		if (itemProps == null)
-			itemProps = new ArrayList<ItemProperty>();
+		itemProps = (CVCProprtiesExpressionDTO) value;
+		if (itemProps == null) {
+			itemProps = new CVCProprtiesExpressionDTO(new ArrayList<ItemProperty>(),(MCustomVisualization)pnode, pnode.getJasperDesign(), pnode.getJasperConfiguration());
+		}
 		propertiesTV.setInput(itemProps);
 
 		JasperDesign jd = pnode.getJasperDesign();
@@ -272,7 +274,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 
 		ExpressionInterpreter expIntr = ExpressionUtil.getCachedInterpreter(dataset, jd, jConf);
 		String module = null;
-		for (ItemProperty ip : itemProps) {
+		for (ItemProperty ip : itemProps.getItemProps()) {
 			// let's get our description
 			if (ip.getName().equals("module")) {
 				 module = ItemPropertyUtil.getItemPropertyString((StandardItemProperty) ip, expIntr);
@@ -314,7 +316,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 										}
 									}
 									first = false;
-									CVCPropertyEditor editor = new CVCPropertyEditor(this.section, itemProps);
+									SectionCVCPropertyEditor editor = new SectionCVCPropertyEditor(this.section, itemProps);
 									for (WidgetPropertyDescriptor pd : csd.getProperties()) {
 										ItemPropertyDescription<?> ipdesc = WidgetFactory.createItemPropertyDescriptor(currentDescriptor, pd, jConf);
 										if (ipdesc != null){
@@ -345,7 +347,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 		//update the editor, if I'm refreshing a CVC the descriptor is the same between
 		//two CVC of the same type, but I need to update the editor with a new one
 		//with the properties of the currently selected
-		CVCPropertyEditor editor = new CVCPropertyEditor(this.section, itemProps);
+		SectionCVCPropertyEditor editor = new SectionCVCPropertyEditor(this.section, itemProps);
 		for (WItemProperty wip : wIProps){
 			wip.setPropertyEditor(editor);
 			wip.updateWidget();

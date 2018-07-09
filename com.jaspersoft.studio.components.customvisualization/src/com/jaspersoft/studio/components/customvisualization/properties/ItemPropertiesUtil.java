@@ -13,6 +13,7 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.customvisualization.model.CVCProprtiesExpressionDTO;
 import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
 import com.jaspersoft.studio.components.customvisualization.ui.framework.CVCWidgetsDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.framework.DatasetPropertyDescriptor;
@@ -75,7 +76,8 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 			return null;
 		// let's look if we have some files with our properties
 		@SuppressWarnings("unchecked")
-		List<ItemProperty> p = (List<ItemProperty>) pnode.getPropertyValue(CVDesignComponent.PROPERTY_ITEM_PROPERTIES);
+		CVCProprtiesExpressionDTO dto = (CVCProprtiesExpressionDTO)pnode.getPropertyValue(CVDesignComponent.PROPERTY_ITEM_PROPERTIES);
+		List<ItemProperty> p = dto.getItemProps();
 		if (Misc.isNullOrEmpty(p)) {
 			cd = null;
 			return null;

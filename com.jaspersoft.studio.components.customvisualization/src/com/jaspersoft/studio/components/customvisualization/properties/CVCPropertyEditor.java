@@ -4,20 +4,17 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.properties;
 
-import java.util.List;
-
+import com.jaspersoft.studio.components.customvisualization.model.CVCProprtiesExpressionDTO;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
-import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.widgets.framework.PropertyEditorAdapter;
 
 import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.customvisualization.design.CVDesignComponent;
 import net.sf.jasperreports.engine.JRExpression;
 
 /**
  * Editor to write and read the property between the CVC component and 
- * the dynamic widgets
+ * the dynamic widgets. Used in the advanced view
  * 
  * @author Orlandin Marco
  *
@@ -25,23 +22,17 @@ import net.sf.jasperreports.engine.JRExpression;
 public class CVCPropertyEditor extends PropertyEditorAdapter {
 	
 	/**
-	 * The section used to write the value inside the widget
-	 */
-	private AbstractSection section;
-	
-	/**
 	 * The current list of property on the CVC component
 	 */
-	private List<ItemProperty> itemProps;
+	protected CVCProprtiesExpressionDTO itemProps;
 	
-	public CVCPropertyEditor(AbstractSection section, List<ItemProperty> itemProps) {
-		this.section = section;
+	public CVCPropertyEditor(CVCProprtiesExpressionDTO itemProps) {
 		this.itemProps = itemProps;
 	}
 
 	@Override
 	public String getPropertyValue(String propertyName) {
-		ItemProperty p = ItemPropertyUtil.getProperty(itemProps, propertyName);
+		ItemProperty p = ItemPropertyUtil.getProperty(itemProps.getItemProps(), propertyName);
 		if (p != null) {
 			return p.getValue();
 		}
@@ -50,7 +41,7 @@ public class CVCPropertyEditor extends PropertyEditorAdapter {
 	
 	@Override
 	public JRExpression getPropertyValueExpression(String propertyName) {
-		ItemProperty p = ItemPropertyUtil.getProperty(itemProps, propertyName);
+		ItemProperty p = ItemPropertyUtil.getProperty(itemProps.getItemProps(), propertyName);
 		if (p != null) {
 			return p.getValueExpression();
 		}
@@ -59,27 +50,31 @@ public class CVCPropertyEditor extends PropertyEditorAdapter {
 	
 	@Override
 	public void removeProperty(String propertyName) {
-		ItemProperty p = ItemPropertyUtil.getProperty(itemProps, propertyName);
+		ItemProperty p = ItemPropertyUtil.getProperty(itemProps.getItemProps(), propertyName);
 		if (p != null) {
-			itemProps.remove(p);
-			section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
+			itemProps.getItemProps().remove(p);
+			executeChangeCommand();
 		}
 	}
 	
 	@Override
 	public void createUpdateProperty(String propertyName, String value, JRExpression valueExpression) {
-		ItemProperty p = ItemPropertyUtil.getProperty(itemProps, propertyName);
+		ItemProperty p = ItemPropertyUtil.getProperty(itemProps.getItemProps(), propertyName);
 		if (p != null) {
-			int idx = itemProps.indexOf(p);
+			int idx = itemProps.getItemProps().indexOf(p);
 			if (idx >= 0) {
-				itemProps.set(idx, new StandardItemProperty(propertyName, value, valueExpression));
+				itemProps.getItemProps().set(idx, new StandardItemProperty(propertyName, value, valueExpression));
 			} else {
-				itemProps.add(new StandardItemProperty(propertyName, value, valueExpression));
+				itemProps.getItemProps().add(new StandardItemProperty(propertyName, value, valueExpression));
 			}
 		} else {
-			itemProps.add(new StandardItemProperty(propertyName, value, valueExpression));
+			itemProps.getItemProps().add(new StandardItemProperty(propertyName, value, valueExpression));
 		}
-		section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
+		executeChangeCommand();
+	}
+	
+	protected void executeChangeCommand() {
+		
 	}
 
 }

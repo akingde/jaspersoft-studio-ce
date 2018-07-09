@@ -4,8 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.model;
 
-import java.util.List;
-
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.osgi.util.NLS;
 
@@ -24,8 +22,8 @@ public class CVItemPropertiesLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if(element instanceof List<?>) {
-			return NLS.bind(Messages.CVItemPropertiesLabelProvider_TextStr,((List<?>) element).size());
+		if(element instanceof CVCProprtiesExpressionDTO) {
+			return NLS.bind(Messages.CVItemPropertiesLabelProvider_TextStr,((CVCProprtiesExpressionDTO)element).getItemProps().size());
 		}
 		return super.getText(element);
 	}
