@@ -17,10 +17,10 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.context.AEditorContext;
 import com.jaspersoft.studio.editor.preview.IRunReport;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.view.control.IReportRunner;
-import com.jaspersoft.studio.editor.preview.view.control.JiveRunner;
 import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.messages.Messages;
 
@@ -76,22 +76,26 @@ public class RunStopAction extends Action implements IMenuCreator {
 				run();
 			}
 		};
-		String defMode = editor.getJrContext().getEditorContext().getDefaultRunMode();
-
-		MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
-		m1.setText("Run Report");
-		m1.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/start_task.gif"));
-		m1.addSelectionListener(listener);
-		m1.setData("run.key", MODERUN_LOCAL);
-		setupMenu(m1, defMode);
-
-		for (Map.Entry<String, IReportRunner> entry : ReportController.getRunners().entrySet()) {
-			m1 = new MenuItem(listMenu, SWT.RADIO);
-			m1.setText(entry.getValue().getLabel());
+		AEditorContext cntx = editor.getJrContext().getEditorContext();
+		String defMode = cntx.getDefaultRunMode();
+		if (cntx.isAllowOtherRunners()) {
+			MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
+			m1.setText("Run Report");
 			m1.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/start_task.gif"));
 			m1.addSelectionListener(listener);
-			m1.setData("run.key", entry.getKey());
+			m1.setData("run.key", MODERUN_LOCAL);
 			setupMenu(m1, defMode);
+		}
+
+		for (Map.Entry<String, IReportRunner> entry : ReportController.getRunners().entrySet()) {
+			if (entry.getKey().equals(defMode)) {
+				MenuItem m1 = new MenuItem(listMenu, SWT.RADIO);
+				m1.setText(entry.getValue().getLabel());
+				m1.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/start_task.gif"));
+				m1.addSelectionListener(listener);
+				m1.setData("run.key", entry.getKey());
+				setupMenu(m1, defMode);
+			}
 		}
 
 		return listMenu;

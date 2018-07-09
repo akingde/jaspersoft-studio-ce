@@ -231,4 +231,8 @@ public class AEditorContext {
 	public String getDefaultRunMode() {
 		return RunStopAction.MODERUN_LOCAL;
 	}
+
+	public boolean isAllowOtherRunners() {
+		return true;
+	}
 }
