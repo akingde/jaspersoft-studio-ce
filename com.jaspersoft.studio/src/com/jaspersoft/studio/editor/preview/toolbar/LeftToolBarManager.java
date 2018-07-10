@@ -99,7 +99,7 @@ public class LeftToolBarManager extends ATopToolBarManager {
 	}
 
 	protected void addExporterSettings(IToolBarManager tbManager, IParametrable ip) {
-		PreviewContainer pvcont = (PreviewContainer) container;
+		PreviewJRPrint pvcont = (PreviewJRPrint) container;
 		if (pvcont.getJrContext().getEditorContext().hasExporterSettings()) {
 			if (vexpAction == null) {
 				JasperReportsContext jrContext = (JasperReportsContext) container
