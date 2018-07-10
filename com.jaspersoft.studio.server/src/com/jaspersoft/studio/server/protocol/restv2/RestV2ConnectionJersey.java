@@ -1047,7 +1047,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 		Builder req = HttpUtils
 				.getRequest(target.path("reports" + runit.getUriString() + "/inputControls/" + ctrls + "/values")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		Response r = connector.post(req, Entity.entity(convertInputControls(ics), getMediaType()), monitor);
+		Response r = connector.post(req, Entity.entity(convertInputControls(ics).getRawParameters(), getMediaType()),
+				monitor);
 		InputControlStateListWrapper crl = toObj(r, InputControlStateListWrapper.class, monitor);
 		if (crl != null)
 			for (ResourceDescriptor rd : ics) {
