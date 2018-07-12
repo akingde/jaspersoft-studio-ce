@@ -44,6 +44,8 @@ rm -Rf "/Volumes/TIBCO Jaspersoft Studio/TIBCO Jaspersoft Studio/test.txt"
 
 # Rename folder Jaspersoft Studio 1.0 to the new version
 mv "/Volumes/TIBCO Jaspersoft Studio/TIBCO Jaspersoft Studio" "/Volumes/TIBCO Jaspersoft Studio/TIBCO Jaspersoft Studio $1.app"
+# Trying to fix issue during the sign process
+xattr -cr "/Volumes/TIBCO Jaspersoft Studio/TIBCO Jaspersoft Studio $1.app"
 
 #Signing the application
 
