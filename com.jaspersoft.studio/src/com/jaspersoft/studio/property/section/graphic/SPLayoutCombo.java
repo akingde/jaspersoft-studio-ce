@@ -10,8 +10,6 @@ import java.util.List;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -31,6 +29,8 @@ import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 import net.sf.jasperreports.eclipse.ui.JSSTableCombo;
+import net.sf.jasperreports.eclipse.ui.ValueChangedEvent;
+import net.sf.jasperreports.eclipse.ui.ValueChangedListener;
 import net.sf.jasperreports.engine.JRCommonElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
@@ -55,6 +55,8 @@ public class SPLayoutCombo extends ASPropertyWidget<IPropertyDescriptor>  {
 	
 	private JSSTableCombo combo;
 
+	private String longestName = null;
+	
 	public SPLayoutCombo(Composite parent, LayoutSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -207,12 +209,17 @@ public class SPLayoutCombo extends ASPropertyWidget<IPropertyDescriptor>  {
 				if (drop) refreshItems();
 				super.dropDown(drop);
 			}
-		};
-
-		combo.addModifyListener(new ModifyListener() {
 			
 			@Override
-			public void modifyText(ModifyEvent e) {
+			protected String getLongestText() {
+				return computeLongestName();
+			}
+		};
+
+		combo.addModifyListener(new ValueChangedListener() {
+			
+			@Override
+			public void valueChanged(ValueChangedEvent e) {
 				handlePropertyChange();
 			}
 		});
@@ -239,6 +246,19 @@ public class SPLayoutCombo extends ASPropertyWidget<IPropertyDescriptor>  {
 			tableItem.setData(item);
 		}
 		table.setData(visibleLayouts.toArray(new ILayout[visibleLayouts.size()]));
+	}
+	
+	private String computeLongestName() {
+		if (longestName == null) {
+			longestName = "";
+			for(ILayout item : layouts){
+				String currentText = item.getName();
+				if (longestName.length() < currentText.length()) {
+					longestName = currentText;
+				}
+			}
+		}
+		return longestName;
 	}
 	
 }

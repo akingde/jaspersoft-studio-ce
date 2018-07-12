@@ -16,8 +16,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
@@ -38,6 +36,8 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
 
 import net.sf.jasperreports.eclipse.ui.JSSTableCombo;
+import net.sf.jasperreports.eclipse.ui.ValueChangedEvent;
+import net.sf.jasperreports.eclipse.ui.ValueChangedListener;
 
 /**
  * Extension of an swt widget to handle only numeric values. The combo is painted and
@@ -132,6 +132,8 @@ public class NumericTableCombo extends Composite {
 	 */
 	private VALIDATION_RESULT currentState = VALIDATION_RESULT.VALID;
 	
+	private String longestName = null;
+	
 	/**
 	 * Custom layout used to place the elements inside the composite. This will remove 
 	 * every unnecessary space to have the combo completely fit the container area
@@ -168,10 +170,10 @@ public class NumericTableCombo extends Composite {
 	 * Modify listeners called when the value in the text area change, fire all the attached
 	 * selection listeners
 	 */
-	private ModifyListener inputNotifier = new ModifyListener() {
+	private ValueChangedListener inputNotifier = new ValueChangedListener() {
 		
 		@Override
-		public void modifyText(ModifyEvent e) {
+		public void valueChanged(ValueChangedEvent e) {
 			if (currentState == VALIDATION_RESULT.VALID){
 				//Fire the listeners only if the value is valid
 				fireListeners();
@@ -230,6 +232,11 @@ public class NumericTableCombo extends Composite {
 			@Override
 			protected void setTableData(Table table) {
 				refreshTableItems(table);
+			}
+			
+			@Override
+			protected String getLongestText() {
+				return computeLongestName();
 			}
 		};
 		defaultBackgroundColor = ColorConstants.white;
@@ -826,6 +833,21 @@ public class NumericTableCombo extends Composite {
 		}
 	}
 	
+	private String computeLongestName() {
+		if (longestName == null) {
+			longestName = "";
+			for(String currentText : items){
+				if (longestName.length() < currentText.length()) {
+					longestName = currentText;
+				}
+			}
+		}
+		if (longestName == null || getText().length() > longestName.length()) {
+			longestName = getText();
+		}
+		return longestName;
+	}
+	
 	protected void setComboItems(String[] items){
 		this.items = items;
 		refreshTableItems(controlCombo.getTable());
@@ -857,11 +879,11 @@ public class NumericTableCombo extends Composite {
 		return controlCombo.getMenu();
 	}
 	
-	protected void addModifyListener(ModifyListener listener){
+	protected void addModifyListener(ValueChangedListener listener){
 		controlCombo.addModifyListener(listener);
 	}
 	
-	protected void removeModifyListener(ModifyListener listener){
+	protected void removeModifyListener(ValueChangedListener listener){
 		controlCombo.removeModifyListener(listener);
 	}
 	
