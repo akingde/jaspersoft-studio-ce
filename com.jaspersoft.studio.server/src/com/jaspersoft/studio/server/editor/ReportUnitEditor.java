@@ -86,7 +86,8 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 			// check if we can run the report
 			actionToolBarManager.setEnabled(false);
 			dataDapterToolBarManager.setEnabled(false);
-			leftToolbar.setEnabled(false);
+			if (leftToolbar != null)
+				leftToolbar.setEnabled(false);
 			getLeftContainer().setEnabled(false);
 			getLeftContainer().switchView(null, ReportRunControler.FORM_PARAMETERS);
 

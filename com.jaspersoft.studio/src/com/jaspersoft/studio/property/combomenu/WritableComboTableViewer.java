@@ -9,13 +9,10 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -23,6 +20,8 @@ import org.eclipse.swt.widgets.TableItem;
 import com.jaspersoft.studio.help.HelpSystem;
 
 import net.sf.jasperreports.eclipse.ui.JSSTableCombo;
+import net.sf.jasperreports.eclipse.ui.ValueChangedEvent;
+import net.sf.jasperreports.eclipse.ui.ValueChangedListener;
 
 /**
  * Class that manage the {@link JSSTableCombo}, where a combo is created trough a canvas and a table for the menu. the {@link JSSTableCombo}
@@ -34,6 +33,8 @@ import net.sf.jasperreports.eclipse.ui.JSSTableCombo;
  */
 public class WritableComboTableViewer implements IMenuProvider {
 
+	private static final String ITEM_DATA = "itemData";
+	
 	/**
 	 * Style bit: Create handle control and drop-down widget with default behaviours, i.e. showing text, showing image,
 	 * using menu as drop-down widget.
@@ -68,12 +69,14 @@ public class WritableComboTableViewer implements IMenuProvider {
 	/**
 	 * Last element selected in the menu
 	 */
-	private ComboItem selectedItem = null;
+	private SelectedComboItem selectedItem = null;
 	
 	/**
 	 * Disable the emphasis effect on the last selected item when set to true
 	 */
 	private boolean disableSelectedItemEmphasis = false;
+	
+	private String longestName = null;
 	
 	/**
 	 * Constructs a new instance of this class given its parent and a style value describing its behavior and appearance.
@@ -99,6 +102,11 @@ public class WritableComboTableViewer implements IMenuProvider {
 			protected int getTopItem(Table table) {
 				return computeTopItem(table);
 			}
+			
+			@Override
+			protected String getLongestText() {
+				return computeLongestName();
+			}
 		};
 		// tell the TableCombo that I want 2 blank columns auto sized.
 		dropDownHandle.defineColumns(2);
@@ -107,12 +115,17 @@ public class WritableComboTableViewer implements IMenuProvider {
 		dropDownHandle.setShowTableHeader(false);
 		listeners = new ArrayList<ComboItemAction>();
 		
-		dropDownHandle.addModifyListener(new ModifyListener() {
+	
+		dropDownHandle.addModifyListener(new ValueChangedListener() {
 			
 			@Override
-			public void modifyText(ModifyEvent e) {
-				String text = dropDownHandle.getText();
-				selectedItem = new ComboItem(text, true, -1, text, text);
+			public void valueChanged(ValueChangedEvent e) {
+				if (e.isTyped()) {
+					selectedItem = new SelectedComboItem(e.getText(), true, e.getText(), e.getText());
+				} else {
+					ComboItem selectedItemData = (ComboItem)e.getSelectedItem().getData(ITEM_DATA);
+					selectedItem = new SelectedComboItem(e.getText(), false, selectedItemData.getItem(), selectedItemData.getValue());
+				}
 				for (ComboItemAction listener : listeners) {
 					listener.exec();
 				}
@@ -124,6 +137,7 @@ public class WritableComboTableViewer implements IMenuProvider {
 		table.removeAll();
 		for(ComboItem item : elementList){
 			TableItem tableItem = new TableItem(table, SWT.NONE);
+			tableItem.setData(ITEM_DATA, item);
 			if (item instanceof ComboItemSeparator){
 				tableItem.setText("______________");		
 			} else {
@@ -132,6 +146,21 @@ public class WritableComboTableViewer implements IMenuProvider {
 			}
 
 		}
+	}
+	
+	private String computeLongestName() {
+		if (longestName == null) {
+			longestName = "";
+			for(ComboItem item : elementList){
+				if (!(item instanceof ComboItemSeparator)){
+					String currentText = item.getText();
+					if (longestName.length() < currentText.length()) {
+						longestName = currentText;
+					}
+				} 
+			}
+		}
+		return longestName;
 	}
 	
 	/**
@@ -278,7 +307,7 @@ public class WritableComboTableViewer implements IMenuProvider {
 	 * 
 	 * @return A reference to the combobox control
 	 */
-	public Control getControl() {
+	public Composite getControl() {
 		return dropDownHandle;
 	}
 
@@ -351,7 +380,8 @@ public class WritableComboTableViewer implements IMenuProvider {
 	 */
 	public void select(int index) {
 		if (index >= 0 && index < elementList.size()) {
-			selectedItem = elementList.get(index);
+			ComboItem itemEntry = elementList.get(index);
+			selectedItem = new SelectedComboItem(itemEntry.getText(), false, itemEntry.getItem(), itemEntry.getValue());
 			dropDownHandle.setText(selectedItem.getText());
 			//dropDownHandle.setImage(selectedItem.getImage());
 		}
