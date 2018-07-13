@@ -9,6 +9,8 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -88,6 +90,25 @@ public class TextPropertyDescription<T> extends AbstractExpressionPropertyDescri
 				if (wiProp.isRefresh())
 					return;
 				handleEdit(simpleControl, wiProp);
+			}
+		});
+		//this listener block the traverse when the tab is pressed with ctrl, in this case it will insert a regular
+		//tab in the text
+		simpleControl.addTraverseListener(new TraverseListener() {
+			
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (( e.stateMask & SWT.MODIFIER_MASK ) == SWT.CTRL && e.keyCode == SWT.TAB){
+					e.doit = false;
+					String currentText = simpleControl.getText();
+					Point selection = simpleControl.getSelection();
+					String newText = currentText.substring(0, selection.x) + SWT.TAB;
+					int newSelection = newText.length();
+					if (selection.y < currentText.length()) newText+=currentText.substring(selection.y, currentText.length());
+					simpleControl.setText(newText);
+					simpleControl.setSelection(newSelection);
+				}
+				
 			}
 		});
 		// Flag used to overcome the problem of focus events in Mac OS X
