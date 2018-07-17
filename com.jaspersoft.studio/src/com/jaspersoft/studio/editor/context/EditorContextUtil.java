@@ -36,9 +36,9 @@ public class EditorContextUtil {
 
 	private static List<ContextSwitchAction> actions = new ArrayList<>();
 
-	public static void fireContextChanged() {
+	public static void fireContextChanged(IResource r) {
 		for (ContextSwitchAction csa : actions)
-			csa.refresh();
+			csa.refresh(r);
 	}
 
 	public static QualifiedName EC_KEY = new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(),
@@ -212,14 +212,14 @@ public class EditorContextUtil {
 			return null;
 		}
 
-		public void refresh() {
+		public void refresh(IResource r) {
 			JasperReportsConfiguration jConf = editor.getJrContext();
 			AEditorContext old = jConf.getEditorContext();
 			IFile f = (IFile) jConf.get(FileUtils.KEY_FILE);
 			AEditorContext ec = getEditorContext(f, jConf);
 			if (old.getClass().equals(ec.getClass()))
 				return;
-			editor.changeContext(ec.getId(), false);
+			editor.changeContext(ec.getId(), !r.equals(f));
 			setToolBarText(jConf.getEditorContext().getName());
 		}
 	}

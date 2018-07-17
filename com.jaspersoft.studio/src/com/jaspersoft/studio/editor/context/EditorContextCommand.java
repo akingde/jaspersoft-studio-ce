@@ -12,7 +12,6 @@ import org.eclipse.core.commands.State;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISelectionService;
@@ -27,8 +26,6 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 
 public class EditorContextCommand extends AbstractHandler {
-	private QualifiedName key = new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(),
-			AEditorContext.EDITOR_CONTEXT);
 
 	public EditorContextCommand() {
 		UIUtils.getDisplay().asyncExec(this::listenSelection);
@@ -46,7 +43,7 @@ public class EditorContextCommand extends AbstractHandler {
 					setBaseEnabled(true);
 					cmd.setEnabled(true);
 					try {
-						String p = ((IResource) obj).getPersistentProperty(key);
+						String p = ((IResource) obj).getPersistentProperty(EditorContextUtil.EC_KEY);
 
 						State state = cmd.getState(RadioState.STATE_ID);
 						if (state != null)
@@ -81,10 +78,10 @@ public class EditorContextCommand extends AbstractHandler {
 						return null;
 					String state = event.getParameter(RadioState.PARAMETER_ID);
 
-					((IResource) obj).setPersistentProperty(key, getPersistentState(state));
+					((IResource) obj).setPersistentProperty(EditorContextUtil.EC_KEY, getPersistentState(state));
 
 					HandlerUtil.updateRadioState(event.getCommand(), state);
-					EditorContextUtil.fireContextChanged();
+					EditorContextUtil.fireContextChanged(((IResource) obj));
 				} catch (CoreException e) {
 					UIUtils.showError(e);
 				}
