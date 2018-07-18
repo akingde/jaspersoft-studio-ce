@@ -15,6 +15,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -112,21 +113,29 @@ public class BordersSection extends AbstractSection {
 	 * Spinner for the left padding or for the general padding when the checkbox is selected
 	 */
 	private NullableSpinner paddingLeft;
+	
+	private CLabel leftPaddingLabel;
 
 	/**
 	 * Spinner for the right padding
 	 */
 	private NullableSpinner paddingRight;
+	
+	private CLabel rightPaddingLabel;
 
 	/**
 	 * Spinner for the bottom padding
 	 */
 	private NullableSpinner paddingBottom;
+	
+	private CLabel bottomPaddingLabel;
 
 	/**
 	 * Spinner for the top padding
 	 */
 	private NullableSpinner paddingTop;
+	
+	private CLabel topPaddingLabel;
 
 	/**
 	 * Border figure rectangle
@@ -250,8 +259,11 @@ public class BordersSection extends AbstractSection {
 	private void checkBoxValueChange() {
 		if (checkBoxPadding.getSelection()) {
 			paddingRight.setEnabled(false);
+			rightPaddingLabel.setEnabled(false);
 			paddingTop.setEnabled(false);
+			topPaddingLabel.setEnabled(false);
 			paddingBottom.setEnabled(false);
+			bottomPaddingLabel.setEnabled(false);
 			paddingRight.setDefaultValue(null);
 			paddingTop.setDefaultValue(null);
 			paddingBottom.setDefaultValue(null);
@@ -263,8 +275,11 @@ public class BordersSection extends AbstractSection {
 			paddingTop.setDefaultValue(0);
 			paddingBottom.setDefaultValue(0);
 			paddingRight.setEnabled(true);
+			rightPaddingLabel.setEnabled(true);
 			paddingTop.setEnabled(true);
+			topPaddingLabel.setEnabled(true);
 			paddingBottom.setEnabled(true);
+			bottomPaddingLabel.setEnabled(true);
 		}
 	}
 
@@ -345,7 +360,7 @@ public class BordersSection extends AbstractSection {
 			}
 		});
 
-		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Left_Label, SWT.RIGHT);
+		leftPaddingLabel = getWidgetFactory().createCLabel(composite, Messages.BordersSection_Left_Label, SWT.RIGHT);
 
 		paddingLeft = new NullableSpinner(composite, SWT.BORDER);
 		paddingLeft.setDefaultValue(0);
@@ -355,12 +370,12 @@ public class BordersSection extends AbstractSection {
 		paddingLeft.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_LEFT_PADDING, paddingLeft.getValueAsInteger());
-				paddingLeft.setInherited(paddingLeft.getValueAsInteger() == null);
+				setPaddingInherithed(paddingLeft.getValueAsInteger() == null, paddingLeft, leftPaddingLabel);
 			}
 		});
 		createPaddingContextualMenu(paddingLeft, JRBaseLineBox.PROPERTY_LEFT_PADDING);
 
-		getWidgetFactory().createCLabel(composite, Messages.common_right, SWT.RIGHT);
+		rightPaddingLabel = getWidgetFactory().createCLabel(composite, Messages.common_right, SWT.RIGHT);
 
 		paddingRight = new NullableSpinner(composite, SWT.BORDER);
 		paddingRight.setDefaultValue(0);
@@ -370,12 +385,12 @@ public class BordersSection extends AbstractSection {
 		paddingRight.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_RIGHT_PADDING, paddingRight.getValueAsInteger());
-				paddingRight.setInherited(paddingRight.getValueAsInteger() == null);
+				setPaddingInherithed(paddingRight.getValueAsInteger() == null, paddingRight, rightPaddingLabel);
 			}
 		});
 		createPaddingContextualMenu(paddingRight, JRBaseLineBox.PROPERTY_RIGHT_PADDING);
 
-		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Top_Label, SWT.RIGHT);
+		topPaddingLabel = getWidgetFactory().createCLabel(composite, Messages.BordersSection_Top_Label, SWT.RIGHT);
 
 		paddingTop = new NullableSpinner(composite, SWT.BORDER);
 		paddingTop.setDefaultValue(0);
@@ -385,12 +400,12 @@ public class BordersSection extends AbstractSection {
 		paddingTop.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_TOP_PADDING, paddingTop.getValueAsInteger());
-				paddingTop.setInherited(paddingTop.getValueAsInteger() == null);
+				setPaddingInherithed(paddingTop.getValueAsInteger() == null, paddingTop, topPaddingLabel);
 			}
 		});
 		createPaddingContextualMenu(paddingTop, JRBaseLineBox.PROPERTY_TOP_PADDING);
 
-		getWidgetFactory().createCLabel(composite, Messages.common_bottom, SWT.RIGHT);
+		bottomPaddingLabel = getWidgetFactory().createCLabel(composite, Messages.common_bottom, SWT.RIGHT);
 
 		paddingBottom = new NullableSpinner(composite, SWT.BORDER);
 		paddingBottom.setDefaultValue(0);
@@ -400,7 +415,7 @@ public class BordersSection extends AbstractSection {
 		paddingBottom.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, paddingBottom.getValueAsInteger());
-				paddingBottom.setInherited(paddingBottom.getValueAsInteger() == null);
+				setPaddingInherithed(paddingBottom.getValueAsInteger() == null, paddingBottom, bottomPaddingLabel);
 			}
 		});
 		createPaddingContextualMenu(paddingBottom, JRBaseLineBox.PROPERTY_BOTTOM_PADDING);
@@ -923,12 +938,24 @@ public class BordersSection extends AbstractSection {
 				paddingBottom.setValue(getPaddingValue(lb.getPropertyActualValue(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)));
 				paddingLeft.setValue(getPaddingValue(lb.getPropertyActualValue(JRBaseLineBox.PROPERTY_LEFT_PADDING)));
 				paddingRight.setValue(getPaddingValue(lb.getPropertyActualValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING)));
-				paddingTop.setInherited(lb.getPropertyValue(JRBaseLineBox.PROPERTY_TOP_PADDING) == null);
-				paddingBottom.setInherited(lb.getPropertyValue(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) == null);
-				paddingLeft.setInherited(lb.getPropertyValue(JRBaseLineBox.PROPERTY_LEFT_PADDING) == null);
-				paddingRight.setInherited(lb.getPropertyValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING) == null);
+				
+				setPaddingInherithed(lb.getPropertyValue(JRBaseLineBox.PROPERTY_TOP_PADDING) == null, paddingTop, topPaddingLabel);
+				setPaddingInherithed(lb.getPropertyValue(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) == null, paddingBottom, bottomPaddingLabel);
+				setPaddingInherithed(lb.getPropertyValue(JRBaseLineBox.PROPERTY_LEFT_PADDING) == null, paddingLeft, leftPaddingLabel);
+				setPaddingInherithed(lb.getPropertyValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING) == null, paddingRight, rightPaddingLabel);
 			}
 			checkBoxValueChange();
+		}
+	}
+	
+	protected void setPaddingInherithed(boolean isInherithed, NullableSpinner paddingControl, CLabel paddingLabel) {
+		paddingControl.setInherited(isInherithed);
+		if (isInherithed) {
+			paddingControl.setToolTipText(Messages.common_inherited_attribute + Messages.BordersSection_padding_tool_tip);
+			paddingLabel.setToolTipText(Messages.common_inherited_attribute + Messages.BordersSection_padding_tool_tip);
+		} else {
+			paddingControl.setToolTipText(Messages.BordersSection_padding_tool_tip);
+			paddingLabel.setToolTipText(Messages.BordersSection_padding_tool_tip);
 		}
 	}
 

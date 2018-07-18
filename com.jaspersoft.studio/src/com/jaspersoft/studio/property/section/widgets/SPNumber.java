@@ -145,9 +145,15 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 		if (elementValue == null) {
 			ftext.setForeground(ColorConstants.gray);
 			ftext.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+			if (getLabel() != null) {
+				getLabel().setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+			}
 		} else {
 			ftext.setForeground(ColorConstants.black);
 			ftext.setToolTipText(pDescriptor.getDescription());
+			if (getLabel() != null) {
+				getLabel().setToolTipText(pDescriptor.getDescription());
+			}
 		}
 	}
 	

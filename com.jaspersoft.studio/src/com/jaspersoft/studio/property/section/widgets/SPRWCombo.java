@@ -14,7 +14,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -81,9 +80,15 @@ public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 		if (elementValue == null) {
 			combo.setForeground(ColorConstants.gray);
 			combo.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+			if (getLabel() != null) {
+				getLabel().setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+			}
 		} else {
 			combo.setForeground(ColorConstants.black);
 			combo.setToolTipText(pDescriptor.getDescription());
+			if (getLabel() != null) {
+				getLabel().setToolTipText(pDescriptor.getDescription());
+			}
 		}
 		setData(pnode, resolvedValue);
 	}

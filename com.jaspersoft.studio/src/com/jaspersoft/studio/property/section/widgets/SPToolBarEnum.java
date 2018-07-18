@@ -131,8 +131,14 @@ public class SPToolBarEnum<T extends IPropertyDescriptor & IEnumDescriptors> ext
 			}
 			if (elementValue == null) {
 				currentItem.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+				if (getLabel() != null) {
+					getLabel().setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+				}
 			} else {
 				currentItem.setToolTipText(pDescriptor.getDescription());
+				if (getLabel() != null) {
+					getLabel().setToolTipText(pDescriptor.getDescription());
+				}
 			}
 		}
 		setData(pnode, resolvedValue);

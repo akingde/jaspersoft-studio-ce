@@ -967,8 +967,16 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		if (insertField != null && !insertField.isDisposed()) {
 			if (elementValue != null) {
 				insertField.setForeground(ColorConstants.black);
+				insertField.setToolTipText(getTooltip());
+				if (getLabel() != null) {
+					getLabel().setToolTipText(pDescriptor.getDescription());
+				}
 			} else {
 				insertField.setForeground(ColorConstants.gray);
+				insertField.setToolTipText(Messages.common_inherited_attribute + getTooltip());
+				if (getLabel() != null) {
+					getLabel().setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+				}
 			}
 		}
 	}

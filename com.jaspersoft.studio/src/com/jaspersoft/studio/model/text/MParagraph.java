@@ -184,8 +184,10 @@ public class MParagraph extends APropertyNode implements IPropertiesHolder {
 	public Object getPropertyValue(Object id) {
 		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
 		if (jrElement != null) {
-			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING))
-				return lineSpacingD.getIntValue(jrElement.getOwnLineSpacing());
+			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING)) {
+				LineSpacingEnum ownLineSpacing = jrElement.getOwnLineSpacing();
+				return ownLineSpacing != null ? lineSpacingD.getIntValue(jrElement.getOwnLineSpacing()) : null;
+			}
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE))
 				return jrElement.getOwnLineSpacingSize();
 

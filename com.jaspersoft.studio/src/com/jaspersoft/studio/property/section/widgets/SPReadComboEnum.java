@@ -71,9 +71,15 @@ public class SPReadComboEnum<T extends IPropertyDescriptor & IEnumDescriptors> e
 		if (elementValue == null) {
 			combo.setForeground(ColorConstants.gray);
 			combo.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+			if (getLabel() != null) {
+				getLabel().setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+			}
 		} else {
 			combo.setForeground(ColorConstants.black);
 			combo.setToolTipText(pDescriptor.getDescription());
+			if (getLabel() != null) {
+				getLabel().setToolTipText(pDescriptor.getDescription());
+			}
 		}
 		setData(pnode, resolvedValue);
 	}
