@@ -249,7 +249,6 @@ public class ColorStyledText extends Composite {
 		lineColorData.horizontalAlignment = SWT.CENTER;
 		lineColor = new Label(this, SWT.NONE);
 		lineColor.setLayoutData(lineColorData);
-		lineColor.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
 
 		// Open the color selection window when the button is pushed
 		lineColor.addMouseListener(new MouseAdapter() {
@@ -270,6 +269,15 @@ public class ColorStyledText extends Composite {
 				}
 			}
 		});
+	}
+	
+	/**
+	 * Set the tooltip of both the color button and the text area
+	 */
+	@Override
+	public void setToolTipText(String string) {
+		lineColor.setToolTipText(string);
+		textArea.setToolTipText(string);
 	}
 
 	/**

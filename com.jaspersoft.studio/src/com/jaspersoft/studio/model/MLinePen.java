@@ -142,7 +142,8 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 				if (penLineStyleD == null){
 					getPropertyDescriptors();
 				}
-				return penLineStyleD.getIntValue(linePen.getOwnLineStyleValue());
+				LineStyleEnum ownLineStyle = linePen.getOwnLineStyleValue();
+				return ownLineStyle != null ? penLineStyleD.getIntValue(linePen.getOwnLineStyleValue()) : null;
 			}
 		}
 		return null;

@@ -8,10 +8,12 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
@@ -74,6 +76,24 @@ public class SPRWPopUpCombo extends ASPropertyWidget<NamedEnumPropertyDescriptor
 			index++;
 		}
 		combo.select(index);
+	}
+	
+	@Override
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		setData(pnode, resolvedValue);
+		if (elementValue == null) {
+			combo.setTextForeground(ColorConstants.gray);
+			combo.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+			if (getLabel() != null) {
+				getLabel().setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+			}
+		} else {
+			combo.setTextForeground(ColorConstants.black);
+			combo.setToolTipText(pDescriptor.getDescription());
+			if (getLabel() != null) {
+				getLabel().setToolTipText(pDescriptor.getDescription());
+			}
+		}
 	}
 
 	/**

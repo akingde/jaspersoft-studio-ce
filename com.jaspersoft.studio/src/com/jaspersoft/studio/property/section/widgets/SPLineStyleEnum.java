@@ -134,6 +134,10 @@ public class SPLineStyleEnum {
 			combo.setTextForeground(ColorConstants.black);
 		}
 	}
+	
+	public void setToolTipText(String text) {
+		combo.setToolTipText(text);
+	}
 
 	/**
 	 * Set the selected index of the popup combo
