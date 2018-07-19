@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.editor.context.AEditorContext;
@@ -41,8 +45,12 @@ public class JRSEditorContext extends AEditorContext {
 
 		Path fpath = Paths.get(f.getLocationURI().toASCIIString());
 		Path ppath = Paths.get(f.getProject().getLocationURI().toASCIIString());
+		IContainer root = ResourcesPlugin.getWorkspace().getRoot();
 		for (ServerProfile sp : ServerManager.getServerList()) {
-			Path jrsp = Paths.get(sp.getProjectPath());
+			IResource r = root.findMember(sp.getProjectPath());
+			if (r == null)
+				continue;
+			Path jrsp = Paths.get(r.getLocationURI().toASCIIString());
 			if (jrsp.startsWith(ppath) && fpath.startsWith(jrsp)) {
 				add(list, rset, sp.getProjectPath());
 				break;

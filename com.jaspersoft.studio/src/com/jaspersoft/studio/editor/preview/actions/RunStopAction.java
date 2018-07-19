@@ -7,7 +7,6 @@ package com.jaspersoft.studio.editor.preview.actions;
 import java.util.Map;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -24,7 +23,8 @@ import com.jaspersoft.studio.editor.preview.view.control.IReportRunner;
 import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.messages.Messages;
 
-public class RunStopAction extends Action implements IMenuCreator {
+public class RunStopAction extends Action // implements IMenuCreator
+{
 	public static final String MODERUN_LOCAL = "RUNLOCAL";
 
 	public static final String ID = "PREVIEWRELOADACTION"; //$NON-NLS-1$
@@ -34,7 +34,7 @@ public class RunStopAction extends Action implements IMenuCreator {
 		super();
 		this.editor = editor;
 		setId(ID);
-		setMenuCreator(this);
+		// setMenuCreator(this);
 		setDescription(Messages.RunStopAction_runreport_desc);
 		setToolTipText(Messages.RunStopAction_runreport_desc);
 		ImageDescriptor imgd = JaspersoftStudioPlugin.getInstance()
@@ -97,6 +97,8 @@ public class RunStopAction extends Action implements IMenuCreator {
 				setupMenu(m1, defMode);
 			}
 		}
+		if (listMenu.getItemCount() == 1)
+			listMenu.getItems()[0].dispose();
 
 		return listMenu;
 	}
