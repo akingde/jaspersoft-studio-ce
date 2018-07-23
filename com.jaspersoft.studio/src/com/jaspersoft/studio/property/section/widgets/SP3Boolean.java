@@ -58,12 +58,14 @@ public class SP3Boolean<T extends IPropertyDescriptor> extends ASPropertyWidget<
 			cmb3Bool.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
 			if (getLabel() != null) {
 				getLabel().setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+				getLabel().setForeground(ColorConstants.gray);
 			}
 		} else {
 			cmb3Bool.setForeground(ColorConstants.black);
 			cmb3Bool.setToolTipText(pDescriptor.getDescription());
 			if (getLabel() != null) {
 				getLabel().setToolTipText(pDescriptor.getDescription());
+				getLabel().setForeground(ColorConstants.black);
 			}
 		}
 		setData(pnode, resolvedValue);

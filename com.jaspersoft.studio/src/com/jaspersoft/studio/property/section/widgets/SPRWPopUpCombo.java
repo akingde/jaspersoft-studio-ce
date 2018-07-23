@@ -86,12 +86,14 @@ public class SPRWPopUpCombo extends ASPropertyWidget<NamedEnumPropertyDescriptor
 			combo.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
 			if (getLabel() != null) {
 				getLabel().setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+				getLabel().setForeground(ColorConstants.gray);
 			}
 		} else {
 			combo.setTextForeground(ColorConstants.black);
 			combo.setToolTipText(pDescriptor.getDescription());
 			if (getLabel() != null) {
 				getLabel().setToolTipText(pDescriptor.getDescription());
+				getLabel().setForeground(ColorConstants.black);
 			}
 		}
 	}
