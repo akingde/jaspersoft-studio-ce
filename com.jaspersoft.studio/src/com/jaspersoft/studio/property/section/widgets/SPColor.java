@@ -92,12 +92,14 @@ public class SPColor extends ASPropertyWidget<ColorPropertyDescriptor> {
 			foreButton.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
 			if (getLabel() != null) {
 				getLabel().setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+				getLabel().setForeground(ColorConstants.gray);
 			}
 		} else if (getLabel() != null){
 			getLabel().setForeground(ColorConstants.black);
 			foreButton.setToolTipText(pDescriptor.getDescription());
 			if (getLabel() != null) {
 				getLabel().setToolTipText(pDescriptor.getDescription());
+				getLabel().setForeground(ColorConstants.black);
 			}
 		}
 		setData(pnode, resolvedValue);

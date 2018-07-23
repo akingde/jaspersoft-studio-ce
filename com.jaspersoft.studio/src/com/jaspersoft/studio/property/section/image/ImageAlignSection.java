@@ -4,15 +4,17 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.image;
 
-import net.sf.jasperreports.engine.base.JRBaseStyle;
-
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+
+import net.sf.jasperreports.engine.base.JRBaseStyle;
 
 /*
  * The location section on the location tab.
@@ -30,10 +32,11 @@ public class ImageAlignSection extends AbstractRealValueSection {
 
 		parent.setLayout(new GridLayout(4, false));
 
-		getWidgetFactory().createCLabel(parent, Messages.ImageAlignSection_imageAlignLabel, SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(parent, Messages.ImageAlignSection_imageAlignLabel, SWT.RIGHT);
 
-		createWidget4Property(parent, JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, false);
-
+		ASPropertyWidget<?> horizontalAlignWidget = createWidget4Property(parent, JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, false);
+		horizontalAlignWidget.setLabel(label);
+		
 		getWidgetFactory().createCLabel(parent, "", SWT.SEPARATOR | SWT.VERTICAL); //$NON-NLS-1$
 
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, false);

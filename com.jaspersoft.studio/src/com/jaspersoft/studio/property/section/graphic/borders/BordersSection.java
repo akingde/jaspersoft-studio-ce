@@ -960,9 +960,11 @@ public class BordersSection extends AbstractSection {
 		if (isInherithed) {
 			paddingControl.setToolTipText(Messages.common_inherited_attribute + tooltipText);
 			paddingLabel.setToolTipText(Messages.common_inherited_attribute + tooltipText);
+			paddingLabel.setForeground(ColorConstants.gray);
 		} else {
 			paddingControl.setToolTipText(tooltipText);
 			paddingLabel.setToolTipText(tooltipText);
+			paddingLabel.setForeground(ColorConstants.black);
 		}
 	}
 
@@ -990,9 +992,11 @@ public class BordersSection extends AbstractSection {
 				if (isInherited) {
 					lineStyle.setToolTipText(Messages.common_inherited_attribute + "Style");
 					lineStyleLabel.setToolTipText(Messages.common_inherited_attribute + "Style");
+					lineStyleLabel.setForeground(ColorConstants.gray);
 				} else {
 					lineStyle.setToolTipText("Style");
 					lineStyleLabel.setToolTipText("Style");
+					lineStyleLabel.setForeground(ColorConstants.black);
 				}
 			}
 
@@ -1005,9 +1009,11 @@ public class BordersSection extends AbstractSection {
 				if (isInherited) {
 					lineColor.setToolTipText(Messages.common_inherited_attribute + "Color");
 					lineColorLabel.setToolTipText(Messages.common_inherited_attribute + "Color");
+					lineColorLabel.setForeground(ColorConstants.gray);
 				} else {
 					lineColor.setToolTipText("Color");
 					lineColorLabel.setToolTipText("Color");
+					lineColorLabel.setForeground(ColorConstants.black);
 				}
 			}
 		}
