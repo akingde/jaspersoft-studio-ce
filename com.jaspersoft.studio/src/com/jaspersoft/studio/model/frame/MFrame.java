@@ -200,7 +200,8 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String p = getElementNameProperty();
+		return Misc.isNullOrEmpty(p) ? getIconDescriptor().getTitle() : p;
 	}
 
 	/*
