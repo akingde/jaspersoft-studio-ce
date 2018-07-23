@@ -46,7 +46,7 @@ import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontSizeButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.RWFloatComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWFontSizePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWStyleComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
@@ -400,9 +400,8 @@ public class MStyle extends APropertyNode
 		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
 
-		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(
-				JRBaseStyle.PROPERTY_FONT_SIZE, Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED,
-				false);
+		RWFontSizePropertyDescriptor fontSizeD = new RWFontSizePropertyDescriptor(
+				JRBaseStyle.PROPERTY_FONT_SIZE, Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED);
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
 		desc.add(fontSizeD);
 
