@@ -16,12 +16,9 @@ import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
@@ -135,20 +132,16 @@ public abstract class ADataInput implements IDataInput {
 		Menu menu = new Menu(num);
 		MenuItem item = new MenuItem(menu, SWT.PUSH);
 		item.setText(Messages.ADataInput_removeparam);
-		item.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				ADataInput.this.params.remove(prm.getName());
-				ADataInput.this.updateInput();
-				removed = true;
-			}
+		item.addListener(SWT.Selection, e -> {
+			ADataInput.this.params.remove(prm.getName());
+			ADataInput.this.updateInput();
+			removed = true;
 		});
 		item = new MenuItem(menu, SWT.PUSH);
 		item.setText(Messages.ADataInput_settonull);
-		item.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				ADataInput.this.params.put(prm.getName(), null);
-				ADataInput.this.updateInput();
-			}
+		item.addListener(SWT.Selection, e -> {
+			ADataInput.this.params.put(prm.getName(), null);
+			ADataInput.this.updateInput();
 		});
 
 		num.setMenu(menu);
@@ -208,14 +201,9 @@ public abstract class ADataInput implements IDataInput {
 		}
 
 	};
-	protected TraverseListener keyListener = new TraverseListener() {
-
-		@Override
-		public void keyTraversed(TraverseEvent e) {
-			if (pcontainer != null && e.detail == SWT.TRAVERSE_RETURN) {
-				pcontainer.runReport();
-			}
-		}
+	protected TraverseListener keyListener = e -> {
+		if (ADataInput.this.pcontainer != null && e.detail == SWT.TRAVERSE_RETURN)
+			ADataInput.this.pcontainer.runReport();
 	};
 
 	private PreviewContainer pcontainer;
