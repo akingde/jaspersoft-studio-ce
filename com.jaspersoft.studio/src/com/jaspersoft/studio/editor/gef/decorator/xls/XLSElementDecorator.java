@@ -560,11 +560,17 @@ public class XLSElementDecorator extends ChainableElementDecorator {
 					int currentIndex = 0;
 					for(Rectangle position : aggregatedPosition) {
 						g2d.setStroke(solid);
-						g2d.drawLine(position.x + dxOffset, startY, position.x + dxOffset, startY + position.y);
-						startY = startY + position.y;
+						int endY =  startY + position.y;
+						if (currentIndex - 1 >= 0) {
+							Rectangle previusLine = aggregatedPosition.get(currentIndex-1);
+							endY -= (previusLine.y + previusLine.height);
+						}
+						g2d.drawLine(position.x + dxOffset, startY, position.x + dxOffset, endY);
+						startY = endY;
+						endY += position.height;
 						g2d.setStroke(dashed);
-						g2d.drawLine(position.x + dxOffset, startY, position.x + dxOffset, startY + position.height);
-						startY = startY + position.height;
+						g2d.drawLine(position.x + dxOffset, startY, position.x + dxOffset, endY);
+						startY = endY;
 						currentIndex ++;
 						if (currentIndex == aggregatedPosition.size()) {
 							g2d.setStroke(solid);
