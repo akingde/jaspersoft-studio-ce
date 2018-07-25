@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.http.annotation.Experimental;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -159,10 +160,13 @@ public class ImportContentAction extends ACachedSelectionAction {
 		setId(ID);
 	}
 	
+	@Experimental 
 	@Override
+	//FIXME this action is hidden for now until further developments
 	protected boolean calculateEnabled() {
-		List<Object> bands = editor.getSelectionCache().getSelectionModelForType(MBand.class);
-		return bands.size() == 1;
+		return false;
+		//List<Object> bands = editor.getSelectionCache().getSelectionModelForType(MBand.class);
+		//return bands.size() == 1;
 	}
 	
 	/**
