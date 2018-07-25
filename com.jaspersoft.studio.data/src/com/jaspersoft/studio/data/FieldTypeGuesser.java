@@ -58,10 +58,16 @@ public class FieldTypeGuesser {
 				if (v == null)
 					f.setValueClass(String.class);
 				else {
-					if (v instanceof Number && !sv.matches("-?+\\d+(\\.0*)?")) {
-						f.setValueClass(String.class);
+					if (v instanceof Number) {
+						if (!sv.matches("^[+-]?(\\d+(\\.\\d*)?)$")) {
+							f.setValueClass(String.class);
+							continue;
+						} else if (sv.contains(".") && !type.equals(BigDecimal.class))
+							continue;
+					} else if (v instanceof Date && sv.contains(":"))
 						continue;
-					}
+					else if (v instanceof Time && (sv.contains("-") || sv.contains("//")))
+						continue;
 				}
 				return;
 			} catch (Throwable e) {

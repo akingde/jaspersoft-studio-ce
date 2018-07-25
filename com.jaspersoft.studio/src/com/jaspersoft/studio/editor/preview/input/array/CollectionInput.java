@@ -17,8 +17,6 @@ import java.util.Set;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -56,62 +54,58 @@ public class CollectionInput extends ADataInput {
 			label.setToolTipText(tt);
 			label.setLayoutData(new GridData(GridData.FILL_BOTH));
 			label.addTraverseListener(keyListener);
-			label.addModifyListener(new ModifyListener() {
+			label.addModifyListener(e -> {
+				String txt = label.getText();
+				Object[] s = txt.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+				// now we could just replace values with values from this
+				// string array
+				// in case of string it's simple
+				// in case of unknown type, all are strings
+				// what if we have array of numbers?
+				// we could parse one by one, what to dow with wrong values?
+				// what if we have dates, times, timestamp?
+				if (param instanceof ParameterJasper) {
+					Class<?> c = ((ParameterJasper) param).getParam().getNestedType();
+					if (c != null) {
+						for (int i = 0; i < s.length; i++) {
+							try {
+								if (c.isAssignableFrom(Integer.class))
+									s[i] = Integer.parseInt((String) s[i]);
+								else if (c.isAssignableFrom(Byte.class))
+									s[i] = Byte.parseByte((String) s[i]);
+								else if (c.isAssignableFrom(Short.class))
+									s[i] = Short.parseShort((String) s[i]);
+								else if (c.isAssignableFrom(BigInteger.class))
+									s[i] = new BigInteger((String) s[i]);
+								else if (c.isAssignableFrom(Long.class))
+									s[i] = Long.parseLong((String) s[i]);
+								else if (c.isAssignableFrom(Float.class))
+									s[i] = Float.parseFloat((String) s[i]);
+								else if (c.isAssignableFrom(Double.class))
+									s[i] = Double.parseDouble((String) s[i]);
+								else if (c.isAssignableFrom(BigDecimal.class))
+									s[i] = new BigDecimal((String) s[i]);
+							} catch (NumberFormatException nfe) {
 
-				@Override
-				public void modifyText(ModifyEvent e) {
-					String txt = label.getText();
-					Object[] s = txt.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-					// now we could just replace values with values from this
-					// string array
-					// in case of string it's simple
-					// in case of unknown type, all are strings
-					// what if we have array of numbers?
-					// we could parse one by one, what to dow with wrong values?
-					// what if we have dates, times, timestamp?
-					if (param instanceof ParameterJasper) {
-						Class<?> c = ((ParameterJasper) param).getParam().getNestedType();
-						if (c != null) {
-							for (int i = 0; i < s.length; i++) {
-								try {
-									if (c.isAssignableFrom(Integer.class))
-										s[i] = Integer.parseInt((String) s[i]);
-									else if (c.isAssignableFrom(Byte.class))
-										s[i] = Byte.parseByte((String) s[i]);
-									else if (c.isAssignableFrom(Short.class))
-										s[i] = Short.parseShort((String) s[i]);
-									else if (c.isAssignableFrom(BigInteger.class))
-										s[i] = new BigInteger((String) s[i]);
-									else if (c.isAssignableFrom(Long.class))
-										s[i] = Long.parseLong((String) s[i]);
-									else if (c.isAssignableFrom(Float.class))
-										s[i] = Float.parseFloat((String) s[i]);
-									else if (c.isAssignableFrom(Double.class))
-										s[i] = Double.parseDouble((String) s[i]);
-									else if (c.isAssignableFrom(BigDecimal.class))
-										s[i] = new BigDecimal((String) s[i]);
-								} catch (NumberFormatException nfe) {
-
-								}
 							}
 						}
 					}
-					Map<String, Object> p = CollectionInput.this.params;
-					Object value = p.get(param.getName());
-					if (value == null)
-						return;
-					if (value.getClass().isArray())
-						value = s;
-					else if (value instanceof Collection) {
-						if (value instanceof List)
-							value = new ArrayList();
-						else
-							((Collection<?>) value).clear();
-						for (Object item : s)
-							((Collection) value).add(item);
-					}
-					updateModel(value);
 				}
+				Map<String, Object> p = CollectionInput.this.params;
+				Object value = p.get(param.getName());
+				if (value == null)
+					return;
+				if (value.getClass().isArray())
+					value = s;
+				else if (value instanceof Collection) {
+					if (value instanceof List)
+						value = new ArrayList();
+					else
+						((Collection<?>) value).clear();
+					for (Object item : s)
+						((Collection) value).add(item);
+				}
+				updateModel(value);
 			});
 
 			bbuton = new Button(cmp, SWT.PUSH);
@@ -151,6 +145,7 @@ public class CollectionInput extends ADataInput {
 				}
 			});
 			updateInput();
+			setNullable(param, label);
 		}
 	}
 

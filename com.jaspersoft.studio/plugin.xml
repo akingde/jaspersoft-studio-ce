@@ -1984,6 +1984,39 @@
      <menu
            id="com.jaspersoft.studio.editor.context.type"
            label="Report Repository Type">
+        <visibleWhen
+              checkEnabled="false">
+           <with
+                 variable="activeMenuSelection">
+                 <iterate
+                             ifEmpty="false"
+                             operator="and">
+                         <or>
+                            <adapt
+                                  type="org.eclipse.core.resources.IProject">
+                            </adapt>
+                            <adapt
+                                  type="org.eclipse.core.resources.IFolder">
+                               <not>
+                                  <test
+                                        property="org.eclipse.core.resources.name"
+                                        value="JR-INF">
+                                  </test>
+                               </not>
+                            </adapt>
+                            <adapt type="org.eclipse.core.resources.IResource">
+             	 <test property="org.eclipse.core.resources.extension" value="jrxml" />
+         </adapt>
+                         </or>
+                       </iterate>
+                       <count
+                             value="1">
+                       </count>
+                 
+                 
+               
+           </with>
+        </visibleWhen>
      </menu>
   </menuContribution>
   <menuContribution
