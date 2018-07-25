@@ -154,53 +154,61 @@ public class ICParameterContributor implements IParameterICContributor {
 				boolean isCol = Collection.class.isAssignableFrom(pClazz) || pClazz.isArray();
 				switch (cOpt.getSelectionIndex()) {
 				case 1:
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_LABEL);
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_TYPE);
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
+					ICParameterContributor.this.prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_LABEL);
+					ICParameterContributor.this.prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_TYPE);
+					ICParameterContributor.this.prm.getPropertiesMap()
+							.removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					ICParameterContributor.this.prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
 					buildCmp();
 					buildRepositoryIC();
 					break;
 				case 2:
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
-					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE, ICTypes.BOOLEAN.name());
+					ICParameterContributor.this.prm.getPropertiesMap()
+							.removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					ICParameterContributor.this.prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
+					ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
+							ICTypes.BOOLEAN.name());
 					buildIC();
 					break;
 				case 3:
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
-					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE, ICTypes.VALUE.name());
+					ICParameterContributor.this.prm.getPropertiesMap()
+							.removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					ICParameterContributor.this.prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
+					ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
+							ICTypes.VALUE.name());
 					buildIC();
 					break;
 				case 4:
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
-					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
+					ICParameterContributor.this.prm.getPropertiesMap()
+							.removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
 							isCol ? ICTypes.MULTI_LOV.name() : ICTypes.SINGLE_LOV.name());
 					buildIC();
 					break;
 				case 5:
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
-					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
+					ICParameterContributor.this.prm.getPropertiesMap()
+							.removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
 							isCol ? ICTypes.MULTI_LOV_CHECKBOX.name() : ICTypes.SINGLE_LOV_RADIO.name());
 					buildIC();
 					break;
 				case 6:
-					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
+					ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
 							isCol ? ICTypes.MULTI_QUERY.name() : ICTypes.SINGLE_QUERY.name());
 					buildIC();
 					break;
 				case 7:
-					prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
+					ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_TYPE,
 							isCol ? ICTypes.MULTI_LOV_CHECKBOX.name() : ICTypes.SINGLE_QUERY_RADIO.name());
 					buildIC();
 					break;
 				default:
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_TYPE);
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_PATH);
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
-					prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_LABEL);
+					ICParameterContributor.this.prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_TYPE);
+					ICParameterContributor.this.prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_PATH);
+					ICParameterContributor.this.prm.getPropertiesMap()
+							.removeProperty(PROPERTY_JS_INPUTCONTROL_DATASOURCE);
+					ICParameterContributor.this.prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_VALUE);
+					ICParameterContributor.this.prm.getPropertiesMap().removeProperty(PROPERTY_JS_INPUTCONTROL_LABEL);
 				}
 				cOpt.getParent().update();
 				cOpt.getParent().layout(true);
