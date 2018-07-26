@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ITreeViewerListener;
@@ -43,6 +44,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
+import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -441,6 +443,14 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		ruDescription.setEnabled(bnRunit.getSelection() && isFolder);
 
 		reportUnit = getNewRunit();
+
+		if (obj instanceof MContentResource) {
+			try {
+				WSClientHelper.refreshResource((MContentResource) obj, new NullProgressMonitor());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		if (obj instanceof MReportUnit) {
 			reportUnit = getNewRunit();
 			reportUnit = (MReportUnit) obj;
