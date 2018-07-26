@@ -745,14 +745,6 @@
             </input>
          </propertySection>
          <propertySection
-               class="com.jaspersoft.studio.components.section.name.NameSection"
-               id="com.jaspersoft.studio.components.table.properties.NameSectionList"
-               tab="com.jaspersoft.studio.components.list">
-            <input
-                  type="com.jaspersoft.studio.components.list.model.MList">
-            </input>
-         </propertySection>
-         <propertySection
                afterSection="com.jaspersoft.studio.components.barcode.property.BarcodeSection"
                class="com.jaspersoft.studio.components.barcode.property.QRCodeSection"
                id="com.jaspersoft.studio.components.barcode.property.QRCodeSection"

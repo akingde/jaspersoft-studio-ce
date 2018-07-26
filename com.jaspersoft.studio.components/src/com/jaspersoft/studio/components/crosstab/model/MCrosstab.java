@@ -24,7 +24,6 @@ import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDat
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDataCell;
 import com.jaspersoft.studio.components.crosstab.model.title.MTitle;
 import com.jaspersoft.studio.components.crosstab.model.title.MTitleCell;
-import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -42,6 +41,7 @@ import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -312,7 +312,7 @@ public class MCrosstab extends MGraphicElementLineBox
 			}
 			propertyChange(
 					new PropertyChangeEvent(this, MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, oldValue, newValue));
-		} else if (id.equals(PROPERTY_MAP) || id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+		} else if (id.equals(MGraphicElement.PROPERTY_ELEMENT_NAME)) {
 			super.setPropertyValue(id, value);
 			// fire the event to update the editor name, because the property of the name
 			// could be changed
@@ -357,7 +357,7 @@ public class MCrosstab extends MGraphicElementLineBox
 	 */
 	@Override
 	public String getDisplayText() {
-		String name = getPropertiesMap().getProperty(NameSection.getNamePropertyId(this));
+		String name = getElementNameProperty();
 		return getIconDescriptor().getTitle() + " " + Misc.nvl(name); //$NON-NLS-1$
 	}
 
