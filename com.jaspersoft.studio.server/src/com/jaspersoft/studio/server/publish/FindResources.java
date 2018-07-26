@@ -151,14 +151,9 @@ public class FindResources {
 				if (srvURL == null)
 					srvURL = file
 							.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_SERVERURL));
-				// String srvUSER = jd.getProperty(AExporter.PROP_USER);
-				// if (srvUSER == null)
-				// srvUSER = file.getPersistentProperty(new
-				// QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_USER));
 
 				if (prunit != null && srvURL != null && mserv.getValue().getUrl().equals(srvURL)) {
 					try {
-						// WSClientHelper.connect(mserv, monitor);
 						WSClientHelper.connectGetData(mserv, monitor);
 					} catch (Exception e) {
 						List<MServerProfile> m = ServerManager.getServerProfiles(jd, mserv.getJasperConfiguration(),
@@ -170,12 +165,11 @@ public class FindResources {
 								continue;
 							}
 							try {
-								// WSClientHelper.connect(sp, monitor);
 								WSClientHelper.connectGetData(sp, monitor);
 								mserv = sp;
 								break;
 							} catch (Exception e1) {
-
+								// no need to show error
 							}
 						}
 					}

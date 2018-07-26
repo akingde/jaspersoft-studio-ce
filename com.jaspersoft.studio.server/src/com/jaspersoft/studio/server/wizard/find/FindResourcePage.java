@@ -54,6 +54,7 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryComposite;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
@@ -332,6 +333,13 @@ public class FindResourcePage extends WizardPage {
 					return true;
 				if (!finderUI.isShowHidden() && !containedResource && r.getValue().getParentFolder().endsWith("_files"))
 					return false;
+				if (r instanceof MContentResource)
+					try {
+						WSClientHelper.refreshResource(r, new NullProgressMonitor());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
 				String type = WsTypes.INST().toRestType(r.getValue().getWsType());
 				String ftype = WsTypes.INST().toRestFileType(r.getValue().getWsType()).toString();
 				for (String t : finderUI.getTypes()) {
