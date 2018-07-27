@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.jdbc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -17,6 +18,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -66,7 +69,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	protected WSecretText textPassword;
 
 	// private Button btnSavePassword;
-	protected ComboViewer comboJDBCDriver;
+	protected Combo comboJDBCDriver;
 
 	protected JDBCDriverDefinition currentdriver = null;
 
@@ -134,7 +137,12 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tbtmNewItem.setControl(composite);
 
-		cproperties = new PropertiesComponent(composite);
+		cproperties = new PropertiesComponent(composite) {
+			@Override
+			protected void handlePropertiesChanged() {
+				pchangesuport.firePropertyChange("dirty", false, true);
+			}
+		};
 		cproperties.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
@@ -150,9 +158,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
 		lbl.setText(Messages.JDBCDataAdapterComposite_driverlabel);
 
-		comboJDBCDriver = new ComboViewer(composite, SWT.NONE);
-		Combo combo = comboJDBCDriver.getCombo();
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboJDBCDriver = new Combo(composite, SWT.NONE);
+		comboJDBCDriver.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl = new Label(composite, SWT.NONE);
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
@@ -166,10 +173,11 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		createUserPass(composite);
 
 		definitions = getDefinitions();
+		String[] items = new String[definitions.length];
 		for (int i = 0; i < definitions.length; ++i)
-			comboJDBCDriver.add(definitions[i]);
-
-		ISelectionChangedListener listener = new ISelectionChangedListener() {
+			items[i] = definitions[i].toString();
+		comboJDBCDriver.setItems(items);
+		/*ISelectionChangedListener listener = new ISelectionChangedListener() {
 
 			public void selectionChanged(SelectionChangedEvent event) {
 				if (comboJDBCDriver.getCombo().getSelectionIndex() >= 0) {
@@ -183,10 +191,37 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 			}
 
 		};
-		comboJDBCDriver.addSelectionChangedListener(listener);
-		comboJDBCDriver.setSelection(new StructuredSelection(definitions[0]));
-		listener.selectionChanged(null);
+
+		comboJDBCDriver.addSelectionChangedListener(listener);*/
+		comboJDBCDriver.select(0);
+		comboJDBCDriver.addModifyListener(driverModifyListener);
+		//listener.selectionChanged(null);
 	}
+	
+	private ModifyListener driverModifyListener = new ModifyListener() {
+		
+		@Override
+		public void modifyText(ModifyEvent e) {
+			Combo combo = (Combo)e.widget;
+			String text = combo.getText();
+			int selectionIndex = -1;
+			for(int i = 0; i<definitions.length; i++) {
+				String definition = definitions[i].toString();
+				if (definition.equals(text)) {
+					selectionIndex = i;
+					break;
+				}
+			}
+			if (selectionIndex != -1) {
+				currentdriver = definitions[selectionIndex];
+				btnWizardActionPerformed();
+			} else {
+				currentdriver = new JDBCDriverDefinition("", text, textJDBCUrl.getText());
+				btnWizardActionPerformed();
+			}
+			
+		}
+	};
 
 	protected void createUserPass(final Composite composite) {
 		Label lbl = new Label(composite, SWT.NONE);
@@ -312,14 +347,20 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapter;
 
 		String driverName = Misc.nvl(jdbcDataAdapter.getDriver(), "org.hsqldb.jdbcDriver"); //$NON-NLS-1$
-		comboJDBCDriver.getCombo().setText(driverName);
-
+		comboJDBCDriver.removeModifyListener(driverModifyListener);
+		comboJDBCDriver.setText(driverName);
+		comboJDBCDriver.addModifyListener(driverModifyListener);
+		currentdriver = null;
 		for (JDBCDriverDefinition d : definitions) {
 			if (d.getDriverName().equals(driverName)) {
 				currentdriver = d;
 				break;
 			}
 		}
+		if (currentdriver == null) {
+			currentdriver = new JDBCDriverDefinition("", comboJDBCDriver.getText(), ((JdbcDataAdapter)dataAdapter).getUrl());
+		}
+		
 
 		bindingContext.bindValue(SWTObservables.observeText(textUsername, SWT.Modify), PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(textPassword, SWT.Modify), PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
@@ -344,7 +385,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc.getDataAdapter();
 
-		jdbcDataAdapter.setDriver(comboJDBCDriver.getCombo().getText());
+		jdbcDataAdapter.setDriver(comboJDBCDriver.getText());
 		jdbcDataAdapter.setUsername(textUsername.getText());
 		jdbcDataAdapter.setPassword(textPassword.getText());
 		jdbcDataAdapter.setUrl(textJDBCUrl.getText());

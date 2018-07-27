@@ -137,14 +137,24 @@ public class PropertiesComponent {
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		bGroup.setBackground(parent.getBackground());
 
-		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
+		new NewButton(){
+			protected void afterElementAdded(Object selement) {
+				handlePropertiesChanged();
+			}
+		}.createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
 				return new Property("property", "value"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 		});
-		new DeleteButton().createDeleteButton(bGroup, tviewer);
+		new DeleteButton(){
+			protected void afterElementDeleted(Object element) {
+				handlePropertiesChanged();
+			}
+			
+		}
+		.createDeleteButton(bGroup, tviewer);
 
 		this.control = composite;
 	}
@@ -179,10 +189,14 @@ public class PropertiesComponent {
 				}
 				tviewer.update(element, new String[] { property });
 				tviewer.refresh();
+				handlePropertiesChanged();
 			}
 		});
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new TextCellEditor(parent) });
 		viewer.setColumnProperties(new String[] { "KEY", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	protected void handlePropertiesChanged() {
 	}
 }
