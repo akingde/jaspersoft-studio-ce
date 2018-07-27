@@ -18,7 +18,6 @@ import com.jaspersoft.studio.callout.pin.IPinContainer;
 import com.jaspersoft.studio.components.list.ListComponentFactory;
 import com.jaspersoft.studio.components.list.ListNodeIconDescriptor;
 import com.jaspersoft.studio.components.list.messages.Messages;
-import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.editor.layout.FreeLayout;
 import com.jaspersoft.studio.editor.layout.ILayout;
@@ -279,7 +278,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 				else
 					jrList.setDatasetRun(null);
 			}
-		} else if (id.equals(PROPERTY_MAP) || id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+		} else if (id.equals(MGraphicElement.PROPERTY_ELEMENT_NAME)) {
 			super.setPropertyValue(id, value);
 			// fire the event to update the editor name, because the property of the name
 			// could be changed
@@ -336,10 +335,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 	 */
 	@Override
 	public String getDisplayText() {
-		String p = getElementNameProperty();
-		if (!Misc.isNullOrEmpty(p))
-			return p;
-		String name = getPropertiesMap().getProperty(NameSection.getNamePropertyId(this));
+		String name = getElementNameProperty();
 		return getIconDescriptor().getTitle() + " " + Misc.nvl(name);
 	}
 

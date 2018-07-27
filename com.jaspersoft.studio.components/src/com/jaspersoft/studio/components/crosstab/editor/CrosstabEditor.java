@@ -31,7 +31,6 @@ import com.jaspersoft.studio.components.crosstab.model.nodata.action.CreateCross
 import com.jaspersoft.studio.components.crosstab.model.parameter.action.CreateCrosstabParameterAction;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateRowGroupAction;
 import com.jaspersoft.studio.components.crosstab.model.title.action.CreateCrosstabTitleAction;
-import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
@@ -44,6 +43,7 @@ import com.jaspersoft.studio.editor.report.ParentSelectionOverrider;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
@@ -231,7 +231,7 @@ public class CrosstabEditor extends NamedSubeditor {
 		ANode node = getEditedNode();
 		if (node != null && node.getValue() instanceof JRBaseElement) {
 			JRBaseElement el = (JRBaseElement) node.getValue();
-			return el.getPropertiesMap().getProperty(NameSection.getNamePropertyId(node));
+			return el.getPropertiesMap().getProperty(MGraphicElement.PROPERTY_ELEMENT_NAME);
 		}
 		return null;
 	}

@@ -7,7 +7,6 @@ package com.jaspersoft.studio.components.table.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.callout.pin.IPinContainer;
-import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.components.table.DSListener;
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.TableDatasetRunProperyDescriptor;
@@ -324,7 +322,7 @@ public class MTable extends MGraphicElement
 			}
 			// Triggering the event will refresh the UI
 			propertyChange(new PropertyChangeEvent(this, PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, oldValue, newValue));
-		} else if (id.equals(PROPERTY_MAP) || id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+		} else if (id.equals(MGraphicElement.PROPERTY_ELEMENT_NAME)) {
 			super.setPropertyValue(id, value);
 			// fire the event to update the editor name, because the property of the name
 			// could be changed
@@ -417,10 +415,7 @@ public class MTable extends MGraphicElement
 	 */
 	@Override
 	public String getDisplayText() {
-		String p = getElementNameProperty();
-		if (!Misc.isNullOrEmpty(p))
-			return p;
-		String name = getPropertiesMap().getProperty(NameSection.getNamePropertyId(this));
+		String name = getElementNameProperty();
 		return getIconDescriptor().getTitle() + " " + Misc.nvl(name); //$NON-NLS-1$
 	}
 

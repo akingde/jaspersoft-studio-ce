@@ -19,7 +19,6 @@ import org.eclipse.jface.action.Separator;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.components.list.model.MList;
-import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
@@ -32,6 +31,7 @@ import com.jaspersoft.studio.editor.report.ParentSelectionOverrider;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
@@ -163,7 +163,7 @@ public class ListEditor extends NamedSubeditor {
 		ANode node = getEditedNode();
 		if (node != null && node.getValue() instanceof JRBaseElement) {
 			JRBaseElement el = (JRBaseElement) node.getValue();
-			return el.getPropertiesMap().getProperty(NameSection.getNamePropertyId(node));
+			return el.getPropertiesMap().getProperty(MGraphicElement.PROPERTY_ELEMENT_NAME);
 		}
 		return null;
 	}
