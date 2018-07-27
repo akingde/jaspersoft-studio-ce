@@ -277,7 +277,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 		return jrContext;
 	}
 
-	public JasperReportsConfiguration getJrContext() {
+	public JasperReportsConfiguration getJrContext() { 
 		return jrContext;
 	}
 

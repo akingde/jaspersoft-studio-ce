@@ -47,7 +47,7 @@ public class EditorContextUtil {
 	public static AEditorContext getEditorContext(IFile f, JasperReportsConfiguration jConf) {
 		String ctx = null;
 		try {
-			if (f != null) {
+			if (f != null && f.exists()) {
 				ctx = f.getPersistentProperty(EC_KEY);
 				IContainer c = f.getParent();
 				while (c != null && Misc.isNullOrEmpty(ctx)) {
@@ -101,7 +101,12 @@ public class EditorContextUtil {
 			this.toolBar = toolBar;
 			this.tbManager = tbManager;
 			setText("Project");
-			UIUtils.getDisplay().asyncExec(() -> setToolBarText(editor.getJrContext().getEditorContext().getName()));
+			UIUtils.getDisplay().asyncExec(() -> {
+				if (editor.getJrContext() != null)
+					setToolBarText(editor.getJrContext().getEditorContext().getName());
+				else
+					setToolBarText(AEditorContext.NAME);
+			});
 			setMenuCreator(this);
 			this.editor = editor;
 			actions.add(this);
@@ -109,15 +114,19 @@ public class EditorContextUtil {
 		}
 
 		private void setToolBarText(String text) {
+			if (toolBar.isDisposed())
+				return;
 			setText(Misc.nvl(text, AEditorContext.NAME));
-			IFile f = (IFile) editor.getJrContext().get(FileUtils.KEY_FILE);
-			try {
-				if (f.getPersistentProperty(EC_KEY) == null)
-					setToolTipText("This context is inherited from the parent folder.");
-				else
-					setToolTipText("This context is set on the file");
-			} catch (CoreException e) {
-				e.printStackTrace();
+			if (editor.getJrContext() != null) {
+				IFile f = (IFile) editor.getJrContext().get(FileUtils.KEY_FILE);
+				try {
+					if (f == null || f.getPersistentProperty(EC_KEY) == null)
+						setToolTipText("This context is inherited from the parent folder.");
+					else
+						setToolTipText("This context is set on the file");
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
 			}
 			tbManager.update(true);
 			toolBar.pack();
