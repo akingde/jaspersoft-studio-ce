@@ -43,14 +43,16 @@ public class JRSEditorContext extends AEditorContext {
 		if (!f.getParent().isVirtual())
 			add(list, rset, f.getParent().getLocation().toFile().getAbsolutePath());
 
-		Path fpath = Paths.get(f.getLocationURI().toASCIIString());
-		Path ppath = Paths.get(f.getProject().getLocationURI().toASCIIString());
+		Path fpath = Paths.get(f.getLocation().toFile().getAbsolutePath());
+		Path ppath = Paths.get(f.getProject().getLocation().toFile().getAbsolutePath());
 		IContainer root = ResourcesPlugin.getWorkspace().getRoot();
 		for (ServerProfile sp : ServerManager.getServerList()) {
+			if (sp.getProjectPath() == null)
+				continue;
 			IResource r = root.findMember(sp.getProjectPath());
 			if (r == null)
 				continue;
-			Path jrsp = Paths.get(r.getLocationURI().toASCIIString());
+			Path jrsp = Paths.get(r.getLocation().toFile().getAbsolutePath());
 			if (jrsp.startsWith(ppath) && fpath.startsWith(jrsp)) {
 				add(list, rset, sp.getProjectPath());
 				break;
