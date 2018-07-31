@@ -10,6 +10,7 @@ import java.util.Set;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceAWS;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
+import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 
 public class DatasourcesAllFilter implements IDatasourceFilter {
 	private static final Set<String> types = new HashSet<>();
@@ -36,6 +37,13 @@ public class DatasourcesAllFilter implements IDatasourceFilter {
 
 	public static String[] getTypesArray() {
 		return types.toArray(new String[types.size()]);
+	}
+
+	public static String[] getTypesArrayRest() {
+		String[] tps = getTypesArray();
+		for (int i = 0; i < types.size(); i++)
+			tps[i] = WsTypes.INST().toRestType(tps[i]);
+		return tps;
 	}
 
 	@Override

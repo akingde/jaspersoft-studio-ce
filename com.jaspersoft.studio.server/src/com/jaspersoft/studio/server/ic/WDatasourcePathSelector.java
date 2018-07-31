@@ -17,7 +17,7 @@ public class WDatasourcePathSelector extends WResourcePathSelector {
 
 	@Override
 	protected String[] getCompatibleResources() {
-		return DatasourcesAllFilter.getTypesArray();
+		return DatasourcesAllFilter.getTypesArrayRest();
 	}
 
 	@Override
