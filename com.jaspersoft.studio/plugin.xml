@@ -2037,7 +2037,7 @@
      </separator>
      <command
            commandId="com.jaspersoft.studio.editor.context.type"
-           label="Java Project"
+           label="Project"
            style="radio">
         <parameter
               name="org.eclipse.ui.commands.radioStateParameter"
