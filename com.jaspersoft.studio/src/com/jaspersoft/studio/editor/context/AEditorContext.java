@@ -7,7 +7,6 @@ package com.jaspersoft.studio.editor.context;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -86,7 +85,8 @@ public class AEditorContext {
 			configRepositoryPaths(list);
 		}
 		setupProxy(list);
-		repositoryServices = Collections.singletonList(new JSSFileRepositoryService(jConf, list));
+		repositoryServices = new ArrayList<>();
+		repositoryServices.add(new JSSFileRepositoryService(jConf, list));
 		jConf.setExtensions(RepositoryService.class, repositoryServices);
 		List<PersistenceServiceFactory> persistenceServiceFactoryList = jConf
 				.getExtensions(PersistenceServiceFactory.class);

@@ -19,6 +19,7 @@ import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRRuntimeException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -403,6 +404,8 @@ public class DBMetadata {
 		} catch (JRException e1) {
 			updateUI(root);
 			designer.showError(e1);
+		} catch (JRRuntimeException e1) {
+			return null;
 		}
 
 		connection = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);

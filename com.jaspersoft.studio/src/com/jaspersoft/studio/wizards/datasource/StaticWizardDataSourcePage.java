@@ -224,8 +224,10 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 		// in a previous step, and this directory has been stored in the
 		// settings with the key "new_file_path"...
 		IProject selectedProject = null;
-
+		JasperReportsConfiguration jConfig = null;
 		if (getSettings() != null) {
+			jConfig = (JasperReportsConfiguration) getSettings().get(JSSWizard.JASPERREPORTS_CONFIGURATION);
+			IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
 			if (getSettings().containsKey(JSSWizard.FILE_PATH)) {
 				IResource resource = ResourcesPlugin.getWorkspace().getRoot()
 						.findMember(((IPath) getSettings().get(JSSWizard.FILE_PATH)).toOSString());
@@ -233,16 +235,13 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 					selectedProject = resource.getProject();
 				}
 			} else if (getSettings().get(JSSWizard.JASPERREPORTS_CONFIGURATION) != null) {
-				JasperReportsConfiguration jConfig = (JasperReportsConfiguration) getSettings()
-						.get(JSSWizard.JASPERREPORTS_CONFIGURATION);
-				IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
 				if (f != null)
 					selectedProject = f.getProject();
 			}
 		}
 		cleanDataAdapterStorageListeners();
 
-		storages = new ArrayList<ADataAdapterStorage>();
+		storages = new ArrayList<>();
 		// Load all the data adapters...
 		// Attention, we are not loading all the possible data storages, but only the
 		// ones we know
@@ -255,7 +254,10 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 		}
 
 		for (ADataAdapterStorage storage : storages) {
-			List<DataAdapterDescriptor> das = new ArrayList<DataAdapterDescriptor>(storage.getDataAdapterDescriptors());
+			if (jConfig != null && !jConfig.getEditorContext().isDataAdapterStorage(storage))
+				continue;
+
+			List<DataAdapterDescriptor> das = new ArrayList<>(storage.getDataAdapterDescriptors());
 			// Sort data adapters
 			Collections.sort(das, new Comparator<DataAdapterDescriptor>() {
 				@Override
