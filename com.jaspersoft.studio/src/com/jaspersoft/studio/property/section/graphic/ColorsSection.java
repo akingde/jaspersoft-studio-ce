@@ -5,6 +5,9 @@
 package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+
+import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -13,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
@@ -52,6 +56,27 @@ public class ColorsSection extends AbstractRealValueSection {
 	@Override
 	public void expandForProperty(Object propertyId) {
 		if (section != null && !section.isExpanded()) section.setExpanded(true);
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (!isDisposed()) {
+			String n = evt.getPropertyName();
+			setRefreshing(true);
+			APropertyNode element = getElement();
+			if (element != null) {
+				element.getPropertyDescriptors();
+				for (Object key : widgets.keySet()) {
+					if (n.equals(key) || n.equals(JRDesignElement.PROPERTY_PARENT_STYLE) || n.equals(JRDesignElement.PROPERTY_PARENT_STYLE_NAME_REFERENCE)){
+						//Use actual and current value to check if a value is inherited or not
+						Object currentValue = element.getPropertyActualValue(key);
+						Object ownValue = element.getPropertyValue(key);
+						widgets.get(key).setData(element, currentValue, ownValue);
+					}
+				}
+			}
+			setRefreshing(false);
+		}
 	}
 	
 	protected void initializeProvidedProperties() {
