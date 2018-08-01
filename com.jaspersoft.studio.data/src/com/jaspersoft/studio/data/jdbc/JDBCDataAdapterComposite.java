@@ -4,17 +4,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.jdbc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -177,25 +172,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		for (int i = 0; i < definitions.length; ++i)
 			items[i] = definitions[i].toString();
 		comboJDBCDriver.setItems(items);
-		/*ISelectionChangedListener listener = new ISelectionChangedListener() {
-
-			public void selectionChanged(SelectionChangedEvent event) {
-				if (comboJDBCDriver.getCombo().getSelectionIndex() >= 0) {
-					currentdriver = definitions[comboJDBCDriver.getCombo().getSelectionIndex()];
-					comboJDBCDriver.getCombo().setText(currentdriver.getDriverName());
-					btnWizardActionPerformed();
-				} else {
-					currentdriver = null;
-				}
-
-			}
-
-		};
-
-		comboJDBCDriver.addSelectionChangedListener(listener);*/
 		comboJDBCDriver.select(0);
 		comboJDBCDriver.addModifyListener(driverModifyListener);
-		//listener.selectionChanged(null);
 	}
 	
 	private ModifyListener driverModifyListener = new ModifyListener() {
@@ -217,7 +195,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 				btnWizardActionPerformed();
 			} else {
 				currentdriver = new JDBCDriverDefinition("", text, textJDBCUrl.getText());
-				btnWizardActionPerformed();
+				pchangesuport.firePropertyChange("dirty", false, true);
 			}
 			
 		}
@@ -385,7 +363,20 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc.getDataAdapter();
 
-		jdbcDataAdapter.setDriver(comboJDBCDriver.getText());
+		JDBCDriverDefinition currentdriver = null;
+		String selectedDriverText = comboJDBCDriver.getText();
+		for (JDBCDriverDefinition d : definitions) {
+			if (d.toString().equals(selectedDriverText)) {
+				currentdriver = d;
+				break;
+			}
+		}
+		if (currentdriver == null) {
+			jdbcDataAdapter.setDriver(selectedDriverText);
+		} else {
+			jdbcDataAdapter.setDriver(currentdriver.getDriverName());
+		}
+		
 		jdbcDataAdapter.setUsername(textUsername.getText());
 		jdbcDataAdapter.setPassword(textPassword.getText());
 		jdbcDataAdapter.setUrl(textJDBCUrl.getText());
