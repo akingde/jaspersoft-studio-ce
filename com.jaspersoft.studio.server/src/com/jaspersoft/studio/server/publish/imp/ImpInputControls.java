@@ -189,17 +189,17 @@ public class ImpInputControls {
 		dataType.setUriString(dataType.getParentFolder() + "/" + dataType.getName());
 		if (jd.getQuery() != null)
 			dataType.setResourceProperty("PROP_QUERY_LANGUAGE", jd.getQuery().getLanguage());
-
-		try {
-			ICQuery value = new ObjectMapper().readValue(qv, ICQuery.class);
-			if (value != null) {
-				rd.setQueryValueColumn(value.valueField);
-				rd.setQueryVisibleColumns(value.columns.toArray(new String[value.columns.size()]));
-				dataType.setSql(value.query);
+		if (qv != null)
+			try {
+				ICQuery value = new ObjectMapper().readValue(qv, ICQuery.class);
+				if (value != null) {
+					rd.setQueryValueColumn(value.valueField);
+					rd.setQueryVisibleColumns(value.columns.toArray(new String[value.columns.size()]));
+					dataType.setSql(value.query);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 		String v = p.getPropertiesMap().getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_DATASOURCE);
 		if (!Misc.isNullOrEmpty(v)) {
@@ -223,12 +223,13 @@ public class ImpInputControls {
 		dt.setParentFolder(rd.getUriString() + MReportUnit.RU_SUFFIX);
 		dt.setUriString(dt.getParentFolder() + "/" + rd.getName());
 		List<ListItem> values = new ArrayList<>();
-		try {
-			values = new ObjectMapper().readValue(qv, new TypeReference<List<ListItem>>() {
-			});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		if (qv != null)
+			try {
+				values = new ObjectMapper().readValue(qv, new TypeReference<List<ListItem>>() {
+				});
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		if (values == null)
 			values = new ArrayList<>();
 
