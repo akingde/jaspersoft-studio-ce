@@ -562,6 +562,7 @@ public class MTextField extends MTextElement {
 			return result;
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 		result.put(JRDesignStyle.PROPERTY_PATTERN, jrElement.getOwnPattern());
+		result.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, jrElement.isBlankWhenNull());
 		return result;
 	}
 }
