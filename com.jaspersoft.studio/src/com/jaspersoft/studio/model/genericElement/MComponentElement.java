@@ -89,8 +89,12 @@ public class MComponentElement extends MGraphicElement {
 	 */
 	@Override
 	public String getToolTip() {
-		return getIconDescriptor().getToolTip() + "\n"
-				+ (String) getPropertyValue(JRDesignComponentElement.PROPERTY_COMPONENT_KEY);
+		String componentKey = (String) getPropertyValue(JRDesignComponentElement.PROPERTY_COMPONENT_KEY);
+		String tooltip = getIconDescriptor().getToolTip();
+		if (componentKey != null) {
+			tooltip += "\n" + componentKey;
+		}
+		return tooltip;
 	}
 
 	@Override
@@ -125,7 +129,9 @@ public class MComponentElement extends MGraphicElement {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		if (id.equals(JRDesignComponentElement.PROPERTY_COMPONENT_KEY)) {
 			ComponentKey ckey = jrElement.getComponentKey();
-			return ckey.getName() + " " + ckey.getNamespacePrefix() + " " + ckey.getNamespace();
+			if (ckey != null) {
+				return ckey.getName() + " " + ckey.getNamespacePrefix() + " " + ckey.getNamespace();
+			} else return null;
 		}
 		return super.getPropertyValue(id);
 	}
