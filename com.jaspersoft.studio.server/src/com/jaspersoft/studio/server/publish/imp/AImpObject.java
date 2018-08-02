@@ -26,6 +26,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -40,6 +41,8 @@ public abstract class AImpObject {
 	protected AFileResource findFile(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
 			JRDesignExpression exp, IFile file) {
 		String str = getPath(fileset, exp);
+		if (Misc.isNullOrEmpty(str))
+			return null;
 		if (fileset.contains(str)) {
 			File f = findFile(file, str);
 			if (f != null && f.exists())
@@ -48,8 +51,6 @@ public abstract class AImpObject {
 				setupSameExpression(mrunit, exp, doPath(str));
 			return null;
 		}
-		if (str == null)
-			return null;
 		File f = findFile(file, str);
 		if (f != null && f.exists()) {
 			PublishOptions popt = createOptions(jrConfig, str);
@@ -68,8 +69,8 @@ public abstract class AImpObject {
 		String fname = f.getName();
 		if (fname.contains("___")) {
 			int ind = fname.indexOf("___");
-			fname = fname.substring(0, ind );
-		} 
+			fname = fname.substring(0, ind);
+		}
 		return fname;
 	}
 
