@@ -47,8 +47,9 @@ public class EditorContextUtil {
 	public static AEditorContext getEditorContext(IFile f, JasperReportsConfiguration jConf) {
 		String ctx = null;
 		try {
-			if (f != null && f.exists()) {
-				ctx = f.getPersistentProperty(EC_KEY);
+			if (f != null) {
+				if (f.exists())
+					ctx = f.getPersistentProperty(EC_KEY);
 				IContainer c = f.getParent();
 				while (c != null && Misc.isNullOrEmpty(ctx)) {
 					ctx = c.getPersistentProperty(EC_KEY);

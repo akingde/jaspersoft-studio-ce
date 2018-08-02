@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ICQuery {
 	public String query;
+	public String language;
 	public String valueField;
 	public List<String> columns = new ArrayList<>();
 }

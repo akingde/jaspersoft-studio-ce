@@ -448,6 +448,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 	 */
 	private void editElement(PropertyDTO edited) {
 		PropertyDTO result = edited.clone();
+		result.seteContext(eContext);
 		JRPropertyDialog inputDialog = new JRPropertyDialog(UIUtils.getShell());
 		inputDialog.setValue(result);
 		if (inputDialog.open() == Dialog.OK) {
