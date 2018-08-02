@@ -15,6 +15,7 @@ import com.jaspersoft.studio.property.dataset.fields.table.widget.AWidget;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 public class WICValueSelector extends AWTextButton {
 
@@ -45,8 +46,10 @@ public class WICValueSelector extends AWTextButton {
 					prm = (JRParameter) aw.getTColumn().getValue1();
 
 				if (prm != null) {
-					String type = prm.getPropertiesMap()
-							.getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_TYPE);
+					JRPropertiesMap pmap = prm.getPropertiesMap();
+					if (aw.getElement() instanceof JRPropertiesMap)
+						pmap = (JRPropertiesMap) aw.getElement();
+					String type = pmap.getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_TYPE);
 
 					if (type != null && (type.equals(ICTypes.SINGLE_LOV.name())
 							|| type.equals(ICTypes.SINGLE_LOV_RADIO.name()) || type.equals(ICTypes.MULTI_LOV.name())
