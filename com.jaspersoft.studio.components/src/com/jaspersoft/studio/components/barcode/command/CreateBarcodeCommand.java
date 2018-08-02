@@ -91,7 +91,7 @@ public class CreateBarcodeCommand extends CreateElementCommand {
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getBarcode();
 				if (srcNode.getValue() == null)
-					jrElement = srcNode.createJRElement(jasperDesign);
+					jrElement = srcNode.createJRElement(jasperDesign, true);
 				else
 					jrElement = (JRDesignElement) srcNode.getValue();
 
