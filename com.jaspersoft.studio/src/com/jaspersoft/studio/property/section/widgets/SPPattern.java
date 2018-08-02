@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -16,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -65,6 +67,28 @@ public class SPPattern extends SPText<IPropertyDescriptor> {
 	public void setData(APropertyNode pnode, Object b) {
 		super.setData(pnode, b);
 		btn.setEnabled(pnode.isEditable());
+	}
+	
+	@Override
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		setData(pnode, resolvedValue);
+		if (ftext != null && !ftext.isDisposed()){
+			if (elementValue != null){
+				ftext.setForeground(ColorConstants.black);
+				ftext.setToolTipText(pDescriptor.getDescription());
+				if (getLabel() != null) {
+					getLabel().setToolTipText(pDescriptor.getDescription());
+					getLabel().setForeground(ColorConstants.black);
+				}
+			} else {
+				ftext.setForeground(ColorConstants.gray);
+				ftext.setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+				if (getLabel() != null) {
+					getLabel().setToolTipText(Messages.common_inherited_attribute + pDescriptor.getDescription());
+					getLabel().setForeground(ColorConstants.gray);
+				}
+			}
+		}
 	}
 
 	@Override
