@@ -560,6 +560,8 @@ public class ParametersTable extends AbstractModifyTable {
 			params.add((JRDesignParameter) p);
 			final JRParameter prm = p;
 			PropertyChangeListener pcl = evt -> {
+				if (treeviewer.getTree().isDisposed())
+					return;
 				treeviewer.refresh(true);
 				treeviewer.expandToLevel(prm, 1);
 			};

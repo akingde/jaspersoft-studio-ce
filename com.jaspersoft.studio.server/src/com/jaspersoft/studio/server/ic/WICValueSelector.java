@@ -48,11 +48,13 @@ public class WICValueSelector extends AWTextButton {
 					String type = prm.getPropertiesMap()
 							.getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_TYPE);
 
-					if (type != null
-							&& (type.equals(ICTypes.SINGLE_LOV.name()) || type.equals(ICTypes.MULTI_LOV.name())))
+					if (type != null && (type.equals(ICTypes.SINGLE_LOV.name())
+							|| type.equals(ICTypes.SINGLE_LOV_RADIO.name()) || type.equals(ICTypes.MULTI_LOV.name())
+							|| type.equals(ICTypes.MULTI_LOV_CHECKBOX.name())))
 						showLOV(cmp, prm);
-					else if (type != null
-							&& (type.equals(ICTypes.SINGLE_QUERY.name()) || type.equals(ICTypes.MULTI_QUERY.name())))
+					else if (type != null && (type.equals(ICTypes.SINGLE_QUERY.name())
+							|| type.equals(ICTypes.SINGLE_QUERY_RADIO.name()) || type.equals(ICTypes.MULTI_QUERY.name())
+							|| type.equals(ICTypes.MULTI_QUERY_CHECKBOX.name())))
 						showQuery(cmp, prm);
 					else
 						showText(cmp, prm);
@@ -61,6 +63,7 @@ public class WICValueSelector extends AWTextButton {
 
 		});
 	}
+
 	private void showText(Composite cmp, JRParameter prm) {
 		String v = prm.getPropertiesMap().getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_VALUE);
 		TextDialog d = new TextDialog(cmp.getShell(), Misc.nvl(v));
@@ -69,6 +72,7 @@ public class WICValueSelector extends AWTextButton {
 			fillValue();
 		}
 	}
+
 	private void showLOV(Composite cmp, JRParameter prm) {
 		String v = prm.getPropertiesMap().getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_VALUE);
 		LovDialog d = new LovDialog(cmp.getShell(), Misc.nvl(v));
