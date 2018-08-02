@@ -17,6 +17,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -28,6 +29,7 @@ import com.jaspersoft.studio.data.designer.ICQuery;
 import com.jaspersoft.studio.data.designer.IFilterQuery;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.wizard.resource.StringValueDialog;
+import com.jaspersoft.studio.server.wizard.resource.page.QueryPageContent;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -44,6 +46,7 @@ public class QueryComposite {
 	private Text tQuery;
 	private Text tValue;
 	private TableViewer tableViewer;
+	private Combo cLang;
 
 	public QueryComposite(String v, IFilterQuery fq) {
 		this.fq = fq;
@@ -54,9 +57,18 @@ public class QueryComposite {
 		}
 		if (value == null)
 			value = new ICQuery();
+		if (fq != null)
+			value.language = fq.getLanguage();
 	}
 
 	public void createComposite(Composite composite) {
+		if (fq == null) {
+			cLang = new Combo(composite, SWT.READ_ONLY);
+			cLang.setItems(QueryPageContent.LANGUAGES);
+			cLang.addModifyListener(e -> value.language = cLang.getText());
+
+		}
+
 		CTabFolder tabFolder = new CTabFolder(composite, SWT.TOP | SWT.FLAT);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 250;
@@ -209,6 +221,8 @@ public class QueryComposite {
 		tQuery.setText(Misc.nvl(value.query));
 		tValue.setText(Misc.nvl(value.valueField));
 		tableViewer.setInput(value.columns);
+		if (cLang != null)
+			cLang.setText(Misc.nvl(value.language));
 	}
 
 	protected void handleValueChanged() {
@@ -217,6 +231,8 @@ public class QueryComposite {
 
 	public String getValue() {
 		try {
+			if (value.language == null)
+				value.language = fq.getLanguage();
 			return mapper.writeValueAsString(value);
 		} catch (IOException e) {
 			e.printStackTrace();

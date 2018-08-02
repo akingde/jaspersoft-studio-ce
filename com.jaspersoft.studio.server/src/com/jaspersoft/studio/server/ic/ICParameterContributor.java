@@ -286,7 +286,7 @@ public class ICParameterContributor implements IParameterICContributor {
 				Misc.nvl(prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_VALUE) : "")) {
 			@Override
 			protected void handleValueChanged() {
-				prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_VALUE, getValue());
+				ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_VALUE, getValue());
 			}
 		};
 		lovc.createComposite(c);
@@ -308,7 +308,7 @@ public class ICParameterContributor implements IParameterICContributor {
 				Misc.nvl(prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_VALUE) : ""), fq) {
 			@Override
 			protected void handleValueChanged() {
-				prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_VALUE, getValue());
+				ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_VALUE, getValue());
 			}
 		};
 		qc.createComposite(c);

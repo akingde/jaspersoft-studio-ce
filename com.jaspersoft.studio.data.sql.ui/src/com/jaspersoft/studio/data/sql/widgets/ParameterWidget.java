@@ -165,4 +165,9 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> implement
 		return null;
 	}
 
+	@Override
+	public String getLanguage() {
+		return "sql";
+	}
+
 }

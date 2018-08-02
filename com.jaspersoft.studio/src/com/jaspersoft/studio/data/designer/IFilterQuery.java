@@ -4,6 +4,7 @@
 package com.jaspersoft.studio.data.designer;
 
 public interface IFilterQuery {
+	public String getLanguage();
 
 	public String getFilterQuery();
 }

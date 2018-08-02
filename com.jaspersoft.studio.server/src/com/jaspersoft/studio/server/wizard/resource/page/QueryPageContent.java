@@ -25,6 +25,8 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class QueryPageContent extends APageContent {
 
+	public static final String[] LANGUAGES = new String[] { "sql", "hql", "domain", "sl", "HiveQL", "MongoDbQuery" };
+
 	public QueryPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
@@ -69,7 +71,7 @@ public class QueryPageContent extends APageContent {
 
 			clang = new Combo(composite, SWT.BORDER);
 
-			clang.setItems(new String[] { "sql", "hql", "domain", "sl", "HiveQL", "MongoDbQuery" });
+			clang.setItems(LANGUAGES);
 			// clang.setItems(ModelUtils.getQueryLanguages(res.getJasperConfiguration()));
 
 		}

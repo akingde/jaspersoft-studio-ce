@@ -340,4 +340,9 @@ public class EditExpressionXDialog extends ATitledDialog implements IFilterQuery
 		return ParameterWidget.getFilterQueryObject(operands);
 	}
 
+	@Override
+	public String getLanguage() {
+		return "sql";
+	}
+
 }

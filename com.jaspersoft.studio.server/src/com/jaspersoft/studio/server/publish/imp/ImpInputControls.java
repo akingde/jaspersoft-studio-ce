@@ -194,8 +194,11 @@ public class ImpInputControls {
 				ICQuery value = new ObjectMapper().readValue(qv, ICQuery.class);
 				if (value != null) {
 					rd.setQueryValueColumn(value.valueField);
-					rd.setQueryVisibleColumns(value.columns.toArray(new String[value.columns.size()]));
+					if (value.columns != null)
+						rd.setQueryVisibleColumns(value.columns.toArray(new String[value.columns.size()]));
 					dataType.setSql(value.query);
+					if (value.language != null)
+						dataType.setResourceProperty("PROP_QUERY_LANGUAGE", value.language);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
