@@ -19,6 +19,7 @@ import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.editor.context.AEditorContext;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -27,8 +28,8 @@ import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.repo.RepositoryService;
 
 public class JRSEditorContext extends AEditorContext {
-	public static final String JRS_ID = "jrs";
-	public static final String JRS_NAME = "JasperReports Server";
+	public static final String JRS_ID = "jrs"; //$NON-NLS-1$
+	public static final String JRS_NAME = Messages.JRSEditorContext_1;
 
 	@Override
 	public String getName() {
@@ -94,7 +95,7 @@ public class JRSEditorContext extends AEditorContext {
 
 	@Override
 	public String jrVersion() {
-		return "any";
+		return "any"; //$NON-NLS-1$
 	}
 
 	@Override

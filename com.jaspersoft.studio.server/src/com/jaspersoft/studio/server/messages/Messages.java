@@ -206,6 +206,7 @@ public class Messages extends NLS {
 	public static String JRSClasspathContainerPage_0;
 	public static String JRSClasspathContainerPage_1;
 	public static String JRSClasspathContainerPage_2;
+	public static String JRSEditorContext_1;
 	public static String JRSPreferencesPage_0;
 	public static String JRSPreferencesPage_1;
 	public static String JRSPreferencesPage_10;

@@ -180,6 +180,7 @@ public class Messages extends NLS {
 	public static String AdditionalJarsPage_wizardTitle;
 	public static String AdjustTextFontSize_action_name;
 	public static String AdjustTextFontSize_action_tooltip;
+	public static String AEditorContext_2;
 	public static String AExportAction_exportreport;
 	public static String AExportAction_overwriteCheckbox;
 	public static String AExportAction_overwriteMessage;
@@ -647,6 +648,10 @@ public class Messages extends NLS {
 	public static String EditDataAdapterAction_editTooltip;
 	public static String EditGuideAction_editText;
 	public static String EditGuideAction_editTooltip;
+	public static String EditorContextUtil_0;
+	public static String EditorContextUtil_1;
+	public static String EditorContextUtil_2;
+	public static String EditorContextUtil_6;
 	public static String EditToolAction_name;
 	public static String ElementContextualMenu_contextualResetPlural;
 	public static String ElementContextualMenu_econtextualResetSingular;

@@ -20,6 +20,7 @@ import org.eclipse.jdt.core.JavaCore;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -36,8 +37,8 @@ import net.sf.jasperreports.repo.PersistenceServiceFactory;
 import net.sf.jasperreports.repo.RepositoryService;
 
 public class AEditorContext {
-	public static final String NAME = "project";
-	public static final String EDITOR_CONTEXT = "editor.context";
+	public static final String NAME = "project"; //$NON-NLS-1$
+	public static final String EDITOR_CONTEXT = "editor.context"; //$NON-NLS-1$
 	protected IFile f;
 	protected JasperReportsConfiguration jConf;
 	private String id = NAME;
@@ -56,7 +57,7 @@ public class AEditorContext {
 	}
 
 	public String getName() {
-		return "Project";
+		return Messages.AEditorContext_2;
 	}
 
 	public void dispose() {
@@ -154,14 +155,14 @@ public class AEditorContext {
 			cl = new CompositeClassloader(cl, this.getClass().getClassLoader()) {
 				@Override
 				protected URL findResource(String name) {
-					if (name.endsWith("GroovyEvaluator.groovy"))
+					if (name.endsWith("GroovyEvaluator.groovy")) //$NON-NLS-1$
 						return null;
 					return super.findResource(name);
 				}
 
 				@Override
 				protected Class<?> findClass(String className) throws ClassNotFoundException {
-					if (className.endsWith("GroovyEvaluator"))
+					if (className.endsWith("GroovyEvaluator")) //$NON-NLS-1$
 						throw new ClassNotFoundException(className);
 					return super.findClass(className);
 				}
@@ -221,7 +222,7 @@ public class AEditorContext {
 	}
 
 	public String jrVersion() {
-		return "any";
+		return "any"; //$NON-NLS-1$
 	}
 
 	public boolean isDataAdapterStorage(ADataAdapterStorage storage) {
