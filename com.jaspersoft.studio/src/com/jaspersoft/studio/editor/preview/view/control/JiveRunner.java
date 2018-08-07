@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
@@ -34,7 +35,7 @@ public class JiveRunner implements IReportRunner {
 	}
 
 	public void run(final PreviewContainer pcontainer, final IFile file, final JasperReport jasperReport,
-			JasperReportsConfiguration jrContext, Map<String, Object> jasperParameters) {
+			JasperReportsConfiguration jrContext, Map<String, Object> jasperParameters, IProgressMonitor monitor) {
 		JettyUtil.startJetty(file.getProject(), jrContext);
 		UIUtils.getDisplay().syncExec(() -> {
 			try {

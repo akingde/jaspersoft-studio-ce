@@ -277,7 +277,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 		return jrContext;
 	}
 
-	public JasperReportsConfiguration getJrContext() { 
+	public JasperReportsConfiguration getJrContext() {
 		return jrContext;
 	}
 
@@ -1184,6 +1184,21 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 				getMReport().removeParameter(DataQueryAdapters.DEFAULT_DATAADAPTER);
 			}
 			super.runReport(myDataAdapterDesc, prmDirty);
+		}
+
+		private boolean saving = false;
+
+		@Override
+		public void doSave(IProgressMonitor monitor) {
+			if (saving)
+				return;
+			saving = true;
+			try {
+				super.doSave(monitor);
+				AbstractJRXMLEditor.this.doSave(monitor);
+			} finally {
+				saving = false;
+			}
 		}
 
 		/**

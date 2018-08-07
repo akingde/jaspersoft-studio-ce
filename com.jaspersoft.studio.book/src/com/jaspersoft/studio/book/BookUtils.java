@@ -38,55 +38,54 @@ public class BookUtils {
 
 	public static final int BOOK_VALID = ITextContentDescriber.VALID;
 	public static final int BOOK_INVALID = ITextContentDescriber.INVALID;
-	
+
 	/**
-	 * Scans the workspace for possible book reports and sets the 
-	 * default editor to the {@link JRBookEditor} one.
+	 * Scans the workspace for possible book reports and sets the default editor to
+	 * the {@link JRBookEditor} one.
 	 * 
 	 * @throws CoreException
 	 */
 	public static void scanWSForBookReports() throws CoreException {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		for(IProject proj : projects) {
-			if(proj.isOpen() && proj.hasNature(JasperReportsNature.NATURE_ID)) {
+		for (IProject proj : projects) {
+			if (proj.isOpen() && proj.hasNature(JasperReportsNature.NATURE_ID)) {
 				checkContainerMembersForDefaultEditor(proj);
 			}
 		}
 	}
 
 	/*
-	 * Verifies the children of a generic resource if they can be
-	 * book reports.
+	 * Verifies the children of a generic resource if they can be book reports.
 	 */
-	private static void checkContainerMembersForDefaultEditor(IContainer resource)
-			throws CoreException {
+	private static void checkContainerMembersForDefaultEditor(IContainer resource) throws CoreException {
 		IResource[] members = resource.members();
-		for(IResource r : members) {
-			if(r instanceof IFile) {
+		for (IResource r : members) {
+			if (r instanceof IFile) {
 				checkFileResourceForDefaultEditor((IFile) r);
-			}
-			else if (r instanceof IContainer) {
-				checkContainerMembersForDefaultEditor((IContainer) r);				
+			} else if (r instanceof IContainer) {
+				checkContainerMembersForDefaultEditor((IContainer) r);
 			}
 		}
 	}
 
 	/**
-	 * Checks the specified file and if necessary sets the default editor information.
+	 * Checks the specified file and if necessary sets the default editor
+	 * information.
 	 * 
-	 * @param fileResource the file to be checked
+	 * @param fileResource
+	 *            the file to be checked
 	 */
 	public static void checkFileResourceForDefaultEditor(IFile fileResource) {
 		String fileExtension = fileResource.getFileExtension();
 		IEditorDescriptor defaultEditor = IDE.getDefaultEditor(fileResource);
-		if("jrxml".equals(fileExtension) && defaultEditor!=null && 
-				!JRBookEditor.BOOK_EDITOR_ID.equals(defaultEditor.getId())) {
-			if(BookUtils.isValidJRBook(fileResource)) {
+		if ("jrxml".equals(fileExtension) && defaultEditor != null
+				&& !JRBookEditor.BOOK_EDITOR_ID.equals(defaultEditor.getId())) {
+			if (BookUtils.isValidJRBook(fileResource)) {
 				IDE.setDefaultEditor(fileResource, JRBookEditor.BOOK_EDITOR_ID);
 			}
 		}
 	}
-	
+
 	/**
 	 * Checks if the specified file is a JasperReports Book.
 	 * 
@@ -110,7 +109,7 @@ public class BookUtils {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Validate an input stream as possible JasperReports Book.
 	 * 
@@ -125,22 +124,25 @@ public class BookUtils {
 	public static int validateBook(InputStream in, IContentDescription description) throws IOException {
 		try {
 			// Preliminary check on empty inputstream to avoid ParseException
-			if(in.markSupported()) {
+			if (in.markSupported()) {
 				try {
 					in.mark(0);
 					int firstRead = in.read();
-					if(firstRead==-1) {
+					if (firstRead == -1) {
 						return BOOK_INVALID;
 					}
-				} finally{
+				} finally {
 					in.reset();
 				}
 			}
 			Document document = XMLUtils.parseNoValidation(in);
-			document.getDocumentElement().normalize();
-			NodeList bookParts = document.getElementsByTagName("part");
-			if(bookParts!=null && bookParts.getLength()>0){
-				return BOOK_VALID;
+			if (document != null) {
+				if (document.getDocumentElement() != null)
+					document.getDocumentElement().normalize();
+				NodeList bookParts = document.getElementsByTagName("part");
+				if (bookParts != null && bookParts.getLength() > 0) {
+					return BOOK_VALID;
+				}
 			}
 		} catch (ParserConfigurationException e) {
 			JRBookActivator.getDefault().logError(e);
