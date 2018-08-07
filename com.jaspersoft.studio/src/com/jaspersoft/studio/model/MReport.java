@@ -118,14 +118,14 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	public INode getRoot() {
 		return this;
 	}
-	
+
 	@Override
 	public void register(Object key, ANode value) {
 		if (key != null) {
 			obj2Node.put(key, value);
 		}
 	}
-	
+
 	@Override
 	public void unregister(Object key) {
 		if (key != null) {
@@ -293,8 +293,9 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		columnSpaceD.setCategory(Messages.MReport_columns_category);
 		desc.add(columnSpaceD);
 
-		RWLanguageComboBoxPropertyDescriptor languageD = new RWLanguageComboBoxPropertyDescriptor(JasperDesign.PROPERTY_LANGUAGE,
-				Messages.common_language, ModelUtils.getDefaultReportLanguages(), NullEnum.NOTNULL, false);
+		RWLanguageComboBoxPropertyDescriptor languageD = new RWLanguageComboBoxPropertyDescriptor(
+				JasperDesign.PROPERTY_LANGUAGE, Messages.common_language, ModelUtils.getDefaultReportLanguages(),
+				NullEnum.NOTNULL, false);
 		languageD.setDescription(Messages.MReport_language_description);
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
@@ -1139,19 +1140,19 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 
 	public Object getParameter(String key) {
 		if (parameters == null)
-			parameters = new HashMap<String, Object>();
+			parameters = new HashMap<>();
 		return parameters.get(key);
 	}
 
 	public void putParameter(String key, Object value) {
 		if (parameters == null)
-			parameters = new HashMap<String, Object>();
+			parameters = new HashMap<>();
 		parameters.put(key, value);
 	}
 
 	public void removeParameter(String key) {
 		if (parameters == null)
-			parameters = new HashMap<String, Object>();
+			parameters = new HashMap<>();
 		parameters.remove(key);
 	}
 
