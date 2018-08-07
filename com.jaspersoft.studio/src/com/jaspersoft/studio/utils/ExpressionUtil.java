@@ -308,7 +308,7 @@ public class ExpressionUtil {
 	 */
 	public static void removeAllReportInterpreters(JasperReportsConfiguration reportsConfiguration) {
 		synchronized (datasetsIntepreters) {
-			List<JRDesignDataset> datasetsToRemove = new ArrayList<JRDesignDataset>();
+			List<JRDesignDataset> datasetsToRemove = new ArrayList<>();
 			for (Entry<JRDesignDataset, ExpressionInterpreter> intepreter : datasetsIntepreters.entrySet()) {
 				if (intepreter.getValue().getJasperReportsConfiguration() == reportsConfiguration) {
 					datasetsToRemove.add(intepreter.getKey());
@@ -373,8 +373,9 @@ public class ExpressionUtil {
 			try {
 				jr = JasperCompileManager.getInstance(jrConfig).compile(jrConfig.getJasperDesign());
 			} catch (JRValidationException ex) {
-				//The original report doesn't compile. Try to create a dummy report with the parameters of the original, used only
-				//for the compilation and initialization of the parameters
+				// The original report doesn't compile. Try to create a dummy report with the
+				// parameters of the original, used only
+				// for the compilation and initialization of the parameters
 				JasperDesign jd = new JasperDesign();
 				jd.setName(jrConfig.getJasperDesign().getName());
 				for (JRParameter prm : jrConfig.getJasperDesign().getParameters()) {
@@ -392,7 +393,7 @@ public class ExpressionUtil {
 
 		prms = jrConfig.getJRParameters();
 		if (prms == null) {
-			prms = new HashMap<String, Object>();
+			prms = new HashMap<>();
 			jrConfig.setJRParameters(prms);
 		}
 		try {
