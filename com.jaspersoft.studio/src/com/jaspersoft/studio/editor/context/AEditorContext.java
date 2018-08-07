@@ -251,4 +251,8 @@ public class AEditorContext {
 	public boolean isAllowOtherRunners() {
 		return true;
 	}
+
+	public boolean supportsDataSnapshots() {
+		return true;
+	}
 }

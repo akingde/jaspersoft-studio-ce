@@ -113,10 +113,12 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 
 		@Override
 		public void runWithEvent(Event event) {
-			Point point = ((ToolItem) event.widget).getParent().toDisplay(new Point(event.x, event.y));
-			menu = getMenu(((ToolItem) event.widget).getParent());
-			menu.setLocation(point.x, point.y);
-			menu.setVisible(true);
+			if (container.getJrContext().getEditorContext().supportsDataSnapshots()) {
+				Point point = ((ToolItem) event.widget).getParent().toDisplay(new Point(event.x, event.y));
+				menu = getMenu(((ToolItem) event.widget).getParent());
+				menu.setLocation(point.x, point.y);
+				menu.setVisible(true);
+			}
 		}
 
 		private Menu menu;
