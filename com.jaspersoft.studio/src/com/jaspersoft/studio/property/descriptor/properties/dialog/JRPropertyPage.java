@@ -86,7 +86,6 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		for (PropertyDTO p : props)
 			if (p.getName() != null && !p.getName().equals("")) //$NON-NLS-1$
 				v.setProperty(p.getName(), p.getValue());
-		value = v;
 		super.dispose();
 	}
 
@@ -379,6 +378,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 				dialog.setValue(p);
 				if (dialog.open() == Window.OK) {
 					props.add(p);
+					value.setProperty(p.getName(), p.getValue());
 					tableViewer.refresh();
 				}
 			}
@@ -395,6 +395,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 				if (selection.size() > 0) {
 					PropertyDTO selectedValue = (PropertyDTO) selection.getFirstElement();
 					editElement(selectedValue);
+					value.setProperty(selectedValue.getName(), selectedValue.getValue());
 				}
 			}
 		});
@@ -415,6 +416,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 					int index = props.indexOf(selectedValue);
 					props.remove(index);
 					tableViewer.refresh();
+					value.removeProperty(selectedValue.getName());
 				}
 			}
 		});
