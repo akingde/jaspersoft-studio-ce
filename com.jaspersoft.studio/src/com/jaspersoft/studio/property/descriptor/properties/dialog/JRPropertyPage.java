@@ -86,6 +86,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		for (PropertyDTO p : props)
 			if (p.getName() != null && !p.getName().equals("")) //$NON-NLS-1$
 				v.setProperty(p.getName(), p.getValue());
+		value = v;
 		super.dispose();
 	}
 
