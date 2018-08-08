@@ -27,11 +27,11 @@ public class JPropertiesCellEditor extends EditableDialogCellEditor {
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		JRPropertyEditor wizard = new JRPropertyEditor(jConfig, jrElement);
-		wizard.setValue((JRPropertiesMap) getValue());
+		wizard.setValue((JRPropertiesMap) ((JRPropertiesMap) getValue()).clone());
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK)
-			return new JRPropertiesMap(wizard.getValue());
+			return wizard.getValue();
 		return null;
 	}
 
