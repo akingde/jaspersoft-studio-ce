@@ -12,6 +12,7 @@ import org.eclipse.core.commands.State;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.internal.core.JavaProject;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISelectionService;
@@ -39,7 +40,7 @@ public class EditorContextCommand extends AbstractHandler {
 		ss.addSelectionListener((part, selection) -> {
 			if (selection instanceof IStructuredSelection && ((IStructuredSelection) selection).size() == 1) {
 				Object obj = ((IStructuredSelection) selection).getFirstElement();
-				if(obj instanceof JavaProject)
+				if (obj instanceof JavaProject)
 					obj = ((JavaProject) obj).getProject();
 				if (obj instanceof IResource && isSelectable((IResource) obj)) {
 					setBaseEnabled(true);
