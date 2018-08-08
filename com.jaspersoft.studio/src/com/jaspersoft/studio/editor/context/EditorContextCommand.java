@@ -39,6 +39,8 @@ public class EditorContextCommand extends AbstractHandler {
 		ss.addSelectionListener((part, selection) -> {
 			if (selection instanceof IStructuredSelection && ((IStructuredSelection) selection).size() == 1) {
 				Object obj = ((IStructuredSelection) selection).getFirstElement();
+				if(obj instanceof JavaProject)
+					obj = ((JavaProject) obj).getProject();
 				if (obj instanceof IResource && isSelectable((IResource) obj)) {
 					setBaseEnabled(true);
 					cmd.setEnabled(true);
