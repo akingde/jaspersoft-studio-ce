@@ -395,7 +395,6 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 				if (selection.size() > 0) {
 					PropertyDTO selectedValue = (PropertyDTO) selection.getFirstElement();
 					editElement(selectedValue);
-					value.setProperty(selectedValue.getName(), selectedValue.getValue());
 				}
 			}
 		});
@@ -457,6 +456,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		if (inputDialog.open() == Dialog.OK) {
 			int index = props.indexOf(edited);
 			props.set(index, result);
+			value.setProperty(result.getName(), result.getValue());
 			tableViewer.refresh();
 		}
 	}
