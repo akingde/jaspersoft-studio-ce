@@ -75,6 +75,8 @@ public class EditorContextCommand extends AbstractHandler {
 		ISelection sel = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		if (sel instanceof IStructuredSelection) {
 			Object obj = ((IStructuredSelection) sel).getFirstElement();
+			if(obj instanceof JavaProject)
+				obj = ((JavaProject) obj).getProject();
 			if (obj instanceof IResource)
 				try {
 					if (HandlerUtil.matchesRadioState(event))
