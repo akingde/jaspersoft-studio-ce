@@ -57,10 +57,14 @@ public class VSimpleErrorPreview extends APreview {
 	}
 
 	public void setMessage(String msg) {
+		if (tmessage.isDisposed())
+			return;
 		tmessage.setText(msg);
 	}
 
 	public void addMessage(String msg) {
+		if (tmessage.isDisposed())
+			return;
 		tmessage.setText(tmessage.getText() + msg + "\n");
 		tmessage.getParent().update();
 		tmessage.getParent().layout();
@@ -69,6 +73,8 @@ public class VSimpleErrorPreview extends APreview {
 	private Composite container;
 
 	public void clear() {
+		if (tmessage.isDisposed())
+			return;
 		tmessage.setText("");
 	}
 

@@ -233,7 +233,11 @@ public class AEditorContext {
 		return true;
 	}
 
-	public boolean setDataAdapter(DataAdapterDescriptor myDataAdapterDesc, MReport mrep) {
+	public String getDataAdapterProperty() {
+		return DataQueryAdapters.DEFAULT_DATAADAPTER;
+	}
+
+	public Boolean setDataAdapter(DataAdapterDescriptor myDataAdapterDesc, MReport mrep) {
 		JasperDesign jd = jConf.getJasperDesign();
 		String oldp = jd.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 		if (oldp == null || !oldp.equals(myDataAdapterDesc.getName())) {
