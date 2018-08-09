@@ -21,6 +21,8 @@ import org.eclipse.swt.widgets.Listener;
 
 import com.jaspersoft.studio.messages.Messages;
 
+import net.sf.jasperreports.eclipse.util.Misc;
+
 /**
  * Special Combo that allow to define a read only combo without using
  * the style bit. This was done because a standard read only combo has
@@ -142,7 +144,7 @@ public class CustomReadOnlyCombo extends Combo{
 		@Override
 		public void setText(String string) {	
 			removeVerifyListener(verifyListener);
-			super.setText(string);
+			super.setText(Misc.nvl(string));
 			addVerifyListener(verifyListener);
 		}
 		
