@@ -19,6 +19,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wb.swt.ResourceManager;
@@ -180,6 +181,39 @@ public class ImageUtils {
 		return scaled;
 	}
 
+	/**
+	 * Add text to an image padding the image to the right
+	 */
+	public static Image addTextToImage(Image originalImage, String text) {
+		// Sanity checks
+		Assert.isNotNull(originalImage, "The image to resize can not be null.");
+		Assert.isTrue(!originalImage.isDisposed(), "The image to resize is disposed.");
+		int originalHeight = originalImage.getImageData().height;
+		int originalWidth = originalImage.getImageData().width;
+		// Perform resize operation using anti-alias and interpolation settings
+		Image scaled = new Image(Display.getDefault(), 1, 1);
+		GC gc = new GC(scaled);
+		Point size = gc.textExtent(text);
+		scaled.dispose();
+		gc.dispose();
+		scaled = new Image(Display.getDefault(), originalWidth + size.x + 5, originalHeight);
+		gc = new GC(scaled);
+		try {
+			gc.setAntialias(SWT.ON);
+			gc.setInterpolation(SWT.HIGH);
+			int destY = (originalImage.getImageData().height - size.y) / 2;
+			gc.drawImage(originalImage, 0, 0, originalWidth, originalHeight, size.x + 3, 0, originalHeight, originalWidth);
+			gc.drawText(text, 2, destY, true);
+			//int whitePixel = scaled.getImageData().palette.getPixel(new RGB(255,255,255));
+			//scaled.getImageData().transparentPixel = whitePixel;
+		} finally {
+			gc.dispose();
+		}
+		return scaled;
+	}
+
+	
+	
 	/**
 	 * Checks if the specified extension is a valid one for a potential image file.
 	 * 

@@ -17,6 +17,8 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
@@ -85,6 +87,14 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 			public void focusLost(FocusEvent e) {
 				refresh();
 			}
+		});
+		txt.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				txt.setSelection(0, txt.getText().length());
+			}
+			
 		});
 		
 		//This listener dynamically set the size of the text item when 

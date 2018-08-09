@@ -7,6 +7,7 @@ import java.util.TimeZone;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StackLayout;
@@ -31,10 +32,14 @@ import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 
 public class ABrowserViewer extends APreview implements IURLViewable {
 	public static final String REFRESH_ACTION_ID = "com.jaspersoft.studio.browserViewer.refreshAction"; //$NON-NLS-1$
+	public static final String OPEN_BROWSER_ACTION_ID = "com.jaspersoft.studio.browserViewer.openBrowserAction"; //$NON-NLS-1$
+	//public static final String OPEN_BROWSER_TEXT_ACTION_ID = "com.jaspersoft.studio.browserViewer.openBrowserActionText"; //$NON-NLS-1$
 	private Browser browser;
 	private String url;
 	private URLContributionItem urlBar;
 	private Action refreshAction;
+	private Action openInBrowserAction;
+	//private Action openInBrowserTextAction;
 	private StackLayout stackLayout;
 	private Composite container;
 	private Composite externalBrowserCmp;
@@ -78,6 +83,8 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 				};
 			tmanager.add(urlBar);
 			tmanager.add(getRefreshAction());
+			tmanager.add(getOpenBrowser());
+			//tmanager.add(getOpenBrowserText());
 		}
 	}
 
@@ -93,7 +100,7 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 	protected int getUrlWidth(Control control) {
 		// Add the calculation of the toolbar width depending on the available
 		// size on the parent
-		// minus 40 to leave space to the refresh action
+		// minus 80 to leave space to the refresh and external open actions
 		return control.getParent().getSize().x - 80;
 	}
 
@@ -167,6 +174,39 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 		}
 		return refreshAction;
 	}
+	
+	/*
+	 * Returns the refresh action to be added to the toolbar.
+	 */
+	private Action getOpenBrowser() {
+		if (openInBrowserAction == null) {
+			ImageDescriptor baseImage = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/application_go.png");
+			openInBrowserAction = new Action("", baseImage) {
+				@Override
+				public void run() {
+					BrowserUtils.openExternalBrowser(url);
+				}
+			};
+			openInBrowserAction.setId(OPEN_BROWSER_ACTION_ID);
+			openInBrowserAction.setToolTipText("Open the report in the external browser");
+		}
+		return openInBrowserAction;
+	}
+	
+	/*private Action getOpenBrowserText() {
+		if (openInBrowserTextAction == null) {
+			
+			openInBrowserTextAction = new Action("Share") {
+				@Override
+				public void run() {
+					BrowserUtils.openExternalBrowser(url);
+				}
+			};
+			openInBrowserTextAction.setId(OPEN_BROWSER_TEXT_ACTION_ID);
+			openInBrowserTextAction.setToolTipText("Open the report in the external browser");
+		}
+		return openInBrowserTextAction;
+	}*/
 
 	/**
 	 * Refreshes the browser if possible.
