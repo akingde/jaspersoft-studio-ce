@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.data.designer.IFilterQuery;
 import com.jaspersoft.studio.property.dataset.fields.table.widget.AWTextButton;
 import com.jaspersoft.studio.property.dataset.fields.table.widget.AWidget;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRParameter;
@@ -44,12 +45,20 @@ public class WICValueSelector extends AWTextButton {
 					prm = (JRParameter) aw.getTColumn().getValue();
 				else if (aw.getTColumn().getValue1() instanceof JRParameter)
 					prm = (JRParameter) aw.getTColumn().getValue1();
+				else if (aw.getElement() instanceof PropertyExpressionsDTO) {
+					Object obj = ((PropertyExpressionsDTO) aw.getElement()).getJrElement();
+					if (obj instanceof JRParameter)
+						prm = (JRParameter) obj;
+				}
 
 				if (prm != null) {
 					JRPropertiesMap pmap = prm.getPropertiesMap();
 					if (aw.getElement() instanceof JRPropertiesMap)
 						pmap = (JRPropertiesMap) aw.getElement();
 					String type = pmap.getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_TYPE);
+					if (aw.getElement() instanceof PropertyExpressionsDTO)
+						type = ((PropertyExpressionsDTO) aw.getElement())
+								.getProperty(ICParameterContributor.PROPERTY_JS_INPUTCONTROL_TYPE, false).getValue();
 
 					if (type != null && (type.equals(ICTypes.SINGLE_LOV.name())
 							|| type.equals(ICTypes.SINGLE_LOV_RADIO.name()) || type.equals(ICTypes.MULTI_LOV.name())
