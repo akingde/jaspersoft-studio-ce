@@ -21,6 +21,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
+import com.jaspersoft.studio.editor.context.AEditorContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage;
 
@@ -169,9 +170,10 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 		if (dastorages != null) {
 			JRDesignDataset currentDataset = getCurrentDataset();
 			if (currentDataset != null) {
+				AEditorContext cntx = editor.getConfiguration().getEditorContext();
 				for (int i = 0; i < dastorages.length; i++) {
 					final ADataAdapterStorage s = dastorages[i];
-					if (!editor.getConfiguration().getEditorContext().isDataAdapterStorage(s))
+					if (!cntx.isDataAdapterStorage(s))
 						continue;
 					for (DataAdapterDescriptor d : s.getDataAdapterDescriptors(currentDataset)) {
 						if (language != null) {
@@ -235,7 +237,8 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	public void setSelected(String d) {
 		if (d != null && dastorages != null)
 			for (ADataAdapterStorage das : dastorages) {
-				if (!editor.getConfiguration().getEditorContext().isDataAdapterStorage(das))
+				AEditorContext cntx = editor.getConfiguration().getEditorContext();
+				if (!cntx.isDataAdapterStorage(das))
 					continue;
 				for (DataAdapterDescriptor dad : das.getDataAdapterDescriptors())
 					if (dad.getName().equals(d)) {
