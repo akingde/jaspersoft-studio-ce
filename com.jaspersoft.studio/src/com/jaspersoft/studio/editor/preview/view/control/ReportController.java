@@ -332,7 +332,9 @@ public class ReportController {
 	public static void finishCompiledReport(final Console c, final AVParameters prmInput,
 			final PreviewJRPrint pcontainer) {
 		UIUtils.getDisplay().syncExec(() -> {
-			c.addMessage(Messages.ReportControler_msg_reportfinished);
+			if (!(pcontainer instanceof PreviewContainer
+					&& runners.get(((PreviewContainer) pcontainer).getMode()) != null))
+				c.addMessage(Messages.ReportControler_msg_reportfinished);
 			pcontainer.setNotRunning(true);
 			boolean notprmfiled = prmInput != null && !prmInput.checkFieldsFilled();
 			if (notprmfiled) {
@@ -395,8 +397,9 @@ public class ReportController {
 						c.startMessage(Messages.PreviewEditor_starting);
 						if (!prmInput.checkFieldsFilled())
 							return Status.CANCEL_STATUS;
-
-						setupDataAdapter(pcontainer);
+						IReportRunner runner = runners.get(pcontainer.getMode());
+						if (runner == null)
+							setupDataAdapter(pcontainer);
 
 						// remove parameters that are not for prompting
 						Set<String> toRemove = new HashSet<>();
@@ -408,9 +411,9 @@ public class ReportController {
 						for (String key : toRemove)
 							jasperParameters.remove(key);
 
-						IReportRunner runner = runners.get(pcontainer.getMode());
 						if (runner != null) {
 							runner.run(pcontainer, file, jasperReport, jrContext, jasperParameters, monitor);
+							return Status.OK_STATUS;
 						} else {
 							setupVirtualizer(jd);
 							setupRecordCounters();
