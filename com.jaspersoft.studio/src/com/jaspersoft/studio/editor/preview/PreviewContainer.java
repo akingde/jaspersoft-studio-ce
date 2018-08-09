@@ -104,7 +104,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	 * Flag used to enable or disable the run of the report when the JasperDesign is
 	 * set
 	 */
-	private boolean runWhenInitilizing = true;
+	protected boolean runWhenInitilizing = true;
 
 	private ReportController reportControler;
 
@@ -428,11 +428,11 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return super.switchRightView(view, stats, container);
 	}
 
-	public void runReport(final DataAdapterDescriptor myDataAdapter) {
-		runReport(myDataAdapter, isParameterDirty);
+	public boolean runReport(final DataAdapterDescriptor myDataAdapter) {
+		return runReport(myDataAdapter, isParameterDirty);
 	}
 
-	public void runReport(final DataAdapterDescriptor myDataAdapter, boolean prmDirty) {
+	public boolean runReport(final DataAdapterDescriptor myDataAdapter, boolean prmDirty) {
 		if (isNotRunning()) {
 			// check if we can run the report
 			actionToolBarManager.setEnabled(false);
@@ -456,6 +456,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			reportControler.runReport();
 			auditPreview();
 		}
+		return true;
 	}
 
 	private void addPreviewModeContributeProperties() {
@@ -498,6 +499,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	}
 
 	public void showParameters(boolean showprm) {
+		if (sashform.isDisposed())
+			return;
 		if (showprm)
 			sashform.upRestore();
 		else
@@ -569,10 +572,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	}
 
 	private void setupDataAdapter() {
-		JasperDesign jd = getReportControler().getJrContext().getJasperDesign();
+		JasperDesign jd = jrContext.getJasperDesign();
 		PreviewTopToolBarManager pt = (PreviewTopToolBarManager) dataDapterToolBarManager;
 		if (pt != null && jd != null) {
-			String strda = jd.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+			String strda = jd.getProperty(jrContext.getEditorContext().getDataAdapterProperty());
 			DataAdapterAction daWidget = ((PreviewTopToolBarManager) dataDapterToolBarManager).getDataSourceWidget();
 			pt.refreshDataAdapters();
 

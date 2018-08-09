@@ -345,7 +345,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 		IDataAdapterRunnable adapterRunReport = new IDataAdapterRunnable() {
 
-			public void runReport(DataAdapterDescriptor da) {
+			public boolean runReport(DataAdapterDescriptor da) {
 				if (da != null) {
 					newdataset.setProperty(DEFAULT_DATAADAPTER, da.getName());
 				} else {
@@ -356,6 +356,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 				refreshLangCombo(da);
 				dscombo.getMenu(tb);
+				return true;
 			}
 
 			public boolean isNotRunning() {
@@ -368,8 +369,8 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			}
 
 			@Override
-			public void runReport(DataAdapterDescriptor myDataAdapter, boolean prmDirty) {
-				runReport(myDataAdapter);
+			public boolean runReport(DataAdapterDescriptor myDataAdapter, boolean prmDirty) {
+				return runReport(myDataAdapter);
 			}
 		};
 		dscombo = new DataAdapterAction(adapterRunReport, DataAdapterManager.getDataAdapter(file, jConfig), newdataset);
