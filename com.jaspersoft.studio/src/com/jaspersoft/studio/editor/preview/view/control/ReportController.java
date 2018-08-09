@@ -408,14 +408,14 @@ public class ReportController {
 						for (String key : toRemove)
 							jasperParameters.remove(key);
 
-						setupVirtualizer(jd);
-						setupRecordCounters();
-						setupDataSnapshot();
-
 						IReportRunner runner = runners.get(pcontainer.getMode());
 						if (runner != null) {
-							runner.run(pcontainer, file, jasperReport, jrContext, jasperParameters);
+							runner.run(pcontainer, file, jasperReport, jrContext, jasperParameters, monitor);
 						} else {
+							setupVirtualizer(jd);
+							setupRecordCounters();
+							setupDataSnapshot();
+
 							c.startMessage(Messages.ReportControler_msg_fillreports);
 
 							JaspersoftStudioPlugin.getExtensionManager().onRun(jrContext, jasperReport,

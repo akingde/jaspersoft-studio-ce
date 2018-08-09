@@ -45,42 +45,47 @@ import net.sf.jasperreports.util.CastorUtil;
  */
 public class DataAdapterManager {
 
-	private static Map<String, DataAdapterFactory> dataAdapterFactories = new HashMap<String, DataAdapterFactory>();
-	
-	private static Map<String, DataAdapterFactory> customFactories = new HashMap<String, DataAdapterFactory>();
+	private static Map<String, DataAdapterFactory> dataAdapterFactories = new HashMap<>();
 
-	private static Map<Object, ADataAdapterStorage> storages = new HashMap<Object, ADataAdapterStorage>();
-	
+	private static Map<String, DataAdapterFactory> customFactories = new HashMap<>();
+
+	private static Map<Object, ADataAdapterStorage> storages = new HashMap<>();
+
 	static {
-		//Listener used to clear the cache when something about the data adapters definition change in the preferences
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(new IPropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				if (event.getProperty().equals(CustomDataAdaptersPreferencePage.CUSTOMDATAADAPTERS)){
-					customFactories.clear();
-					loadCustomFactories();
-				}
-			}
-		});
+		// Listener used to clear the cache when something about the data adapters
+		// definition change in the preferences
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+				.addPropertyChangeListener(new IPropertyChangeListener() {
+
+					@Override
+					public void propertyChange(PropertyChangeEvent event) {
+						if (event.getProperty().equals(CustomDataAdaptersPreferencePage.CUSTOMDATAADAPTERS)) {
+							customFactories.clear();
+							loadCustomFactories();
+						}
+					}
+				});
 		loadCustomFactories();
 	}
-	
+
 	/**
 	 * Load the definitions of all the custom configurable data adapters
 	 */
-	protected static void loadCustomFactories() {		
-		String definitions = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(CustomDataAdaptersPreferencePage.CUSTOMDATAADAPTERS);
+	protected static void loadCustomFactories() {
+		String definitions = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+				.getString(CustomDataAdaptersPreferencePage.CUSTOMDATAADAPTERS);
 		StringTokenizer st = new StringTokenizer(definitions, File.pathSeparator + "\n\r"); //$NON-NLS-1$
-		Set<String> pathsList = new LinkedHashSet<String>();
+		Set<String> pathsList = new LinkedHashSet<>();
 		while (st.hasMoreTokens())
 			pathsList.add(st.nextToken());
 		if (!pathsList.isEmpty()) {
-			StandardJSONWidgetsDescriptorResolver resolver = new StandardJSONWidgetsDescriptorResolver(AdapterWidgetsDescriptor.class);
+			StandardJSONWidgetsDescriptorResolver resolver = new StandardJSONWidgetsDescriptorResolver(
+					AdapterWidgetsDescriptor.class);
 			for (String definition : pathsList) {
 				File file = new File(definition);
 				if (file.exists()) {
-					AdapterWidgetsDescriptor loadedDecriptor = (AdapterWidgetsDescriptor)resolver.loadDescriptor(JasperReportsConfiguration.getDefaultInstance(), file.getAbsolutePath());
+					AdapterWidgetsDescriptor loadedDecriptor = (AdapterWidgetsDescriptor) resolver
+							.loadDescriptor(JasperReportsConfiguration.getDefaultInstance(), file.getAbsolutePath());
 					if (loadedDecriptor != null) {
 						ConfigurableDataAdapterFactory factory = new ConfigurableDataAdapterFactory(loadedDecriptor);
 						customFactories.put(loadedDecriptor.getAdapterClass(), factory);
@@ -95,8 +100,9 @@ public class DataAdapterManager {
 	 *******************************/
 
 	/**
-	 * Add a DataAdapterFactory to the list of DataAdapterFactories in JaspersoftStudio. The new type of data adapter will
-	 * then be visible when a new data adapter is created.
+	 * Add a DataAdapterFactory to the list of DataAdapterFactories in
+	 * JaspersoftStudio. The new type of data adapter will then be visible when a
+	 * new data adapter is created.
 	 * 
 	 * @param factory
 	 */
@@ -106,7 +112,8 @@ public class DataAdapterManager {
 	}
 
 	/**
-	 * Remove the DataAdapterFactory to the list of DataAdapterFactories in JaspersoftStudio.
+	 * Remove the DataAdapterFactory to the list of DataAdapterFactories in
+	 * JaspersoftStudio.
 	 * 
 	 * @param factory
 	 */
@@ -122,7 +129,8 @@ public class DataAdapterManager {
 	 */
 	public static synchronized List<DataAdapterFactory> getDataAdapterFactories() {
 
-		// Let's sort the list based on the description. Please note that the description may be localized,
+		// Let's sort the list based on the description. Please note that the
+		// description may be localized,
 		// so not all the languages have the same order if assumptions are done.
 
 		DataAdapterFactory[] factories = dataAdapterFactories.values()
@@ -139,7 +147,7 @@ public class DataAdapterManager {
 			}
 		});
 
-		List<DataAdapterFactory> listOfDataAdapterFactories = new ArrayList<DataAdapterFactory>();
+		List<DataAdapterFactory> listOfDataAdapterFactories = new ArrayList<>();
 		listOfDataAdapterFactories.addAll(Arrays.asList(factories));
 		listOfDataAdapterFactories.addAll(customFactories.values());
 
@@ -155,12 +163,15 @@ public class DataAdapterManager {
 		if (Misc.isNullOrEmpty(adapterClassName))
 			return null;
 		DataAdapterFactory factory = dataAdapterFactories.get(adapterClassName);
-		if (factory != null) return factory;
-		else return customFactories.get(adapterClassName);
+		if (factory != null)
+			return factory;
+		else
+			return customFactories.get(adapterClassName);
 	}
 
-	public static ADataAdapterStorage[] getDataAdapter(IFile file, IProject project, JasperReportsConfiguration jConfig) {
-		List<ADataAdapterStorage> st = new ArrayList<ADataAdapterStorage>();
+	public static ADataAdapterStorage[] getDataAdapter(IFile file, IProject project,
+			JasperReportsConfiguration jConfig) {
+		List<ADataAdapterStorage> st = new ArrayList<>();
 		st.add(getPreferencesStorage());
 		if (file != null) {
 			project = file.getProject();
@@ -215,7 +226,7 @@ public class DataAdapterManager {
 	}
 
 	public static List<ADataAdapterStorage> getProjectStorages() {
-		List<ADataAdapterStorage> das = new ArrayList<ADataAdapterStorage>();
+		List<ADataAdapterStorage> das = new ArrayList<>();
 		for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			if (ProjectUtil.isOpen(prj))
 				das.add(getProjectStorage(prj));
@@ -234,7 +245,8 @@ public class DataAdapterManager {
 	// if (!loaded) {
 	// new ExtensionManager().init();
 	// }
-	// List<DataAdapterDescriptor> listOfDataAdapters = new ArrayList<DataAdapterDescriptor>();
+	// List<DataAdapterDescriptor> listOfDataAdapters = new
+	// ArrayList<DataAdapterDescriptor>();
 	// listOfDataAdapters.addAll(dataAdapters);
 	// return listOfDataAdapters;
 	// }
@@ -246,7 +258,8 @@ public class DataAdapterManager {
 	/**
 	 * Creates a copy of a data adapter looking for the right Factory.
 	 * 
-	 * A NullPointerException is raised is the dataAdapter is null or if a suitable DataAdapterFactory is not found.
+	 * A NullPointerException is raised is the dataAdapter is null or if a suitable
+	 * DataAdapterFactory is not found.
 	 * 
 	 * @param dataAdapter
 	 * @return

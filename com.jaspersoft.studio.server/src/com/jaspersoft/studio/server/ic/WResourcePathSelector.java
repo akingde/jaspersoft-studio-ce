@@ -69,8 +69,9 @@ public class WResourcePathSelector extends AWTextButton {
 		if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
 			ResourceDescriptor rd = FindResourceJob.doFindResource(msp, getCompatibleResources(), null, true,
 					getName());
+			if (rd == null)
+				return;
 			postSelection(rd);
-			fillValue();
 		} else {
 			RepositoryDialog rd = new RepositoryDialog(btn.getShell(), msp) {
 
@@ -83,8 +84,8 @@ public class WResourcePathSelector extends AWTextButton {
 				AMResource rs = rd.getResource();
 				postSelection(rs.getValue());
 			}
-			fillValue();
 		}
+		fillValue();
 	}
 
 	protected String getName() {

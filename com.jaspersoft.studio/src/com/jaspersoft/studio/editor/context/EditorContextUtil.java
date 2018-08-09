@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -101,7 +102,7 @@ public class EditorContextUtil {
 			super();
 			this.toolBar = toolBar;
 			this.tbManager = tbManager;
-			setText("Project");
+			setText(Messages.EditorContextUtil_0);
 			UIUtils.getDisplay().asyncExec(() -> {
 				if (editor.getJrContext() != null)
 					setToolBarText(editor.getJrContext().getEditorContext().getName());
@@ -122,9 +123,9 @@ public class EditorContextUtil {
 				IFile f = (IFile) editor.getJrContext().get(FileUtils.KEY_FILE);
 				try {
 					if (f == null || f.getPersistentProperty(EC_KEY) == null)
-						setToolTipText("This context is inherited from the parent folder.");
+						setToolTipText(Messages.EditorContextUtil_1);
 					else
-						setToolTipText("This context is set on the file");
+						setToolTipText(Messages.EditorContextUtil_2);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
@@ -168,11 +169,11 @@ public class EditorContextUtil {
 				for (KeyValue<String, String> item : ecs) {
 					MenuItem mi = new MenuItem(menu, SWT.CHECK);
 					mi.setText(item.value);
-					mi.setData("name", item.key);
+					mi.setData("name", item.key); //$NON-NLS-1$
 					mi.addSelectionListener(new SelectionAdapter() {
 						@Override
 						public void widgetSelected(SelectionEvent e) {
-							String n = (String) mi.getData("name");
+							String n = (String) mi.getData("name"); //$NON-NLS-1$
 							IFile f = (IFile) editor.getJrContext().get(FileUtils.KEY_FILE);
 							String ct = null;
 							try {
@@ -186,7 +187,7 @@ public class EditorContextUtil {
 								setToolBarText(mi.getText());
 							}
 							for (MenuItem m : menu.getItems())
-								if (m.getData("name") != null)
+								if (m.getData("name") != null) //$NON-NLS-1$
 									m.setSelection(false);
 							mi.setSelection(true);
 						}
@@ -198,12 +199,12 @@ public class EditorContextUtil {
 					new MenuItem(menu, SWT.SEPARATOR);
 
 					MenuItem mi = new MenuItem(menu, SWT.PUSH);
-					mi.setText("Reset To Parent");
+					mi.setText(Messages.EditorContextUtil_6);
 					mi.addSelectionListener(new SelectionAdapter() {
 						@Override
 						public void widgetSelected(SelectionEvent e) {
 							for (MenuItem m : menu.getItems())
-								if (m.getData("name") != null)
+								if (m.getData("name") != null) //$NON-NLS-1$
 									m.setSelection(false);
 
 							IFile f = (IFile) editor.getJrContext().get(FileUtils.KEY_FILE);

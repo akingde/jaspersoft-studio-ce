@@ -277,7 +277,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 		return jrContext;
 	}
 
-	public JasperReportsConfiguration getJrContext() { 
+	public JasperReportsConfiguration getJrContext() {
 		return jrContext;
 	}
 
@@ -1172,18 +1172,28 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 		@Override
 		public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc, boolean prmDirty) {
 			JasperDesign jasperDesign = getJasperDesign();
-			if (myDataAdapterDesc != null) {
-				String oldp = jasperDesign.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-				if (oldp == null || !oldp.equals(myDataAdapterDesc.getName())) {
-					getMReport().putParameter(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc);
-					jasperDesign.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
-					setDirty(true);
-				}
-			} else {
+			if (myDataAdapterDesc != null)
+				setDirty(jrContext.getEditorContext().setDataAdapter(myDataAdapterDesc, getMReport()));
+			else {
 				jasperDesign.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 				getMReport().removeParameter(DataQueryAdapters.DEFAULT_DATAADAPTER);
 			}
 			super.runReport(myDataAdapterDesc, prmDirty);
+		}
+
+		private boolean saving = false;
+
+		@Override
+		public void doSave(IProgressMonitor monitor) {
+			if (saving)
+				return;
+			saving = true;
+			try {
+				super.doSave(monitor);
+				AbstractJRXMLEditor.this.doSave(monitor);
+			} finally {
+				saving = false;
+			}
 		}
 
 		/**

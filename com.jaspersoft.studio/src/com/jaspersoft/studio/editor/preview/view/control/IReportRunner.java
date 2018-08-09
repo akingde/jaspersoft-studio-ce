@@ -7,6 +7,7 @@ package com.jaspersoft.studio.editor.preview.view.control;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
@@ -23,5 +24,5 @@ public interface IReportRunner {
 	public APreview getPreview(Composite parent, JasperReportsConfiguration jrConfig);
 
 	public void run(PreviewContainer pcontainer, final IFile file, final JasperReport jasperReport,
-			JasperReportsConfiguration jrContext, Map<String, Object> jasperParameters);
+			JasperReportsConfiguration jrContext, Map<String, Object> jasperParameters, IProgressMonitor monitor);
 }

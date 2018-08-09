@@ -378,6 +378,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 				dialog.setValue(p);
 				if (dialog.open() == Window.OK) {
 					props.add(p);
+					value.setProperty(p.getName(), p.getValue());
 					tableViewer.refresh();
 				}
 			}
@@ -414,6 +415,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 					int index = props.indexOf(selectedValue);
 					props.remove(index);
 					tableViewer.refresh();
+					value.removeProperty(selectedValue.getName());
 				}
 			}
 		});
@@ -454,6 +456,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		if (inputDialog.open() == Dialog.OK) {
 			int index = props.indexOf(edited);
 			props.set(index, result);
+			value.setProperty(result.getName(), result.getValue());
 			tableViewer.refresh();
 		}
 	}
