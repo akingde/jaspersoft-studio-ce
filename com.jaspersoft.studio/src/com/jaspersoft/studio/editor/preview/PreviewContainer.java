@@ -58,7 +58,6 @@ import com.jaspersoft.studio.editor.preview.view.control.ReportController;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
-import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
@@ -428,11 +427,11 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return super.switchRightView(view, stats, container);
 	}
 
-	public boolean runReport(final DataAdapterDescriptor myDataAdapter) {
-		return runReport(myDataAdapter, isParameterDirty);
+	public boolean runReport(final DataAdapterDescriptor myDataAdapter, boolean daAction) {
+		return runReport(myDataAdapter, isParameterDirty, daAction);
 	}
 
-	public boolean runReport(final DataAdapterDescriptor myDataAdapter, boolean prmDirty) {
+	public boolean runReport(final DataAdapterDescriptor myDataAdapter, boolean prmDirty, boolean daAction) {
 		if (isNotRunning()) {
 			// check if we can run the report
 			actionToolBarManager.setEnabled(false);
@@ -537,7 +536,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				setupDataAdapter();
 
 				if ((isRunDirty || getJasperPrint() == null) && runWhenInitilizing)
-					runReport(dataAdapterDesc);
+					runReport(dataAdapterDesc, false);
 				if (propChangeListener == null)
 					propChangeListener = evt -> {
 						String pname = evt.getPropertyName();

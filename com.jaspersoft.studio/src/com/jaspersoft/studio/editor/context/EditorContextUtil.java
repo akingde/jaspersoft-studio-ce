@@ -1,7 +1,9 @@
 package com.jaspersoft.studio.editor.context;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -18,6 +20,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
@@ -36,10 +39,31 @@ import net.sf.jasperreports.eclipse.util.Misc;
 public class EditorContextUtil {
 
 	private static List<ContextSwitchAction> actions = new ArrayList<>();
+	private static Map<AbstractJRXMLEditor, Label> labels = new HashMap<>();
 
 	public static void fireContextChanged(IResource r) {
-		for (ContextSwitchAction csa : actions)
-			csa.refresh(r);
+		if (ENABLEMENU)
+			for (ContextSwitchAction csa : actions)
+				csa.refresh(r);
+		else
+			for (AbstractJRXMLEditor editor : labels.keySet()) {
+				JasperReportsConfiguration jConf = editor.getJrContext();
+				AEditorContext old = jConf.getEditorContext();
+				IFile f = (IFile) jConf.get(FileUtils.KEY_FILE);
+				AEditorContext ec = getEditorContext(f, jConf);
+				if (old.getClass().equals(ec.getClass()))
+					return;
+				editor.changeContext(ec.getId(), !r.equals(f));
+
+				Label lbl = labels.get(editor);
+
+				if (lbl.isDisposed())
+					return;
+				lbl.setText(editor.getJrContext().getEditorContext().getName());
+				lbl.pack();
+				lbl.getParent().update();
+				lbl.getParent().layout(true);
+			}
 	}
 
 	public static QualifiedName EC_KEY = new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(),
@@ -49,7 +73,7 @@ public class EditorContextUtil {
 		String ctx = null;
 		try {
 			if (f != null) {
-				if (f.exists())
+				if (f.exists() && ENABLEMENU)
 					ctx = f.getPersistentProperty(EC_KEY);
 				IContainer c = f.getParent();
 				while (c != null && Misc.isNullOrEmpty(ctx)) {
@@ -82,15 +106,23 @@ public class EditorContextUtil {
 		return Misc.nvl(ctx, AEditorContext.NAME);
 	}
 
-	public static Control createSwitch(Composite cmp, AbstractJRXMLEditor editor) {
-		ToolBar toolBar = new ToolBar(cmp, SWT.FLAT);
-		toolBar.setBackgroundMode(SWT.INHERIT_FORCE);
-		ToolBarManager tbManager = new ToolBarManager(toolBar);
+	public static boolean ENABLEMENU = false;
 
-		tbManager.add(new ContextSwitchAction(editor, toolBar, tbManager));
-		tbManager.update(true);
-		toolBar.pack();
-		return toolBar;
+	public static Control createSwitch(Composite cmp, AbstractJRXMLEditor editor) {
+		if (ENABLEMENU) {
+			ToolBar toolBar = new ToolBar(cmp, SWT.FLAT);
+			toolBar.setBackgroundMode(SWT.INHERIT_FORCE);
+			ToolBarManager tbManager = new ToolBarManager(toolBar);
+
+			tbManager.add(new ContextSwitchAction(editor, toolBar, tbManager));
+			tbManager.update(true);
+			toolBar.pack();
+			return toolBar;
+		}
+		Label lbl = new Label(cmp, SWT.NONE);
+		lbl.setText(editor.getJrContext().getEditorContext().getName());
+		labels.put(editor, lbl);
+		return lbl;
 	}
 
 	public static class ContextSwitchAction extends Action implements IMenuCreator {
@@ -231,7 +263,9 @@ public class EditorContextUtil {
 			if (old.getClass().equals(ec.getClass()))
 				return;
 			editor.changeContext(ec.getId(), !r.equals(f));
+
 			setToolBarText(jConf.getEditorContext().getName());
 		}
 	}
+
 }

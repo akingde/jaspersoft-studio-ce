@@ -35,8 +35,8 @@ import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.TooltipCCombo;
 
-public class DatasourceComboItem extends ContributionItem implements PropertyChangeListener, IReportViewerListener,
-		Listener {
+public class DatasourceComboItem extends ContributionItem
+		implements PropertyChangeListener, IReportViewerListener, Listener {
 
 	private TooltipCCombo combo;
 	private ToolItem toolitem;
@@ -49,9 +49,9 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 * Constructor for ComboToolItem.
 	 * 
 	 * @param partService
-	 *          used to add a PartListener
+	 *            used to add a PartListener
 	 * @param initStrings
-	 *          the initial string displayed in the combo
+	 *            the initial string displayed in the combo
 	 */
 	public DatasourceComboItem(IDataAdapterRunnable editor, ADataAdapterStorage[] dastorages) {
 		super("datasourceadaptercomboitem");
@@ -74,7 +74,8 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	}
 
 	/**
-	 * This method refresh the list of data adapters in the combo box. It does preserve the selection (if any).
+	 * This method refresh the list of data adapters in the combo box. It does
+	 * preserve the selection (if any).
 	 * 
 	 * If combo is disposed or not yet available, it does nothing.
 	 * 
@@ -157,23 +158,26 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		try {
 			if (!isEnabled()) {
 				combo.setEnabled(false);
-				//combo.setText(""); //$NON-NLS-1$
+				// combo.setText(""); //$NON-NLS-1$
 			} else {
 
 				/*
-				 * combo.removeListener(SWT.Selection, this); combo.removeListener(SWT.DefaultSelection, this);
+				 * combo.removeListener(SWT.Selection, this);
+				 * combo.removeListener(SWT.DefaultSelection, this);
 				 * 
 				 * if (repopulateCombo) {
 				 * 
 				 * 
-				 * AMDatasource d = null; if (combo.getSelectionIndex() > 0) d = items.get(combo.getSelectionIndex() - 1); else
-				 * if (selecteditem > 0 && items.size() > selecteditem) d = items.get(selecteditem - 1);
+				 * AMDatasource d = null; if (combo.getSelectionIndex() > 0) d =
+				 * items.get(combo.getSelectionIndex() - 1); else if (selecteditem > 0 &&
+				 * items.size() > selecteditem) d = items.get(selecteditem - 1);
 				 * 
 				 * items = RepositoryManager.getDatasources();
 				 * 
-				 * combo.setItems(getStringItems()); selectCombo(0); if (d != null) for (int i = 0; i < items.size(); i++) if
-				 * (items.get(i) == d) { selectCombo(i + 1); break; } } combo.setEnabled(true); combo.addListener(SWT.Selection,
-				 * this); combo.addListener(SWT.DefaultSelection, this);
+				 * combo.setItems(getStringItems()); selectCombo(0); if (d != null) for (int i =
+				 * 0; i < items.size(); i++) if (items.get(i) == d) { selectCombo(i + 1); break;
+				 * } } combo.setEnabled(true); combo.addListener(SWT.Selection, this);
+				 * combo.addListener(SWT.DefaultSelection, this);
 				 */
 				if (repopulateCombo) {
 					updateDataAdapters();
@@ -194,7 +198,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 * Computes the width required by control
 	 * 
 	 * @param control
-	 *          The control to compute width
+	 *            The control to compute width
 	 * @return int The width required
 	 */
 	protected int computeWidth(Control control) {
@@ -202,10 +206,11 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	}
 
 	/**
-	 * Creates and returns the control for this contribution item under the given parent composite.
+	 * Creates and returns the control for this contribution item under the given
+	 * parent composite.
 	 * 
 	 * @param parent
-	 *          the parent composite
+	 *            the parent composite
 	 * @return the new control
 	 */
 	protected Control createControl(Composite parent) {
@@ -251,11 +256,12 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	}
 
 	/**
-	 * The control item implementation of this <code>IContributionItem</code> method calls the <code>createControl</code>
-	 * framework method. Subclasses must implement <code>createControl</code> rather than overriding this method.
+	 * The control item implementation of this <code>IContributionItem</code> method
+	 * calls the <code>createControl</code> framework method. Subclasses must
+	 * implement <code>createControl</code> rather than overriding this method.
 	 * 
 	 * @param parent
-	 *          The parent of the control to fill
+	 *            The parent of the control to fill
 	 */
 	@Override
 	public final void fill(Composite parent) {
@@ -263,13 +269,13 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	}
 
 	/**
-	 * The control item implementation of this <code>IContributionItem</code> method throws an exception since controls
-	 * cannot be added to menus.
+	 * The control item implementation of this <code>IContributionItem</code> method
+	 * throws an exception since controls cannot be added to menus.
 	 * 
 	 * @param parent
-	 *          The menu
+	 *            The menu
 	 * @param index
-	 *          Menu index
+	 *            Menu index
 	 */
 	@Override
 	public final void fill(Menu parent, int index) {
@@ -277,14 +283,16 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	}
 
 	/**
-	 * The control item implementation of this <code>IContributionItem</code> method calls the <code>createControl</code>
-	 * framework method to create a control under the given parent, and then creates a new tool item to hold it.
-	 * Subclasses must implement <code>createControl</code> rather than overriding this method.
+	 * The control item implementation of this <code>IContributionItem</code> method
+	 * calls the <code>createControl</code> framework method to create a control
+	 * under the given parent, and then creates a new tool item to hold it.
+	 * Subclasses must implement <code>createControl</code> rather than overriding
+	 * this method.
 	 * 
 	 * @param parent
-	 *          The ToolBar to add the new control to
+	 *            The ToolBar to add the new control to
 	 * @param index
-	 *          Index
+	 *            Index
 	 */
 	@Override
 	public void fill(ToolBar parent, int index) {
@@ -303,7 +311,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					selectedDA = da;
-					editor.runReport(da);
+					editor.runReport(da, false);
 
 				}
 			});

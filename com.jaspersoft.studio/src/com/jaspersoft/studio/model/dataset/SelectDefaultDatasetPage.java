@@ -65,9 +65,10 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	 * Create the page
 	 * 
 	 * @param context
-	 *          File of the opened report used as context to resolve the workspace paths
+	 *            File of the opened report used as context to resolve the workspace
+	 *            paths
 	 * @param initialPath
-	 *          initial path the text area
+	 *            initial path the text area
 	 */
 	public SelectDefaultDatasetPage(IFile context, String intialPath) {
 		super("defaultDAPage"); //$NON-NLS-1$
@@ -87,10 +88,12 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	}
 
 	/**
-	 * Returns an array of strings containing the title for the modes section, plus the title of every mode.
+	 * Returns an array of strings containing the title for the modes section, plus
+	 * the title of every mode.
 	 * <p>
 	 * 
-	 * Default implementation would return 5 strings, including 1 title and the following 4 modes:
+	 * Default implementation would return 5 strings, including 1 title and the
+	 * following 4 modes:
 	 * <ol>
 	 * <li>workspace resource;</li>
 	 * <li>absolute path in filesystem;</li>
@@ -165,11 +168,13 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		btnUrlRemote.setText(modesAndHeaderTitles[3]);
 
 		/*
-		 * btnNoDataSource = new Button(grpSelectionMode, SWT.RADIO); btnNoDataSource.addSelectionListener(new
-		 * SelectionAdapter() {
+		 * btnNoDataSource = new Button(grpSelectionMode, SWT.RADIO);
+		 * btnNoDataSource.addSelectionListener(new SelectionAdapter() {
 		 * 
-		 * @Override public void widgetSelected(SelectionEvent e) { changeSelectionMode(cmpNoDataAdapter); path = null;
-		 * getWizard().getContainer().updateButtons(); } }); btnNoDataSource.setText(modesAndHeaderTitles[4]);
+		 * @Override public void widgetSelected(SelectionEvent e) {
+		 * changeSelectionMode(cmpNoDataAdapter); path = null;
+		 * getWizard().getContainer().updateButtons(); } });
+		 * btnNoDataSource.setText(modesAndHeaderTitles[4]);
 		 */
 
 		btnCustom = new Button(grpSelectionMode, SWT.RADIO);
@@ -218,7 +223,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	}
 
 	/**
-	 * Creates the panel with the different options container. A stack layout will be used.
+	 * Creates the panel with the different options container. A stack layout will
+	 * be used.
 	 */
 	private void createOptionsPanel(Composite container) {
 		grpOptions = new Group(container, SWT.NONE);
@@ -247,7 +253,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	}
 
 	/**
-	 * When a new data adapter selection mode is selected, shows the dedicated options panel
+	 * When a new data adapter selection mode is selected, shows the dedicated
+	 * options panel
 	 */
 	private void changeSelectionMode() {
 		if (btnAbsolutePath.getSelection()) {
@@ -326,7 +333,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	 * Creates the empty composite for no Data Adapter selection.
 	 */
 	/*
-	 * private void createNoDataSourceContainer() { cmpNoDataAdapter = new Composite(grpOptions, SWT.NONE); }
+	 * private void createNoDataSourceContainer() { cmpNoDataAdapter = new
+	 * Composite(grpOptions, SWT.NONE); }
 	 */
 
 	private void textModified() {
@@ -364,10 +372,11 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	}
 
 	/**
-	 * Check if the provided relative path from the report file point to an existing resource
+	 * Check if the provided relative path from the report file point to an existing
+	 * resource
 	 * 
 	 * @param location
-	 *          the relative path
+	 *            the relative path
 	 * @return true if the path point to an existing resource, false otherwise
 	 */
 	private boolean isInWorkspace(String location) {
@@ -416,9 +425,10 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	}
 
 	/**
-	 * Check if the page is complete, the page is complete if the provided absolute path is not empty or if the provided
-	 * url is not empty and valid. If the absolute path is not empty but doesn't point to a file then a warning message is
-	 * shown
+	 * Check if the page is complete, the page is complete if the provided absolute
+	 * path is not empty or if the provided url is not empty and valid. If the
+	 * absolute path is not empty but doesn't point to a file then a warning message
+	 * is shown
 	 */
 	@Override
 	public boolean isPageComplete() {

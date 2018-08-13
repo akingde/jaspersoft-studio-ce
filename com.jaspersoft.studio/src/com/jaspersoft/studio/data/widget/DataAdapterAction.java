@@ -124,13 +124,13 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 			return;
 		JRDesignDataset currentDataset = getCurrentDataset();
 		if (currentDataset == null) {
-			editor.runReport(null);
+			editor.runReport(null, true);
 			return;
 		}
 		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(editor.getConfiguration());
 		DataAdapterDescriptor defaultDA = defaultStorage.getDefaultJRDataAdapter(currentDataset);
 		if (defaultDA == selectedDA) {
-			editor.runReport(null);
+			editor.runReport(null, true);
 		} else {
 			if (!editor.runReport(selectedDA, false)) {
 				if (currentDataset != null) {

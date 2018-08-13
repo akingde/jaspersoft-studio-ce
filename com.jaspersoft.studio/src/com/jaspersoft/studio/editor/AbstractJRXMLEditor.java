@@ -1170,10 +1170,11 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 		}
 
 		@Override
-		public boolean runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc, boolean prmDirty) {
+		public boolean runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc, boolean prmDirty,
+				boolean daAction) {
 			JasperDesign jasperDesign = getJasperDesign();
 			if (myDataAdapterDesc != null) {
-				Boolean set = jrContext.getEditorContext().setDataAdapter(myDataAdapterDesc, getMReport());
+				Boolean set = jrContext.getEditorContext().setDataAdapter(myDataAdapterDesc, getMReport(), daAction);
 				if (set == null)
 					return false;
 				setDirty(set);
@@ -1181,7 +1182,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 				jasperDesign.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 				getMReport().removeParameter(DataQueryAdapters.DEFAULT_DATAADAPTER);
 			}
-			super.runReport(myDataAdapterDesc, prmDirty);
+			super.runReport(myDataAdapterDesc, prmDirty, daAction);
 			return true;
 		}
 
