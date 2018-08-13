@@ -84,7 +84,7 @@ public class EditorContextUtil {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		AEditorContext ec = JaspersoftStudioPlugin.getExtensionManager().getEditorContext(ctx);
+		AEditorContext ec = JaspersoftStudioPlugin.getExtensionManager().getEditorContext(ctx, f);
 		ec.init(f, jConf);
 		return ec;
 	}

@@ -184,7 +184,7 @@ public class ExtensionManager {
 		return editorContexts;
 	}
 
-	public AEditorContext getEditorContext(String c) {
+	public AEditorContext getEditorContext(String c, IFile f) {
 		if (!Misc.isNullOrEmpty(c)) {
 			IConfigurationElement[] config = Platform.getExtensionRegistry()
 					.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "editorContext"); //$NON-NLS-1$
@@ -193,7 +193,7 @@ public class ExtensionManager {
 					String cname = e.getAttribute("contextName");
 					if (cname.equals(c)) {
 						Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
-						if (o instanceof AEditorContext) {
+						if (o instanceof AEditorContext && ((AEditorContext) o).canHandleFile(f)) {
 							((AEditorContext) o).setId(cname);
 							return (AEditorContext) o;
 						}
@@ -204,6 +204,7 @@ public class ExtensionManager {
 			}
 		}
 		return new AEditorContext();
+
 	}
 
 	public List<IReportRunner> getReportRunners() {

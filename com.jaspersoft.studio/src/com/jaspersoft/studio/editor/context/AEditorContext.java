@@ -55,6 +55,10 @@ public class AEditorContext {
 		return id;
 	}
 
+	public boolean canHandleFile(IFile f) {
+		return true;
+	}
+
 	public void init(IFile f, JasperReportsConfiguration jConf) {
 		this.f = f;
 		this.jConf = jConf;
