@@ -1831,9 +1831,14 @@
        </definition>
        <definition
              id="com.jaspersoft.studio.project">
+              <or>
           <instanceof
                 value="org.eclipse.core.resources.IProject">
           </instanceof>
+          <instanceof
+                value="org.eclipse.jdt.internal.core.JavaProject">
+          </instanceof>
+           </or>
        </definition>
     </extension>
 	<extension point="org.eclipse.ui.handlers">
