@@ -14,6 +14,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
@@ -52,13 +54,13 @@ public class EditorContextUtil {
 				IFile f = (IFile) jConf.get(FileUtils.KEY_FILE);
 				AEditorContext ec = getEditorContext(f, jConf);
 				if (old.getClass().equals(ec.getClass()))
-					return;
+					continue;
 				editor.changeContext(ec.getId(), !r.equals(f));
 
 				Label lbl = labels.get(editor);
 
 				if (lbl.isDisposed())
-					return;
+					continue;
 				lbl.setText(editor.getJrContext().getEditorContext().getName());
 				lbl.pack();
 				lbl.getParent().update();
@@ -122,6 +124,7 @@ public class EditorContextUtil {
 		Label lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(editor.getJrContext().getEditorContext().getName());
 		labels.put(editor, lbl);
+		lbl.addDisposeListener(e -> labels.remove(editor));
 		return lbl;
 	}
 

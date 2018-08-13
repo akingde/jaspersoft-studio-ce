@@ -132,7 +132,7 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 		if (defaultDA == selectedDA) {
 			editor.runReport(null, true);
 		} else {
-			if (!editor.runReport(selectedDA, false)) {
+			if (!editor.runReport(selectedDA, true)) {
 				if (currentDataset != null) {
 					defaultDA = defaultStorage.getDefaultJRDataAdapter(currentDataset);
 					if (defaultDA != null && defaultDA != selectedDA)
