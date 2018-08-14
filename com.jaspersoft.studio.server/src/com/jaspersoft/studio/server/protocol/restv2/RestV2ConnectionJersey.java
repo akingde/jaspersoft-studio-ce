@@ -275,7 +275,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		if (serverInfo != null) {
 			dateFormat = new SimpleDateFormat(serverInfo.getDateFormatPattern());
 			timestampFormat = new SimpleDateFormat(serverInfo.getDatetimeFormatPattern());
-			if (sp.getJrVersion().equals("last")) //$NON-NLS-1$
+			if (sp.getJrVersion() == null || sp.getJrVersion().equals("last")) //$NON-NLS-1$
 				sp.setJrVersion(Version.setJRVersion(serverInfo));
 		}
 		return serverInfo;
