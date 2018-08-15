@@ -1191,6 +1191,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 			saving = true;
 			try {
 				super.doSave(monitor);
+				if(!isRefreshing)
 				AbstractJRXMLEditor.this.doSave(monitor);
 			} finally {
 				saving = false;
