@@ -634,6 +634,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	@Override
 	public void runReport() {
 		DataAdapterAction daWidget = ((PreviewTopToolBarManager) dataDapterToolBarManager).getDataSourceWidget();
+		daWidget.refreshDA();
 		dataAdapterDesc = daWidget.isDefaultDASelected() ? null : daWidget.getSelected();
 		runReport(dataAdapterDesc, false);
 	}

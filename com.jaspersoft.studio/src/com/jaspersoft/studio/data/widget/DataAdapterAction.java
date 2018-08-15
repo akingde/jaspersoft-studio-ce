@@ -145,6 +145,17 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	public void refreshDA() {
 		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(editor.getConfiguration());
 		DataAdapterDescriptor defaultDA = defaultStorage.getDefaultJRDataAdapter(getCurrentDataset());
+		if (defaultDA == null) {
+			JRDesignDataset currentDataset = getCurrentDataset();
+			if (currentDataset != null) {
+				String p = currentDataset.getPropertiesMap()
+						.getProperty(editor.getConfiguration().getEditorContext().getDataAdapterProperty());
+				if (p != null) {
+					setSelected(p);
+					return;
+				}
+			}
+		}
 		setSelected(defaultDA);
 	}
 
@@ -215,16 +226,14 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	}
 
 	public void setDataAdapterStorages(ADataAdapterStorage[] dastorages) {
-		if (this.dastorages != null) {
+		if (this.dastorages != null)
 			for (ADataAdapterStorage das : dastorages)
 				das.removePropertyChangeListener(this);
-		}
 
 		this.dastorages = dastorages;
-		if (dastorages != null) {
+		if (dastorages != null)
 			for (ADataAdapterStorage das : dastorages)
 				das.addPropertyChangeListener(this);
-		}
 		setSelected(Messages.DataAdapterManager_oneemptyrecord);
 	}
 

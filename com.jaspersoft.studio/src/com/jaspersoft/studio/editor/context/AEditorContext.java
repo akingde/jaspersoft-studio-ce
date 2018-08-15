@@ -244,12 +244,18 @@ public class AEditorContext {
 
 	public Boolean setDataAdapter(DataAdapterDescriptor myDataAdapterDesc, MReport mrep, boolean daAction) {
 		if (!daAction)
-			return true;
-		JasperDesign jd = jConf.getJasperDesign();
-		String oldp = jd.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-		if (oldp == null || !oldp.equals(myDataAdapterDesc.getName())) {
-			mrep.putParameter(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc);
-			jd.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
+			return false;
+		if (myDataAdapterDesc != null) {
+			JasperDesign jd = jConf.getJasperDesign();
+			String oldp = jd.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+			if (oldp == null || !oldp.equals(myDataAdapterDesc.getName())) {
+				mrep.putParameter(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc);
+				jd.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
+				return true;
+			}
+		} else {
+			mrep.getJasperDesign().removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+			mrep.removeParameter(DataQueryAdapters.DEFAULT_DATAADAPTER);
 			return true;
 		}
 		return false;
