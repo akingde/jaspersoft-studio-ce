@@ -236,9 +236,10 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 	public void changeContext(String c, boolean reset) {
 		IFile oldFile = (IFile) get(FileUtils.KEY_FILE);
 		try {
-			oldFile.setPersistentProperty(
-					new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(), AEditorContext.EDITOR_CONTEXT),
-					reset ? null : c);
+			if (oldFile.exists())
+				oldFile.setPersistentProperty(
+						new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(), AEditorContext.EDITOR_CONTEXT),
+						reset ? null : c);
 		} catch (CoreException e) {
 			UIUtils.showError(e);
 		}

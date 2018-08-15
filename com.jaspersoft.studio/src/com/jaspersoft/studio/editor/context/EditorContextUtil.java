@@ -78,7 +78,7 @@ public class EditorContextUtil {
 				if (f.exists() && ENABLEMENU)
 					ctx = f.getPersistentProperty(EC_KEY);
 				IContainer c = f.getParent();
-				while (c != null && Misc.isNullOrEmpty(ctx)) {
+				while (c != null && Misc.isNullOrEmpty(ctx) && c.exists()) {
 					ctx = c.getPersistentProperty(EC_KEY);
 					c = c.getParent();
 				}
