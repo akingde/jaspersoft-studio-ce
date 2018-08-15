@@ -142,6 +142,12 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 		}
 	}
 
+	public void refreshDA() {
+		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(editor.getConfiguration());
+		DataAdapterDescriptor defaultDA = defaultStorage.getDefaultJRDataAdapter(getCurrentDataset());
+		setSelected(defaultDA);
+	}
+
 	public void dispose() {
 		if (listMenu != null)
 			listMenu.dispose();
@@ -258,14 +264,19 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 
 	public void setSelected(DataAdapterDescriptor d) {
 		selectedDA = d;
-		// set current
-		String name = d.getTitle();
-		if (name.length() > 17)
-			name = name.substring(0, 17) + "..."; //$NON-NLS-1$
-		setText(name);
-		setDescription(d.getDescription());
-		setToolTipText(d.getName());
-
+		if (d == null) {
+			setText(Messages.DataAdapterAction_0);
+			setDescription(Messages.DataAdapterAction_1);
+			setToolTipText(Messages.DataAdapterAction_2);
+		} else {
+			// set current
+			String name = d.getTitle();
+			if (name.length() > 17)
+				name = name.substring(0, 17) + "..."; //$NON-NLS-1$
+			setText(name);
+			setDescription(d.getDescription());
+			setToolTipText(d.getName());
+		}
 		if (parent != null) {
 			ToolBar toolBar = (ToolBar) parent;
 			toolBar.pack(true);

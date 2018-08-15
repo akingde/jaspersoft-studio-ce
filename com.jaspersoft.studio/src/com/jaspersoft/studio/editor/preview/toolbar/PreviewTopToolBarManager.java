@@ -359,8 +359,10 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 			dataSourceWidget.setLanguage(q != null ? q.getLanguage() : null);
 		} else
 			dataSourceWidget.setLanguage(null);
-		if (!getTopToolBar().isDisposed())
+		if (!getTopToolBar().isDisposed()) {
 			dataSourceWidget.getMenu(getTopToolBar());
+			dataSourceWidget.refreshDA();
+		}
 	}
 
 	public DataAdapterAction getDataSourceWidget() {
