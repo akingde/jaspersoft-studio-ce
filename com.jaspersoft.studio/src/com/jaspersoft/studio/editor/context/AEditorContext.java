@@ -242,6 +242,10 @@ public class AEditorContext {
 		return DataQueryAdapters.DEFAULT_DATAADAPTER;
 	}
 
+	public boolean hasNoDataAdapter() {
+		return false;
+	}
+
 	public Boolean setDataAdapter(DataAdapterDescriptor myDataAdapterDesc, MReport mrep, boolean daAction) {
 		if (!daAction)
 			return false;

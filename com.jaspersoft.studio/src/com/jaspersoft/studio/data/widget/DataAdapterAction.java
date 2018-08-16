@@ -183,11 +183,25 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 				run();
 			}
 		};
+		AEditorContext cntx = editor.getConfiguration().getEditorContext();
+		if(cntx.hasNoDataAdapter()) {
+			final MenuItem m1 = new MenuItem(listMenu, SWT.PUSH); 
+			m1.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) { 
+					m1.setSelection(true);
 
+					setSelected((DataAdapterDescriptor)null); //$NON-NLS-1$
+					// do run
+					run();
+				}
+			}); 
+			m1.setText(Messages.DataAdapterAction_0);
+		}
 		if (dastorages != null) {
 			JRDesignDataset currentDataset = getCurrentDataset();
 			if (currentDataset != null) {
-				AEditorContext cntx = editor.getConfiguration().getEditorContext();
+				
 				for (int i = 0; i < dastorages.length; i++) {
 					final ADataAdapterStorage s = dastorages[i];
 					if (!cntx.isDataAdapterStorage(s))
