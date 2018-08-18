@@ -124,20 +124,20 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 			return;
 		JRDesignDataset currentDataset = getCurrentDataset();
 		if (currentDataset == null) {
-			editor.runReport(null, true);
+			if (!editor.runReport(null, true))
+				refreshDA();
 			return;
 		}
 		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(editor.getConfiguration());
 		DataAdapterDescriptor defaultDA = defaultStorage.getDefaultJRDataAdapter(currentDataset);
 		if (defaultDA == selectedDA) {
-			editor.runReport(null, true);
+			if (!editor.runReport(null, true))
+				refreshDA();
 		} else {
-			if (!editor.runReport(selectedDA, true)) {
-				if (currentDataset != null) {
-					defaultDA = defaultStorage.getDefaultJRDataAdapter(currentDataset);
-					if (defaultDA != null && defaultDA != selectedDA)
-						setSelected(defaultDA);
-				}
+			if (!editor.runReport(selectedDA, true) && currentDataset != null) {
+				defaultDA = defaultStorage.getDefaultJRDataAdapter(currentDataset);
+				if (defaultDA != selectedDA)
+					setSelected(defaultDA);
 			}
 		}
 	}
@@ -184,24 +184,24 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 			}
 		};
 		AEditorContext cntx = editor.getConfiguration().getEditorContext();
-		if(cntx.hasNoDataAdapter()) {
-			final MenuItem m1 = new MenuItem(listMenu, SWT.PUSH); 
+		if (cntx.hasNoDataAdapter()) {
+			final MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
 			m1.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e) { 
+				public void widgetSelected(SelectionEvent e) {
 					m1.setSelection(true);
 
-					setSelected((DataAdapterDescriptor)null); //$NON-NLS-1$
+					setSelected((DataAdapterDescriptor) null); // $NON-NLS-1$
 					// do run
 					run();
 				}
-			}); 
+			});
 			m1.setText(Messages.DataAdapterAction_0);
 		}
 		if (dastorages != null) {
 			JRDesignDataset currentDataset = getCurrentDataset();
 			if (currentDataset != null) {
-				
+
 				for (int i = 0; i < dastorages.length; i++) {
 					final ADataAdapterStorage s = dastorages[i];
 					if (!cntx.isDataAdapterStorage(s))
