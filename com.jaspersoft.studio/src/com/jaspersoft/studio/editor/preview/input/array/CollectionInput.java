@@ -32,6 +32,7 @@ import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 public class CollectionInput extends ADataInput {
 	private Button bbuton;
 	private Text label;
+	private boolean refreshing = false;
 
 	public boolean isForType(Class<?> valueClass) {
 		return Collection.class.isAssignableFrom(valueClass) || valueClass.isArray();
@@ -55,6 +56,8 @@ public class CollectionInput extends ADataInput {
 			label.setLayoutData(new GridData(GridData.FILL_BOTH));
 			label.addTraverseListener(keyListener);
 			label.addModifyListener(e -> {
+				if (refreshing)
+					return;
 				String txt = label.getText();
 				Object[] s = txt.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 				// now we could just replace values with values from this
@@ -165,7 +168,12 @@ public class CollectionInput extends ADataInput {
 			}
 		if (lblText.isEmpty())
 			lblText = "No elements";
-		label.setText(lblText);
+		try {
+			refreshing = true;
+			label.setText(lblText);
+		} finally {
+			refreshing = false;
+		}
 	}
 
 	private final int SHORTLENGHT = 15;

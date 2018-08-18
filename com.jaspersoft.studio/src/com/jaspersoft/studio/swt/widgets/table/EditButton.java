@@ -50,6 +50,11 @@ public class EditButton<T> {
 				else
 					return;
 				editElement.editElement(inlist, index);
+				if (inlist.get(index) == null) {
+					inlist.remove(index);
+					tableViewer.refresh();
+					return;
+				}
 				afterElementModified((T) s.getFirstElement(), inlist, index);
 				tableViewer.refresh();
 				tableViewer.setSelection(new StructuredSelection(inlist.get(index)));

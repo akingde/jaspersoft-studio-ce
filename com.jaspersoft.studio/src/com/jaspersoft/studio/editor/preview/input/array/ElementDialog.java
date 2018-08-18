@@ -39,7 +39,7 @@ import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
 
 public class ElementDialog extends PersistentLocationDialog {
 	private IParameter prm;
-	private Map<String, AWElement> map = new LinkedHashMap<String, AWElement>();
+	private Map<String, AWElement> map = new LinkedHashMap<>();
 	private String[] cvalues = null;
 	private StackLayout stack;
 	private Combo cmb;
@@ -112,7 +112,8 @@ public class ElementDialog extends PersistentLocationDialog {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+	 * @see
+	 * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
 	 */
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
