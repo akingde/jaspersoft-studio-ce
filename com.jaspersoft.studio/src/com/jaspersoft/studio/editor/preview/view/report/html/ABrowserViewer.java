@@ -76,7 +76,7 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 
 					@Override
 					protected int computeWidth(Control control) {
-						if (w < 0)
+//						if (w < 0)
 							w = Math.max(200, getUrlWidth(control.getParent()) - 200);
 						return w;
 					}
