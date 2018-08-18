@@ -96,7 +96,9 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> implement
 
 		@Override
 		protected boolean isParameterCompatible(JRParameter p) {
-			for (AOperand aop : getValue().getExpression().getOperands()) {
+			for (AOperand aop : operands) {
+				if (aop == ParameterWidget.this.value)
+					continue;
 				if (aop instanceof FieldOperand) {
 					if (((FieldOperand) aop).getMColumn() == null)
 						return true;
@@ -119,7 +121,9 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> implement
 		protected String getDefaultParameterType() {
 			if (prm != null && isParameterCompatible(prm))
 				return prm.getValueClassName();
-			for (AOperand aop : getValue().getExpression().getOperands()) {
+			for (AOperand aop : operands) {
+				if (aop == ParameterWidget.this.value)
+					continue;
 				if (aop instanceof FieldOperand) {
 					String t = ((FieldOperand) aop).getMColumn().getUnformattedTypeName();
 					return JDBCFieldsProvider.getJavaType4SQL(t);
@@ -136,9 +140,11 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> implement
 			txt.setText(Misc.nvl(p.getName()));
 			txt.setToolTipText(Misc.nvl(p.getName()));
 		} else {
-			SelectParameterDialog d = new SelectSQLParameterDialog(UIUtils.getShell(), designer, this);
-			if (d.open() == Dialog.OK)
-				fillValue();
+			UIUtils.getDisplay().asyncExec(() -> {
+				SelectParameterDialog d = new SelectSQLParameterDialog(UIUtils.getShell(), designer, this);
+				if (d.open() == Dialog.OK)
+					fillValue();
+			});
 		}
 	}
 

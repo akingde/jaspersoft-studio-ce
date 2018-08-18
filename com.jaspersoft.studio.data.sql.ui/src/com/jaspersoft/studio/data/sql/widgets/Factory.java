@@ -196,6 +196,7 @@ public class Factory {
 			AOperandWidget<?> neww = createWidget(parent, operands.get(index), w.getDesigner());
 			neww.setOperandMap(w.getOperandMap());
 			neww.setMenuOperands(w.getMenuOperands());
+			neww.setOperands(operands, index);
 			createWidgetMenu(neww, operands, index, op.getExpression());
 			parent.layout(true);
 		}
@@ -204,7 +205,7 @@ public class Factory {
 	public static Map<String, AOperand> buildMap(AOperandWidget<?> w, AMExpression<?> mexpr) {
 		Map<String, AOperand> opMap = w.getOperandMap();
 		if (opMap == null) {
-			opMap = new LinkedHashMap<String, AOperand>();
+			opMap = new LinkedHashMap<>();
 			opMap.put(Messages.Factory_6, getOperand(w, new ParameterPOperand(mexpr)));
 			opMap.put(Messages.Factory_7, getOperand(w, new ParameterNotPOperand(mexpr)));
 			opMap.put(Messages.Factory_8, getOperand(w, new FieldOperand(null, null, mexpr)));

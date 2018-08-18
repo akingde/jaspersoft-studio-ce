@@ -14,8 +14,8 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -54,7 +54,7 @@ public class EditExpressionDialog extends ATitledDialog {
 		this.value = value;
 		setOperator(value.getOperator().getSqlname());
 		setPrevcond(value.getPrevCond());
-		operands = new ArrayList<AOperand>(value.getOperands());
+		operands = new ArrayList<>(value.getOperands());
 	}
 
 	private java.util.List<AOperand> operands;
@@ -118,10 +118,10 @@ public class EditExpressionDialog extends ATitledDialog {
 		gd.widthHint = 250;
 		w.setLayoutData(gd);
 
-		Combo operator = new Combo(cmp, SWT.READ_ONLY);
-		operator.setItems(Operator.operators);
-		operator.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		operator.addSelectionListener(new SelectionAdapter() {
+		Combo optr = new Combo(cmp, SWT.READ_ONLY);
+		optr.setItems(Operator.operators);
+		optr.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		optr.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				showRight();
@@ -141,12 +141,12 @@ public class EditExpressionDialog extends ATitledDialog {
 		rcmp.setLayoutData(gd);
 
 		showRight();
-		bindingContext.bindValue(SWTObservables.observeSelection(operator),
+		bindingContext.bindValue(SWTObservables.observeSelection(optr),
 				PojoObservables.observeValue(this, "operator")); //$NON-NLS-1$
 		return cmp;
 	}
 
-	private Map<String, Composite> map = new HashMap<String, Composite>();
+	private Map<String, Composite> map = new HashMap<>();
 	private Composite rcmp;
 	private StackLayout stackLayout;
 	private Button opDel;
@@ -252,17 +252,7 @@ public class EditExpressionDialog extends ATitledDialog {
 				setupListButtons();
 			}
 		});
-		inlist.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-
-			}
+		inlist.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -283,7 +273,7 @@ public class EditExpressionDialog extends ATitledDialog {
 	private void handleAddInList(List inlist) {
 		int index = Math.max(0, inlist.getSelectionIndex());
 		OperandDialog dialog = new OperandDialog(getShell(), designer);
-		ArrayList<AOperand> ops = new ArrayList<AOperand>(operands);
+		ArrayList<AOperand> ops = new ArrayList<>(operands);
 		if (index < ops.size())
 			ops.add(index, Factory.getDefaultOperand(value));
 		else
@@ -313,7 +303,7 @@ public class EditExpressionDialog extends ATitledDialog {
 
 	private void showInList(List inlist) {
 		String[] ilarray = new String[Math.max(operands.size() - 1, 0)];
-		if (operands.size() > 0)
+		if (!operands.isEmpty())
 			for (int i = 1; i < operands.size(); i++)
 				ilarray[i - 1] = operands.get(i).toSQLString();
 		inlist.setItems(ilarray);

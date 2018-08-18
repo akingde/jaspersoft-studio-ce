@@ -212,13 +212,14 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		return type;
 	}
 
-	private static Map<String, String> types = new HashMap<String, String>();
+	private static Map<String, String> types = new HashMap<>();
 	static {
 		types.put("CHAR", "java.lang.String");
 		types.put("VARCHAR", "java.lang.String");
 		types.put("LONGVARCHAR", "java.lang.String");
 		types.put("NUMERIC", "java.math.BigDecimal");
 		types.put("DECIMAL", "java.math.BigDecimal");
+		types.put("NUMERIC", "java.math.BigDecimal");
 		types.put("BIT", "java.lang.Boolean");
 		types.put("TINYINT", "java.lang.Byte");
 		types.put("SMALLINT", "java.lang.Short");
@@ -243,6 +244,6 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 	}
 
 	public static String getJavaType4SQL(String type) {
-		return Misc.nvl(types.get(type), "java.lang.String");
+		return Misc.nvl(types.get(type.toUpperCase()), "java.lang.String");
 	}
 }
