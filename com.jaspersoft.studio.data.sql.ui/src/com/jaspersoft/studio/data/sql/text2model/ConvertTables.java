@@ -50,6 +50,8 @@ public class ConvertTables {
 		TableOrAlias t = ftbl.getTable();
 		if (t != null) {
 			MFromTable mft = getFromTable(t, mfrom, designer);
+			if (mft == null)
+				return;
 			if (t.getTblAlias() != null)
 				mft.setAlias(t.getTblAlias().getDbname());
 			mft.setAliasKeyword(Misc.nvl(t.getAlias(), " "));
@@ -57,7 +59,8 @@ public class ConvertTables {
 				for (FromTableJoin ftj : ftbl.getFjoin()) {
 					TableOrAlias onTbl = ftj.getOnTable();
 					MFromTableJoin mftj = getFromTableJoin(onTbl, mft, designer);
-
+					if (mftj == null)
+						continue;
 					if (onTbl.getTblAlias() != null)
 						mftj.setAlias(onTbl.getTblAlias().getDbname());
 					mftj.setJoin(ftj.getJoin());
@@ -67,19 +70,19 @@ public class ConvertTables {
 					else {
 						JoinCondition jc = ftj.getJoinCond();
 						if (jc != null) {
-							String str = "USING(";
+							StringBuilder str = new StringBuilder("USING(");
 							// add join condition
 							if (jc.getUseCols() != null && jc.getUseCols() instanceof DbObjectName) {
-								str += ((DbObjectName) jc.getUseCols()).getDbname();
+								str.append(((DbObjectName) jc.getUseCols()).getDbname());
 							} else if (jc.getUseCols() != null) {
 								String del = "";
 								for (DbObjectName n : jc.getUseCols().getEntries()) {
-									str += del + n.getDbname();
+									str.append(del).append(n.getDbname());
 									del = ",";
 								}
 							}
-							str += ")";
-							mftj.setJoinKey(str);
+							str.append(")");
+							mftj.setJoinKey(str.toString());
 						}
 					}
 				}
@@ -124,7 +127,6 @@ public class ConvertTables {
 		String schema = ConvertUtil.getDbObjectName(eContents, 2);
 		if (tf instanceof DbObjectNameImpl)
 			table = ((DbObjectNameImpl) tf).getDbname();
-		// String catalog = getDbObjectName(eContents, 3);
 		MSqlTable msqlt = ConvertUtil.findTable(dbroot, schema, table, designer);
 		if (msqlt == null)
 			msqlt = ConvertUtil.getTableUnknown(dbroot, schema, table, designer);

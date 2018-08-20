@@ -56,7 +56,6 @@ public class ConvertGroupBy {
 					column = ConvertUtil.getDbObjectName(eContents, 1);
 				String table = ConvertUtil.getDbObjectName(eContents, 2);
 				String schema = ConvertUtil.getDbObjectName(eContents, 3);
-				// String catalog = getDbObjectName(eContents, 3);
 				KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column, designer);
 				if (kv != null)
 					new MGroupByColumn(parent, kv.key, kv.value);

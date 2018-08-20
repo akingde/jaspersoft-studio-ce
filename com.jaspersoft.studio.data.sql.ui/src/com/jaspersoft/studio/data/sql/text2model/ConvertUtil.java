@@ -66,7 +66,7 @@ public class ConvertUtil {
 				for (INode n : node.getChildren()) {
 					if (n instanceof INotInMetadata && ((INotInMetadata) n).isNotInMetadata()) {
 						if (toRemove == null)
-							toRemove = new ArrayList<INode>();
+							toRemove = new ArrayList<>();
 						toRemove.add(n);
 						continue;
 					}
@@ -142,7 +142,7 @@ public class ConvertUtil {
 					}
 				}
 				if (mft.getValue().isNotInMetadata() && mft.getValue().getValue().equalsIgnoreCase(table))
-					return new KeyValue<MSQLColumn, MFromTable>(addColumn(mft.getValue(), column), mft);
+					return new KeyValue<>(addColumn(mft.getValue(), column), mft);
 			}
 		}
 		if (key == null) {
@@ -167,7 +167,7 @@ public class ConvertUtil {
 						if (v.isNotInMetadata())
 							continue;
 						if (v.getValue().equalsIgnoreCase(tblName))
-							return new KeyValue<MSQLColumn, MFromTable>(addColumn(v, column), mft);
+							return new KeyValue<>(addColumn(v, column), mft);
 					}
 					getTableUnknown(msel.getRoot(), schema, tblName, designer);
 				}
@@ -175,7 +175,7 @@ public class ConvertUtil {
 				if (star.getValue().equals("*"))
 					for (MFromTable mft : Util.getFromTables(msel)) {
 						MSqlTable v = mft.getValue();
-						return new KeyValue<MSQLColumn, MFromTable>(addColumn(v, column), mft);
+						return new KeyValue<>(addColumn(v, column), mft);
 					}
 				getTableUnknown(msel.getRoot(), schema, "", designer);
 			}
@@ -246,13 +246,13 @@ public class ConvertUtil {
 	}
 
 	public static String cleanDbNameFull(String dbname) {
-		String r = "";
+		StringBuilder r = new StringBuilder("");
 		String sep = "";
 		for (String s : dbname.split("\\.")) {
-			r += sep + getDbName(s);
+			r.append(sep).append(getDbName(s));
 			sep = ".";
 		}
-		return r;
+		return r.toString();
 	}
 
 	public static String getDbName(String dbname) {

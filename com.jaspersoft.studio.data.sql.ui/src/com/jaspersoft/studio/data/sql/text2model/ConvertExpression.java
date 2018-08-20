@@ -157,7 +157,6 @@ public class ConvertExpression {
 			if (tf.getExpgroup().getIsnot() != null)
 				meg.setNot(true);
 			convertExpression(designer, msel.getParent(), meg, tf.getExpgroup().getExpr());
-			// setPrevOperator(meg, prevCond);
 		} else if (tf.getXexp() != null) {
 			MExpressionX me = new MExpressionX(parent, null, -1);
 			XExpr xexpr = tf.getXexp();
@@ -296,7 +295,6 @@ public class ConvertExpression {
 			column = ConvertUtil.getDbObjectName(eContents, 1);
 		String table = ConvertUtil.getDbObjectName(eContents, 2);
 		String schema = ConvertUtil.getDbObjectName(eContents, 3);
-		// String catalog = getDbObjectName(eContents, 3);
 		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column, designer);
 		if (kv != null)
 			return new FieldOperand(kv.key, kv.value, mexpr);
