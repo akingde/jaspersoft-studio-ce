@@ -59,7 +59,7 @@ Section "${PRODUCT_NAME}" SEC01
   SetShellVarContext all
   SetOutPath "$INSTDIR"
   SetOverwrite try
-  File /r /x src "${INSTALLER_FILES_DIR}\*.*"
+  File /r "${INSTALLER_FILES_DIR}\*.*"
 
 ; Shortcuts
   CreateDirectory "$SMPROGRAMS\${ICONS_GROUP}"
