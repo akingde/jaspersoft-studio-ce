@@ -11,8 +11,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -33,26 +31,23 @@ import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 public class ABrowserViewer extends APreview implements IURLViewable {
 	public static final String REFRESH_ACTION_ID = "com.jaspersoft.studio.browserViewer.refreshAction"; //$NON-NLS-1$
 	public static final String OPEN_BROWSER_ACTION_ID = "com.jaspersoft.studio.browserViewer.openBrowserAction"; //$NON-NLS-1$
-	//public static final String OPEN_BROWSER_TEXT_ACTION_ID = "com.jaspersoft.studio.browserViewer.openBrowserActionText"; //$NON-NLS-1$
+	// public static final String OPEN_BROWSER_TEXT_ACTION_ID =
+	// "com.jaspersoft.studio.browserViewer.openBrowserActionText"; //$NON-NLS-1$
 	private Browser browser;
 	private String url;
 	private URLContributionItem urlBar;
 	private Action refreshAction;
 	private Action openInBrowserAction;
-	//private Action openInBrowserTextAction;
+	// private Action openInBrowserTextAction;
 	private StackLayout stackLayout;
 	private Composite container;
 	private Composite externalBrowserCmp;
 
 	public ABrowserViewer(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
-		parent.addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				if (browser != null) {
-					browser.dispose();
-				}
-			}
+		parent.addDisposeListener(e -> {
+			if (browser != null)
+				browser.dispose();
 		});
 	}
 
@@ -72,19 +67,16 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 		if (!useExternalBrowser()) {
 			if (urlBar == null)
 				urlBar = new URLContributionItem(Misc.nvl(url, "")) { //$NON-NLS-1$
-					private int w = -1;
 
 					@Override
 					protected int computeWidth(Control control) {
-//						if (w < 0)
-							w = Math.max(200, getUrlWidth(control.getParent()) - 200);
-						return w;
+						return Math.max(200, getUrlWidth(control.getParent()) - 200);
 					}
 				};
 			tmanager.add(urlBar);
 			tmanager.add(getRefreshAction());
 			tmanager.add(getOpenBrowser());
-			//tmanager.add(getOpenBrowserText());
+			// tmanager.add(getOpenBrowserText());
 		}
 	}
 
@@ -142,7 +134,7 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 				container.layout();
 			}
 		} else {
-			if (browser == null) {
+			if (browser == null)
 				try {
 					browser = BrowserUtils.getSWTBrowserWidget(container, SWT.NONE);
 					browser.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -150,7 +142,6 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 				} catch (Error e) {
 					e.printStackTrace();
 				}
-			}
 			if (stackLayout.topControl != browser) {
 				stackLayout.topControl = browser;
 				container.layout();
@@ -166,6 +157,11 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 			refreshAction = new Action("", JaspersoftStudioPlugin.getInstance().getImageDescriptor( //$NON-NLS-1$
 					JaspersoftStudioPlugin.ICONS_RESOURCES_REFRESH_16_PNG)) {
 				@Override
+				public boolean isEnabled() {
+					return true;
+				}
+
+				@Override
 				public void run() {
 					browser.refresh();
 				}
@@ -174,14 +170,21 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 		}
 		return refreshAction;
 	}
-	
+
 	/*
 	 * Returns the refresh action to be added to the toolbar.
 	 */
 	private Action getOpenBrowser() {
 		if (openInBrowserAction == null) {
-			ImageDescriptor baseImage = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/application_go.png");
+			ImageDescriptor baseImage = JaspersoftStudioPlugin.getInstance()
+					.getImageDescriptor("icons/application_go.png");
 			openInBrowserAction = new Action("", baseImage) {
+
+				@Override
+				public boolean isEnabled() {
+					return true;
+				}
+
 				@Override
 				public void run() {
 					BrowserUtils.openExternalBrowser(url);
@@ -192,30 +195,26 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 		}
 		return openInBrowserAction;
 	}
-	
-	/*private Action getOpenBrowserText() {
-		if (openInBrowserTextAction == null) {
-			
-			openInBrowserTextAction = new Action("Share") {
-				@Override
-				public void run() {
-					BrowserUtils.openExternalBrowser(url);
-				}
-			};
-			openInBrowserTextAction.setId(OPEN_BROWSER_TEXT_ACTION_ID);
-			openInBrowserTextAction.setToolTipText("Open the report in the external browser");
-		}
-		return openInBrowserTextAction;
-	}*/
+
+	/*
+	 * private Action getOpenBrowserText() { if (openInBrowserTextAction == null) {
+	 * 
+	 * openInBrowserTextAction = new Action("Share") {
+	 * 
+	 * @Override public void run() { BrowserUtils.openExternalBrowser(url); } };
+	 * openInBrowserTextAction.setId(OPEN_BROWSER_TEXT_ACTION_ID);
+	 * openInBrowserTextAction.
+	 * setToolTipText("Open the report in the external browser"); } return
+	 * openInBrowserTextAction; }
+	 */
 
 	/**
 	 * Refreshes the browser if possible.
 	 */
 	protected void refreshBrowser() {
 		updateUIForBrowser();
-		if (!useExternalBrowser()) {
+		if (!useExternalBrowser())
 			browser.refresh();
-		}
 	}
 
 	public static boolean useExternalBrowser() {
