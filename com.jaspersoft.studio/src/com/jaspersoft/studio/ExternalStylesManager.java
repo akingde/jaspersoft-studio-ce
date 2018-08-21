@@ -23,6 +23,7 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplate;
 import net.sf.jasperreports.engine.JRTemplateReference;
@@ -216,6 +217,8 @@ public class ExternalStylesManager {
 						externalStylesCache.put(key, cacheEntry);
 					}
 				} catch (JRException e) {
+					e.printStackTrace();
+				} catch (JRRuntimeException e) {
 					e.printStackTrace();
 				}
 			}
