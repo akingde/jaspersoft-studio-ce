@@ -200,6 +200,14 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	}
 
 	/**
+	 * The attribute of the conditional styles are never shown at design time
+	 */
+	@Override
+	protected boolean isDependencyStyle(){
+		return false;
+	}
+	
+	/**
 	 * Creates the jr style.
 	 * 
 	 * @return the jR design conditional style

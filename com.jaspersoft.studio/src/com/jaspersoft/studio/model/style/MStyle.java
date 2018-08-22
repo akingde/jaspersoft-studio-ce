@@ -905,6 +905,51 @@ public class MStyle extends APropertyNode
 			}
 		}
 	}
+	
+	/**
+	 * Return true if this style is inherited from another style
+	 */
+	protected boolean isDependencyStyle(){
+		ANode stylesRoot = getStylesRoot();
+		if (stylesRoot != null) {
+			String styleName = getValue().getName();
+			return searchStyleDependency(stylesRoot, styleName);
+		}
+		return false;
+	}
+	
+	/**
+	 * Search recursively if a style name is used by another style
+	 */
+	protected boolean searchStyleDependency(ANode parent, String name) {
+		for(INode child : parent.getChildren()) {
+			if (child instanceof MStyle) {
+				MStyle style = (MStyle)child;
+				JRStyle jrStyle = style.getValue().getStyle();
+				if (jrStyle != null && jrStyle.getName().equals(name)) {
+					return true;
+				}
+				searchStyleDependency(style, name);
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Return a reference to the node father of all the styles
+	 *  
+	 * @param element a node of the model. It will be used to get the root and then explored to 
+	 * get the styles
+	 * @return reference to the father of all the styles
+	 */
+	protected ANode getStylesRoot() {
+		ANode parent = getParent();
+		while(parent != null && !(parent instanceof MStyles)){
+			parent = parent.getParent();
+		}
+		return parent;
+	}
+	
 
 	/**
 	 * Return the styles used by this element and eventually by its children.
@@ -969,7 +1014,9 @@ public class MStyle extends APropertyNode
 			}
 		}
 		evt = new PropertyChangeEvent(getValue(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-		fireUpdateForElements(evt.getPropertyName().equals(JRDesignStyle.PROPERTY_DEFAULT));
+		//if this style is used by another style refresh all the elements
+		boolean isDependencyStyle = isDependencyStyle();
+		fireUpdateForElements(evt.getPropertyName().equals(JRDesignStyle.PROPERTY_DEFAULT) || isDependencyStyle);
 		super.propertyChange(evt);
 	}
 
