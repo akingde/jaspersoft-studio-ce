@@ -871,7 +871,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 						if (jrContext.getEditorContext().saveOnPreview() || jrContext
 								.getPropertyBoolean(DesignerPreferencePage.P_SAVE_ON_PREVIEW, Boolean.FALSE)) {
 							monitor.subTask(Messages.AbstractJRXMLEditor_10);
-							UIUtils.getDisplay().syncExec(() -> doSave(monitor));
+							if (isDirty())
+								UIUtils.getDisplay().syncExec(() -> doSave(monitor));
 						}
 						UIUtils.getDisplay().syncExec(() -> {
 							model2preview();
@@ -1191,8 +1192,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 			saving = true;
 			try {
 				super.doSave(monitor);
-				if(!isRefreshing)
-				AbstractJRXMLEditor.this.doSave(monitor);
+				if (!isRefreshing)
+					AbstractJRXMLEditor.this.doSave(monitor);
 			} finally {
 				saving = false;
 			}
