@@ -55,11 +55,13 @@ import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.util.query.EmptyQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.SimpleJasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.DefaultChartTheme;
 import net.sf.jasperreports.engine.fonts.FontExtensionsCollector;
@@ -888,13 +890,21 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 		if (reportConverter != null) {
 			reportConverter.refreshCachedStyles();
 			JasperDesign design = getJasperDesign();
-			PropertyChangeEvent changeEvent = new PropertyChangeEvent(design, MGraphicElement.FORCE_GRAPHICAL_REFRESH,
-					false, true);
+			//Since JasperReports doesn't render correctly the element with a style reference at design time we use the trick
+			//to set an external style as local one, so set in the element the JRDesignStyle object of the external style, along
+			//with the name reference. So when a reference is updated we need to iterate all style and if thy are using a reference
+			//refresh its copy of the internal style as well
+			for(JRStyle style : design.getStyles()) {
+				if (style.getStyleNameReference() != null) {
+					((JRDesignStyle)style).setParentStyle(ExternalStylesManager.getExternalStyle(style.getStyleNameReference(), this));
+				}
+			}
+			PropertyChangeEvent changeEvent = new PropertyChangeEvent(design, MGraphicElement.FORCE_GRAPHICAL_REFRESH, false, true);
 			for (JRDesignElement element : ModelUtils.getAllElements(design)) {
 				element.getEventSupport().firePropertyChange(changeEvent);
 			}
-		}
-	}
+    	}
+  	}
 
 	/**
 	 * Return the report converter used to paint the report elements
