@@ -116,7 +116,7 @@ public class JrxmlTemplateBundle extends WizardTemplateBundle {
 				if (props != null && props instanceof JRPropertiesMap) {
 					pmap = (JRPropertiesMap) props;
 				}
-				templateEngine.setReportDataAdapter(reportBundle, step1.getDataAdapter(), pmap);
+				templateEngine.setReportDataAdapter(reportBundle, step1.getDataAdapter(), pmap, jConfig);
 
 			}
 			

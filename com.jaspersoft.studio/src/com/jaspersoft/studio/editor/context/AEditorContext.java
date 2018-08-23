@@ -265,6 +265,13 @@ public class AEditorContext {
 		return false;
 	}
 
+	public void setDataAdapter(DataAdapterDescriptor myDataAdapterDesc, JasperDesign jd) {
+		if (myDataAdapterDesc != null)
+			jd.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
+		else
+			jd.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+	}
+
 	public String getDefaultRunMode() {
 		return RunStopAction.MODERUN_LOCAL;
 	}
