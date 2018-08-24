@@ -232,7 +232,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 							tab.refresh();
 							currentTab = tab;
 							currentTab.aboutToBeShown();
-							if (state != TabState.TAB_ALREADY_VISIBLE) {
+							if (state != TabState.TAB_ALREADY_VISIBLE || state == TabState.TAB_DYNAMIC_VISIBLE) {
 								// The layout is done only if the tab was not
 								// visible
 								tabbedPropertyComposite.layout();
