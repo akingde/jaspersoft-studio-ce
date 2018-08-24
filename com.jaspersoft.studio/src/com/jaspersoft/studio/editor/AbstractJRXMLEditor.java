@@ -773,7 +773,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 
 	@Override
 	protected void handlePropertyChange(final int propertyId) {
-		if (!isRefreshing) {
+		if (!isRefreshing) { 
+			JaspersoftStudioPlugin.getInstance().logError(new Exception());
 			if (propertyId == ISaveablePart.PROP_DIRTY && previewEditor != null)
 				setPreviewDirty(true);
 			// Can indirectly refresh the widgets so it must be executed inside
