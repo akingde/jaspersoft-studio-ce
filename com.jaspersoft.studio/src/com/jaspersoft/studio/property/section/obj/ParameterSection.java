@@ -12,6 +12,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -43,8 +44,7 @@ public class ParameterSection extends AbstractSection {
 		rootLayout.marginWidth = 0;
 		// rootLayout.verticalSpacing=0;
 		rootComposite.setLayout(rootLayout);
-		GridData rootData = new GridData(GridData.FILL_BOTH);
-		rootData.minimumHeight = 150;
+		GridData rootData = new GridData(GridData.FILL_HORIZONTAL);
 		rootComposite.setLayoutData(rootData);
 
 		cmp = getWidgetFactory().createComposite(rootComposite);
@@ -57,7 +57,8 @@ public class ParameterSection extends AbstractSection {
 		gd.horizontalSpan = 2;
 		cmp.setLayoutData(gd);
 
-		createWidget4Property(cmp, JRDesignParameter.PROPERTY_NESTED_TYPE_NAME);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		createWidget4Property(cmp, JRDesignParameter.PROPERTY_NESTED_TYPE_NAME).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		createWidget4Property(rootComposite, JRDesignParameter.PROPERTY_DESCRIPTION).getControl().setLayoutData(gd);
@@ -95,7 +96,9 @@ public class ParameterSection extends AbstractSection {
 	private void setCompVisible(Composite c, boolean visible) {
 		c.setVisible(visible);
 		((GridData) c.getLayoutData()).exclude = !visible;
-		rootComposite.layout(true, true);
+		((GridData)rootComposite.getLayoutData()).minimumHeight = visible ? 150 : SWT.DEFAULT;
+		//layout the section
+		rootComposite.getParent().getParent().layout(true, true);
 	}
 
 	/**
