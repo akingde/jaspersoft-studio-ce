@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.callout;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -13,10 +14,17 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.PlatformUI;
@@ -60,8 +68,59 @@ public class CalloutEditManager extends DirectEditManager {
 		// dispose any scaled fonts that might have been created disposeScaledFont();
 	}
 
+	/**
+	 * The cell editor is created inside a separate shell because of some ubuntu 
+	 * refreshing problem when the widget is created directly above the figure.
+	 * See http://jira.jaspersoft.com/browse/JSS-539 for more information
+	 * 
+	 */
 	protected CellEditor createCellEditorOn(Composite composite) {
-		return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
+		return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP){
+			@Override
+			protected Control createControl(Composite parent) {
+				Shell shell = new Shell(parent.getShell(), SWT.NO_TRIM);
+				final Text text = (Text)super.createControl(shell);
+				//Set the canvas of the figure on the shell
+				shell.setData(parent);
+				//Create the layout for the shell to place the widget centered with 1 pixel of shell visible,
+				//used to create the border
+				shell.setLayout(new Layout() {
+					
+					@Override
+					protected void layout(Composite composite, boolean flushCache) {
+						Rectangle availableSize = composite.getClientArea();
+						text.setBounds(1, 1, availableSize.width - 2, availableSize.height - 2);
+					}
+					
+					@Override
+					protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
+						return text.computeSize(wHint, hHint);
+					}
+				});
+				//Add the paint listener to the shell to define the border
+				shell.addPaintListener(new PaintListener() {
+					
+					@Override
+					public void paintControl(PaintEvent e) {
+						Rectangle bounds = ((Shell)e.widget).getBounds();
+						int w = bounds.width - 1;
+						int h = bounds.height- 1;
+						e.gc.setForeground(ColorConstants.orange);
+						e.gc.drawRectangle(0, 0, w, h);
+					}
+				});
+				
+				text.setBackground(ColorConstants.white);
+				return shell;
+			}
+		};
+	}
+
+	/**
+	 * Asks the source edit part to show source feedback.
+	 */
+	public void showFeedback() {
+		getEditPart().showSourceFeedback(getDirectEditRequest());
 	}
 
 	public void dispose() {
@@ -149,7 +208,8 @@ public class CalloutEditManager extends DirectEditManager {
 
 		String fontName = model == null ? null : (String) model.getPropertyValue(JRBaseFont.PROPERTY_FONT_NAME);
 
-		Text text = (Text) getCellEditor().getControl();
+		Shell shell = (Shell) getCellEditor().getControl();
+		Text text = (Text) shell.getChildren()[0];
 		Font font = getEditPart().getFigure().getFont();
 
 		disposeScaledFont();
