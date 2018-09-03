@@ -57,7 +57,7 @@ public class SubreportParameterEditor extends ParameterEditor {
 	
 	@Override
 	protected ParameterPage getEditingPage() {
-		SubreportParameterPage page = new SubreportParameterPage(subReport, jd);
+		SubreportParameterPage page = new SubreportParameterPage(subReport, jd,  getJasperDesign());
 		return page;
 	}
 	

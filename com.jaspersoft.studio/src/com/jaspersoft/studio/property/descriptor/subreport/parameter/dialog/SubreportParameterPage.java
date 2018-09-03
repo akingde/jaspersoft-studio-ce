@@ -22,10 +22,9 @@ import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboInputPara
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParametersPage;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.InputParameterDialog;
-import com.jaspersoft.studio.utils.ModelUtils;
 
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -42,13 +41,16 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 public class SubreportParameterPage extends ComboParametersPage {
 
 	private MSubreport subreportModel;
+	
+	private JRReport subreportDesign;
 
 	private JasperDesign jd;
 	
-	public SubreportParameterPage(MSubreport subreportModel, JasperDesign jd) {
+	public SubreportParameterPage(MSubreport subreportModel, JasperDesign jd, JRReport subreportDesign) {
 		super(null);
 		this.subreportModel = subreportModel;
 		this.jd = jd;
+		this.subreportDesign = subreportDesign;
 	}
 
 	@Override
@@ -59,12 +61,9 @@ public class SubreportParameterPage extends ComboParametersPage {
 		bMaster.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				JRDataset dataset = ModelUtils.getFirstDatasetInHierarchy(subreportModel);
-				if (dataset == null && jd != null) {
-					dataset = jd.getMainDataset();
-				}
-				if (dataset == null) return;
-				for (JRParameter prm : dataset.getParameters()) {
+				if (subreportDesign == null)
+					return;
+				for (JRParameter prm : subreportDesign.getMainDataset().getParameters()) {
 					if (prm.isSystemDefined())
 						continue;
 					String name = prm.getName();
@@ -100,18 +99,14 @@ public class SubreportParameterPage extends ComboParametersPage {
 		for(GenericJSSParameter param : values){
 				usedParams.add(param.getName());
 		}
-		JRDataset dataset = ModelUtils.getFirstDatasetInHierarchy(subreportModel);
-		if (dataset == null && jd != null) {
-			dataset = jd.getMainDataset();
-		}
-		if (dataset != null){
-			for (JRParameter param :dataset.getParameters()){
-				if (!usedParams.contains(param.getName())){
-						if (param.getName() != null) result.add(param.getName());
+		if (subreportDesign != null)
+			for (JRParameter param : subreportDesign.getParameters()) {
+				if (!usedParams.contains(param.getName())) {
+					if (param.getName() != null)
+						result.add(param.getName());
 				}
 			}
-			Collections.sort(result);
-		}
+		Collections.sort(result);
 		return result;
 	}
 	
