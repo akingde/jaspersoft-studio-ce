@@ -11,12 +11,23 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 
 public class ParameterPOperand extends AOperand {
+	public ParameterPOperand(AMExpression<?> mexpr, boolean showDialog) {
+		this(mexpr);
+		this.showDialog = showDialog;
+	}
+
 	public ParameterPOperand(AMExpression<?> mexpr) {
 		super(mexpr);
 		JRDesignDataset ds = null;
 		if (mexpr.getRoot() != null)
 			ds = mexpr.getRoot().getValue();
 		setJrParameter(jrParameter, ds);
+	}
+
+	private boolean showDialog = true;
+
+	public boolean isShowDialog() {
+		return showDialog;
 	}
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

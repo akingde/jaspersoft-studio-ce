@@ -139,7 +139,7 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> implement
 		if (p != null) {
 			txt.setText(Misc.nvl(p.getName()));
 			txt.setToolTipText(Misc.nvl(p.getName()));
-		} else {
+		} else if (getValue().isShowDialog()) {
 			UIUtils.getDisplay().asyncExec(() -> {
 				SelectParameterDialog d = new SelectSQLParameterDialog(UIUtils.getShell(), designer, this);
 				if (d.open() == Dialog.OK)

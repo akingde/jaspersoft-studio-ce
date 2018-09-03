@@ -4,10 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.dialogs;
 
-import net.sf.jasperreports.eclipse.ui.ATitledDialog;
-import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
-import net.sf.jasperreports.eclipse.ui.validator.ValidatorUtil;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -27,6 +23,10 @@ import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.data.sql.validator.ColumnAliasStringValidator;
+
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
+import net.sf.jasperreports.eclipse.ui.validator.ValidatorUtil;
 
 public class EditSelectExpressionDialog extends ATitledDialog {
 	private MSelectExpression value;

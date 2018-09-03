@@ -40,6 +40,7 @@ import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.UnknownOperand;
+import com.jaspersoft.studio.data.sql.widgets.AOperandWidget;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
 import com.jaspersoft.studio.data.sql.widgets.ParameterWidget;
 
@@ -185,12 +186,15 @@ public class EditExpressionXDialog extends ATitledDialog implements IFilterQuery
 				cmp.setLayout(layout);
 
 				if (operands.size() < 2)
-					operands.add(new ParameterPOperand(value));
+					operands.add(new ParameterPOperand(value, false));
 
-				Control w = Factory.createWidget(cmp, operands.get(1), designer);
+				AOperandWidget<?> w = Factory.createWidget(cmp, operands.get(1), designer);
+				w.setOperandMap(w.getOperandMap());
+				w.setOperands(operands, 0);
 				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
 				w.setLayoutData(gd);
+
 			} else if (isThreeOperands()) {
 				cmp = new Composite(rcmp, SWT.NONE);
 				GridLayout layout = new GridLayout(3, false);
@@ -199,8 +203,10 @@ public class EditExpressionXDialog extends ATitledDialog implements IFilterQuery
 				cmp.setLayout(layout);
 
 				if (operands.size() < 2)
-					operands.add(new ParameterPOperand(value));
-				Control w = Factory.createWidget(cmp, operands.get(1), designer);
+					operands.add(new ParameterPOperand(value, false));
+				AOperandWidget<?> w = Factory.createWidget(cmp, operands.get(1), designer);
+				w.setOperandMap(w.getOperandMap());
+				w.setOperands(operands, 0);
 				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
 				w.setLayoutData(gd);
@@ -208,8 +214,10 @@ public class EditExpressionXDialog extends ATitledDialog implements IFilterQuery
 				new Label(cmp, SWT.NONE).setText("AND");
 
 				if (operands.size() < 3)
-					operands.add(new ParameterPOperand(value));
+					operands.add(new ParameterPOperand(value, false));
 				w = Factory.createWidget(cmp, operands.get(2), designer);
+				w.setOperandMap(w.getOperandMap());
+				w.setOperands(operands, 0);
 				gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
 				w.setLayoutData(gd);

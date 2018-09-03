@@ -63,7 +63,7 @@ public class CreateXExpression extends AAction {
 		else if (isInSelect(sel))
 			mexpr = run(null, (ANode) sel, -1);
 		mexpr.getOperands().add(new FieldOperand(null, null, mexpr));
-		mexpr.getOperands().add(new ParameterPOperand(mexpr));
+		mexpr.getOperands().add(new ParameterPOperand(mexpr, false));
 		showDialog(mexpr);
 	}
 
