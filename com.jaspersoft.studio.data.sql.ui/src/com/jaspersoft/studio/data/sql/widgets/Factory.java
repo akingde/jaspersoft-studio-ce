@@ -63,7 +63,10 @@ public class Factory {
 
 		AOperandWidget<?> w = createWidget(cmp, op, designer);
 		w.setExludeField(exludeField);
+		w.setOperandMap(w.getOperandMap());
+		w.setOperands(operands, index);
 		createWidgetMenu(w, operands, index, mexpr);
+
 		return cmp;
 	}
 

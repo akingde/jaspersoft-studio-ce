@@ -244,6 +244,8 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 	}
 
 	public static String getJavaType4SQL(String type) {
+		if (type == null)
+			return Object.class.getCanonicalName();
 		return Misc.nvl(types.get(type.toUpperCase()), "java.lang.String");
 	}
 }
