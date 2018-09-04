@@ -4,9 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -17,7 +14,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -44,6 +40,9 @@ import com.jaspersoft.studio.server.editor.action.RunStopAction;
 import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
 public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IParametrable, CachedSelectionProvider {
 	public static final String ID = "com.jaspersoft.studio.server.editor.ReportUnitEditor";
 	private String reportUnitURI;
@@ -60,12 +59,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 		} catch (Exception e1) {
 			throw new PartInitException(e1.getMessage(), e1);
 		}
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-
-			public void run() {
-				runReport();
-			}
-		});
+		UIUtils.getDisplay().asyncExec(this::runReport);
 
 	}
 
@@ -174,7 +168,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 		ToolItem toolItem = tireset.getToolItem();
 		toolItem.setText(Messages.PreviewContainer_resetactiontitle);
 		toolItem.setToolTipText(Messages.PreviewContainer_resetactiontooltip);
-		toolItem.addSelectionListener(new SelectionListener() {
+		toolItem.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -195,9 +189,6 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 				job.schedule();
 			}
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
 		});
 		tbm.update(true);
 
@@ -269,7 +260,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 
 	@Override
 	public void setMode(String mode) {
-
+		// do nothing
 	}
 
 	private CommonSelectionCacheProvider selectionCache = new CommonSelectionCacheProvider();

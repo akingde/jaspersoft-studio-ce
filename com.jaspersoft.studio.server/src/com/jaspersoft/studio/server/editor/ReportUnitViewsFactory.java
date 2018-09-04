@@ -17,7 +17,7 @@ import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
 public class ReportUnitViewsFactory extends AViewsFactory {
 	public static final String DEFAULT = Argument.RUN_OUTPUT_FORMAT_HTML;
 
-	private static LinkedHashMap<String, Class<? extends APreview>> pcmap = new LinkedHashMap<String, Class<? extends APreview>>();
+	private static LinkedHashMap<String, Class<? extends APreview>> pcmap = new LinkedHashMap<>();
 	static {
 		pcmap.put(Argument.RUN_OUTPUT_FORMAT_JRPRINT, SWTViewer.class);
 

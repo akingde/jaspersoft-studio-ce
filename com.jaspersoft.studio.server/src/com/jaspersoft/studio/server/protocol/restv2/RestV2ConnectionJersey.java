@@ -782,7 +782,18 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 					if (ee.getOutputResource() == null) {
 						OutputResourceDescriptor or = new OutputResourceDescriptor();
 						or.setContentType(r.getHeaderString("Content-Type")); //$NON-NLS-1$
-						or.setFileName("file"); //$NON-NLS-1$
+						String fname = r.getHeaderString("Content-Disposition");
+						if (fname != null) {
+							int indx = fname.indexOf("attachment; filename=");
+							if (indx >= 0)
+								fname = fname.substring("attachment; filename=".length() + 1, fname.length() - 1);
+						} else if (or.getContentType() != null) {
+							int indx = or.getContentType().indexOf('/');
+							if (indx >= 0)
+								fname = "file." + or.getContentType().substring(indx + 1, or.getContentType().length());
+						} else
+							fname = "file";
+						or.setFileName(fname); // $NON-NLS-1$
 						ee.setOutputResource(or);
 					}
 					byte[] d = readFile(r, monitor);
