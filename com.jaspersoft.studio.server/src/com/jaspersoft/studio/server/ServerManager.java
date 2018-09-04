@@ -232,7 +232,7 @@ public class ServerManager {
 				if (urlt.length > 1)
 					user = urlt[1];
 				String organization = null;
-				if (urlt.length >= 2)
+				if (urlt.length > 2)
 					organization = urlt[2];
 				for (MServerProfile sp : serverProfiles.keySet()) {
 					ServerProfile serv = sp.getValue();
