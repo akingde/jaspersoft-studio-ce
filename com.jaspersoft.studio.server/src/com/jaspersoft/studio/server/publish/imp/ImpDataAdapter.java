@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -69,6 +70,7 @@ public class ImpDataAdapter extends AImpObject {
 		if (f != null && f.exists()) {
 			fileset.add(dpath);
 			PublishOptions popt = createOptions(jrConfig, dpath);
+			popt.setFilePath(dpath);
 			// popt.setDataset(jd);
 			AFileResource fr = addResource(monitor, mrunit, fileset, f, popt);
 			popt.setValueSetter(popt.new ValueSetter<JRDesignDataset>((JRDesignDataset) jd) {
@@ -105,6 +107,8 @@ public class ImpDataAdapter extends AImpObject {
 			PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
+		if (popt.getFilePath() != null)
+			rname = FilenameUtils.getBaseName(popt.getFilePath());
 		ResourceDescriptor rd = createResource(mrunit);
 		rd.setName(IDStringValidator.safeChar(rname));
 		rd.setLabel(rname);
@@ -126,7 +130,8 @@ public class ImpDataAdapter extends AImpObject {
 			FileInputStream is = null;
 			try {
 				is = new FileInputStream(f);
-				final DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(is, (IFile) jrConfig.get(FileUtils.KEY_FILE));
+				final DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(is,
+						(IFile) jrConfig.get(FileUtils.KEY_FILE));
 				if (dad != null) {
 					final DataAdapter da = dad.getDataAdapter();
 					String fname = getFileName(da);

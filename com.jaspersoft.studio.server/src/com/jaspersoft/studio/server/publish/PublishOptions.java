@@ -22,6 +22,15 @@ public class PublishOptions {
 	private List<JRDesignExpression> jExpression;
 	private String expression;
 	private JRDesignDataset dataset;
+	private String filePath;
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
 
 	public void setDataset(JRDesignDataset dataset) {
 		this.dataset = dataset;
