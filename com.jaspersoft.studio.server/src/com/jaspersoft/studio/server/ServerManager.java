@@ -231,10 +231,8 @@ public class ServerManager {
 				String user = null;
 				if (urlt.length > 1)
 					user = urlt[1];
-				if (urlt.length >= 2)
-					user = urlt[1];
 				String organization = null;
-				if (urlt.length >= 3)
+				if (urlt.length >= 2)
 					organization = urlt[2];
 				for (MServerProfile sp : serverProfiles.keySet()) {
 					ServerProfile serv = sp.getValue();
@@ -242,7 +240,7 @@ public class ServerManager {
 						if (serv.getName().equals(name) && url != null && serv.getUrl().equals(url)) {
 							if (user == null)
 								return sp;
-							if (serv.getUser().equals(user) && (organization == null
+							if (serv.getUser().equals(user) && (Misc.isNullOrEmpty(organization)
 									|| (serv.getOrganisation() != null && serv.getOrganisation().equals(organization))))
 								return sp;
 						}

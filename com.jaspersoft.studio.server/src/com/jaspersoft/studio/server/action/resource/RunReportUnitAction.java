@@ -30,8 +30,10 @@ public class RunReportUnitAction extends Action {
 		setText(Messages.RunReportUnitAction_1);
 		setDescription(Messages.RunReportUnitAction_2);
 		setToolTipText(Messages.RunReportUnitAction_3);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 
@@ -75,12 +77,7 @@ public class RunReportUnitAction extends Action {
 				if (node != null) {
 					final String key = ServerManager.getKey((MReportUnit) node);
 					if (key != null)
-						Display.getDefault().asyncExec(new Runnable() {
-
-							public void run() {
-								SelectionHelper.openEditor(key, ReportUnitEditor.ID);
-							}
-						});
+						Display.getDefault().asyncExec(() -> SelectionHelper.openEditor(key, ReportUnitEditor.ID));
 				}
 				break;
 			}
