@@ -108,7 +108,7 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		// super.createPropertyDescriptors(desc, defaultsMap);
 
-		positionD = new NamedEnumPropertyDescriptor<AxisPositionEnum>(
+		NamedEnumPropertyDescriptor<AxisPositionEnum> positionD = new NamedEnumPropertyDescriptor<AxisPositionEnum>(
 				JRDesignChartAxis.PROPERTY_POSITION,
 				Messages.MChartAxes_position, AxisPositionEnum.LEFT_OR_TOP,
 				NullEnum.NOTNULL);
@@ -153,13 +153,13 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 	}
 
 	private MChart mChart;
-	private static NamedEnumPropertyDescriptor<AxisPositionEnum> positionD;
-
+	
 	public Object getPropertyValue(Object id) {
 		JRDesignChartAxis jrElement = (JRDesignChartAxis) getValue();
 
-		if (id.equals(JRDesignChartAxis.PROPERTY_POSITION))
-			return positionD.getIntValue(jrElement.getPositionValue());
+		if (id.equals(JRDesignChartAxis.PROPERTY_POSITION)) {
+			return NamedEnumPropertyDescriptor.getIntValue(NullEnum.NOTNULL, jrElement.getPositionValue());
+		}
 
 		if (id.equals(JRDesignChartAxis.PROPERTY_CHART)) {
 			if (mChart == null)
@@ -174,9 +174,10 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignChartAxis jrElement = (JRDesignChartAxis) getValue();
-		if (id.equals(JRDesignChartAxis.PROPERTY_POSITION))
-			jrElement.setPosition(positionD.getEnumValue(value));
-		else if (mChart != null) {
+		if (id.equals(JRDesignChartAxis.PROPERTY_POSITION)) {
+			AxisPositionEnum axisPosition = NamedEnumPropertyDescriptor.getEnumValue(AxisPositionEnum.LEFT_OR_TOP, NullEnum.NOTNULL, value);
+			jrElement.setPosition(axisPosition);
+		} else if (mChart != null) {
 			mChart.setPropertyValue(id, value);
 		}
 	}

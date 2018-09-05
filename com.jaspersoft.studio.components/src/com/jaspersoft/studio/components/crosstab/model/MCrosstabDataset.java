@@ -26,7 +26,7 @@ public class MCrosstabDataset extends MElementDataset {
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	
 	public MCrosstabDataset(JRCrosstabDataset value, JasperDesign jasperDesign) {
 		super(value, jasperDesign);
