@@ -77,7 +77,9 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 						if (target instanceof MFolder) {
 							MFolder f = (MFolder) target;
 							for (AMResource amr : droppedObjects) {
-								try {
+								try { 
+									if(amr.getParent() == f)
+										continue;
 									toRefresh.add(amr.getParent());
 									((MFolder) target).getWsClient().move(monitor, amr.getValue(),
 											f.getValue().getUriString());
