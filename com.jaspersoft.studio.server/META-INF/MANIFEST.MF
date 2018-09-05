@@ -17,8 +17,7 @@ Require-Bundle: com.jaspersoft.studio;bundle-version="7.2.0";visibility:=reexpor
  org.apache.commons.lang3;bundle-version="3.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/jasperserver-dto-7.1.0.jar,
- patch-library.jar,
+Bundle-ClassPath: patch-library.jar,
  lib/axis-1.4-JS-4.jar,
  lib/js-extra-classes.jar,
  lib/jersey/asm-all-repackaged-2.2.0-b24.jar,
@@ -53,6 +52,7 @@ Bundle-ClassPath: lib/jasperserver-dto-7.1.0.jar,
  lib/jersey213/jersey-media-multipart-2.13.jar,
  lib/jersey213/mimepull-1.9.6.jar,
  lib/jersey/net.java.html.json-0.7.1.jar,
+ lib/jasperserver-dto-develop-20180703.153635-6.jar,
  .
 Eclipse-RegisterBuddy: com.jaspersoft.studio, com.jaspersoft.studio.bundles.jackson
 Eclipse-BuddyPolicy: registered
