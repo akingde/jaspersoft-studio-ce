@@ -14,8 +14,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
@@ -122,7 +120,8 @@ public class EditorContextUtil {
 			return toolBar;
 		}
 		Label lbl = new Label(cmp, SWT.NONE);
-		lbl.setText(editor.getJrContext().getEditorContext().getName());
+		if (editor.getJrContext() != null)
+			lbl.setText(editor.getJrContext().getEditorContext().getName());
 		labels.put(editor, lbl);
 		lbl.addDisposeListener(e -> labels.remove(editor));
 		return lbl;
