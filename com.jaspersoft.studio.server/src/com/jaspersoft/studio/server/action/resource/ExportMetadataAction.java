@@ -17,6 +17,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
@@ -59,6 +60,10 @@ public class ExportMetadataAction extends Action {
 				n = ((AMResource) firstElement).getRoot();
 				if (n instanceof MServerProfile)
 					msp = (MServerProfile) n;
+				if (((AMResource) firstElement).getParent() instanceof MReportUnit) {
+					setEnabled(false);
+					return false;
+				}
 			}
 			try {
 				IConnection c = msp.getWsClient();
@@ -66,10 +71,13 @@ public class ExportMetadataAction extends Action {
 					en = msp != null && c.isSupported(Feature.EXPORTMETADATA);
 					if (en && c.getServerProfile().getClientUser() != null) {
 						for (ClientRole r : c.getServerProfile().getClientUser().getRoleSet()) {
-							if (r.getName().equals("ROLE_SUPERUSER"))
+							if (r.getName().equals("ROLE_SUPERUSER")) {
+								setEnabled(true);
 								return true;
+							}
 						}
 					}
+					setEnabled(false);
 					return false;
 				}
 			} catch (Exception e) {
