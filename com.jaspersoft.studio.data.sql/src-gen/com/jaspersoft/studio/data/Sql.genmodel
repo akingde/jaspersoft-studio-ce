@@ -4,7 +4,7 @@
     editorDirectory="/com.jaspersoft.studio.data.sql.editor/src" modelPluginID="com.jaspersoft.studio.data.sql"
     forceOverwrite="true" modelName="Sql" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="6.0" copyrightFields="false" editPluginID="com.jaspersoft.studio.data.sql.edit"
-    editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.12">
+    editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.13">
   <genPackages prefix="Sql" basePackage="com.jaspersoft.studio.data" disposableProviderFactory="true"
       ecorePackage="Sql.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//XFunction">

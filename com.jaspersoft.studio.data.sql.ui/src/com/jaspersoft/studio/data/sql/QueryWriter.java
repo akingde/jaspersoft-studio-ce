@@ -19,20 +19,17 @@ import com.jaspersoft.studio.model.util.ModelVisitor;
 
 public class QueryWriter {
 	public static String writeQuery(ANode root) {
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		new ModelVisitor<INode>(root) {
 
 			@Override
 			public boolean visit(INode n) {
 				if (n instanceof ISubQuery) {
-					if (n instanceof MSelectSubQuery
-							&& !((MSelectSubQuery) n).isFirst())
+					if (n instanceof MSelectSubQuery && !((MSelectSubQuery) n).isFirst())
 						sb.append(",\n\t");
 					sb.append("(");
 				} else if (n instanceof IQueryString) {
-					if (n instanceof MFromTable
-							&& !(n instanceof MFromTableJoin)
-							&& n.getValue() instanceof MQueryTable
+					if (n instanceof MFromTable && !(n instanceof MFromTableJoin) && n.getValue() instanceof MQueryTable
 							&& !((MFromTable) n).isFirst())
 						sb.append(",\n\t");
 					sb.append(((IQueryString) n).toSQLString());
@@ -42,8 +39,7 @@ public class QueryWriter {
 
 			@Override
 			protected void postChildIteration(INode n) {
-				boolean b = n instanceof MFromTable
-						&& n.getValue() instanceof MQueryTable;
+				boolean b = n instanceof MFromTable && n.getValue() instanceof MQueryTable;
 				if (n instanceof ISubQuery || b) {
 					if (b && n instanceof MFromTableJoin)
 						return;
@@ -57,7 +53,7 @@ public class QueryWriter {
 	}
 
 	public static String writeSubQuery(ANode root) {
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		new ModelVisitor<INode>(root) {
 
 			@Override
@@ -73,8 +69,7 @@ public class QueryWriter {
 
 			@Override
 			protected void postChildIteration(INode n) {
-				boolean b = n instanceof MFromTable
-						&& n.getValue() instanceof MQueryTable;
+				boolean b = n instanceof MFromTable && n.getValue() instanceof MQueryTable;
 				if (n instanceof ISubQuery || b) {
 					sb.append(")");
 					if (b && n instanceof MFromTableJoin)

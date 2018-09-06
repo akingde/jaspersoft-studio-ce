@@ -219,7 +219,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected List<?> getModelChildren() {
-		final List<ANode> list = new ArrayList<ANode>();
+		final List<ANode> list = new ArrayList<>();
 		final MFrom mfrom = getModel();
 		new ModelVisitor<ANode>(mfrom) {
 
@@ -245,7 +245,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private List<MFrom> getFrom(ANode n, final ANode ignore) {
-		final List<MFrom> list = new ArrayList<MFrom>();
+		final List<MFrom> list = new ArrayList<>();
 		new ModelVisitor<MFrom>(n) {
 
 			@Override
@@ -429,7 +429,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 
 				@Override
 				public void run() {
-					Map<AMapElement, Rectangle> map = new HashMap<AMapElement, Rectangle>();
+					Map<AMapElement, Rectangle> map = new HashMap<>();
 					for (Object p : getChildren())
 						addToMap(p, map);
 					SetSilentValuesCommand c = new SetSilentValuesCommand(true);
@@ -446,8 +446,9 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 					}
 					figure.setLayoutManager(xyLayout);
 					layout = true;
-					if (getViewer() != null)
+					if (getViewer() != null) {
 						getViewer().getEditDomain().getCommandStack().execute(c);
+					}
 					isRunning = false;
 				}
 			});

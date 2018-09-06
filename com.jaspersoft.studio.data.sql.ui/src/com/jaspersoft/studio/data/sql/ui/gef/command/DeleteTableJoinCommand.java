@@ -32,10 +32,8 @@ public class DeleteTableJoinCommand extends ACommand {
 		super.execute();
 		mtbl = null;
 		MFromTableJoin mftj = doGetJoinedTable();
-		if (mftj != null && mftj.getParent() != null
-				&& mftj.getParent().getParent() != null) {
-			MFromTable mtbl = new MFromTable(mftj.getParent().getParent(),
-					mftj.getValue());
+		if (mftj != null && mftj.getParent() != null && mftj.getParent().getParent() != null) {
+			mtbl = new MFromTable(mftj.getParent().getParent(), mftj.getValue());
 			undoRemove.add(mtbl);
 			mtbl.setAlias(mftj.getAlias());
 			mtbl.setAliasKeyword(mftj.getAliasKeyword());
@@ -50,10 +48,9 @@ public class DeleteTableJoinCommand extends ACommand {
 
 	protected void copySubQuery(MFromTable mftj, MFromTable mtbl) {
 		if (mftj.getValue() instanceof MQueryTable) {
-			List<INode> children = new ArrayList<INode>(mftj.getChildren());
+			List<INode> children = new ArrayList<>(mftj.getChildren());
 			for (INode n : children) {
-				if (n instanceof MUnion || n instanceof MSelect
-						|| n instanceof MFrom || n instanceof MWhere
+				if (n instanceof MUnion || n instanceof MSelect || n instanceof MFrom || n instanceof MWhere
 						|| n instanceof MGroupBy || n instanceof MHaving)
 					reparent((ANode) n, mtbl);
 			}

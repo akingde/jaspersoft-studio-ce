@@ -22,10 +22,10 @@ public class SetSilentValuesCommand extends Command {
 
 	public void add(AMapElement m, String id, Object val) {
 		if (newVals == null)
-			newVals = new HashMap<AMapElement, Map<String, Object>>();
+			newVals = new HashMap<>();
 		Map<String, Object> vals = newVals.get(m);
 		if (vals == null) {
-			vals = new HashMap<String, Object>();
+			vals = new HashMap<>();
 			newVals.put(m, vals);
 		}
 		vals.put(id, val);
@@ -40,13 +40,13 @@ public class SetSilentValuesCommand extends Command {
 		if (newVals == null)
 			return;
 		if (oldVals == null)
-			oldVals = new HashMap<AMapElement, Map<String, Object>>();
+			oldVals = new HashMap<>();
 		AMapElement last = null;
 		for (AMapElement m : newVals.keySet()) {
 			Map<String, Object> newvalues = newVals.get(m);
 			Map<String, Object> oldvalues = oldVals.get(m);
 			if (oldvalues == null) {
-				oldvalues = new HashMap<String, Object>();
+				oldvalues = new HashMap<>();
 				oldVals.put(m, oldvalues);
 			}
 			for (String key : newvalues.keySet()) {

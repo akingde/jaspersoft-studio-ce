@@ -48,6 +48,7 @@ public class JoinCommand extends ACommand {
 	@Override
 	public void execute() {
 		super.execute();
+
 		MFromTable mfSrcTbl = srcTbl;
 		if (srcTbl.getParent() instanceof MFrom && srcTbl.getParent() != null
 				&& srcTbl.getParent().getParent() instanceof MFromTable
@@ -103,7 +104,7 @@ public class JoinCommand extends ACommand {
 		c.execute();
 
 		if (srcTbl instanceof MFromTable && !srcTbl.getChildren().isEmpty()) {
-			List<MFromTableJoin> lst = new ArrayList<MFromTableJoin>();
+			List<MFromTableJoin> lst = new ArrayList<>();
 			for (INode n : srcTbl.getChildren()) {
 				if (n == destTbl)
 					return;
@@ -117,7 +118,8 @@ public class JoinCommand extends ACommand {
 	}
 
 	private MFromTableJoin convertToSubTable(MFromTable nsrc, MFromTable parent) {
-		reparent(nsrc, null);
+		if (nsrc != parent)
+			reparent(nsrc, null);
 		MFromTableJoin join = new MFromTableJoin(parent, nsrc.getValue());
 		undoRemove.add(join);
 		undoProperties.put(nsrc, nsrc.copyPropertiesUndo(join));

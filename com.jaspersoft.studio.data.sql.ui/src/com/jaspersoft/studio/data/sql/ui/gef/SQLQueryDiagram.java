@@ -159,7 +159,7 @@ public class SQLQueryDiagram {
 				IStructuredSelection s = (IStructuredSelection) viewer.getSelection();
 
 				if (s != null) {
-					List<Object> models = new ArrayList<Object>();
+					List<Object> models = new ArrayList<>();
 					for (Object obj : s.toList()) {
 						if (obj instanceof EditPart) {
 							if (obj instanceof ColumnEditPart)
@@ -198,7 +198,7 @@ public class SQLQueryDiagram {
 				}
 				menu.add(new org.eclipse.jface.action.Separator());
 
-				TableSelectAllAction sa = new TableSelectAllAction(designer, Messages.SQLQueryDiagram_0);  
+				TableSelectAllAction sa = new TableSelectAllAction(designer, Messages.SQLQueryDiagram_0);
 				if (sa.calculateEnabled(selection))
 					menu.add(sa);
 
@@ -241,9 +241,10 @@ public class SQLQueryDiagram {
 		if (reread && ds != null) {
 			String tbls = ds.getPropertiesMap().getProperty(SQL_EDITOR_TABLES);
 			if (!Misc.isNullOrEmpty(tbls)) {
-				final List<Table> map = new ArrayList<Table>();
+				final List<Table> map = new ArrayList<>();
 				try {
-					String[] tables = net.sf.jasperreports.eclipse.util.Misc.decodeBase64String(tbls, FileUtils.LATIN1_ENCODING).split(";"); //$NON-NLS-1$
+					String[] tables = net.sf.jasperreports.eclipse.util.Misc
+							.decodeBase64String(tbls, FileUtils.LATIN1_ENCODING).split(";"); //$NON-NLS-1$
 					for (String t : tables) {
 						String[] tprm = t.split(","); //$NON-NLS-1$
 						Table tbl = new Table();
@@ -261,7 +262,7 @@ public class SQLQueryDiagram {
 								// ignore
 							}
 					}
-					final List<AMapElement> processed = new ArrayList<AMapElement>();
+					final List<AMapElement> processed = new ArrayList<>();
 					new ModelVisitor<Object>(designer.getRoot()) {
 
 						@Override
@@ -324,13 +325,13 @@ public class SQLQueryDiagram {
 		viewer.setContents(designer.getRoot());
 
 		TreeSelection s = (TreeSelection) designer.getOutline().getTreeViewer().getSelection();
-		List<MFromTable> tables = new ArrayList<MFromTable>();
+		List<MFromTable> tables = new ArrayList<>();
 		for (Object obj : s.toList()) {
 			if (obj instanceof MFromTable)
 				tables.add((MFromTable) obj);
 		}
 		if (!tables.isEmpty()) {
-			List<TableEditPart> parts = new ArrayList<TableEditPart>();
+			List<TableEditPart> parts = new ArrayList<>();
 			EditPart ep = viewer.getRootEditPart();
 			for (Object obj : ep.getChildren())
 				doAddParts(obj, parts, tables);
@@ -363,7 +364,7 @@ public class SQLQueryDiagram {
 	}
 
 	protected void doDeleteTable() {
-		List<EditPart> parts = new ArrayList<EditPart>(viewer.getSelectedEditParts());
+		List<EditPart> parts = new ArrayList<>(viewer.getSelectedEditParts());
 		if (parts.size() > 1)
 			Collections.sort(parts, new Comparator<EditPart>() {
 
@@ -384,7 +385,7 @@ public class SQLQueryDiagram {
 			@Override
 			public void execute() {
 				if (!firstRun)
-					run = UIUtils.showDeleteConfirmation(viewer.getControl().getShell(),  Messages.SQLQueryDiagram_6);
+					run = UIUtils.showDeleteConfirmation(viewer.getControl().getShell(), Messages.SQLQueryDiagram_6);
 				firstRun = true;
 				if (run)
 					super.execute();
@@ -398,7 +399,7 @@ public class SQLQueryDiagram {
 		};
 		for (EditPart p : parts) {
 			GroupRequest deleteReq = new GroupRequest(RequestConstants.REQ_DELETE);
-			Map<String, String> extendedData = new HashMap<String, String>();
+			Map<String, String> extendedData = new HashMap<>();
 			extendedData.put(Messages.SQLQueryDiagram_7, Messages.SQLQueryDiagram_8);
 			deleteReq.setExtendedData(extendedData);
 			deleteReq.setEditParts(p);
@@ -443,9 +444,9 @@ public class SQLQueryDiagram {
 		private void doDrop(List<ANode> node) {
 			if (getCurrentEvent() == null)
 				return;
-			final Set<MSqlTable> tablesset = new LinkedHashSet<MSqlTable>();
-			Set<MSQLColumn> colsset = new LinkedHashSet<MSQLColumn>();
-			Set<ANode> others = new LinkedHashSet<ANode>();
+			final Set<MSqlTable> tablesset = new LinkedHashSet<>();
+			Set<MSQLColumn> colsset = new LinkedHashSet<>();
+			Set<ANode> others = new LinkedHashSet<>();
 			Util.filterTables(node, tablesset, colsset, others);
 
 			MFrom mfrom = null;
@@ -468,7 +469,7 @@ public class SQLQueryDiagram {
 				// use
 				// smoothly
 				// the graphical editor (Diagram Tab) without NPE.
-				Set<MSqlTable> tmp = new LinkedHashSet<MSqlTable>();
+				Set<MSqlTable> tmp = new LinkedHashSet<>();
 				for (MSqlTable t : tablesset) {
 					MSqlTable mt = Util.getTable(designer.getDbMetadata().getRoot(), t);
 					designer.getDbMetadata().loadTable(mt);

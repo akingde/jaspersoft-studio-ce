@@ -4,7 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -50,6 +49,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
@@ -64,7 +64,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	private boolean refreshMetadata = false;
 	private IProgressMonitor runningmonitor;
 	private CTabFolder tabFolder;
-	private Set<MSQLRoot> roots = new HashSet<MSQLRoot>();
+	private Set<MSQLRoot> roots = new HashSet<>();
 	private DataAdapterDescriptor da;
 	private PreferenceListener preferenceListener = new PreferenceListener();
 
@@ -122,16 +122,6 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		return tabFolder.getSelectionIndex() == 2;
 	}
 
-	// private boolean warned = false;
-
-	// private void showWarning() {
-	// if (!warned && isQueryModelEmpty()) {
-	// UIUtils.showWarning("Attention, SQL Query Builder will overwrite the
-	// existing query!");
-	// warned = true;
-	// }
-	// }
-
 	protected void createDiagram(CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText(Messages.SQLQueryDesigner_diagram);
@@ -168,7 +158,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	@Override
-	protected void createLineStyler() {
+	protected void createLineStyler() {// nothing
 	}
 
 	@Override
@@ -187,6 +177,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	public void refreshModel() {
+		ModelVisitor.printModel(root);
 		if (outline != null) {
 			outline.getTreeViewer().setInput(root);
 			outline.getTreeViewer().refresh();
@@ -208,12 +199,6 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	public void refreshedMetadata() {
 		if (tabFolder.getSelectionIndex() == 0)
 			source.setDirty(true);
-		// if (tabFolder.getSelectionIndex() != 0) {
-		// refreshMetadata = true;
-		// Util.refreshTables(dbMetadata.getRoot(), getRoot(), this);
-		// refreshMetadata = false;
-		// }
-		// refreshQueryModel();
 		if (tabFolder.getSelectionIndex() == 1)
 			outline.scheduleRefresh();
 		if (tabFolder.getSelectionIndex() == 2)
@@ -261,8 +246,9 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			return outline;
 		case 2:
 			return diagram;
+		default:
+			return null;
 		}
-		return null;
 	}
 
 	@Override
@@ -271,14 +257,10 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			return;
 		this.da = da;
 		super.setDataAdapter(da);
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (runningmonitor != null)
-					runningmonitor.setCanceled(true);
-				updateMetadata();
-			}
+		UIUtils.getDisplay().asyncExec(() -> {
+			if (runningmonitor != null)
+				runningmonitor.setCanceled(true);
+			updateMetadata();
 		});
 	}
 
@@ -294,7 +276,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 							runningmonitor = monitor;
 							monitor.beginTask(Messages.SQLQueryDesigner_readmetadata, IProgressMonitor.UNKNOWN);
 							dbMetadata.closeConnection();
-							DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig)
+							DataAdapterService das = DataAdapterServiceUtil
+									.getInstance(new ParameterContributorContext(jConfig, null, null))
 									.getService(da.getDataAdapter());
 							dbMetadata.updateMetadata(da, das, monitor);
 						} finally {
@@ -362,50 +345,47 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		return rt;
 	}
 
-	private PropertyChangeListener tblListener = new PropertyChangeListener() {
+	private PropertyChangeListener tblListener = arg0 -> {
+		if (getjDataset() == null)
+			return;
+		final Set<String> tables = new HashSet<>();
+		new ModelVisitor<String>((INode) arg0.getSource()) {
 
-		@Override
-		public void propertyChange(PropertyChangeEvent arg0) {
-			if (getjDataset() == null)
-				return;
-			final Set<String> tables = new HashSet<String>();
-			new ModelVisitor<String>((INode) arg0.getSource()) {
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MFromTable) {
+					MFromTable ft = (MFromTable) n;
+					Object x = ft.getPropertyActualValue(MFromTable.PROP_X);
+					Object y = ft.getPropertyActualValue(MFromTable.PROP_Y);
+					if (x != null && y != null) {
+						String str = ft.getValue().toSQLString() + ft.getAliasKeyString() + "," + x + "," + y + ","
+								+ ft.getId();
+						String sm = (String) ft.getPropertyValue(MFromTable.SHOW_MODE_PROPERTY);
+						if (sm != null)
+							str += "," + sm;
 
-				@Override
-				public boolean visit(INode n) {
-					if (n instanceof MFromTable) {
-						MFromTable ft = (MFromTable) n;
-						Object x = ft.getPropertyActualValue(MFromTable.PROP_X);
-						Object y = ft.getPropertyActualValue(MFromTable.PROP_Y);
-						if (x != null && y != null) {
-							String str = ft.getValue().toSQLString() + ft.getAliasKeyString() + "," + x + "," + y + ","
-									+ ft.getId();
-							String sm = (String) ft.getPropertyValue(MFromTable.SHOW_MODE_PROPERTY);
-							if (sm != null)
-								str += "," + sm;
-
-							str += ";";
-							tables.add(str);
-						}
-					} else if (n instanceof MFrom) {
-						MFrom ft = (MFrom) n;
-						Object x = ft.getPropertyActualValue(MFromTable.PROP_X);
-						Object y = ft.getPropertyActualValue(MFromTable.PROP_Y);
-						if (x != null && y != null)
-							tables.add("\t\tFROM," + x + "," + y + "," + ft.getId() + ";");
+						str += ";";
+						tables.add(str);
 					}
-					return true;
+				} else if (n instanceof MFrom) {
+					MFrom ft = (MFrom) n;
+					Object x = ft.getPropertyActualValue(MFromTable.PROP_X);
+					Object y = ft.getPropertyActualValue(MFromTable.PROP_Y);
+					if (x != null && y != null)
+						tables.add("\t\tFROM," + x + "," + y + "," + ft.getId() + ";");
 				}
-			};
-			String input = "";
-			for (String t : tables)
-				input += t;
-
-			try {
-				getjDataset().setProperty(SQLQueryDiagram.SQL_EDITOR_TABLES, Misc.encodeBase64String(input, FileUtils.LATIN1_ENCODING));
-			} catch (IOException e) {
-				container.getQueryStatus().showError(e);
+				return true;
 			}
+		};
+		StringBuilder input = new StringBuilder();
+		for (String t : tables)
+			input.append(t);
+
+		try {
+			getjDataset().setProperty(SQLQueryDiagram.SQL_EDITOR_TABLES,
+					Misc.encodeBase64String(input.toString(), FileUtils.LATIN1_ENCODING));
+		} catch (IOException e) {
+			container.getQueryStatus().showError(e);
 		}
 	};
 
@@ -413,9 +393,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			String p = event.getProperty();
-			if (p.equals(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE)) {
+			if (p.equals(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE))
 				doRefreshRoots(true);
-			}
 		}
 
 	}
@@ -423,9 +402,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	public void refreshViewer() {
 		if (root != null)
 			root.removeChildren();
-		else {
+		else
 			root = createRoot(root);
-		}
 		Util.createSelect(root);
 		new MOrderBy(root);
 	}

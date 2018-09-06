@@ -29,23 +29,22 @@ public abstract class ACommand extends Command {
 	@Override
 	public void execute() {
 		if (undoRemove == null)
-			undoRemove = new HashSet<ANode>();
+			undoRemove = new HashSet<>();
 		if (undoAdd == null)
-			undoAdd = new HashMap<ANode, KeyValue<ANode, Integer>>();
+			undoAdd = new HashMap<>();
 		if (undoProperties == null)
-			undoProperties = new HashMap<ANode, Map<String, Object>>();
+			undoProperties = new HashMap<>();
 		if (undoCmd == null)
-			undoCmd = new ArrayList<Command>();
+			undoCmd = new ArrayList<>();
 	}
 
 	protected void reparent(ANode n, ANode p) {
 		ANode parent = n.getParent();
 		if (parent != null)
-			undoAdd.put(n, new KeyValue<ANode, Integer>(parent, parent
-					.getChildren().indexOf(n)));
+			undoAdd.put(n, new KeyValue<ANode, Integer>(parent, parent.getChildren().indexOf(n)));
 		if (p != null)
 			undoRemove.add(n);
-		((ANode) n).setParent(p, -1);
+		n.setParent(p, -1);
 	}
 
 	private ANode root;
@@ -85,14 +84,12 @@ public abstract class ACommand extends Command {
 			ame.copyProperties(undoProperties.get(p));
 		}
 
-		if (!undoRemove.isEmpty() || !undoAdd.isEmpty()
-				|| !undoProperties.isEmpty())
+		if (!undoRemove.isEmpty() || !undoAdd.isEmpty() || !undoProperties.isEmpty())
 			firePropertyChange();
 	}
 
 	protected void firePropertyChange() {
 		if (root != null)
-			root.getPropertyChangeSupport().firePropertyChange("wrongvalue",
-					true, false);
+			root.getPropertyChangeSupport().firePropertyChange("wrongvalue", true, false);
 	}
 }
