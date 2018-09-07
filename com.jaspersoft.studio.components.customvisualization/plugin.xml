@@ -200,5 +200,13 @@
             exporterClass="com.jaspersoft.studio.components.customvisualization.ui.preferences.ExportedCVCHandler">
       </resourceExporter>
    </extension>
+   <extension
+         point="net.sf.jasperreports.preferencePageExtension">
+      <pageExtension
+            class="com.jaspersoft.studio.components.customvisualization.ui.preferences.CVCPropertiesPreferencePageExtension"
+            extendedPageId="com.jaspersoft.studio.components.customvisualization.ui.preferences.CVCPropertiesPreferencePageExtension"
+            id="com.jaspersoft.studio.preferences.PropertiesPreferencePage">
+      </pageExtension>
+   </extension>
     
 </plugin>

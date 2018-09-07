@@ -554,6 +554,7 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.jface.preference,
    org.eclipse.ui,
    org.eclipse.core.runtime.preferences",
+ com.jaspersoft.studio.preferences.editor.properties,
  com.jaspersoft.studio.preferences.editor.table;
   uses:="org.eclipse.jface.preference,
    org.eclipse.swt.events,

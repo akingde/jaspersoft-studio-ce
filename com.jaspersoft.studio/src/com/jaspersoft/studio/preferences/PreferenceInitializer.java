@@ -4,6 +4,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -21,6 +23,9 @@ import com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage;
 import com.jaspersoft.studio.preferences.theme.ThemesPreferencePage;
+
+import net.sf.jasperreports.eclipse.preferences.IPreferencePageExtension;
+import net.sf.jasperreports.eclipse.preferences.PreferencesExtensionsManager;
 
 /*
  * Class used to initialize default preference values.
@@ -65,6 +70,14 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		ThemesPreferencePage.getDefaults(store);
 
 		JRVersionPreferencesPages.getDefaults(store);
+		
+		//initialize contributed default properties
+		List<IPreferencePageExtension> contributedPages = PreferencesExtensionsManager.getContributedPreferencePages();
+		if (contributedPages != null){
+			for(IPreferencePageExtension page : contributedPages){
+				page.initDefaultProperties(store);
+			}
+		}
 	}
 
 }
