@@ -101,4 +101,9 @@ public class PropertiesPreferencePage implements IPreferencePageExtension {
 		store.setDefault(SINGLE_COLUMN_ID, false);
 		store.setDefault(P_DEFAULT_ADVANCED_TAB, false);
 	}
+
+
+	@Override
+	public void initDefaultProperties(IPreferenceStore store) {	
+	}
 }

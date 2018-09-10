@@ -5,13 +5,19 @@
 package com.jaspersoft.studio.components.customvisualization;
 
 import java.io.IOException;
+import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.components.customvisualization.ui.preferences.CVCPropertiesPreferencePageExtension;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 
 import net.sf.jasperreports.customvisualization.CVConstants;
+import net.sf.jasperreports.customvisualization.export.CVElementPhantomJSImageDataProvider;
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
+import net.sf.jasperreports.eclipse.util.FilePrefUtil;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -72,6 +78,20 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 			initCustomVisualizationComponentProperties();
 		} catch (IOException e) {
 			logError(e);
+		}
+		
+		//workaround to have the phantomjs path property to fallback to the value phantomjs, doing the if phantomjs can be executed directly with a console command
+		//then the cvc will work even without setting the path.
+		try {
+			Properties props = FileUtils.load(JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
+			String phantomJSPath = props.getProperty(CVElementPhantomJSImageDataProvider.PROPERTY_PHANTOMJS_EXECUTABLE_PATH);
+			if (phantomJSPath == null || phantomJSPath.isEmpty()) {
+				props.put(CVElementPhantomJSImageDataProvider.PROPERTY_PHANTOMJS_EXECUTABLE_PATH, CVCPropertiesPreferencePageExtension.PHANTOMJS_DEFAULT_VALUE);
+				JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(props));
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logError(ex);
 		}
 	}
 	

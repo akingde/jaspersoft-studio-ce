@@ -136,4 +136,8 @@ public class ComponentsPreferencePageExtension implements IPreferencePageExtensi
 	public void performDefaults() {
 	}
 
+	@Override
+	public void initDefaultProperties(IPreferenceStore store) {
+	}
+
 }
