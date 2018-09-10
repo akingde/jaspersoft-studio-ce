@@ -630,7 +630,7 @@ public class PasteResourceAction extends Action {
 			WSClientHelper.refreshResource((AMResource) p, monitor);
 		else if (p instanceof MServerProfile) {
 			WSClientHelper.listFolder(((MServerProfile) p), ((MServerProfile) p).getWsClient(monitor),
-					Messages.PasteResourceAction_15, monitor, 2);
+					Messages.PasteResourceAction_15, monitor, 0);
 		}
 	}
 }

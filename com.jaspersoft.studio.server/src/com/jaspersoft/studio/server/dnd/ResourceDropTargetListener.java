@@ -71,18 +71,20 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 						List<INode> toRefresh = new ArrayList<>();
 						if (((ANode) target).getParent() instanceof MReportUnit
 								|| ((ANode) target).getParent() instanceof MFolder
-								|| ((ANode) target).getParent() instanceof MServerProfile)
+						// || ((ANode) target).getParent() instanceof MServerProfile
+						)
 							target = ((ANode) target).getParent();
 
 						if (target instanceof MFolder) {
 							MFolder f = (MFolder) target;
 							for (AMResource amr : droppedObjects) {
-								try { 
-									if(amr.getParent() == f)
+								try {
+									if (amr.getParent() == f)
 										continue;
 									toRefresh.add(amr.getParent());
 									((MFolder) target).getWsClient().move(monitor, amr.getValue(),
 											f.getValue().getUriString());
+									toRefresh.add((INode) target);
 								} catch (Exception e) {
 									UIUtils.showError(e);
 								}
@@ -91,7 +93,7 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 							for (AMResource amr : droppedObjects) {
 								try {
 									toRefresh.add(amr.getParent());
-									((MFolder) target).getWsClient().move(monitor, amr.getValue(), "/");
+									((MServerProfile) target).getWsClient().move(monitor, amr.getValue(), "/");
 								} catch (Exception e) {
 									UIUtils.showError(e);
 								}
@@ -117,7 +119,7 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 						}
 						for (INode n : toRefresh)
 							try {
-								if (!hasParent(toRefresh, (AMResource) n))
+								if (!hasParent(toRefresh, n) || n instanceof MServerProfile)
 									PasteResourceAction.refreshNode(n, monitor);
 							} catch (Exception e) {
 								UIUtils.showError(e);
@@ -125,7 +127,11 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 						try {
 							if (target instanceof MReference)
 								target = ((ANode) target).getParent();
-							WSClientHelper.refreshResource((AMResource) target, monitor);
+							if (target instanceof AMResource)
+								WSClientHelper.refreshResource((AMResource) target, monitor);
+							else if (target instanceof MServerProfile)
+								WSClientHelper.listFolder((MServerProfile) target,
+										((MServerProfile) target).getWsClient(), "/", monitor, 0);
 						} catch (Exception e) {
 							UIUtils.showError(e);
 						}
@@ -157,7 +163,7 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 		return res;
 	}
 
-	private boolean hasParent(List<? extends INode> lst, AMResource amr) {
+	private boolean hasParent(List<? extends INode> lst, INode amr) {
 		INode parent = amr.getParent();
 		while (parent != null) {
 			if (lst.contains(parent))
@@ -179,7 +185,8 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 				TreeSelection sel = (TreeSelection) viewer.getSelection();
 				for (Object obj : sel.toArray()) {
 					if (obj instanceof AMResource) {
-						if (!PasteResourceAction.isSameServer((AMResource) d, (AMResource) obj))
+						if (d instanceof AMResource
+								&& !PasteResourceAction.isSameServer((AMResource) d, (AMResource) obj))
 							return false;
 						continue;
 					}
