@@ -43,7 +43,7 @@ public class TabbedPropertyRegistryFactory {
 	 */
 	private TabbedPropertyRegistryFactory() {
 		super();
-		idToCacheData = new HashMap<String, CacheData>();
+		idToCacheData = new HashMap<>();
 	}
 
 	protected Map<String, CacheData> idToCacheData; // cache
@@ -55,19 +55,16 @@ public class TabbedPropertyRegistryFactory {
 	 *            the contributor.
 	 * @return a registry for the given contributor.
 	 */
-	public TabbedPropertyRegistry createRegistry(
-			ITabbedPropertySheetPageContributor target) {
+	public TabbedPropertyRegistry createRegistry(ITabbedPropertySheetPageContributor target) {
 		/**
-		 * Get the contributor id from the ITabbedPropertySheetPageContributor
-		 * interface
+		 * Get the contributor id from the ITabbedPropertySheetPageContributor interface
 		 */
 		String key = target.getContributorId();
-		CacheData data = (CacheData) idToCacheData.get(key);
+		CacheData data = idToCacheData.get(key);
 		if (data == null) {
 			data = new CacheData();
 			data.registry = new TabbedPropertyRegistry(key);
-			data.references = new ArrayList<ITabbedPropertySheetPageContributor>(
-					5);
+			data.references = new ArrayList<>(5);
 			idToCacheData.put(key, data);
 		}
 		data.references.add(target);
@@ -76,20 +73,18 @@ public class TabbedPropertyRegistryFactory {
 	}
 
 	/**
-	 * Indicates that the given contributor no longer needs a registry. The
-	 * registry will be disposed when no other contributor of the same type
-	 * needs it.
+	 * Indicates that the given contributor no longer needs a registry. The registry
+	 * will be disposed when no other contributor of the same type needs it.
 	 * 
 	 * @param target
 	 *            the contributor;
 	 */
 	public void disposeRegistry(ITabbedPropertySheetPageContributor target) {
 		/**
-		 * Get the contributor id from the ITabbedPropertySheetPageContributor
-		 * interface
+		 * Get the contributor id from the ITabbedPropertySheetPageContributor interface
 		 */
 		String key = target.getContributorId();
-		CacheData data = (CacheData) idToCacheData.get(key);
+		CacheData data = idToCacheData.get(key);
 		if (data != null) {
 			data.references.remove(target);
 			if (data.references.isEmpty()) {

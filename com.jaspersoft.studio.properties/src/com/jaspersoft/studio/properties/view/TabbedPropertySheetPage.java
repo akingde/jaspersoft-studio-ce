@@ -58,64 +58,68 @@ import net.sf.jasperreports.eclipse.util.Pair;
 /**
  * A property sheet page that provides a tabbed UI. It's is based on the
  * TabbedPropertySheetPage made by Anthony Hunter inside eclipse, but with some
- * optimization to be faster with Jaspersoft Studio. The pages are cached but
- * to avoid to cache too much widgets the page tab not used in the last 10 hours
- * are discarded the waiting time before a page tab is discarded is defined by the
- * variable PAGE_EXPIRATION_TIME, the discard of the page is done when a new
+ * optimization to be faster with Jaspersoft Studio. The pages are cached but to
+ * avoid to cache too much widgets the page tab not used in the last 10 hours
+ * are discarded the waiting time before a page tab is discarded is defined by
+ * the variable PAGE_EXPIRATION_TIME, the discard of the page is done when a new
  * one is loaded
  * 
  * @author Anthony Hunter & Orlandin Marco
  */
 public class TabbedPropertySheetPage extends Page implements IPropertySheetPage {
-	
+
 	/**
-	 * Class to collect every page created and will watched to be disposed after too much
-	 * time in the cache
+	 * Class to collect every page created and will watched to be disposed after too
+	 * much time in the cache
 	 * 
 	 * @author Orlandin Marco
 	 *
 	 */
 	private static class PagesWatcher {
-		
+
 		/**
 		 * The list of the watched page
 		 */
-		private List<TabbedPropertySheetPage> pages = new ArrayList<TabbedPropertySheetPage>();
-		
+		private List<TabbedPropertySheetPage> pages = new ArrayList<>();
+
 		/**
-		 * Process the pages, removing the disposed ones and to the not disposed is called the method
-		 * to dispose unused tabs
+		 * Process the pages, removing the disposed ones and to the not disposed is
+		 * called the method to dispose unused tabs
 		 */
-		public void processPages(){
-			for(TabbedPropertySheetPage page : new ArrayList<TabbedPropertySheetPage>(pages)){
-				if (page.tabbedPropertyComposite.isDisposed()){
+		public void processPages() {
+			for (TabbedPropertySheetPage page : new ArrayList<TabbedPropertySheetPage>(pages)) {
+				if (page.tabbedPropertyComposite.isDisposed()) {
 					pages.remove(page);
 				} else {
 					page.removeExpiredTabs();
 				}
 			}
-			
+
 		}
-		
+
 		/**
-		 * Add a page that will be watched 
+		 * Add a page that will be watched
 		 * 
-		 * @param page a not null page
+		 * @param page
+		 *            a not null page
 		 */
-		public void addPage(TabbedPropertySheetPage page){
-			if (page != null) pages.add(page);
+		public void addPage(TabbedPropertySheetPage page) {
+			if (page != null)
+				pages.add(page);
 		}
-		
+
 		/**
 		 * Remove a watched page, typically called in the dispose of the page itsel
 		 * 
-		 * @param page the page 
+		 * @param page
+		 *            the page
 		 */
-		public void removePage(TabbedPropertySheetPage page){
-			if (page != null) pages.remove(page);
+		public void removePage(TabbedPropertySheetPage page) {
+			if (page != null)
+				pages.remove(page);
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -125,7 +129,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * The page expiration time is 10 hours
 	 */
 	private Long PAGE_EXPIRATION_TIME = 36000000l;
-	
+
 	/**
 	 * Composite where the controls are shown
 	 */
@@ -141,8 +145,8 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	private TabbedPropertyRegistry registry;
 
 	/**
-	 * The currently active contributor id, which may not match the contributor
-	 * id from the workbench part that created this instance.
+	 * The currently active contributor id, which may not match the contributor id
+	 * from the workbench part that created this instance.
 	 */
 	private String currentContributorId;
 
@@ -185,9 +189,9 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * Flag to show or not the title bar
 	 */
 	private boolean hasTitleBar;
-	
+
 	private ControlDecoration cd;
-	
+
 	private List<ValidationError> errors;
 
 	/**
@@ -211,7 +215,8 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 						tab = getTab(descriptor);
 						if (tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
 							// force widgets to be resized
-							tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
+							tab.setInput(tabbedPropertyViewer.getWorkbenchPart(),
+									(ISelection) tabbedPropertyViewer.getInput());
 							TabState state = tabbedPropertyComposite.showTabContents(descriptor, tab);
 							if (state == TabState.TAB_NOT_DEFINED) {
 								// Tab not defined, it need to be created
@@ -222,11 +227,11 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 							}
 
 							Pair<Composite, Long> showedComposite = tabToComposite.get(tab);
-							if (showedComposite != null){
+							if (showedComposite != null) {
 								showedComposite.setValue(System.currentTimeMillis());
 							}
 							WATCHER.processPages();
-							
+
 							// store tab selection
 							storeCurrentTabSelection(descriptor);
 							tab.refresh();
@@ -242,7 +247,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 						}
 					}
 				}
-			}	
+			}
 		}
 	}
 
@@ -342,16 +347,16 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 		hasTitleBar = showTitleBar;
 		contributor = tabbedPropertySheetPageContributor;
 		currentContributorId = contributor.getContributorId();
-		tabToComposite = new HashMap<TabContents, Pair<Composite, Long>>();
-		descriptorToTab = new HashMap<ITabDescriptor, TabContents>();
-		lastSelectedTabForElement = new HashMap<Object, String>();
+		tabToComposite = new HashMap<>();
+		descriptorToTab = new HashMap<>();
+		lastSelectedTabForElement = new HashMap<>();
 		validateRegistry();
 		WATCHER.addPage(this);
 	}
 
 	/**
-	 * create tab from the descriptor if necessary. then the tab is cached to
-	 * make faster the next request
+	 * create tab from the descriptor if necessary. then the tab is cached to make
+	 * faster the next request
 	 * 
 	 * @param descriptor
 	 *            a tab descriptor
@@ -372,8 +377,8 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * Take a TabContents and search a TabDescriptor for that tab
 	 */
 	private ITabDescriptor getTabDescriptor(TabContents tab) {
-		for(Entry<ITabDescriptor, TabContents> tabEntry : descriptorToTab.entrySet()){
-			if (tabEntry.getValue() == tab){
+		for (Entry<ITabDescriptor, TabContents> tabEntry : descriptorToTab.entrySet()) {
+			if (tabEntry.getValue() == tab) {
 				return tabEntry.getKey();
 			}
 		}
@@ -388,9 +393,8 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	}
 
 	/**
-	 * Update width and height of the current tab inside the scroll area, this
-	 * is usually called when the size changes and the scrollbar need to be
-	 * refreshed
+	 * Update width and height of the current tab inside the scroll area, this is
+	 * usually called when the size changes and the scrollbar need to be refreshed
 	 * 
 	 */
 	public void updatePageMinimumSize() {
@@ -414,8 +418,8 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 			@Override
 			public void controlResized(ControlEvent e) {
 				/*
-				 * Check the page height when the composite area is resized
-				 * because the column layout could be changed
+				 * Check the page height when the composite area is resized because the column
+				 * layout could be changed
 				 */
 				updatePageMinimumSize();
 			}
@@ -436,7 +440,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 		tabbedPropertyViewer.setContentProvider(tabListContentProvider);
 		tabbedPropertyViewer.addSelectionChangedListener(new SelectionChangedListener());
 
-		if (hasTitleBar && registry == null) {
+		if (hasTitleBar && registry == null && currentContributorId != null) {
 			initContributor(currentContributorId);
 		}
 	}
@@ -557,11 +561,11 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	}
 
 	/**
-	 * Stores the current tab label in the selection queue. Tab labels are used
-	 * to carry the tab context from one input object to another. The queue
-	 * specifies the selection priority. So if the first tab in the queue is not
-	 * available for the input we try the second tab and so on. If none of the
-	 * tabs are available we default to the first tab available for the input.
+	 * Stores the current tab label in the selection queue. Tab labels are used to
+	 * carry the tab context from one input object to another. The queue specifies
+	 * the selection priority. So if the first tab in the queue is not available for
+	 * the input we try the second tab and so on. If none of the tabs are available
+	 * we default to the first tab available for the input.
 	 */
 	private void storeCurrentTabSelection(ITabDescriptor tab) {
 		lastSelectedTabForElement.put(getSelectedObject(), tab.getId());
@@ -638,8 +642,8 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 			TabbedPropertyTitle title = tabbedPropertyComposite.getTitle();
 			if (currentTab == null) {
 				/**
-				 * No tabs are shown so hide the title bar, otherwise you see
-				 * "No properties available" and a title bar for the selection.
+				 * No tabs are shown so hide the title bar, otherwise you see "No properties
+				 * available" and a title bar for the selection.
 				 */
 				title.setTitle(null, null);
 			} else {
@@ -658,22 +662,22 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	}
 
 	/**
-	 * The workbench part creates this instance of the TabbedPropertySheetPage
-	 * and implements ITabbedPropertySheetPageContributor which is unique
-	 * contributor id. This unique contributor id is used to load a registry
-	 * with the extension point This id matches the registry.
+	 * The workbench part creates this instance of the TabbedPropertySheetPage and
+	 * implements ITabbedPropertySheetPageContributor which is unique contributor
+	 * id. This unique contributor id is used to load a registry with the extension
+	 * point This id matches the registry.
 	 * <p>
 	 * It is possible for elements in a selection to implement
-	 * ITabbedPropertySheetPageContributor to provide a different contributor id
-	 * and thus a differenent registry.
+	 * ITabbedPropertySheetPageContributor to provide a different contributor id and
+	 * thus a differenent registry.
 	 * 
 	 * @param selection
 	 *            the current selection in the active workbench part.
 	 */
 	private void validateRegistry() {
 		/**
-		 * All the elements in the selection implement a new contributor id, so
-		 * use that id.
+		 * All the elements in the selection implement a new contributor id, so use that
+		 * id.
 		 */
 		initContributor(currentContributorId);
 		overrideActionBars();
@@ -693,41 +697,42 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * Return a list of all the available TabContents actually visible
 	 */
 	public List<TabContents> getCurrentTabs() {
-		List<TabContents> result = new ArrayList<TabContents>();
+		List<TabContents> result = new ArrayList<>();
 		for (ITabDescriptor desc : tabbedPropertyViewer.getElements()) {
 			result.add(getTab(desc));
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Check if a tab associated to a descriptor is visible or not
 	 * 
-	 * @param descriptor the descriptor, must be not null
- 	 * @return true if it is visible, false otherwise
+	 * @param descriptor
+	 *            the descriptor, must be not null
+	 * @return true if it is visible, false otherwise
 	 */
-	private boolean isTabVisible(ITabDescriptor descriptor){
+	private boolean isTabVisible(ITabDescriptor descriptor) {
 		return tabbedPropertyComposite.getTabState(descriptor) == TabState.TAB_ALREADY_VISIBLE;
 	}
 
 	/**
 	 * Cycle all the tabs of this page to remove the not visible and not used ones
 	 */
-	protected void removeExpiredTabs(){
+	protected void removeExpiredTabs() {
 		synchronized (TabbedPropertySheetPage.this) {
 			long currentTime = System.currentTimeMillis();
-			Map<TabContents, Pair<Composite, Long>> mapCopy = new HashMap<TabContents, Pair<Composite,Long>>(tabToComposite);
-			for (Entry<TabContents, Pair<Composite, Long>> entry : mapCopy.entrySet()){
+			Map<TabContents, Pair<Composite, Long>> mapCopy = new HashMap<>(tabToComposite);
+			for (Entry<TabContents, Pair<Composite, Long>> entry : mapCopy.entrySet()) {
 				Pair<Composite, Long> entryValues = entry.getValue();
 				Long lastTimeUsed = entryValues.getValue();
-				if (lastTimeUsed != -1 && (currentTime - lastTimeUsed) > PAGE_EXPIRATION_TIME ){
+				if (lastTimeUsed != -1 && (currentTime - lastTimeUsed) > PAGE_EXPIRATION_TIME) {
 					ITabDescriptor descriptor = getTabDescriptor(entry.getKey());
-					if (descriptor != null && !isTabVisible(descriptor)){
+					if (descriptor != null && !isTabVisible(descriptor)) {
 						tabbedPropertyComposite.destroyTabContents(descriptor);
 						tabToComposite.remove(entry.getKey());
-					}	
+					}
 				}
-			}	
+			}
 		}
 	}
 }
