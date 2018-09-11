@@ -292,7 +292,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 							setDataIntoWidgets();
 							stackLayout.setTopControl(form);
 						} else {
-							//need to dispose the onld controls and create the new ones
+							//need to dispose the old controls and create the new ones
 							currentDescriptor = newDescriptor;
 							wIProps.clear();
 							for (Control c : form.getChildren()){
@@ -329,6 +329,8 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 								stackLayout.setTopControl(form);
 								//Refresh the scrollbars
 								if (propertyPageContainer != null){
+									//refresh the properties view
+									propertyPageContainer.getParent().layout(true, true); 
 									propertyPageContainer.refreshPageComposite();
 								}
 							}
