@@ -149,7 +149,8 @@ public class CVCItemDescriptor extends ADescriptor {
 	protected void initItemPropertyDescriptors() {
 		if (pnode != null) {
 			// let's look if we have some files with our properties
-			List<ItemProperty> p = (List<ItemProperty>) pnode.getPropertyValue(CVDesignComponent.PROPERTY_ITEM_PROPERTIES);
+			CVCProprtiesExpressionDTO cvcDto = (CVCProprtiesExpressionDTO) pnode.getPropertyValue(CVDesignComponent.PROPERTY_ITEM_PROPERTIES);
+			List<ItemProperty> p = cvcDto.getItemProps();
 			if (!Misc.isNullOrEmpty(p)) {
 				// let's get our description
 				// let's get our description

@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.properties.internal.TabbedPropertyComposite;
 
 /**
- * Composite used to create a single section in the preferences view. It keep the preference page
- * reference to force the refresh and calculation of the scrollbar sizes (usefull when controls are
+ * Composite used to create a single section in the properties view. It keep the properties page
+ * reference to force the refresh and calculation of the scrollbar sizes (useful when controls are
  * created dynamically)
  */
 public class SectionContainerComposite extends Composite {
