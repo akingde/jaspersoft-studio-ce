@@ -2015,7 +2015,7 @@
      </separator>
      <command
            commandId="com.jaspersoft.studio.editor.context.type"
-           label="Project"
+           label="JasperReports Library"
            style="radio">
         <parameter
               name="org.eclipse.ui.commands.radioStateParameter"
