@@ -378,6 +378,10 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		//the creation of the object alter the drop location, we need to restore it at the end of the execution
+		//so if an undo and redo is done the calculation will be done on the origianl value instead of the already
+		//modified value
+		Rectangle originalLocation = location.getCopy();
 		//Create the object if necessary
 		createObject();
 		if (jrElement != null) {
@@ -421,6 +425,7 @@ public class CreateElementCommand extends Command {
 				
 			}
 		}
+		location = originalLocation;
 	}
 	
 	/**
