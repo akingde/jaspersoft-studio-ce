@@ -137,8 +137,8 @@ public class ICParameterContributor implements IParameterICContributor {
 		new Label(parent, SWT.NONE).setText("Input Control");
 
 		cOpt = new Combo(parent, SWT.READ_ONLY);
-		Class<?> pClazz = prm.getValueClass();
-		if (Collection.class.isAssignableFrom(pClazz) || pClazz.isArray())
+		Class<?> pClazz = prm != null ? prm.getValueClass() : null;
+		if (pClazz != null && (Collection.class.isAssignableFrom(pClazz) || pClazz.isArray()))
 			cOpt.setItems(new String[] { "", "Existing From Repository", Messages.ICTypes_0, Messages.ICTypes_1,
 					Messages.ICTypes_3, Messages.ICTypes_6, Messages.ICTypes_5, Messages.ICTypes_8 });
 		else
@@ -286,7 +286,8 @@ public class ICParameterContributor implements IParameterICContributor {
 				Misc.nvl(prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_VALUE) : "")) {
 			@Override
 			protected void handleValueChanged() {
-				ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_VALUE, getValue());
+				ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_VALUE,
+						getValue());
 			}
 		};
 		lovc.createComposite(c);
@@ -308,7 +309,8 @@ public class ICParameterContributor implements IParameterICContributor {
 				Misc.nvl(prm != null ? prm.getPropertiesMap().getProperty(PROPERTY_JS_INPUTCONTROL_VALUE) : ""), fq) {
 			@Override
 			protected void handleValueChanged() {
-				ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_VALUE, getValue());
+				ICParameterContributor.this.prm.getPropertiesMap().setProperty(PROPERTY_JS_INPUTCONTROL_VALUE,
+						getValue());
 			}
 		};
 		qc.createComposite(c);
