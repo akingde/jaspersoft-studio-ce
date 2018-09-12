@@ -107,8 +107,8 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> implement
 						Class<?> clazz = JRClassLoader.loadClassForName(JDBCFieldsProvider.getJavaType4SQL(t));
 						Class<?> pclazz = p.getValueClass();
 						if (Number.class.isAssignableFrom(pclazz))
-							pclazz = Number.class;
-						return Number.class.isAssignableFrom(clazz);
+							return Number.class.isAssignableFrom(clazz);
+						return pclazz.isAssignableFrom(clazz);
 					} catch (ClassNotFoundException e) {
 						e.printStackTrace();
 						return false;
