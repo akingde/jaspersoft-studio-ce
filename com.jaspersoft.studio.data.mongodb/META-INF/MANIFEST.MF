@@ -3,7 +3,7 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: MongoDB Plugin
 Bundle-SymbolicName: com.jaspersoft.studio.data.mongodb;singleton:=true
-Bundle-Version: 7.2.0.qualifier
+Bundle-Version: 7.2.0.final
 Bundle-Activator: com.jaspersoft.studio.data.mongodb.Activator
 Bundle-Vendor: TIBCO Software Inc.
 Require-Bundle: com.jaspersoft.studio.data;bundle-version="7.2.0";visibility:=reexport,
