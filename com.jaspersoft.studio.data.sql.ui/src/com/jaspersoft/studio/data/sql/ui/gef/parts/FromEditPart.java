@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
@@ -34,6 +35,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.data.sql.QueryWriter;
 import com.jaspersoft.studio.data.sql.model.ISubQuery;
+import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -58,7 +60,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		RoundedRectangle fig = new FormFigure();
+		RoundedRectangle fig = new FromFigure();
 		fig.setLayoutManager(xyLayout);
 		fig.setBackgroundColor(SWTResourceManager.getColor(248, 248, 255));
 		fig.setOpaque(true);
@@ -235,10 +237,36 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 						if (!lst.isEmpty())
 							list.addAll(lst);
 						// return false;
-					} else
+					} else {
+						if (n.getValue() instanceof MSqlTable) {
+							String name = getTblName((MFromTable) n);
+							if (name != null) {
+								boolean exists = false;
+								for (ANode en : list) {
+									if (en instanceof MFromTable) {
+										String ename = getTblName((MFromTable) en);
+										if (en != null && name.equals(ename)) {
+											exists = true;
+											break;
+										}
+									}
+								}
+								if (exists)
+									return true;
+							}
+						}
 						list.add((ANode) n);
+					}
 				}
 				return true;
+			}
+
+			private String getTblName(MFromTable n) {
+				if (n.getValue() instanceof MSqlTable) {
+					MSqlTable tbl = n.getValue();
+					return tbl.getValue() + " AS " + n.getAlias();
+				}
+				return null;
 			}
 		};
 		return list;
@@ -368,14 +396,12 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 		Object pv = item.getPropertyValue(MFromTable.PROP_X);
 		if (pv != null && pv instanceof Integer)
 			x = (Integer) pv;
-		else if (pv != null && pv instanceof Point) {
-			x = ((Point) pv).x;
-			y = ((Point) pv).y;
+		else if (pv != null && pv instanceof Point)
 			return null;
-		} else if (!(item instanceof MFrom) || (item instanceof MFrom && item.getChildren().isEmpty()))
+		else if (!(item instanceof MFrom) || (item instanceof MFrom && item.getChildren().isEmpty()))
 			layout = false;
 
-		pv = ((APropertyNode) item).getPropertyValue(MFromTable.PROP_Y);
+		pv = item.getPropertyValue(MFromTable.PROP_Y);
 		if (pv != null && pv instanceof Integer)
 			y = (Integer) pv;
 		if (x != null && y != null)
@@ -405,7 +431,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 				}
 				return false;
 			}
-		}.getObject(), Boolean.TRUE)) {
+		}.getObject(), Boolean.FALSE)) {
 			figure.setLayoutManager(xyLayout);
 			isRunning = false;
 		} else {
@@ -446,16 +472,15 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 					}
 					figure.setLayoutManager(xyLayout);
 					layout = true;
-					if (getViewer() != null) {
+					if (getViewer() != null)
 						getViewer().getEditDomain().getCommandStack().execute(c);
-					}
 					isRunning = false;
 				}
 			});
 		}
 	}
 
-	class FormFigure extends RoundedRectangle {
+	class FromFigure extends RoundedRectangle {
 		@Override
 		public Insets getInsets() {
 			return INSETS;
@@ -478,24 +503,25 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 			IFigure t = super.getToolTip();
 			if (t instanceof Label) {
 				Label l = (Label) t;
-				l.setText(getModel().getDisplayText());
-				// Rectangle b = getBounds().getCopy();
-				// l.setText(l.getText() + "\n" + b);
-				// this.translateToAbsolute(b);
-				// l.setText(l.getText() + "\n" + b);
-				// this.translateToRelative(b);
-				// l.setText(l.getText() + "\n" + b);
-				// l.setText(l.getText() + "\nX"
-				// + getModel().getPropertyValue(MFromTable.PROP_X));
-				// l.setText(l.getText() + "\nY"
-				// + getModel().getPropertyValue(MFromTable.PROP_Y));
-				// l.setText(l.getText() + "\nChildren: "
-				// + getModel().getChildren().size());
-				// for (Figure f : (List<Figure>) getChildren()) {
-				// l.setText(l.getText() + "\n\n"
-				// + ((Label) f.getToolTip()).getText() + "\n\n");
-				// }
+				MFrom mdl = getModel();
+				l.setText(mdl.getDisplayText());
+				Rectangle b = getBounds().getCopy();
+				l.setText(l.getText() + "\n" + b);
+				this.translateToAbsolute(b);
+				l.setText(l.getText() + "\n" + b);
+				this.translateToRelative(b);
+				l.setText(l.getText() + "\n" + b);
+				l.setText(l.getText() + "\nX" + mdl.getPropertyValue(MFromTable.PROP_X));
+				l.setText(l.getText() + "\nY" + mdl.getPropertyValue(MFromTable.PROP_Y));
 
+				l.setText(l.getText() + "\nLayour: " + getLayoutManager());
+
+				l.setText(l.getText() + "\nChildren Model: " + mdl.getChildren().size());
+				l.setText(l.getText() + "\nChildren Figures: " + getChildren().size());
+				for (Figure f : (List<Figure>) getChildren()) {
+					l.setText(l.getText() + "\n" + f.getBounds());
+					l.setText(l.getText() + "\n" + ((Label) f.getToolTip()).getText() + "\n------");
+				}
 			}
 			return t;
 		}

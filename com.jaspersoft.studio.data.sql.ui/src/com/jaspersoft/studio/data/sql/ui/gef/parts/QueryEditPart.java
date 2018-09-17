@@ -52,8 +52,7 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.CONTAINER_ROLE,
-				new FromContainerEditPolicy());
+		installEditPolicy(EditPolicy.CONTAINER_ROLE, new FromContainerEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
 
 			@Override
@@ -62,8 +61,7 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 			}
 
 			@Override
-			protected Command createChangeConstraintCommand(
-					ChangeBoundsRequest request, EditPart child,
+			protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child,
 					Object constraint) {
 				Rectangle b = getHostFigure().getBounds();
 				Rectangle r = (Rectangle) constraint;
@@ -107,8 +105,7 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 						}
 
 						@Override
-						protected void showChangeBoundsFeedback(
-								ChangeBoundsRequest request) {
+						protected void showChangeBoundsFeedback(ChangeBoundsRequest request) {
 							super.showChangeBoundsFeedback(request);
 							Label r = (Label) getDragSourceFeedbackFigure();
 							Rectangle b = r.getBounds();
@@ -123,7 +120,7 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected List<?> getModelChildren() {
 		MSQLRoot root = getModel();
-		List<MFrom> list = new ArrayList<MFrom>();
+		List<MFrom> list = new ArrayList<>();
 		for (INode n : root.getChildren()) {
 			if (n instanceof MFrom && !n.getChildren().isEmpty())
 				list.add((MFrom) n);

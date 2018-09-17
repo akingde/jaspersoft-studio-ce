@@ -32,16 +32,16 @@ public class SqlTableFigure extends Figure {
 		}
 	}
 
-	public static Color classColor = SWTResourceManager.getColor(255, 255, 206);
+	public static final Color classColor = SWTResourceManager.getColor(255, 255, 206);
 	private Label lblName;
 	private ColumnsFigure attributeFigure = new ColumnsFigure();
-	private LineBorder border = new LineBorder(ColorConstants.black, 1);
+	private LineBorder brd = new LineBorder(ColorConstants.black, 1);
 
 	public SqlTableFigure(String name) {
 		ToolbarLayout layout = new ToolbarLayout();
 		layout.setSpacing(5);
 		setLayoutManager(layout);
-		setBorder(border);
+		setBorder(brd);
 		setBackgroundColor(classColor);
 		setOpaque(true);
 
@@ -66,13 +66,13 @@ public class SqlTableFigure extends Figure {
 	}
 
 	public void showSelectedBorder() {
-		border.setWidth(2);
+		brd.setWidth(2);
 		invalidate();
 		repaint();
 	}
 
 	public void hideSelectedBorder() {
-		border.setWidth(1);
+		brd.setWidth(1);
 		invalidate();
 		repaint();
 	}
