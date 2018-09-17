@@ -6,9 +6,11 @@ package com.jaspersoft.studio.model.style.command;
 
 import org.eclipse.gef.commands.Command;
 
+import net.sf.jasperreports.engine.JRConditionalStyle;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRParagraph;
 import net.sf.jasperreports.engine.JRPen;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.base.JRBoxPen;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
@@ -52,6 +54,19 @@ public class UpdateStyleCommand extends Command {
 		return sourceStyle != null && targetStyle != null;
 	}
 
+	protected void copyParentStyleAttributes(JRDesignStyle targetStyle, JRDesignStyle sourceStyle) {
+		targetStyle.setDefault(sourceStyle.isDefault());
+		targetStyle.setParentStyle(sourceStyle.getStyle());
+		targetStyle.setParentStyleNameReference(sourceStyle.getStyleNameReference());
+		int index = 0;
+		for(JRConditionalStyle condStyle : sourceStyle.getConditionalStyleList()) {
+			if (targetStyle.getConditionalStyleList().size() > index) {
+				copyAttributes((JRBaseStyle)targetStyle.getConditionalStyleList().get(index), (JRBaseStyle)condStyle);
+			}
+			index++;
+		}
+	}
+	
 	/**
 	 * Copy all the attributes from the source style to the target style, except the 
 	 * name. The style attributes read from the source are the own values
@@ -59,12 +74,12 @@ public class UpdateStyleCommand extends Command {
 	 * @param sourceStyle The source style from where the properties are read, must be not null
 	 * @param targetStyle The target style where the properties are copied, must be not null
 	 */
-	protected void copyAttributes(JRDesignStyle targetStyle, JRDesignStyle sourceStyle){
+	protected void copyAttributes(JRBaseStyle targetStyle, JRBaseStyle sourceStyle){
 		targetStyle.setBackcolor(sourceStyle.getOwnBackcolor());
 		targetStyle.setBlankWhenNull(sourceStyle.isOwnBlankWhenNull());
 		targetStyle.setBold(sourceStyle.isOwnBold());
 		targetStyle.setItalic(sourceStyle.isOwnItalic());
-		targetStyle.setDefault(sourceStyle.isDefault());
+
 		targetStyle.setFill(sourceStyle.getOwnFillValue());
 		targetStyle.setFontName(sourceStyle.getOwnFontName());
 		targetStyle.setFontSize(sourceStyle.getOwnFontsize());
@@ -73,8 +88,7 @@ public class UpdateStyleCommand extends Command {
 		targetStyle.setHorizontalTextAlign(sourceStyle.getOwnHorizontalTextAlign());
 		targetStyle.setMarkup(sourceStyle.getOwnMarkup());
 		targetStyle.setMode(sourceStyle.getOwnModeValue());
-		targetStyle.setParentStyle(sourceStyle.getStyle());
-		targetStyle.setParentStyleNameReference(sourceStyle.getStyleNameReference());
+
 		targetStyle.setPattern(sourceStyle.getOwnPattern());
 		targetStyle.setPdfEmbedded(sourceStyle.isOwnPdfEmbedded());
 		targetStyle.setPdfEncoding(sourceStyle.getOwnPdfEncoding());
@@ -121,6 +135,10 @@ public class UpdateStyleCommand extends Command {
 		 copyLineBox(targetBox.getRightPen(), sourceBox.getRightPen());
 		 copyLineBox(targetBox.getBottomPen(), sourceBox.getBottomPen());
 		 copyLineBox(targetBox.getTopPen(), sourceBox.getTopPen());
+		 
+		 if (targetStyle instanceof JRDesignStyle && sourceStyle instanceof JRDesignStyle) {
+			 copyParentStyleAttributes((JRDesignStyle)targetStyle, (JRDesignStyle)sourceStyle);
+		 }
 	}
 	
 	/**
