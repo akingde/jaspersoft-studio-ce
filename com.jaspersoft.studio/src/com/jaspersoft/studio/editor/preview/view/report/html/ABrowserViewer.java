@@ -70,7 +70,7 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 
 					@Override
 					protected int computeWidth(Control control) {
-						return Math.max(200, getUrlWidth(control.getParent()) - 200);
+						return Math.max(200, getUrlWidth(control.getParent()) - 250);
 					}
 				};
 			tmanager.add(urlBar);
@@ -196,6 +196,52 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 		return openInBrowserAction;
 	}
 
+	/*
+	 private Action getOpenBrowserDropDown() {
+		if (openInBrowserAction == null) {
+			openInBrowserAction = new Action("", Action.AS_DROP_DOWN_MENU) {
+				@Override
+				public void run() {
+				}
+			};
+			openInBrowserAction.setMenuCreator(new IMenuCreator() {
+				
+				private Menu menu = null;
+				
+				private void createMenu(Menu parent) {
+					BrowserManager manager = BrowserManager.getInstance();
+					for(IBrowserDescriptor descriptor : manager.getWebBrowsers()) {
+						descriptor.
+					}
+				}
+				
+				
+				@Override
+				public Menu getMenu(Menu parent) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public Menu getMenu(Control parent) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public void dispose() {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			openInBrowserAction.setId(OPEN_BROWSER_ACTION_ID);
+			openInBrowserAction.setToolTipText("Open the report in the external browser");
+		}
+		return openInBrowserAction;
+	}
+	 */
+	
+	
 	/*
 	 * private Action getOpenBrowserText() { if (openInBrowserTextAction == null) {
 	 * 
