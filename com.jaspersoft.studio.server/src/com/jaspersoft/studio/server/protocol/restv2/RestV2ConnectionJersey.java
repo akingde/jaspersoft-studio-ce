@@ -747,9 +747,13 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				if (rer.getParameters() != null) {
 					String del = "?"; //$NON-NLS-1$
 					for (ReportParameter rp : rer.getParameters().getReportParameters()) {
-						rourl.append(del).append(rp.getName() + "="); //$NON-NLS-1$
-						for (String v : rp.getValues())
+						if (rp.getValues().isEmpty())
+							rourl.append(del).append(rp.getName() + "="); //$NON-NLS-1$
+						for (String v : rp.getValues()) {
+							rourl.append(del).append(rp.getName() + "=");
 							rourl.append(v);
+							del = "&";
+						}
 						del = "&"; //$NON-NLS-1$
 					}
 				}
