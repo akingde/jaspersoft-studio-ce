@@ -505,23 +505,23 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 				Label l = (Label) t;
 				MFrom mdl = getModel();
 				l.setText(mdl.getDisplayText());
-				Rectangle b = getBounds().getCopy();
-				l.setText(l.getText() + "\n" + b);
-				this.translateToAbsolute(b);
-				l.setText(l.getText() + "\n" + b);
-				this.translateToRelative(b);
-				l.setText(l.getText() + "\n" + b);
-				l.setText(l.getText() + "\nX" + mdl.getPropertyValue(MFromTable.PROP_X));
-				l.setText(l.getText() + "\nY" + mdl.getPropertyValue(MFromTable.PROP_Y));
-
-				l.setText(l.getText() + "\nLayour: " + getLayoutManager());
-
-				l.setText(l.getText() + "\nChildren Model: " + mdl.getChildren().size());
-				l.setText(l.getText() + "\nChildren Figures: " + getChildren().size());
-				for (Figure f : (List<Figure>) getChildren()) {
-					l.setText(l.getText() + "\n" + f.getBounds());
-					l.setText(l.getText() + "\n" + ((Label) f.getToolTip()).getText() + "\n------");
-				}
+//				Rectangle b = getBounds().getCopy();
+//				l.setText(l.getText() + "\n" + b);
+//				this.translateToAbsolute(b);
+//				l.setText(l.getText() + "\n" + b);
+//				this.translateToRelative(b);
+//				l.setText(l.getText() + "\n" + b);
+//				l.setText(l.getText() + "\nX" + mdl.getPropertyValue(MFromTable.PROP_X));
+//				l.setText(l.getText() + "\nY" + mdl.getPropertyValue(MFromTable.PROP_Y));
+//
+//				l.setText(l.getText() + "\nLayour: " + getLayoutManager());
+//
+//				l.setText(l.getText() + "\nChildren Model: " + mdl.getChildren().size());
+//				l.setText(l.getText() + "\nChildren Figures: " + getChildren().size());
+//				for (Figure f : (List<Figure>) getChildren()) {
+//					l.setText(l.getText() + "\n" + f.getBounds());
+//					l.setText(l.getText() + "\n" + ((Label) f.getToolTip()).getText() + "\n------");
+//				}
 			}
 			return t;
 		}
