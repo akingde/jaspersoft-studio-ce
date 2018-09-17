@@ -451,31 +451,31 @@ public class CrosstabWizard extends JSSWizard {
 		if (function == AgregationFunctionEnum.UNIQUE)
 			exp.setText(oldExpText);
 		else if (function == AgregationFunctionEnum.YEAR) {
-			exp.setText("new SimpleDateFormat(\"yyyy\").format(" + oldExpText + ")");
+			exp.setText("Integer.parseInt(new SimpleDateFormat(\"yyyy\").format(" + oldExpText + "))");
 			bucket.setValueClassName(Integer.class.getName());
 		} else if (function == AgregationFunctionEnum.MONTH) {
-			exp.setText("new SimpleDateFormat(\"MM\").format(" + oldExpText + ")");
+			exp.setText("Integer.parseInt(new SimpleDateFormat(\"MM\").format(" + oldExpText + "))");
 			bucket.setValueClassName(Integer.class.getName());
 		} else if (function == AgregationFunctionEnum.WEEK) {
-			exp.setText("new SimpleDateFormat(\"ww\").format(" + oldExpText + ")");
+			exp.setText("Integer.parseInt(new SimpleDateFormat(\"ww\").format(" + oldExpText + "))");
 			bucket.setValueClassName(Integer.class.getName());
 		} else if (function == AgregationFunctionEnum.DAY) {
-			exp.setText("new SimpleDateFormat(\"dd\").format(" + oldExpText + ")");
+			exp.setText("Integer.parseInt(new SimpleDateFormat(\"dd\").format(" + oldExpText + "))");
 			bucket.setValueClassName(Integer.class.getName());
 		} else if (function == AgregationFunctionEnum.DAY_OF_THE_WEEK) {
-			exp.setText("new SimpleDateFormat(\"u\").format(" + oldExpText + ")");
+			exp.setText("Integer.parseInt(new SimpleDateFormat(\"u\").format(" + oldExpText + "))");
 			bucket.setValueClassName(Integer.class.getName());
 		} else if (function == AgregationFunctionEnum.HOUR) {
-			exp.setText("new SimpleDateFormat(\"HH\").format(" + oldExpText + ")");
+			exp.setText("Integer.parseInt(new SimpleDateFormat(\"HH\").format(" + oldExpText + "))");
 			bucket.setValueClassName(Integer.class.getName());
 		} else if (function == AgregationFunctionEnum.MINUTE) {
-			exp.setText("new SimpleDateFormat(\"mm\").format(" + oldExpText + ")");
+			exp.setText("Integer.parseInt(new SimpleDateFormat(\"mm\").format(" + oldExpText + "))");
 			bucket.setValueClassName(Integer.class.getName());
 		} else if (function == AgregationFunctionEnum.SECOND) {
-			exp.setText("new SimpleDateFormat(\"ss\").format(" + oldExpText + ")");
+			exp.setText("Integer.parseInt(new SimpleDateFormat(\"ss\").format(" + oldExpText + "))");
 			bucket.setValueClassName(Integer.class.getName());
 		} else if (function == AgregationFunctionEnum.MILLISECOND) {
-			exp.setText("new SimpleDateFormat(\"SSSS\").format(" + oldExpText + ")");
+			exp.setText("Integer.parseInt(new SimpleDateFormat(\"SSSS\").format(" + oldExpText + "))");
 			bucket.setValueClassName(Integer.class.getName());
 		} else if (function == AgregationFunctionEnum.QUARTER) {
 			exp.setText("(Integer.parseInt(new SimpleDateFormat(\"MM\").format(" + oldExpText + "))/4)+1");

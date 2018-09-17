@@ -42,7 +42,9 @@ import com.jaspersoft.studio.property.ISetValueCommandProvider;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPWidgetFactory;
+import com.jaspersoft.studio.utils.UIUtil;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 /*
@@ -283,7 +285,14 @@ public abstract class AbstractSection extends AbstractPropertySection
 						widgets.get(key).setData(element, element.getPropertyValue(key));
 				}
 			}
-			getTabbedPropertySheetPage().showErrors();
+			UIUtils.getDisplay().syncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					getTabbedPropertySheetPage().showErrors();
+				}
+			});
+
 			setRefreshing(false);
 		}
 	}
