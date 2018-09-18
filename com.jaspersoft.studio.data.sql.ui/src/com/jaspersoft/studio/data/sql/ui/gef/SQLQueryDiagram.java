@@ -360,7 +360,7 @@ public class SQLQueryDiagram {
 	}
 
 	public void dispose() {
-
+		// do nothing
 	}
 
 	protected void doDeleteTable() {
@@ -537,8 +537,7 @@ public class SQLQueryDiagram {
 
 		@Override
 		protected Request createTargetRequest() {
-			CreateRequest request = new CreateRequest();
-			return request;
+			return new CreateRequest();
 		}
 
 	}

@@ -54,7 +54,7 @@ import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 
 public class TableEditPart extends AbstractGraphicalEditPart {
-	private Map<String, MSelectColumn> set = new HashMap<String, MSelectColumn>();
+	private Map<String, MSelectColumn> set = new HashMap<>();
 	private SQLQueryDesigner designer;
 
 	public boolean isAllstar() {
@@ -125,7 +125,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		f.setToolTip(new Label(fromTable.getDisplayText()));
 		String sm = (String) fromTable.getPropertyValue(MFromTable.SHOW_MODE_PROPERTY);
 		if (sm == null)
-			;// f.setLabelIcont(null);
+			;
 		else if (sm.equals("short"))
 			f.setLabelIcon(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/null.png"));
 		else if (sm.equals("keys"))
@@ -133,7 +133,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		else
 			f.setLabelIcon(null);
 
-		FromEditPart parent = (FromEditPart) getParent();
+		FromEditPart parent = getParent();
 		Point p = parent.readPoint(fromTable);
 		if (p == null)
 			return;
@@ -175,7 +175,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		String sm = (String) m.getPropertyValue(MFromTable.SHOW_MODE_PROPERTY);
 
 		MSqlTable tbl = m.getValue();
-		List<INode> lst = new ArrayList<INode>();
+		List<INode> lst = new ArrayList<>();
 		if (sm != null && sm.equals("short"))
 			return lst;
 		for (INode n : tbl.getChildren()) {
@@ -245,7 +245,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		String dtype = getDesigner().getjConfig().getProperty(SQLEditorPreferencesPage.P_DIAGRAM_TYPE);
 		if (dtype != null && dtype.equals(SQLEditorPreferencesPage.COARSE)) {
 			if (getModel().getTableJoins() != null && !getModel().getTableJoins().isEmpty()) {
-				List<TableJoin> joins = new ArrayList<TableJoin>();
+				List<TableJoin> joins = new ArrayList<>();
 				for (TableJoin tj : getModel().getTableJoins()) {
 					if (isSubQuery(tj))
 						continue;
@@ -254,7 +254,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 				return joins;
 			}
 		} else {
-			final List<TableJoinDetail> tjs = new ArrayList<TableJoinDetail>();
+			final List<TableJoinDetail> tjs = new ArrayList<>();
 			final MFromTable m = getModel();
 			List<TableJoinDetail> joins = m.getTableJoinDetails();
 			if (joins != null)
@@ -277,11 +277,10 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 				public boolean visit(INode n) {
 					if (n instanceof MFromTable && n.getValue() instanceof MQueryTable)
 						visit(n);
-					else if (n instanceof MFromTable)
-						if (n.equals(m)) {
-							tjs.add(tjd);
-							stop();
-						}
+					else if (n instanceof MFromTable && n.equals(m)) {
+						tjs.add(tjd);
+						stop();
+					}
 					return true;
 				}
 			};
@@ -294,14 +293,14 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		String dtype = getDesigner().getjConfig().getProperty(SQLEditorPreferencesPage.P_DIAGRAM_TYPE);
 		if (dtype != null && dtype.equals(SQLEditorPreferencesPage.COARSE)) {
 			if (getModel() instanceof MFromTableJoin) {
-				List<TableJoin> joins = new ArrayList<TableJoin>();
+				List<TableJoin> joins = new ArrayList<>();
 				TableJoin tj = ((MFromTableJoin) getModel()).getTableJoin();
 				if (!isSubQuery(tj))
 					joins.add(tj);
 				return joins;
 			}
 		} else {
-			List<TableJoinDetail> tjs = new ArrayList<TableJoinDetail>();
+			List<TableJoinDetail> tjs = new ArrayList<>();
 			MFromTable m = getModel();
 			List<TableJoinDetail> joins = m.getTableJoinDetails();
 			if (joins != null)

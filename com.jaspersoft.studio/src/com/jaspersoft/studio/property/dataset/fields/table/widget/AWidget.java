@@ -59,18 +59,20 @@ public abstract class AWidget {
 
 		final PropertyChangeListener l = evt -> {
 			if (evt.getPropertyName().equals(c.getPropertyName()))
-				control.fillValue();
+				if (control != null)
+					control.fillValue();
 		};
 		if (element instanceof JRChangeEventsSupport)
 			((JRChangeEventsSupport) element).getEventSupport().addPropertyChangeListener(l);
 		if (element instanceof JRPropertiesHolder)
 			((JRPropertiesHolder) element).getPropertiesMap().getEventSupport().addPropertyChangeListener(l);
-		control.addDisposeListener(e -> {
-			if (element instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) element).getEventSupport().removePropertyChangeListener(l);
-			if (element instanceof JRPropertiesHolder)
-				((JRPropertiesHolder) element).getPropertiesMap().getEventSupport().removePropertyChangeListener(l);
-		});
+		if (control != null)
+			control.addDisposeListener(e -> {
+				if (element instanceof JRChangeEventsSupport)
+					((JRChangeEventsSupport) element).getEventSupport().removePropertyChangeListener(l);
+				if (element instanceof JRPropertiesHolder)
+					((JRPropertiesHolder) element).getPropertiesMap().getEventSupport().removePropertyChangeListener(l);
+			});
 	}
 
 	public AWControl getControl() {
