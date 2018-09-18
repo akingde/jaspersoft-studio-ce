@@ -52,9 +52,11 @@ public class NumericText extends Text {
 	/**
 	 * Enumeration used as a result of the validation, valid it means the inserted text is 
 	 * a valid number, not valid means it can not be formatted as a number, out of bounds means
-	 * it is a valid number but exceeds the min or max accepted values
+	 * it is a valid number but exceeds the min or max accepted values. VALID_NOT_FINAL is 
+	 * to allow to insert a valid value for a decimal number (like a dot as decimal separator),
+	 * but the value should not be stored because it miss some digits yet
 	 */
-	protected enum VALIDATION_RESULT {VALID, NOT_VALID, OUT_OF_BOUNDS};
+	protected enum VALIDATION_RESULT {VALID, VALID_NOT_FINAL, NOT_VALID, OUT_OF_BOUNDS};
 	
 	/**
 	 * The listeners on this widget
@@ -162,7 +164,7 @@ public class NumericText extends Text {
 			if (changedAfterFocus){
 				//The listener are fired instead only if the value changed
 				//after the focus gain
-				if (currentState == VALIDATION_RESULT.VALID) {
+				if (currentState == VALIDATION_RESULT.VALID || currentState == VALIDATION_RESULT.VALID_NOT_FINAL) {
 					//Fire the listeners only if the value is valid
 					fireListeners();
 				}
@@ -505,6 +507,7 @@ public class NumericText extends Text {
 			}
 		}
 		updateBackground(defaultBackgroundColor);
+		if (String.valueOf(ValidatedDecimalFormat.DECIMAL_SEPARATOR).equals(entry)) return VALIDATION_RESULT.VALID_NOT_FINAL;
 		return VALIDATION_RESULT.VALID;
 	}
 	
