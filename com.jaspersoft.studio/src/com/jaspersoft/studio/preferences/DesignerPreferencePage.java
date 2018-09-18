@@ -185,6 +185,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_RESIZE_CONTAINER, true);
 		store.setDefault(P_SHOW_VARIABLES_DEFAULTS, true);
 		store.setDefault(P_RESIZE_ON_PASTE, true);
+		store.setDefault(JSS_UNIT_KEEP_UNIT, true);
 		PreferenceConverter.setDefault(store, P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());
 	}
 
