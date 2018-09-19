@@ -548,7 +548,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 				String convertedValue = unit.doConversionFromThis(unitsMap.get(Unit.PX), value);
 				// Generate the command to update the measure unit in the preferences
 				if (jConfig != null
-						&& Misc.nvl(jConfig.getPropertyBoolean(DesignerPreferencePage.JSS_UNIT_KEEP_UNIT), false))
+						&& Misc.nvl(jConfig.getPropertyBoolean(DesignerPreferencePage.JSS_UNIT_KEEP_UNIT), true))
 					for (APropertyNode item : section.getElements()) {
 						APropertyNode pholder = getPropertiesHolder(item);
 						if (pholder != null) {
@@ -712,7 +712,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		setUUnit(value, Unit.PX);
 		double dValue = uunit.getValue(defaultMeasure.getKeyName());
 		insertField.setBackground(null);
-		if (jConfig != null && Misc.nvl(jConfig.getPropertyBoolean(DesignerPreferencePage.JSS_UNIT_KEEP_UNIT), false))
+		if (jConfig != null && Misc.nvl(jConfig.getPropertyBoolean(DesignerPreferencePage.JSS_UNIT_KEEP_UNIT), true))
 			insertField.setText(truncateDouble(dValue, defaultMeasure.getPrecision())
 					.concat(" ".concat(defaultMeasure.getUnitName()))); //$NON-NLS-1$
 		else
@@ -943,7 +943,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		this.pnode = pnode;
 		createContextualMenu(pnode);
 		insertField.setEnabled(pnode.isEditable());
-		if (jConfig != null && Misc.nvl(jConfig.getPropertyBoolean(DesignerPreferencePage.JSS_UNIT_KEEP_UNIT), false)) {
+		if (jConfig != null && Misc.nvl(jConfig.getPropertyBoolean(DesignerPreferencePage.JSS_UNIT_KEEP_UNIT), true)) {
 			defaultValue = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
 			APropertyNode pholder = getPropertiesHolder(pnode);
 			if (pholder != null)
