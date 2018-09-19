@@ -507,7 +507,10 @@ public class NumericText extends Text {
 			}
 		}
 		updateBackground(defaultBackgroundColor);
-		if (String.valueOf(ValidatedDecimalFormat.DECIMAL_SEPARATOR).equals(entry)) return VALIDATION_RESULT.VALID_NOT_FINAL;
+		if (String.valueOf(ValidatedDecimalFormat.DECIMAL_SEPARATOR).equals(entry) ||
+				((keyCode == SWT.DEL || keyCode == SWT.BS) && work.endsWith(String.valueOf(ValidatedDecimalFormat.DECIMAL_SEPARATOR)))) {
+			return VALIDATION_RESULT.VALID_NOT_FINAL;
+		}
 		return VALIDATION_RESULT.VALID;
 	}
 	
