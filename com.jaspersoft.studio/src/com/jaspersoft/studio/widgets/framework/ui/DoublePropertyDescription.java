@@ -139,7 +139,7 @@ public class DoublePropertyDescription extends NumberPropertyDescription<Double>
 		if (!Misc.isNullOrEmpty(getDefaultValueString()))
 			tt += "\nDefault: " + getDefaultValueString();
 		if (getMin() != null || getMax() != null){
-			DecimalFormat formatter = new DecimalFormat("0.#####E0");
+			DecimalFormat formatter = new DecimalFormat("0.#######");
 	 	
 			if (getMin() != null)
 				tt += "\nmin: " + formatter.format(getMin());
