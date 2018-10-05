@@ -4,8 +4,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.jface.dialogs;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -39,6 +42,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.eclipse.ui.util.PersistentLocationDialog;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -49,7 +53,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
  * 
  */
 public class FileSelectionDialog extends PersistentLocationDialog {
-	
+
 	// Expression that will be associated to the image element
 	protected String fileExpressionText;
 	// All widgets stuff
@@ -72,9 +76,8 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	protected JRDesignExpression jrFileExpression;
 
 	protected JasperReportsConfiguration jConfig;
-	
+
 	protected boolean allowValidation = true;
-	
 
 	/**
 	 * Create the dialog.
@@ -99,10 +102,12 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	}
 
 	/**
-	 * Returns an array of strings containing the title for the modes section, plus the title of every mode.
+	 * Returns an array of strings containing the title for the modes section, plus
+	 * the title of every mode.
 	 * <p>
 	 * 
-	 * Default implementation would return 6 strings, including 1 title and the following 5 modes:
+	 * Default implementation would return 6 strings, including 1 title and the
+	 * following 5 modes:
 	 * <ol>
 	 * <li>workspace resource;</li>
 	 * <li>absolute path in filesystem;</li>
@@ -186,7 +191,7 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 		});
 		btnCustomExpression.setText(fileModesAndHeaderTitles[5]);
 
-		if (allowNoFileOption()){
+		if (allowNoFileOption()) {
 			btnNoFile = new Button(grpFileSelectionMode, SWT.RADIO);
 			btnNoFile.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -196,14 +201,14 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 				}
 			});
 			btnNoFile.setText(fileModesAndHeaderTitles[4]);
-	
+
 			createOptionsPanel(container);
-	
+
 			// As default no image radio button selected
 			btnNoFile.setSelection(true);
 			btnNoFile.setFocus();
 			allowValidation = false;
-	
+
 			changeFileSelectionMode(cmpNoFile);
 		} else {
 			createOptionsPanel(container);
@@ -211,7 +216,7 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 			btnWorkspaceResource.setSelection(true);
 			allowValidation = true;
 			btnWorkspaceResource.setFocus();
-	
+
 			changeFileSelectionMode(cmpWorkspaceResourceSelection);
 		}
 
@@ -226,18 +231,20 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	public boolean isValidationAllowed() {
 		return allowValidation;
 	}
-	
+
 	/**
 	 * Set if the selected path type allow a validation of the resource
 	 * 
-	 * @param value true if it allow a validation of the resource, false of otherwise
+	 * @param value
+	 *            true if it allow a validation of the resource, false of otherwise
 	 */
 	public void setAllowValidation(boolean value) {
 		allowValidation = value;
 	}
-	
+
 	/*
-	 * Creates the panel with the different options container. A stack layout will be used.
+	 * Creates the panel with the different options container. A stack layout will
+	 * be used.
 	 */
 	private void createOptionsPanel(Composite container) {
 		grpOptions = new Group(container, SWT.NONE);
@@ -311,8 +318,8 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	}
 
 	public void handleTxtFilesystemPathChange() {
-		String resourcePath = txtFilesystemPath.getText();
-		fileExpressionText = resourcePath.replace(System.getProperty("file.separator").charAt(0), '/');
+		fileExpressionText = getRootRelativePath(txtFilesystemPath.getText())
+				.replace(System.getProperty("file.separator").charAt(0), '/');
 	}
 
 	/*
@@ -330,8 +337,8 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 		GridLayout cmpCustomExpressionlayout = new GridLayout();
 		cmpCustomExpression.setLayout(cmpCustomExpressionlayout);
 
-		customExpression = new WTextExpression(cmpCustomExpression, SWT.NONE, Messages.ImageSelectionDialog_EnterExpression,
-				WTextExpression.LABEL_ON_TOP) {
+		customExpression = new WTextExpression(cmpCustomExpression, SWT.NONE,
+				Messages.ImageSelectionDialog_EnterExpression, WTextExpression.LABEL_ON_TOP) {
 			@Override
 			public void setExpression(JRDesignExpression exp) {
 				super.setExpression(exp);
@@ -367,13 +374,14 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 		String imageURLText = txtURL.getText();
 		fileExpressionText = imageURLText;
 	}
-	
+
 	/**
-	 * Show the custom expression area with an expression preinitialized inside it 
+	 * Show the custom expression area with an expression preinitialized inside it
 	 * 
-	 * @param expression the expression to show, must be not null
+	 * @param expression
+	 *            the expression to show, must be not null
 	 */
-	protected void showCustomExpression(String expression){
+	protected void showCustomExpression(String expression) {
 		changeFileSelectionMode(cmpCustomExpression);
 		btnWorkspaceResource.setSelection(false);
 		btnAbsolutePath.setSelection(false);
@@ -384,7 +392,8 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	}
 
 	/*
-	 * When a new image selection mode is selected, shows the dedicated options panel and hide the image preview one.
+	 * When a new image selection mode is selected, shows the dedicated options
+	 * panel and hide the image preview one.
 	 */
 	public void changeFileSelectionMode(Control newTopControl) {
 		// Resets previous info on the image expression
@@ -408,26 +417,41 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	 */
 	protected IFile selectFileFromWorkspace() {
 		IFile file = null;
-		FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(Display.getCurrent().getActiveShell(),
-				false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+		FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(
+				Display.getCurrent().getActiveShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
 		fd.setInitialPattern(getFileExtension());// $NON-NLS-1$
 		boolean isok = fd.open() == Dialog.OK;
 		if (isok) {
 			file = (IFile) fd.getFirstResult();
-			IFile contextfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
-			String filepath = null;
-			if (contextfile != null && file.getProject().equals(contextfile.getProject()))
-				filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", ""); //$NON-NLS-1$ //$NON-NLS-2$
-			else
-				filepath = file.getRawLocationURI().toASCIIString();
+			String filepath = getRootRelativePath(file.getLocation().toOSString());
 			txtResourcePath.setText(filepath);
 
 			// Change the standard separator with an universal one
-			fileExpressionText = StringUtils
-					.replaceBackslashWithDoubleBackslash(filepath.replace(System.getProperty("file.separator").charAt(0), '/')); //$NON-NLS-1$
+			fileExpressionText = StringUtils.replaceBackslashWithDoubleBackslash(filepath); // $NON-NLS-1$
 		} else {
 			// no image selected
 			txtResourcePath.setText(""); //$NON-NLS-1$
+		}
+		return file;
+	}
+
+	private String getRootRelativePath(String file) {
+		if (!Misc.isNullOrEmpty(file)) {
+			Path cpath = Paths.get(file);
+			IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
+			Path fpath = Paths.get(f.getLocation().toOSString());
+			if (fpath.getParent().equals(cpath.getParent()))
+				return cpath.getFileName().toString();
+			for (String p : jConfig.getEditorContext().getRepositoryRoots()) {
+				Path rpath = Paths.get(p);
+				if (cpath.startsWith(rpath)) {
+					String path = rpath.relativize(cpath).toString();
+					path = FilenameUtils.separatorsToUnix(path);
+					if (!path.startsWith("/"))
+						path = "/" + path;
+					return path;
+				}
+			}
 		}
 		return file;
 	}
@@ -439,7 +463,7 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	protected String[] getFileExtensions() {
 		return new String[] { "*.*" }; //$NON-NLS-1$
 	}
-	
+
 	protected String[] getFileExtensionsNames() {
 		return new String[] { "All Files" }; //$NON-NLS-1$
 	}
@@ -453,14 +477,15 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 		fd.setFilterPath(root.getLocation().toOSString());
 		String[] extensions = getFileExtensions();
 		String[] extensionNames = getFileExtensionsNames();
-		fd.setFilterExtensions(extensions); 
-		if (extensions.length == extensionNames.length){
+		fd.setFilterExtensions(extensions);
+		if (extensions.length == extensionNames.length) {
 			fd.setFilterNames(extensionNames);
 		}
 		String selection = fd.open();
 		if (selection != null) {
 			// After the text modification the image preview job will be invoked...
 			txtFilesystemPath.setText(selection);
+			handleTxtFilesystemPathChange();
 		}
 	}
 
@@ -516,13 +541,13 @@ public class FileSelectionDialog extends PersistentLocationDialog {
 	public JRDesignExpression getFileExpression() {
 		return jrFileExpression;
 	}
-	
+
 	/**
 	 * Override this to change if the no file option should be shown or not
 	 * 
 	 * @return true if the no file option should be shown, false otherwise
 	 */
-	protected boolean allowNoFileOption(){
+	protected boolean allowNoFileOption() {
 		return true;
 	}
 }

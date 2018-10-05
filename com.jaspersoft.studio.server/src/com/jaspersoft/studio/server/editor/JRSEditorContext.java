@@ -6,6 +6,7 @@ package com.jaspersoft.studio.server.editor;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -37,6 +38,27 @@ public class JRSEditorContext extends AEditorContext {
 	}
 
 	@Override
+	public List<String> getRepositoryRoots() {
+		Path fpath = Paths.get(f.getLocation().toFile().getAbsolutePath());
+		Path ppath = Paths.get(f.getProject().getLocation().toFile().getAbsolutePath());
+		IContainer root = ResourcesPlugin.getWorkspace().getRoot();
+		for (ServerProfile sp : ServerManager.getServerList()) {
+			if (sp.getProjectPath() == null)
+				continue;
+			IResource r = root.findMember(sp.getProjectPath());
+			if (r == null)
+				continue;
+			Path jrsp = Paths.get(r.getLocation().toFile().getAbsolutePath());
+			if (jrsp.startsWith(ppath) && fpath.startsWith(jrsp)) {
+				List<String> res = new ArrayList<>();
+				res.add(jrsp.toAbsolutePath().toString());
+				return res;
+			}
+		}
+		return super.getRepositoryRoots();
+	}
+
+	@Override
 	protected void configRepositoryPaths(List<RepositoryService> list) {
 		Set<String> rset = new HashSet<>();
 		if (f.isLinked())
@@ -55,7 +77,7 @@ public class JRSEditorContext extends AEditorContext {
 				continue;
 			Path jrsp = Paths.get(r.getLocation().toFile().getAbsolutePath());
 			if (jrsp.startsWith(ppath) && fpath.startsWith(jrsp)) {
-				add(list, rset, sp.getProjectPath());
+				add(list, rset, r.getLocation().toOSString());
 				break;
 			}
 		}

@@ -114,7 +114,14 @@ public class AEditorContext {
 		add(list, rset, f.getProject().getLocation().toFile().getAbsolutePath());
 	}
 
+	public List<String> getRepositoryRoots() {
+		List<String> res = new ArrayList<>();
+		res.add(f.getProject().getLocation().toFile().getAbsolutePath());
+		return res;
+	}
+
 	protected String add(List<RepositoryService> list, Set<String> rset, String root) {
+		System.out.println("Adding root: " + root);
 		if (rset.contains(root))
 			return null;
 		rset.add(root);

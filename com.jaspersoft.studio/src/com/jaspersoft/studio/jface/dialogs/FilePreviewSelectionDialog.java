@@ -81,8 +81,8 @@ public class FilePreviewSelectionDialog extends FileSelectionDialog {
 		Control area = super.createDialogArea(parent);
 
 		createFilePreviewPanel(container);
-		
-		//This will allow to show the preview now that the preview area is created
+
+		// This will allow to show the preview now that the preview area is created
 		changeFileSelectionMode(cmpNoFile);
 		return area;
 	}
@@ -142,6 +142,7 @@ public class FilePreviewSelectionDialog extends FileSelectionDialog {
 
 	@Override
 	public void handleTxtFilesystemPathChange() {
+		super.handleTxtFilesystemPathChange();
 		loadImagePreview();
 	}
 
@@ -151,13 +152,14 @@ public class FilePreviewSelectionDialog extends FileSelectionDialog {
 	}
 
 	/*
-	 * When a new image selection mode is selected, shows the dedicated options panel and hide the image preview one.
+	 * When a new image selection mode is selected, shows the dedicated options
+	 * panel and hide the image preview one.
 	 */
 	public void changeFileSelectionMode(Control newTopControl) {
 		super.changeFileSelectionMode(newTopControl);
-		//Check if the preview area was already created, since this method
-		//can be called by the superclass during the controls creation
-		if (filePreview != null){
+		// Check if the preview area was already created, since this method
+		// can be called by the superclass during the controls creation
+		if (filePreview != null) {
 			// Shows no preview panel and hide the image preview one
 			Image currImgPreview = filePreview.getImage();
 			if (currImgPreview != null)
@@ -197,9 +199,7 @@ public class FilePreviewSelectionDialog extends FileSelectionDialog {
 			grpFilePreview.layout(true);
 
 			// Dispose unused images
-			if (originalImg != null) {
-				originalImg.dispose();
-			}
+			originalImg.dispose();
 			if (oldPreviewImg != null) {
 				oldPreviewImg.dispose();
 			}
@@ -233,9 +233,7 @@ public class FilePreviewSelectionDialog extends FileSelectionDialog {
 			grpFilePreview.layout(true);
 
 			// Dispose unused images
-			if (remoteImg != null) {
-				remoteImg.dispose();
-			}
+			remoteImg.dispose();
 			if (oldPreviewImg != null) {
 				oldPreviewImg.dispose();
 			}
@@ -257,7 +255,8 @@ public class FilePreviewSelectionDialog extends FileSelectionDialog {
 	}
 
 	/*
-	 * Job that is responsible to load an image from an URL or a local filesystem path.
+	 * Job that is responsible to load an image from an URL or a local filesystem
+	 * path.
 	 */
 	private final class ImagePreviewJob extends WorkbenchJob {
 
@@ -277,7 +276,7 @@ public class FilePreviewSelectionDialog extends FileSelectionDialog {
 					IFileStore imgFileStore = EFS.getLocalFileSystem().getStore(new Path(imagePath));
 					loadFilePreview(imagePath, imgFileStore);
 					// Change the standard separator with an universal one
-					fileExpressionText = imagePath.replace(System.getProperty("file.separator").charAt(0), '/');
+					FilePreviewSelectionDialog.super.handleTxtFilesystemPathChange();
 				} else if (btnUrlRemote.getSelection()) {
 					// URL
 					String imageURLText = txtURL.getText();
@@ -294,26 +293,27 @@ public class FilePreviewSelectionDialog extends FileSelectionDialog {
 						if (imgByte != null) {
 							Image oldPreviewImg = filePreview.getImage();
 
-							BufferedInputStream inputStreamReader = new BufferedInputStream(new ByteArrayInputStream(imgByte));
+							BufferedInputStream inputStreamReader = new BufferedInputStream(
+									new ByteArrayInputStream(imgByte));
 							ImageData imageData = new ImageData(inputStreamReader);
 							Image img = new Image(getDisplay(), imageData);
 
-							String sizeInfo = Messages.ImageSelectionDialog_NoSizeInfoAvailable;
-							sizeInfo = (DecimalFormat.getNumberInstance().format(imgByte.length))
+							String sizeInfo = (DecimalFormat.getNumberInstance().format(imgByte.length))
 									+ Messages.ImageSelectionDialog_bytes;
 							// Gets a resized image for the preview area
 							int imgWidth = img.getImageData().width;
 							int imgHeight = img.getImageData().height;
-							Image resizedImg = ImageUtils.resize(img, Math.min(imgWidth, 200), Math.min(imgHeight, 200));
+							Image resizedImg = ImageUtils.resize(img, Math.min(imgWidth, 200),
+									Math.min(imgHeight, 200));
 							filePreview.setImage(resizedImg);
-							lblFileDimension.setText(Messages.ImageSelectionDialog_Dimension + imgWidth + "x" + imgHeight + "px"); //$NON-NLS-2$ //$NON-NLS-3$
+							lblFileDimension.setText(
+									Messages.ImageSelectionDialog_Dimension + imgWidth + "x" + imgHeight + "px"); //$NON-NLS-2$ //$NON-NLS-3$
 							lblFileSize.setText(Messages.ImageSelectionDialog_Size + sizeInfo);
 							grpFilePreviewLayout.topControl = cmpFilePreview;
 							grpFilePreview.layout(true);
 
 							// Dispose unused images
-							if (img != null)
-								img.dispose();
+							img.dispose();
 							if (oldPreviewImg != null)
 								oldPreviewImg.dispose();
 						}
