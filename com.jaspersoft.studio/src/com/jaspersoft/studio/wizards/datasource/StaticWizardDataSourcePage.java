@@ -4,7 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.wizards.datasource;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,11 +11,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -26,8 +20,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -54,6 +46,11 @@ import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardRunnablePage;
 import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
 import com.jaspersoft.studio.wizards.group.ReportWizardFieldsGroupByDynamicPage;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 /**
  * 
@@ -96,7 +93,7 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 	private Composite composite_editor = null;
 	private AWizardDataEditorComposite activeEditor = null;
 	private Label lblEmptyEditor = null;
-	private Map<DataAdapterDescriptor, AWizardDataEditorComposite> editors = new HashMap<DataAdapterDescriptor, AWizardDataEditorComposite>();
+	private Map<DataAdapterDescriptor, AWizardDataEditorComposite> editors = new HashMap<>();
 
 	/**
 	 * This variable is used to initialize this page with all the defaults as it
@@ -108,7 +105,7 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 
 	// Global UI elements;
 	protected Combo dataAdaptersCombo = null;
-	List<DataAdapterDescriptor> dataAdapterDescriptors = new ArrayList<DataAdapterDescriptor>();
+	List<DataAdapterDescriptor> dataAdapterDescriptors = new ArrayList<>();
 
 	private DataAdapterDescriptor selectedDataAdapterDescriptor = null;
 
@@ -147,17 +144,7 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 		Label lblDataAdapter = new Label(composite_container, SWT.NONE);
 		lblDataAdapter.setText(Messages.WizardDataSourcePage_lblNewLabel_text);
 		dataAdaptersCombo = new Combo(composite_container, SWT.READ_ONLY);
-		// Code used for TableCombo from Nebula, unfortunately on Mac it looks too bad
-		// to be used.
-		// dataAdaptersCombo.defineColumns(1);
-		// dataAdaptersCombo.setShowTableHeader(false);
-		dataAdaptersCombo.addDisposeListener(new DisposeListener() {
-
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				cleanDataAdapterStorageListeners();
-			}
-		});
+		dataAdaptersCombo.addDisposeListener(e -> cleanDataAdapterStorageListeners());
 		dataAdaptersCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -191,12 +178,6 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 
 		composite_editor = new Composite(composite_container, SWT.NONE);
 		composite_editor.setLayout(new StackLayout());
-		// FormData fd_composite_editor = new FormData();
-		// fd_composite_editor.right = new FormAttachment(composite_dataadapter, 0,
-		// SWT.RIGHT);
-		// fd_composite_editor.left = new FormAttachment(0, 0);
-		// fd_composite_editor.top = new FormAttachment(composite_dataadapter, 10);
-		// fd_composite_editor.bottom = new FormAttachment(100, 0);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 3;
 		composite_editor.setLayoutData(gd);
@@ -211,7 +192,6 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 	 * 
 	 */
 	public void loadSettings() {
-
 		if (!firstLoad)
 			return;
 		firstLoad = false;
@@ -231,13 +211,10 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 			if (getSettings().containsKey(JSSWizard.FILE_PATH)) {
 				IResource resource = ResourcesPlugin.getWorkspace().getRoot()
 						.findMember(((IPath) getSettings().get(JSSWizard.FILE_PATH)).toOSString());
-				if (resource != null && resource.getProject() != null) {
+				if (resource != null && resource.getProject() != null)
 					selectedProject = resource.getProject();
-				}
-			} else if (getSettings().get(JSSWizard.JASPERREPORTS_CONFIGURATION) != null) {
-				if (f != null)
-					selectedProject = f.getProject();
-			}
+			} else if (getSettings().get(JSSWizard.JASPERREPORTS_CONFIGURATION) != null && f != null)
+				selectedProject = f.getProject();
 		}
 		cleanDataAdapterStorageListeners();
 
@@ -266,11 +243,6 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 				}
 			});
 			for (DataAdapterDescriptor d : das) {
-				// Code used for TableCombo, not used because the TableCombo looks bad on Mac.
-				// TableItem ti = new TableItem(dataAdaptersCombo.getTable(), SWT.NONE);
-				// ti.setImage(JaspersoftStudioPlugin.getImage(d.getIcon16()));
-				// ti.setText(d.getName());
-
 				// Since we are not showing icons, we append the data adapter type to the name
 				dataAdaptersCombo.add(storage.getLabel(d));
 				dataAdapterDescriptors.add(d);
@@ -278,10 +250,9 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 			storage.addPropertyChangeListener(dsListner);
 		}
 
-		if (dataAdapterDescriptors.size() > 0) {
-			if (!selectDataAdapter(EmptyDataAdapterDescriptor.EMPTY_ADAPTER_NAME))
-				if (!selectDataAdapter("Sample DB"))
-					dataAdaptersCombo.select(0);
+		if (!dataAdapterDescriptors.isEmpty()) {
+			if (!selectDataAdapter(EmptyDataAdapterDescriptor.EMPTY_ADAPTER_NAME) && !selectDataAdapter("Sample DB"))
+				dataAdaptersCombo.select(0);
 			// update the editor control state
 			handleDataAdapterSelectionEvent(null);
 		}
@@ -304,13 +275,7 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 		}
 	}
 
-	private PropertyChangeListener dsListner = new PropertyChangeListener() {
-
-		@Override
-		public void propertyChange(PropertyChangeEvent arg0) {
-			loadSettings();
-		}
-	};
+	private PropertyChangeListener dsListner = arg0 -> loadSettings();
 	private List<ADataAdapterStorage> storages;
 
 	/**
@@ -359,9 +324,8 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		if (visible == true) {
+		if (visible)
 			loadSettings();
-		}
 	}
 
 	@Override
@@ -375,12 +339,7 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 				getSettings().put(DATASET_PROPERTIES,
 						((SimpleQueryWizardDataEditorComposite) activeEditor).getDataset().getPropertiesMap());
 
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-
-				public void run() {
-					monitor.setTaskName("Getting fields...");
-				}
-			});
+			UIUtils.getDisplay().asyncExec(() -> monitor.setTaskName("Getting fields..."));
 
 			ProgressMonitorCheckerThread checker = new ProgressMonitorCheckerThread(monitor);
 			checker.addListener(activeEditor);
@@ -390,11 +349,8 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 
 			List<JRDesignField> fields = activeEditor.readFields();
 
-			if (fields != null && !fields.isEmpty()) {
-				if (getSettings() != null) {
-					getSettings().put(DISCOVERED_FIELDS, fields);
-				}
-			}
+			if (fields != null && !fields.isEmpty() && getSettings() != null)
+				getSettings().put(DISCOVERED_FIELDS, fields);
 		} else {
 			getSettings().remove(DATASET_QUERY_LANGUAGE);
 			getSettings().remove(DATASET_QUERY_TEXT);

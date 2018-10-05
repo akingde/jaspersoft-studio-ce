@@ -208,15 +208,13 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 							JaspersoftStudioPlugin.getInstance().getUsageManager().audit(
 									templateChooserStep.getTemplateBundle().getClass().getName(),
 									UsageStatisticsIDs.CATEGORY_REPORT);
-							UIUtils.getDisplay().asyncExec(new Runnable() {
-								public void run() {
-									IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-											.getActivePage();
-									try {
-										IDE.openEditor(page, reportFile, true);
-									} catch (PartInitException e) {
-										e.printStackTrace();
-									}
+							UIUtils.getDisplay().asyncExec(() -> {
+								IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+										.getActivePage();
+								try {
+									IDE.openEditor(page, reportFile, true);
+								} catch (PartInitException e) {
+									e.printStackTrace();
 								}
 							});
 						}
@@ -229,9 +227,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 					}
 				}
 			});
-		} catch (InvocationTargetException e) {
-			UIUtils.showError(e.getCause());
-		} catch (InterruptedException e) {
+		} catch (InvocationTargetException | InterruptedException e) {
 			UIUtils.showError(e.getCause());
 		}
 		return super.performFinish();
@@ -382,13 +378,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		 */
 		public IFile createFile() {
 			result = null;
-			UIUtils.getDisplay().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					result = creationWizard.createNewFile();
-				}
-			});
+			UIUtils.getDisplay().syncExec(() -> result = creationWizard.createNewFile());
 			return result;
 		}
 

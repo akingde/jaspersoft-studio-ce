@@ -7,10 +7,8 @@ package com.jaspersoft.studio.data.json;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
@@ -30,21 +28,20 @@ import net.sf.jasperreports.data.json.JsonDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
- * Editor composite for the Json query language.
- * This is supposed to used by {@link JsonDataAdapterDescriptor}.
+ * Editor composite for the Json query language. This is supposed to used by
+ * {@link JsonDataAdapterDescriptor}.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
 public class JsonWizardDataEditorComposite extends ATreeWizardDataEditorComposite {
-	
-	private static final int JOB_DELAY=300;
+
+	private static final int JOB_DELAY = 300;
 	private JsonDataManager jsonDataManager;
 	private DecorateTreeViewerJob decorateJob;
 	private NodeBoldStyledLabelProvider<JsonSupportNode> treeLabelProvider;
 	private JsonTreeContentProvider treeContentProvider;
 	private JsonLineStyler lineStyler;
-
 
 	public JsonWizardDataEditorComposite(Composite parent, WizardPage page,
 			DataAdapterDescriptor dataAdapterDescriptor) {
@@ -54,11 +51,11 @@ public class JsonWizardDataEditorComposite extends ATreeWizardDataEditorComposit
 	@Override
 	protected void init() {
 		super.init();
-		this.jsonDataManager=new JsonDataManager(getQueryLanguage());
-		this.lineStyler=new JsonLineStyler();
-		this.decorateJob=new DecorateTreeViewerJob();
-		this.treeLabelProvider=new NodeBoldStyledLabelProvider<JsonSupportNode>();
-		this.treeContentProvider=new JsonTreeContentProvider();
+		this.jsonDataManager = new JsonDataManager(getQueryLanguage());
+		this.lineStyler = new JsonLineStyler();
+		this.decorateJob = new DecorateTreeViewerJob();
+		this.treeLabelProvider = new NodeBoldStyledLabelProvider<>();
+		this.treeContentProvider = new JsonTreeContentProvider();
 	}
 
 	@Override
@@ -85,99 +82,91 @@ public class JsonWizardDataEditorComposite extends ATreeWizardDataEditorComposit
 
 	@Override
 	protected void refreshTreeViewerContent(final DataAdapterDescriptor da) {
-		if(da!=null && da.getDataAdapter() instanceof JsonDataAdapter){
+		if (da != null && da.getDataAdapter() instanceof JsonDataAdapter) {
 			treeViewer.setInput(JsonTreeCustomStatus.LOADING_JSON);
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						jsonDataManager.loadJsonDataFile
-							(((JsonDataAdapter)da.getDataAdapter()).getDataFile(),
-							getJasperReportsConfiguration(),
-							getDataset());
-						treeViewer.setInput(jsonDataManager.getJsonSupportModel());
-						treeViewer.expandToLevel(2);
-						decorateTreeUsingQueryText();
-					} catch (Exception e) {
-						getStatusBar().showError(e);
-						treeViewer.getTree().removeAll();
-						treeViewer.setInput(JsonTreeCustomStatus.ERROR_LOADING_JSON);
-					}
+			UIUtils.getDisplay().asyncExec(() -> {
+				try {
+					jsonDataManager.loadJsonDataFile(((JsonDataAdapter) da.getDataAdapter()).getDataFile(),
+							getJasperReportsConfiguration(), getDataset());
+					treeViewer.setInput(jsonDataManager.getJsonSupportModel());
+					treeViewer.expandToLevel(2);
+					decorateTreeUsingQueryText();
+				} catch (Exception e) {
+					getStatusBar().showError(e);
+					treeViewer.getTree().removeAll();
+					treeViewer.setInput(JsonTreeCustomStatus.ERROR_LOADING_JSON);
 				}
 			});
-		}
-		else{
+		} else {
 			treeViewer.getTree().removeAll();
 			treeViewer.setInput(JsonTreeCustomStatus.FILE_NOT_FOUND);
 		}
 	}
-	
+
 	/*
-	 * Adds support for generating the query expression,
-	 * using the current selected node as input.
+	 * Adds support for generating the query expression, using the current selected
+	 * node as input.
 	 */
 	private void addDoubleClickSupport() {
-		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				TreeSelection s = (TreeSelection) treeViewer.getSelection();
-				if(s.getFirstElement() instanceof JsonSupportNode){
-					JsonSupportNode jsonNode=(JsonSupportNode) s.getFirstElement();
-					String queryExpression=jsonDataManager.getQueryExpression(null,jsonNode);
-					queryTextArea.setText(queryExpression);
-				}
+		treeViewer.addDoubleClickListener(event -> {
+			TreeSelection s = (TreeSelection) treeViewer.getSelection();
+			if (s.getFirstElement() instanceof JsonSupportNode) {
+				JsonSupportNode jsonNode = (JsonSupportNode) s.getFirstElement();
+				String queryExpression = jsonDataManager.getQueryExpression(null, jsonNode);
+				queryTextArea.setText(queryExpression);
 			}
 		});
 	}
-	
+
 	@Override
 	protected void decorateTreeUsingQueryText() {
-		if(jsonDataManager.getJsonSupportModel()!=null){
+		if (jsonDataManager.getJsonSupportModel() != null) {
 			decorateJob.cancel();
 			decorateJob.schedule(JOB_DELAY);
 		}
 	}
-	
-	/*
-	 * Job that is responsible to update the treeviewer presentation 
-	 * depending on the nodes selected by the Json query.
-	 */
-	private final class DecorateTreeViewerJob extends WorkbenchJob{
 
-		public DecorateTreeViewerJob(){
+	/*
+	 * Job that is responsible to update the treeviewer presentation depending on
+	 * the nodes selected by the Json query.
+	 */
+	private final class DecorateTreeViewerJob extends WorkbenchJob {
+
+		public DecorateTreeViewerJob() {
 			super(Messages.JsonWizardDataEditorComposite_Job);
 			setSystem(true);
 		}
-		
+
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			if(!isDisposed()){
+			if (!isDisposed()) {
 				monitor.beginTask(Messages.JsonWizardDataEditorComposite_Task, IProgressMonitor.UNKNOWN);
-				String query=queryTextArea.getText();
+				String query = queryTextArea.getText();
 				treeLabelProvider.setSelectedNodes(jsonDataManager.getSelectableNodes(query));
 				treeViewer.refresh();
 				monitor.done();
 				return Status.OK_STATUS;
-			}
-			else {
+			} else {
 				return Status.CANCEL_STATUS;
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void dispose() {
-		if(decorateJob!=null){
+		if (decorateJob != null) {
 			decorateJob.cancel();
-			decorateJob=null;
+			decorateJob = null;
 		}
 		super.dispose();
 	}
-	
+
 	@Override
 	public String getQueryLanguage() {
-		return "json"; //$NON-NLS-1$
+		JsonDataAdapter da = (JsonDataAdapter) getDataAdapterDescriptor().getDataAdapter();
+		return da.getLanguage().getName();
+		// return "json"; //$NON-NLS-1$
 	}
 
 }
