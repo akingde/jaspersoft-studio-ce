@@ -4,22 +4,22 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.protocol.restv2;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
+import com.fasterxml.jackson.jaxrs.cfg.Annotations;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 
 /**
@@ -78,34 +78,48 @@ import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 		"application/attributes.collection+json", "application/attributes.collection+xml" })
 public class ClientQueryMapperProvider extends JacksonJaxbJsonProvider implements ContextResolver<ObjectMapper> {
 
-	private final ObjectMapper mapper;
+	private static ObjectMapper mapper;
 
 	public ClientQueryMapperProvider() {
-		mapper = getObjectMapper();
+		super(getObjectMapper(), DEFAULT_ANNOTATIONS);
 	}
 
-	@Override
-	public ObjectMapper getContext(Class<?> type) {
+	public ClientQueryMapperProvider(Annotations... annotationsToUse) {
+		super(getObjectMapper(), annotationsToUse);
+	}
+
+	public ClientQueryMapperProvider(ObjectMapper mapper, Annotations[] annotationsToUse) {
+		super(mapper, annotationsToUse);
+	}
+
+	public static ObjectMapper getObjectMapper() {
+		if (mapper == null) {
+			synchronized (ClientQueryMapperProvider.class) {
+				if (mapper == null) {
+					mapper = new ObjectMapper();
+					AnnotationIntrospector primary = new JaxbAnnotationIntrospector();
+					AnnotationIntrospector secondary = new JacksonAnnotationIntrospector();
+					AnnotationIntrospector pair = AnnotationIntrospector.pair(primary, secondary);
+					mapper.setAnnotationIntrospector(pair);
+					// Serialize dates using ISO8601 format
+					// Jackson uses timestamps by default, so use StdDateFormat to get ISO8601
+					mapper.setDateFormat(new StdDateFormat());
+					// Prevent exceptions from being thrown for unknown properties
+					mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+					// Use XML wrapper name as JSON property name
+					mapper.configure(MapperFeature.USE_WRAPPER_NAME_AS_PROPERTY_NAME, true);
+					mapper.configure(JsonParser.Feature.STRICT_DUPLICATE_DETECTION, true);
+					// ignore fields with null values
+					mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+				}
+			}
+		}
 		return mapper;
 	}
 
-	private ObjectMapper getObjectMapper() {
-		ObjectMapper mp = new ObjectMapper();
-		mp.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
-
-		JaxbAnnotationModule jaxbModule = new JaxbAnnotationModule();
-		mp.registerModule(jaxbModule);
-		mp.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
-		mp.configure(MapperFeature.USE_WRAPPER_NAME_AS_PROPERTY_NAME, true);
-		mp.configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false);
-
-		mp.enable(SerializationFeature.INDENT_OUTPUT);
-		mp.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-		mp.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
-
-		mp.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-
-		return mp;
+	@Override
+	public ObjectMapper getContext(Class<?> arg0) {
+		return getObjectMapper();
 	}
 
 }
