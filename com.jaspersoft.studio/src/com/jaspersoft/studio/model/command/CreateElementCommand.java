@@ -37,11 +37,9 @@ import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-
 /**
- * Command used to create an element inside the container. If the
- * container is too small it is resized and if it has a layout also
- * it is rearranged
+ * Command used to create an element inside the container. If the container is
+ * too small it is resized and if it has a layout also it is rearranged
  * 
  * @author Slavic & Orlandin Marco
  * 
@@ -52,7 +50,7 @@ public class CreateElementCommand extends Command {
 	 * The JasperDesign of the current Report
 	 */
 	protected JasperDesign jasperDesign;
-	
+
 	/**
 	 * The JasperReportsConfiguration of the current report
 	 */
@@ -62,24 +60,24 @@ public class CreateElementCommand extends Command {
 	 * The node to create
 	 */
 	protected MGraphicElement srcNode;
-	
+
 	/**
 	 * The container of the new node
 	 */
 	protected ANode destNode;
 
-	/** 
+	/**
 	 * The JR Object of the node to create
 	 */
 	protected JRDesignElement jrElement;
 
-	/** 
-	 * The group of the destination node, it could be different
-	 * from the value of the destination node
+	/**
+	 * The group of the destination node, it could be different from the value of
+	 * the destination node
 	 */
 	protected JRElementGroup jrGroup;
 
-	/** 
+	/**
 	 * The location of the created node
 	 */
 	protected Rectangle location;
@@ -88,21 +86,21 @@ public class CreateElementCommand extends Command {
 	 * The index of the new node inside the container
 	 */
 	protected int index;
-	
+
 	/**
 	 * The layout command used to relayout the container
 	 */
 	private LazyLayoutCommand lCmd;
-	
+
 	/**
-	 * Flag used to execute some operation (the change of the selection)
-	 * only on the first execution and not on eventually redo operations
+	 * Flag used to execute some operation (the change of the selection) only on the
+	 * first execution and not on eventually redo operations
 	 */
 	private boolean firstTime = true;
-	
+
 	/**
-	 * The list of commands executed to resize the container if necessary
-	 * and relayout it, or additional commands added from the outside
+	 * The list of commands executed to resize the container if necessary and
+	 * relayout it, or additional commands added from the outside
 	 */
 	private JSSCompoundCommand commands;
 
@@ -112,12 +110,13 @@ public class CreateElementCommand extends Command {
 	protected boolean operationCancelled = false;
 
 	/**
-	 * This flag defines if upon the creation of the new element the default template (if any) should
-	 * be applied. This is by default true but can be disabled when the command is used to create an 
-	 * element after a movement into another parent or a paste operation
+	 * This flag defines if upon the creation of the new element the default
+	 * template (if any) should be applied. This is by default true but can be
+	 * disabled when the command is used to create an element after a movement into
+	 * another parent or a paste operation
 	 */
 	private boolean applyDefault = true;
-	
+
 	protected CreateElementCommand() {
 		super();
 	}
@@ -126,11 +125,11 @@ public class CreateElementCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	public CreateElementCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
 		super();
@@ -141,11 +140,11 @@ public class CreateElementCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	public CreateElementCommand(MFrame destNode, MGraphicElement srcNode, int index) {
 		super();
@@ -162,11 +161,11 @@ public class CreateElementCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	public CreateElementCommand(MBand destNode, MGraphicElement srcNode, int index) {
 		super();
@@ -177,13 +176,13 @@ public class CreateElementCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param position
-	 *          the position
+	 *            the position
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	public CreateElementCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super();
@@ -203,11 +202,11 @@ public class CreateElementCommand extends Command {
 	 * Sets the context.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	protected void setContext(ANode destNode, MGraphicElement srcNode, int index) {
 		if (destNode != null) {
@@ -223,24 +222,28 @@ public class CreateElementCommand extends Command {
 			this.index = index;
 		} else {
 			this.destNode = null;
-			// MessageDialog.openInformation(UIUtils.getShell(), "Unable to create the element",
-			// "The element can not be created because there aren't containers where it can be placed");
+			// MessageDialog.openInformation(UIUtils.getShell(), "Unable to create the
+			// element",
+			// "The element can not be created because there aren't containers where it can
+			// be placed");
 		}
 	}
-	
+
 	/**
 	 * Manually set the jasperdesign for the command
 	 * 
-	 * @param design the new jasper design
+	 * @param design
+	 *            the new jasper design
 	 */
-	public void setJasperDesign(JasperDesign design){
+	public void setJasperDesign(JasperDesign design) {
 		this.jasperDesign = design;
 	}
 
 	/**
 	 * Check if the command was cancelled during the execution
 	 * 
-	 * @return true if the command was cancelled during the execution, false otherwise
+	 * @return true if the command was cancelled during the execution, false
+	 *         otherwise
 	 */
 	public boolean isCancelled() {
 		return operationCancelled;
@@ -254,7 +257,8 @@ public class CreateElementCommand extends Command {
 	public void fixLocation(Rectangle position, MBand band) {
 		if (location == null) {
 			if (jrElement != null)
-				location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
+				location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(),
+						jrElement.getHeight());
 			else if (band != null)
 				location = new Rectangle(band.getBounds().x, band.getBounds().y, 50, 30);
 			else
@@ -272,9 +276,9 @@ public class CreateElementCommand extends Command {
 	}
 
 	/**
-	 * Creates the JRElement to add if it was not defined before.
-	 * Esstentially the JRObject can be both passed from outside or
-	 * create a new default one using it ANode type
+	 * Creates the JRElement to add if it was not defined before. Esstentially the
+	 * JRObject can be both passed from outside or create a new default one using it
+	 * ANode type
 	 */
 	protected void createObject() {
 		if (jrElement == null)
@@ -296,20 +300,22 @@ public class CreateElementCommand extends Command {
 		jrElement.setWidth(location.width);
 		jrElement.setHeight(location.height);
 
-		if (jrGroup instanceof JRDesignBand && destNode.getJasperConfiguration().getPropertyBoolean(DesignerPreferencePage.P_RESIZE_CONTAINER, Boolean.TRUE)) {
+		if (jrGroup instanceof JRDesignBand && destNode.getJasperConfiguration()
+				.getPropertyBoolean(DesignerPreferencePage.P_RESIZE_CONTAINER, Boolean.TRUE)) {
 			JRDesignBand band = (JRDesignBand) jrGroup;
 			int height = jrElement.getY() + jrElement.getHeight();
 			if (band.getHeight() < height) {
 				int maxBandHeight = ModelUtils.getMaxBandHeight(band, jasperDesign);
 				// If the element is too big it will be resized to the maximum band size
 				if (maxBandHeight < height) {
-					//The band can not grow to contain the elements, check if the element can enter in the band
-					if (jrElement.getHeight() < maxBandHeight){
-						//The element can enter, place it on the end of the band
+					// The band can not grow to contain the elements, check if the element can enter
+					// in the band
+					if (jrElement.getHeight() < maxBandHeight) {
+						// The element can enter, place it on the end of the band
 						jrElement.setY(maxBandHeight - jrElement.getHeight());
 						location.y = jrElement.getY();
 					} else {
-						//the element can enter, resize it and place it on the end
+						// the element can enter, resize it and place it on the end
 						height = maxBandHeight;
 						jrElement.setHeight(height);
 						jrElement.setY(maxBandHeight - jrElement.getHeight());
@@ -324,26 +330,26 @@ public class CreateElementCommand extends Command {
 				addCommand(cmd);
 			}
 		}
-		
-    	if (applyDefault) {
-    		applayDefaultAttributes(srcNode.getClass(), jrElement);
-    	}
+
+		if (applyDefault) {
+			applayDefaultAttributes(srcNode.getClass(), jrElement);
+		}
 	}
-	
+
 	/**
-	 * Apply the attribute from the default set, can be overridden to provide 
+	 * Apply the attribute from the default set, can be overridden to provide
 	 * specific behavior
 	 */
-	protected void applayDefaultAttributes(Class<?> clazz, JRElement element){
+	protected void applayDefaultAttributes(Class<?> clazz, JRElement element) {
 		DefaultManager.INSTANCE.applyDefault(clazz, element);
 	}
-	
+
 	/**
-	 * Add a command to the list of commands that will
-	 * be executed after the element creation
+	 * Add a command to the list of commands that will be executed after the element
+	 * creation
 	 * 
-	 * @param command command to add, if null it will not be 
-	 * added
+	 * @param command
+	 *            command to add, if null it will not be added
 	 */
 	protected void addCommand(Command command) {
 		if (commands == null)
@@ -352,10 +358,11 @@ public class CreateElementCommand extends Command {
 	}
 
 	/**
-	 * Add list of a command to the list of commands that will
-	 * be executed after the element creation
+	 * Add list of a command to the list of commands that will be executed after the
+	 * element creation
 	 * 
-	 * @param cmds commands to add, if null nothing will be added
+	 * @param cmds
+	 *            commands to add, if null nothing will be added
 	 */
 	protected void addCommands(List<Command> cmds) {
 		if (cmds != null)
@@ -378,11 +385,15 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		//the creation of the object alter the drop location, we need to restore it at the end of the execution
-		//so if an undo and redo is done the calculation will be done on the origianl value instead of the already
-		//modified value
+		// the creation of the object alter the drop location, we need to restore it at
+		// the end of the execution
+		// so if an undo and redo is done the calculation will be done on the origianl
+		// value instead of the already
+		// modified value
+		if (location == null)
+			location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
 		Rectangle originalLocation = location.getCopy();
-		//Create the object if necessary
+		// Create the object if necessary
 		createObject();
 		if (jrElement != null) {
 			removeElement(jasperDesign, jrElement);
@@ -399,7 +410,7 @@ public class CreateElementCommand extends Command {
 				else
 					jFrame.addElement(index, jrElement);
 			}
-			//create the command to relayout the parent
+			// create the command to relayout the parent
 			if (lCmd == null) {
 				lCmd = new LazyLayoutCommand(destNode);
 				addCommand(lCmd);
@@ -409,37 +420,44 @@ public class CreateElementCommand extends Command {
 				SelectionHelper.setSelection(jrElement, false);
 				firstTime = false;
 			}
-			
-			//log the statistics of the creation of an element
+
+			// log the statistics of the creation of an element
 			if (jrElement != null) {
-				if (jrElement instanceof JRDesignComponentElement){
-					JRDesignComponentElement componentElement = (JRDesignComponentElement)jrElement;
-					if (componentElement.getComponent() != null){
-						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(componentElement.getComponent().getClass().getName(), UsageStatisticsIDs.CATEGORY_ELEMENT);
+				if (jrElement instanceof JRDesignComponentElement) {
+					JRDesignComponentElement componentElement = (JRDesignComponentElement) jrElement;
+					if (componentElement.getComponent() != null) {
+						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(
+								componentElement.getComponent().getClass().getName(),
+								UsageStatisticsIDs.CATEGORY_ELEMENT);
 					} else {
-						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(jrElement.getClass().getName()+"[null_component]", UsageStatisticsIDs.CATEGORY_ELEMENT);
+						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(
+								jrElement.getClass().getName() + "[null_component]",
+								UsageStatisticsIDs.CATEGORY_ELEMENT);
 					}
-				} else{
-					JaspersoftStudioPlugin.getInstance().getUsageManager().audit(jrElement.getClass().getName(), UsageStatisticsIDs.CATEGORY_ELEMENT);
+				} else {
+					JaspersoftStudioPlugin.getInstance().getUsageManager().audit(jrElement.getClass().getName(),
+							UsageStatisticsIDs.CATEGORY_ELEMENT);
 				}
-				
+
 			}
 		}
 		location = originalLocation;
 	}
-	
+
 	/**
-	 * This method defines if upon the creation of the new element the default template (if any) should
-	 * be applied. This is by default true but can be disabled when the command is used to create an 
-	 * element after a movement into another parent or a paste operation
+	 * This method defines if upon the creation of the new element the default
+	 * template (if any) should be applied. This is by default true but can be
+	 * disabled when the command is used to create an element after a movement into
+	 * another parent or a paste operation
 	 * 
-	 * @param applyDefault true if the default should be checked and applied if present, false if it should
-	 * not be applied in any case
+	 * @param applyDefault
+	 *            true if the default should be checked and applied if present,
+	 *            false if it should not be applied in any case
 	 */
 	public void setApplyDefault(boolean applyDefault) {
 		this.applyDefault = applyDefault;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 

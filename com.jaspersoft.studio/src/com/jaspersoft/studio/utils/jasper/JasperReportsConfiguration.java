@@ -249,6 +249,7 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 		remove(FileUtils.KEY_FILE);
 		isPropsCached = false;
 		init(oldFile);
+		resetCaches(null);
 		getProperties();
 	}
 
@@ -258,10 +259,6 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 			return;
 		String qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
 		pstore = (MScopedPreferenceStore) JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier);
-		// if (service == null) {
-		// service = Platform.getPreferencesService();
-
-		// }
 		cntx = EditorContextUtil.getEditorContext(file, this);
 		cntx.initClassloader();
 		IProject project = null;
@@ -269,21 +266,10 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 			put(FileUtils.KEY_FILE, file);
 			project = file.getProject();
 			put(FileUtils.KEY_IPROJECT, project);
-			if (project != null) {
-				// lookupOrders = new String[] { ResourceScope.SCOPE, ProjectScope.SCOPE,
-				// InstanceScope.SCOPE };
-				// contexts = new IScopeContext[] { new ResourceScope(file), new
-				// ProjectScope(project), INSTANCE_SCOPE };
-			}
 			cntx.configureRepositoryService();
-		} else {
-			// lookupOrders = new String[] { InstanceScope.SCOPE };
-			// contexts = new IScopeContext[] { INSTANCE_SCOPE };
 		}
 		// file changed, reset properties
 		isPropsCached = false;
-
-		// service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 		if (preferenceListener == null) {
 			preferenceListener = new PreferenceListener();
 			JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
@@ -303,8 +289,8 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 		componentBundles.invalidate();
 		chartThemesBundles.invalidate();
 		ExpressionUtil.removeAllReportInterpreters(this);
-		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "classpath", null, arg0));
-
+		if (arg0 != null)
+			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "classpath", null, arg0));
 		castorBundles.invalidate();
 	}
 
@@ -890,21 +876,26 @@ public class JasperReportsConfiguration extends SimpleJasperReportsContext {
 		if (reportConverter != null) {
 			reportConverter.refreshCachedStyles();
 			JasperDesign design = getJasperDesign();
-			//Since JasperReports doesn't render correctly the element with a style reference at design time we use the trick
-			//to set an external style as local one, so set in the element the JRDesignStyle object of the external style, along
-			//with the name reference. So when a reference is updated we need to iterate all style and if thy are using a reference
-			//refresh its copy of the internal style as well
-			for(JRStyle style : design.getStyles()) {
+			// Since JasperReports doesn't render correctly the element with a style
+			// reference at design time we use the trick
+			// to set an external style as local one, so set in the element the
+			// JRDesignStyle object of the external style, along
+			// with the name reference. So when a reference is updated we need to iterate
+			// all style and if thy are using a reference
+			// refresh its copy of the internal style as well
+			for (JRStyle style : design.getStyles()) {
 				if (style.getStyleNameReference() != null) {
-					((JRDesignStyle)style).setParentStyle(ExternalStylesManager.getExternalStyle(style.getStyleNameReference(), this));
+					((JRDesignStyle) style).setParentStyle(
+							ExternalStylesManager.getExternalStyle(style.getStyleNameReference(), this));
 				}
 			}
-			PropertyChangeEvent changeEvent = new PropertyChangeEvent(design, MGraphicElement.FORCE_GRAPHICAL_REFRESH, false, true);
+			PropertyChangeEvent changeEvent = new PropertyChangeEvent(design, MGraphicElement.FORCE_GRAPHICAL_REFRESH,
+					false, true);
 			for (JRDesignElement element : ModelUtils.getAllElements(design)) {
 				element.getEventSupport().firePropertyChange(changeEvent);
 			}
-    	}
-  	}
+		}
+	}
 
 	/**
 	 * Return the report converter used to paint the report elements
