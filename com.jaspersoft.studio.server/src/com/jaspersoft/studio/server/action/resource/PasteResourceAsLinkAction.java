@@ -4,7 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.resource;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -15,8 +14,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
@@ -57,8 +56,8 @@ public class PasteResourceAsLinkAction extends PasteResourceAction {
 
 	@Override
 	protected void saveToReportUnit(IProgressMonitor monitor, AMResource parent, IConnection ws,
-			ResourceDescriptor origin) throws IOException, Exception {
-		ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
+			ResourceDescriptor origin, boolean doSave) throws Exception {
+		ResourceDescriptor prd = parent.getValue();
 		ResourceDescriptor rd = null;
 		rd = new ResourceDescriptor();
 		rd.setName(origin.getName());
@@ -80,8 +79,8 @@ public class PasteResourceAsLinkAction extends PasteResourceAction {
 			rd.setUriString(prd.getParentFolder() + "/" + prd.getName() + "_files/" + prd.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		prd.getChildren().add(rd);
-
-		ws.addOrModifyResource(monitor, prd, null);
+		if (doSave)
+			ws.addOrModifyResource(monitor, prd, null);
 	}
 
 }

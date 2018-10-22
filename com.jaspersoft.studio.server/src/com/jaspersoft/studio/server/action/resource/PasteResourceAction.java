@@ -26,8 +26,6 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.VerifyEvent;
@@ -185,12 +183,9 @@ public class PasteResourceAction extends Action {
 							p = (ANode) p.getChildren().get(0);
 						s = new TreeSelection(new TreePath(new Object[] { p }));
 
-						UIUtils.getDisplay().asyncExec(new Runnable() {
-
-							public void run() {
-								treeViewer.refresh(true);
-								treeViewer.setSelection(s);
-							}
+						UIUtils.getDisplay().asyncExec(() -> {
+							treeViewer.refresh(true);
+							treeViewer.setSelection(s);
 						});
 					} catch (Throwable e) {
 						throw new InvocationTargetException(e);
@@ -216,7 +211,7 @@ public class PasteResourceAction extends Action {
 		MServerProfile sp = (MServerProfile) parent.getRoot();
 		String dURI = ((AMResource) parent).getValue().getUriString();
 		IConnection ws = sp.getWsClient(monitor);
-		Set<ANode> toRefresh = new HashSet<ANode>();
+		Set<ANode> toRefresh = new HashSet<>();
 
 		monitor.beginTask(Messages.PasteResourceAction_1 + dURI, list.size());
 		if (parent instanceof MReportUnit)
@@ -239,9 +234,24 @@ public class PasteResourceAction extends Action {
 						rd.setName(origin.getName());
 						rd.setUriString(dURI + "/" + origin.getName()); //$NON-NLS-1$
 						rd.setWsType(origin.getWsType());
-						if (parent instanceof MReportUnit)
+						if (parent instanceof MReportUnit) {
 							rd.setUriString(rd.getUriString() + "_files"); //$NON-NLS-1$
-						rd = ws.get(monitor, rd, null);
+							boolean ex = false;
+							for (INode n : parent.getChildren()) {
+								if (n.getValue() instanceof ResourceDescriptor) {
+									ResourceDescriptor tmp = (ResourceDescriptor) n.getValue();
+									if (tmp.getWsType().equals(rd.getWsType())
+											&& tmp.getUriString().equals(rd.getUriString())) {
+										rd = tmp;
+										ex = true;
+										break;
+									}
+								}
+							}
+							if (!ex)
+								rd = null;
+						} else
+							rd = ws.get(monitor, rd, null);
 						if (rd != null)
 							exists = true;
 					} catch (Exception e) {
@@ -251,15 +261,11 @@ public class PasteResourceAction extends Action {
 						replace = false;
 					}
 					if (exists && !existsAll) {
-						UIUtils.getDisplay().syncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								d = new PasteDialog(UIUtils.getShell(), m);
-								if (d.open() != Dialog.OK) {
-									monitor.setCanceled(true);
-									return;
-								}
+						UIUtils.getDisplay().syncExec(() -> {
+							d = new PasteDialog(UIUtils.getShell(), m);
+							if (d.open() != Dialog.OK) {
+								monitor.setCanceled(true);
+								return;
 							}
 						});
 						existsAll = d.getForAll();
@@ -298,8 +304,11 @@ public class PasteResourceAction extends Action {
 							rd.setLabel(suf); // $NON-NLS-1$
 							fixUris(rd, monitor, mc);
 							ws.addOrModifyResource(monitor, rd, file);
-						} else if (parent instanceof MReportUnit)
-							saveToReportUnit(monitor, (AMResource) parent, ws, origin);
+						} else if (parent instanceof MReportUnit) {
+							saveToReportUnit(monitor, (AMResource) parent, ws, origin, true);
+							if (parent instanceof MReportUnit)
+								parent.setValue(ws.get(monitor, ((MReportUnit) parent).getValue(), null));
+						}
 					} else if (parent instanceof MFolder) {
 						if (copy) {
 							IConnection mc = m.getWsClient();
@@ -361,22 +370,22 @@ public class PasteResourceAction extends Action {
 							if (origin.getParentFolder() != null && !origin.getParentFolder().endsWith("_files")) //$NON-NLS-1$
 								origin.setIsReference(true);
 						}
-						saveToReportUnit(monitor, (AMResource) parent, ws, origin);
-						if (parent instanceof MReportUnit)
-							parent.setValue(ws.get(monitor, ((AMResource) parent).getValue(), null));
+						saveToReportUnit(monitor, (MReportUnit) parent, ws, origin, false);
+						// if (parent instanceof MReportUnit)
+						// parent.setValue(ws.get(monitor, ((MReportUnit) parent).getValue(), null));
 					}
 				}
 				deleteIfCut(monitor, m);
 			}
+
 			monitor.worked(1);
 			if (monitor.isCanceled())
 				break;
 		}
 		if (monitor.isCanceled())
 			return;
-		// if (parent instanceof MReportUnit)
-		// parent.setValue(ws.addOrModifyResource(monitor, (ResourceDescriptor)
-		// parent.getValue(), null));
+		if (parent instanceof MReportUnit)
+			ws.addOrModifyResource(monitor, ((MReportUnit) parent).getValue(), null);
 		toRefresh.add(parent);
 		for (ANode n : toRefresh)
 			refreshNode(n, monitor);
@@ -401,15 +410,12 @@ public class PasteResourceAction extends Action {
 			}
 		}
 		if (confirmNames) {
-			UIUtils.getDisplay().syncExec(new Runnable() {
-				public void run() {
-					ResourceNameDialog d = new ResourceNameDialog(UIUtils.getShell(), name, sname + copyName + ext,
-							parent);
-					if (d.open() == Dialog.OK)
-						copyName = d.getValue();
-					else
-						monitor.setCanceled(true);
-				}
+			UIUtils.getDisplay().syncExec(() -> {
+				ResourceNameDialog d = new ResourceNameDialog(UIUtils.getShell(), name, sname + copyName + ext, parent);
+				if (d.open() == Dialog.OK)
+					copyName = d.getValue();
+				else
+					monitor.setCanceled(true);
 			});
 			firstConfirm = true;
 		} else
@@ -453,13 +459,13 @@ public class PasteResourceAction extends Action {
 					String oldText = txt.getText();
 					String leftText = oldText.substring(0, e.start);
 					String rightText = oldText.substring(e.end, oldText.length());
-					String name = leftText + e.text + rightText;
-					if (name.isEmpty()) {
+					String nm = leftText + e.text + rightText;
+					if (nm.isEmpty()) {
 						error(Messages.PasteResourceAction_6);
 						return;
 					}
 					for (INode n : p.getChildren()) {
-						if (n instanceof AMResource && ((AMResource) n).getValue().getName().equals(name)) {
+						if (n instanceof AMResource && ((AMResource) n).getValue().getName().equals(nm)) {
 							error(Messages.PasteResourceAction_16);
 							return;
 						}
@@ -472,13 +478,7 @@ public class PasteResourceAction extends Action {
 					getButton(IDialogConstants.OK_ID).setEnabled(msg == null);
 				}
 			});
-			txt.addModifyListener(new ModifyListener() {
-
-				@Override
-				public void modifyText(ModifyEvent e) {
-					value = txt.getText();
-				}
-			});
+			txt.addModifyListener(e -> value = txt.getText());
 
 			final Button bAuto = new Button(c, SWT.CHECK);
 			bAuto.setText(Messages.PasteResourceAction_8);
@@ -502,13 +502,14 @@ public class PasteResourceAction extends Action {
 	}
 
 	protected void saveToReportUnit(IProgressMonitor monitor, AMResource parent, IConnection ws,
-			ResourceDescriptor origin) throws IOException, Exception {
+			ResourceDescriptor origin, boolean doSave) throws Exception {
 		ResourceDescriptor prd = putIntoReportUnit(monitor, parent, ws, origin);
-		ws.addOrModifyResource(monitor, prd, null);
+		if (doSave)
+			ws.addOrModifyResource(monitor, prd, null);
 	}
 
 	public static ResourceDescriptor putIntoReportUnit(IProgressMonitor monitor, AMResource parent, IConnection ws,
-			ResourceDescriptor origin) throws IOException, Exception {
+			ResourceDescriptor origin) throws Exception {
 		ResourceDescriptor prd = parent.getValue();
 		ResourceDescriptor rd = null;
 		File file = null;
