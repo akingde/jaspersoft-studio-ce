@@ -70,28 +70,30 @@ public class CollectionInput extends ADataInput {
 				if (param instanceof ParameterJasper) {
 					Class<?> c = ((ParameterJasper) param).getParam().getNestedType();
 					if (c != null) {
+						Object[] o = new Object[s.length];
 						for (int i = 0; i < s.length; i++) {
 							try {
 								if (c.isAssignableFrom(Integer.class))
-									s[i] = Integer.parseInt((String) s[i]);
+									o[i] = Integer.parseInt((String) s[i]);
 								else if (c.isAssignableFrom(Byte.class))
-									s[i] = Byte.parseByte((String) s[i]);
+									o[i] = Byte.parseByte((String) s[i]);
 								else if (c.isAssignableFrom(Short.class))
-									s[i] = Short.parseShort((String) s[i]);
+									o[i] = Short.parseShort((String) s[i]);
 								else if (c.isAssignableFrom(BigInteger.class))
-									s[i] = new BigInteger((String) s[i]);
+									o[i] = new BigInteger((String) s[i]);
 								else if (c.isAssignableFrom(Long.class))
-									s[i] = Long.parseLong((String) s[i]);
+									o[i] = Long.parseLong((String) s[i]);
 								else if (c.isAssignableFrom(Float.class))
-									s[i] = Float.parseFloat((String) s[i]);
+									o[i] = Float.parseFloat((String) s[i]);
 								else if (c.isAssignableFrom(Double.class))
-									s[i] = Double.parseDouble((String) s[i]);
+									o[i] = Double.parseDouble((String) s[i]);
 								else if (c.isAssignableFrom(BigDecimal.class))
-									s[i] = new BigDecimal((String) s[i]);
+									o[i] = new BigDecimal((String) s[i]);
 							} catch (NumberFormatException nfe) {
 
 							}
 						}
+						s = o;
 					}
 				}
 				Map<String, Object> p = CollectionInput.this.params;
