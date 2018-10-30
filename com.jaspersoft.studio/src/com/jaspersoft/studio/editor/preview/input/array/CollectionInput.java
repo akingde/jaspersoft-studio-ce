@@ -29,6 +29,8 @@ import com.jaspersoft.studio.editor.preview.input.ADataInput;
 import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 
+import net.sf.jasperreports.eclipse.util.Misc;
+
 public class CollectionInput extends ADataInput {
 	private Button bbuton;
 	private Text label;
@@ -71,8 +73,14 @@ public class CollectionInput extends ADataInput {
 					Class<?> c = ((ParameterJasper) param).getParam().getNestedType();
 					if (c != null) {
 						Object[] o = new Object[s.length];
+						int nulls = 0;
 						for (int i = 0; i < s.length; i++) {
 							try {
+								if (Misc.isNullOrEmpty((String) s[i])) {
+									nulls++;
+									continue;
+								}
+
 								if (c.isAssignableFrom(Integer.class))
 									o[i] = Integer.parseInt((String) s[i]);
 								else if (c.isAssignableFrom(Byte.class))
@@ -90,10 +98,19 @@ public class CollectionInput extends ADataInput {
 								else if (c.isAssignableFrom(BigDecimal.class))
 									o[i] = new BigDecimal((String) s[i]);
 							} catch (NumberFormatException nfe) {
-
+								nulls++;
 							}
 						}
-						s = o;
+						if (nulls > 0) {
+							s = new Object[o.length - nulls];
+							for (int i = 0, j = 0; i < o.length; i++) {
+								if (o[i] == null)
+									continue;
+								s[j] = o[i];
+								j++;
+							}
+						} else
+							s = o;
 					}
 				}
 				Map<String, Object> p = CollectionInput.this.params;
