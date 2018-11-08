@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.nebula.widgets.cdatetime.CDT;
@@ -143,11 +145,7 @@ public class DateInput extends ADataInput {
 
 	protected void handleDateRangeChange(Class<? extends Date> clazz) {
 		try {
-			DateRangeBuilder drb = null;
-			if (date.getSelection() != null)
-				drb = new DateRangeBuilder(date.getSelection());
-			else
-				drb = new DateRangeBuilder(Misc.nvl(date.getText().replaceAll(" ", "")).toUpperCase());
+			DateRangeBuilder drb = getDateRangeBuilder();
 
 			// if the value should be influenced by the timezone then read its
 			// value from the parameter
@@ -186,6 +184,26 @@ public class DateInput extends ADataInput {
 		} catch (InvalidDateRangeExpressionException dre) {
 			updateModel(null);
 		}
+	}
+
+	private DateRangeBuilder getDateRangeBuilder() {
+		if (date.getSelection() != null)
+			return new DateRangeBuilder(date.getSelection());
+
+		String exp = Misc.nvl(date.getText()).toUpperCase();
+		Matcher matcher = Pattern.compile(RelativeDateRange.DATE_RANGE_REGEXP).matcher(exp.replaceAll(" ", ""));
+		if (matcher.matches())
+			return new DateRangeBuilder(exp.replaceAll(" ", ""));
+
+		if (date.getPattern() != null) {
+			SimpleDateFormat sdf = new SimpleDateFormat(date.getPattern());
+			try {
+				return new DateRangeBuilder(sdf.parse(exp));
+			} catch (ParseException e) {
+				// do nothing here
+			}
+		}
+		return new DateRangeBuilder(exp);
 	}
 
 	protected void createTimestampRange(Composite parent, final IParameter param, final Map<String, Object> params) {

@@ -52,7 +52,7 @@ Bundle-ClassPath: patch-library.jar,
  lib/jersey213/jersey-media-multipart-2.13.jar,
  lib/jersey213/mimepull-1.9.6.jar,
  lib/jersey/net.java.html.json-0.7.1.jar,
- lib/jasperserver-dto-develop-20180921.152804-8.jar,
+ lib/jasperserver-dto-develop-20181019.131308-10.jar,
  .
 Eclipse-RegisterBuddy: com.jaspersoft.studio, com.jaspersoft.studio.bundles.jackson
 Eclipse-BuddyPolicy: registered
@@ -75,7 +75,6 @@ Export-Package: com.jaspersoft.ireport.jasperserver.ws,
  com.jaspersoft.jasperserver.dto.adhoc.query.el.operator.membership,
  com.jaspersoft.jasperserver.dto.adhoc.query.el.range,
  com.jaspersoft.jasperserver.dto.adhoc.query.field,
- com.jaspersoft.jasperserver.dto.adhoc.query.filter,
  com.jaspersoft.jasperserver.dto.adhoc.query.group,
  com.jaspersoft.jasperserver.dto.adhoc.query.order,
  com.jaspersoft.jasperserver.dto.adhoc.query.select,

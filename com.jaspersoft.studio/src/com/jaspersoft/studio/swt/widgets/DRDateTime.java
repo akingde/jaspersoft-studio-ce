@@ -35,8 +35,9 @@ public class DRDateTime extends CDateTime {
 
 	public void setSupportDateRange(boolean supportDateRange) {
 		this.supportDateRange = supportDateRange;
-	}
-
+	} 
+	
+	
 	@Override
 	public void setSelection(Date selection) {
 		super.setSelection(selection);

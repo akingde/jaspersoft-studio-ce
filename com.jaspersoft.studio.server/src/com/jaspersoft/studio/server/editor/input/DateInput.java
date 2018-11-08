@@ -4,8 +4,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor.input;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.swt.widgets.Composite;
 
@@ -18,6 +22,7 @@ import com.jaspersoft.studio.swt.widgets.DRDateTime;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.types.date.DateRange;
+import net.sf.jasperreports.types.date.RelativeDateRange;
 import net.sf.jasperreports.types.date.TimestampRange;
 
 public class DateInput extends com.jaspersoft.studio.editor.preview.input.DateInput {
@@ -44,7 +49,8 @@ public class DateInput extends com.jaspersoft.studio.editor.preview.input.DateIn
 				createDate(parent, param, params);
 		} else if (java.sql.Time.class.isAssignableFrom(valueClass)) {
 			createTime(parent, param, params);
-		} else if (java.sql.Timestamp.class.isAssignableFrom(valueClass) || java.util.Date.class.isAssignableFrom(valueClass)) {
+		} else if (java.sql.Timestamp.class.isAssignableFrom(valueClass)
+				|| java.util.Date.class.isAssignableFrom(valueClass)) {
 			if (supportDateRange)
 				createTimestampRange(parent, param, params);
 			else
@@ -61,12 +67,19 @@ public class DateInput extends com.jaspersoft.studio.editor.preview.input.DateIn
 	protected void handleDateRangeChange(Class<? extends Date> clazz) {
 		if (date.getSelection() != null) {
 			Date d = date.getSelection();
-			if (d != null)
-				if (isNumeric)
-					updateModel(d.getTime());
-				else
-					updateModel(d);
+			updateWithDate(d);
 		} else {
+			String exp = Misc.nvl(date.getText()).toUpperCase();
+			Matcher matcher = Pattern.compile(RelativeDateRange.DATE_RANGE_REGEXP).matcher(exp.replaceAll(" ", ""));
+			if (!matcher.matches() && date.getPattern() != null) {
+				SimpleDateFormat sdf = new SimpleDateFormat(date.getPattern());
+				try {
+					updateWithDate(sdf.parse(exp));
+					return;
+				} catch (ParseException e) {
+					// do nothing here
+				}
+			}
 			String ntxt = date.getNullText();
 			if (ntxt.equals(DRDateTime.NULLTEXT))
 				updateModel(null);
@@ -74,5 +87,13 @@ public class DateInput extends com.jaspersoft.studio.editor.preview.input.DateIn
 				updateModel(Misc.nvl(ntxt.replaceAll(" ", "")).toUpperCase());
 
 		}
+	}
+
+	private void updateWithDate(Date d) {
+		if (d != null)
+			if (isNumeric)
+				updateModel(d.getTime());
+			else
+				updateModel(d);
 	}
 }
