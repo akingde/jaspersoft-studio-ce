@@ -25,7 +25,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.IContributedContentsView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.ResourceManager;
@@ -54,109 +57,146 @@ import com.jaspersoft.studio.formatting.actions.SameHeightMinAction;
 import com.jaspersoft.studio.formatting.actions.SameWidthMaxAction;
 import com.jaspersoft.studio.formatting.actions.SameWidthMinAction;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
- * View where a the format option are shown as buttons and can be clicked
- * to format in the appropriate way the selected elements
+ * View where a the format option are shown as buttons and can be clicked to
+ * format in the appropriate way the selected elements
  * 
  * @author Orlandin Marco
  *
  */
 public class FormattingToolsView extends ViewPart implements IContributedContentsView {
-	
+
 	/**
-	 * It is simulate an action, but the only important thing is the isEnabled method.
-	 * This is done to avoid to call the isEnabled of every format action, in order to
-	 * speed up the computation
+	 * It is simulate an action, but the only important thing is the isEnabled
+	 * method. This is done to avoid to call the isEnabled of every format action,
+	 * in order to speed up the computation
 	 * 
 	 * @author Orlandin Marco
 	 *
 	 */
-	private class FakeActionEnabler extends Action{
-		
+	private class FakeActionEnabler extends Action {
+
 		/**
 		 * The id of the incapsulated action
 		 */
 		private String actionId;
-		
+
 		/**
-		 * Minimum number of MGraphicalElements selected in order to have the isEnabled return the true value
+		 * Minimum number of MGraphicalElements selected in order to have the isEnabled
+		 * return the true value
 		 */
 		private int requiredElementSelected;
-		
+
 		/**
 		 * 
-		 * @param requiredElements Minimum number of MGraphicalElements selected in order to have the isEnabled return the true value
+		 * @param requiredElements
+		 *            Minimum number of MGraphicalElements selected in order to have the
+		 *            isEnabled return the true value
 		 */
-		public FakeActionEnabler(int requiredElements, String actionId){
+		public FakeActionEnabler(int requiredElements, String actionId) {
 			this.requiredElementSelected = requiredElements;
 			this.actionId = actionId;
 		}
-		
+
 		/**
-		 * Return true if the number of selected MGraphicalElement is equal or greater of the element
-		 * that this action require to be selected, otherwise false;
+		 * Return true if the number of selected MGraphicalElement is equal or greater
+		 * of the element that this action require to be selected, otherwise false;
 		 */
 		@Override
 		public boolean isEnabled() {
-			return selectedGraphicalElements>=requiredElementSelected;
+			return selectedGraphicalElements >= requiredElementSelected;
 		}
-		
+
 		@Override
 		public void run() {
-			ActionRegistry registry = (ActionRegistry)getContributingPart().getAdapter(ActionRegistry.class);
+			ActionRegistry registry = (ActionRegistry) getContributingPart().getAdapter(ActionRegistry.class);
 			IAction action = registry.getAction(actionId);
 			action.run();
 		}
 	}
-	
+
 	/**
 	 * The scrolled composite where the main composite is placed
 	 */
 	private ScrolledComposite scrollComp;
-	
+
 	/**
 	 * Composite where the buttons are placed
 	 */
-  private Composite mainContainer;
-  
-  /**
-   * List of all the buttons that do a format action
-   */
-  private List<Control> controlList = new ArrayList<Control>();
-  
-  /**
-   * Number of MGraphicalElement selected
-   */
-  private int selectedGraphicalElements = 0;
-  
+	private Composite mainContainer;
+
+	/**
+	 * List of all the buttons that do a format action
+	 */
+	private List<Control> controlList = new ArrayList<Control>();
+
+	/**
+	 * Number of MGraphicalElement selected
+	 */
+	private int selectedGraphicalElements = 0;
+
 	/**
 	 * Minimum width for every button
 	 */
-  private int buttonsMinWidth = 200;
-	
-  /**
-   * Height for every button
-   */
-  private int buttonHeight = 30;
-	
-  /**
-   * Custom layout to have all the controls fill the available area on multiple 
-   * columns without leaving empty space
-   * 
-   * @author Orlandin Marco
-   *
-   */
-  private class ButtonFillLayout extends Layout{
+	private int buttonsMinWidth = 200;
 
-  	/**
-  	 * Height of the last column (the heightest one)
-  	 */
-  	private int height = 0;
-  	
-  	/**
-  	 * The size of the control is the same of the parent
-  	 */
+	/**
+	 * Height for every button
+	 */
+	private int buttonHeight = 30;
+
+	/**
+	 * Current active JRXML editor
+	 */
+	private CachedSelectionProvider currentEditor = null;
+
+	/**
+	 * Listener added to the site to get a notification when the editor is changed.
+	 * This will allow to update the references to the new active editor
+	 */
+	private IPartListener partChangeListener = new IPartListener() {
+
+		@Override
+		public void partOpened(IWorkbenchPart part) {
+		}
+
+		@Override
+		public void partDeactivated(IWorkbenchPart part) {
+		}
+
+		@Override
+		public void partClosed(IWorkbenchPart part) {
+		}
+
+		@Override
+		public void partBroughtToTop(IWorkbenchPart part) {
+		}
+
+		@Override
+		public void partActivated(IWorkbenchPart editor) {
+			updateEditor(editor);
+		}
+	};
+
+	/**
+	 * Custom layout to have all the controls fill the available area on multiple
+	 * columns without leaving empty space
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class ButtonFillLayout extends Layout {
+
+		/**
+		 * Height of the last column (the heightest one)
+		 */
+		private int height = 0;
+
+		/**
+		 * The size of the control is the same of the parent
+		 */
 		@Override
 		protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
 			return composite.getParent().getSize();
@@ -165,90 +205,121 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 		@Override
 		protected void layout(Composite composite, boolean flushCache) {
 			int containerWidth = composite.getBounds().width;
-			if (containerWidth<buttonsMinWidth) return;
-			Control [] children = composite.getChildren ();
-			int maximumColumns = containerWidth/buttonsMinWidth;
+			if (containerWidth < buttonsMinWidth)
+				return;
+			Control[] children = composite.getChildren();
+			int maximumColumns = containerWidth / buttonsMinWidth;
 			int fillWidth = (containerWidth / maximumColumns) - 1;
 			int actualRow = 0;
 			int actualCol = 0;
 			for (Control control : children) {
-				int newX = (actualCol*fillWidth)+1;
-				int newY = (actualRow*buttonHeight)+1;
+				int newX = (actualCol * fillWidth) + 1;
+				int newY = (actualRow * buttonHeight) + 1;
 				Rectangle newBounds = new Rectangle(newX, newY, fillWidth, buttonHeight);
 				control.setBounds(newBounds);
 				actualCol++;
-				if (actualCol == maximumColumns){
+				if (actualCol == maximumColumns) {
 					actualCol = 0;
 					actualRow++;
 				}
-				height = newY+buttonHeight;
+				height = newY + buttonHeight;
 			}
 		}
-		
-		public int getHeight(){
+
+		public int getHeight() {
 			return height;
 		}
-  	
-  }
-  
-  /**
-   * Selection listener called everytime something is selected
-   */
-  private SelectionChangedListener selectionListener = new SelectionChangedListener() {
-		
+
+	}
+
+	@Override
+	public void init(IViewSite site) throws PartInitException {
+		super.init(site);
+		getSite().getPage().addPartListener(partChangeListener);
+	}
+	
+	/**
+	 * Update the current active editor reference, removing the listeners from the old
+	 * one and adding them to the new one, and trigger a refresh
+	 * 
+	 * @param editor the new editor
+	 */
+	private void updateEditor(IWorkbenchPart editor) {
+		if (currentEditor != editor && editor instanceof CachedSelectionProvider) {
+			if (currentEditor != null) {
+				CachedSelectionProvider cachedSelEditor = (CachedSelectionProvider) currentEditor;
+				cachedSelEditor.getSelectionCache().removeSelectionChangeListener(selectionListener);
+			}
+			CachedSelectionProvider cachedSelEditor = (CachedSelectionProvider) editor;
+			cachedSelEditor.getSelectionCache().addSelectionChangeListener(selectionListener);
+			currentEditor = (CachedSelectionProvider) editor;
+			updateSelection();
+		}
+	}
+
+	/**
+	 * Selection listener called everytime something is selected
+	 */
+	private SelectionChangedListener selectionListener = new SelectionChangedListener() {
+
 		@Override
 		public void selectionChanged() {
-			//Initialize contend will do nothing if the buttons was already initialized
-			initializeContent();	
-			updateSelectedElements();
-			refresh();
+			updateSelection();
 		}
-		
+
 	};
-	
+
+	private void updateSelection() {
+		// Initialize contend will do nothing if the buttons was already initialized
+		initializeContent();
+		updateSelectedElements();
+		refresh();
+	}
+
 	/**
 	 * Return the editor
 	 */
 	@Override
 	public IWorkbenchPart getContributingPart() {
-		  return getSite().getPage().getActiveEditor();
+		return (IWorkbenchPart) currentEditor;
 	}
-	
+
 	/**
-	 * Refresh the button enabled state using the isEnabled of 
-	 * the actions associated to everyone of them
+	 * Refresh the button enabled state using the isEnabled of the actions
+	 * associated to everyone of them
 	 */
-	private void refresh(){
+	private void refresh() {
 		mainContainer.setRedraw(false);
-		for(Control control : controlList){
-			IAction action = (IAction)control.getData();
+		for (Control control : controlList) {
+			IAction action = (IAction) control.getData();
 			control.setEnabled(action.isEnabled());
 		}
 		mainContainer.setRedraw(true);
 	}
 
 	/**
-	 * Check the number of actually selected MGraphicalElement. If the number is at least
-	 * 2 no more elements are searched since all the format actions need at least 2 elements
+	 * Check the number of actually selected MGraphicalElement. If the number is at
+	 * least 2 no more elements are searched since all the format actions need at
+	 * least 2 elements
 	 * 
-	 * @param selection the actually selected elements
+	 * @param selection
+	 *            the actually selected elements
 	 */
-	private void updateSelectedElements(){
+	private void updateSelectedElements() {
 		IWorkbenchPart editor = getContributingPart();
 		selectedGraphicalElements = 0;
-		if (editor instanceof CachedSelectionProvider){
-			CachedSelectionProvider cachedSelEditor = (CachedSelectionProvider)editor;
+		if (editor instanceof CachedSelectionProvider) {
+			CachedSelectionProvider cachedSelEditor = (CachedSelectionProvider) editor;
 			List<?> editparts = cachedSelEditor.getSelectionCache().getSelectionModelPartForType(MGraphicElement.class);
 			selectedGraphicalElements = ToolUtilitiesCompatibility.getSelectionWithoutDependants(editparts).size();
-		} 
+		}
 	}
-	
 
 	@Override
 	public void createPartControl(Composite parent) {
 		scrollComp = new ScrolledComposite(parent, SWT.V_SCROLL);
 		scrollComp.setLayoutData(new GridData(GridData.FILL_BOTH));
-		scrollComp.setLayout(new GridLayout(1,false));
+		scrollComp.setLayout(new GridLayout(1, false));
 		scrollComp.setExpandVertical(true);
 		scrollComp.setExpandHorizontal(true);
 		scrollComp.addControlListener(new ControlAdapter() {
@@ -260,88 +331,90 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 		mainContainer = new Composite(scrollComp, SWT.BORDER);
 		mainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		scrollComp.setContent(mainContainer);
-    mainContainer.setLayout(new ButtonFillLayout());
-    
-		IWorkbenchPart editor = getContributingPart();
-		if (editor instanceof CachedSelectionProvider){
-			CachedSelectionProvider cachedSelEditor = (CachedSelectionProvider)editor;
-			cachedSelEditor.getSelectionCache().addSelectionChangeListener(selectionListener);
-		} 
+		mainContainer.setLayout(new ButtonFillLayout());
+		//since the active editor on the site is null (because this view is actually under activation
+		//we force the update taking the editor from the SelectionHelper 
+		updateEditor(SelectionHelper.getActiveJRXMLEditor());
 	}
-	
+
 	/**
-	 * Set the height of the scrolled composite, according to the one of its content, to 
-	 * show or not the scrollbar
+	 * Set the height of the scrolled composite, according to the one of its
+	 * content, to show or not the scrollbar
 	 */
-	private void refreshScrolledHeight(){
-		if (controlList.isEmpty()) return;
+	private void refreshScrolledHeight() {
+		if (controlList.isEmpty())
+			return;
 		mainContainer.layout();
-		int heightRequired = ((ButtonFillLayout)mainContainer.getLayout()).getHeight();
-		scrollComp.setMinHeight(heightRequired+10);
+		int heightRequired = ((ButtonFillLayout) mainContainer.getLayout()).getHeight();
+		scrollComp.setMinHeight(heightRequired + 10);
 	}
-	
+
 	/**
-	 * Create the buttons with the associated format actions, but only if an editor is opened
-	 * and only if the buttons was not already craeted. This is done at various time since someone
-	 * can open the view without any editor opened, so without formatting actions available
+	 * Create the buttons with the associated format actions, but only if an editor
+	 * is opened and only if the buttons was not already craeted. This is done at
+	 * various time since someone can open the view without any editor opened, so
+	 * without formatting actions available
 	 */
-	private void initializeContent(){
-		if (controlList.isEmpty() && getContributingPart() != null){
-	  	ActionRegistry registry = (ActionRegistry)getContributingPart().getAdapter(ActionRegistry.class);
-	    if (registry != null){
-	    	mainContainer.setRedraw(false);
-	    	generateButton(registry.getAction(Align2Element.ID_ALIGN_TOP),2);
-	    	generateButton(registry.getAction(Align2Element.ID_ALIGN_BOTTOM),2);
-	    	generateButton(registry.getAction(Align2Element.ID_ALIGN_LEFT),2);
-	    	generateButton(registry.getAction(Align2Element.ID_ALIGN_RIGHT),2);
-	    	generateButton(registry.getAction(Align2Element.ID_ALIGN_CENTER),2);
-	    	generateButton(registry.getAction(Align2Element.ID_ALIGN_MIDDLE),2);
-	    	generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_TOP),1);
-	    	generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_BOTTOM),1);
-	    	generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_LEFT),1);
-	    	generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_RIGHT),1);
-	    	generateButton(registry.getAction(OrganizeAsTableAction.ID),1);
-	    	generateButton(registry.getAction(JoinLeftAction.ID),2);
-	    	generateButton(registry.getAction(JoinRightAction.ID),2);
-	    	generateButton(registry.getAction(EqualsHSpaceAction.ID),2);
-	    	generateButton(registry.getAction(IncreaseHSpaceAction.ID),2);
-	    	generateButton(registry.getAction(DecreaseHSpaceAction.ID),2);
-	    	generateButton(registry.getAction(RemoveHSpaceAction.ID),2);
-	    	generateButton(registry.getAction(EqualsVSpaceAction.ID),2);
-	    	generateButton(registry.getAction(IncreaseVSpaceAction.ID),2);
-	    	generateButton(registry.getAction(DecreaseVSpaceAction.ID),2);
-	    	generateButton(registry.getAction(RemoveVSpaceAction.ID),2);
-	    	generateButton(registry.getAction(MatchSizeAction.ID_SIZE_WIDTH),2);
-	    	generateButton(registry.getAction(SameWidthMinAction.ID),2);
-	    	generateButton(registry.getAction(SameWidthMaxAction.ID),2);
-	    	generateButton(registry.getAction(MatchSizeAction.ID_SIZE_HEIGHT),2);
-	    	generateButton(registry.getAction(SameHeightMinAction.ID),2);
-	    	generateButton(registry.getAction(SameHeightMaxAction.ID),2);
-	    	generateButton(registry.getAction(MatchSizeAction.ID_SIZE_BOTH),2);
-	    	generateButton(registry.getAction(Size2BorderAction.ID_SIZE_BOTH),1);
-	    	generateButton(registry.getAction(Size2BorderAction.ID_SIZE_WIDTH),1);
-	    	generateButton(registry.getAction(Size2BorderAction.ID_SIZE_HEIGHT),1);
-	    	generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_CENTER),1);
-	    	generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_MIDDLE),1);
-	    	generateButton(registry.getAction(CenterInParentAction.ID),1);
-	    	mainContainer.setRedraw(true);
-	    	scrollComp.layout(true, true);
-	    	refreshScrolledHeight();
-	    }
+	private void initializeContent() {
+		if (controlList.isEmpty() && getContributingPart() != null) {
+			ActionRegistry registry = (ActionRegistry) getContributingPart().getAdapter(ActionRegistry.class);
+			if (registry != null) {
+				mainContainer.setRedraw(false);
+				generateButton(registry.getAction(Align2Element.ID_ALIGN_TOP), 2);
+				generateButton(registry.getAction(Align2Element.ID_ALIGN_BOTTOM), 2);
+				generateButton(registry.getAction(Align2Element.ID_ALIGN_LEFT), 2);
+				generateButton(registry.getAction(Align2Element.ID_ALIGN_RIGHT), 2);
+				generateButton(registry.getAction(Align2Element.ID_ALIGN_CENTER), 2);
+				generateButton(registry.getAction(Align2Element.ID_ALIGN_MIDDLE), 2);
+				generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_TOP), 1);
+				generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_BOTTOM), 1);
+				generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_LEFT), 1);
+				generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_RIGHT), 1);
+				generateButton(registry.getAction(OrganizeAsTableAction.ID), 1);
+				generateButton(registry.getAction(JoinLeftAction.ID), 2);
+				generateButton(registry.getAction(JoinRightAction.ID), 2);
+				generateButton(registry.getAction(EqualsHSpaceAction.ID), 2);
+				generateButton(registry.getAction(IncreaseHSpaceAction.ID), 2);
+				generateButton(registry.getAction(DecreaseHSpaceAction.ID), 2);
+				generateButton(registry.getAction(RemoveHSpaceAction.ID), 2);
+				generateButton(registry.getAction(EqualsVSpaceAction.ID), 2);
+				generateButton(registry.getAction(IncreaseVSpaceAction.ID), 2);
+				generateButton(registry.getAction(DecreaseVSpaceAction.ID), 2);
+				generateButton(registry.getAction(RemoveVSpaceAction.ID), 2);
+				generateButton(registry.getAction(MatchSizeAction.ID_SIZE_WIDTH), 2);
+				generateButton(registry.getAction(SameWidthMinAction.ID), 2);
+				generateButton(registry.getAction(SameWidthMaxAction.ID), 2);
+				generateButton(registry.getAction(MatchSizeAction.ID_SIZE_HEIGHT), 2);
+				generateButton(registry.getAction(SameHeightMinAction.ID), 2);
+				generateButton(registry.getAction(SameHeightMaxAction.ID), 2);
+				generateButton(registry.getAction(MatchSizeAction.ID_SIZE_BOTH), 2);
+				generateButton(registry.getAction(Size2BorderAction.ID_SIZE_BOTH), 1);
+				generateButton(registry.getAction(Size2BorderAction.ID_SIZE_WIDTH), 1);
+				generateButton(registry.getAction(Size2BorderAction.ID_SIZE_HEIGHT), 1);
+				generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_CENTER), 1);
+				generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_MIDDLE), 1);
+				generateButton(registry.getAction(CenterInParentAction.ID), 1);
+				mainContainer.setRedraw(true);
+				scrollComp.layout(true, true);
+				refreshScrolledHeight();
+			}
 		}
 	}
-	
+
 	/**
 	 * Create a button for a formatting action. Image and text of the button are
-	 * taken from the action. the enable state of the button will be dependent 
-	 * from the number of MGraphicalElement selected at the moment
+	 * taken from the action. the enable state of the button will be dependent from
+	 * the number of MGraphicalElement selected at the moment
 	 * 
-	 * @param action format action
-	 * @param numberOfSelectedElements minimum number of selected MGraphicalElment needed
-	 * to have the button enable
+	 * @param action
+	 *            format action
+	 * @param numberOfSelectedElements
+	 *            minimum number of selected MGraphicalElment needed to have the
+	 *            button enable
 	 */
-	private void generateButton(IAction action, int numberOfSelectedElements){
-		if (action == null) return;
+	private void generateButton(IAction action, int numberOfSelectedElements) {
+		if (action == null)
+			return;
 		Button button = new Button(mainContainer, SWT.PUSH);
 		button.setText(action.getText());
 		button.setImage(ResourceManager.getImage(action.getImageDescriptor()));
@@ -350,29 +423,29 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 		button.setEnabled(enablerAction.isEnabled());
 		button.setData(enablerAction);
 		RowData buttonData = new RowData();
-		//buttonData.width = SWT.FILL;
+		// buttonData.width = SWT.FILL;
 		button.setLayoutData(buttonData);
 		controlList.add(button);
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IAction action = (IAction)e.widget.getData();
+				IAction action = (IAction) e.widget.getData();
 				action.run();
 			}
 		});
 	}
-	
-	
+
 	@Override
 	public void dispose() {
+		getSite().getPage().removePartListener(partChangeListener);
 		super.dispose();
-		IWorkbenchPart editor = getContributingPart();
-  		if (editor instanceof CachedSelectionProvider){
-			CachedSelectionProvider cachedSelEditor = (CachedSelectionProvider)editor;
+		if (currentEditor != null) {
+			CachedSelectionProvider cachedSelEditor = (CachedSelectionProvider) currentEditor;
 			cachedSelEditor.getSelectionCache().removeSelectionChangeListener(selectionListener);
-		} 
+			currentEditor = null;
+		}
 	}
-	
+
 	@Override
 	public void setFocus() {
 		mainContainer.setFocus();
