@@ -22,6 +22,7 @@ import com.jaspersoft.studio.property.JSSStyleResolver;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
@@ -102,9 +103,9 @@ public abstract class APropertyNode extends ANode implements IJSSPropertySource,
 		// the superclass one first in order not to break the expression context setting of
 		// other property descriptors.
 		try {
-			ExpressionContext elementExpressionContext = getExpressionContext();
 			for (IPropertyDescriptor desc : descriptors) {
 				if (desc instanceof IExpressionContextSetter) {
+					ExpressionContext elementExpressionContext = getExpressionContext(Misc.toStringObject(desc.getId()));
 					((IExpressionContextSetter) desc).setExpressionContext(elementExpressionContext);
 				}
 			}
@@ -136,6 +137,24 @@ public abstract class APropertyNode extends ANode implements IJSSPropertySource,
 			elementExpressionContext = ModelUtils.getElementExpressionContext(designEl, this);
 		}
 		return elementExpressionContext;
+	}
+	
+	/**
+	 * <p>
+	 * Sometimes a more specific expression context is needed for some properties of a generic node.</br>
+	 * Using the following method is possible to retrieve the dedicated expression context for a 
+	 * specific node property using its id.
+	 * </p>
+	 * 
+	 * <p>The default implementation returns the "generic" expression context.<br/>
+	 * Sub-classes should override the following method to provide a special behavior
+	 * </p>
+	 * 
+	 * @param propertyID the id of the node property
+	 * @return the expression context for the node property specified
+	 */
+	public ExpressionContext getExpressionContext(String propertyID) {
+		return getExpressionContext();
 	}
 
 	public IPropertyDescriptor getPropertyDescriptor(Object id) {

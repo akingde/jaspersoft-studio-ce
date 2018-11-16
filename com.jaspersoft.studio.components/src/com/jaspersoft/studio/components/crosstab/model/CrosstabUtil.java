@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -353,5 +354,21 @@ public class CrosstabUtil {
 		totalCell.addElement(stext);
 		jrGroup.setTotalHeader(totalCell);
 		return jrGroup;
+	}
+	
+	/**
+	 * Go up trough the hierarchy until the crosstab node is found
+	 * 
+	 * @return the crosstab node that contains the current node, or null if it can't be found
+	 */
+	public static MCrosstab getMCrosstab(INode node) {
+		INode tmpNode = node.getParent();
+		while (tmpNode != null) {
+			if (tmpNode instanceof MCrosstab) {
+				return (MCrosstab) tmpNode;
+			}
+			tmpNode = tmpNode.getParent();
+		}
+		return null;
 	}
 }

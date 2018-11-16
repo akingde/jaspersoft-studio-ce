@@ -25,6 +25,7 @@ import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
+import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -87,9 +88,9 @@ public class SPExpression extends AHistorySPropertyWidget<IPropertyDescriptor> i
 			designEl = (JRDesignElement) pnode.getValue();
 		}
 		// Try to get an expression context for the node if any
-		Object expContextAdapter = pnode.getAdapter(ExpressionContext.class);
-		if(expContextAdapter!=null){
-			expr.setExpressionContext((ExpressionContext)expContextAdapter);
+		ExpressionContext expContext = pnode.getExpressionContext(Misc.toStringObject(this.pDescriptor.getId()));			
+		if(expContext!=null){
+			expr.setExpressionContext(expContext);
 		}
 		else{
 			expr.setExpressionContext(ModelUtils.getElementExpressionContext(designEl, pnode));

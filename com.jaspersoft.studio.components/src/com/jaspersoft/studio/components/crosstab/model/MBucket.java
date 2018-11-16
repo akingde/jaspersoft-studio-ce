@@ -184,6 +184,19 @@ public class MBucket extends APropertyNode {
 	public ExpressionContext getExpressionContext() {
 		return bucketContainer.getExpressionContext();
 	}
+	
+	@Override
+	public ExpressionContext getExpressionContext(String propertyID) {
+		if(propertyID.equals(JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION)) {
+			// special handling for the order by expression in terms of context
+			// see also "Bucket Comparator and Sort Order" paragraph in JR PDF doc
+			MCrosstab mCrosstab = CrosstabUtil.getMCrosstab(bucketContainer);
+			if(mCrosstab!=null) {
+				return new ExpressionContext(mCrosstab.getValue(), bucketContainer.getJasperConfiguration());
+			}			
+		}
+		return getExpressionContext();
+	}
 
 	@SuppressWarnings("rawtypes")
 	@Override

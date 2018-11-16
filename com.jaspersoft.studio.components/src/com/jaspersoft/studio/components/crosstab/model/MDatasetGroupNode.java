@@ -4,15 +4,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
+
 import net.sf.jasperreports.crosstabs.JRCrosstabDataset;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
-
-import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.INode;
 
 /**
  * Abstract node used to provide the correct expression context
@@ -63,14 +62,7 @@ public abstract class MDatasetGroupNode extends APropertyNode {
 	 * @return the crosstab node that contains the current node, or null if it can't be found
 	 */
 	public MCrosstab getMCrosstab() {
-		INode node = getParent();
-		while (node != null) {
-			if (node instanceof MCrosstab) {
-				return (MCrosstab) node;
-			}
-			node = node.getParent();
-		}
-		return null;
+		return CrosstabUtil.getMCrosstab(this);
 	}
 	
 	@SuppressWarnings("rawtypes")
