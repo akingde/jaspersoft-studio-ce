@@ -115,7 +115,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		super(parent, newIndex);
 		setValue(jrList);
 	}
-	
+
 	@Override
 	public void register() {
 		super.register();
@@ -127,7 +127,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 			}
 		}
 	}
-	
+
 	@Override
 	public void unregister() {
 		super.unregister();
@@ -310,7 +310,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		StandardListComponent componentImpl = new StandardListComponent();
 		DesignListContents contents = new DesignListContents();
 		contents.setHeight(100);
-		contents.setWidth(100);
+		contents.setWidth((Integer) 100);
 		componentImpl.setContents(contents);
 
 		component.setComponent(componentImpl);

@@ -35,8 +35,7 @@ public class CreateListCommand extends CreateElementCommand {
 	 * @param index
 	 *            the index
 	 */
-	public CreateListCommand(MElementGroup destNode, MGraphicElement srcNode,
-			int index) {
+	public CreateListCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -80,31 +79,34 @@ public class CreateListCommand extends CreateElementCommand {
 	 * @param index
 	 *            the index
 	 */
-	public CreateListCommand(ANode destNode, MGraphicElement srcNode,
-			Rectangle position, int index) {
+	public CreateListCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
-	
+
 	/**
-	 * Check if the source is inside the destination recursively 
+	 * Check if the source is inside the destination recursively
 	 * 
-	 * @param dest the destination node
-	 * @param actaulSource the actual source node of the recursion
-	 * @return true if the destination node is the same as the source node or one of its
-	 * children, false otherwise
+	 * @param dest
+	 *            the destination node
+	 * @param actaulSource
+	 *            the actual source node of the recursion
+	 * @return true if the destination node is the same as the source node or one of
+	 *         its children, false otherwise
 	 */
-	private boolean sourceContainsDestination(INode dest, INode actaulSource){
-		if (dest == actaulSource) return true;
+	private boolean sourceContainsDestination(INode dest, INode actaulSource) {
+		if (dest == actaulSource)
+			return true;
 		else {
-			for(INode child : actaulSource.getChildren()){
+			for (INode child : actaulSource.getChildren()) {
 				boolean contains = sourceContainsDestination(dest, child);
-				if (contains) return true;
+				if (contains)
+					return true;
 			}
 		}
 		return false;
-		
+
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		return !sourceContainsDestination(destNode, srcNode) && super.canExecute();
@@ -116,16 +118,15 @@ public class CreateListCommand extends CreateElementCommand {
 	@Override
 	protected void createObject() {
 		if (jrElement == null) {
-			//Pass to the wizard the default width and height if available, otherwise
-			//uses the default ones
+			// Pass to the wizard the default width and height if available, otherwise
+			// uses the default ones
 			int suggestedWidth = location != null ? location.width : -1;
 			int suggestedHeight = location != null ? location.height : -1;
 			ListWizard wizard = new ListWizard(suggestedWidth, suggestedHeight);
 			wizard.setConfig(jConfig, false);
-			
-			WizardDialog dialog = new WizardDialog(Display.getDefault()
-					.getActiveShell(), wizard);
-			
+
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getList();
@@ -135,21 +136,17 @@ public class CreateListCommand extends CreateElementCommand {
 				else {
 					jrElement = (JRDesignElement) srcNode.getValue();
 					if (location != null) {
-						location.width = Math.max(location.width,
-								jrElement.getWidth());
-						location.height = Math.max(location.height,
-								jrElement.getHeight());
+						location.width = Math.max(location.width, jrElement.getWidth());
+						location.height = Math.max(location.height, jrElement.getHeight());
 					}
 				}
 				if (jrElement != null) {
 					setElementBounds();
 					JRDesignComponentElement jrel = (JRDesignComponentElement) jrElement;
-					StandardListComponent jrList = (StandardListComponent) jrel
-							.getComponent();
-					DesignListContents contents = (DesignListContents) jrList
-							.getContents();
+					StandardListComponent jrList = (StandardListComponent) jrel.getComponent();
+					DesignListContents contents = (DesignListContents) jrList.getContents();
 					contents.setHeight(jrElement.getHeight());
-					contents.setWidth(jrElement.getWidth());
+					contents.setWidth((Integer) jrElement.getWidth());
 				}
 			}
 		}

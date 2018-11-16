@@ -13,6 +13,7 @@ import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.jface.wizard.WizardPage;
@@ -28,14 +29,16 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.ui.EmptyWizardDataEditorComposite;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
+		implements IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public DataSourceProviderDataAdapter getDataAdapter() {
 		if (dataAdapter == null) {
 			dataAdapter = new DataSourceProviderDataAdapterImpl();
-			((DataSourceProviderDataAdapter) dataAdapter).setProviderClass("com.jaspersoft.studio.data.sample.PersonBeansDataSource");
+			((DataSourceProviderDataAdapter) dataAdapter)
+					.setProviderClass("com.jaspersoft.studio.data.sample.PersonBeansDataSource");
 		}
 		return (DataSourceProviderDataAdapter) dataAdapter;
 	}
@@ -47,7 +50,8 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor imp
 
 	private IFieldsProvider fprovider;
 
-	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
 		getFieldProvider(jConfig);
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
@@ -60,7 +64,8 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor imp
 	private void getFieldProvider(JasperReportsConfiguration jConfig) {
 		if (fprovider == null) {
 			fprovider = new JRDSProviderFieldsProvider();
-			DataSourceProviderDataAdapterService ds = new DataSourceProviderDataAdapterService(jConfig, getDataAdapter());
+			DataSourceProviderDataAdapterService ds = new DataSourceProviderDataAdapterService(
+					new ParameterContributorContext(jConfig, null, jConfig.getJRParameters()), getDataAdapter());
 			try {
 				((JRDSProviderFieldsProvider) fprovider).setProvider(ds.getProvider());
 			} catch (JRException e) {

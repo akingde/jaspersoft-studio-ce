@@ -50,7 +50,7 @@ public class KeysPreferencePage extends FieldEditorOverlayPage {
 		addField(tf);
 		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()), DOCS_REFERENCE_HTML + tf.getPreferenceName());
 
-		tf = new NStringFieldEditor(MapComponent.PROPERTY_VERSION, Messages.MMap_VersionText, getFieldEditorParent());
+		tf = new NStringFieldEditor(MapComponent.PROPERTY_GOOGLE_VERSION, Messages.MMap_VersionText, getFieldEditorParent());
 		tf.setEmptyStringAllowed(true);
 		tf.setTextLimit(1000);
 		addField(tf);
@@ -64,7 +64,7 @@ public class KeysPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(MapComponent.PROPERTY_CLIENT_ID, "");
 		store.setDefault(MapComponent.PROPERTY_SIGNATURE, "");
 		store.setDefault(MapComponent.PROPERTY_KEY, "");
-		store.setDefault(MapComponent.PROPERTY_VERSION, "");
+		store.setDefault(MapComponent.PROPERTY_GOOGLE_VERSION, "");
 	}
 
 	/*

@@ -21,29 +21,29 @@ import com.jaspersoft.studio.properties.preferences.PropertiesPreferencePage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 
 /**
- * Reworked version of a {@link ColumnLayout} to provide a different logic 
- * to calculate the number of columns. 
+ * Reworked version of a {@link ColumnLayout} to provide a different logic to
+ * calculate the number of columns.
  * 
  * @author Orlandin Marco
  *
  */
-public class DynamicColumnLayout extends Layout{
+public class DynamicColumnLayout extends Layout {
 
 	/**
 	 * Horizontal spacing between columns (default is 5).
 	 */
 	public int horizontalSpacing = 5;
-	
+
 	/**
 	 * Vertical spacing between controls (default is 5).
 	 */
 	public int verticalSpacing = 5;
-	
+
 	/**
 	 * Top margin (default is 5).
 	 */
 	public int topMargin = 5;
-	
+
 	/**
 	 * Left margin (default is 5).
 	 */
@@ -52,22 +52,22 @@ public class DynamicColumnLayout extends Layout{
 	 * Bottom margin (default is 5).
 	 */
 	public int bottomMargin = 5;
-	
+
 	/**
 	 * Right margin (default is 5).
 	 */
 	public int rightMargin = 5;
-	
+
 	/**
 	 * The page where the controls are shown
 	 */
 	private TabbedPropertySheetPage page;
-	
+
 	/**
 	 * Minimum size for a column
 	 */
 	public int landscapeColumnsSize = 350;
-	
+
 	/**
 	 * Flag used to force the layout to have always a single column
 	 */
@@ -76,23 +76,25 @@ public class DynamicColumnLayout extends Layout{
 	/**
 	 * Creates a new instance of the column layout.
 	 * 
-	 * @param page the property page where this layout is used, must be not null
+	 * @param page
+	 *            the property page where this layout is used, must be not null
 	 */
 	public DynamicColumnLayout(TabbedPropertySheetPage page) {
 		Assert.isNotNull(page);
 		this.page = page;
-		
-		//Check if the flag to force a single column is enabled
-		final IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore(); 
+
+		// Check if the flag to force a single column is enabled
+		final IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
 		forceSingleColumn = prefStore.getBoolean(PropertiesPreferencePage.SINGLE_COLUMN_ID);
-		//add a preference listener to refresh the flag when the preference option change
+		// add a preference listener to refresh the flag when the preference option
+		// change
 		prefStore.addPropertyChangeListener(new IPropertyChangeListener() {
-			
+
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
-				if (DynamicColumnLayout.this.page.getTabbedPropertyComposite().isDisposed()){
+				if (DynamicColumnLayout.this.page.getTabbedPropertyComposite().isDisposed()) {
 					prefStore.removePropertyChangeListener(this);
-				} else if (event.getProperty().equals(PropertiesPreferencePage.SINGLE_COLUMN_ID)){
+				} else if (event.getProperty().equals(PropertiesPreferencePage.SINGLE_COLUMN_ID)) {
 					forceSingleColumn = prefStore.getBoolean(PropertiesPreferencePage.SINGLE_COLUMN_ID);
 					DynamicColumnLayout.this.page.getTabbedPropertyComposite().layout(true, true);
 				}
@@ -111,7 +113,6 @@ public class DynamicColumnLayout extends Layout{
 		Point[] sizes = new Point[children.length];
 
 		int ncolumns = calculateColumnsNumber();
-		int width = page.getTabbedPropertyComposite().getPropertiesArea().width;
 		for (int i = 0; i < children.length; i++) {
 			sizes[i] = computeControlSize(children[i], SWT.DEFAULT);
 			cwidth = Math.max(cwidth, sizes[i].x);
@@ -126,7 +127,7 @@ public class DynamicColumnLayout extends Layout{
 
 		for (int i = 0; i < sizes.length; i++) {
 			int childHeight = sizes[i].y;
-			if (i>0 && colHeight + childHeight > perColHeight) {
+			if (i > 0 && colHeight + childHeight > perColHeight) {
 				heights[ncol] = colHeight;
 				ncol++;
 				if (ncol == ncolumns || fillIn) {
@@ -140,7 +141,7 @@ public class DynamicColumnLayout extends Layout{
 				colHeight += verticalSpacing;
 			colHeight += childHeight;
 		}
-		heights[ncol] = Math.max(heights[ncol],colHeight);
+		heights[ncol] = Math.max(heights[ncol], colHeight);
 
 		Point size = new Point(0, 0);
 		for (int i = 0; i < ncolumns; i++) {
@@ -148,7 +149,7 @@ public class DynamicColumnLayout extends Layout{
 		}
 		size.x = cwidth * ncolumns + (ncolumns - 1) * horizontalSpacing;
 		size.x += leftMargin + rightMargin;
-		//System.out.println("ColumnLayout: whint="+wHint+", size.x="+size.x);
+		// System.out.println("ColumnLayout: whint="+wHint+", size.x="+size.x);
 		size.y += topMargin + bottomMargin;
 		return size;
 	}
@@ -168,33 +169,35 @@ public class DynamicColumnLayout extends Layout{
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Calculate the number of columns, if the flag is enabled this is always one. It is
-	 * also one if the properties area is in portrait proportions and if there is no space
-	 * for more then one column, otherwise the number of columns is calculated like the int
-	 * division between the current width and the minimum width for a column
+	 * Calculate the number of columns, if the flag is enabled this is always one.
+	 * It is also one if the properties area is in portrait proportions and if there
+	 * is no space for more then one column, otherwise the number of columns is
+	 * calculated like the int division between the current width and the minimum
+	 * width for a column
 	 * 
 	 * @return an int >= 1 that indicate the number of columns
 	 */
-	protected int calculateColumnsNumber(){
-		if (forceSingleColumn) return 1;
+	protected int calculateColumnsNumber() {
+		if (forceSingleColumn)
+			return 1;
 		else {
 			Rectangle layoutArea = page.getTabbedPropertyComposite().getPropertiesArea();
-			if (layoutArea.height >= layoutArea.width || layoutArea.width < landscapeColumnsSize){
-				//portrait mode or size for only one column
+			if (layoutArea.height >= layoutArea.width || layoutArea.width < landscapeColumnsSize) {
+				// portrait mode or size for only one column
 				return 1;
 			} else {
 				return layoutArea.width / landscapeColumnsSize;
 			}
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 *
 	 * @see org.eclipse.swt.widgets.Layout#layout(org.eclipse.swt.widgets.Composite,
-	 *      boolean)
+	 * boolean)
 	 */
 	protected void layout(Composite parent, boolean flushCache) {
 		Control[] children = parent.getChildren();
@@ -203,13 +206,12 @@ public class DynamicColumnLayout extends Layout{
 		int cheight = 0;
 		Point[] sizes = new Point[children.length];
 		int ncolumns = calculateColumnsNumber();
-		int width = page.getTabbedPropertyComposite().getPropertiesArea().width;
 		for (int i = 0; i < children.length; i++) {
-			sizes[i] = computeControlSize(children[i],  SWT.DEFAULT);
+			sizes[i] = computeControlSize(children[i], SWT.DEFAULT);
 			cwidth = Math.max(cwidth, sizes[i].x);
 			cheight += sizes[i].y;
 		}
-	
+
 		int realWidth = (carea.width - leftMargin - rightMargin + horizontalSpacing) / ncolumns - horizontalSpacing;
 
 		int fillWidth = Math.max(cwidth, realWidth);
@@ -226,17 +228,16 @@ public class DynamicColumnLayout extends Layout{
 			Point csize = sizes[i];
 			int childWidth = fillWidth;
 
-			if (i>0 && colHeight + csize.y > perColHeight) {
+			if (i > 0 && colHeight + csize.y > perColHeight) {
 				heights[ncol] = colHeight;
-				if (fillIn || ncol == ncolumns-1) {
+				if (fillIn || ncol == ncolumns - 1) {
 					// overflow - start filling in
 					fillIn = true;
 					ncol = findShortestColumn(heights);
 
 					x = leftMargin + ncol * (fillWidth + horizontalSpacing);
 
-				}
-				else {
+				} else {
 					ncol++;
 					x += fillWidth + horizontalSpacing;
 				}
@@ -245,23 +246,23 @@ public class DynamicColumnLayout extends Layout{
 			if (colHeight > 0)
 				colHeight += verticalSpacing;
 
-
-			child.setBounds(x, topMargin+colHeight, childWidth, csize.y);
+			child.setBounds(x, topMargin + colHeight, childWidth, csize.y);
 
 			colHeight += csize.y;
 		}
 	}
-	
+
 	private int computeColumnHeight(int ncolumns, Point[] sizes, int totalHeight, int verticalMargin) {
-		int averageHeight = ( totalHeight + sizes.length * verticalMargin ) / ncolumns;
+		int averageHeight = (totalHeight + sizes.length * verticalMargin) / ncolumns;
 		int requiredHeight = computeActualHeight(ncolumns, sizes, averageHeight, verticalMargin);
 		if (averageHeight == requiredHeight) {
 			return requiredHeight;
 		}
-		// Try making the columns shorter, repeat up to 10 times, usually one or two iterations will be sufficient
-		for ( int i = 0; i < 10; i++ ) {
+		// Try making the columns shorter, repeat up to 10 times, usually one or two
+		// iterations will be sufficient
+		for (int i = 0; i < 10; i++) {
 			int candidateHeight = computeActualHeight(ncolumns, sizes, requiredHeight - 1, verticalMargin);
-			if ( candidateHeight >= requiredHeight ) {
+			if (candidateHeight >= requiredHeight) {
 				return requiredHeight;
 			}
 			requiredHeight = candidateHeight;
@@ -269,7 +270,7 @@ public class DynamicColumnLayout extends Layout{
 		return requiredHeight;
 	}
 
-	private static int computeActualHeight(int ncolumns, Point[] sizes, int candidateHeight, int verticalMargin ) {
+	private static int computeActualHeight(int ncolumns, Point[] sizes, int candidateHeight, int verticalMargin) {
 		int colHeight = 0;
 		int maxHeight = 0;
 		int column = 1;

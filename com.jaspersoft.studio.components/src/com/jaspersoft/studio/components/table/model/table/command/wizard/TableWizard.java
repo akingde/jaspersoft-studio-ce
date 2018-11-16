@@ -47,9 +47,7 @@ public class TableWizard extends JSSWizard {
 	private WizardConnectionPage step2;
 	private TableWizardLayoutPage step4;
 	private MTable table = null;;
-	
-	
-	
+
 	float baseColor = new Float(Math.tan(Math.toRadians(208.0)));
 
 	public TableWizard() {
@@ -60,17 +58,18 @@ public class TableWizard extends JSSWizard {
 
 	@Override
 	public void addPages() {
-		
+
 		step1 = new WizardDatasetPage(false, "Table");
 		addPage(step1);
-		
+
 		step2 = new WizardConnectionPage();
 		addPage(step2);
-		
-		
+
 		// Setting up the expressions context. This is not really useful, since
-		// we still don't know where the element will be added, so this call will fall back to the default dataset.
-		// FIXME: pass a proper ANode to the wizard to let the code to lookup for a more appropriate dataset.
+		// we still don't know where the element will be added, so this call will fall
+		// back to the default dataset.
+		// FIXME: pass a proper ANode to the wizard to let the code to lookup for a more
+		// appropriate dataset.
 		step2.setExpressionContext(ModelUtils.getElementExpressionContext(null, null));
 
 		step3 = new TableWizardFieldsPage();
@@ -81,86 +80,81 @@ public class TableWizard extends JSSWizard {
 	}
 
 	/**
-	 * The getNextPage implementations does nothing, since all the logic has
-	 * been moved inside each page, specifically extended for
-	 * this wizard
+	 * The getNextPage implementations does nothing, since all the logic has been
+	 * moved inside each page, specifically extended for this wizard
 	 * 
 	 * @see com.jaspersoft.studio.wizards.JSSWizard#getNextPage(org.eclipse.jface.wizard.IWizardPage)
 	 *
-	 * @param the current page.
+	 * @param the
+	 *            current page.
 	 *
 	 * @return the next page
 	 */
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		
+
 		// Nothing to do. If you change this method, please update the
 		// comment.
-		
+
 		return super.getNextPage(page);
 	}
-	
+
 	/**
-	 * This method returns a dataset object
-	 * based on what has been selected in the first step
-	 * of the wizard (existing dataset, main dataset, new dataset, etc...)
+	 * This method returns a dataset object based on what has been selected in the
+	 * first step of the wizard (existing dataset, main dataset, new dataset,
+	 * etc...)
 	 * 
-	 *  @return JRDesignDataset
+	 * @return JRDesignDataset
 	 */
 	public JRDesignDataset getDataset() {
 		return step1.getSelectedDataset();
 	}
-		
 
 	/* ************************************************************** */
 	// Table generation code...
-	
-	
-	
+
 	/**
 	 * 
-	 * Generates the table created by this wizard.
-	 * This method will generate the table only the first time it is called, then
-	 * a cached version will be returned, this because the creation of the table
-	 * involved the creation of a set of commands, and we don't want to create
-	 * commands twice. The second time the call is made, the cached table will be
-	 * returned.</br>
+	 * Generates the table created by this wizard. This method will generate the
+	 * table only the first time it is called, then a cached version will be
+	 * returned, this because the creation of the table involved the creation of a
+	 * set of commands, and we don't want to create commands twice. The second time
+	 * the call is made, the cached table will be returned.</br>
 	 * </br>
-	 * Please note that if this method is invoked before the end of the wizard, the final table may
-	 * result incomplete.
+	 * Please note that if this method is invoked before the end of the wizard, the
+	 * final table may result incomplete.
 	 * 
 	 * 
 	 * @param tableWidth
-	 * 				An optional width to be used as size of the table to create. This will help
-	 *              to calculate the columns width.
+	 *            An optional width to be used as size of the table to create. This
+	 *            will help to calculate the columns width.
 	 *
-	 *  @return MTable
-	 *  			An MTable object with a JasperReports configuration attached.
+	 * @return MTable An MTable object with a JasperReports configuration attached.
 	 */
 	public MTable getTable(int tableWidth) {
-		
-		if (table != null) return table;
-		
+
+		if (table != null)
+			return table;
+
 		table = new MTable();
 		table.setValue(table.createJRElement(getConfig().getJasperDesign()));
 		table.setJasperConfiguration(getConfig());
-	
+
 		List<Object> lst = step3.getSelectedFields();
-		
+
 		StandardTable tbl = TableManager.getTable(table);
 
 		// Configure a proper dataset run...
 		JRDesignDataset dataset = getDataset();
-		
+
 		JRDesignDatasetRun datasetRun = step2.getJRDesignDatasetRun();
-		if (datasetRun == null)
-		{
+		if (datasetRun == null) {
 			datasetRun = new JRDesignDatasetRun();
-			
+
 		}
-		datasetRun.setDatasetName( dataset.isMainDataset() ? null : dataset.getName() );
+		datasetRun.setDatasetName(dataset.isMainDataset() ? null : dataset.getName());
 		tbl.setDatasetRun(datasetRun);
-		
+
 		// Get the connection/datasource expression from the proper wizard step...
 		JasperDesign jd = getConfig().getJasperDesign();
 
@@ -168,26 +162,23 @@ public class TableWizard extends JSSWizard {
 			int colWidth = 40;
 			if (tableWidth < 0)
 				tableWidth = table.getDefaultWidth();
-			if (lst.size() > 0){
+			if (lst.size() > 0) {
 				colWidth = tableWidth / lst.size();
 				for (Object f : lst) {
 					StandardColumn col = CreateColumnCommand.addColumnWithStyle(jd, tbl, table.getPropertiesMap(),
-																		step4.isTableHeader(), step4.isTableFooter(),
-																		step4.isColumnHeader(), step4.isColumnFooter(),
-																		step4.isGroupHeader(), step4.isGroupFooter());
+							step4.isTableHeader(), step4.isTableFooter(), step4.isColumnHeader(),
+							step4.isColumnFooter(), step4.isGroupHeader(), step4.isGroupFooter());
 					col.setWidth(colWidth);
 					DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
 					DesignCell detCell = (DesignCell) col.getDetailCell();
 					if (step4.isColumnHeader()) {
-						JRDesignStaticText sText = (JRDesignStaticText) new MStaticText()
-								.createJRElement(jd);
+						JRDesignStaticText sText = (JRDesignStaticText) new MStaticText().createJRElement(jd);
 						sText.setWidth(col.getWidth());
 						sText.setHeight(colHeadCell.getHeight());
 						sText.setText(((JRField) f).getName());
 						colHeadCell.addElement(sText);
 					}
-					JRDesignTextField fText = (JRDesignTextField) new MTextField()
-							.createJRElement(jd);
+					JRDesignTextField fText = (JRDesignTextField) new MTextField().createJRElement(jd);
 					fText.setWidth(col.getWidth());
 					fText.setHeight(detCell.getHeight());
 					JRDesignExpression jre = new JRDesignExpression();
@@ -198,55 +189,54 @@ public class TableWizard extends JSSWizard {
 				}
 			} else {
 				StandardColumn col = CreateColumnCommand.addColumnWithStyle(jd, tbl, table.getPropertiesMap(),
-																			step4.isTableHeader(), step4.isTableFooter(),
-																			step4.isColumnHeader(), step4.isColumnFooter(),
-																			step4.isGroupHeader(), step4.isGroupFooter());
+						step4.isTableHeader(), step4.isTableFooter(), step4.isColumnHeader(), step4.isColumnFooter(),
+						step4.isGroupHeader(), step4.isGroupFooter());
 				col.setWidth(colWidth);
 				tbl.addColumn(col);
 			}
-			
+
 		}
 		String dsname = (String) tbl.getDatasetRun().getDatasetName();
 		if (dsname == null || dsname.trim().isEmpty()) {
 			// create an empty dataset
 			JRDesignDataset jrDataset = new JRDesignDataset(false);
-			jrDataset.setName(ModelUtils.getDefaultName(jd.getDatasetMap(),
-					"Empty Dataset"));
+			jrDataset.setName(ModelUtils.getDefaultName(jd.getDatasetMap(), "Empty Dataset"));
 			addCommand(new CreateDatasetCommand(getConfig(), jrDataset));
-			((JRDesignDatasetRun) tbl.getDatasetRun()).setDatasetName(jrDataset
-					.getName());
+			((JRDesignDatasetRun) tbl.getDatasetRun()).setDatasetName(jrDataset.getName());
 		}
 
-		//Apply the style to the table
+		// Apply the style to the table
 		ApplyTableStyleAction applyAction = new ApplyTableStyleAction(step4.getSelectedStyle(), table.getValue());
 		applyAction.applayStyle(jd);
 		return table;
 	}
 
-
-	
 	/**
 	 * Set all the borders of a JR style to a precise width
 	 * 
-	 * @param element a JR style
-	 * @param lineWidth the width
+	 * @param element
+	 *            a JR style
+	 * @param lineWidth
+	 *            the width
 	 */
-	private void setBorderWidth(JRDesignStyle element, float lineWidth){
+	private void setBorderWidth(JRDesignStyle element, float lineWidth) {
 		JRLineBox box = element.getLineBox();
-		box.getPen().setLineWidth(lineWidth);
-		box.getLeftPen().setLineWidth(lineWidth);
-		box.getRightPen().setLineWidth(lineWidth);
-		box.getBottomPen().setLineWidth(lineWidth);
-		box.getTopPen().setLineWidth(lineWidth);
+		box.getPen().setLineWidth((Float) lineWidth);
+		box.getLeftPen().setLineWidth((Float) lineWidth);
+		box.getRightPen().setLineWidth((Float) lineWidth);
+		box.getBottomPen().setLineWidth((Float) lineWidth);
+		box.getTopPen().setLineWidth((Float) lineWidth);
 	}
-	
+
 	/**
 	 * Set all the borders of a JR style to a precise color
 	 * 
-	 * @param element a JR style
-	 * @param lineWidth the width
+	 * @param element
+	 *            a JR style
+	 * @param lineWidth
+	 *            the width
 	 */
-	private void setBorderColor(JRDesignStyle element, Color lineColor){
+	private void setBorderColor(JRDesignStyle element, Color lineColor) {
 		JRLineBox box = element.getLineBox();
 		box.getPen().setLineColor(lineColor);
 		box.getLeftPen().setLineColor(lineColor);
@@ -254,19 +244,22 @@ public class TableWizard extends JSSWizard {
 		box.getBottomPen().setLineColor(lineColor);
 		box.getTopPen().setLineColor(lineColor);
 	}
-	
+
 	/**
-	 * Starting from a TableStyle it generate a list of styles that will be applied to the table.
-	 * For every style generated will be executed an addCommand to add them to the report
+	 * Starting from a TableStyle it generate a list of styles that will be applied
+	 * to the table. For every style generated will be executed an addCommand to add
+	 * them to the report
 	 * 
-	 * @param jd the jasperdesign
-	 * @param style the TableStyle from where all the styles for the table will be generated
+	 * @param jd
+	 *            the jasperdesign
+	 * @param style
+	 *            the TableStyle from where all the styles for the table will be
+	 *            generated
 	 * @return a list of style that can be applied to the table
 	 */
-    public List<JRDesignStyle> createStyles(JasperDesign jd, TableStyle style)
-    {
-    	String baseName = "Table";
-		
+	public List<JRDesignStyle> createStyles(JasperDesign jd, TableStyle style) {
+		String baseName = "Table";
+
 		for (int i = 0;; i++) {
 			String name = baseName;
 			if (i > 0) {
@@ -278,105 +271,92 @@ public class TableWizard extends JSSWizard {
 				break;
 			}
 		}
-    	
-        List<JRDesignStyle> styles = new ArrayList<JRDesignStyle>();
 
-        JRDesignStyle tableStyle=  new JRDesignStyle();
-        tableStyle.setName(baseName);
+		List<JRDesignStyle> styles = new ArrayList<JRDesignStyle>();
 
-        if (style.getBorderStyle() == BorderStyleEnum.FULL || style.getBorderStyle() == BorderStyleEnum.PARTIAL_VERTICAL)
-        {
-            setBorderColor(tableStyle, style.getBorderColor());
-            setBorderWidth(tableStyle, 1.0f);
-        }
-        else
-        {
-            tableStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-            tableStyle.getLineBox().getTopPen().setLineWidth(1.0f);
-            tableStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-            tableStyle.getLineBox().getBottomPen().setLineWidth(1.0f);
-        }
+		JRDesignStyle tableStyle = new JRDesignStyle();
+		tableStyle.setName(baseName);
 
-        addCommand( new CreateStyleCommand(jd, tableStyle));
-        styles.add(tableStyle);
+		if (style.getBorderStyle() == BorderStyleEnum.FULL
+				|| style.getBorderStyle() == BorderStyleEnum.PARTIAL_VERTICAL) {
+			setBorderColor(tableStyle, style.getBorderColor());
+			setBorderWidth(tableStyle, 1.0f);
+		} else {
+			tableStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+			tableStyle.getLineBox().getTopPen().setLineWidth((Float) 1.0f);
+			tableStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+			tableStyle.getLineBox().getBottomPen().setLineWidth((Float) 1.0f);
+		}
 
-        JRDesignStyle tableHeaderStyle=  new JRDesignStyle();
-        tableHeaderStyle.setName(baseName + "_TH");
+		addCommand(new CreateStyleCommand(jd, tableStyle));
+		styles.add(tableStyle);
 
-        if (style.getBorderStyle() == BorderStyleEnum.FULL)
-        {
-            setBorderColor(tableHeaderStyle, style.getBorderColor());
-            setBorderWidth(tableHeaderStyle, 0.5f);
-        }
-        else
-        {
-            tableHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-            tableHeaderStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
-            tableHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-            tableHeaderStyle.getLineBox().getTopPen().setLineWidth(0.5f);
-        }
+		JRDesignStyle tableHeaderStyle = new JRDesignStyle();
+		tableHeaderStyle.setName(baseName + "_TH");
 
-        tableHeaderStyle.setMode(ModeEnum.OPAQUE);
-        tableHeaderStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_TABLE_HEADER));
+		if (style.getBorderStyle() == BorderStyleEnum.FULL) {
+			setBorderColor(tableHeaderStyle, style.getBorderColor());
+			setBorderWidth(tableHeaderStyle, 0.5f);
+		} else {
+			tableHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+			tableHeaderStyle.getLineBox().getBottomPen().setLineWidth((Float) 0.5f);
+			tableHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+			tableHeaderStyle.getLineBox().getTopPen().setLineWidth((Float) 0.5f);
+		}
 
-        addCommand( new CreateStyleCommand(jd, tableHeaderStyle));
-        styles.add(tableHeaderStyle);
+		tableHeaderStyle.setMode(ModeEnum.OPAQUE);
+		tableHeaderStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_TABLE_HEADER));
 
-        JRDesignStyle columnHeaderStyle=  new JRDesignStyle();
-        columnHeaderStyle.setName(baseName + "_CH");
+		addCommand(new CreateStyleCommand(jd, tableHeaderStyle));
+		styles.add(tableHeaderStyle);
 
-        if (style.getBorderStyle() == BorderStyleEnum.FULL)
-        {
-            setBorderColor(columnHeaderStyle, style.getBorderColor());
-            setBorderWidth(columnHeaderStyle, 0.5f);
-        }
-        else
-        {
-            columnHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-            columnHeaderStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
-            columnHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-            columnHeaderStyle.getLineBox().getTopPen().setLineWidth(0.5f);
-        }
+		JRDesignStyle columnHeaderStyle = new JRDesignStyle();
+		columnHeaderStyle.setName(baseName + "_CH");
 
-        columnHeaderStyle.setMode(ModeEnum.OPAQUE);
-        columnHeaderStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_COL_HEADER));
+		if (style.getBorderStyle() == BorderStyleEnum.FULL) {
+			setBorderColor(columnHeaderStyle, style.getBorderColor());
+			setBorderWidth(columnHeaderStyle, 0.5f);
+		} else {
+			columnHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+			columnHeaderStyle.getLineBox().getBottomPen().setLineWidth((Float) 0.5f);
+			columnHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+			columnHeaderStyle.getLineBox().getTopPen().setLineWidth((Float) 0.5f);
+		}
 
-        addCommand( new CreateStyleCommand(jd, columnHeaderStyle));
-        styles.add(columnHeaderStyle);
+		columnHeaderStyle.setMode(ModeEnum.OPAQUE);
+		columnHeaderStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_COL_HEADER));
 
-        JRDesignStyle cellStyle=  new JRDesignStyle();
-        cellStyle.setName(baseName + "_TD");
+		addCommand(new CreateStyleCommand(jd, columnHeaderStyle));
+		styles.add(columnHeaderStyle);
 
-        if (style.getBorderStyle() == BorderStyleEnum.FULL)
-        {
-            setBorderColor(cellStyle, style.getBorderColor());
-            setBorderWidth(cellStyle, 0.5f);
-        }
-        else
-        {
-            cellStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-            cellStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
-            cellStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-            cellStyle.getLineBox().getTopPen().setLineWidth(0.5f);
-        }
+		JRDesignStyle cellStyle = new JRDesignStyle();
+		cellStyle.setName(baseName + "_TD");
 
-        cellStyle.setMode(ModeEnum.OPAQUE);
-        cellStyle.setBackcolor(Color.WHITE);
+		if (style.getBorderStyle() == BorderStyleEnum.FULL) {
+			setBorderColor(cellStyle, style.getBorderColor());
+			setBorderWidth(cellStyle, 0.5f);
+		} else {
+			cellStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+			cellStyle.getLineBox().getBottomPen().setLineWidth((Float) 0.5f);
+			cellStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+			cellStyle.getLineBox().getTopPen().setLineWidth((Float) 0.5f);
+		}
 
+		cellStyle.setMode(ModeEnum.OPAQUE);
+		cellStyle.setBackcolor(Color.WHITE);
 
-        if (style.hasAlternateColor())
-        {
-            JRDesignConditionalStyle condStyle = new JRDesignConditionalStyle();
-            condStyle.setConditionExpression(ModelUtils.createExpression("new Boolean($V{REPORT_COUNT}.intValue()%2==0)"));
-            condStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_DETAIL));
-            cellStyle.addConditionalStyle(condStyle);
-        }
+		if (style.hasAlternateColor()) {
+			JRDesignConditionalStyle condStyle = new JRDesignConditionalStyle();
+			condStyle.setConditionExpression(
+					ModelUtils.createExpression("new Boolean($V{REPORT_COUNT}.intValue()%2==0)"));
+			condStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_DETAIL));
+			cellStyle.addConditionalStyle(condStyle);
+		}
 
-        addCommand( new CreateStyleCommand(jd, cellStyle));
-        styles.add(cellStyle);
+		addCommand(new CreateStyleCommand(jd, cellStyle));
+		styles.add(cellStyle);
 
+		return styles;
+	}
 
-        return styles;
-    }	
-	
 }

@@ -379,9 +379,9 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
         else
         {
             tableHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-            tableHeaderStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
+            tableHeaderStyle.getLineBox().getBottomPen().setLineWidth((Float) 0.5f);
             tableHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-            tableHeaderStyle.getLineBox().getTopPen().setLineWidth(0.5f);
+            tableHeaderStyle.getLineBox().getTopPen().setLineWidth((Float)0.5f);
         }
 
         tableHeaderStyle.setMode(ModeEnum.OPAQUE);
@@ -401,9 +401,9 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
         else
         {
             columnHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-            columnHeaderStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
+            columnHeaderStyle.getLineBox().getBottomPen().setLineWidth((Float)0.5f);
             columnHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-            columnHeaderStyle.getLineBox().getTopPen().setLineWidth(0.5f);
+            columnHeaderStyle.getLineBox().getTopPen().setLineWidth((Float)0.5f);
         }
 
         columnHeaderStyle.setMode(ModeEnum.OPAQUE);
@@ -423,9 +423,9 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
         else
         {
             cellStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-            cellStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
+            cellStyle.getLineBox().getBottomPen().setLineWidth((Float)0.5f);
             cellStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-            cellStyle.getLineBox().getTopPen().setLineWidth(0.5f);
+            cellStyle.getLineBox().getTopPen().setLineWidth((Float)0.5f);
         }
 
         cellStyle.setMode(ModeEnum.OPAQUE);

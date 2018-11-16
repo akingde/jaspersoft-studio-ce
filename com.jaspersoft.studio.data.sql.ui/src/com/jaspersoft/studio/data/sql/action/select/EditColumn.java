@@ -4,12 +4,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.select;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectColumnDialog;
@@ -20,6 +17,8 @@ import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.model.ANode;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class EditColumn extends AAction {
 

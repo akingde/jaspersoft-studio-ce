@@ -7,10 +7,14 @@ package com.jaspersoft.studio.data.jrdsprovider;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
+
+import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
-import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRDataset;
@@ -19,12 +23,6 @@ import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JasperDesign;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-
-import com.jaspersoft.studio.data.fields.IFieldsProvider;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRDSProviderFieldsProvider implements IFieldsProvider {
 

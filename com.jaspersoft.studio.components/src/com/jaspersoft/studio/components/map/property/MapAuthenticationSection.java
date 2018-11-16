@@ -48,7 +48,7 @@ public class MapAuthenticationSection extends AbstractSection {
 		keyWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_KEY);
 		idWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_CLIENT_ID);
 		signatureWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_SIGNATURE);
-		createWidget4Property(cmpContainer, MapComponent.PROPERTY_VERSION);
+		createWidget4Property(cmpContainer, MapComponent.PROPERTY_GOOGLE_VERSION);
 		useBusinessAPICheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -90,7 +90,7 @@ public class MapAuthenticationSection extends AbstractSection {
 		addProvidedProperties(MapComponent.PROPERTY_KEY, Messages.MapAuthenticationSection_ApiKeyText);
 		addProvidedProperties(MapComponent.PROPERTY_CLIENT_ID, Messages.MapAuthenticationSection_ClientIdText);
 		addProvidedProperties(MapComponent.PROPERTY_SIGNATURE, Messages.MapAuthenticationSection_SignatureText);
-		addProvidedProperties(MapComponent.PROPERTY_VERSION, Messages.MapAuthenticationSection_VersionText);
+		addProvidedProperties(MapComponent.PROPERTY_GOOGLE_VERSION, Messages.MapAuthenticationSection_VersionText);
 	}
 
 }

@@ -176,8 +176,7 @@ public class JobCalendarTrigger  extends com.jaspersoft.ireport.jasperserver.ws.
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof JobCalendarTrigger)) return false;
-        JobCalendarTrigger other = (JobCalendarTrigger) obj;
-        if (obj == null) return false;
+        JobCalendarTrigger other = (JobCalendarTrigger) obj; 
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);

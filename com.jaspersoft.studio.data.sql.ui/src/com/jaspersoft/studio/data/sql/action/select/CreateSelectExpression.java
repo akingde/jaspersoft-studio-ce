@@ -4,8 +4,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.select;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 

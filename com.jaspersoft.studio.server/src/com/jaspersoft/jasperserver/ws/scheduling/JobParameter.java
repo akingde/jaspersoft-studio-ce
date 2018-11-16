@@ -83,8 +83,7 @@ public class JobParameter  implements java.io.Serializable {
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof JobParameter)) return false;
-        JobParameter other = (JobParameter) obj;
-        if (obj == null) return false;
+        JobParameter other = (JobParameter) obj; 
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);

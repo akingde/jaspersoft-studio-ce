@@ -27,7 +27,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataFileStream;
 import net.sf.jasperreports.data.DataFileUtils;
-import net.sf.jasperreports.data.xml.RemoteXmlDataAdapterImpl;
+import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
@@ -41,10 +41,10 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
-	public RemoteXmlDataAdapterImpl getDataAdapter() {
+	public XmlDataAdapterImpl getDataAdapter() {
 		if (dataAdapter == null)
-			dataAdapter = new RemoteXmlDataAdapterImpl();
-		return (RemoteXmlDataAdapterImpl) dataAdapter;
+			dataAdapter = new XmlDataAdapterImpl();
+		return (XmlDataAdapterImpl) dataAdapter;
 	}
 
 	@Override

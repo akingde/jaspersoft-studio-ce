@@ -20,8 +20,6 @@ import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionPNot;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
 import com.jaspersoft.studio.model.ANode;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 public class EditExpression extends AAction {
 	private SQLQueryDesigner designer;
 

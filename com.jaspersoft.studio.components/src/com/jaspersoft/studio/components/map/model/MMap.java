@@ -332,9 +332,9 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			return getJasperDesign().getProperty(MapComponent.PROPERTY_CLIENT_ID);
 		} else if (id.equals(MapComponent.PROPERTY_SIGNATURE)) {
 			return getJasperDesign().getProperty(MapComponent.PROPERTY_SIGNATURE);
-		} else if (id.equals(MapComponent.PROPERTY_VERSION)) {
+		} else if (id.equals(MapComponent.PROPERTY_GOOGLE_VERSION)) {
 			// FIXME - This will be soon removed
-			return getJasperDesign().getProperty(MapComponent.PROPERTY_VERSION);
+			return getJasperDesign().getProperty(MapComponent.PROPERTY_GOOGLE_VERSION);
 		} else if (id.equals(MapComponent.PROPERTY_GOOGLE_VERSION)){
 			return getJasperDesign().getProperty(MapComponent.PROPERTY_GOOGLE_VERSION);
 		}
@@ -410,12 +410,12 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			} else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_SIGNATURE);
 			}
-		} else if (id.equals(MapComponent.PROPERTY_VERSION)) {
+		} else if (id.equals(MapComponent.PROPERTY_GOOGLE_VERSION)) {
 			// FIXME - This will be soon removed 
 			if (value instanceof String && !Misc.isNullOrEmptyString(value)) {
-				getJasperDesign().setProperty(MapComponent.PROPERTY_VERSION, (String) value);
+				getJasperDesign().setProperty(MapComponent.PROPERTY_GOOGLE_VERSION, (String) value);
 			} else {
-				getJasperDesign().removeProperty(MapComponent.PROPERTY_VERSION);
+				getJasperDesign().removeProperty(MapComponent.PROPERTY_GOOGLE_VERSION);
 			}
 		} else if (id.equals(MapComponent.PROPERTY_GOOGLE_VERSION)) {
 			if (value instanceof String && !Misc.isNullOrEmptyString(value)) {
