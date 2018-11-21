@@ -15,7 +15,10 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.repo.RepositoryContext;
 import net.sf.jasperreports.repo.RepositoryUtil;
+import net.sf.jasperreports.repo.SimpleRepositoryContext;
+import net.sf.jasperreports.repo.SimpleRepositoryResourceContext;
 
 /**
  * Default resolver to load a {@link WidgetsDescriptor} from a JSON file
@@ -45,7 +48,15 @@ public class StandardJSONWidgetsDescriptorResolver implements IWidgetsDescriptor
 		InputStream in = null;
 		WidgetsDescriptor result = null;
 		try {
-			in = RepositoryUtil.getInstance(jConfig).getInputStreamFromLocation(URL);
+			IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
+			if (file != null) {
+				String parentPath = file.getParent().getLocation().toFile().getAbsolutePath();
+				SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(parentPath);
+				RepositoryContext repoContext = SimpleRepositoryContext.of(jConfig, context);
+				in = RepositoryUtil.getInstance(repoContext).getInputStreamFromLocation(URL);
+			} else {
+				in = RepositoryUtil.getInstance(jConfig).getInputStreamFromLocation(URL);
+			}
 			mapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
 			result = (WidgetsDescriptor)mapper.readValue(in, classToResolve);
 		} catch (Exception e) {

@@ -47,7 +47,10 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.repo.RepositoryContext;
 import net.sf.jasperreports.repo.RepositoryUtil;
+import net.sf.jasperreports.repo.SimpleRepositoryContext;
+import net.sf.jasperreports.repo.SimpleRepositoryResourceContext;
 
 public class SubreportWizard extends JSSWizard {
 	private NewSubreportPage step0;
@@ -128,16 +131,20 @@ public class SubreportWizard extends JSSWizard {
 								reportFileName = ((File) reportFileName).toURI().toString();
 							else if (reportFileName instanceof String) {
 								String location = (String) reportFileName;
+								IFile file = (IFile) jrConf.get(FileUtils.KEY_FILE);
+								String parentPath = file.getParent().getLocation().toFile().getAbsolutePath();
+								SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(parentPath);
+								RepositoryContext repoContext = SimpleRepositoryContext.of(jrConf, context);
 								InputStream in = null;
 								try {
-									in = RepositoryUtil.getInstance(jrConf).getInputStreamFromLocation(location);
+									in = RepositoryUtil.getInstance(repoContext).getInputStreamFromLocation(location);
 									readJR(jrConf, location, in);
 								} catch (JRException e) {
 									e.printStackTrace();
 									if (location.endsWith(FileExtension.PointJASPER)) {
 										location = StringUtils.replaceAllIns(location, FileExtension.JASPER + "$", FileExtension.JRXML);
 										try {
-											in = RepositoryUtil.getInstance(jrConf).getInputStreamFromLocation(location);
+											in = RepositoryUtil.getInstance(repoContext).getInputStreamFromLocation(location);
 											readJR(jrConf, location, in);
 										} catch (JRException e1) {
 											e.printStackTrace();

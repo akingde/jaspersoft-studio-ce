@@ -53,7 +53,10 @@ import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleGraphics2DExporterOutput;
 import net.sf.jasperreports.export.SimpleGraphics2DReportConfiguration;
 import net.sf.jasperreports.parts.subreport.SubreportPartComponent;
+import net.sf.jasperreports.repo.RepositoryContext;
 import net.sf.jasperreports.repo.RepositoryUtil;
+import net.sf.jasperreports.repo.SimpleRepositoryContext;
+import net.sf.jasperreports.repo.SimpleRepositoryResourceContext;
 
 /**
  * This class helps in creating and caching report thumbnails to be displayed
@@ -136,7 +139,11 @@ public class ReportThumbnailsManager {
 	public static File findFile(String location, JasperReportsConfiguration context) {
 		InputStream in = null;
 		try {
-			in = RepositoryUtil.getInstance(context).getInputStreamFromLocation(location);
+			IFile file = (IFile) context.get(FileUtils.KEY_FILE);
+			String parentPath = file.getParent().getLocation().toFile().getAbsolutePath();
+			SimpleRepositoryResourceContext resContext = SimpleRepositoryResourceContext.of(parentPath);
+			RepositoryContext repoContext = SimpleRepositoryContext.of(context, resContext);
+			in = RepositoryUtil.getInstance(repoContext).getInputStreamFromLocation(location);
 			if (in != null && in instanceof FileInputStream) {
 				Field pathField = FileInputStream.class.getDeclaredField("path");
 				pathField.setAccessible(true);

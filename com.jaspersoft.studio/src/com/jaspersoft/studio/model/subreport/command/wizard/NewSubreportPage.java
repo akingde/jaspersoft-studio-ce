@@ -55,7 +55,10 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.repo.RepositoryContext;
 import net.sf.jasperreports.repo.RepositoryUtil;
+import net.sf.jasperreports.repo.SimpleRepositoryContext;
+import net.sf.jasperreports.repo.SimpleRepositoryResourceContext;
 
 public class NewSubreportPage extends JSSWizardSelectionPage implements IExpressionContextSetter {
 
@@ -230,7 +233,11 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 								t = t.substring(1);
 							if (t.endsWith("\""))
 								t = t.substring(0, t.length() - 1);
-							byte[] fByte = RepositoryUtil.getInstance(jConf).getBytesFromLocation(t);
+							IFile file = (IFile) jConf.get(FileUtils.KEY_FILE);
+							String parentPath = file.getParent().getLocation().toFile().getAbsolutePath();
+							SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(parentPath);
+							RepositoryContext repoContext = SimpleRepositoryContext.of(jConf, context);
+							byte[] fByte = RepositoryUtil.getInstance(repoContext).getBytesFromLocation(t);
 							if (fByte != null) {
 								if (!JrxmlContentDescriber.isStandardJRXML(new ByteArrayInputStream(fByte))) {
 									MessageDialog.openError(getShell(), Messages.NewSubreportPage_FileSelectionErrorTitle,
