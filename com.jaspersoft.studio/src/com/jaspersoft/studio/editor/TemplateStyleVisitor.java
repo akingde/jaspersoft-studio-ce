@@ -32,7 +32,7 @@ public class TemplateStyleVisitor implements IResourceDeltaVisitor {
 		if (delta.getResource() instanceof IFile) {
 			IFile resource = (IFile)delta.getResource();
 			String extension = resource.getFileExtension();
-			if (extension != null && extension.toLowerCase().equals("jrtx")) {
+			if (editor.getModel() != null && extension != null && extension.toLowerCase().equals("jrtx")) {
 				try {
 					JasperReportsConfiguration jConfig = ((MReportRoot)editor.getModel()).getJasperConfiguration();
 					ResourceChangeEvent resourceChangeEvent = new ResourceChangeEvent(jConfig, resource, RESOURCE_TYPE.TEMPLATE_STYLE);
