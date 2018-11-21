@@ -50,6 +50,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.repo.FileRepositoryService;
 import net.sf.jasperreports.repo.RepositoryService;
 import net.sf.jasperreports.repo.Resource;
+import net.sf.jasperreports.repo.SimpleRepositoryContext;
 
 public class JRSRepositoryService implements RepositoryService {
 	private JSSFileRepositoryService parent;
@@ -299,7 +300,7 @@ public class JRSRepositoryService implements RepositoryService {
 			if (rs == this)
 				continue;
 			try {
-				K r = parent.doGetResource(uri, resourceType, rs);
+				K r = parent.doGetResource(SimpleRepositoryContext.of(jConfig), uri, resourceType, rs);
 				if (r != null)
 					return r;
 			} catch (JRRuntimeException e) {

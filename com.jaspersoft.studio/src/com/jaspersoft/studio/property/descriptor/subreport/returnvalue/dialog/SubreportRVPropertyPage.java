@@ -19,8 +19,12 @@ import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.repo.RepositoryContext;
 import net.sf.jasperreports.repo.RepositoryUtil;
+import net.sf.jasperreports.repo.SimpleRepositoryContext;
+import net.sf.jasperreports.repo.SimpleRepositoryResourceContext;
 
+import org.eclipse.core.resources.IFile;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -127,7 +131,11 @@ public class SubreportRVPropertyPage extends RVPropertyPage {
 		InputStream in = null;
 		JRBaseReport jd = null;
 		try {
-			in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
+			IFile file = (IFile) dto.getjConfig().get(FileUtils.KEY_FILE);
+			String parentPath = file.getParent().getLocation().toFile().getAbsolutePath();
+			SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(parentPath);
+			RepositoryContext repoContext = SimpleRepositoryContext.of(dto.getjConfig(), context);
+			in = RepositoryUtil.getInstance(repoContext).getInputStreamFromLocation(path);
 			if (in != null) {
 				Object obj = JRLoader.loadObject(in);
 				if (obj instanceof JasperReport)
@@ -146,7 +154,11 @@ public class SubreportRVPropertyPage extends RVPropertyPage {
 		InputStream in = null;
 		JRBaseReport jd = null;
 		try {
-			in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
+			IFile file = (IFile) dto.getjConfig().get(FileUtils.KEY_FILE);
+			String parentPath = file.getParent().getLocation().toFile().getAbsolutePath();
+			SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(parentPath);
+			RepositoryContext repoContext = SimpleRepositoryContext.of(dto.getjConfig(), context);
+			in = RepositoryUtil.getInstance(repoContext).getInputStreamFromLocation(path);
 			if (in != null) {
 				InputSource is = new InputSource(new InputStreamReader(in, FileUtils.UTF8_ENCODING));
 				jd = new JRXmlLoader(dto.getjConfig(), JRXmlDigesterFactory.createDigester(dto.getjConfig())).loadXML(is);

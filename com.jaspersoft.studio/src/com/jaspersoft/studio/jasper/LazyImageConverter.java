@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -21,6 +22,7 @@ import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.KeyValue;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRElement;
@@ -41,6 +43,9 @@ import net.sf.jasperreports.engine.util.JRExpressionUtil;
 import net.sf.jasperreports.engine.util.JRImageLoader;
 import net.sf.jasperreports.renderers.Renderable;
 import net.sf.jasperreports.renderers.util.RendererUtil;
+import net.sf.jasperreports.repo.RepositoryContext;
+import net.sf.jasperreports.repo.SimpleRepositoryContext;
+import net.sf.jasperreports.repo.SimpleRepositoryResourceContext;
 
 /**
  * Special image converter used to load the images in the editor. This one allow
@@ -471,8 +476,11 @@ public class LazyImageConverter extends ElementConverter {
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					if (location != null) {
-						Renderable r = RendererUtil.getInstance(jrContext).getNonLazyRenderable(location,
-								OnErrorTypeEnum.ERROR);
+						IFile file = (IFile) ((JasperReportsConfiguration)jrContext).get(FileUtils.KEY_FILE);
+						String reportPath = file.getParent().getLocation().toFile().getAbsolutePath();
+						SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(reportPath);
+						RepositoryContext repoContext = SimpleRepositoryContext.of(jrContext, context);
+						Renderable r = RendererUtil.getInstance(repoContext).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
 						info.update(r);
 						refreshElements(key);
 					}
@@ -593,22 +601,26 @@ public class LazyImageConverter extends ElementConverter {
 	 *            the location of the image
 	 * @return a Renderable or null
 	 */
-	protected Renderable getNonLazyRenderable(JasperReportsContext context, String location) {
+	protected Renderable getNonLazyRenderable(JasperReportsContext jrContext, String location) {
 		if (fixedImageCache.containsKey(location)) {
 			return fixedImageCache.get(location);
 		}
-		KeyValue<JasperReportsContext, String> key = getKey(context, location);
+		KeyValue<JasperReportsContext, String> key = getKey(jrContext, location);
 		TimedCache imageInfo = getImageInfo(key);
 		
 		// If the image is expired (it is also expired when is empty), it is refreshed
 		if (imageInfo.isExpired()){
 			try {
-				Renderable r = RendererUtil.getInstance(context).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
+				IFile file = (IFile) ((JasperReportsConfiguration)jrContext).get(FileUtils.KEY_FILE);
+				String reportPath = file.getParent().getLocation().toFile().getAbsolutePath();
+				SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(reportPath);
+				RepositoryContext repoContext = SimpleRepositoryContext.of(jrContext, context);
+				Renderable r = RendererUtil.getInstance(repoContext).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
 				imageInfo.update(r);
 			} catch (JRException e) {
 				try {
 					JaspersoftStudioPlugin.getInstance().logError(e);
-					Renderable errorImage = RendererUtil.getInstance(context).handleImageError(e, OnErrorTypeEnum.ERROR);
+					Renderable errorImage = RendererUtil.getInstance(jrContext).handleImageError(e, OnErrorTypeEnum.ERROR);
 					imageInfo.update(errorImage);
 				} catch (JRException e1) {
 					imageInfo.update(RendererUtil.NO_IMAGE_RENDERER);

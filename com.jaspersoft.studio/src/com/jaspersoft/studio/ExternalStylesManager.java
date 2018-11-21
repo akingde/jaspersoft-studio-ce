@@ -32,7 +32,10 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
+import net.sf.jasperreports.repo.RepositoryContext;
 import net.sf.jasperreports.repo.RepositoryUtil;
+import net.sf.jasperreports.repo.SimpleRepositoryContext;
+import net.sf.jasperreports.repo.SimpleRepositoryResourceContext;
 
 /**
  * Class that caches the external styles to improve the performance when resolving their names
@@ -187,14 +190,17 @@ public class ExternalStylesManager {
 	 */
 	protected static JRTemplate getTemplate(JasperReportsConfiguration jConf, String location, boolean isNestedCall){
 		if (jConf != null && location != null){
-			IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
-			String projectPath = project.getLocation().toPortableString();
-			String key = projectPath + location;
+			IFile file = (IFile) jConf.get(FileUtils.KEY_FILE);
+			String reportPath = file.getLocation().toPortableString();
+			String key = reportPath + location;
 			if (externalStylesCache.containsKey(key)){
 				return externalStylesCache.get(key).getTemplate();
 			} else {
 				try {
-					byte[] data = RepositoryUtil.getInstance(jConf).getBytesFromLocation(location);
+					String parentPath = file.getParent().getLocation().toFile().getAbsolutePath();
+					SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(parentPath);
+					RepositoryContext repoContext = SimpleRepositoryContext.of(jConf, context);
+					byte[] data = RepositoryUtil.getInstance(repoContext).getBytesFromLocation(location);
 					if (data != null){
 						JRTemplate resolvedTemplate = JRXmlTemplateLoader.load(new ByteArrayInputStream(data));
 						if (resolvedTemplate != null){
@@ -236,14 +242,17 @@ public class ExternalStylesManager {
 	 * @return true if the template can be resolved and it is valid, false otherwise
 	 */
 	public static boolean validateTemplate(JasperReportsConfiguration jConfig, String location){
-			IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
-			String projectPath = project.getLocation().toPortableString();
-			String key = projectPath + location;
+			IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
+			String reportPath = file.getLocation().toPortableString();
+			String key = reportPath + location;
 			if (externalStylesCache.containsKey(key)){
 				return externalStylesCache.get(key).getTemplate() != null;
 			} else {
 				try{
-					byte[] data = RepositoryUtil.getInstance(jConfig).getBytesFromLocation(location);
+					String parentPath = file.getParent().getLocation().toFile().getAbsolutePath();
+					SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(parentPath);
+					RepositoryContext repoContext = SimpleRepositoryContext.of(jConfig, context);
+					byte[] data = RepositoryUtil.getInstance(repoContext).getBytesFromLocation(location);
 					if (data != null){
 						JRTemplate template = JRXmlTemplateLoader.load(new ByteArrayInputStream(data));
 						if (template != null){

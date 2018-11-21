@@ -9,7 +9,10 @@ import java.io.InputStream;
 import java.net.URI;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.repo.RepositoryContext;
 import net.sf.jasperreports.repo.RepositoryUtil;
+import net.sf.jasperreports.repo.SimpleRepositoryContext;
+import net.sf.jasperreports.repo.SimpleRepositoryResourceContext;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
@@ -123,7 +126,10 @@ public class DataAdapterLocationResolver {
 		InputStream stream = null;
 		if (location != null && !location.isEmpty()){
 			try{
-				stream = RepositoryUtil.getInstance(jConfig).getInputStreamFromLocation(location);
+				String parentPath = report.getParent().getLocation().toFile().getAbsolutePath();
+				SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(parentPath);
+				RepositoryContext repoContext = SimpleRepositoryContext.of(jConfig, context);
+				stream = RepositoryUtil.getInstance(repoContext).getInputStreamFromLocation(location);
 			} catch (Exception ex){
 			}
 		}

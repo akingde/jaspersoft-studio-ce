@@ -81,8 +81,11 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
 import net.sf.jasperreports.engine.fill.FillListener;
+import net.sf.jasperreports.engine.fill.JasperReportSource;
+import net.sf.jasperreports.engine.fill.SimpleJasperReportSource;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
 import net.sf.jasperreports.repo.RepositoryUtil;
+import net.sf.jasperreports.repo.SimpleRepositoryResourceContext;
 
 public class ReportController {
 
@@ -426,7 +429,11 @@ public class ReportController {
 
 							// We create the fillHandle to run the report based
 							// on the type of data adapter....
-							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jrContext, jasperReport,
+							String projectPath = file.getProject().getLocation().toFile().getAbsolutePath();
+							String reportPath = file.getParent().getLocation().toFile().getAbsolutePath();
+							SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(reportPath);
+							JasperReportSource jrSource = SimpleJasperReportSource.from(jasperReport, projectPath, context);
+							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jrContext, jrSource,
 									new HashMap<String, Object>(jasperParameters));
 
 							if (fillReport(fh, monitor, pcontainer) == Status.CANCEL_STATUS) {
