@@ -123,9 +123,9 @@ public class DSHighLow extends ADSComponent {
 				MHyperLink hyperLinkElement = null;
 				JRHyperlink hyperlink = dataset.getItemHyperlink();
 				if (hyperlink != null){
-					hyperLinkElement = new MHyperLink((JRHyperlink)hyperlink.clone());
+					hyperLinkElement = createHyperlinkModel((JRHyperlink)hyperlink.clone());
 				} else {
-					hyperLinkElement = new MHyperLink(new JRDesignHyperlink());
+					hyperLinkElement = createHyperlinkModel(new JRDesignHyperlink());
 				}
 				
 				//The highlow chart has the hyperlink on the dataset and not on the series, so it 

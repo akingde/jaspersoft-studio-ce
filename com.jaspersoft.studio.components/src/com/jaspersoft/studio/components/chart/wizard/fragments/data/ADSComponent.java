@@ -31,6 +31,7 @@ import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
+import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
@@ -39,6 +40,7 @@ import net.sf.jasperreports.charts.design.JRDesignXyDataset;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRChartDataset;
+import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
@@ -87,6 +89,27 @@ public abstract class ADSComponent implements IExpressionContextSetter {
 
 	public Control getControl() {
 		return control;
+	}
+	
+	/**
+	 * Create and hyperlink node with the capability to provide the correct 
+	 * context when requested using the adapter
+	 * 
+	 * @param hyperLinkValue a not null {@link JRHyperlink}
+	 * @return a not null {@link MHyperLink}
+	 */
+	protected MHyperLink createHyperlinkModel(JRHyperlink hyperLinkValue) {
+		return new MHyperLink(hyperLinkValue) {
+			private static final long serialVersionUID = 95174812206428579L;
+
+			@SuppressWarnings("rawtypes")
+			@Override
+			public Object getAdapter(Class adapter) {
+				if (adapter.equals(ExpressionContext.class)) {
+					return expContext;
+				} else return super.getAdapter(adapter);
+			}
+		};
 	}
 
 	public void createControl(Composite parent) {

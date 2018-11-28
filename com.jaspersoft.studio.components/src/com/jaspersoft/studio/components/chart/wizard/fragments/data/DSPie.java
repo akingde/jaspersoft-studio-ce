@@ -198,9 +198,9 @@ public class DSPie extends ADSComponent {
 					MHyperLink hyperLinkElement = null;
 					JRHyperlink hyperlink = serie.getSectionHyperlink();
 					if (hyperlink != null){
-						hyperLinkElement = new MHyperLink((JRHyperlink)hyperlink.clone());
+						hyperLinkElement = createHyperlinkModel((JRHyperlink)hyperlink.clone());
 					} else {
-						hyperLinkElement = new MHyperLink(new JRDesignHyperlink());
+						hyperLinkElement = createHyperlinkModel(new JRDesignHyperlink());
 					}
 					HyperlinkPage dlg = new HyperlinkPage(hyperlinkBtn.getShell(), hyperLinkElement, seriesCombo.getText(), serie.getSectionHyperlink() != null);
 					int operationResult = dlg.open();
