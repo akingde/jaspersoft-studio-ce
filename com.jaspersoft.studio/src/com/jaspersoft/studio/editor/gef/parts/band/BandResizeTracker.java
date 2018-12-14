@@ -23,6 +23,7 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ViewportAutoexposeHelper;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.SelectionRequest;
@@ -324,35 +325,57 @@ public class BandResizeTracker extends SimpleDragTracker {
 	
   /**
    * Update the request and freeze the drag when it has reached it maximum dimension
-   * @return true if the drag can continue, false otherwise
+   * @return return always true because when the drag is bigger than the available space the request
+   * is changed to fit the available space.
    */
 	protected boolean conditionallyUpdateSourceRequest() {
 		Dimension d = getDragMoveDelta();
+		
 		ChangeBoundsRequest request = (ChangeBoundsRequest) getSourceRequest();
 		BandEditPart part = (BandEditPart) getOperationSet().get(0);
 		IFigure figure = part.getFigure();
-		int newValue = figure.getBounds().height + request.getSizeDelta().height;
+		int oldHeight = 0;
+		if (part.getModel() != null) {
+			oldHeight = part.getModel().getBounds().height();
+		} else {
+			//this should never happen but just in case fallback
+			oldHeight = figure.getBounds().height - 1;
+		}
+		//using the zoom to transform from relative to absolute
+		ZoomManager zoomMgr = (ZoomManager) part.getViewer().getProperty(ZoomManager.class.toString());
+		int deltaHeight = (int)Math.round(d.height / zoomMgr.getZoom());
+		int newHeight = oldHeight + deltaHeight;
 		int maxBandHeight = ModelUtils.getMaxBandHeight(part.getBand(),part.getJasperDesign());
-		boolean inBoundContidion = newValue > 0 && newValue <= maxBandHeight;
-		if (d.height<0 || inBoundContidion){
-			int differences = (d.height + figure.getBounds().height) - maxBandHeight;
+		boolean inBoundContidion = newHeight > 0 && newHeight <= maxBandHeight;
+		if (deltaHeight<0 || inBoundContidion){
+			//the drag is valid with the current space
+			int differences = newHeight - maxBandHeight;
 			//Correct the end point of the dragging
 			if (differences > 0) {
-				d.height-=differences;
+				deltaHeight-=differences;
 			}
-			request.setSizeDelta(new Dimension(0, d.height));
+			request.setSizeDelta(new Dimension(0, (int)(deltaHeight * zoomMgr.getZoom())));
 			request.setEditParts(getOperationSet());
 			request.setResizeDirection(PositionConstants.SOUTH);
+			request.setLocation(getLocation());
+			snapPoint(request);
+			request.setLocation(getLocation());
+		} else if (oldHeight < maxBandHeight) {
+			//the drag is bigger than the maximum space but there is still some space to grow
+			request.setSizeDelta(new Dimension(0, (int)Math.ceil(((maxBandHeight-oldHeight)*zoomMgr.getZoom()))));
+			request.setEditParts(getOperationSet());
+			request.setResizeDirection(PositionConstants.NORTH);
 			snapPoint(request);
 			request.setLocation(getLocation());
 		} else {
+			//now space to drag
 			request.setSizeDelta(new Dimension(0, 0));
 			request.setEditParts(getOperationSet());
 			request.setResizeDirection(PositionConstants.NORTH);
 			snapPoint(request);
 			request.setLocation(getLocation());
 		}
-		return inBoundContidion;
+		return true;
 	}
 	
 
