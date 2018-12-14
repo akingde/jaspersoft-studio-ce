@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -42,7 +43,9 @@ public class ExpressionWidget {
 		expButton.setEnabled(enabled);
 		expText.setEnabled(enabled);
 		if (enabled)
-			expLabel.setForeground(expLabel.getDisplay().getSystemColor(SWT.COLOR_TITLE_FOREGROUND));
+			//expLabel.setForeground(expLabel.getDisplay().getSystemColor(SWT.COLOR_TITLE_FOREGROUND));
+			//changed in a static color because on ubuntu this system color is always white
+			expLabel.setForeground(ColorConstants.black);
 		else
 			expLabel.setForeground(expLabel.getDisplay().getSystemColor(SWT.COLOR_TITLE_INACTIVE_FOREGROUND));
 	}
