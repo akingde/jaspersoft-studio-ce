@@ -171,13 +171,16 @@ public class AExporter {
 			ttroot = ((MServerProfile) root).getTmpDir(monitor);
 		else
 			ttroot = FileUtils.getInProjectFolder(FileUtils.createTempDir().toURI(), monitor);
-		IResource r = ttroot.findMember(rd.getParentFolder());
+		String pfolder = rd.getParentFolder();
+		if (pfolder.endsWith("_files"))
+			pfolder = pfolder.substring(0, pfolder.lastIndexOf("_files"));
+		IResource r = ttroot.findMember(pfolder);
 		if (r != null && r instanceof IFile) {
 			r.delete(true, monitor);
 			r = null;
 		}
 		if (r == null || !r.exists())
-			r = ttroot.getFolder(rd.getParentFolder());
+			r = ttroot.getFolder(pfolder);
 		IFolder troot = (IFolder) r;
 		String newpath = getNewFileName(rd, dextention);
 		r = troot.findMember(newpath);

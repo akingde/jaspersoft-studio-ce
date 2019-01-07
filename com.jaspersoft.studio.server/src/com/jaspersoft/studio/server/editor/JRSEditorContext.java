@@ -4,6 +4,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor;
 
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,19 +14,26 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.JavaCore;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.editor.context.AEditorContext;
+import com.jaspersoft.studio.editor.context.JSSClasspathListener;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
+import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
+import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.repo.RepositoryService;
 
 public class JRSEditorContext extends AEditorContext {
@@ -86,8 +94,63 @@ public class JRSEditorContext extends AEditorContext {
 
 	@Override
 	public void initClassloader() {
-		// here, he should look into report unit, then into JRS (project) classpath
-		super.initClassloader();
+		if (javaclassloader != null && classpathlistener != null) {
+			javaclassloader.removeClasspathListener(classpathlistener);
+			jConf.remove(JavaProjectClassLoader.JAVA_PROJECT_CLASS_LOADER_KEY);
+		}
+		if (cLoader != null) {
+			cLoader.dispose();
+			cLoader = null;
+		}
+		try {
+			ClassLoader cl = Thread.currentThread().getContextClassLoader();
+			if (f != null) {
+				cl = createJrsClassLoader(cl);
+
+				IProject project = f.getProject();
+				if (project != null && project.getNature(JavaCore.NATURE_ID) != null) {
+					javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), cl);
+					jConf.put(JavaProjectClassLoader.JAVA_PROJECT_CLASS_LOADER_KEY, javaclassloader);
+					classpathlistener = new JSSClasspathListener(this, jConf);
+					javaclassloader.addClasspathListener(classpathlistener);
+					cl = javaclassloader;
+				}
+			}
+			cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
+			cl = new CompositeClassloader(cl, this.getClass().getClassLoader()) {
+				@Override
+				protected URL findResource(String name) {
+					if (name.endsWith("GroovyEvaluator.groovy")) //$NON-NLS-1$
+						return null;
+					return super.findResource(name);
+				}
+
+				@Override
+				protected Class<?> findClass(String className) throws ClassNotFoundException {
+					if (className.endsWith("GroovyEvaluator")) //$NON-NLS-1$
+						throw new ClassNotFoundException(className);
+					return super.findClass(className);
+				}
+			};
+			setClassLoader(cl);
+		} catch (
+
+		CoreException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private JrsClassLoader cLoader;
+
+	private ClassLoader createJrsClassLoader(ClassLoader cl) {
+		cLoader = new JrsClassLoader(cl, f.getParent());
+		return cLoader;
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		cLoader.dispose();
 	}
 
 	@Override
