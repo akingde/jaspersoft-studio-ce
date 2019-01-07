@@ -3,8 +3,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.fields;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,22 +73,16 @@ public class FieldsTable extends AbstractModifyTable {
 		this.background = background;
 		createControl(parent);
 		if (dataset.getQuery() != null)
-			((JRDesignQuery) dataset.getQuery()).getEventSupport()
-					.addPropertyChangeListener(JRDesignQuery.PROPERTY_LANGUAGE, new PropertyChangeListener() {
+			((JRDesignQuery) dataset.getQuery()).getEventSupport().addPropertyChangeListener(
+					JRDesignQuery.PROPERTY_LANGUAGE, evt -> refreshFields((String) evt.getNewValue()));
 
-						@Override
-						public void propertyChange(PropertyChangeEvent evt) {
-
-							refreshFields((String) evt.getNewValue());
-						}
-					});
 	}
 
 	public Composite getControl() {
 		return composite;
 	}
 
-	private List<TableViewerColumn> columns = new ArrayList<TableViewerColumn>();
+	private List<TableViewerColumn> columns = new ArrayList<>();
 
 	private void createControl(Composite parent) {
 		composite = new Composite(parent, SWT.NONE);
@@ -118,6 +110,7 @@ public class FieldsTable extends AbstractModifyTable {
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 		new NewButton() {
+			@Override
 			protected void afterElementAdded(Object selement) {
 				try {
 					dataset.addField((JRField) selement);
@@ -125,7 +118,7 @@ public class FieldsTable extends AbstractModifyTable {
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
-			};
+			}
 		}.createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
@@ -155,7 +148,7 @@ public class FieldsTable extends AbstractModifyTable {
 			}
 		});
 
-		EditButton<JRDesignField> eb = new EditButton<JRDesignField>();
+		EditButton<JRDesignField> eb = new EditButton<>();
 		eb.createEditButtons(bGroup, tviewer, new IEditElement<JRDesignField>() {
 
 			@Override
@@ -164,7 +157,7 @@ public class FieldsTable extends AbstractModifyTable {
 				JasperReportsConfiguration jConf = mdataset.getJasperConfiguration();
 				jConf.put(HintsPropertiesList.COM_JASPERSOFT_STUDIO_DATASET_LANGUAGE,
 						dataset.getQuery() != null ? dataset.getQuery().getLanguage() : null);
-				PropertiesDialog<JRDesignField> d = new PropertiesDialog<JRDesignField>(tviewer.getTable().getShell(),
+				PropertiesDialog<JRDesignField> d = new PropertiesDialog<>(tviewer.getTable().getShell(),
 						(JRDesignField) oldF.clone(), tcolumns, MField.getIconDescriptor().getDescription(), jConf);
 				if (d.open() == Dialog.OK) {
 					dataset.removeField(oldF);
@@ -181,19 +174,20 @@ public class FieldsTable extends AbstractModifyTable {
 		eb.editOnDoubleClick();
 
 		new DeleteButton() {
+			@Override
 			protected void afterElementDeleted(Object element) {
 				if (element != null) {
 					dataset.removeField(((JRDesignField) element).getName());
 					fireModifyListeners();
 				}
-			};
+			}
 		}.createDeleteButton(bGroup, tviewer);
 
 		new ListOrderButtons().createOrderButtons(bGroup, tviewer);
 
 		List<JRField> fields = dataset.getFieldsList();
 		if (fields == null)
-			fields = new ArrayList<JRField>();
+			fields = new ArrayList<>();
 		setFields(fields);
 	}
 
@@ -266,15 +260,15 @@ public class FieldsTable extends AbstractModifyTable {
 	}
 
 	public <T extends JRField> void setFields(List<T> fields) {
-		fields = new ArrayList<T>(fields);
-		Map<String, JRField> oldFieldsMap = new HashMap<String, JRField>();
+		fields = new ArrayList<>(fields);
+		Map<String, JRField> oldFieldsMap = new HashMap<>();
 		for (JRField f : dataset.getFields())
 			oldFieldsMap.put(f.getName(), f);
 
 		for (JRField f : dataset.getFields())
 			dataset.removeField(f);
 
-		List<JRField> newfields = new ArrayList<JRField>();
+		List<JRField> newfields = new ArrayList<>();
 		for (JRField f : fields)
 			try {
 				JRField oldField = oldFieldsMap.get(f.getName());
@@ -304,7 +298,7 @@ public class FieldsTable extends AbstractModifyTable {
 		return (List<JRDesignField>) tviewer.getInput();
 	}
 
-	private List<TColumn> tcolumns = new ArrayList<TColumn>();
+	private List<TColumn> tcolumns = new ArrayList<>();
 
 	private void refreshFields(String newLang) {
 		// ok depending on language we should show different fields
