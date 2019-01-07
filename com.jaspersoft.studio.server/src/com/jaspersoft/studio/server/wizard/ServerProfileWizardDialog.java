@@ -22,7 +22,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 
 public class ServerProfileWizardDialog extends WizardDialog {
 
-	List<SelectionListener> listeners = new ArrayList<SelectionListener>();
+	List<SelectionListener> listeners = new ArrayList<>();
 	Button testButton = null;
 
 	public ServerProfileWizardDialog(Shell parentShell, IWizard newWizard) {
@@ -58,10 +58,10 @@ public class ServerProfileWizardDialog extends WizardDialog {
 		setButtonLayoutData(testButton);
 		testButton.setEnabled(true);
 		testButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				fireTestPressed(event);
 			}
-
 		});
 		super.createButtonsForButtonBar(parent);
 	}

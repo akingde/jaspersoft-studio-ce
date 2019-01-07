@@ -83,7 +83,8 @@ public class JrsClassLoader extends ClassLoader {
 
 		private boolean toRefresh(IResource r) {
 			return r instanceof IProject || (r instanceof IFolder && isFolderOrParent(r))
-					|| (r instanceof IFile && (r.getName().endsWith(".jar") || r.getName().endsWith(".zip")));
+					|| (r instanceof IFile && (r.getName().endsWith(".jar") || r.getName().endsWith(".zip")
+							|| r.getName().endsWith(".properties")));
 		}
 
 		private boolean isFolderOrParent(IResource r) {
@@ -120,8 +121,8 @@ public class JrsClassLoader extends ClassLoader {
 				@Override
 				public boolean visit(IResource resource) throws CoreException {
 					if (resource instanceof IFile && resource.getFileExtension() != null
-							&& (resource.getFileExtension().equals("jar")
-									|| resource.getFileExtension().equals("zip"))) {
+							&& (resource.getFileExtension().equals("jar") || resource.getFileExtension().equals("zip")
+									|| resource.getFileExtension().equals("properties"))) {
 						try {
 							urls.add(resource.getLocationURI().toURL());
 						} catch (MalformedURLException e) {

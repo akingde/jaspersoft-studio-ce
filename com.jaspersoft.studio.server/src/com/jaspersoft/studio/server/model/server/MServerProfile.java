@@ -21,12 +21,14 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.studio.editor.context.EditorContextUtil;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.editor.JRSEditorContext;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -190,15 +192,8 @@ public class MServerProfile extends ANode {
 					} catch (Exception e) {
 						// UIUtils.showError(e);
 					} finally {
-						if (c != null) {
-							UIUtils.getDisplay().asyncExec(new Runnable() {
-
-								@Override
-								public void run() {
-									c.completed(wsClient);
-								}
-							});
-						}
+						if (c != null)
+							UIUtils.getDisplay().asyncExec(() -> c.completed(wsClient));
 					}
 					return Status.OK_STATUS;
 				}
@@ -303,8 +298,10 @@ public class MServerProfile extends ANode {
 				ServerManager.saveServerProfile(this);
 			}
 			if (!tmpDir.getFullPath().toFile().exists()) {
-				if (!tmpDir.exists())
+				if (!tmpDir.exists()) {
 					tmpDir.create(true, true, monitor);
+					tmpDir.setPersistentProperty(EditorContextUtil.EC_KEY, JRSEditorContext.NAME);
+				}
 				ServerManager.saveServerProfile(this);
 			}
 		}
