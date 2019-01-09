@@ -12,11 +12,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.ui.part.EditorPart;
 
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.IEditorContributor;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.preferences.JRSPreferencesPage;
@@ -198,6 +200,11 @@ public class JRSEditorContributor implements IEditorContributor {
 	}
 
 	@Override
+	public Action[] getEditorActions(AbstractVisualEditor editor) {
+		return null;
+	}
+	
+	@Override
 	public String getTitleToolTip(JasperReportsContext jrConfig, String toolTip) {
 		String s = toolTip;
 		JasperDesign jd = ((JasperReportsConfiguration) jrConfig).getJasperDesign();
@@ -213,6 +220,12 @@ public class JRSEditorContributor implements IEditorContributor {
 				s += "\nResource name: " + p;
 		}
 		return s;
+	}
+
+	@Override
+	public String[] getEditorActionsIDs() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

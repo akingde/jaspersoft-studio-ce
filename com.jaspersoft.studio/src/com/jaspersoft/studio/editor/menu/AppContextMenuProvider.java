@@ -39,7 +39,6 @@ import com.jaspersoft.studio.editor.action.OpenEditorAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.UnBindElementsAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
-import com.jaspersoft.studio.editor.action.band.ImportContentAction;
 import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
 import com.jaspersoft.studio.editor.action.band.StretchToContentAction;
 import com.jaspersoft.studio.editor.action.copy.CopyFormatAction;
@@ -693,10 +692,6 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action.isEnabled())
 			menu.add(action);
 
-		action = getActionRegistry().getAction(ImportContentAction.ID);
-		if (action.isEnabled())
-			menu.add(action);
-		
 		action = getActionRegistry().getAction(MaximizeContainerAction.ID);
 		if (action.isEnabled())
 			menu.add(action);
@@ -752,6 +747,20 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(ContextualDatasetAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
+		
+		// Contributed actions
+		boolean wasFirstActionAdded = false;
+		List<String> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getEditorActionsIDs();
+		for(String actionId : contributedActions) {
+			action = getActionRegistry().getAction(actionId);
+			if (action != null && action.isEnabled()) {
+				if (!wasFirstActionAdded) {
+					menu.add(new Separator());
+					wasFirstActionAdded = true;
+				}
+				menu.add(action);
+			}
+		}
 	}
 
 	private boolean isBackgroundEditable() {

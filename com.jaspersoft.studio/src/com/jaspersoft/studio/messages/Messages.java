@@ -1019,8 +1019,6 @@ public class Messages extends NLS {
 	public static String ImageInput_nullimage;
 	public static String ImageInput_selectimage;
 	public static String ImportCompositeElementAction_actionName;
-	public static String ImportContentAction_actionName;
-	public static String ImportContentAction_actionTooltip;
 	public static String ImportDAPage_1;
 	public static String ImportDAPage_2;
 	public static String ImportDAPage_3;
@@ -1053,12 +1051,6 @@ public class Messages extends NLS {
 	public static String IncreaseHSpaceAction_actionName;
 	public static String IncreaseVSpaceAction_actionDescription;
 	public static String IncreaseVSpaceAction_actionName;
-	public static String InkscapeMessageDialog_cancelOption;
-	public static String InkscapeMessageDialog_dialogMessage;
-	public static String InkscapeMessageDialog_dialogTitle;
-	public static String InkscapeMessageDialog_fileDialogTitle;
-	public static String InkscapeMessageDialog_partentLabel;
-	public static String InkscapeMessageDialog_retryOption;
 	public static String InputControlsPreferencePage_0;
 	public static String InputControlsPreferencePage_2;
 	public static String InputControlsPreferencePage_3;

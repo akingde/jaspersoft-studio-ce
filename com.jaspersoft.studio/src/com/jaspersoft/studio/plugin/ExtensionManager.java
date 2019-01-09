@@ -786,8 +786,34 @@ public class ExtensionManager {
 		List<AContributorAction> list = new ArrayList<AContributorAction>();
 		for (IEditorContributor f : eContributor) {
 			AContributorAction[] actions = f.getActions();
-			for (AContributorAction a : actions)
-				list.add(a);
+			if (actions != null) {
+				for (AContributorAction a : actions)
+					list.add(a);
+			}
+		}
+		return list;
+	}
+	
+	public List<Action> getEditorActions(AbstractVisualEditor editor) {
+		List<Action> list = new ArrayList<Action>();
+		for (IEditorContributor f : eContributor) {
+			Action[] actions = f.getEditorActions(editor);
+			if (actions != null) {
+				for (Action a : actions)
+					list.add(a);
+			}
+		}
+		return list;
+	}
+	
+	public List<String> getEditorActionsIDs() {
+		List<String> list = new ArrayList<String>();
+		for (IEditorContributor f : eContributor) {
+			String[] actionsIds = f.getEditorActionsIDs();
+			if (actionsIds != null) {
+				for (String id : actionsIds)
+					list.add(id);
+			}
 		}
 		return list;
 	}

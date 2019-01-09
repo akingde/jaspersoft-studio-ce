@@ -40,6 +40,7 @@ import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.gef.ui.parts.TreeViewer;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
@@ -89,7 +90,6 @@ import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.UnBindElementsAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.align.Align2Element;
-import com.jaspersoft.studio.editor.action.band.ImportContentAction;
 import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
 import com.jaspersoft.studio.editor.action.band.StretchToContentAction;
 import com.jaspersoft.studio.editor.action.copy.CopyAction;
@@ -1054,10 +1054,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new Size2BorderAction(this, Size2BorderAction.BOTH);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-
-		action = new ImportContentAction(this);
-		registry.registerAction(action);
-		selectionActions.add(action.getId());
 		
 		action = new MaximizeContainerAction(this);
 		registry.registerAction(action);
@@ -1208,6 +1204,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		selectionActions.add(action.getId());
 
 		// End of the background actions
+		
+		// Contributed actions
+		List<Action> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getEditorActions(this);
+		for(Action cAction : contributedActions) {
+			registry.registerAction(cAction);
+			selectionActions.add(cAction.getId());
+		}
+		
 	}
 
 	protected void createEditorActions(ActionRegistry registry) {

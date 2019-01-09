@@ -7,8 +7,10 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.EditorPart;
 
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -31,6 +33,10 @@ public interface IEditorContributor {
 	public void onRun(JasperReportsConfiguration jrConfig, JasperReport jr, Map<String, Object> params);
 
 	public AContributorAction[] getActions();
+	
+	public Action[] getEditorActions(AbstractVisualEditor editor);
+	
+	public String[] getEditorActionsIDs();
 
 	public String getTitleToolTip(JasperReportsContext jrConfig, String toolTip);
 }
