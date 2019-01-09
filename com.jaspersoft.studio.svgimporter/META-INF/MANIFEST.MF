@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
+Bundle-ManifestVersion: 2
+Bundle-Name: Jaspersoft Studio SVG Importer
+Bundle-SymbolicName: com.jaspersoft.studio.svgimporter;singleton:=true
+Bundle-Version: 7.3.0.qualifier
+Bundle-Activator: com.jaspersoft.studio.svimporter.activator.Activator
+Bundle-Localization: plugin
+Bundle-Vendor: TIBCO Software Inc.
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: patch-library.jar,
+ .
+Eclipse-RegisterBuddy: com.jaspersoft.studio
+Eclipse-BuddyPolicy: registered
+Require-Bundle: com.jaspersoft.studio;bundle-version="7.3.0",
+ org.w3c.css.sac;bundle-version="1.3.1"

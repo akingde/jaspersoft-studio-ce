@@ -34,8 +34,20 @@ public interface IEditorContributor {
 
 	public AContributorAction[] getActions();
 	
+	/**
+	 * Return the actions that will be integrated into the report editor contextual menu
+	 * 
+	 * @param editor the current editor (can be used to build the action or to provide different 
+	 * actions for a specific editor, ie report,table...)
+	 * @return an array of action or null
+	 */
 	public Action[] getEditorActions(AbstractVisualEditor editor);
 	
+	/**
+	 * Return the id of all the actions provided by this contributor
+	 * 
+	 * @return an array of actions id or null
+	 */
 	public String[] getEditorActionsIDs();
 
 	public String getTitleToolTip(JasperReportsContext jrConfig, String toolTip);
