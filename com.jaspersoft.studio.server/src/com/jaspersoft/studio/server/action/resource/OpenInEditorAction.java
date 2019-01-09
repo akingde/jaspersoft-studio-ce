@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -36,7 +38,6 @@ import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMResource;
-import com.jaspersoft.studio.server.model.MJar;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.PublishUtil;
@@ -147,14 +148,20 @@ public class OpenInEditorAction extends Action {
 					}
 				}
 				if (res.getParent() instanceof MReportUnit) {
-					for (INode n : res.getParent().getChildren()) {
-						if (n instanceof MJar) {
-							MJar mjar = (MJar) n;
-							fkeyname = ServerManager.getKey(mjar);
-							rd = WSClientHelper.getResource(new NullProgressMonitor(), mjar, mjar.getValue());
-							f = new AExporter(path).exportToIFile(mjar, rd, fkeyname, monitor);
+					MReportUnit runit = (MReportUnit) res.getParent();
+					for (INode n : runit.getChildren()) {
+						if (n == res)
+							continue;
+						if (n instanceof AFileResource) {
+							AFileResource mfile = (AFileResource) n;
+							fkeyname = ServerManager.getKey(mfile);
+							rd = WSClientHelper.getResource(new NullProgressMonitor(), mfile, mfile.getValue());
+							f = new AExporter(path).exportToIFile(mfile, rd, fkeyname, monitor);
 							if (f != null)
-								PublishUtil.savePath(f, mjar);
+								PublishUtil.savePath(f, mfile);
+							if (rd.getReferenceUri() != null
+									|| !rd.getUriString().startsWith(runit.getValue().getUriString()))
+								createLink(f.getLocation(), rd.getName(), file, monitor);
 						}
 					}
 				}
@@ -170,6 +177,12 @@ public class OpenInEditorAction extends Action {
 			}
 			path = null;
 		}
+	}
+
+	private void createLink(IPath path, String name, IFile file, IProgressMonitor monitor) throws CoreException {
+		IProject project = file.getProject();
+		IFile newFile = project.getFile(file.getParent().getProjectRelativePath() + "/" + name);
+		newFile.createLink(path, IResource.REPLACE, monitor);
 	}
 
 	private void openEditor(final IFile f, final AMResource res) {

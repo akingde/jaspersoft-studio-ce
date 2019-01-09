@@ -90,8 +90,8 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 
 	public void setFields(List<JRDesignField> fields) {
 		// remove duplicates
-		List<JRDesignField> toadd = new ArrayList<JRDesignField>();
-		Set<String> names = new HashSet<String>();
+		List<JRDesignField> toadd = new ArrayList<>();
+		Set<String> names = new HashSet<>();
 		for (JRDesignField f : fields) {
 			if (names.contains(f.getName()))
 				continue;

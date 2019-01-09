@@ -292,13 +292,9 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		return toolItemsManager;
 	}
 
-	private static DriversManager driversManager;
-
 	public static DriversManager getDriversManager() {
-		if (driversManager == null) {
-			driversManager = new DriversManager();
-			driversManager.init();
-		}
+		DriversManager driversManager = new DriversManager();
+		driversManager.init();
 		return driversManager;
 	}
 
