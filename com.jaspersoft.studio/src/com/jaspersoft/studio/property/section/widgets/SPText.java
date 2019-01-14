@@ -50,6 +50,24 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 		protected void checkSubclass() {
 		}
 		
+		/**
+		 * Assuring that the width has an hint in case of grid layout, doing this will force the
+		 * sptext to not grow too much depending on the text content 
+		 */
+		@Override
+		public void setLayoutData(Object layoutData) {
+			Object newData = layoutData;
+			if (newData instanceof GridData) {
+				GridData newGridData = (GridData)newData;
+				if (newGridData.widthHint == SWT.DEFAULT) {
+					int w = getCharWidth(this) * 15;
+					if (w > 50) w = 50;
+					newGridData.widthHint = w;
+				}
+			}
+			super.setLayoutData(newData);
+		}
+		
 	}
 	
 	protected CustomText ftext;
