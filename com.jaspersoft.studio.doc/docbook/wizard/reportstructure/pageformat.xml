@@ -46,7 +46,7 @@
 		</figure>
 		<para>
 			By modifying width and height, it is possible to create a report of whatever size you like. The page orientations options, Landscape or Portrait, in reality are not meaningful, 
-			because the page dimension are characterized by width and height independent of the sheet orientation. Howerver, this property can be used bt certain report exporters.The page margin 
+			because the page dimension are characterized by width and height independent of the sheet orientation. Howerver, this property can be used by certain report exporters.The page margin 
 			dimensions are set by means of the four options on the Page Margin tab. 
 		</para> 
 	</section>
