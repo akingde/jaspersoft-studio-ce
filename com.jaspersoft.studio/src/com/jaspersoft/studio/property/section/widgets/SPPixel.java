@@ -750,7 +750,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	}
 
 	private static double parseDouble(String v) {
-		v = v.replaceAll("[^\\d,\\.]++", "");
+		v = v.replaceAll("[^-?\\d,\\.]++", "");
 		if (v.matches(".+\\.\\d+,\\d+$"))
 			return Double.parseDouble(v.replaceAll("\\.", "").replaceAll(",", "."));
 		if (v.matches(".+,\\d+\\.\\d+$"))
