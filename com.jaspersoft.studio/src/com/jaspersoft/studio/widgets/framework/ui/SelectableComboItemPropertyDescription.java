@@ -94,6 +94,10 @@ public class SelectableComboItemPropertyDescription<T> extends ComboItemProperty
 			}
 			if (!found) {
 				combo.setText(v);
+				//if the value is not found but it is null, and it is not mandatory then it is acceptable as value, so mark it as found
+				if (!isMandatory() && v == null) {
+					found = true;
+				}
 			}
 			combo.setError(!found);
 			combo.setToolTipText(getToolTip());
