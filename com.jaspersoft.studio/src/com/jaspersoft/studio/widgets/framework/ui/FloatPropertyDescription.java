@@ -8,6 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.ibm.icu.text.DecimalFormat;
 import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -15,6 +16,8 @@ import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.widget.FallbackNumericText;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 	
@@ -122,5 +125,22 @@ public class FloatPropertyDescription extends NumberPropertyDescription<Float> {
 			v = v.replace(separator, '.');
 		} 
 		return Float.valueOf(v);
+	}
+	
+	@Override
+	public String getToolTip() {
+		String tt = Misc.nvl(getDescription());
+		tt += "\n" + (isMandatory() ? "Mandatory" : "Optional");
+		if (!Misc.isNullOrEmpty(getDefaultValueString()))
+			tt += "\nDefault: " + getDefaultValueString();
+		if (getMin() != null || getMax() != null){
+			DecimalFormat formatter = new DecimalFormat("0.#######");
+			if (getMin() != null && getMin() != Float.MIN_VALUE)
+				tt += "\nmin: " + formatter.format(getMin());
+
+			if (getMax() != null && getMax() != Float.MAX_VALUE)
+				tt += "\nmax: " + formatter.format(getMax());
+		}
+		return tt;
 	}
 }

@@ -141,10 +141,10 @@ public class DoublePropertyDescription extends NumberPropertyDescription<Double>
 		if (getMin() != null || getMax() != null){
 			DecimalFormat formatter = new DecimalFormat("0.#######");
 	 	
-			if (getMin() != null)
+			if (getMin() != null && getMin() != -Double.MAX_VALUE)
 				tt += "\nmin: " + formatter.format(getMin());
 
-			if (getMax() != null)
+			if (getMax() != null && getMax() != Double.MAX_VALUE)
 				tt += "\nmax: " + formatter.format(getMax());
 		}
 		return tt;

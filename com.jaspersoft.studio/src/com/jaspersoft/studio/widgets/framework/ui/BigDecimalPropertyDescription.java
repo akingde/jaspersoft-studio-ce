@@ -5,19 +5,20 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
 import java.math.BigDecimal;
-import java.util.Locale;
 
-import org.apache.commons.validator.routines.BigDecimalValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.ibm.icu.text.DecimalFormat;
 import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.widget.FallbackNumericText;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class BigDecimalPropertyDescription extends NumberPropertyDescription<BigDecimal> {
 	
@@ -88,7 +89,7 @@ public class BigDecimalPropertyDescription extends NumberPropertyDescription<Big
 	
 	@Override
 	protected FallbackNumericText createSimpleEditor(Composite parent) {
-		FallbackNumericText text = new FallbackNumericText(parent, SWT.BORDER, 0, 0);
+		FallbackNumericText text = new FallbackNumericText(parent, SWT.BORDER, 0, 20);
 		text.setRemoveTrailZeroes(true);
 		BigDecimal max = getMax();
 		BigDecimal min = getMin();
@@ -114,11 +115,29 @@ public class BigDecimalPropertyDescription extends NumberPropertyDescription<Big
 	@Override
 	protected BigDecimal convertValue(String v) throws NumberFormatException {
 		if (v == null || v.isEmpty()) return null;
-		BigDecimal parsedBigDecimal = BigDecimalValidator.getInstance().validate(v, Locale.getDefault());
-		if (parsedBigDecimal == null) {
-			throw new NumberFormatException();
-		} else {
+		try {
+			BigDecimal parsedBigDecimal = new BigDecimal(v);
 			return parsedBigDecimal;
+		} catch (Exception ex) {
+			throw new NumberFormatException();
+		} 
+	}
+	
+	@Override
+	public String getToolTip() {
+		String tt = Misc.nvl(getDescription());
+		tt += "\n" + (isMandatory() ? "Mandatory" : "Optional");
+		if (!Misc.isNullOrEmpty(getDefaultValueString()))
+			tt += "\nDefault: " + getDefaultValueString();
+		if (getMin() != null || getMax() != null){
+			DecimalFormat formatter = new DecimalFormat("0.#######");
+	 	
+			if (getMin() != null)
+				tt += "\nmin: " + formatter.format(getMin());
+
+			if (getMax() != null)
+				tt += "\nmax: " + formatter.format(getMax());
 		}
+		return tt;
 	}
 }

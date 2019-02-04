@@ -49,6 +49,7 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 		super();
 		Assert.isTrue(minAcceptedDigits >= 0, "Digits number can't be negative");
 		Assert.isTrue(maxAcceptedDigits >= minAcceptedDigits, "The max accepted digits must be less or equal of the number of digits");
+		setParseBigDecimal(maxAcceptedDigits > 10);
 		String pattern = null;
 		//Create the pattern using the number of digits
 		if (maxAcceptedDigits > 0){
@@ -77,27 +78,27 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 	 */
 	@Override
 	public Number parse(String source) throws ParseException {
-    ParsePosition pp = new ParsePosition(0);
-    //char groupSeparator = getDecimalFormatSymbols().getGroupingSeparator();
-    //remove the grouping separator
-    String valueToParse = source;//source.replace(String.valueOf(groupSeparator), "");
-    //When the value start with a minus handle it like a positive changing the minus with 0 
-    //and changing sign at the end
-    boolean isNegative = false;
-    if (valueToParse.startsWith("-")){
-    	isNegative = true;
-    	valueToParse = "0" + valueToParse.substring(1);
-    }
-    Matcher matcher = patternToMatch.matcher(valueToParse);
-		if (!matcher.matches()) {
-			throw new ParseException(valueToParse, pp.getIndex());
-		}
-    Number result = super.parse(valueToParse, pp);
-    if (pp.getIndex() == valueToParse.length())  {
-    	 return isNegative ? result.doubleValue() * -1 : result;
-     } else {
-    	 throw new ParseException(valueToParse, pp.getIndex());
-     }
+	    ParsePosition pp = new ParsePosition(0);
+	    //char groupSeparator = getDecimalFormatSymbols().getGroupingSeparator();
+	    //remove the grouping separator
+	    String valueToParse = source;//source.replace(String.valueOf(groupSeparator), "");
+	    //When the value start with a minus handle it like a positive changing the minus with 0 
+	    //and changing sign at the end
+	    boolean isNegative = false;
+	    if (valueToParse.startsWith("-")){
+	    	isNegative = true;
+	    	valueToParse = "0" + valueToParse.substring(1);
+	    }
+	    Matcher matcher = patternToMatch.matcher(valueToParse);
+			if (!matcher.matches()) {
+				throw new ParseException(valueToParse, pp.getIndex());
+			}
+	    Number result = super.parse(valueToParse, pp);
+	    if (pp.getIndex() == valueToParse.length())  {
+	    	 return isNegative ? result.doubleValue() * -1 : result;
+	     } else {
+	    	 throw new ParseException(valueToParse, pp.getIndex());
+	     }
 	}
 	
 	/**
