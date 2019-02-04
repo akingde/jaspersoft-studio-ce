@@ -296,7 +296,7 @@ public class WColorPicker extends Composite {
 			if (toolTipText != null){
 				errorTooltip += " \n" + toolTipText;
 			}
-			setToolTipText(errorTooltip);
+			setWidgetsToolTipText(errorTooltip);
 		} else {
 			setToolTipText(toolTipText);
 		}
