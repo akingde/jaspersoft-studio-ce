@@ -4,13 +4,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style.command;
 
-import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
+
+import net.sf.jasperreports.engine.JRConditionalStyle;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 /*/*
  * link nodes & together.
  * 
@@ -22,7 +22,7 @@ public class DeleteConditionalStyleCommand extends Command {
 	private JRDesignStyle jrStyle;
 	
 	/** The jr conditional style. */
-	private JRDesignConditionalStyle jrConditionalStyle;
+	private JRConditionalStyle jrConditionalStyle;
 	
 	/** The element position. */
 	private int elementPosition = 0;
@@ -38,7 +38,13 @@ public class DeleteConditionalStyleCommand extends Command {
 	public DeleteConditionalStyleCommand(MStyle destNode, MConditionalStyle srcNode) {
 		super();
 		this.jrStyle = (JRDesignStyle) destNode.getValue();
-		this.jrConditionalStyle = (JRDesignConditionalStyle) srcNode.getValue();
+		this.jrConditionalStyle = (JRConditionalStyle) srcNode.getValue();
+	}
+	
+	public DeleteConditionalStyleCommand(JRDesignStyle destNode, JRConditionalStyle srcNode) {
+		super();
+		this.jrStyle = destNode;
+		this.jrConditionalStyle = srcNode;
 	}
 
 	/* (non-Javadoc)

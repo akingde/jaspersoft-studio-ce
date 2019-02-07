@@ -11,7 +11,9 @@ import java.util.Map;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.editor.style.ApplyStyleAction;
+import com.jaspersoft.studio.model.style.command.CreateConditionalStyleCommand;
 import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
+import com.jaspersoft.studio.model.style.command.DeleteConditionalStyleCommand;
 import com.jaspersoft.studio.model.style.command.UpdateStyleCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -22,6 +24,7 @@ import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.engine.JRConditionalStyle;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
@@ -57,6 +60,7 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	 */
 	public static final String DETAIL_PROPERTY = "com.jaspersoft.studio.table.style.detail";
 	
+	public static final String ALT_ROW_EXP = "new Boolean($V{REPORT_COUNT}.intValue()%2==0)";
 	
 	/**
 	 * Styles that will be applied to the table
@@ -300,6 +304,20 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 					stylesToApply.set(i, styleToUpdate);
 					if (styleToUpdate != null){
 						commands.add(new UpdateStyleCommand(updatedStyle, styleToUpdate));
+						if (i == 3) {
+							for (JRConditionalStyle oldCondStyle : styleToUpdate.getConditionalStyleList()) {
+								if (oldCondStyle.getConditionExpression() != null && ALT_ROW_EXP.equals(oldCondStyle.getConditionExpression().getText())) {
+									commands.add(new DeleteConditionalStyleCommand(styleToUpdate, oldCondStyle));
+									break;
+								}
+							}
+							if (!updatedStyle.getConditionalStyleList().isEmpty()) {
+								for (JRConditionalStyle newCondStyle : new ArrayList<JRConditionalStyle>(updatedStyle.getConditionalStyleList())) {
+									updatedStyle.removeConditionalStyle(newCondStyle);
+									commands.add(new CreateConditionalStyleCommand(styleToUpdate, newCondStyle));
+								}
+							}
+						}
 					} else {
 						stylesToApply.set(i, null);
 					}
@@ -435,7 +453,7 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
         if (style.hasAlternateColor())
         {
             JRDesignConditionalStyle condStyle = new JRDesignConditionalStyle();
-            condStyle.setConditionExpression(ModelUtils.createExpression("new Boolean($V{REPORT_COUNT}.intValue()%2==0)"));
+            condStyle.setConditionExpression(ModelUtils.createExpression(ALT_ROW_EXP));
             condStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_DETAIL));
             cellStyle.addConditionalStyle(condStyle);
         }

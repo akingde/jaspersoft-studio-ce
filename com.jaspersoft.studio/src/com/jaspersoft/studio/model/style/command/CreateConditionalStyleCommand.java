@@ -4,14 +4,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style.command;
 
-import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.utils.SelectionHelper;
+
+import net.sf.jasperreports.engine.JRConditionalStyle;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 /*
  * link nodes & together.
  * 
@@ -20,7 +20,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 public class CreateConditionalStyleCommand extends Command {
 
 	/** The jr conditional style. */
-	private JRDesignConditionalStyle jrConditionalStyle;
+	private JRConditionalStyle jrConditionalStyle;
 
 	/** The jr style. */
 	private JRDesignStyle jrStyle;
@@ -43,7 +43,7 @@ public class CreateConditionalStyleCommand extends Command {
 		this.index = index;
 		this.jrStyle = (JRDesignStyle) destNode.getValue();
 		if (srcNode != null && srcNode.getValue() != null) {
-			this.jrConditionalStyle = (JRDesignConditionalStyle) srcNode.getValue();
+			this.jrConditionalStyle = (JRConditionalStyle) srcNode.getValue();
 		}
 	}
 	
@@ -55,10 +55,25 @@ public class CreateConditionalStyleCommand extends Command {
 	 *  @param style the JR object of the conditional style. It should be a new object
 	 *  not used from other element of the model
 	 */
-	public CreateConditionalStyleCommand(MStyle destNode, JRDesignConditionalStyle style) {
+	public CreateConditionalStyleCommand(MStyle destNode, JRConditionalStyle style) {
 		super();
 		this.index = -1;
 		this.jrStyle = (JRDesignStyle) destNode.getValue();
+		this.jrConditionalStyle = style;
+	}
+	
+	/**
+	 * Create the command to build the conditional style. The style is always the 
+	 * last children of the parent node
+	 * 
+	 *  @param destNode parent style
+	 *  @param style the JR object of the conditional style. It should be a new object
+	 *  not used from other element of the model
+	 */
+	public CreateConditionalStyleCommand(JRDesignStyle destNode, JRConditionalStyle style) {
+		super();
+		this.index = -1;
+		this.jrStyle = destNode;
 		this.jrConditionalStyle = style;
 	}
 	
