@@ -5,13 +5,14 @@
 package com.jaspersoft.studio.widgets.framework.ui;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.ibm.icu.text.DecimalFormat;
 import com.jaspersoft.studio.swt.widgets.NumericText;
+import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
@@ -127,10 +128,10 @@ public class BigDecimalPropertyDescription extends NumberPropertyDescription<Big
 	public String getToolTip() {
 		String tt = Misc.nvl(getDescription());
 		tt += "\n" + (isMandatory() ? "Mandatory" : "Optional");
+		DecimalFormat formatter = new DecimalFormat("0.#######", ValidatedDecimalFormat.SYMBOLS);
 		if (!Misc.isNullOrEmpty(getDefaultValueString()))
-			tt += "\nDefault: " + getDefaultValueString();
+			tt += "\nDefault: " + formatter.format(getDefaultValue());
 		if (getMin() != null || getMax() != null){
-			DecimalFormat formatter = new DecimalFormat("0.#######");
 	 	
 			if (getMin() != null)
 				tt += "\nmin: " + formatter.format(getMin());

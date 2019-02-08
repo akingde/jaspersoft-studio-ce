@@ -4,11 +4,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.ui;
 
+import java.text.DecimalFormat;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.ibm.icu.text.DecimalFormat;
 import com.jaspersoft.studio.swt.widgets.NumericText;
 import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -136,11 +137,10 @@ public class DoublePropertyDescription extends NumberPropertyDescription<Double>
 	public String getToolTip() {
 		String tt = Misc.nvl(getDescription());
 		tt += "\n" + (isMandatory() ? "Mandatory" : "Optional");
+		DecimalFormat formatter = new DecimalFormat("0.#######", ValidatedDecimalFormat.SYMBOLS);
 		if (!Misc.isNullOrEmpty(getDefaultValueString()))
-			tt += "\nDefault: " + getDefaultValueString();
+			tt += "\nDefault: " + formatter.format(getDefaultValue());
 		if (getMin() != null || getMax() != null){
-			DecimalFormat formatter = new DecimalFormat("0.#######");
-	 	
 			if (getMin() != null && getMin() != -Double.MAX_VALUE)
 				tt += "\nmin: " + formatter.format(getMin());
 

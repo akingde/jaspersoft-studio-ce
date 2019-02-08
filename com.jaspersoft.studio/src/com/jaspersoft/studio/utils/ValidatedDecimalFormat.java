@@ -21,6 +21,13 @@ import org.eclipse.core.runtime.Assert;
  */
 public class ValidatedDecimalFormat extends DecimalFormat{
 	
+	public static final DecimalFormatSymbols SYMBOLS;
+	
+	static {
+		DecimalFormat format= (DecimalFormat)DecimalFormat.getInstance();
+		SYMBOLS=format.getDecimalFormatSymbols();
+	}
+	
 	/**
 	 * Static variable with the decimal separator
 	 */
@@ -105,9 +112,7 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 	 * Return the decimal separator of the current instance
 	 */
 	protected static char getDecimalSeparator(){
-		DecimalFormat format= (DecimalFormat)DecimalFormat.getInstance();
-		DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();
-		return symbols.getDecimalSeparator();
+		return SYMBOLS.getDecimalSeparator();
 	}
 	
 	/**
