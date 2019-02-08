@@ -45,9 +45,7 @@ public class OpenInBrowserAction extends Action {
 	public boolean isEnabled() {
 		TreeSelection treeSelection = (TreeSelection) treeViewer.getSelection();
 		Object firstElement = treeSelection.getFirstElement();
-		if (treeSelection.size() == 1 && (firstElement instanceof AMResource || firstElement instanceof MServerProfile))
-			return true;
-		return false;
+		return treeSelection.size() == 1 && (firstElement instanceof AMResource || firstElement instanceof MServerProfile);
 	}
 
 	@Override
@@ -91,11 +89,9 @@ public class OpenInBrowserAction extends Action {
 					UIUtils.showError(e);
 				}
 			}
-		} catch (MalformedURLException e) {
+		} catch (MalformedURLException | URISyntaxException e) {
 			UIUtils.showError(e);
-		} catch (URISyntaxException e) {
-			UIUtils.showError(e);
-		}
+		} 
 	}
 
 	private void openInBrowser(AMResource mr, String uri) throws UnsupportedEncodingException {
@@ -104,8 +100,7 @@ public class OpenInBrowserAction extends Action {
 			UIUtils.showInformation("This resource url can't be opened directly from here.");
 			return;
 		}
-		uri += jrsUrl;
-		System.out.println(uri);
+		uri += jrsUrl; 
 		BrowserUtils.openExternalBrowser(uri);
 	}
 

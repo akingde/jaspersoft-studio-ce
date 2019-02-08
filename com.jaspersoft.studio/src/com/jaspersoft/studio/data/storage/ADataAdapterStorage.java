@@ -39,7 +39,7 @@ public abstract class ADataAdapterStorage {
 
 	public Collection<DataAdapterDescriptor> getDataAdapterDescriptors(JRDesignDataset dataset) {
 		if (daDescriptors == null) {
-			daDescriptors = new LinkedHashMap<String, DataAdapterDescriptor>();
+			daDescriptors = new LinkedHashMap<>();
 			findAll();
 		}
 		return daDescriptors.values();
@@ -48,7 +48,7 @@ public abstract class ADataAdapterStorage {
 	public Collection<DataAdapterDescriptor> getDataAdapterDescriptors() {
 		return getDataAdapterDescriptors(null);
 	}
-	
+
 	protected String generateDataAdapterName(DataAdapterDescriptor adapter) {
 		String adapterName = adapter.getName();
 		int counter = 1;
@@ -82,7 +82,8 @@ public abstract class ADataAdapterStorage {
 			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
 			return true;
 		}
-		// FIXME: This code is only to recover broken workspace in the future can be removed
+		// FIXME: This code is only to recover broken workspace in the future can be
+		// removed
 		// Maybe it was a duplicated data adapter, search it manually
 		String key = getUrl(da);
 		if (key != null) {
@@ -94,15 +95,15 @@ public abstract class ADataAdapterStorage {
 	}
 
 	public boolean editDataAdapter(String oldName, DataAdapterDescriptor adapter) {
-		if (daDescriptors.containsKey(oldName)) {
-			if (adapter.getName().equals(oldName) || !daDescriptors.containsKey(adapter.getName())) {
-				daDescriptors.remove(oldName);
-				daDescriptors.put(adapter.getName(), adapter);
-				propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
-				return true;
-			}
+		if (daDescriptors.containsKey(oldName)
+				&& (adapter.getName().equals(oldName) || !daDescriptors.containsKey(adapter.getName()))) {
+			daDescriptors.remove(oldName);
+			daDescriptors.put(adapter.getName(), adapter);
+			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
+			return true;
 		}
-		// FIXME: This code is only to recover broken workspace in the future can be removed
+		// FIXME: This code is only to recover broken workspace in the future can be
+		// removed
 		// Maybe it was a duplicated data adapter, search it manually
 		String key = getUrl(adapter);
 		if (key != null) {
@@ -124,7 +125,8 @@ public abstract class ADataAdapterStorage {
 	}
 
 	/**
-	 * Check the validity of the data adapter name. It is valid only if it is not null, not empty and not already existed.
+	 * Check the validity of the data adapter name. It is valid only if it is not
+	 * null, not empty and not already existed.
 	 * 
 	 * @param dataAdapterName
 	 * @return bool
@@ -151,25 +153,25 @@ public abstract class ADataAdapterStorage {
 
 	public String getLabel(DataAdapterDescriptor d) {
 		String label = d.getTitle();
-		DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(d.getDataAdapter().getClass()
-				.getCanonicalName());
+		DataAdapterFactory factory = DataAdapterManager
+				.findFactoryByDataAdapterClass(d.getDataAdapter().getClass().getCanonicalName());
 		if (this instanceof FileDataAdapterStorage)
 			label += " - [" + getUrl(d) + "]";
 		else if (factory != null)
 			label += " - " + factory.getLabel();
 		return label;
 	}
-	
+
 	/**
 	 * Return the map of all the current data adapter with their key
 	 * 
 	 * @return a not null map of data adapters
 	 */
-	public Map<String,DataAdapterDescriptor> getDescriptors(){
-		if (daDescriptors == null){
+	public Map<String, DataAdapterDescriptor> getDescriptors() {
+		if (daDescriptors == null) {
 			getDataAdapterDescriptors();
 		}
-		return new HashMap<String, DataAdapterDescriptor>(daDescriptors);
+		return new HashMap<>(daDescriptors);
 	}
 
 	public abstract void findAll();
