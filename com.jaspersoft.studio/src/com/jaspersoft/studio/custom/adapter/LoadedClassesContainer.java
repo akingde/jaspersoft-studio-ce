@@ -10,6 +10,7 @@ import java.util.List;
 import net.sf.jasperreports.data.AbstractDataAdapter;
 import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterContributorFactory;
 import net.sf.jasperreports.data.DataAdapterServiceFactory;
 
 /**
@@ -54,7 +55,7 @@ public class LoadedClassesContainer {
 			adapterImplementation.add(new Pair(loadedClass.getPackage().getName(), loadedClass.getSimpleName()));
 		}else if (!loadedClass.isInterface() && AbstractDataAdapterService.class.isAssignableFrom(loadedClass)){
 			 service.add(new Pair(loadedClass.getPackage().getName(), loadedClass.getSimpleName()));
-		}else if (!loadedClass.isInterface() && DataAdapterServiceFactory.class.isAssignableFrom(loadedClass)){
+		}else if (!loadedClass.isInterface() && (DataAdapterServiceFactory.class.isAssignableFrom(loadedClass) || DataAdapterContributorFactory.class.isAssignableFrom(loadedClass))){
 			serviceFatory.add(new Pair(loadedClass.getPackage().getName(), loadedClass.getSimpleName()));
 		}
 	}
