@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/jasperserver-dto-develop-20181019.131308-10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasperserver-dto-develop-20190204.115049-11.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey/net.java.html.json-0.7.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/mimepull-1.9.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-media-multipart-2.13.jar"/>
