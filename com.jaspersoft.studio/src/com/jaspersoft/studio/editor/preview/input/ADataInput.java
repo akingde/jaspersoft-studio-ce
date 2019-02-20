@@ -212,7 +212,7 @@ public abstract class ADataInput implements IDataInput {
 		this.pcontainer = pcontainer;
 	}
 
-	private IStatusLineManager getStatusLineManager() {
+	protected IStatusLineManager getStatusLineManager() {
 		IWorkbench wb = PlatformUI.getWorkbench();
 		IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
 

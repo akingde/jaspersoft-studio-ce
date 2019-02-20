@@ -13,6 +13,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.nebula.widgets.cdatetime.CDT;
 import org.eclipse.nebula.widgets.cdatetime.CDateTime;
@@ -87,8 +88,16 @@ public class DateInput extends ADataInput {
 			}
 			date.setToolTipText(tt + "\n" + date.getToolTipText());
 		}
+		setNullable(param, date);
 		date.addFocusListener(focusListener);
 		date.addTraverseListener(keyListener);
+	}
+
+	protected void handleFocusLost() {
+		IStatusLineManager statusLineManager = getStatusLineManager();
+		if (statusLineManager != null)
+			statusLineManager.setMessage(null);
+		// updateInput();
 	}
 
 	private static String[] namesOfDays = new String[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
@@ -358,9 +367,12 @@ public class DateInput extends ADataInput {
 					}
 				}
 				date.setSelection(null);
+				((DRDateTime) date).setText(null);
 			}
 		} else {
 			date.setSelection(null);
+			if (date instanceof DRDateTime)
+				((DRDateTime) date).setText(null);
 		}
 	}
 
