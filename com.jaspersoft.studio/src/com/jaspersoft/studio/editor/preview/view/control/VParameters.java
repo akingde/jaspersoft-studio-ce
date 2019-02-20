@@ -45,7 +45,7 @@ public class VParameters extends AVParameters {
 	protected void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
 		this.params = params;
 		this.prompts = prompts;
-		Map<String, Boolean> dirtyMap = new HashMap<String, Boolean>();
+		Map<String, Boolean> dirtyMap = new HashMap<>();
 		for (String key : incontrols.keySet()) {
 			IDataInput control = incontrols.get(key);
 			dirtyMap.put(key, control.isDirty());
@@ -97,7 +97,7 @@ public class VParameters extends AVParameters {
 				try {
 					Thread.currentThread().setContextClassLoader(jContext.getClassLoader());
 					JRDesignDataset mDataset = (JRDesignDataset) jContext.getJasperDesign().getMainDataset();
-					Set<String> keys = new HashSet<String>();
+					Set<String> keys = new HashSet<>();
 					for (String pname : new HashSet<String>(incontrols.keySet())) {
 						if (monitor.isCanceled())
 							return Status.CANCEL_STATUS;
@@ -136,7 +136,7 @@ public class VParameters extends AVParameters {
 				try {
 					Thread.currentThread().setContextClassLoader(jContext.getClassLoader());
 					JRDesignDataset mDataset = (JRDesignDataset) jContext.getJasperDesign().getMainDataset();
-					Set<String> keys = new HashSet<String>();
+					Set<String> keys = new HashSet<>();
 					for (String pname : new HashSet<String>(incontrols.keySet())) {
 						if (monitor.isCanceled())
 							return Status.CANCEL_STATUS;

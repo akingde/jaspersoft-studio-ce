@@ -35,9 +35,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -88,7 +86,6 @@ public class VErrorPreview extends APreview {
 	}
 
 	private Label compilationTime;
-	// private Label compilSubTime;
 	private Label fillingTime;
 	private Label exportTime;
 	private Label execTime;
@@ -103,7 +100,6 @@ public class VErrorPreview extends APreview {
 	private Composite statComposite;
 	private TableViewer errorViewer;
 	private ArrayList<String> errorList;
-	private ToolBarManager tbManager;
 	private Action errAction;
 	private Action statAction;
 	private Action msgAction;
@@ -120,7 +116,7 @@ public class VErrorPreview extends APreview {
 		ToolBar topToolBar = new ToolBar(container, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 		topToolBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		tbManager = new ToolBarManager(topToolBar);
+		ToolBarManager tbManager = new ToolBarManager(topToolBar);
 		msgAction = new Action(Messages.VErrorPreview_0) {
 			@Override
 			public void run() {
@@ -197,30 +193,28 @@ public class VErrorPreview extends APreview {
 		wtable.setLayoutData(new GridData(GridData.FILL_BOTH));
 		wtable.setHeaderVisible(false);
 		wtable.setLinesVisible(true);
-		wtable.addListener(SWT.MouseDoubleClick, new Listener() {
-
-			public void handleEvent(Event event) {
-				int sindex = wtable.getSelectionIndex();
-				if (sindex < 0 || sindex > errors.size())
-					return;
-				Object aux = auxil.get(sindex);
-				if (aux != null && aux instanceof JRExpression) {
-					JasperDesign jd = jContext.getJasperDesign();
-					JRExpressionCollector rc = JRExpressionCollector.collector(jContext, jd);
-					if (!openExpressionEditor(jContext, rc, (JRDesignDataset) jd.getMainDataset(), (JRDesignExpression) aux))
-						for (JRDataset d : jd.getDatasetsList())
-							if (openExpressionEditor(jContext, rc, (JRDesignDataset) d, (JRDesignExpression) aux))
-								break;
-				} else {
-					Object e = errors.get(sindex);
-					if (e instanceof Throwable)
-						UIUtils.showError((Throwable) e);
-				}
+		wtable.addListener(SWT.MouseDoubleClick, event -> {
+			int sindex = wtable.getSelectionIndex();
+			if (sindex < 0 || sindex > errors.size())
+				return;
+			Object aux = auxil.get(sindex);
+			if (aux instanceof JRExpression) {
+				JasperDesign jd = jContext.getJasperDesign();
+				JRExpressionCollector rc = JRExpressionCollector.collector(jContext, jd);
+				if (!openExpressionEditor(jContext, rc, (JRDesignDataset) jd.getMainDataset(),
+						(JRDesignExpression) aux))
+					for (JRDataset d : jd.getDatasetsList())
+						if (openExpressionEditor(jContext, rc, (JRDesignDataset) d, (JRDesignExpression) aux))
+							break;
+			} else {
+				Object e = errors.get(sindex);
+				if (e instanceof Throwable)
+					UIUtils.showError((Throwable) e);
 			}
 		});
 
 		wtable.addSelectionListener(new SelectionAdapter() {
-
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int sindex = wtable.getSelectionIndex();
 				if (sindex < 0 || sindex > errors.size())
@@ -266,9 +260,11 @@ public class VErrorPreview extends APreview {
 		itemTbl.setControl(wtable);
 
 		/**
-		 * When the container is resized also the table column is resized to its maximum width
+		 * When the container is resized also the table column is resized to its maximum
+		 * width
 		 */
 		tabFolder.addControlListener(new ControlAdapter() {
+			@Override
 			public void controlResized(ControlEvent e) {
 				refreshTableCellWidth();
 			}
@@ -308,8 +304,8 @@ public class VErrorPreview extends APreview {
 		}
 	}
 
-	public static boolean openExpressionEditor(JasperReportsConfiguration jContext, JRExpressionCollector reportCollector,
-			JRDesignDataset dataset, JRDesignExpression exp) {
+	public static boolean openExpressionEditor(JasperReportsConfiguration jContext,
+			JRExpressionCollector reportCollector, JRDesignDataset dataset, JRDesignExpression exp) {
 		SelectionHelper.getActiveJRXMLEditor();
 
 		JRExpressionCollector datasetCollector = reportCollector.getCollector(dataset);
@@ -325,14 +321,14 @@ public class VErrorPreview extends APreview {
 					if (dialog.open() == Dialog.OK) {
 						JRExpression e = wizard.getValue();
 						IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
-						if (activeJRXMLEditor != null && activeJRXMLEditor instanceof AbstractJRXMLEditor) {
+						if (activeJRXMLEditor instanceof AbstractJRXMLEditor) {
 							AbstractJRXMLEditor editor = (AbstractJRXMLEditor) activeJRXMLEditor;
 							CommandStack cs = (CommandStack) editor.getAdapter(CommandStack.class);
 							if (cs != null) {
-								cs.execute(
-										new SetExpressionValueCommand((JRDesignExpression) expr, e.getText(), e.getValueClassName()));
-								jContext.getJasperDesign().getEventSupport().firePropertyChange(JasperDesign.PROPERTY_NAME, true,
-										false);
+								cs.execute(new SetExpressionValueCommand((JRDesignExpression) expr, e.getText(),
+										e.getValueClassName()));
+								jContext.getJasperDesign().getEventSupport()
+										.firePropertyChange(JasperDesign.PROPERTY_NAME, true, false);
 							}
 						}
 					}
@@ -352,13 +348,6 @@ public class VErrorPreview extends APreview {
 		layout.marginLeft = 20;
 		layout.horizontalSpacing = 3;
 		statComposite.setLayout(layout);
-
-		// new Label(statComposite, SWT.NONE).setText("Subreport Compilation Time");
-		//
-		// compilSubTime = new Label(statComposite, SWT.BOLD);
-		// compilSubTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		// com.jaspersoft.studio.utils.UIUtil.setBold(compilSubTime);
-		// new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel);
 
 		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_compilationTimeLabel);
 
@@ -438,7 +427,6 @@ public class VErrorPreview extends APreview {
 		if (compilationTime.isDisposed())
 			return;
 		if (stats != null) {
-			// compilSubTime.setText(format(stats.getDuration(ReportControler.ST_COMPILATIONTIMESUBREPORT)));
 			compilationTime.setText(format(stats.getDuration(ReportController.ST_COMPILATIONTIME)));
 			fillingTime.setText(format(stats.getDuration(ReportController.ST_FILLINGTIME)));
 			exportTime.setText(format(stats.getDuration(ReportController.ST_EXPORTTIME)));
@@ -483,12 +471,10 @@ public class VErrorPreview extends APreview {
 
 	public void addMessage(String msg) {
 		tmessage.setText(tmessage.getText() + msg + NL);
-		// textSection.setText("Console: " + msg);
 	}
 
 	public void startMessage(String msg) {
 		tmessage.setText(tmessage.getText() + msg); // $NON-NLS-1$
-		// textSection.setText("Console: " + msg);
 	}
 
 	public void addError(Throwable t, JasperDesign design) {
@@ -497,27 +483,27 @@ public class VErrorPreview extends APreview {
 				t = t.getCause();
 			String msg = terror.getText() + ErrorUtil.getStackTrace(t) + NL;
 			terror.setText(terror.getText() + msg + NL); // $NON-NLS-1$
-			// The only way we have to find a missing style error is to parse the error message for now
+			// The only way we have to find a missing style error is to parse the error
+			// message for now
 			String stylesErrorString = Messages.VErrorPreview_1;
 			String m = t.getMessage();
 			if (m != null && m.contains(stylesErrorString) && design != null) {
 				String stylesNotFound = m.substring(m.indexOf(stylesErrorString) + stylesErrorString.length());
 				String[] styleNames = stylesNotFound.split(","); //$NON-NLS-1$
-				HashSet<String> styles = new HashSet<String>();
+				HashSet<String> styles = new HashSet<>();
 				for (String name : styleNames)
 					styles.add(name.trim());
 				List<JRDesignElement> elements = getNotReferencedStyles(design.getAllBands(), styles);
 				addError2List(t, m, elements);
 			} else
 				addError2List(t, m, null);
-			// errorSection.setText("Errors: 1");
 		} else
 			terror.setText(""); //$NON-NLS-1$
 		refreshErrorTable();
 	}
 
 	private List<JRDesignElement> getNotReferencedStyles(JRChild[] childs, HashSet<String> styles) {
-		List<JRDesignElement> result = new ArrayList<JRDesignElement>();
+		List<JRDesignElement> result = new ArrayList<>();
 		for (JRChild child : childs) {
 			if (child instanceof JRDesignElement) {
 				String styleName = getElementStyle((JRDesignElement) child);
@@ -542,7 +528,7 @@ public class VErrorPreview extends APreview {
 	}
 
 	protected void refreshErrorTable() {
-		if (getErrorList().size() > 0)
+		if (!getErrorList().isEmpty())
 			errAction.run();
 		errAction.setText(Messages.VErrorPreview_errorsFoundLabel + getErrorList().size() + ")"); // $NON-NLS-2$ //$NON-NLS-1$
 		errorViewer.refresh();
@@ -568,8 +554,8 @@ public class VErrorPreview extends APreview {
 		refreshErrorTable();
 	}
 
-	private List<Object> errors = new ArrayList<Object>();
-	private List<Object> auxil = new ArrayList<Object>();
+	private List<Object> errors = new ArrayList<>();
+	private List<Object> auxil = new ArrayList<>();
 	private Label runTime;
 	private Label snapshot;
 	private Label snapshotFile;
@@ -588,7 +574,7 @@ public class VErrorPreview extends APreview {
 
 	private List<String> getErrorList() {
 		if (errorList == null) {
-			errorList = new ArrayList<String>();
+			errorList = new ArrayList<>();
 			errorViewer.setInput(errorList);
 		}
 		return errorList;
@@ -599,7 +585,7 @@ public class VErrorPreview extends APreview {
 		errors.clear();
 		msgAction.run();
 		tmessage.setText(""); //$NON-NLS-1$
-		errorList = new ArrayList<String>();
+		errorList = new ArrayList<>();
 		errorViewer.setInput(errorList);
 		setStats(null);
 		addError(null, null);
@@ -608,7 +594,7 @@ public class VErrorPreview extends APreview {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		// nothing to do
 	}
 
 }
