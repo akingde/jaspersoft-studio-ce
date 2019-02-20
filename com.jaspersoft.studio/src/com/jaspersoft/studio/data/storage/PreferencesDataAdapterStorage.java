@@ -79,15 +79,13 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 						Node namedItem = attributes.getNamedItem("class"); //$NON-NLS-1$
 						if (namedItem != null) {
 							String adapterClassName = namedItem.getNodeValue();
-							DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
+							DataAdapterFactory factory = DataAdapterManager
+									.findFactoryByDataAdapterClass(adapterClassName);
 							if (factory == null) {
 								// we should at least log a warning here....
-								JaspersoftStudioPlugin
-										.getInstance()
-										.getLog()
-										.log(
-												new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
-														Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
+								JaspersoftStudioPlugin.getInstance().getLog().log(new Status(Status.WARNING,
+										JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
+										Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
 								continue;
 							}
 
@@ -98,8 +96,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 							inputStream.close();
 
 							inputStream = new FileInputStream(storageElement);
-							dataAdapter = (DataAdapter) CastorUtil.getInstance(JasperReportsConfiguration.getDefaultInstance()).read(
-									inputStream);
+							dataAdapter = (DataAdapter) CastorUtil
+									.getInstance(JasperReportsConfiguration.getDefaultInstance()).read(inputStream);
 							dataAdapterDescriptor.setDataAdapter(dataAdapter);
 							// Always add the data adapter read from the file regardless of the name
 							super.forceAddDataAdapter(dataAdapterDescriptor);
@@ -123,7 +121,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				try {
 					in = urls.nextElement().openStream();
 					DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(in, null);
-					addDataAdapter(dad);
+					if (dad != null)
+						addDataAdapter(dad);
 				} catch (IOException e) {
 					e.printStackTrace();
 				} finally {
@@ -146,8 +145,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	}
 
 	/**
-	 * Save an element on the data adapter file storage. The url is the name of the resource that will be created inside
-	 * the storage
+	 * Save an element on the data adapter file storage. The url is the name of the
+	 * resource that will be created inside the storage
 	 */
 	protected void save(DataAdapterDescriptor adapter) {
 		String fileName = convertDataAdapterName.getFileName(null);
@@ -159,8 +158,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(new InputSource(new StringReader(adapter.toXml(JasperReportsConfiguration
-					.getDefaultInstance()))));
+			Document doc = builder.parse(
+					new InputSource(new StringReader(adapter.toXml(JasperReportsConfiguration.getDefaultInstance()))));
 			// Write the parsed document to an xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
@@ -179,7 +178,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	}
 
 	/**
-	 * Remove a data adapter from the storage, the url is the name of the resource to remove
+	 * Remove a data adapter from the storage, the url is the name of the resource
+	 * to remove
 	 */
 	@Override
 	public boolean removeDataAdapter(DataAdapterDescriptor da) {
@@ -192,8 +192,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	}
 
 	/**
-	 * Add a data adapter from the file storage. As data adapter file name is used the url, manipulated if necessary to
-	 * get a valid an unique file name
+	 * Add a data adapter from the file storage. As data adapter file name is used
+	 * the url, manipulated if necessary to get a valid an unique file name
 	 */
 	@Override
 	public boolean addDataAdapter(DataAdapterDescriptor adapter) {

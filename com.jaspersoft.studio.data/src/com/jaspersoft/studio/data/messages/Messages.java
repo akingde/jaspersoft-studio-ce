@@ -159,6 +159,11 @@ public class Messages extends NLS {
 	public static String MondrianDataAdapterComposite_1;
 	public static String MondrianDataAdapterFactory_description;
 	public static String MondrianDataAdapterFactory_label;
+	public static String RandomDataAdapterComposite_0;
+	public static String RandomDataAdapterDescriptor_0;
+	public static String RandomDataAdapterDescriptor_1;
+	public static String RandomDataAdapterFactory_0;
+	public static String RandomDataAdapterFactory_1;
 	public static String RemoteXMLDataAdapterComposite_0;
 	public static String RemoteXMLDataAdapterComposite_1;
 	public static String RemoteXMLDataAdapterComposite_15;
