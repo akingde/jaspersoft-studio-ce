@@ -22,10 +22,10 @@ public class ReportStateView extends PageBookView {
 
 	@Override
 	protected IPage createDefaultPage(PageBook book) {
-		ReportStatePage page = new ReportStatePage(null);
-		initPage(page);
-		page.createControl(book);
-		return page;
+		ReportStatePage p = new ReportStatePage(null);
+		initPage(p);
+		p.createControl(book);
+		return p;
 	}
 
 	@Override
@@ -34,16 +34,11 @@ public class ReportStateView extends PageBookView {
 		if (part instanceof PreviewJRPrint)
 			preview = (PreviewJRPrint) part;
 		else if (part instanceof AbstractJRXMLEditor) {
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					PreviewJRPrint preview = (PreviewJRPrint) ((AbstractJRXMLEditor) part)
-							.getEditor(AbstractJRXMLEditor.PAGE_PREVIEW);
-					if (preview != null)
-						page.setupConsole(preview.getConsole());
-				}
+			Display.getDefault().asyncExec(() -> {
+				PreviewJRPrint p = (PreviewJRPrint) ((AbstractJRXMLEditor) part)
+						.getEditor(AbstractJRXMLEditor.PAGE_PREVIEW);
+				if (p != null)
+					page.setupConsole(p.getConsole());
 			});
 
 		} else
@@ -57,10 +52,10 @@ public class ReportStateView extends PageBookView {
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
 		if (key == IResource.class && getSite() != null) {
-			IWorkbenchPage page = getSite().getPage();
-			if (page != null && page.getActiveEditor() != null) {
-				IEditorInput editorInput = page.getActiveEditor().getEditorInput();
-				if (editorInput != null && editorInput instanceof IFileEditorInput)
+			IWorkbenchPage p = getSite().getPage();
+			if (p != null && p.getActiveEditor() != null) {
+				IEditorInput editorInput = p.getActiveEditor().getEditorInput();
+				if (editorInput instanceof IFileEditorInput)
 					return ((IFileEditorInput) editorInput).getFile();
 			}
 		}
@@ -74,10 +69,10 @@ public class ReportStateView extends PageBookView {
 
 	@Override
 	protected IWorkbenchPart getBootstrapPart() {
-		IWorkbenchPage page = getSite().getPage();
-		if (page != null) {
+		IWorkbenchPage p = getSite().getPage();
+		if (p != null) {
 			// check whether the active part is important to us
-			IWorkbenchPart activePart = page.getActivePart();
+			IWorkbenchPart activePart = p.getActivePart();
 			return isImportant(activePart) ? activePart : null;
 		}
 		return null;
@@ -85,9 +80,7 @@ public class ReportStateView extends PageBookView {
 
 	@Override
 	protected boolean isImportant(IWorkbenchPart part) {
-		if (part instanceof AbstractJRXMLEditor || part instanceof PreviewJRPrint)
-			return true;
-		return false;
+		return part instanceof AbstractJRXMLEditor || part instanceof PreviewJRPrint;
 	}
 
 }

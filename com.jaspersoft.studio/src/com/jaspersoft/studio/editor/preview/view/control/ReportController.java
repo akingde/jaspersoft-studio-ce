@@ -432,7 +432,8 @@ public class ReportController {
 							String projectPath = file.getProject().getLocation().toFile().getAbsolutePath();
 							String reportPath = file.getParent().getLocation().toFile().getAbsolutePath();
 							SimpleRepositoryResourceContext context = SimpleRepositoryResourceContext.of(reportPath);
-							JasperReportSource jrSource = SimpleJasperReportSource.from(jasperReport, projectPath, context);
+							JasperReportSource jrSource = SimpleJasperReportSource.from(jasperReport, projectPath,
+									context);
 							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jrContext, jrSource,
 									new HashMap<String, Object>(jasperParameters));
 
@@ -629,7 +630,8 @@ public class ReportController {
 	}
 
 	protected void setupRecordCounters() {
-		jrContext.setExtensions(ScriptletFactory.class, Collections.singletonList(new RecordCountScriptletFactory()));
+		scfactory = new RecordCountScriptletFactory();
+		jrContext.setExtensions(ScriptletFactory.class, Collections.singletonList(scfactory));
 	}
 
 	private void finishUpdateViewer(final PreviewContainer pcontainer, final JasperPrint jPrint) {
@@ -663,7 +665,7 @@ public class ReportController {
 	protected void setupDataSnapshot() {
 		Date creationTimestamp = new Date();
 		ReportContext rc = (ReportContext) jasperParameters.get(JRParameter.REPORT_CONTEXT);
-		if (rc != null && rc instanceof SimpleReportContext) {
+		if (rc instanceof SimpleReportContext) {
 			DataCacheHandler dch = (DataCacheHandler) rc
 					.getParameterValue(DataCacheHandler.PARAMETER_DATA_CACHE_HANDLER);
 			String msg = "No";

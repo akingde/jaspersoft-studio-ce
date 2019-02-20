@@ -11,8 +11,6 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -58,8 +56,8 @@ public class GMapsCenterPanel {
 	 * component presented inside a browser instance.
 	 * 
 	 * @param parent
-	 *            a composite control which will be the parent of the new
-	 *            instance (cannot be null)
+	 *            a composite control which will be the parent of the new instance
+	 *            (cannot be null)
 	 * @param style
 	 *            the style of widget to construct
 	 */
@@ -69,19 +67,15 @@ public class GMapsCenterPanel {
 
 	protected void createContent(Composite parent, int style) {
 		createTop(parent);
-		
-		if(Util.isLinux()){
+
+		if (Util.isLinux()) {
 			Composite warningCmp = MapUIUtils.createLinuxWarningText(parent);
-			warningCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,1,1));
+			warningCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		}
 
 		createMap(parent);
 
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				map.activateMapTile();
-			}
-		});
+		UIUtils.getDisplay().asyncExec(() -> map.activateMapTile());
 	}
 
 	protected void createMap(Composite parent) {
@@ -117,17 +111,14 @@ public class GMapsCenterPanel {
 				doAddressChanged(tadr);
 			}
 		});
-		tadr.addTraverseListener(new TraverseListener() {
-
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN || e.keyCode == SWT.CR) {
-					doAddressChanged(tadr);
-					e.doit = false;
-				}
+		tadr.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN || e.keyCode == SWT.CR) {
+				doAddressChanged(tadr);
+				e.doit = false;
 			}
 		});
 		tadr.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusLost(FocusEvent e) {
 				String txt = tadr.getText();
 				if (!Misc.isNullOrEmpty(txt) && !txt.equals(address))
@@ -173,14 +164,10 @@ public class GMapsCenterPanel {
 		// doLatChange(tadr);
 		// }
 		// });
-		tlat.addTraverseListener(new TraverseListener() {
-
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN || e.keyCode == SWT.CR) {
-					doLatChange(tadr);
-					e.doit = false;
-				}
+		tlat.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN || e.keyCode == SWT.CR) {
+				doLatChange(tadr);
+				e.doit = false;
 			}
 		});
 		tlat.addFocusListener(new FocusAdapter() {
@@ -210,14 +197,10 @@ public class GMapsCenterPanel {
 		// doLonChange(tadr);
 		// }
 		// });
-		tlon.addTraverseListener(new TraverseListener() {
-
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN || e.keyCode == SWT.CR) {
-					doLonChange(tadr);
-					e.doit = false;
-				}
+		tlon.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN || e.keyCode == SWT.CR) {
+				doLonChange(tadr);
+				e.doit = false;
 			}
 		});
 		tlon.addFocusListener(new FocusAdapter() {
@@ -234,11 +217,11 @@ public class GMapsCenterPanel {
 	}
 
 	public void initMap() {
+		// nothing to do here
 	}
 
 	/**
-	 * Browser function for correctly configuring the initial settings of the
-	 * map.
+	 * Browser function for correctly configuring the initial settings of the map.
 	 * 
 	 * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
 	 * 
@@ -257,13 +240,12 @@ public class GMapsCenterPanel {
 
 	}
 
-	private LatLng lastCoords;
 	private boolean centering = false;
 
 	protected void centerMap(LatLng coords) {
 		if (coords == null)
 			return;
-		lastCoords = coords;
+		LatLng lastCoords = coords;
 		if (centering)
 			return;
 		centering = true;
@@ -318,11 +300,11 @@ public class GMapsCenterPanel {
 	}
 
 	protected void handleMapTypeChanged(MapType mapType) {
-
+		// nothing to do here
 	}
 
 	protected void handleMapZoomChanged(int newZoomLevel) {
-
+		// nothing to do here
 	}
 
 	protected void handleMapCenterChanged(LatLng position) {
@@ -338,7 +320,7 @@ public class GMapsCenterPanel {
 	}
 
 	protected void handleAddressChanged(String address) {
-
+		// nothing to do here
 	}
 
 	public String getAddress() {
@@ -384,7 +366,7 @@ public class GMapsCenterPanel {
 			if (!initialised) {
 				map.getJavascriptMapSupport().setZoomLevel(getZoomLevel());
 				map.getJavascriptMapSupport().setMapType(mapType != null ? mapType : MapType.ROADMAP);
-				if ((mapCenter == null || mapCenter.getLat() == null || mapCenter.getLat() == null)) {
+				if ((mapCenter == null || mapCenter.getLat() == null || mapCenter.getLng() == null)) {
 					if (address != null && !address.isEmpty()) {
 						LatLng coords = GMapUtils.getAddressCoordinates(address);
 						if (coords != null)

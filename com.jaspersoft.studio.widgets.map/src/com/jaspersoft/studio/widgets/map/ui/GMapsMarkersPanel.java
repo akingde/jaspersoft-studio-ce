@@ -27,10 +27,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
@@ -61,10 +59,10 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 public class GMapsMarkersPanel extends GMapsCenterPanel {
 
 	/**
-	 * The markers string is formatted with at max 6 decimal digits and using
-	 * the English locale, that will force the . separator. This is required
-	 * because when passing the location to the javascript it expects double
-	 * with the standard dot separator
+	 * The markers string is formatted with at max 6 decimal digits and using the
+	 * English locale, that will force the . separator. This is required because
+	 * when passing the location to the javascript it expects double with the
+	 * standard dot separator
 	 */
 	protected static DecimalFormat coordinatesFormatter = new DecimalFormat("#.######",
 			new DecimalFormatSymbols(Locale.ENGLISH));
@@ -76,8 +74,8 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 	 * component presented inside a browser instance.
 	 * 
 	 * @param parent
-	 *            a composite control which will be the parent of the new
-	 *            instance (cannot be null)
+	 *            a composite control which will be the parent of the new instance
+	 *            (cannot be null)
 	 * @param style
 	 *            the style of widget to construct
 	 */
@@ -88,9 +86,9 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 	@Override
 	protected void createContent(Composite parent, int style) {
 		createTop(parent);
-		if(Util.isLinux()){
+		if (Util.isLinux()) {
 			Composite warningCmp = MapUIUtils.createLinuxWarningText(parent);
-			warningCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,2,1));
+			warningCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 		}
 		SashForm sash = new SashForm(parent, style | SWT.HORIZONTAL) {
 			@Override
@@ -112,11 +110,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 		containerCmp.setLayout(layout);
 
 		createRightPanel(containerCmp);
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				map.activateMapTile();
-			}
-		});
+		UIUtils.getDisplay().asyncExec(() -> map.activateMapTile());
 
 		sash.setWeights(new int[] { 4, 1 });
 	}
@@ -145,32 +139,22 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 		map.getFunctions().add(new InitialConfigurationFunction(map.getMapControl(),
 				MapWidgetConstants.BROWSER_FUNCTION_INITIAL_CONFIGURATION, map.getJavaMapSupport()));
 
-		map.getMapControl().addListener(SWT.Deactivate, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				map.getJavascriptMapSupport().evaluateJavascript("myMap.hideMenus();"); //$NON-NLS-1$
-				// refresh();
-			}
-		});
+		map.getMapControl().addListener(SWT.Deactivate,
+				event -> map.getJavascriptMapSupport().evaluateJavascript("myMap.hideMenus();"));//$NON-NLS-1$
 		map.getMapControl().addControlListener(new ControlListener() {
+
 			private boolean first = true;
 
 			@Override
 			public void controlResized(ControlEvent e) {
-				if (first) {
-					UIUtils.getDisplay().asyncExec(new Runnable() {
-						public void run() {
-							centerMap(getMapCenter());
-						}
-					});
-
-				}
+				if (first)
+					UIUtils.getDisplay().asyncExec(() -> centerMap(getMapCenter()));
 				first = false;
 			}
 
 			@Override
 			public void controlMoved(ControlEvent e) {
+				// nothing to do here
 			}
 
 		});
@@ -207,6 +191,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 		final Menu menu = new Menu(markersList);
 		markersList.setMenu(menu);
 		menu.addMenuListener(new MenuAdapter() {
+			@Override
 			public void menuShown(MenuEvent e) {
 				int selected = markersList.getSelectionIndex();
 				MenuItem[] items = menu.getItems();
@@ -321,7 +306,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 	}
 
 	protected void handleMarkerDoubleClick(int ind) {
-
+		// nothing to do
 	}
 
 	public void addNewMarker(Marker m) {
@@ -340,10 +325,10 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 	}
 
 	/**
-	 * Format the marker in a format like lat : long where each value has at max
-	 * 6 decimal digits and the decimal separator is a dot. This assure the
-	 * compatibility with the javascript, since for it the decimal separator
-	 * must be a standard .
+	 * Format the marker in a format like lat : long where each value has at max 6
+	 * decimal digits and the decimal separator is a dot. This assure the
+	 * compatibility with the javascript, since for it the decimal separator must be
+	 * a standard .
 	 */
 	protected String formatMarker(Marker m) {
 		LatLng p = m.getPosition();
@@ -360,6 +345,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 			markersList.removeAll();
 	}
 
+	@Override
 	protected void postInitMap() {
 		map.getJavascriptMapSupport().evaluateJavascript("MENU_KIND=_MENU_COMPLETE"); //$NON-NLS-1$
 	}

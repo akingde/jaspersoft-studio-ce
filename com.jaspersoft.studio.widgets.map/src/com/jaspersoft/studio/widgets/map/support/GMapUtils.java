@@ -106,13 +106,14 @@ public class GMapUtils {
 		HttpClient client = null;
 		try {
 			String addressUrlEncoded = URLEncoder.encode(addressText, "UTF-8");
-			String locationFindURL = "http://maps.google.com/maps/api/geocode/json?sensor=false&address="
+			String locationFindURL = "http://maps.google.com/maps/api/geocode/json?address="
 					+ addressUrlEncoded;
 			client = new HttpClient();
 			locateAddressGET = new GetMethod(locationFindURL);
 			int httpRetCode = client.executeMethod(locateAddressGET);
 			if (httpRetCode == HttpStatus.SC_OK) {
 				String responseBodyAsString = locateAddressGET.getResponseBodyAsString();
+				System.out.println(responseBodyAsString);
 				ObjectMapper mapper = new ObjectMapper();
 				mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
 				mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);

@@ -91,7 +91,7 @@ public class BaseJavaMapSupport implements JavaMapSupport {
 	@Override
 	public List<Marker> getMarkers() {
 		if (markers == null) {
-			markers = new ArrayList<Marker>();
+			markers = new ArrayList<>();
 		}
 		return markers;
 	}
