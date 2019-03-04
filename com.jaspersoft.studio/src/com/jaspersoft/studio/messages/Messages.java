@@ -2491,6 +2491,11 @@ public class Messages extends NLS {
 	public static String DuplicateDataAdapterAction_newAdapterPrefix;
 	public static String DynamicNewFileCreationWizard_VirtualFolderError;
 
+	public static String RandomDataAdapterComposite_0;
+	public static String RandomDataAdapterDescriptor_0; 
+	public static String RandomDataAdapterFactory_0;
+	public static String RandomDataAdapterFactory_1;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
