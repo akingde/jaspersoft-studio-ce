@@ -9,10 +9,11 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
-import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.messages.Messages;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.random.RandomDataAdapterImpl;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 public class RandomDataAdapterFactory implements DataAdapterFactory {

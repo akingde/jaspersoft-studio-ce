@@ -4,16 +4,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.random;
 
-import net.sf.jasperreports.data.empty.EmptyDataAdapter;
-import net.sf.jasperreports.data.empty.EmptyDataAdapterImpl;
-import net.sf.jasperreports.engine.JRConstants;
-
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
-import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.messages.Messages;
+
+import net.sf.jasperreports.data.random.RandomDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 
 public class RandomDataAdapterDescriptor extends DataAdapterDescriptor {
 
@@ -36,7 +35,7 @@ public class RandomDataAdapterDescriptor extends DataAdapterDescriptor {
 
 	@Override
 	public Image getIcon(int size) {
-		return JaspersoftStudioPlugin.getInstance().getImage(Messages.RandomDataAdapterDescriptor_1);
+		return JaspersoftStudioPlugin.getInstance().getImage("icons/battery-empty.png");
 	}
 
 	@Override

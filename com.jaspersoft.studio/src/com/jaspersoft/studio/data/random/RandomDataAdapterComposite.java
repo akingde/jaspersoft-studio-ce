@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Spinner;
 
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.messages.Messages;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.engine.JasperReportsContext;

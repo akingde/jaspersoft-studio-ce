@@ -4,6 +4,7 @@
    <extension
          point="com.jaspersoft.studio.dataAdapters">
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory"/>
+         <dataAdapter ClassFactory="com.jaspersoft.studio.data.random.RandomDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.jdbc.JDBCDataAdapterFactory"/>
          <dataAdapter
                ClassFactory="com.jaspersoft.studio.data.jndi.JndiDataAdapterFactory">
@@ -41,9 +42,6 @@
          </dataAdapter>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.customjrds.CustomJrdsDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.jrdsprovider.JrdsProviderDataAdapterFactory"/>
-         <dataAdapter
-               ClassFactory="com.jaspersoft.studio.data.random.RandomDataAdapterFactory">
-         </dataAdapter>
    </extension>
    <extension
          point="com.jaspersoft.studio.queryDesigner">
