@@ -24,8 +24,10 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.JRGroup;
@@ -131,6 +133,39 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#datasetRun"));
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#dataset");
+	}
+	
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		// initialize style
+		JasperDesign jd = getJasperDesign();
+		if (jd != null && getValue() != null) {
+			JRDataset dataset = getElementDataset();
+			// Calculate the groups list for the current element
+			if (dataset != null) {
+				JRGroup[] groups = dataset.getGroups();
+				String[] items = new String[groups.length + 1];
+				items[0] = ""; // always add empty for <NULL>
+				for (int j = 0; j < groups.length; j++) {
+					items[j + 1] = groups[j].getName();
+				}
+				setGroupItems(items);
+			}
+		}
+	}
+
+	/**
+	 * Return the dataset used by the element
+	 * 
+	 * @return the dataset nearest to this element
+	 */
+	public JRDataset getElementDataset() {
+		JRDataset dataset = ModelUtils.getDataset(this);
+		if (dataset == null && getJasperDesign() != null) {
+			dataset = getJasperDesign().getMainDataset();
+		}
+		return dataset;
 	}
 
 	public void setGroupItems(String[] items) {
