@@ -35,8 +35,7 @@ public class JoinTable extends AAction {
 	}
 
 	protected boolean isColumn(ANode element) {
-		boolean b = element instanceof MFromTable;// && !(element instanceof
-													// MFromTableJoin);
+		boolean b = element instanceof MFromTable;
 		if (b) {
 			MFrom mfrom = null;
 			if (element instanceof MFromTable && element.getValue() instanceof MQueryTable)
@@ -61,7 +60,6 @@ public class JoinTable extends AAction {
 		dialog.setValue(mfromTable);
 		if (dialog.open() == Dialog.OK) {
 			MFromTable destTbl = getFromTable(mfromTable, dialog);
-
 			if (mfromTable instanceof MFromTableJoin) {
 				mfromTable = (MFromTable) mfromTable.getParent();
 
@@ -84,10 +82,7 @@ public class JoinTable extends AAction {
 		for (MFromTable mft : Util.getFromTables(Util.getKeyword(mcol, MFrom.class))) {
 			if (mft == mcol)
 				continue;
-			String alias = ""; //$NON-NLS-1$
-			if (mft.getAlias() != null)
-				alias = mft.getAliasKeyString() + mft.getAlias();
-			if ((mft.getValue().getDisplayText() + alias).trim().equals(ft)) {
+			if (mft.getValue().toSQLString().equals(ft)) {
 				mFromTable = mft;
 				break;
 			}

@@ -22,8 +22,8 @@ public class JoinTableCommand extends ACommand {
 	private MFromTable fromTbl;
 	private MExpression mexpr;
 
-	public JoinTableCommand(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest,
-			MFromTable destTbl, MFromTable fromTbl) {
+	public JoinTableCommand(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl,
+			MFromTable fromTbl) {
 		this.src = src;
 		this.srcTbl = srcTbl;
 		this.dest = dest;
@@ -51,10 +51,8 @@ public class JoinTableCommand extends ACommand {
 		if (!onlyExpression) {
 			mtbljoin = new MFromTableJoin(fromTbl, srcTbl.getValue());
 			mtbljoin.setNoEvents(true);
-			mtbljoin.setPropertyValue(MFromTable.PROP_X,
-					srcTbl.getPropertyActualValue(MFromTable.PROP_X));
-			mtbljoin.setPropertyValue(MFromTable.PROP_Y,
-					srcTbl.getPropertyActualValue(MFromTable.PROP_Y));
+			mtbljoin.setPropertyValue(MFromTable.PROP_X, srcTbl.getPropertyActualValue(MFromTable.PROP_X));
+			mtbljoin.setPropertyValue(MFromTable.PROP_Y, srcTbl.getPropertyActualValue(MFromTable.PROP_Y));
 			mtbljoin.setNoEvents(false);
 			mtbljoin.setAlias(srcTbl.getAlias());
 			mtbljoin.setAliasKeyword(srcTbl.getAliasKeyword());
@@ -89,6 +87,7 @@ public class JoinTableCommand extends ACommand {
 
 	@Override
 	protected void firePropertyChange() {
+		// do nothing here
 	}
 
 }

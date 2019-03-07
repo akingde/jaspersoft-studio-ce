@@ -89,7 +89,7 @@ public class ConvertUtil {
 					mschema = (MSqlSchema) parent;
 				else {
 					parent = parent.getParent();
-					if (parent != null && parent instanceof MSqlSchema)
+					if (parent instanceof MSqlSchema)
 						mschema = (MSqlSchema) parent;
 				}
 			}
@@ -114,10 +114,10 @@ public class ConvertUtil {
 					MSqlTable msqltable = ft.getValue();
 					if (!isInSchema(msqltable, schema))
 						return true;
-					if (table != null && !msqltable.getValue().equalsIgnoreCase(table)) {
-						if (ft.getAlias() == null || (ft.getAlias() != null && !ft.getAlias().equalsIgnoreCase(table)))
-							return true;
-					}
+					if (table != null && !msqltable.getValue().equalsIgnoreCase(table) && (ft.getAlias() == null
+							|| (ft.getAlias() != null && !ft.getAlias().equalsIgnoreCase(table))))
+						return true;
+
 					for (INode c : msqltable.getChildren()) {
 						if (c instanceof MSQLColumn) {
 							MSQLColumn mcol = (MSQLColumn) c;

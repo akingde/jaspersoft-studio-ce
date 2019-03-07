@@ -150,5 +150,6 @@ public class JoinCommand extends ACommand {
 
 	@Override
 	protected void firePropertyChange() {
+		// do nothing here
 	}
 }

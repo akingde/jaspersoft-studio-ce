@@ -51,34 +51,36 @@ public class Util {
 	}
 
 	public static List<AMSQLObject> getUsedColumns(ANode sel) {
-		List<AMSQLObject> list = new ArrayList<AMSQLObject>();
+		List<AMSQLObject> list = new ArrayList<>();
 		MDBObjects mgb = null;
 		if (sel instanceof MDBObjects)
 			mgb = (MDBObjects) sel;
 		else if (sel instanceof AMQueryObject)
 			mgb = (MDBObjects) sel.getParent();
-		for (INode n : mgb.getChildren())
-			if (n instanceof MSelectColumn)
-				list.add((AMSQLObject) n.getValue());
+		if (mgb != null)
+			for (INode n : mgb.getChildren())
+				if (n instanceof MSelectColumn)
+					list.add((AMSQLObject) n.getValue());
 		return list;
 	}
 
 	public static List<MSqlTable> getTables(ANode sel) {
-		List<MSqlTable> list = new ArrayList<MSqlTable>();
+		List<MSqlTable> list = new ArrayList<>();
 		ANode r = getQueryRoot(sel);
-		for (INode n : r.getChildren()) {
-			if (n instanceof MFrom) {
-				for (INode t : n.getChildren()) {
-					list.add((MSqlTable) t.getValue());
-					if (!t.getChildren().isEmpty()) {
-						for (INode jt : t.getChildren())
-							if (jt.getValue() instanceof MSqlTable)
-								list.add((MSqlTable) jt.getValue());
+		if (r != null)
+			for (INode n : r.getChildren()) {
+				if (n instanceof MFrom) {
+					for (INode t : n.getChildren()) {
+						list.add((MSqlTable) t.getValue());
+						if (!t.getChildren().isEmpty()) {
+							for (INode jt : t.getChildren())
+								if (jt.getValue() instanceof MSqlTable)
+									list.add((MSqlTable) jt.getValue());
+						}
 					}
+					break;
 				}
-				break;
 			}
-		}
 		return list;
 	}
 
@@ -91,27 +93,28 @@ public class Util {
 	}
 
 	public static List<MFromTable> getFromTables(ANode sel) {
-		List<MFromTable> list = new ArrayList<MFromTable>();
+		List<MFromTable> list = new ArrayList<>();
 		ANode r = getQueryRoot(sel);
-		for (INode n : r.getChildren()) {
-			if (n instanceof MFrom) {
-				for (INode t : n.getChildren()) {
-					list.add((MFromTable) t);
-					if (!t.getChildren().isEmpty()) {
-						for (INode jt : t.getChildren())
-							if (jt instanceof MFromTable)
-								list.add((MFromTable) jt);
+		if (r != null)
+			for (INode n : r.getChildren()) {
+				if (n instanceof MFrom) {
+					for (INode t : n.getChildren()) {
+						list.add((MFromTable) t);
+						if (!t.getChildren().isEmpty()) {
+							for (INode jt : t.getChildren())
+								if (jt instanceof MFromTable)
+									list.add((MFromTable) jt);
+						}
 					}
+					break;
 				}
-				break;
 			}
-		}
 		return list;
 	}
 
 	public static MRoot getRoot(MSQLColumn mcol, AMExpression<?> mexpr) {
 		if (mcol != null)
-			return (MRoot) mcol.getRoot();
+			return mcol.getRoot();
 		ModelVisitor<INode> mv = new ModelVisitor<INode>(mexpr.getRoot()) {
 			@Override
 			public boolean visit(INode n) {
@@ -130,10 +133,6 @@ public class Util {
 		ModelVisitor<ANode> mv = new ModelVisitor<ANode>(target.getRoot()) {
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof AMExpression && src instanceof AMExpression)
-					;// System.out.println(((AMExpression<?>) n).getId() +
-						// " --- " +
-						// ((AMExpression<?>) src).getId());
 				if (src != n && src.equals(n)) {
 					setObject((ANode) n);
 					stop();
@@ -155,7 +154,7 @@ public class Util {
 	}
 
 	public static List<ANode> getAllNodes(Object data) {
-		List<ANode> nodes = new ArrayList<ANode>();
+		List<ANode> nodes = new ArrayList<>();
 		if (data.getClass().isArray()) {
 			Object[] ar = (Object[]) data;
 			for (Object obj : ar)
@@ -210,7 +209,7 @@ public class Util {
 
 	public static void refreshTables(MRoot rmeta, final MRoot rquery, final SQLQueryDesigner designer) {
 		List<MSqlTable> oldTables = getTables(rquery);
-		Set<MSqlTable> newTables = new HashSet<MSqlTable>();
+		Set<MSqlTable> newTables = new HashSet<>();
 		for (MSqlTable mt : oldTables) {
 			MSqlTable newTbl = getTable(rmeta, mt, designer);
 			if (newTbl != null)
@@ -218,14 +217,10 @@ public class Util {
 		}
 		for (MSqlTable t : newTables)
 			replaceTable(rquery, t);
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				designer.setRefreshMetadata(true);
-				rquery.getPropertyChangeSupport().firePropertyChange("tablesupdated", false, true);
-				designer.setRefreshMetadata(false);
-			}
+		Display.getDefault().asyncExec(() -> {
+			designer.setRefreshMetadata(true);
+			rquery.getPropertyChangeSupport().firePropertyChange("tablesupdated", false, true);
+			designer.setRefreshMetadata(false);
 		});
 
 	}
@@ -236,9 +231,8 @@ public class Util {
 
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof MFromTable)
-					if (((MFromTable) n).getValue().toSQLString().equals(sqlTable))
-						n.setValue(mtable);
+				if (n instanceof MFromTable && ((MFromTable) n).getValue().toSQLString().equals(sqlTable))
+					n.setValue(mtable);
 				if (n instanceof MSelectColumn) {
 					MSQLColumn mc = getColumn(((MSelectColumn) n).getMFromTable(), ((MSelectColumn) n).getValue());
 					if (mc != null)
@@ -289,7 +283,7 @@ public class Util {
 		if (mt.getParent() != null) {
 			if (mt.getParent() instanceof MSqlSchema)
 				msch = (MSqlSchema) mt.getParent();
-			else if (mt.getParent().getParent() != null && mt.getParent().getParent() instanceof MSqlSchema)
+			else if (mt.getParent().getParent() instanceof MSqlSchema)
 				msch = (MSqlSchema) mt.getParent().getParent();
 		}
 		final String schema = msch != null ? msch.getValue() : "";
@@ -304,12 +298,10 @@ public class Util {
 						return false;
 					else
 						designer.getDbMetadata().loadSchema(mschema);
-				} else if (n instanceof MSqlTable) {
-					if (((MSqlTable) n).getValue().equalsIgnoreCase(mt.getValue())) {
-						designer.getDbMetadata().loadTable((MSqlTable) n);
-						setObject((MSqlTable) n);
-						stop();
-					}
+				} else if (n instanceof MSqlTable && ((MSqlTable) n).getValue().equalsIgnoreCase(mt.getValue())) {
+					designer.getDbMetadata().loadTable((MSqlTable) n);
+					setObject((MSqlTable) n);
+					stop();
 				}
 				return true;
 			}
@@ -330,11 +322,9 @@ public class Util {
 			public boolean visit(INode n) {
 				if (n instanceof MSqlSchema)
 					return Misc.nvl(((MSqlSchema) n).getValue()).equals(Misc.nvl(schemaName));
-				if (n instanceof MSqlTable) {
-					if (n.getValue().equals(table)) {
-						setObject((MSqlTable) n);
-						stop();
-					}
+				if (n instanceof MSqlTable && n.getValue().equals(table)) {
+					setObject((MSqlTable) n);
+					stop();
 				}
 				return true;
 			}
@@ -349,7 +339,7 @@ public class Util {
 
 	public static void copySubQuery(MFromTable mftj, MFromTable mtbl) {
 		if (mftj.getValue() instanceof MQueryTable) {
-			List<INode> children = new ArrayList<INode>(mftj.getChildren());
+			List<INode> children = new ArrayList<>(mftj.getChildren());
 			for (INode n : children) {
 				if (n instanceof MUnion || n instanceof MSelect || n instanceof MFrom || n instanceof MWhere
 						|| n instanceof MGroupBy || n instanceof MHaving)

@@ -7,12 +7,8 @@ package com.jaspersoft.studio.data.sql.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.ATitledDialog;
-
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -55,6 +51,8 @@ import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.utils.UIUtil;
 
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+
 public class JoinFromTableDialog extends ATitledDialog {
 	private MFromTable srcTable;
 	private String fromTable;
@@ -68,8 +66,7 @@ public class JoinFromTableDialog extends ATitledDialog {
 		this(parentShell, designer, false);
 	}
 
-	public JoinFromTableDialog(Shell parentShell, SQLQueryDesigner designer,
-			boolean create) {
+	public JoinFromTableDialog(Shell parentShell, SQLQueryDesigner designer, boolean create) {
 		super(parentShell);
 		setTitle(Messages.JoinFromTableDialog_0);
 		setDescription(Messages.JoinFromTableDialog_1);
@@ -95,7 +92,7 @@ public class JoinFromTableDialog extends ATitledDialog {
 		ANode parent = srcTable.getParent();
 		if (srcTable instanceof MFromTableJoin)
 			parent = parent.getParent();
-		List<String> lst = new ArrayList<String>();
+		List<String> lst = new ArrayList<>();
 		String spStr = null;
 		if (srcTable instanceof MFromTableJoin) {
 			MFromTable sp = ((MFromTable) srcTable.getParent());
@@ -120,7 +117,7 @@ public class JoinFromTableDialog extends ATitledDialog {
 			if (fromTables[i].equals(ftbl))
 				return i;
 		}
-		if (fromTables != null && fromTables.length > 0)
+		if (fromTables.length > 0)
 			fromTable = fromTables[0];
 		return 0;
 	}
@@ -171,8 +168,7 @@ public class JoinFromTableDialog extends ATitledDialog {
 		}
 
 		DataBindingContext bindingContext = new DataBindingContext();
-		bindingContext.bindValue(SWTObservables.observeSelection(keyword),
-				PojoObservables.observeValue(this, "join")); //$NON-NLS-1$ 
+		bindingContext.bindValue(SWTObservables.observeSelection(keyword), PojoObservables.observeValue(this, "join")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(ftable),
 				PojoObservables.observeValue(this, "fromTable")); //$NON-NLS-1$
 
@@ -184,21 +180,16 @@ public class JoinFromTableDialog extends ATitledDialog {
 			gd.heightHint = 200;
 			gd.horizontalSpan = 3;
 			treeViewer.getControl().setLayoutData(gd);
-			treeViewer.addDoubleClickListener(new IDoubleClickListener() {
-
-				@Override
-				public void doubleClick(DoubleClickEvent event) {
-					TreeSelection ts = (TreeSelection) treeViewer
-							.getSelection();
-					Object el = ts.getFirstElement();
-					if (el instanceof MSQLColumn)
-						okPressed();
-					else {
-						if (treeViewer.getExpandedState(el))
-							treeViewer.collapseToLevel(el, 1);
-						else
-							treeViewer.expandToLevel(el, 1);
-					}
+			treeViewer.addDoubleClickListener(event -> {
+				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+				Object el = ts.getFirstElement();
+				if (el instanceof MSQLColumn)
+					okPressed();
+				else {
+					if (treeViewer.getExpandedState(el))
+						treeViewer.collapseToLevel(el, 1);
+					else
+						treeViewer.expandToLevel(el, 1);
 				}
 			});
 			ColumnViewerToolTipSupport.enableFor(treeViewer);
@@ -206,31 +197,27 @@ public class JoinFromTableDialog extends ATitledDialog {
 			MenuManager menuMgr = new MenuManager();
 			menuMgr.setRemoveAllWhenShown(true);
 			afactory = new ActionFactory(designer, treeViewer);
-			menuMgr.addMenuListener(new IMenuListener() {
-				public void menuAboutToShow(IMenuManager mgr) {
-					TreeSelection s = (TreeSelection) treeViewer.getSelection();
-					Object[] selection = s != null ? s.toArray() : null;
-					boolean isFromTable = false;
-					if (selection != null)
-						for (Object o : selection)
-							if (o instanceof MFromTable) {
-								isFromTable = true;
-								break;
-							}
-
-					for (AAction act : afactory.getActions()) {
-						if (act == null)
-							mgr.add(new org.eclipse.jface.action.Separator());
-						else if (act.calculateEnabled(selection)) {
-							if (isFromTable
-									&& !(act instanceof CreateExpressionGroup
-											|| act instanceof CreateExpression || act instanceof CreateXExpression))
-								continue;
-							mgr.add(act);
+			menuMgr.addMenuListener(mgr -> {
+				TreeSelection s = (TreeSelection) treeViewer.getSelection();
+				Object[] selection = s != null ? s.toArray() : null;
+				boolean isFromTable = false;
+				if (selection != null)
+					for (Object o : selection)
+						if (o instanceof MFromTable) {
+							isFromTable = true;
+							break;
 						}
+
+				for (AAction act : afactory.getActions()) {
+					if (act == null)
+						mgr.add(new org.eclipse.jface.action.Separator());
+					else if (act.calculateEnabled(selection)) {
+						if (isFromTable && !(act instanceof CreateExpressionGroup || act instanceof CreateExpression
+								|| act instanceof CreateXExpression))
+							continue;
+						mgr.add(act);
 					}
 				}
-
 			});
 			Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
 			treeViewer.getControl().setMenu(menu);
@@ -251,19 +238,17 @@ public class JoinFromTableDialog extends ATitledDialog {
 				@Override
 				public void keyPressed(KeyEvent event) {
 					if (event.character == SWT.DEL && event.stateMask == 0) {
-						TreeSelection s = (TreeSelection) treeViewer
-								.getSelection();
+						TreeSelection s = (TreeSelection) treeViewer.getSelection();
 						if (s == null)
 							return;
-						List<Object> selection = new ArrayList<Object>();
+						List<Object> selection = new ArrayList<>();
 						for (Object obj : s.toList()) {
 							if (obj instanceof MFromTable)
 								continue;
 							selection.add(obj);
 						}
 
-						List<DeleteAction<?>> dactions = afactory
-								.getDeleteActions(selection.toArray());
+						List<DeleteAction<?>> dactions = afactory.getDeleteActions(selection.toArray());
 						for (DeleteAction<?> da : dactions) {
 							da.run();
 							break;

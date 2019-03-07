@@ -63,6 +63,7 @@ public class AMSQLObject extends MDBObjects implements IQueryString {
 		return obj instanceof AMSQLObject && ((AMSQLObject) obj).toSQLString().equals(toSQLString());
 	}
 
+	@Override
 	public int hashCode() {
 		return toSQLString().hashCode();
 	};
