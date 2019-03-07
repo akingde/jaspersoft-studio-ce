@@ -62,16 +62,12 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 		gd.widthHint = 500;
 		textFileName.setLayoutData(gd);
 		textFileName.setToolTipText(Messages.AFileDataAdapterComposite_0);
-		textFileName.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				String tt = textFileName.getText();
-				if (!tt.isEmpty())
-					tt += "\n\n";
-				tt += Messages.AFileDataAdapterComposite_0;
-				textFileName.setToolTipText(tt);
-			}
+		textFileName.addModifyListener(e -> {
+			String tt = textFileName.getText();
+			if (!tt.isEmpty())
+				tt += "\n\n";
+			tt += Messages.AFileDataAdapterComposite_0;
+			textFileName.setToolTipText(tt);
 		});
 
 		btnBrowse = new Button(parent, SWT.PUSH);
