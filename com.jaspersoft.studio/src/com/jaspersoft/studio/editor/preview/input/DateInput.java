@@ -110,8 +110,8 @@ public class DateInput extends ADataInput {
 	}
 
 	/**
-	 * Called when the timezone changes, this force the parameter to be recalculated
-	 * with the current timezone
+	 * Called when the timezone changes, this force the parameter to be
+	 * recalculated with the current timezone
 	 */
 	private void refresh() {
 		if (date != null && !date.isDisposed()) {
@@ -143,7 +143,8 @@ public class DateInput extends ADataInput {
 	}
 
 	/**
-	 * Check if the flag to use the report timezone is enabled in the preferences
+	 * Check if the flag to use the report timezone is enabled in the
+	 * preferences
 	 * 
 	 * @return true if the flag is enabled, false otherwise
 	 */

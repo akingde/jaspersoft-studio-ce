@@ -6,8 +6,12 @@ package com.jaspersoft.studio.swt.widgets;
 import java.util.Date;
 
 import org.eclipse.nebula.widgets.cdatetime.CDateTime;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 
 import net.sf.jasperreports.eclipse.util.Misc;
 
@@ -32,18 +36,27 @@ public class DRDateTime extends CDateTime {
 		this.supportDateRange = supportDateRange;
 	}
 
+	Listener l = event -> {
+		if (getText().equals(NULLTEXT))
+			setText(String.valueOf(""));
+
+	};
+
 	@Override
 	public void setSelection(Date selection) {
 		super.setSelection(selection);
-		if (supportDateRange)
+		if (supportDateRange) {
 			removeTextListener();
+			text.getControl().addListener(SWT.KeyDown, l);
+		}
 	}
 
 	@Override
 	protected void addTextListener() {
-		if (supportDateRange)
+		if (supportDateRange) {
 			removeTextListener();
-		else
+			text.getControl().addListener(SWT.KeyDown, l);
+		} else
 			super.addTextListener();
 	}
 
