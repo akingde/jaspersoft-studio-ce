@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.foundation.bundles"
       label="Jaspersoft Studio Required Bundles Feature"
-      version="1.0.11"
+      version="1.0.12"
       provider-name="TIBCO Software Inc.">
 
    <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
@@ -27,9 +27,6 @@
          version="0.0.0"/>
 
    <requires>
-      <import plugin="org.junit" version="4.10.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.commons.codec" version="1.6.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.commons.logging" version="1.1.1" match="greaterOrEqual"/>
       <import plugin="org.w3c.dom.svg" version="1.1.0" match="greaterOrEqual"/>
       <import plugin="org.w3c.dom.smil" version="1.0.1" match="greaterOrEqual"/>
       <import plugin="org.w3c.css.sac" version="1.3.1" match="greaterOrEqual"/>
@@ -78,10 +75,10 @@
          version="2.1.7.js6_b02"/>
 
    <plugin
-         id="com.jaspersoft.studio.bundles.poi"
+         id="org.apache.servicemix.bundles.poi"
          download-size="0"
          install-size="0"
-         version="3.15.0.b03"/>
+         version="4.0.1.1"/>
 
    <plugin
          id="joda-time"
@@ -112,10 +109,10 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.servicemix.bundles.xmlbeans"
+         id="com.jaspersoft.studio.bundles.xmlbeans"
          download-size="0"
          install-size="0"
-         version="2.5.0.2"
+         version="3.0.2.b01"
          unpack="false"/>
 
    <plugin
