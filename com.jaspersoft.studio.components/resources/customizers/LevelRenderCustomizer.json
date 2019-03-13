@@ -22,10 +22,10 @@
                     "name": "itemIndex",
                     "label": "Legend Item Index",
                     "description": "The index of the legend item that will be changed",
-                    "mandatory": false,
-                    "defaultValue": "1",
+                    "mandatory": true,
                     "readOnly": false,
-                    "type": "integer"
+                    "type": "integer",
+                    "min": "0"
                 },
                	{
                     "name": "itemSeries",

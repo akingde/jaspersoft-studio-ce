@@ -4,8 +4,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.framework.manager.panel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -15,6 +18,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.IWItemProperty;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
+import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
 
@@ -48,9 +52,27 @@ public class VisibilityPanelManager extends BasePanelManager {
 	 */
 	@Override
 	public IWItemProperty createWidget(WidgetPropertyDescriptor widgetDesc, ItemPropertyDescription<?> widget, IPropertyEditor editor, ExpressionContext ec) {
-		WItemProperty property = (WItemProperty)super.createWidget(widgetDesc, widget, editor, ec);
-		widgetsMap.put(widget.getName(), property);
-		return property;
+		//create the label
+		Label label = WidgetFactory.createLabelForProperty(parent, widgetDesc);
+		label.setLayoutData(new GridData());
+		
+		//create the widget, with a validation on the mandatory only if the value is visible
+		WItemProperty widgetEditor = new WItemProperty(parent, SWT.NONE, widget, editor) {
+			
+			@Override
+			public List<String> isValueValid() {
+				if (!isVisible()) return new ArrayList<String>();
+				else return super.isValueValid();
+			};
+		};
+		widgetEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		widgetEditor.setExpressionContext(ec);
+		
+		//store the references
+		widgetEditor.setData(LABEL_KEY, label);
+		properties.add(widgetEditor);
+		widgetsMap.put(widget.getName(), widgetEditor);
+		return widgetEditor;
 	}
 	
 	@Override

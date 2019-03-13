@@ -18,6 +18,8 @@ import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetsDescriptor;
 import com.jaspersoft.studio.widgets.framework.ui.widget.FallbackNumericText;
 
+import net.sf.jasperreports.eclipse.util.Misc;
+
 public class LongPropertyDescription extends NumberPropertyDescription<Long> {
 	
 	public LongPropertyDescription() {
@@ -124,5 +126,20 @@ public class LongPropertyDescription extends NumberPropertyDescription<Long> {
 		} else {
 			return parsedLong;
 		}
+	}
+	
+	@Override
+	public String getToolTip() {
+		String tt = Misc.nvl(getDescription());
+		if (!Misc.isNullOrEmpty(getDefaultValueString()))
+			tt += "\nDefault: " + getDefaultValue();
+		if (getMin() != null || getMax() != null){
+			if (getMin() != null && getMin() != Long.MIN_VALUE)
+				tt += "\nmin: " + getMin();
+
+			if (getMax() != null && getMax() != Long.MAX_VALUE)
+				tt += "\nmax: " + getMax();
+		}
+		return tt;
 	}
 }

@@ -26,7 +26,10 @@ import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
 import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedListener;
+import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
+import com.jaspersoft.studio.widgets.framework.ui.ComboItemPropertyDescription;
 import com.jaspersoft.studio.widgets.framework.ui.ItemPropertyDescription;
+import com.jaspersoft.studio.widgets.framework.ui.TextPropertyDescription;
 
 import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -52,6 +55,25 @@ public class SPItemProperty extends AHistorySPropertyWidget<ItemPropertyDescript
 		ADescriptor d = pDescriptor.getDescriptor();
 		ItemPropertyDescription<?> ipd = d.getDescription((String) pDescriptor.getId());
 		expr = new WItemProperty(parent, SWT.NONE, ipd, d.getPropertyEditor());
+		if (ipd instanceof ComboItemPropertyDescription || ipd instanceof TextPropertyDescription) {
+			/**
+			 * Assuring that the width has an hint in case of grid layout, doing this will force the
+			 * text to not grow too much depending on the text content 
+			 */
+			DoubleControlComposite control = (DoubleControlComposite)expr.getControl();
+			Control simpleControl = control.getSimpleControlToHighlight();
+			Object layoutData = simpleControl.getLayoutData();
+			if (layoutData != null && layoutData.getClass().equals(GridData.class)) {
+				GridData oldData = (GridData)layoutData;
+				GridData newGridData = new GridData(oldData.horizontalAlignment, oldData.verticalAlignment, oldData.grabExcessHorizontalSpace, oldData.grabExcessVerticalSpace);
+				if (newGridData.widthHint == SWT.DEFAULT) {
+					int w = getCharWidth(simpleControl) * 15;
+					if (w > 50) w = 50;
+					newGridData.widthHint = w;
+				}
+				simpleControl.setLayoutData(newGridData);
+			}
+		}
 		expr.setLabelProvider(new DescriptorPropertyLabelProvider(d));
 		
 		expr.addModifyListener(new ItemPropertyModifiedListener() {

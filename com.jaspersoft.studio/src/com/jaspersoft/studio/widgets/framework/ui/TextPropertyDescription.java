@@ -65,15 +65,6 @@ public class TextPropertyDescription<T> extends AbstractExpressionPropertyDescri
 		else return widgetText;
 	}
 	
-	
-	protected static int defCharWidth = -1;
-
-	protected static int getCharWidth(Control c) {
-		if (defCharWidth < 0)
-			defCharWidth = UIUtil.getCharWidth(c);
-		return defCharWidth;
-	}
-	
 	// Flag used to overcome the problem of focus events in Mac OS X
 	// - JSS Bugzilla 42999
 	// - Eclipse Bug 383750
@@ -86,31 +77,7 @@ public class TextPropertyDescription<T> extends AbstractExpressionPropertyDescri
 		lazyCreateExpressionControl(wiProp, cmp);
 		
 		//create the simple control
-		final Text simpleControl =  new Text(cmp.getSecondContainer(), SWT.BORDER) {
-	
-			
-			@Override
-			protected void checkSubclass() {
-			}
-			
-			/**
-			 * Assuring that the width has an hint in case of grid layout, doing this will force the
-			 * text to not grow too much depending on the text content 
-			 */
-			@Override
-			public void setLayoutData(Object layoutData) {
-				Object newData = layoutData;
-				if (newData instanceof GridData) {
-					GridData newGridData = (GridData)newData;
-					if (newGridData.widthHint == SWT.DEFAULT) {
-						int w = getCharWidth(this) * 15;
-						if (w > 50) w = 50;
-						newGridData.widthHint = w;
-					}
-				}
-				super.setLayoutData(newData);
-			}
-		};
+		final Text simpleControl =  new Text(cmp.getSecondContainer(), SWT.BORDER);
 		cmp.getSecondContainer().setData(simpleControl);
 		cmp.setSimpleControlToHighlight(simpleControl);
 		GridData textData = new GridData(GridData.FILL_HORIZONTAL);

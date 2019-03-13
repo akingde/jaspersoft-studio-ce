@@ -15,8 +15,12 @@ import com.jaspersoft.studio.components.chart.ContextHelpIDs;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.ChartCustomizerDefinition;
 import com.jaspersoft.studio.components.chart.property.descriptor.CustomizerPropertyExpressionsDTO;
+import com.jaspersoft.studio.components.widgets.framework.ui.SeriesSelectionPanelManager;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.widgets.framework.IWItemProperty;
+import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedEvent;
+import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
 import com.jaspersoft.studio.widgets.framework.manager.panel.BasePanelManager;
 import com.jaspersoft.studio.widgets.framework.manager.panel.IPanelManager;
@@ -153,7 +157,16 @@ public class EditCustomizerPage extends JSSHelpWizardPage {
 			//Create the widgets trough the panel manager
 			for(WidgetPropertyDescriptor p : cd.getPlainWidgets()) {
 				ItemPropertyDescription<?> descriptor = WidgetFactory.createItemPropertyDescriptor(cd, p, jConfig);
-				currentPanelManager.createWidget(p, descriptor, pEditor, ec);
+				IWItemProperty widget = currentPanelManager.createWidget(p, descriptor, pEditor, ec);
+				if (p.getName().equals(SeriesSelectionPanelManager.SERIES_SELECTION_TYPE_PROPERTY)){
+					widget.addModifyListener(new ItemPropertyModifiedListener() {
+						
+						@Override
+						public void itemModified(ItemPropertyModifiedEvent event) {
+							getContainer().updateButtons();
+						}
+					});
+				} 
 			}
 			
 			//Update the widgets value

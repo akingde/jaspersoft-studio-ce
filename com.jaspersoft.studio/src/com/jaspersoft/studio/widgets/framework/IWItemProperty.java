@@ -11,6 +11,8 @@ package com.jaspersoft.studio.widgets.framework;
  */
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
+import com.jaspersoft.studio.widgets.framework.events.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.widgets.framework.ui.menu.IMenuProvider;
 
 import net.sf.jasperreports.engine.JRExpression;
@@ -128,4 +130,20 @@ public interface IWItemProperty {
 	 * @param editor a not null {@link IPropertyEditor}
  	 */
 	public void setPropertyEditor(IPropertyEditor editor);
+	
+	/**
+	 * Adds a new listener that will be notified of any expression change/notification.
+	 * 
+	 * @param ml
+	 *          the new {@link ExpressionModifiedListener} to add
+	 */
+	public void addModifyListener(ItemPropertyModifiedListener ml);
+
+	/**
+	 * Removes an {@link ExpressionModifiedListener} instance.
+	 * 
+	 * @param ml
+	 *          the {@link ExpressionModifiedListener} instance to be removed
+	 */
+	public void removeModifyListener(ItemPropertyModifiedListener ml);
 }
