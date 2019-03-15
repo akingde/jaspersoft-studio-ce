@@ -14,7 +14,7 @@ Require-Bundle: com.jaspersoft.studio;bundle-version="7.3.0";visibility:=reexpor
  org.apache.httpcomponents.httpclient;bundle-version="4.3.4";visibility:=reexport,
  org.apache.httpcomponents.httpcore;bundle-version="4.3.2";visibility:=reexport,
  com.jaspersoft.studio.book;bundle-version="7.3.0",
- org.apache.commons.lang3;bundle-version="3.1.0"
+ org.apache.commons.lang3;bundle-version="3.8.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: patch-library.jar,
