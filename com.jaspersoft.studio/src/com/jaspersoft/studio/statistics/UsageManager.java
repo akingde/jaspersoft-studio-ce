@@ -585,6 +585,8 @@ public class UsageManager {
 		// Check if the collecting of statistics is enabled
 		allowUsageCollection = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
 				.getBoolean(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS);
+		//statistics disabled for server shutdown
+		allowUsageCollection = false;
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferencesListener);
 		if (allowUsageCollection) {
 			Job uploadUsageStats = new Job(Messages.UsageManager_uploadJobName) {

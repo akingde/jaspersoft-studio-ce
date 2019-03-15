@@ -9,14 +9,12 @@ import java.io.File;
 import org.eclipse.core.runtime.Platform;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * Action executed the first time eclipse is started to ask to the user if the
- * want to provide the usage statistics
+ * want to provide the usage statistics. Actually the statistics are disabled
+ * by default for a server shutdown
  * 
  * @author Orlandin Marco
  *
@@ -49,7 +47,9 @@ public class EnableUsageStatisticsQuestion implements IFirstStartupAction {
 	public void executeFirstStartupAction(File configurationDirectory) {
 		boolean value = getFlagValue();
 		if (!value){
-			boolean enableUsageStatistic = UIUtils.showConfirmation(Messages.EnableUsageStatisticsQuestion_actionTitle, Messages.EnableUsageStatisticsQuestion_actionMessage);
+			//boolean enableUsageStatistic = UIUtils.showConfirmation(Messages.EnableUsageStatisticsQuestion_actionTitle, Messages.EnableUsageStatisticsQuestion_actionMessage);
+			//statistics disabled for server shutdown
+			boolean enableUsageStatistic = false;
 			JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS, enableUsageStatistic);
 		} else {
 			JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS, false);

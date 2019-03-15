@@ -19,7 +19,10 @@ public class Heartbeat {
 
 	public static void run() {
 		final PropertiesHelper ph = PropertiesHelper.getInstance();
-		if (ph.getBoolean(StudioPreferencePage.CHECK_FOR_UPDATE, true)) {
+		//boolean checkHeartbeat = ph.getBoolean(StudioPreferencePage.CHECK_FOR_UPDATE, true);
+		//statistics disabled for server shutdown
+		boolean checkHeartbeat = false;
+		if (checkHeartbeat) {
 			final VersionCheckResult versionCheck = JaspersoftStudioPlugin.getInstance().getUsageManager().checkVersion();
 			if (versionCheck.canUpdate()) {
 				UIUtils.getDisplay().asyncExec(new Runnable() {
