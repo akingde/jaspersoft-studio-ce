@@ -52,7 +52,7 @@ public class SPColorSeries extends ASPropertyWidget<IPropertyDescriptor> {
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		ftext = section.getWidgetFactory().createText(composite, "", SWT.LEFT);
+		ftext = section.getWidgetFactory().createText(composite, "", SWT.LEFT | SWT.READ_ONLY);
 		ftext.setToolTipText(pDescriptor.getDescription());
 		setWidth(composite, 20);
 

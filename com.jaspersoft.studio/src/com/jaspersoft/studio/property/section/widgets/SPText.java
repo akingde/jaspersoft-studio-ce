@@ -59,7 +59,7 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 			Object newData = layoutData;
 			if (newData instanceof GridData) {
 				GridData newGridData = (GridData)newData;
-				if (newGridData.widthHint == SWT.DEFAULT) {
+				if (newGridData.grabExcessHorizontalSpace && newGridData.horizontalAlignment == SWT.FILL && newGridData.widthHint == SWT.DEFAULT) {
 					int w = getCharWidth(this) * 15;
 					if (w > 50) w = 50;
 					newGridData.widthHint = w;

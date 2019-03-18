@@ -233,6 +233,14 @@ public class HyperlinkSection extends AbstractSection {
 		gd.grabExcessHorizontalSpace = true;
 		return gd;
 	}
+	
+	private GridData gridDataComboGenerator(){
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		gd.grabExcessHorizontalSpace = true;
+		gd.widthHint = 50;
+		return gd;
+	}
 
 	/**
 	 * Refresh the contents of the controls, setting into them the data of the selected element
@@ -380,12 +388,12 @@ public class HyperlinkSection extends AbstractSection {
 		
 		createLabel(mainComposite, Messages.MHyperLink_link_target_description, Messages.MHyperLink_link_target);
 		targetCombo = new Combo(mainComposite, SWT.NONE);
-		targetCombo.setLayoutData(gridDataGenerator()); 
+		targetCombo.setLayoutData(gridDataComboGenerator()); 
 		targetCombo.setItems(linkTargetItems);
 		
 		createLabel(mainComposite, Messages.MHyperLink_link_type_description, Messages.MHyperLink_link_type);
 		typeCombo = new Combo(mainComposite, SWT.NONE);
-		typeCombo.setLayoutData(gridDataGenerator()); 
+		typeCombo.setLayoutData(gridDataComboGenerator()); 
 		typeCombo.setItems(linkTypeItems);
 		
 		Label anchorLabel = createLabel(mainComposite, Messages.MHyperLink_hyperlink_anchor_expression_description, Messages.MHyperLink_hyperlink_anchor_expression);

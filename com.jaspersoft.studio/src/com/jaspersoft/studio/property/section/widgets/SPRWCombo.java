@@ -44,7 +44,31 @@ public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 	protected boolean refresh = false;
 
 	protected void createComponent(Composite parent) {
-		combo = new CCombo(parent, SWT.FLAT | SWT.BORDER);
+		combo = new CCombo(parent, SWT.FLAT | SWT.BORDER) {
+			
+			@Override
+			protected void checkSubclass() {
+			}
+			
+			/**
+			 * Assuring that the width has an hint in case of grid layout, doing this will force the
+			 * combo to not grow too much depending on the text content 
+			 */
+			@Override
+			public void setLayoutData(Object layoutData) {
+				Object newData = layoutData;
+				if (newData instanceof GridData) {
+					GridData newGridData = (GridData)newData;
+					if (newGridData.grabExcessHorizontalSpace && newGridData.horizontalAlignment == SWT.FILL && newGridData.widthHint == SWT.DEFAULT) {
+						int w = getCharWidth(this) * 15;
+						if (w > 50) w = 50;
+						newGridData.widthHint = w;
+					}
+				}
+				super.setLayoutData(newData);
+			}
+			
+		};
 		if (parent.getLayout() instanceof GridLayout) {
 			GridData gd = new GridData();
 			gd.minimumWidth = 100;

@@ -24,10 +24,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.components.customvisualization.model.CVCProprtiesExpressionDTO;
@@ -51,6 +53,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.framework.IPropertyEditor;
 import com.jaspersoft.studio.widgets.framework.WItemProperty;
+import com.jaspersoft.studio.widgets.framework.manager.DoubleControlComposite;
 import com.jaspersoft.studio.widgets.framework.manager.WidgetFactory;
 import com.jaspersoft.studio.widgets.framework.model.SectionPropertyDescriptor;
 import com.jaspersoft.studio.widgets.framework.model.WidgetPropertyDescriptor;
@@ -387,6 +390,26 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 		lbl.setToolTipText(ipd.getToolTip());
 
 		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, ipd, editor);
+		DoubleControlComposite control = (DoubleControlComposite)expr.getControl();
+		Control simpleControl = control.getSimpleControlToHighlight();
+		if (simpleControl instanceof Combo || simpleControl instanceof Text) {
+			/**
+			 * Assuring that the width has an hint in case of grid layout, doing this will force the
+			 * text to not grow too much depending on the text content 
+			 */
+			
+			Object layoutData = simpleControl.getLayoutData();
+			if (layoutData != null && layoutData.getClass().equals(GridData.class)) {
+				GridData oldData = (GridData)layoutData;
+				if (oldData.grabExcessHorizontalSpace && oldData.horizontalAlignment == SWT.FILL && oldData.widthHint == SWT.DEFAULT);
+				GridData newGridData = new GridData(oldData.horizontalAlignment, oldData.verticalAlignment, oldData.grabExcessHorizontalSpace, 
+														oldData.grabExcessVerticalSpace, oldData.horizontalSpan, oldData.verticalSpan);
+				int w = getCharWidth(simpleControl) * 15;
+				if (w > 50) w = 50;
+				newGridData.widthHint = w;
+				simpleControl.setLayoutData(newGridData);
+			}
+		}
 		expr.setLabelProvider(descriptorLabelProvider);
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		expr.setExpressionContext(ec);
