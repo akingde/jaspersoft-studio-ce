@@ -5,8 +5,6 @@
 package com.jaspersoft.studio.property.section.graphic;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -15,6 +13,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.properties.layout.ResizableControlLayout;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -62,38 +61,7 @@ public class GraphicSection extends AbstractSection {
 		Composite styleContainer = new Composite(parent, SWT.NONE);
 		//custom layout that make the style control start (small) and allow it to grow until it reach the width of the 
 		//panel, but not above it
-		Layout styleLayout = new Layout() {
-			
-			@Override
-			protected void layout(Composite composite, boolean flushCache) {
-				Control label = composite.getChildren()[0];
-				Point labelSize = label.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				label.setSize(labelSize.x, labelSize.y);
-				label.setBounds(0, 0, labelSize.x, labelSize.y);
-				int startX = labelSize.x + 8;
-				Control combo = (Control)composite.getChildren()[1];
-				Point size = combo.computeSize(SWT.DEFAULT,SWT.DEFAULT);
-				if (composite.getClientArea().width !=0 && size.x > composite.getClientArea().width - startX) {
-					combo.setBounds(startX, 0, composite.getClientArea().width - startX, size.y);
-				} else {
-					combo.setBounds(startX, 0, size.x, size.y);
-				}
-			}
-			
-			@Override
-			protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
-				Rectangle clientArea = composite.getClientArea();
-				Control label = (Control)composite.getChildren()[0];
-				Control combo = (Control)composite.getChildren()[1];
-				Point sizeLabel = label.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				Point sizeCombo = combo.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				int width = 100 + sizeLabel.x + 8;
-				if (clientArea.width != 0 && sizeCombo.x > 100) {
-					width = Math.min(clientArea.width, sizeCombo.x) + sizeLabel.x + 8;
-				}
-				return new Point(width, Math.max(sizeLabel.y, sizeCombo.y));
-			}
-		};
+		Layout styleLayout = new ResizableControlLayout(100);
 		styleContainer.setLayoutData(gd);
 		createWidget4Property(styleContainer, JRDesignElement.PROPERTY_PARENT_STYLE).getControl().setLayoutData(gd);
 		styleContainer.setLayout(styleLayout);
