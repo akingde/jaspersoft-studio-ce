@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
+import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -98,8 +99,12 @@ public class JoinCommand extends ACommand {
 				return;
 			}
 		}
-
-		JoinTableCommand c = new JoinTableCommand(src, srcTbl, dest, destTbl, fromTbl);
+		String join = AMKeyword.INNER_JOIN;
+		if (srcTbl instanceof MFromTableJoin)
+			join = ((MFromTableJoin) srcTbl).getJoin();
+		else if (destTbl instanceof MFromTableJoin)
+			join = ((MFromTableJoin) destTbl).getJoin();
+		JoinTableCommand c = new JoinTableCommand(src, srcTbl, dest, destTbl, fromTbl, join);
 		undoCmd.add(c);
 		c.execute();
 

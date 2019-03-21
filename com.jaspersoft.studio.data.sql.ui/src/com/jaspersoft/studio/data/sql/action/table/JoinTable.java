@@ -12,12 +12,15 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.JoinFromTableDialog;
 import com.jaspersoft.studio.data.sql.messages.Messages;
+import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.data.sql.ui.gef.command.JoinTableCommand;
 import com.jaspersoft.studio.model.ANode;
+
+import net.sf.jasperreports.eclipse.util.Misc;
 
 public class JoinTable extends AAction {
 	private SQLQueryDesigner designer;
@@ -68,7 +71,7 @@ public class JoinTable extends AAction {
 				mfromTable = tmp;
 			}
 
-			JoinTableCommand c = new JoinTableCommand(null, mfromTable, null, destTbl, destTbl);
+			JoinTableCommand c = new JoinTableCommand(null, mfromTable, null, destTbl, destTbl, dialog.getJoin());
 			designer.getDiagram().getViewer().getEditDomain().getCommandStack().execute(c);
 
 			selectInTree(c.getMexpr());
@@ -78,6 +81,19 @@ public class JoinTable extends AAction {
 
 	public static MFromTable getFromTable(MFromTable mcol, JoinFromTableDialog dialog) {
 		String ft = dialog.getFromTable().replace(",", "").trim(); //$NON-NLS-1$ //$NON-NLS-2$
+		MSQLRoot r = mcol.getRoot();
+		if (r != null) {
+			String IQ = r.getIdentifierQuote();
+			boolean onlyException = r.isQuoteExceptions();
+
+			String[] items = ft.contains(".") ? ft.split("\\.") : new String[] { ft };
+			String del = "";
+			ft = "";
+			for (String it : items) {
+				ft += del + Misc.quote(it, IQ, onlyException);
+				del = ".";
+			}
+		}
 		MFromTable mFromTable = null;
 		for (MFromTable mft : Util.getFromTables(Util.getKeyword(mcol, MFrom.class))) {
 			if (mft == mcol)
@@ -87,8 +103,10 @@ public class JoinTable extends AAction {
 				break;
 			}
 		}
-		if (mFromTable instanceof MFromTableJoin)
+		if (mFromTable instanceof MFromTableJoin) {
 			mFromTable = (MFromTable) mFromTable.getParent();
+			((MFromTableJoin) mFromTable).setJoin(dialog.getJoin());
+		}
 		return mFromTable;
 	}
 }

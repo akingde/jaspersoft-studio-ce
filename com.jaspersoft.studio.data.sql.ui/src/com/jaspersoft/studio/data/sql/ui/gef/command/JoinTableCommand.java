@@ -21,14 +21,16 @@ public class JoinTableCommand extends ACommand {
 	private MFromTable destTbl;
 	private MFromTable fromTbl;
 	private MExpression mexpr;
+	private String join;
 
-	public JoinTableCommand(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl,
-			MFromTable fromTbl) {
+	public JoinTableCommand(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl, MFromTable fromTbl,
+			String join) {
 		this.src = src;
 		this.srcTbl = srcTbl;
 		this.dest = dest;
 		this.destTbl = destTbl;
 		this.fromTbl = fromTbl;
+		this.join = join;
 	}
 
 	@Override
@@ -58,7 +60,7 @@ public class JoinTableCommand extends ACommand {
 			mtbljoin.setAliasKeyword(srcTbl.getAliasKeyword());
 
 			fromTbl.removeTableJoin(mtbljoin.getTableJoin());
-
+			mtbljoin.setJoin(join);
 			mtbljoin.setTableJoin(new TableJoin(mtbljoin, (MFromTable) destTbl));
 			Util.copySubQuery(srcTbl, mtbljoin);
 		} else
