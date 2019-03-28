@@ -185,4 +185,46 @@
          version="2.9.8.b01"
          unpack="false"/>
 
+   <plugin
+         id="org.apache.commons.lang3"
+         download-size="0"
+         install-size="0"
+         version="3.8.1"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.math3"
+         download-size="0"
+         install-size="0"
+         version="3.6.1"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.commons-codec"
+         download-size="0"
+         install-size="0"
+         version="1.12.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.commons-collections4"
+         download-size="0"
+         install-size="0"
+         version="4.2.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.xml.security"
+         download-size="0"
+         install-size="0"
+         version="1.4.2.v201005080400"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.compress"
+         download-size="0"
+         install-size="0"
+         version="1.18.0.v20181121-2221"
+         unpack="false"/>
+
 </feature>
