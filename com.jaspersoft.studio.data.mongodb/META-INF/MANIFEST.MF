@@ -13,5 +13,5 @@ Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
 Bundle-ClassPath: patch-library.jar,
  lib/js-mongodb-datasource-2.0.10.jar,
- lib/mongo-java-driver-3.6.3.jar,
+ lib/mongo-java-driver-3.3.0.jar,
  .
