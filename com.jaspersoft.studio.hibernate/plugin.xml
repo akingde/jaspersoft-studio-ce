@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+            class="com.jaspersoft.studio.hibernate.classpath.HibernateClasspathContainerInitializer"
+            id="com.jaspersoft.studio.data.hibernate.HIBERNATE_5_4_1_FINAL_CONTAINER">
+      </classpathContainerInitializer>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.ui.classpathContainerPage">
+      <classpathContainerPage
+            class="com.jaspersoft.studio.hibernate.classpath.HibernateClasspathContainerPage"
+            id="com.jaspersoft.studio.data.hibernate.HIBERNATE_5_4_1_FINAL_CONTAINER"
+            name="%classpathContainerPage.name">
+      </classpathContainerPage>
+   </extension>
+</plugin>
