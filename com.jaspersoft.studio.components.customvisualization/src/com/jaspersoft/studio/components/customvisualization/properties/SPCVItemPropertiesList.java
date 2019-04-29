@@ -265,7 +265,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 		if (itemProps == null) {
 			itemProps = new CVCProprtiesExpressionDTO(new ArrayList<ItemProperty>(),(MCustomVisualization)pnode, pnode.getJasperDesign(), pnode.getJasperConfiguration());
 		}
-		propertiesTV.setInput(itemProps);
+		propertiesTV.setInput(itemProps.getItemProps());
 
 		JasperDesign jd = pnode.getJasperDesign();
 		JasperReportsConfiguration jConf = pnode.getJasperConfiguration();
