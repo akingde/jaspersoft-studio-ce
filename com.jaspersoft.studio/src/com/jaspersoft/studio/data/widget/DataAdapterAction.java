@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.ToolBar;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.noda.NoDataAdapterDescriptor;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
 import com.jaspersoft.studio.editor.context.AEditorContext;
@@ -55,13 +56,10 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	/**
 	 * Create the action
 	 * 
-	 * @param editor
-	 *            the current runnable editor
-	 * @param dastorages
-	 *            the data adapter storages
-	 * @param dataset
-	 *            Some data adapter are available or not depending from the
-	 *            properties of the current dataset
+	 * @param editor the current runnable editor
+	 * @param dastorages the data adapter storages
+	 * @param dataset Some data adapter are available or not depending from the
+	 * properties of the current dataset
 	 */
 	public DataAdapterAction(IDataAdapterRunnable editor, ADataAdapterStorage[] dastorages, JRDesignDataset dataset) {
 		super();
@@ -76,13 +74,11 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	}
 
 	/**
-	 * Create the action, as dataset to get the dataset relative adapters it uses
-	 * the main one
+	 * Create the action, as dataset to get the dataset relative adapters it
+	 * uses the main one
 	 * 
-	 * @param editor
-	 *            the current runnable editor
-	 * @param dastorages
-	 *            the data adapter storages
+	 * @param editor the current runnable editor
+	 * @param dastorages the data adapter storages
 	 */
 	public DataAdapterAction(IDataAdapterRunnable editor, ADataAdapterStorage[] dastorages) {
 		super();
@@ -112,9 +108,9 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	}
 
 	/**
-	 * Run the report with a specific dataset, selected in the menu. If the dataset
-	 * selected is the JR default one run the report with null as dataset, an
-	 * JasperReports will automatically fallback on the default one
+	 * Run the report with a specific dataset, selected in the menu. If the
+	 * dataset selected is the JR default one run the report with null as
+	 * dataset, an JasperReports will automatically fallback on the default one
 	 */
 	@Override
 	public void run() {
@@ -134,7 +130,7 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 			if (!editor.runReport(null, true))
 				refreshDA();
 		} else {
-			if (!editor.runReport(selectedDA, true) && currentDataset != null) {
+			if (!editor.runReport(selectedDA, true)) {
 				defaultDA = defaultStorage.getDefaultJRDataAdapter(currentDataset);
 				if (defaultDA != selectedDA)
 					setSelected(defaultDA);
@@ -201,7 +197,6 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 		if (dastorages != null) {
 			JRDesignDataset currentDataset = getCurrentDataset();
 			if (currentDataset != null) {
-
 				for (int i = 0; i < dastorages.length; i++) {
 					final ADataAdapterStorage s = dastorages[i];
 					if (!cntx.isDataAdapterStorage(s))
@@ -232,8 +227,19 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 				}
 			}
 		}
+		if (!cntx.hasNoDataAdapter()) {
+			new MenuItem(listMenu, SWT.SEPARATOR);
+
+			final MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
+			m1.setImage(noda.getIcon(16));
+			m1.addSelectionListener(listener);
+			m1.setData("da.key", noda); //$NON-NLS-1$
+			m1.setText(noda.getTitle());
+		}
 		return listMenu;
 	}
+
+	private static NoDataAdapterDescriptor noda = new NoDataAdapterDescriptor();
 
 	private void refresh() {
 		// nothing, a placeholder for refresh
@@ -275,6 +281,10 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 						return;
 					}
 			}
+		if (NoDataAdapterDescriptor.NO_ADAPTER_NAME.equals(d)) {
+			setSelected(noda);
+			return;
+		}
 		// Else check if there is the default data adapter available
 		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(editor.getConfiguration());
 		JRDesignDataset currentDataset = getCurrentDataset();
@@ -310,8 +320,8 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	/**
 	 * Check if the selected is the default one
 	 * 
-	 * @return true if the selected is the default one (and the default one is set),
-	 *         false otherwise
+	 * @return true if the selected is the default one (and the default one is
+	 * set), false otherwise
 	 */
 	public boolean isDefaultDASelected() {
 		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(editor.getConfiguration());
