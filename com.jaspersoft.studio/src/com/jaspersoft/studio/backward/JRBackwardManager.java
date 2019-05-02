@@ -30,6 +30,7 @@ import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.concurrent.FutureCallback;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.util.Util;
 
 import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -43,7 +44,8 @@ import net.sf.jasperreports.eclipse.util.Misc;
 import net.sf.jasperreports.eclipse.util.ZipFilter;
 
 /**
- * Class that offer the utility methods to build a JRXML with an older version of JasperReports. It is a singleton class
+ * Class that offer the utility methods to build a JRXML with an older version
+ * of JasperReports. It is a singleton class
  * 
  * @author Orlandin Marco
  *
@@ -71,15 +73,16 @@ public class JRBackwardManager {
 	public static File storage = ConfigurationManager.getStorage(JRBackwardManager.JR_COMPILER_STORAGE);
 
 	/**
-	 * Read a resource from the current plugin and save it with a specific name inside a specified folder folder. If a
-	 * file was already define inside the specified folder with the same name, then it doesn't do nothing
+	 * Read a resource from the current plugin and save it with a specific name
+	 * inside a specified folder folder. If a file was already define inside the
+	 * specified folder with the same name, then it doesn't do nothing
 	 *
 	 * @param path
-	 *          the path of the resource inside the plugin
+	 *            the path of the resource inside the plugin
 	 * @param fileName
-	 *          the name of the file that will be created on the specified folder
+	 *            the name of the file that will be created on the specified folder
 	 * @param destinationDir
-	 *          directory where the file will be saved
+	 *            directory where the file will be saved
 	 */
 	private static void fetchResource(String path, File destinationDir, String fileName) {
 		File dfile = new File(destinationDir, fileName);
@@ -102,13 +105,15 @@ public class JRBackwardManager {
 	 * Download the zip of a JR from the server and save it on the temp folder
 	 * 
 	 * @param def
-	 *          the definition of the jr to download, containing the url to the server
+	 *            the definition of the jr to download, containing the url to the
+	 *            server
 	 * @param monitor
-	 *          the monitor to execute the operation. It update the taskname with the abount of MB downloaded
-	 * @return the file on the temp folder, zip extension (but depends from the url), containing the JR build of the
-	 *         requested version
+	 *            the monitor to execute the operation. It update the taskname with
+	 *            the abount of MB downloaded
+	 * @return the file on the temp folder, zip extension (but depends from the
+	 *         url), containing the JR build of the requested version
 	 * @throws Exception
-	 *           launched when something goes wrong with the download
+	 *             launched when something goes wrong with the download
 	 */
 	public static void fetchJR(JRDefinition def, final File toDir, final IProgressMonitor monitor) throws Exception {
 		Executor exec = Executor.newInstance();
@@ -133,7 +138,8 @@ public class JRBackwardManager {
 				Header[] headers = response.getHeaders("Content-Type");
 				for (Header h : headers) {
 					if (h.getValue().equals("application/java-archive")) {
-						org.apache.commons.io.FileUtils.copyInputStreamToFile(entity.getContent(), new File(toDir, FilenameUtils.getName(fullURI.getPath())));
+						org.apache.commons.io.FileUtils.copyInputStreamToFile(entity.getContent(),
+								new File(toDir, FilenameUtils.getName(fullURI.getPath())));
 						return null;
 					}
 				}
@@ -184,7 +190,8 @@ public class JRBackwardManager {
 	 * Delete a JR version from the storage, if it is saved inside
 	 * 
 	 * @param def
-	 *          the definition that contains the version of the JR to delete from the storage, must be not null
+	 *            the definition that contains the version of the JR to delete from
+	 *            the storage, must be not null
 	 * @throws IOException
 	 */
 	public static void deleteJR(JRDefinition def) throws IOException {
@@ -211,7 +218,11 @@ public class JRBackwardManager {
 					return false;
 				}
 			}
-			org.apache.commons.io.FileUtils.moveDirectory(path, destDir);
+			if (Util.isWindows()) {
+				org.apache.commons.io.FileUtils.copyDirectory(path, destDir);
+				path.delete();
+			}else
+				org.apache.commons.io.FileUtils.moveDirectory(path, destDir);
 			fetchResource("com/jaspersoft/studio/backward/resources/JRToolKit.jar", destDir, "JRToolKit.jar");
 		} catch (Exception e) {
 			if (path != null)
@@ -231,7 +242,7 @@ public class JRBackwardManager {
 			throw new Exception("Path does not exists.");
 		if (!f.isDirectory())
 			throw new Exception("Path is not a directory.");
-		Collection<File> lf = org.apache.commons.io.FileUtils.listFiles(f, new String[] {"jar", "zip", "jar" }, true);
+		Collection<File> lf = org.apache.commons.io.FileUtils.listFiles(f, new String[] { "jar", "zip", "jar" }, true);
 		List<File> files = new ArrayList<File>();
 		if (lf != null)
 			files.addAll(lf);
