@@ -42,7 +42,8 @@ public class PageFormatSection extends AbstractSection {
 	private MReport report;
 
 	/**
-	 * The container of the page format components (need to easily refresh when the format is changed)
+	 * The container of the page format components (need to easily refresh when
+	 * the format is changed)
 	 */
 	private Composite pageFormatPanel;
 
@@ -83,47 +84,52 @@ public class PageFormatSection extends AbstractSection {
 		previewWidget.setBmargin(bottomMargin);
 		// Building the tooltip message
 		String lineSeparator = System.getProperty("line.separator"); //$NON-NLS-1$
-		String toolTipWidth = Messages.PageFormatDialog_23.concat(": ").concat(pageWidth.toString()).concat(lineSeparator); //$NON-NLS-1$
+		String toolTipWidth = Messages.PageFormatDialog_23.concat(": ").concat(pageWidth.toString()) //$NON-NLS-1$
+				.concat(lineSeparator);
 		String toolTipHeight = Messages.PageFormatDialog_25.concat(": ").concat(pageHeight.toString()) //$NON-NLS-1$
 				.concat(lineSeparator);
 		String toolTipColNumber = Messages.PageFormatDialog_3.concat(": ").concat(colNumber.toString()) //$NON-NLS-1$
 				.concat(lineSeparator);
-		String toolTipColWidth = Messages.PageFormatDialog_5.concat(": ").concat(colWidth.toString()).concat(lineSeparator); //$NON-NLS-1$
-		String toolTipColSpace = Messages.PageFormatDialog_8.concat(": ").concat(colSpace.toString()).concat(lineSeparator); //$NON-NLS-1$
+		String toolTipColWidth = Messages.PageFormatDialog_5.concat(": ").concat(colWidth.toString()) //$NON-NLS-1$
+				.concat(lineSeparator);
+		String toolTipColSpace = Messages.PageFormatDialog_8.concat(": ").concat(colSpace.toString()) //$NON-NLS-1$
+				.concat(lineSeparator);
 		String toolTipLeftMargin = Messages.PageMarginSection_left_margin_tool_tip.concat(": ") //$NON-NLS-1$
 				.concat(leftMargin.toString()).concat(lineSeparator);
 		String toolTipRightMargin = Messages.PageMarginSection_right_margin_tool_tip.concat(": ") //$NON-NLS-1$
 				.concat(rightMargin.toString()).concat(lineSeparator);
-		String toolTipTopMargin = Messages.PageMarginSection_top_margin_tool_tip.concat(": ").concat(topMargin.toString()) //$NON-NLS-1$
-				.concat(lineSeparator);
+		String toolTipTopMargin = Messages.PageMarginSection_top_margin_tool_tip.concat(": ") //$NON-NLS-1$
+				.concat(topMargin.toString()).concat(lineSeparator);
 		String toolTipBottomMargin = Messages.PageMarginSection_bottom_margin_tool_tip.concat(": ").concat( //$NON-NLS-1$
 				bottomMargin.toString());
-		previewWidget.getCanvas()
-				.setToolTipText(
-						(toolTipWidth.concat(toolTipHeight).concat(toolTipColNumber).concat(toolTipColWidth)
-								.concat(toolTipColSpace).concat(toolTipLeftMargin).concat(toolTipRightMargin).concat(toolTipTopMargin)
-								.concat(toolTipBottomMargin)));
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		String orientation;
-		if (orientationValue == 0) {
-			orientation = Messages.PageFormatDialog_19;
-			gd.heightHint = 150;
-			gd.widthHint = 100;
-		} else {
-			orientation = Messages.PageFormatDialog_20;
-			gd.heightHint = 100;
-			gd.widthHint = 150;
+		if (!valuesLabel.isDisposed()) {
+			previewWidget.getCanvas()
+					.setToolTipText((toolTipWidth.concat(toolTipHeight).concat(toolTipColNumber).concat(toolTipColWidth)
+							.concat(toolTipColSpace).concat(toolTipLeftMargin).concat(toolTipRightMargin)
+							.concat(toolTipTopMargin).concat(toolTipBottomMargin)));
+			GridData gd = new GridData(GridData.FILL_BOTH);
+			String orientation;
+			if (orientationValue == 0) {
+				orientation = Messages.PageFormatDialog_19;
+				gd.heightHint = 150;
+				gd.widthHint = 100;
+			} else {
+				orientation = Messages.PageFormatDialog_20;
+				gd.heightHint = 100;
+				gd.widthHint = 150;
+			}
+			valuesLabel.setText(pageWidth.toString().concat("x").concat(pageHeight.toString()).concat(lineSeparator) //$NON-NLS-1$
+					.concat(orientation));
+			previewWidget.setLayoutData(gd);
+			pageFormatPanel.layout();
+			previewWidget.setTBounds();
+			previewWidget.getCanvas().redraw();
 		}
-		valuesLabel.setText(pageWidth.toString().concat("x").concat(pageHeight.toString()).concat(lineSeparator) //$NON-NLS-1$
-				.concat(orientation));
-		previewWidget.setLayoutData(gd);
-		pageFormatPanel.layout();
-		previewWidget.setTBounds();
-		previewWidget.getCanvas().redraw();
 	}
 
 	/**
-	 * Open the dialog to edit the page format, the if closed with the Ok button the preview will be refreshed
+	 * Open the dialog to edit the page format, the if closed with the Ok button
+	 * the preview will be refreshed
 	 */
 	private void openEditDialog() {
 		PageFormatDialog dlg = new PageFormatDialog(Display.getCurrent().getActiveShell(), report);
@@ -135,7 +141,7 @@ public class PageFormatSection extends AbstractSection {
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
-	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
+	 * org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
@@ -170,7 +176,8 @@ public class PageFormatSection extends AbstractSection {
 		valuesLabel = new StyledText(textualInfo, SWT.READ_ONLY);
 		valuesLabel.setEnabled(false);
 		// Add the button
-		Button editLayoutButton = getWidgetFactory().createButton(pageFormatPanel, Messages.PageFormatSection_buttonText, SWT.PUSH);
+		Button editLayoutButton = getWidgetFactory().createButton(pageFormatPanel,
+				Messages.PageFormatSection_buttonText, SWT.PUSH);
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.CENTER;
 		editLayoutButton.setLayoutData(gd);
@@ -194,12 +201,12 @@ public class PageFormatSection extends AbstractSection {
 	public void propertyChange(PropertyChangeEvent evt) {
 		super.propertyChange(evt);
 		UIUtils.getDisplay().syncExec(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				setPreviewWidgetData();
 			}
 		});
-		
+
 	}
 }
