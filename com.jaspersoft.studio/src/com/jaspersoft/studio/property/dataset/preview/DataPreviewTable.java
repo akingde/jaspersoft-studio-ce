@@ -315,7 +315,7 @@ public class DataPreviewTable implements DatasetReaderListener {
 				dataReader.setDesignDataset(clonedDS);
 				dataReader.setMaxRecords(recordsCountSelected);
 				dataReader.addDatasetReaderListener(DataPreviewTable.this);
-				dataReader.start(previewInfoProvider.getJasperReportsConfig());
+				dataReader.start(previewInfoProvider.getJasperReportsConfig(), monitor);
 				return Status.OK_STATUS;
 			}
 		};

@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.SimpleReportContext;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRSaver;
 
@@ -105,9 +104,8 @@ public class DataSnapshotManager {
 	}
 
 	public static String getSnapshotFile(JasperReportsConfiguration jConfig) {
-		JasperDesign jd = jConfig.getJasperDesign();
 		ReportContext rc = (ReportContext) jConfig.getJRParameters().get(JRParameter.REPORT_CONTEXT);
-		if (rc != null && rc instanceof SimpleReportContext) {
+		if (rc instanceof SimpleReportContext) {
 			if (rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT) != null)
 				return (String) rc.getParameterValue(DataSnapshotManager.SAVE_SNAPSHOT);
 		} else if (jConfig.getProperty(DataSnapshotManager.SAVE_SNAPSHOT) != null)

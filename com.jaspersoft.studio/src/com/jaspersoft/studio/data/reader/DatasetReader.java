@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -187,8 +188,8 @@ public class DatasetReader {
 			dataJD.addScriptlet(sf);
 	}
 
-	public static JasperReport compile(JasperReportsConfiguration jConfig, JasperDesign dataJD)
-			throws CoreException, JRException {
+	public static JasperReport compile(JasperReportsConfiguration jConfig, JasperDesign dataJD,
+			IProgressMonitor monitor) throws CoreException, JRException {
 		JasperReport jrobj = null;
 		IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
 		if (f != null) {
@@ -196,7 +197,7 @@ public class DatasetReader {
 			JasperReportCompiler compiler = new JasperReportCompiler();
 			compiler.setErrorHandler(new JRErrorHandler(f));
 			compiler.setProject(f.getProject());
-			jrobj = compiler.compileReport(jConfig, dataJD);
+			jrobj = compiler.compileReport(jConfig, dataJD, monitor);
 			if (jrobj == null) {
 				IMarker[] markers = f.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 				if (!Misc.isNullOrEmpty(markers)) {
@@ -221,7 +222,9 @@ public class DatasetReader {
 			// add also prompting parameters that may have previously
 			// set during a preview phase. This way we can get a more
 			// likely "default" value.
-			hm.putAll(jConfig.getJRParameters());
+			Map<String, Object> existing = jConfig.getJRParameters();
+			if (existing != null)
+				hm.putAll(existing);
 		}
 		hm = ReportController.resetParameters(hm, jConfig);
 		if (maxRecords > 0) {
@@ -279,14 +282,14 @@ public class DatasetReader {
 	 * <li>adding the standard parameters and custom ones</li>
 	 * <li>adding the fields</li>
 	 * <li>compiling the report obtaining a jasper report object</li>
-	 * <li>setting the parameters (including data adapter contributed ones) map</li>
+	 * <li>setting the parameters (including data adapter contributed ones)
+	 * map</li>
 	 * <li>filling the report</li>
 	 * </ol>
 	 * 
-	 * @param jConfig
-	 *            the configuration instance
+	 * @param jConfig the configuration instance
 	 */
-	public void start(JasperReportsConfiguration jConfig) {
+	public void start(JasperReportsConfiguration jConfig, IProgressMonitor monitor) {
 		// Temporary replace the class loader to get the "report" one.
 		// This is necessary for example to load JDBC drivers or additional
 		// classes that are in the classpath of the JasperReports project
@@ -312,7 +315,7 @@ public class DatasetReader {
 			dataJD.addParameter(pListeners);
 
 			// 6. Compile report
-			JasperReport jrobj = compile(jConfig, dataJD);
+			JasperReport jrobj = compile(jConfig, dataJD, monitor);
 			if (jrobj == null)
 				return;
 
@@ -428,11 +431,10 @@ public class DatasetReader {
 	/* Listener methods */
 
 	/**
-	 * Adds a new {@link DatasetReaderListener} to the list of listeners that will
-	 * be notified when a read event on the dataset occurs.
+	 * Adds a new {@link DatasetReaderListener} to the list of listeners that
+	 * will be notified when a read event on the dataset occurs.
 	 * 
-	 * @param listener
-	 *            the listener to add
+	 * @param listener the listener to add
 	 */
 	public void addDatasetReaderListener(DatasetReaderListener listener) {
 		listeners.add(listener);
@@ -442,8 +444,7 @@ public class DatasetReader {
 	 * Removes the specified {@link DatasetReaderListener} from the list of
 	 * listeners that will be notified when a read event on the dataset occurs.
 	 * 
-	 * @param listener
-	 *            the listener to remove
+	 * @param listener the listener to remove
 	 */
 	public void removeDatasetReaderListener(DatasetReaderListener listener) {
 		listeners.remove(listener);
@@ -451,7 +452,7 @@ public class DatasetReader {
 
 	/**
 	 * @return <code>true</code> if the dataset reader is running,
-	 *         <code>false</code> otherwise
+	 * <code>false</code> otherwise
 	 */
 	public boolean isRunning() {
 		return this.running;

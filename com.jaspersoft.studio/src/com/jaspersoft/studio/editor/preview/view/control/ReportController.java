@@ -136,7 +136,6 @@ public class ReportController {
 	public static Map<String, IReportRunner> getRunners() {
 		if (runners == null) {
 			runners = new HashMap<>();
-			// runners.put(JiveRunner.ID, new JiveRunner());
 			for (IReportRunner r : JaspersoftStudioPlugin.getExtensionManager().getReportRunners())
 				runners.put(r.getID(), r);
 		}
@@ -198,29 +197,23 @@ public class ReportController {
 		jasperParameters = resetParameters(jasperParameters, jrContext);
 	}
 
-	public static Map<String, Object> resetParameters(Map<String, Object> jasperParameters,
+	public static Map<String, Object> resetParameters(Map<String, Object> jrPrms,
 			JasperReportsConfiguration jrContext) {
-		jasperParameters = jrContext.getJRParameters();
-		if (jasperParameters == null) {
-			jasperParameters = new HashMap<>();
-			setDefaultParameterValues(jasperParameters, jrContext);
+		Map<String, Object> existing = jrContext.getJRParameters();
+		if (jrPrms == null) {
+			jrPrms = new HashMap<>();
+			if (existing != null)
+				jrPrms.putAll(jrContext.getJRParameters());
+			setDefaultParameterValues(jrPrms, jrContext);
 		} else {
+			if (existing != null)
+				jrPrms.putAll(jrContext.getJRParameters());
 			Map<String, Object> map = new HashMap<>();
 			if (jrContext.getJasperDesign() != null) {
 				List<JRParameter> prm = jrContext.getJasperDesign().getParametersList();
 				for (JRParameter p : prm) {
-					Object obj = jasperParameters.get(p.getName());
-					if (p.getName().endsWith(JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX))
-						continue;
-					if (p.getName().equals(JRParameter.REPORT_DATA_SOURCE))
-						continue;
-					if (p.getName().equals(JRParameter.REPORT_CONNECTION))
-						continue;
-					if (p.getName().startsWith("XML_") || p.getName().startsWith("MONDRIAN_") //$NON-NLS-1$
-							|| p.getName().startsWith("XLSX_") || p.getName().startsWith("XLS_") //$NON-NLS-1$
-							|| p.getName().startsWith("JSON_") || p.getName().startsWith("HIBERNATE_") //$NON-NLS-1$
-							|| p.getName().startsWith("JPA_") || p.getName().startsWith("CSV_") //$NON-NLS-1$
-							|| p.getName().contains("csv.source") || p.getName().startsWith("XMLA_")) //$NON-NLS-1$
+					Object obj = jrPrms.get(p.getName());
+					if (keepParameter(p.getName()))
 						continue;
 					try {
 						if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()) && p.isForPrompting()) {
@@ -230,12 +223,22 @@ public class ReportController {
 					}
 				}
 			}
-			jasperParameters.clear();
-			jasperParameters.putAll(map);
+			jrPrms.clear();
+			jrPrms.putAll(map);
 		}
-		jasperParameters.remove(JRParameter.REPORT_MAX_COUNT);
-		jrContext.setJRParameters(jasperParameters);
-		return jasperParameters;
+		jrPrms.remove(JRParameter.REPORT_MAX_COUNT);
+		jrContext.setJRParameters(jrPrms);
+		return jrPrms;
+	}
+
+	private static boolean keepParameter(String name) {
+		return (name.endsWith(JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX)
+				|| name.equals(JRParameter.REPORT_DATA_SOURCE) || name.equals(JRParameter.REPORT_CONNECTION)
+				|| name.startsWith("XML_") || name.startsWith("MONDRIAN_") //$NON-NLS-1$
+				|| name.startsWith("XLSX_") || name.startsWith("XLS_") //$NON-NLS-1$
+				|| name.startsWith("JSON_") || name.startsWith("HIBERNATE_") //$NON-NLS-1$
+				|| name.startsWith("JPA_") || name.startsWith("CSV_") //$NON-NLS-1$
+				|| name.contains("csv.source") || name.startsWith("XMLA_")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static void setDefaultParameterValues(Map<String, Object> jasperParameters,
@@ -390,9 +393,9 @@ public class ReportController {
 								c.addError(e, jrContext.getJasperDesign());
 							}
 							Map<String, Object> pmap = jrContext.getJRParameters();
-							for (String key : oldm.keySet())
-								if (pmap.containsKey(key))
-									pmap.put(key, oldm.get(key));
+							for (Map.Entry<String, Object> entry : oldm.entrySet())
+								if (pmap.containsKey(entry.getKey()) || keepParameter(entry.getKey()))
+									pmap.put(entry.getKey(), entry.getValue());
 							if (viewmap != null)
 								fillForms();
 						}
@@ -475,7 +478,7 @@ public class ReportController {
 			jrContext.getPropertyChangeSupport().addPropertyChangeListener(evt -> compiler.clean());
 		} else
 			((JRErrorHandler) compiler.getErrorHandler()).reset();
-		JasperReport jr = compiler.compileReport(jrContext, jd);
+		JasperReport jr = compiler.compileReport(jrContext, jd, monitor);
 		stats.endCount(ST_COMPILATIONTIME);
 		if (((JRErrorHandler) compiler.getErrorHandler()).hasErrors()) {
 			UIUtils.getDisplay().syncExec(() -> {

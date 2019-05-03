@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -47,7 +48,7 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 				JasperDesign jd = jConfig.getJasperDesign();
 				if (jd != null) {
 					JasperReportCompiler compiler = new JasperReportCompiler();
-					jr = compiler.compileReport(jConfig, jConfig.getJasperDesign());
+					jr = compiler.compileReport(jConfig, jConfig.getJasperDesign(), new NullProgressMonitor());
 				}
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block

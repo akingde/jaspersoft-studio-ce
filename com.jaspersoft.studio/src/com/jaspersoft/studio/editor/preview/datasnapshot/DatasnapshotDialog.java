@@ -11,8 +11,6 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -57,13 +55,14 @@ public class DatasnapshotDialog extends ATitledDialog {
 			SimpleReportContext reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
 			if (bSnapshot.getSelection()) {
 				DataSnapshotManager.setCaching(hm, true);
-				reportContext = (SimpleReportContext) hm.get(JRParameter.REPORT_CONTEXT);
-				if (reportContext != null) {
-					String fname = (String) jConfig.getMap().get(DataSnapshotManager.SAVE_SNAPSHOT);
-					reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
-				}
+
+				reportContext = (SimpleReportContext) hm.computeIfAbsent(JRParameter.REPORT_CONTEXT,
+						k -> new SimpleReportContext());
+				String fname = (String) jConfig.getMap().get(DataSnapshotManager.SAVE_SNAPSHOT);
+				reportContext.setParameterValue(DataSnapshotManager.SAVE_SNAPSHOT, fname);
+
 				if (!Misc.isNullOrEmpty(tFile.getText())) {
-					String fname = tFile.getText().trim();
+					fname = tFile.getText().trim();
 					DataCacheHandler cacheHandler = DataSnapshotManager.setDataSnapshot(hm, false);
 					if (cacheHandler.getDataSnapshot() != null) {
 						Date creationTimestamp = new Date();
@@ -113,11 +112,6 @@ public class DatasnapshotDialog extends ATitledDialog {
 			}
 		});
 
-		// Label lbl = new Label(cmp, SWT.NONE);
-		// gd = new GridData(GridData.FILL_HORIZONTAL);
-		// gd.horizontalSpan = 2;
-		// lbl.setLayoutData(gd);
-
 		lfile = new Label(cmp, SWT.NONE);
 		lfile.setText(Messages.DatasnapshotDialog_3);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -132,24 +126,14 @@ public class DatasnapshotDialog extends ATitledDialog {
 		gd.widthHint = 400;
 		gd.horizontalIndent = 18;
 		tFile.setLayoutData(gd);
-		tFile.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				String tt = tFile.getText();
-				if (!tt.isEmpty())
-					tt += "\n\n"; //$NON-NLS-1$
-				tt += Messages.DatasnapshotDialog_4;
-				tFile.setToolTipText(tt);
-			}
+		tFile.addModifyListener(e -> {
+			String tt = tFile.getText();
+			if (!tt.isEmpty())
+				tt += "\n\n"; //$NON-NLS-1$
+			tt += Messages.DatasnapshotDialog_4;
+			tFile.setToolTipText(tt);
 		});
-		tFile.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				validate();
-			}
-		});
+		tFile.addModifyListener(e -> validate());
 
 		bFile = new Button(cmp, SWT.PUSH);
 		bFile.setText("..."); //$NON-NLS-1$
@@ -158,14 +142,11 @@ public class DatasnapshotDialog extends ATitledDialog {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(bFile.getShell(), SWT.SAVE);
 				fd.setText(Messages.PreviewTopToolBarManager_3);
-				String sname = "snapshot.jrds"; //$NON-NLS-1$
 				IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
-				if (f != null)
-					sname = FilenameUtils.getBaseName(f.getName()) + ".jrds"; //$NON-NLS-1$
+				String sname = FilenameUtils.getBaseName(f.getName()) + ".jrds"; //$NON-NLS-1$
 				String folder = f.getParent().getLocation().toOSString();
 				fd.setFilterPath(folder);
 				fd.setFileName(sname);
-				// fd.setOverwrite(true);
 				fd.setFilterExtensions(new String[] { "*.jrds", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				// $NON-NLS-2$
 				String fname = fd.open();

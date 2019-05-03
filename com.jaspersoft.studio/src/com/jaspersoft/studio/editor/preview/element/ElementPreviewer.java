@@ -118,7 +118,7 @@ public class ElementPreviewer {
 			setupDatasets(jConf, jDesign);
 			replaceElement((JRDesignElement) element.clone(), jd);
 
-			jrobj = DatasetReader.compile(jConf, jd);
+			jrobj = DatasetReader.compile(jConf, jd, monitor);
 			if (jrobj == null)
 				return null;
 			hm = DatasetReader.prepareParameters(jConf, 100);
