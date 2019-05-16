@@ -5,6 +5,7 @@
 package com.jaspersoft.studio.background;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeSupport;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -413,6 +414,12 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		return (JasperDesign)super.getValue();
 	}
 
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return super.getPropertyChangeSupport();
+	}
+	
 	/**
 	 * Add the listener to the properties map of the report, since the background image relay on that
 	 * to store its informations
@@ -443,6 +450,13 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		if (figureEditPart != null){
 			figureEditPart.refresh();
 		}
-		firePropertyChange(evt);
+		
+		if (PROPERTY_ALPHA.equals(evt.getPropertyName()) || PROPERTY_PATH.equals(evt.getPropertyName()) || PROPERTY_WIDTH.equals(evt.getPropertyName()) || 
+				PROPERTY_HEIGHT.equals(evt.getPropertyName()) || PROPERTY_X.equals(evt.getPropertyName()) || PROPERTY_Y.equals(evt.getPropertyName()) || 
+					PROPERTY_KEEP_RATIO.equals(evt.getPropertyName())) {
+			//fire the property change event when one of the background related property change, because the section of the background image is notified
+			//by this fire property change an need it to update the widgets on the properties view
+			firePropertyChange(evt);
+		}
 	}
 }

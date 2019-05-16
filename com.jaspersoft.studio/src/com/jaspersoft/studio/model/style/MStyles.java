@@ -211,7 +211,18 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 			//A style default flag has been changed or a external style has been added removed, need to update the default styles
 			updateDefaulStyle();
 		}
-		super.propertyChange(evt);
+		if (!(evt.getPropertyName().equals(JasperDesign.PROPERTY_TITLE)
+			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_PAGE_HEADER)
+			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_HEADER)
+			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_FOOTER)
+			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_PAGE_FOOTER)
+			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_LAST_PAGE_FOOTER)
+			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_SUMMARY)
+			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_NO_DATA)
+			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_DETAIL)
+			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_BACKGROUND))) {
+				super.propertyChange(evt);
+		}
 	}
 
 }
