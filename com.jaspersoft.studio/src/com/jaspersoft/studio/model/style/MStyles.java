@@ -211,6 +211,10 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 			//A style default flag has been changed or a external style has been added removed, need to update the default styles
 			updateDefaulStyle();
 		}
+		// Bug #JSS-867. Check the event source: if this event is fired from the MStyles it 
+		// would arrive to the MReport (parent of mstyles) twice.
+		// One from the source of the event (typically caused by an add/remove band) and one from here.
+		// This causes an unexpected behavior when a band delete operation is undone.		
 		if (!(evt.getPropertyName().equals(JasperDesign.PROPERTY_TITLE)
 			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_PAGE_HEADER)
 			|| evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_HEADER)
