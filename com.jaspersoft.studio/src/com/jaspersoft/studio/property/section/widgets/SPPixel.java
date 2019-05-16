@@ -863,7 +863,16 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 			APropertyNode pholder = getPropertiesHolder((APropertyNode) node);
 			if (pholder != null) {
 				JRPropertiesMap nodeMap = (JRPropertiesMap) pholder.getPropertyValue(APropertyNode.PROPERTY_MAP);
-				return setLocalValue(nodeMap, newLocal);
+				if (nodeMap != null && setLocalValue(nodeMap, newLocal)) {
+					SetValueCommand cmd = new SetValueCommand();
+					cmd.setTarget(pholder);
+					cmd.setPropertyId(APropertyNode.PROPERTY_MAP);
+					cmd.setPropertyValue(nodeMap);
+					JSSCompoundCommand commands = new JSSCompoundCommand(pholder);
+					commands.add(cmd);
+					section.runCommand(commands);
+					return true;
+				}
 			}
 		}
 		return false;
