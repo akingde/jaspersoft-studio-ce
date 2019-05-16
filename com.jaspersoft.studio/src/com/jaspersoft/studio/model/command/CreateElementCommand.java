@@ -390,11 +390,13 @@ public class CreateElementCommand extends Command {
 		// so if an undo and redo is done the calculation will be done on the origianl
 		// value instead of the already
 		// modified value
+		
+		// Create the object if necessary
+		createObject();
+		
 		if (location == null)
 			location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
 		Rectangle originalLocation = location.getCopy();
-		// Create the object if necessary
-		createObject();
 		if (jrElement != null) {
 			removeElement(jasperDesign, jrElement);
 			if (jrGroup instanceof JRDesignElementGroup) {
