@@ -255,9 +255,12 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 	 * @return the toolbar if it is found inside the manager, otherwise null
 	 */
 	public static IContributionItem findToolbar(ICoolBarManager cbm2, String tbarid) {
-		for (IContributionItem ci : cbm2.getItems()) {
-			if (ci.getId().equals(tbarid))
-				return ci;
+		if(tbarid!=null) {
+			for (IContributionItem ci : cbm2.getItems()) {
+				if (tbarid.equals(ci.getId())){
+					return ci;
+				}
+			}
 		}
 		return null;
 	}
