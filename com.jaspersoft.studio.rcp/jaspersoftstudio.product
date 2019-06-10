@@ -41,7 +41,6 @@ Special thanks to all people who support this software.
    <launcher name="Jaspersoft Studio">
       <linux icon="/com.jaspersoft.studio.rcp/icons/jss_icon_128.xpm"/>
       <macosx icon="/com.jaspersoft.studio.rcp/icons/jaspersoftstudio.icns"/>
-      <solaris/>
       <win useIco="true">
          <ico path="/com.jaspersoft.studio.rcp/icons/jaspersoftstudio.ico"/>
          <bmp/>
@@ -407,14 +406,14 @@ This Agreement is governed by the laws of the State of New York and the intellec
 
    <configurations>
       <plugin id="com.jaspersoft.studio.rcp" autoStart="false" startLevel="5" />
-      <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="4" />
+      <plugin id="org.apache.felix.scr" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
-      <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
+      <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="4" />
       <property name="eclipse.log.level" value="ALL" />
       <property name="org.eclipse.update.reconcile" value="false" />
       <!--

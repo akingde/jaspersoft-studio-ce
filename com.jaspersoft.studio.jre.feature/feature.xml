@@ -34,26 +34,11 @@
          arch="x86_64"/>
 
    <includes
-         id="jre.win32.win32.x86.feature"
-         version="0.0.0"
-         optional="true"
-         os="win32"
-         ws="win32"
-         arch="x86"/>
-
-   <includes
          id="jre.win32.win32.x86_64.feature"
          version="0.0.0"
          optional="true"
          os="win32"
          ws="win32"
          arch="x86_64"/>
-
-   <includes
-         id="jre.linux.gtk.x86.feature"
-         version="0.0.0"
-         os="linux"
-         ws="gtk"
-         arch="x86"/>
 
 </feature>
