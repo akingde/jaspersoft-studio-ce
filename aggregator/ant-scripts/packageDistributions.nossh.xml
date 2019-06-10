@@ -6,7 +6,6 @@
 	<property name="dist" value="${basedir}/../product/dist"/>
 	<property name="productRootFolder" value="jaspersoftstudio" />
 	<property name="productVersionFile" value="buildversion.properties" />
-	<property name="jre.location.linux32" value="features/jre.linux.gtk.x86.feature_1.8.0.u151/jre/bin" />
 	<property name="jre.location.linux64" value="features/jre.linux.gtk.x86_64.feature_1.8.0.u151/jre/bin" />
 
 	<!-- ================================= 
@@ -16,10 +15,8 @@
 		<echo message="Packaging all the distributions"/>
 		<antcall>
 			<target name="prepareEnvironment"/>
-    		<target name="linux-x86-installer"/>
     		<target name="linux-x86_64-installer"/>
 			<target name="mac-x86_64-installer"/>
-    		<target name="windows-x86-installer"/>
     		<target name="windows-x86_64-installer"/>
 		</antcall>
 	</target>
@@ -28,34 +25,6 @@
 		<property file="jss.properties"/>
 		<delete dir="${dist}" includeemptydirs="true" defaultexcludes="false"/>
 		<mkdir dir="${dist}"/>
-	</target>
-	
-	<!-- ================================= 
-          target: windows-x86-installer
-         ================================= -->
-	<target name="windows-x86-installer" description="Create the win32 x86 installer using NSIS script (NSIS required)" if="jss.version">
-		<echo message="Executing 'windows-x86-installer' task"/>
-		<property name="dirlocation.win32.x86" value="${jssRcpProductFolderPath}/target/products/${jssRcpProductFolderName}/win32/win32/x86" />
-
-		<!-- Replacing the exe launcher (it is a modified version of the original laucher (Eclipse 3.8)
-		     improved with Jaspersoft Studio icons -->
-		<copy file="${jssRcpProductFolderPath}/resources/Jaspersoft Studio.exe" tofile="${dirlocation.win32.x86}/jaspersoftstudio/Jaspersoft Studio.exe" overwrite="true" />
-		<copy file="${jssRcpProductFolderPath}/resources/jaspersoftstudio.ico" tofile="${dirlocation.win32.x86}/jaspersoftstudio/jaspersoftstudio.ico" overwrite="true" />
-		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/license.txt" tofile="${dirlocation.win32.x86}/${productRootFolder}/${jss.distro.prefix}_${jss.version}_license.txt" />
-		<!-- create zip file -->
-		<zip destfile="${dist}/${jss.win32.x86.zipfile}">
-			<fileset dir="${dirlocation.win32.x86}" excludes="**/_MACOSX, **/.DS_Store"/>
-		</zip>
-
-		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${jssRcpProductFolderPath}/lib/nsisant-1.1.jar" />
-		<nsisant script="${jssRcpProductFolderPath}/resources/JaspersoftStudioInstaller.nsi">
-			<define name="PRDUCT_ARCH" value="x86" />
-			<define name="PRODUCT_VERSION" value="${jss.version}" />
-			<define name="PRODUCT_WEB_SITE" value="http://community.jaspersoft.com/project/jaspersoft-studio" />
-			<define name="INSTALLER_FILES_DIR" value="${dirlocation.win32.x86}/jaspersoftstudio" />
-			<define name="OUTPUT_FILE_NAME" value="${dist}/${jss.win32.x86.installer}" />
-		</nsisant>
 	</target>
 	
 	<!-- ================================= 
@@ -86,47 +55,6 @@
 		</nsisant>
 	</target>
 	
-
-	<!-- ================================= 
-          target: linux-x86-installer
-         ================================= -->
-	<target name="linux-x86-installer" description="Create the Linux (x86) tgz package (Unix system required)" if="jss.version">
-		<echo message="Executing 'linux-x86-installer' task"/>
-		<property name="dirlocation.linux.x86" value="${jssRcpProductFolderPath}/target/products/${jssRcpProductFolderName}/linux/gtk/x86" />
-
-		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/license.txt" tofile="${dirlocation.linux.x86}/${productRootFolder}/${jss.distro.prefix}_${jss.version}_license.txt" />
-		<!-- copy fix files for Ubuntu -->
-		<copy file="${basedir}/rootfiles/linux/linux.readme" todir="${dirlocation.linux.x86}/${productRootFolder}" />
-		<copy file="${basedir}/rootfiles/linux/runjss.sh" todir="${dirlocation.linux.x86}/${productRootFolder}" />
-		<!-- set executable flag to launcher -->
-		<chmod file="${dirlocation.linux.x86}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />
-		<!-- rename the folder -->
-		<move file="${dirlocation.linux.x86}/${productRootFolder}" tofile="${dirlocation.linux.x86}/${jss.distro.folder}" />
-		<!-- create tar.gz file -->
-		<!-- <tar destfile="${dist}/${jss.linux.x86.tgz}" basedir="${dirlocation.linux.x86}/" compression="gzip" longfile="gnu" /> -->
-		<tar destfile="${dist}/${jss.linux.x86.tgz}" longfile="gnu" compression="gzip">
-			<tarfileset dir="${dirlocation.linux.x86}/" filemode="755">
-				<include name="**/features/jre.linux.gtk.x86.feature_*/jre/bin/*" />
-				<include name="**/Jaspersoft Studio" />
-				<include name="**/runjss.sh"/>
-			</tarfileset>
-			<tarfileset dir="${dirlocation.linux.x86}/">
-				<include name="**/*" />
-				<exclude name="**/features/jre.linux.gtk.x86.feature_*/jre/bin/*"/>
-				<exclude name="**/Jaspersoft Studio" />
-				<exclude name="**/runjss.sh"/>
-			</tarfileset>
-		</tar>
-		<!-- create debian package -->
-		<antcall target="createDeb">
-			<param name="architecture" value="i386"/>
-			<param name="debpackage" value="jaspersoftstudio"/>
-			<param name= "zipdir.linux" value = "${dirlocation.linux.x86}/"/>
-			<param name="jre.feature.location" value="${jre.location.linux32}"/>
-		</antcall>
-	</target>
-
 	<!-- ================================= 
           target: linux-x86_64-installer
          ================================= -->

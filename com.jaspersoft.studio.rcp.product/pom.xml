@@ -19,9 +19,6 @@
 		<linux.gtk.x86_64.jre.relative.location>
 			linux/gtk/x86_64/jaspersoftstudio/features/jre.linux.gtk.x86_64.feature_${jre.product.version}/jre/bin
 		</linux.gtk.x86_64.jre.relative.location>
-		<linux.gtk.x86.jre.relative.location>
-			linux/gtk/x86/jaspersoftstudio/features/jre.linux.gtk.x86.feature_${jre.product.version}/jre/bin
-		</linux.gtk.x86.jre.relative.location>
 	</properties>
 
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
@@ -82,11 +79,6 @@
 							<target>
 								<chmod perm="755">
 									<fileset dir="${project.build.directory}/products/${project.artifactId}/${linux.gtk.x86_64.jre.relative.location}">
-										<include name="**/*"/>
-									</fileset>
-								</chmod>
-								<chmod perm="755">
-									<fileset dir="${project.build.directory}/products/${project.artifactId}/${linux.gtk.x86.jre.relative.location}">
 										<include name="**/*"/>
 									</fileset>
 								</chmod>
