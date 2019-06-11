@@ -4,13 +4,47 @@
 <h1>Jaspersoft Studio Release Notes</h1>
 <hr/>
 <pre>
-Jaspersoft Studio version 6.8.0 (2019-0X-YY)
+
+Jaspersoft Studio version 6.9.0 (2019-06-XX)
+--------------------------------------------
+- Full support for JasperReports Library 6.9.0
+
+- Updated Groovy library to version 2.4.16
+
+- Updated Batik library to version 1.11
+
+- Updated Jaxen library to version 1.1.6
+
+- Hibernate plug-in upgraded with new version 5.4.1.final
+
+- RCP version is now based on Eclipse 4.11 platform
+
+- Minor and major bug fixes
+
+
+Jaspersoft Studio version 6.8.0 (2019-04-10)
 --------------------------------------------
 - Full support for JasperReports Library 6.8.0
 
-- Updated PostgreSQL driver with version 9.4-1210.jdbc41
+- Introduced the concept of project/folder context (which defines classpath, properties and repository root) in order to closely match the execution environment when based on external applications (such as JasperReports server).
+
+- Field providers will discover and use more metadata properties from jdbc and other languages
+
+- Field providers that read text files will try to guess field types
+
+- Column labels for fields dragged in the designer are now created based on the field properties when available
+
+- Dialogs are available to configure the field properties that are automatically discovered by the QueryExecuter
+
+- Dialogs are available to configure the parameter properties that are automatically discovered from the Data Adapter.
+  
+- Ability to create pluggable UIs to edit the paramter/field properties in a user friendly way
+
+- Added random data source: it generates random value records to populate the report
 
 - RCP stand-alone version now ships Oracle JRE 1.8.0.u151 (see Community Bug #10956)
+
+- Updated PostgreSQL driver with version 9.4-1210.jdbc41
 
 - Updated Spring library to version 5.1.4.RELEASE
 
