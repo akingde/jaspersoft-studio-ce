@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="7.3.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="6.9.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/com.jaspersoft.studio.rcp/icons/studio_logo_about.png"/>
       <text>
-         TIBCO Jaspersoft&#xAE; Studio 6.7.0 - Visual Designer for JasperReports 6.7.0. 
+         TIBCO Jaspersoft&#xAE; Studio 6.9.0 - Visual Designer for JasperReports 6.9.0. 
 Copyright (C) 2010 - 2019 TIBCO Software Inc. All rights reserved. 
 
 For more information, please visit 

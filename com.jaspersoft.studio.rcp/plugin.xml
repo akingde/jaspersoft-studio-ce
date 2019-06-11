@@ -84,7 +84,7 @@
          </property>
          <property
                name="aboutText"
-               value="TIBCO Jaspersoft&#xAE; Studio 6.7.0 - Visual Designer for JasperReports 6.7.0. &#x0A;Copyright (C) 2010 - 2019 TIBCO Software Inc. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://community.jaspersoft.com/project/jaspersoft-studio  &#x0A;&#x0A;Special thanks to all people who support this software.">
+               value="TIBCO Jaspersoft&#xAE; Studio 6.9.0 - Visual Designer for JasperReports 6.9.0. &#x0A;Copyright (C) 2010 - 2019 TIBCO Software Inc. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://community.jaspersoft.com/project/jaspersoft-studio  &#x0A;&#x0A;Special thanks to all people who support this software.">
          </property>
          <property
                name="aboutImage"
