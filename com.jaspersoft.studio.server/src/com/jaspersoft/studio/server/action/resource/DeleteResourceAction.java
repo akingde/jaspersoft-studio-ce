@@ -25,6 +25,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
@@ -50,12 +51,14 @@ public class DeleteResourceAction extends Action {
 	@Override
 	public boolean isEnabled() {
 		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
-		boolean b = firstElement != null && (firstElement instanceof AMResource);
+		boolean b = (firstElement instanceof AMResource);
 		if (b) {
 			AMResource mres = (AMResource) firstElement;
 			int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 			b = b && (pmask == 1 || (pmask & 16) == 16);
 			if (AddResourceAction.isSpecialFolder(mres))
+				return false;
+			if (firstElement instanceof MJrxml && ((MJrxml) firstElement).getValue().isMainReport())
 				return false;
 		}
 		return b;
@@ -73,9 +76,9 @@ public class DeleteResourceAction extends Action {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask(Messages.DeleteResourceAction_0, p.length);
 					try {
-						Set<ANode> toRefresh = new HashSet<ANode>();
-						Set<MReportUnit> set = new HashSet<MReportUnit>();
-						Set<MReportUnit> deleted = new HashSet<MReportUnit>();
+						Set<ANode> toRefresh = new HashSet<>();
+						Set<MReportUnit> set = new HashSet<>();
+						Set<MReportUnit> deleted = new HashSet<>();
 						for (int i = 0; i < p.length; i++) {
 							final Object obj = p[i].getLastSegment();
 							if (obj instanceof AMResource) {
@@ -132,12 +135,7 @@ public class DeleteResourceAction extends Action {
 									e.printStackTrace();
 								}
 						}
-						UIUtils.getDisplay().asyncExec(new Runnable() {
-
-							public void run() {
-								treeViewer.refresh(true);
-							}
-						});
+						UIUtils.getDisplay().asyncExec(() -> treeViewer.refresh(true));
 					} finally {
 						monitor.done();
 					}
@@ -145,11 +143,8 @@ public class DeleteResourceAction extends Action {
 
 				private void deleteResource(IProgressMonitor monitor, final AMResource mres) {
 					try {
-						ANode p = mres.getParent();
 						monitor.subTask(mres.getDisplayText());
 						WSClientHelper.deleteResource(monitor, mres);
-//						if (p != null && p instanceof AMResource)
-//							WSClientHelper.refreshResource((AMResource) p, monitor);
 					} catch (Throwable e) {
 						UIUtils.showError(e);
 					}
