@@ -64,9 +64,9 @@ public class RESTv2ExceptionHandler {
 			}
 		case 401:
 			throw new HttpResponseException(status, res.getStatusInfo().getReasonPhrase());
+		case 404:
 		case 403:
 		case 409:
-		case 404:
 		case 500:
 			if (ct != null) {
 				if (ct.contains("application/collection.errorDescriptor+xml")
@@ -83,7 +83,7 @@ public class RESTv2ExceptionHandler {
 					handleErrorDescriptor(res, monitor, status);
 			} else {
 				System.out.println(res.readEntity(String.class));
-				msg = res.getStatusInfo().getReasonPhrase() + "\n";
+				msg = status + " reason: " + res.getStatusInfo().getReasonPhrase() + "\n";
 				throw new HttpResponseException(status, msg);
 			}
 		default:

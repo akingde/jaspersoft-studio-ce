@@ -15,8 +15,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -58,7 +56,7 @@ import net.sf.jasperreports.eclipse.util.Misc;
 public class DatasourceSelectionComposite extends Composite {
 	protected boolean mandatory = false;
 	private AMResource res;
-	private ANode parent;
+	private ANode pnode;
 
 	// Widgets stuff
 	private Text textLocalDS;
@@ -105,47 +103,39 @@ public class DatasourceSelectionComposite extends Composite {
 		textDSFromRepo = new Text(this, SWT.BORDER);
 		textDSFromRepo.setEnabled(false);
 		textDSFromRepo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		textDSFromRepo.addModifyListener(new ModifyListener() {
+		textDSFromRepo.addModifyListener(e -> {
+			if (!refresh) {
+				final String uri = textDSFromRepo.getText().trim();
+				Job job = new Job(Messages.DatasourceSelectionComposite_0) {
+					private ResourceDescriptor newrd;
 
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (!refresh) {
-					final String uri = textDSFromRepo.getText().trim();
-					Job job = new Job(Messages.DatasourceSelectionComposite_0) {
-						private ResourceDescriptor newrd;
-
-						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							IStatus status = Status.OK_STATUS;
-							try {
-								ResourceDescriptor rd = new ResourceDescriptor();
-								rd.setUriString(uri);
-								newrd = WSClientHelper.getResource(monitor, res.getWsClient(), rd, null);
-								valid = newrd != null && SelectorDatasource.isDatasource(newrd);
-							} catch (Exception e) {
-								valid = false;
-								e.printStackTrace();
-							} finally {
-								monitor.done();
-							}
-
-							UIUtils.getDisplay().asyncExec(new Runnable() {
-
-								@Override
-								public void run() {
-									if (valid)
-										setResource(res, newrd, false);
-									notifyDatasourceSelectionChanged();
-								}
-							});
-							return status;
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						IStatus status = Status.OK_STATUS;
+						try {
+							ResourceDescriptor rd = new ResourceDescriptor();
+							rd.setUriString(uri);
+							newrd = WSClientHelper.getResource(monitor, res.getWsClient(), rd, null);
+							valid = newrd != null && SelectorDatasource.isDatasource(newrd);
+						} catch (Exception e) {
+							valid = false;
+							e.printStackTrace();
+						} finally {
+							monitor.done();
 						}
-					};
-					job.setPriority(Job.SHORT);
-					job.setSystem(false);
-					job.setUser(true);
-					job.schedule();
-				}
+
+						UIUtils.getDisplay().asyncExec(() -> {
+							if (valid)
+								setResource(res, newrd, false);
+							notifyDatasourceSelectionChanged();
+						});
+						return status;
+					}
+				};
+				job.setPriority(Job.SHORT);
+				job.setSystem(false);
+				job.setUser(true);
+				job.schedule();
 			}
 		});
 		InputHistoryCache.bindText(textDSFromRepo, this.getClass().getName());
@@ -202,14 +192,12 @@ public class DatasourceSelectionComposite extends Composite {
 	 * Configures the information needed to correctly use the datasource selection
 	 * widget.
 	 * 
-	 * @param parent
-	 *            the parent anode from which retrieve a {@link MServerProfile}
-	 * @param resource
-	 *            the resource for which we are configuring the datasource
+	 * @param parent   the parent anode from which retrieve a {@link MServerProfile}
+	 * @param resource the resource for which we are configuring the datasource
 	 */
 	public void configurePage(ANode parent, AMResource resource) {
 		isConfiguringPage = true;
-		this.parent = parent;
+		this.pnode = parent;
 		this.res = resource;
 
 		ResourceDescriptor r = SelectorDatasource.getDatasource(res.getValue(), res);
@@ -260,7 +248,6 @@ public class DatasourceSelectionComposite extends Composite {
 		case LOCAL_DATASOURCE:
 			rbLocalDS.setSelection(true);
 			btnSelectLocalDS.setEnabled(true);
-			// textLocalDS.setEnabled(true);
 			if (isConfiguringPage && r != null)
 				textLocalDS.setText(Misc.nvl(r.getName()));
 			break;
@@ -269,6 +256,7 @@ public class DatasourceSelectionComposite extends Composite {
 				rbNoDS.setSelection(true);
 			else {
 				setEnabled(SelectionType.REMOTE_DATASOURCE);
+				refresh = false;
 				return;
 			}
 			break;
@@ -305,13 +293,12 @@ public class DatasourceSelectionComposite extends Composite {
 
 			ref.setIsReference(false);
 			ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
-			// ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
 			ref.setUriString(ref.getParentFolder() + "/" + ref.getName());//$NON-NLS-1$
 
 			SelectorDatasource.replaceDatasource(res, ref);
 		} else {
 			AMResource r = ResourceFactory.getResource(null, ASelector.cloneResource(ref), -1);
-			ResourceWizard wizard = new ResourceWizard(parent, r, true, true);
+			ResourceWizard wizard = new ResourceWizard(pnode, r, true, true);
 			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 			dialog.create();
 			if (dialog.open() != Dialog.OK)
@@ -331,7 +318,7 @@ public class DatasourceSelectionComposite extends Composite {
 		// order
 		// to avoid problem of refreshing (children/parent relationship changes)
 		// due to tree viewer node expansion...
-		MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot());
+		MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot());
 		if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
 			String[] dsArray = WsTypes.INST().getDatasourcesArray();
 			if (res.getValue().getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
@@ -374,7 +361,7 @@ public class DatasourceSelectionComposite extends Composite {
 	private void setResource(AMResource res, ResourceDescriptor rd, boolean modifyText) {
 		ResourceDescriptor runit = res.getValue();
 		try {
-			rd = WSClientHelper.getResource(new NullProgressMonitor(), parent, rd);
+			rd = WSClientHelper.getResource(new NullProgressMonitor(), pnode, rd);
 			rd.setIsReference(true);
 			rd.setReferenceUri(rd.getUriString());
 			rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -411,7 +398,7 @@ public class DatasourceSelectionComposite extends Composite {
 
 	public void addDatasourceSelectionListener(DatasourceSelectionListener l) {
 		if (dsListeners == null)
-			dsListeners = new ArrayList<DatasourceSelectionListener>(1);
+			dsListeners = new ArrayList<>(1);
 		dsListeners.add(l);
 	}
 
