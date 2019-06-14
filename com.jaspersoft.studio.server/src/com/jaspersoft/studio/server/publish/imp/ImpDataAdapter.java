@@ -11,7 +11,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
@@ -34,6 +37,7 @@ import com.jaspersoft.studio.server.preferences.JRSPreferencesPage;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
+import com.jaspersoft.studio.server.publish.PublishOptions.ValueSetter;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -59,29 +63,44 @@ public class ImpDataAdapter extends AImpObject {
 		super(jrConfig);
 	}
 
+	private Map<String, PublishOptions> files = new HashMap<>();
+
+	private class DAValueSetter extends ValueSetter<List<JRDesignDataset>> {
+
+		public DAValueSetter(PublishOptions publishOptions) {
+			publishOptions.super(new ArrayList<>());
+		}
+
+		@Override
+		public void setup() {
+			for (JRDesignDataset ds : object)
+				ds.setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, getValue());
+		}
+
+	}
+
 	public File publish(JRDesignDataset jd, String dpath, MReportUnit mrunit, IProgressMonitor monitor,
 			Set<String> fileset, IFile file) throws Exception {
 		dpath = preparePath(fileset, dpath);
-		if (fileset.contains(dpath))
+		if (fileset.contains(dpath)) {
+			PublishOptions popt = files.get(dpath);
+			((DAValueSetter) popt.getValueSetter()).getObject().add(jd);
 			return null;
+		}
 		if (dpath == null)
 			return null;
 		File f = findFile(file, dpath);
 		if (f != null && f.exists()) {
 			fileset.add(dpath);
 			PublishOptions popt = createOptions(jrConfig, dpath);
+			files.put(dpath, popt);
 			popt.setFilePath(dpath);
 			// popt.setDataset(jd);
 			AFileResource fr = addResource(monitor, mrunit, fileset, f, popt);
-			popt.setValueSetter(popt.new ValueSetter<JRDesignDataset>((JRDesignDataset) jd) {
-
-				@Override
-				public void setup() {
-					object.setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
-							getValue());
-				}
-			});
-			popt.getValueSetter().setValue("repo:" + fr.getValue().getUriString());
+			DAValueSetter vs = new DAValueSetter(popt);
+			vs.getObject().add(jd);
+			popt.setValueSetter(vs);
+			vs.setValue("repo:" + fr.getValue().getUriString());
 		}
 		return f;
 	}

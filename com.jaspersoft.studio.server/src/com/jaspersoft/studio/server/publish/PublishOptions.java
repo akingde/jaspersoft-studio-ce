@@ -118,6 +118,10 @@ public class PublishOptions {
 
 		protected T object;
 
+		public T getObject() {
+			return object;
+		}
+
 		public abstract void setup();
 
 		protected String value;
