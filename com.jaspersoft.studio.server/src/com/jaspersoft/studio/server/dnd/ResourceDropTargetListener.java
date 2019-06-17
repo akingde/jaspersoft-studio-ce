@@ -70,7 +70,7 @@ public class ResourceDropTargetListener extends NodeTreeDropAdapter implements T
 					if (target instanceof ANode) {
 						List<INode> toRefresh = new ArrayList<>();
 						if (((ANode) target).getParent() instanceof MReportUnit
-								|| ((ANode) target).getParent() instanceof MFolder
+								|| (!(target instanceof MFolder) && ((ANode) target).getParent() instanceof MFolder)
 						// || ((ANode) target).getParent() instanceof MServerProfile
 						)
 							target = ((ANode) target).getParent();
