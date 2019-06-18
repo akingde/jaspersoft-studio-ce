@@ -30,7 +30,7 @@ public class RESTv2ExceptionHandler {
 
 	private Map<String, String> getMap(IProgressMonitor monitor) {
 		if (map == null) {
-			map = new HashMap<String, String>();
+			map = new HashMap<>();
 			try {
 				c.getBundle(map, "jasperserver_messages", monitor);
 			} catch (Exception e) {

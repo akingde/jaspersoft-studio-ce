@@ -224,10 +224,10 @@ public class AExporter {
 		String path = rd.getName();
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_IMAGE)) {
 			String fname = path.toLowerCase();
-			if (fname.endsWith(".jpg") || fname.endsWith(".jpeg") || fname.endsWith(".gif") || fname.endsWith(".tiff")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			if (fname.endsWith(".jpg") || fname.endsWith(".jpeg") || fname.endsWith(".gif") || fname.endsWith(".tiff") ) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				return path;
 		}
-		if (!path.endsWith(dextention))
+		if(!path.contains("."))
 			path += dextention;
 		return path;
 	}
