@@ -64,13 +64,14 @@ public class SubreportParameterPage extends ParameterPage {
 	}
 
 	/**
-	 * Return the input of the combo, a list of the parameter names of the original subreport file
+	 * Return the input of the combo, a list of the parameter names of the
+	 * original subreport file
 	 * 
 	 * @return the list of string displayed in the combo
 	 */
 	protected List<String> createNameComboInput() {
-		List<String> result = new ArrayList<String>();
-		HashSet<String> usedParams = new HashSet<String>();
+		List<String> result = new ArrayList<>();
+		HashSet<String> usedParams = new HashSet<>();
 		for (GenericJSSParameter param : values) {
 			usedParams.add(param.getName());
 		}

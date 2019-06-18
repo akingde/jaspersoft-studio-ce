@@ -114,7 +114,7 @@ public class SubreportWizard extends JSSWizard {
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == step3) {
 			try {
-				step3.setJasperDesign(null);
+				step3.setJasperDesign(getConfig().getJasperDesign());
 				getContainer().run(true, true, new IRunnableWithProgress() {
 
 					@Override
@@ -170,7 +170,7 @@ public class SubreportWizard extends JSSWizard {
 								r = (JRReport) JRLoader.loadObject(jrConf, in);
 							}
 						}
-						step3.setJasperDesign(r);
+						
 					}
 
 				});
