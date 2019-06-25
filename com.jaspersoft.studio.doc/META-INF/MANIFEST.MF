@@ -3,7 +3,7 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio Documentation
 Bundle-SymbolicName: com.jaspersoft.studio.doc; singleton:=true
-Bundle-Version: 6.9.0.qualifier
+Bundle-Version: 6.9.0.final
 Bundle-Vendor: TIBCO Software Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.ui.cheatsheets;bundle-version="3.4.0",

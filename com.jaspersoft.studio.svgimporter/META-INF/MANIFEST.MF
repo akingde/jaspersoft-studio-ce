@@ -3,7 +3,7 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio SVG Importer
 Bundle-SymbolicName: com.jaspersoft.studio.svgimporter;singleton:=true
-Bundle-Version: 6.9.0.qualifier
+Bundle-Version: 6.9.0.final
 Bundle-Activator: com.jaspersoft.studio.svimporter.activator.Activator
 Bundle-Localization: plugin
 Bundle-Vendor: TIBCO Software Inc.

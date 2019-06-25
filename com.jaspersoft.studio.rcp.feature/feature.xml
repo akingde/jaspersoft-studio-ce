@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.rcp.feature"
       label="RCP feature for TIBCO Jaspersoft Studio Community"
-      version="6.9.0.qualifier"
+      version="6.9.0.final"
       provider-name="TIBCO Software Inc."
       os="linux,macosx,win32"
       ws="cocoa,gtk,win32">
